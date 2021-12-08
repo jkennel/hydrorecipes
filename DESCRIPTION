@@ -1,7 +1,7 @@
 Package: hydrorecipes
 Type: Package
 Title: Tools for exploring water level datasets.
-Version: 1.0
+Version: 0.0.1
 Date: 2021-12-07
 Authors@R: c(
     person("Jonathan", "Kennel", email="jkennel@uoguelph.ca", role = c("aut", "cre")),
