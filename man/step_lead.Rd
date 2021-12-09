@@ -74,7 +74,7 @@ df <- data.frame(x = runif(n),
 
 recipe(~ ., data = df) |>
   step_lead(index, day, lead = 2:3) |>
-  prep(df) |>
+  prep() |>
   bake(df)
 }
 \seealso{

@@ -33,7 +33,7 @@
 #'
 #' recipe(~ ., data = df) |>
 #'   step_lead(index, day, lead = 2:3) |>
-#'   prep(df) |>
+#'   prep() |>
 #'   bake(df)
 step_lead <-
   function(recipe,
@@ -123,3 +123,33 @@ print.step_lead <-
     printer(x$columns, x$terms, x$trained, width = width)
     invisible(x)
   }
+
+#' @rdname tidy.recipe
+#' @param x A `step_lead` object.
+#' @export
+tidy.step_lead <- function(x, ...) {
+  n_terms <- length(x$terms)
+  res <-
+    tibble(input_names = rep(sel2char(x$terms), each = length(x$lead)),
+           shift = rep(-x$lead, times = n_terms)
+    )
+  res$terms <- paste0(x$prefix, res$input_names, '_',
+                      rep(x$lead, times = n_terms))
+  res$id <- x$id
+  res
+}
+
+#' @rdname tidy.recipe
+#' @param x A `step_lag` object.
+#' @export
+tidy.step_lag <- function(x, ...) {
+  n_terms <- length(x$terms)
+  res <-
+    tibble(input_names = rep(sel2char(x$terms), each = length(x$lag)),
+           shift = rep(x$lag, times = n_terms)
+    )
+  res$terms <- paste0(x$prefix, res$input_names, '_',
+                      rep(x$lag, times = n_terms))
+  res$id <- x$id
+  res
+}

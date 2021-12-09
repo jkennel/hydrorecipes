@@ -34,7 +34,7 @@
 #'
 #' rec <- recipe(~ ., data = df) |>
 #'   step_distributed_lag(index, knots = c(0,4,6)) |>
-#'   prep(df) |>
+#'   prep() |>
 #'   bake(df)
 step_distributed_lag <-
   function(recipe,
