@@ -9,7 +9,7 @@ cross_basis_fft(basis_var, basis_mat)
 \arguments{
 \item{basis_var}{numeric vector}
 
-\item{basis_lag}{lagging matrix}
+\item{basis_mat}{lagging matrix}
 }
 \value{
 numeric vector result of convolution

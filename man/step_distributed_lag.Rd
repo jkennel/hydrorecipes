@@ -81,7 +81,6 @@ df <- data.frame(x = runif(n),
 
 rec <- recipe(~ ., data = df) |>
   step_distributed_lag(index, knots = c(0,4,6)) |>
-  step_lead(day, lead = 0:2) |>
   prep() |>
   bake(df)
 }

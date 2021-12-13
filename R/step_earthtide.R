@@ -27,12 +27,11 @@
 #' @details `step_earthtide` calculates the Earth tide harmonics
 #' @examples
 #' library(earthtide)
-#' library(data.table)
-#' data(transducer)
 #' data(eterna_wavegroups)
-#'
+#' data(transducer)
+#' t_sub <- transducer[1:1000, c('datetime', 'wl')]
 #' rec <- recipe(wl ~ .,
-#'               data = transducer[1:1000, c('datetime', 'wl')])
+#'               data = t_sub)
 #'
 #' wg <- na.omit(eterna_wavegroups[eterna_wavegroups$time == '1 month',])
 #' with_et <- rec |>
@@ -41,7 +40,7 @@
 #'                  longitude = -118.5,
 #'                  wave_groups = wg) |>
 #'   prep() |>
-#'   bake(new_data = transducer[1:1000, list(datetime, wl)])
+#'   bake(new_data = t_sub)
 #'
 #' @seealso [step_earthtide()] [recipe()]
 #'   [prep.recipe()] [bake.recipe()]
@@ -49,7 +48,7 @@
 step_earthtide <-
   function(recipe,
            ...,
-           role = "earthtide",
+           role = "predictor",
            trained = FALSE,
            method = "gravity",
            astro_update = 1L,
@@ -193,7 +192,7 @@ bake.step_earthtide <- function(object, new_data, ...) {
 
   names(et) <- paste0(object$prefix,
                       rep(c('cos', 'sin'), times = nrow(object$wave_groups)),
-                        '_', rep(1:nrow(object$wave_groups), each = 2))
+                      '_', rep(1:nrow(object$wave_groups), each = 2))
 
   bind_cols(new_data, et)
 
@@ -223,32 +222,17 @@ tidy.step_earthtide <- function(x, ...) {
            gravity = rep(x$gravity, n_terms * 2),
            cutoff = rep(x$cutoff, n_terms * 2),
            catalog = rep(x$catalog, n_terms * 2),
-           frequency_start = rep(x$wave_groups$start, 2),
-           frequency_end = rep(x$wave_groups$end, 2),
-           frequency_main = rep(earthtide::get_main_frequency(x$wave_groups$start,
-                                                          x$wave_groups$end), 2)
+           frequency_start = rep(x$wave_groups$start, times = 2),
+           frequency_end = rep(x$wave_groups$end, times = 2),
+           frequency = rep(earthtide::get_main_frequency(x$wave_groups$start,
+                                                         x$wave_groups$end), times = 2)
     )
 
   res$key <- paste0(x$prefix,
-                    rep(c('sin_', 'cos_'), times = n_terms),
-                    rep(1:n_terms, each = 2))
+                    rep(c('sin_', 'cos_'), each = n_terms),
+                    rep(1:n_terms, times = 2))
 
   res$id <- x$id
   res
 }
 
-
-# method = object$method,
-# astro_update = object$astro_update,
-# latitude = object$latitude,
-# longitude = object$longitude,
-# elevation = object$elevation,
-# azimuth = object$azimuth,
-# gravity = object$gravity,
-# earth_radius = object$earth_radius,
-# earth_eccen = object$earth_eccen,
-# cutoff = object$cutoff,
-# wave_groups = object$wave_groups,
-# catalog = object$catalog,
-# eop = object$eop,
-# scale = object$scale,

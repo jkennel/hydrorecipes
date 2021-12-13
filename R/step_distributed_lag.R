@@ -90,8 +90,7 @@ step_distributed_lag_new <-
 #' either use an FFT (no NA and large maximum knot), or a parallel method
 #' (NA, or small maximum knot).
 #'
-#' @param knots specific knots for the lagging process
-#' @param spline_fun spline function to use i.e. splines::ns, splines::bs
+#' @inheritParams splines::ns
 #'
 #' @return matrix with distributed lag terms
 #'
@@ -99,15 +98,14 @@ step_distributed_lag_new <-
 #'
 #' @export
 #'
-basis_lag <- function(knots,
-                      spline_fun = splines::ns) {
+basis_lag <- function(knots) {
 
   # generate basis functions
   max_knot <- max(knots)
   n_knots  <- length(knots)
 
   # generate basis lag
-  spline_fun(min(knots):max_knot,
+  splines::ns(min(knots):max_knot,
              knots = knots[-c(1, n_knots)],
              Boundary.knots = range(knots),
              intercept = TRUE)
@@ -120,9 +118,8 @@ basis_lag <- function(knots,
 #' either use an FFT (no NA and large maximum knot), or a parallel method
 #' (NA, or small maximum knot).
 #'
-#' @param x numeric vector to lag
-#' @param knots specific knots for the lagging process
-#' @param basis_lag lag matrix for convolution
+#' @inheritParams splines::ns
+#' @param basis_mat lag matrix for convolution
 #'
 #' @return matrix with distributed lag terms
 #'
@@ -175,7 +172,7 @@ convolve_fft <- function(x, y)
 #' cross_basis_fft
 #'
 #' @param basis_var numeric vector
-#' @param basis_lag lagging matrix
+#' @param basis_mat lagging matrix
 #'
 #' @return numeric vector result of convolution
 #' @export
@@ -268,16 +265,16 @@ tidy.step_distributed_lag <- function(x, ...) {
 
   if (is_trained(x)) {
     res <-
-      tibble(input_names = rep(x$columns, each = length(x$knots)),
+      tibble(terms = rep(x$columns, each = length(x$knots)),
              knots = rep(x$knots, times = length(x$columns)))
-    res$terms <- paste0(x$prefix, res$input_names, '_', res$knots)
+    res$key <- paste0(x$prefix, res$terms, '_', res$knots)
 
   } else {
     term_names <- sel2char(x$terms)
 
-    res <- tibble(input_names = rep(term_names, each = length(x$knots),
+    res <- tibble(terms = rep(term_names, each = length(x$knots),
                   knots = rep(x$knots, times = length(term_names))))
-    res$terms <- paste0(x$prefix, res$input_names, '_',
+    res$key <- paste0(x$prefix, res$terms, '_',
                         rep(x$knots, times = length(term_names)))
 
   }

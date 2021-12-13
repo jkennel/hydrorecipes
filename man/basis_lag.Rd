@@ -4,12 +4,14 @@
 \alias{basis_lag}
 \title{basis_lag}
 \usage{
-basis_lag(knots, spline_fun = splines::ns)
+basis_lag(knots)
 }
 \arguments{
-\item{knots}{specific knots for the lagging process}
-
-\item{spline_fun}{spline function to use i.e. splines::ns, splines::bs}
+\item{knots}{breakpoints that define the spline.  The default is no
+    knots; together with the natural boundary conditions this results in
+    a basis for linear regression on \code{x}.  Typical values are the
+    mean or median for one knot, quantiles for more knots.  See also
+    \code{Boundary.knots}.}
 }
 \value{
 matrix with distributed lag terms

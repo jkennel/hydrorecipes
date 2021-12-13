@@ -7,11 +7,15 @@
 distributed_lag(x, basis_mat, knots)
 }
 \arguments{
-\item{x}{numeric vector to lag}
+\item{x}{the predictor variable.  Missing values are allowed.}
 
-\item{knots}{specific knots for the lagging process}
+\item{basis_mat}{lag matrix for convolution}
 
-\item{basis_lag}{lag matrix for convolution}
+\item{knots}{breakpoints that define the spline.  The default is no
+    knots; together with the natural boundary conditions this results in
+    a basis for linear regression on \code{x}.  Typical values are the
+    mean or median for one knot, quantiles for more knots.  See also
+    \code{Boundary.knots}.}
 }
 \value{
 matrix with distributed lag terms

@@ -1,25 +1,30 @@
 Package: hydrorecipes
 Type: Package
-Title: Tools for exploring water level datasets.
+Title: Tools for exploring water level datasets
 Version: 0.0.1
 Date: 2021-12-07
 Authors@R: c(
     person("Jonathan", "Kennel", email="jkennel@uoguelph.ca", role = c("aut", "cre")),
     person("Beth", "Parker", role="ths"))
 Maintainer: Jonathan Kennel <jkennel@uoguelph.ca>
-Description: More about what it does (maybe more than
-      one line)
+Description: This package is to be used alongside the recipe package.  It adds 
+    a steps that may be useful for the analysis of water level data.
 License: GPL-3
 Depends:
+  R (>= 4.00),
   recipes (>= 0.1.15)
 Imports: Rcpp (>= 1.0.7),
-  Rcpp (>= 1.0.1),
   RcppArmadillo,
   RcppParallel,
+  earthtide,
+  generics,
   splines,
   tibble,
+  dplyr,
+  purrr,
   rlang,
   tidyr,
+  glue,
   fftw
 LinkingTo: Rcpp, RcppArmadillo, RcppParallel
 RoxygenNote: 7.1.2
@@ -29,3 +34,4 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+LazyData: true

@@ -7,7 +7,7 @@
 step_earthtide(
   recipe,
   ...,
-  role = "earthtide",
+  role = "predictor",
   trained = FALSE,
   method = "gravity",
   astro_update = 1L,
@@ -129,12 +129,11 @@ An updated version of `recipe` with the new step
 }
 \examples{
 library(earthtide)
-library(data.table)
-data(transducer)
 data(eterna_wavegroups)
-
+data(transducer)
+t_sub <- transducer[1:1000, c('datetime', 'wl')]
 rec <- recipe(wl ~ .,
-              data = transducer[1:1000, c('datetime', 'wl')])
+              data = t_sub)
 
 wg <- na.omit(eterna_wavegroups[eterna_wavegroups$time == '1 month',])
 with_et <- rec |>
@@ -143,7 +142,7 @@ with_et <- rec |>
                  longitude = -118.5,
                  wave_groups = wg) |>
   prep() |>
-  bake(new_data = transducer[1:1000, list(datetime, wl)])
+  bake(new_data = t_sub)
 
 }
 \seealso{

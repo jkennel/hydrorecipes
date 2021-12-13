@@ -7,7 +7,7 @@
 #'   specify an alternative filler value with the `default`
 #'   argument.
 #'
-#' @inheritParams recipes::step_pca
+#' @inheritParams recipes::step_lag
 #' @inheritParams recipes::step_center
 #' @param lead A vector of positive integers. Each specified column will be
 #'  lead for each value in the vector.
@@ -130,26 +130,13 @@ print.step_lead <-
 tidy.step_lead <- function(x, ...) {
   n_terms <- length(x$terms)
   res <-
-    tibble(input_names = rep(sel2char(x$terms), each = length(x$lead)),
+    tibble(terms = rep(sel2char(x$terms), each = length(x$lead)),
            shift = rep(-x$lead, times = n_terms)
     )
-  res$terms <- paste0(x$prefix, res$input_names, '_',
-                      rep(x$lead, times = n_terms))
+  res$key <- paste0(x$prefix, rep(x$lead, times = n_terms), '_', res$terms)
   res$id <- x$id
   res
 }
 
-#' @rdname tidy.recipe
-#' @param x A `step_lag` object.
-#' @export
-tidy.step_lag <- function(x, ...) {
-  n_terms <- length(x$terms)
-  res <-
-    tibble(input_names = rep(sel2char(x$terms), each = length(x$lag)),
-           shift = rep(x$lag, times = n_terms)
-    )
-  res$terms <- paste0(x$prefix, res$input_names, '_',
-                      rep(x$lag, times = n_terms))
-  res$id <- x$id
-  res
-}
+
+
