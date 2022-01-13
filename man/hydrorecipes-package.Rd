@@ -6,7 +6,7 @@
 \alias{hydrorecipes-package}
 \title{hydrorecipes: Tools for exploring water level datasets}
 \description{
-This package add a few steps that can be used for the analysis of water level data.
+This package is to be used alongside the recipe package. It adds a steps that may be useful for the analysis of water level data.
 }
 \author{
 \strong{Maintainer}: Jonathan Kennel \email{jkennel@uoguelph.ca}

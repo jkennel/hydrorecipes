@@ -233,6 +233,8 @@ tidy.step_earthtide <- function(x, ...) {
                     rep(1:n_terms, times = 2))
 
   res$id <- x$id
+  res$step_name <- 'step_earthtide'
+
   res
 }
 

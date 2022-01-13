@@ -2,7 +2,7 @@
 % Please edit documentation in R/step_distributed_lag.R
 \name{step_distributed_lag}
 \alias{step_distributed_lag}
-\title{Create a lagged predictor}
+\title{Create a distributed lagged predictor}
 \usage{
 step_distributed_lag(
   recipe,

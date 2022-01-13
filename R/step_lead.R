@@ -135,8 +135,25 @@ tidy.step_lead <- function(x, ...) {
     )
   res$key <- paste0(x$prefix, rep(x$lead, times = n_terms), '_', res$terms)
   res$id <- x$id
+  res$step_name <- 'step_lead'
   res
 }
+
+#' @rdname tidy.recipe
+#' @param x A `step_lag` object.
+#' @export
+tidy.step_lag <- function(x, ...) {
+  n_terms <- length(x$terms)
+  res <-
+    tibble(terms = rep(sel2char(x$terms), each = length(x$lag)),
+           shift = rep(x$lag, times = n_terms)
+    )
+  res$key <- paste0(x$prefix, rep(x$lag, times = n_terms), '_', res$terms)
+  res$id <- x$id
+  res$name <- 'step_lag'
+  res
+}
+
 
 
 

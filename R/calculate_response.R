@@ -75,6 +75,11 @@ response_harmonic <- function(co, step_info) {
 
 }
 
+
+get_step_and_coefficients <- function(rec) {
+  rec$last_term_info
+}
+
 #' response
 #'
 #' @param fit a model fit object having a coefficients method.

@@ -1,4 +1,4 @@
-#' Create a lagged predictor
+#' Create a distributed lagged predictor
 #'
 #' `step_distributed_lag` creates a *specification* of a recipe step that
 #'   will add new columns of lagged data. Lagged data will
@@ -206,7 +206,7 @@ prep.step_distributed_lag <- function(x, training, info = NULL, ...) {
 
   col_names <- recipes_eval_select(x$terms, training, info)
 
-  x_len <- nrow(training[, col_names])
+  x_len <- nrow(training)
 
   if(max(x$knots) > x_len) {
     stop('The maximum knot cannot be larger than the number of elements in x')
@@ -280,6 +280,7 @@ tidy.step_distributed_lag <- function(x, ...) {
   }
 
   res$id <- x$id
+  res$step_name <- 'step_distributed_lag'
 
   res
 }
