@@ -4,7 +4,7 @@
 \alias{response}
 \title{response}
 \usage{
-response(fit, rec)
+response(fit, rec, data, ...)
 }
 \arguments{
 \item{fit}{a model fit object having a coefficients method.}

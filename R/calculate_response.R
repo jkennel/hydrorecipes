@@ -80,6 +80,7 @@ get_step_and_coefficients <- function(rec) {
   rec$last_term_info
 }
 
+
 #' response
 #'
 #' @param fit a model fit object having a coefficients method.
@@ -88,14 +89,19 @@ get_step_and_coefficients <- function(rec) {
 #' @return a list of response functions corresponding to each step
 #' @export
 #'
-response <- function(fit, rec) {
+response <- function(fit, rec, data, ...) UseMethod("response")
+
+
+#' @rdname predict_terms
+#' @export
+response.lm <- function(fit, rec) {
 
   co <- coefficients(fit)
 
   rec_steps <- tidy(rec)
 
   resp <- vector(mode = "list", length = nrow(rec_steps))
-  names(resp) <- rec_steps$type
+  names(resp) <- paste0(rec_steps$type, '_', rec_steps$step_name)
 
   for (i in 1:nrow(rec_steps)) {
 
@@ -123,4 +129,43 @@ response <- function(fit, rec) {
   resp
 }
 
+#' @rdname predict_terms
+#' @export
+response.cv.glmnet <- function(fit, rec) {
+
+  co <- coefficients(fit)
+  co_names <- rownames(co)
+  co <- as.vector(co)
+  names(co) <- co_names
+
+  rec_steps <- tidy(rec)
+
+  resp <- vector(mode = "list", length = nrow(rec_steps))
+  names(resp) <- paste0(rec_steps$type, '_', rec_steps$step_name)
+
+  for (i in 1:nrow(rec_steps)) {
+
+    step_info <- tidy(rec, i)
+
+    type <- rec_steps$type[i]
+
+    if (type %in% c('lead', 'lag')) {
+      out <- response_lag(co, step_info)
+    } else if (type == 'distributed_lag') {
+      out <- response_distributed_lag(co, step_info)
+    } else if (type %in% c('harmonic', 'earthtide')) {
+      out <- response_harmonic(co, step_info)
+    } else {
+      print(paste0('No response method for type: ', type))
+      out <- NULL
+    }
+
+    if(!is.null(out)) {
+      resp[[i]] <- out
+    }
+
+  }
+
+  resp
+}
 
