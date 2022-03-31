@@ -15,8 +15,7 @@ log_lags(n, max_time_lag)
 integer vector of lags
 }
 \description{
-Generate logarithmically spacing for lags. Note: the number of lags will not
-exactly equal n unless max_time_lag is large or n is very small
+Generate lags that are spaced logarithmic. Lags start at 0.
 }
 \examples{
 log_lags(12, 86401)

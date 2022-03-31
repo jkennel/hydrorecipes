@@ -10,7 +10,7 @@ Maintainer: Jonathan Kennel <jkennel@uoguelph.ca>
 Description: This package is to be used alongside the recipe package.  It adds 
     a steps that may be useful for the analysis of water level data.
 License: GPL-3
-Depends:
+Depends: 
   R (>= 4.00),
   recipes (>= 0.1.15)
 Imports: Rcpp (>= 1.0.7),
@@ -33,6 +33,6 @@ Encoding: UTF-8
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
-    rmarkdown
+    rmarkdown, tinytest
 VignetteBuilder: knitr
 LazyData: true

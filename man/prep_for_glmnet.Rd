@@ -4,10 +4,14 @@
 \alias{prep_for_glmnet}
 \title{prep_for_glmnet}
 \usage{
-prep_for_glmnet(rec, col_names = NULL)
+prep_for_glmnet(rec, outcome_column = "outcome", na_rm = TRUE)
 }
 \arguments{
-\item{col_names}{}
+\item{rec}{a recipe}
+
+\item{outcome_column}{the column name that holds the outcome variable}
+
+\item{na_rm}{remove incomplete rows}
 }
 \value{
 

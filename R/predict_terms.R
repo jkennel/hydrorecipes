@@ -52,22 +52,22 @@ predict_terms.cv.glmnet <- function(fit, rec, data, ...) {
 
   rec_steps <- tidy(rec)
   rec_steps <- rec_steps[rec_steps$type != 'rm', ]
+
+  # output list
   resp <- vector(mode = "list",
                  length = nrow(rec_steps))
-  names(resp) <- rec_steps$type
+  names(resp) <- paste(rec_steps$type, rec_steps$step_name, sep = '_')
 
 
   for (i in 1:nrow(rec_steps)) {
 
     step_info <- tidy(rec, i)
 
-    # type <- rec_steps$type[i]
-
     co_sub <- get_coefficients(co, step_info)
 
     if (length(co_sub) >= 1) {
       term_val <- as.matrix(data[, names(co_sub)]) %*% as.matrix(co_sub)
-      plot(term_val, type = 'l', main = rec_steps$id[i])
+      # plot(term_val, type = 'l', main = rec_steps$id[i])
     }
     resp[[i]] <- term_val
   }
