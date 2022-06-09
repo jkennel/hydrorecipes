@@ -4,7 +4,7 @@
 \alias{run_glmnet}
 \title{run_glmnet}
 \usage{
-run_glmnet(rec, new_data, outcome_column = "outcome", ...)
+run_glmnet(rec, new_data = NULL, outcome_column = "outcome", ...)
 }
 \arguments{
 \item{...}{}

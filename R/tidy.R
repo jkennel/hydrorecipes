@@ -144,7 +144,7 @@ tidy.step_ns <- function(x, ...) {
 
   ret <- tibble(terms = rep(terms, each = new_cols),
          id = x$id)
-  ret$key <- paste(rep(terms, each = new_cols), "ns", rep(1:new_cols, times = length(terms)), sep = "_")
+  ret$key <- paste(rep(terms, each = new_cols), "ns", rep(names0(new_cols, ""), times = length(terms)), sep = "_")
   ret
 }
 

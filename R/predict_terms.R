@@ -18,9 +18,11 @@ predict_terms.lm <- function(fit, rec, data, ...) {
   co <- coefficients(fit)
 
   rec_steps <- tidy(rec)
-  rec_steps <- rec_steps[rec_steps$type != 'rm']
-  resp <- vector(mode = "list", length = nrow(rec_steps))
-  names(resp) <- rec_steps$type
+  rec_steps <- rec_steps[rec_steps$type != 'rm', ]
+
+  resp <- vector(mode = "list",
+                 length = nrow(rec_steps))
+  names(resp) <- paste(rec_steps$type, rec_steps$step_name, sep = '_')
 
   for (i in 1:nrow(rec_steps)) {
 
@@ -32,7 +34,7 @@ predict_terms.lm <- function(fit, rec, data, ...) {
 
     if (length(co_sub) >= 1) {
       term_val <- as.matrix(data[, names(co_sub)]) %*% co_sub
-      plot(term_val, type = 'l')
+      # plot(term_val, type = 'l')
     }
     resp[[i]] <- term_val
   }

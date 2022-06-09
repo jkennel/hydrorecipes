@@ -13,6 +13,7 @@ get_coefficients <- function(co, step_info) {
 
 }
 
+
 #' response_lag
 #'
 #' @inheritParams get_coefficients
@@ -30,6 +31,7 @@ response_lag <- function(co, step_info) {
   )
 
 }
+
 
 #' response_distributed_lag
 #'
@@ -128,6 +130,7 @@ response.lm <- function(fit, rec) {
 
   resp
 }
+
 
 #' @rdname predict_terms
 #' @export
