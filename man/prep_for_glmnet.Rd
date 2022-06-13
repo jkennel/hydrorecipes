@@ -14,8 +14,12 @@ prep_for_glmnet(rec, outcome_column = "outcome", na_rm = TRUE)
 \item{na_rm}{remove incomplete rows}
 }
 \value{
-
+a list of x and y terms usable with cv.glmnet
 }
 \description{
 prep_for_glmnet
+}
+\examples{
+data <- data.frame(outcome = 1:10, reg1 = rnorm(10), reg2 = rnorm(10))
+prep_for_glmnet(data)
 }

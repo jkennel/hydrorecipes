@@ -1,14 +1,42 @@
 #' run_glmnet
 #'
-#' @param rec
-#' @param new_data
-#' @param outcome_column
+#' @param rec a prepped recipe (recipe)
+#' @param new_data data to use with the recipe (data.frame)
+#' @param outcome_column name of the outcome variable (character)
 #' @param ...
 #'
-#' @return
+#' @return a list that contains the model fit info, the response weights,
+#'  and the contributions for each component
+#'
 #' @export
 #'
 #' @examples
+#' # kernel
+#'
+#' library(glmnet)
+#' set.seed(1)
+#' n_data   <- 200
+#' kern_len <- 20
+#' kern     <- 0.8^(0:kern_len) * 0.5
+#' kern     <- kern / sum(kern)
+#' input    <- rnorm(n_data)
+#' outcome  <- fftw_convolve(input, rev(kern), align = 'right')
+#'
+#' plot(input, type = 'l', col = '#b47846', lwd = 2, ylab = 'values',
+#'   main = 'orange is input, blue is output')
+#' points(outcome, type = 'l', col = 'steelblue', lwd = 2)
+#' data <- data.frame(outcome = head(outcome, 179), input = head(input, 179))
+#' rec <- recipe(outcome~input, data) |>
+#'   step_distributed_lag(input, knots = log_lags(4, 20)) |>
+#'   step_rm('input') |>
+#'   prep()
+#' res <- run_glmnet(rec, new_data = data,
+#'   outcome_column = 'outcome',
+#'   alpha = 1,
+#'   relax = TRUE)
+#' plot(co~lag, res$response[[1]], type = 'o')
+#' points(y = kern, x = 0:20, type = 'o', pch = 20, col = '#b47846', lwd = 2)
+#' plot(outcome~predicted, res$decomp, type ='p', pch = 20, cex = 0.5)
 run_glmnet <- function(rec,
                        new_data = NULL,
                        outcome_column = 'outcome', ...) {

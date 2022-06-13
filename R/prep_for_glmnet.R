@@ -4,10 +4,12 @@
 #' @param outcome_column the column name that holds the outcome variable
 #' @param na_rm remove incomplete rows
 #'
-#' @return
+#' @return a list of x and y terms usable with cv.glmnet
 #' @export
 #'
 #' @examples
+#' data <- data.frame(outcome = 1:10, reg1 = rnorm(10), reg2 = rnorm(10))
+#' prep_for_glmnet(data)
 prep_for_glmnet <- function(rec,
                             outcome_column = 'outcome',
                             na_rm = TRUE) {

@@ -10,6 +10,7 @@
 \alias{tidy.step}
 \alias{tidy.check}
 \alias{tidy.step_ns}
+\alias{tidy.step_intercept}
 \title{Tidy the Result of a Recipe}
 \usage{
 \method{tidy}{step_distributed_lag}(x, ...)
@@ -27,6 +28,8 @@
 \method{tidy}{check}(x, ...)
 
 \method{tidy}{step_ns}(x, ...)
+
+\method{tidy}{step_intercept}(x, ...)
 }
 \arguments{
 \item{x}{A `recipe` object, step, or check (trained or otherwise).}

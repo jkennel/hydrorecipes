@@ -133,6 +133,7 @@ tidy.check <- function(x, ...) {
 
 
 #' @rdname tidy.recipe
+#' @param x A `step_ns` object.
 #' @export
 tidy.step_ns <- function(x, ...) {
   if (is_trained(x)) {
@@ -145,6 +146,23 @@ tidy.step_ns <- function(x, ...) {
   ret <- tibble(terms = rep(terms, each = new_cols),
          id = x$id)
   ret$key <- paste(rep(terms, each = new_cols), "ns", rep(names0(new_cols, ""), times = length(terms)), sep = "_")
+  ret
+}
+
+#' @rdname tidy.recipe
+#' @param x A `step_intercept` object.
+#' @export
+tidy.step_intercept <- function(x, ...) {
+  if (is_trained(x)) {
+    terms <- names(x$objects)
+  } else {
+    terms <- sel2char(x$terms)
+  }
+  new_cols <- ncol(x$objects[[1]])
+
+  ret <- tibble(terms = terms,
+                id = x$id)
+  ret$key <- paste(terms, "intercept", sep = "_")
   ret
 }
 
