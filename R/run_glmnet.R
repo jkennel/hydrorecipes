@@ -63,7 +63,7 @@ run_glmnet <- function(rec,
   decomp <- predict_terms(fit, rec, glm_in$x)
   decomp <- append(decomp, list(outcome = glm_in$y))
   decomp <- append(decomp, list(predicted = predict(fit, glm_in$x)))
-  decomp <- data.table::as.data.table(decomp)
+  decomp <- as.data.frame(decomp)
 
 
 

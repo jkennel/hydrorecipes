@@ -10,7 +10,6 @@
 #' @importFrom purrr map2
 #' @importFrom glue glue
 #' @importFrom generics tidy
-#' @importFrom tsibble gcd_interval
 #' @importFrom stats coefficients
 NULL
 
