@@ -87,27 +87,28 @@ get_step_and_coefficients <- function(rec) {
 #'
 #' @param fit a model fit object having a coefficients method.
 #' @param rec a prepped recipe object..
+#' @param ... currently not used
 #'
 #' @return a list of response functions corresponding to each step
 #' @export
 #'
-response <- function(fit, rec, data, ...) UseMethod("response")
+response <- function(fit, rec, ...) UseMethod("response")
 
 
-#' @rdname predict_terms
+#' @rdname response
 #' @export
-response.lm <- function(fit, rec) {
+response.lm <- function(fit, rec, ...) {
 
   co <- coefficients(fit)
 
-  rec_steps <- tidy(rec)
+  rec_steps <- tidy2(rec)
 
   resp <- vector(mode = "list", length = nrow(rec_steps))
   names(resp) <- paste0(rec_steps$type, '_', rec_steps$step_name)
 
   for (i in 1:nrow(rec_steps)) {
 
-    step_info <- tidy(rec, i)
+    step_info <- tidy2(rec, i)
 
     type <- rec_steps$type[i]
 
@@ -132,23 +133,23 @@ response.lm <- function(fit, rec) {
 }
 
 
-#' @rdname predict_terms
+#' @rdname response
 #' @export
-response.cv.glmnet <- function(fit, rec) {
+response.cv.glmnet <- function(fit, rec, ...) {
 
   co <- coefficients(fit)
   co_names <- rownames(co)
   co <- as.vector(co)
   names(co) <- co_names
 
-  rec_steps <- tidy(rec)
+  rec_steps <- tidy2(rec)
 
   resp <- vector(mode = "list", length = nrow(rec_steps))
   names(resp) <- paste0(rec_steps$type, '_', rec_steps$step_name)
 
   for (i in 1:nrow(rec_steps)) {
 
-    step_info <- tidy(rec, i)
+    step_info <- tidy2(rec, i)
 
     type <- rec_steps$type[i]
 

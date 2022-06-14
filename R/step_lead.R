@@ -128,10 +128,8 @@ print.step_lead <-
 
 
 
-#' @rdname tidy.recipe
-#' @param x A `step_lead` object.
 #' @export
-tidy.step_lead <- function(x, ...) {
+tidy2.step_lead <- function(x, ...) {
   n_terms <- length(x$terms)
   res <-
     tibble(terms = rep(sel2char(x$terms), each = length(x$lead)),
@@ -144,10 +142,8 @@ tidy.step_lead <- function(x, ...) {
 }
 
 
-#' @rdname tidy.recipe
-#' @param x A `step_lag` object.
 #' @export
-tidy.step_lag <- function(x, ...) {
+tidy2.step_lag <- function(x, ...) {
   n_terms <- length(x$terms)
   res <-
     tibble(terms = rep(sel2char(x$terms), each = length(x$lag)),

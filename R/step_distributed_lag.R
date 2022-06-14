@@ -259,7 +259,6 @@ print.step_distributed_lag <-
   }
 
 
-#' @rdname tidy.recipe
 #' @export
 tidy.step_distributed_lag <- function(x, ...) {
 
@@ -285,3 +284,27 @@ tidy.step_distributed_lag <- function(x, ...) {
   res
 }
 
+#' @export
+tidy2.step_distributed_lag <- function(x, ...) {
+
+  if (is_trained(x)) {
+    res <-
+      tibble(terms = rep(x$columns, each = length(x$knots)),
+             knots = rep(x$knots, times = length(x$columns)))
+    res$key <- paste0(x$prefix, res$terms, '_', res$knots)
+
+  } else {
+    term_names <- sel2char(x$terms)
+
+    res <- tibble(terms = rep(term_names, each = length(x$knots),
+                              knots = rep(x$knots, times = length(term_names))))
+    res$key <- paste0(x$prefix, res$terms, '_',
+                      rep(x$knots, times = length(term_names)))
+
+  }
+
+  res$id <- x$id
+  res$step_name <- 'step_distributed_lag'
+
+  res
+}

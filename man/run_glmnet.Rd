@@ -13,7 +13,7 @@ run_glmnet(rec, new_data = NULL, outcome_column = "outcome", ...)
 
 \item{outcome_column}{name of the outcome variable (character)}
 
-\item{...}{}
+\item{...}{arguments to pass to cv.glmnet}
 }
 \value{
 a list that contains the model fit info, the response weights,
@@ -24,7 +24,7 @@ run_glmnet
 }
 \examples{
 # kernel
-
+library(hydrorecipes)
 library(glmnet)
 set.seed(1)
 n_data   <- 200
@@ -37,12 +37,13 @@ outcome  <- fftw_convolve(input, rev(kern), align = 'right')
 plot(input, type = 'l', col = '#b47846', lwd = 2, ylab = 'values',
   main = 'orange is input, blue is output')
 points(outcome, type = 'l', col = 'steelblue', lwd = 2)
-data <- data.frame(outcome = head(outcome, 179), input = head(input, 179))
+data <- data.frame(outcome = outcome, input = input)
 rec <- recipe(outcome~input, data) |>
   step_distributed_lag(input, knots = log_lags(4, 20)) |>
   step_rm('input') |>
   prep()
-res <- run_glmnet(rec, new_data = data,
+res <- run_glmnet(rec,
+  new_data = data,
   outcome_column = 'outcome',
   alpha = 1,
   relax = TRUE)

@@ -17,7 +17,7 @@ predict_terms.lm <- function(fit, rec, data, ...) {
 
   co <- coefficients(fit)
 
-  rec_steps <- tidy(rec)
+  rec_steps <- tidy2(rec)
   rec_steps <- rec_steps[rec_steps$type != 'rm', ]
 
   resp <- vector(mode = "list",
@@ -26,7 +26,7 @@ predict_terms.lm <- function(fit, rec, data, ...) {
 
   for (i in 1:nrow(rec_steps)) {
 
-    step_info <- tidy(rec, i)
+    step_info <- tidy2(rec, i)
 
     type <- rec_steps$type[i]
 
@@ -52,7 +52,7 @@ predict_terms.cv.glmnet <- function(fit, rec, data, ...) {
   co <- as.vector(co)
   names(co) <- co_names
 
-  rec_steps <- tidy(rec)
+  rec_steps <- tidy2(rec)
   rec_steps <- rec_steps[rec_steps$type != 'rm', ]
 
   # output list
@@ -63,7 +63,7 @@ predict_terms.cv.glmnet <- function(fit, rec, data, ...) {
 
   for (i in 1:nrow(rec_steps)) {
 
-    step_info <- tidy(rec, i)
+    step_info <- tidy2(rec, i)
 
     co_sub <- get_coefficients(co, step_info)
 

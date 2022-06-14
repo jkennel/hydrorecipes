@@ -102,11 +102,13 @@ fftw_convolve <- function(x,
   # adjust output for alignment
   if (align == 'right') {
     for(i in 1:ncol(y)){
-      u[,i] <- data.table::shift(u[,i], n = length(end), type = 'lag')
+      u[,i] <- lag(u[,i], length(end))
+      # u[,i] <- data.table::shift(u[,i], n = length(end), type = 'lag')
     }
   } else if (align == 'left') {
     for(i in 1:ncol(y)) {
-      u[,i] <- data.table::shift(u[,i], n = length(start), type = 'lead')
+      u[,i] <- rev(lag(rev(u[, i]), length(start)))
+      #u[,i] <- data.table::shift(u[,i], n = length(start), type = 'lead')
     }
   }
 

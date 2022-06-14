@@ -207,10 +207,38 @@ print.step_earthtide <-
   }
 
 
-#' @rdname tidy.recipe
-#' @param x A `step_earthtide` object.
 #' @export
 tidy.step_earthtide <- function(x, ...) {
+
+  n_terms <- nrow(x$wave_groups)
+  res <-
+    tibble(terms = rep(sel2char(x$terms), n_terms * 2),
+           latitude = rep(x$latitude, n_terms * 2),
+           longitude = rep(x$longitude, n_terms * 2),
+           elevation = rep(x$elevation, n_terms * 2),
+           azimuth = rep(x$azimuth, n_terms * 2),
+           gravity = rep(x$gravity, n_terms * 2),
+           cutoff = rep(x$cutoff, n_terms * 2),
+           catalog = rep(x$catalog, n_terms * 2),
+           frequency_start = rep(x$wave_groups$start, times = 2),
+           frequency_end = rep(x$wave_groups$end, times = 2),
+           frequency = rep(earthtide::get_main_frequency(x$wave_groups$start,
+                                                         x$wave_groups$end), times = 2)
+    )
+
+  res$key <- paste0(x$prefix,
+                    rep(c('sin_', 'cos_'), each = n_terms),
+                    rep(1:n_terms, times = 2))
+
+  res$id <- x$id
+  res$step_name <- 'step_earthtide'
+
+  res
+}
+
+
+#' @export
+tidy2.step_earthtide <- function(x, ...) {
 
   n_terms <- nrow(x$wave_groups)
   res <-

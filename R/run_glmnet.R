@@ -3,7 +3,7 @@
 #' @param rec a prepped recipe (recipe)
 #' @param new_data data to use with the recipe (data.frame)
 #' @param outcome_column name of the outcome variable (character)
-#' @param ...
+#' @param ... arguments to pass to cv.glmnet
 #'
 #' @return a list that contains the model fit info, the response weights,
 #'  and the contributions for each component
@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' # kernel
-#'
+#' library(hydrorecipes)
 #' library(glmnet)
 #' set.seed(1)
 #' n_data   <- 200
@@ -25,12 +25,13 @@
 #' plot(input, type = 'l', col = '#b47846', lwd = 2, ylab = 'values',
 #'   main = 'orange is input, blue is output')
 #' points(outcome, type = 'l', col = 'steelblue', lwd = 2)
-#' data <- data.frame(outcome = head(outcome, 179), input = head(input, 179))
+#' data <- data.frame(outcome = outcome, input = input)
 #' rec <- recipe(outcome~input, data) |>
 #'   step_distributed_lag(input, knots = log_lags(4, 20)) |>
 #'   step_rm('input') |>
 #'   prep()
-#' res <- run_glmnet(rec, new_data = data,
+#' res <- run_glmnet(rec,
+#'   new_data = data,
 #'   outcome_column = 'outcome',
 #'   alpha = 1,
 #'   relax = TRUE)
@@ -62,7 +63,7 @@ run_glmnet <- function(rec,
   # calculate the contribution of each step
   decomp <- predict_terms(fit, rec, glm_in$x)
   decomp <- append(decomp, list(outcome = glm_in$y))
-  decomp <- append(decomp, list(predicted = predict(fit, glm_in$x)))
+  decomp <- append(decomp, list(predicted = as.numeric(predict(fit, newx = glm_in$x))))
   decomp <- as.data.frame(decomp)
 
 
