@@ -14,10 +14,10 @@ Depends:
   R (>= 4.1.0),
   recipes (>= 0.1.15)
 Imports: Rcpp (>= 1.0.7),
-  RcppArmadillo,
-  RcppParallel,
+  tidyselect,
   earthtide,
   generics,
+  ggplot2,
   splines,
   glmnet,
   tibble,
@@ -33,6 +33,8 @@ Encoding: UTF-8
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
-    rmarkdown, tinytest
+    rmarkdown,
+    tinytest,
+    broom
 VignetteBuilder: knitr
 LazyData: true

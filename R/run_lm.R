@@ -1,8 +1,8 @@
-#' run_glmnet
+#' run_lm
 #'
 #' @param rec a prepped recipe (recipe)
 #' @param new_data data to use with the recipe (data.frame)
-#' @param ... arguments to pass to cv.glmnet
+#' @param ... arguments to pass to lm
 #'
 #' @return a list that contains the model fit info, the response weights,
 #'  and the contributions for each component
@@ -12,7 +12,6 @@
 #' @examples
 #' # kernel
 #' library(hydrorecipes)
-#' library(glmnet)
 #' set.seed(1)
 #' n_data   <- 200
 #' kern_len <- 20
@@ -29,42 +28,37 @@
 #'   step_distributed_lag(input, knots = log_lags(4, 20)) |>
 #'   step_rm('input') |>
 #'   prep()
-#' res <- run_glmnet(rec,
-#'   new_data = data,
-#'   alpha = 1,
-#'   relax = TRUE)
+#' res <- run_lm(rec,
+#'   new_data = data)
 #' plot(co~lag, res$response[[1]], type = 'o')
 #' points(y = kern, x = 0:20, type = 'o', pch = 20, col = '#b47846', lwd = 2)
 #' plot(outcome~predicted, res$components, type ='p', pch = 20, cex = 0.5)
-run_glmnet <- function(rec,
-                       new_data = NULL, ...) {
+run_lm <- function(rec,
+                   new_data = NULL,
+                   ...) {
 
   outcome_column <- rec$var_info
   outcome_column <- outcome_column$variable[
     which(outcome_column$role == 'outcome')]
 
   # dataset for regression
-  glm_rec <- rec |>
+  lm_rec <- rec |>
     recipes::bake(new_data = new_data)
 
-  # save the complete cases
-  complete <- complete.cases(glm_rec)
 
-  # generate input matrices for glm_rec
-  glm_in <- prep_for_glmnet(glm_rec,
-                            outcome_column = outcome_column,
-                            na_rm = FALSE)
+  # save the complete cases
+  complete <- complete.cases(lm_rec)
+
 
   # fit model
-  fit <- cv.glmnet(x = glm_in$x[complete, , drop = FALSE],
-                   y = glm_in$y[complete, drop = FALSE],
-                   ...)
+  form <- formula(paste0(outcome_column, '~.'))
+  fit  <- lm(formula = form, data = lm_rec, ...)
 
 
   # calculate the contribution of each step
-  decomp <- predict_terms(fit, rec, glm_in$x[complete,])
+  decomp <- predict_terms(fit, rec, lm_rec[complete,])
   decomp <- append(decomp, list(new_data[complete,]))
-  decomp <- append(decomp, list(predicted = as.numeric(predict(fit, newx = glm_in$x[complete,]))))
+  decomp <- append(decomp, list(predicted = as.numeric(predict(fit, newx = lm_rec[complete,]))))
   decomp <- as.data.frame(decomp)
 
 
@@ -79,5 +73,5 @@ run_glmnet <- function(rec,
 
   class(resp) <- 'deconvolution'
   resp
-}
 
+}

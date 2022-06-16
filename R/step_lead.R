@@ -126,8 +126,6 @@ print.step_lead <-
 
 
 
-
-
 #' @export
 tidy2.step_lead <- function(x, ...) {
   n_terms <- length(x$terms)
@@ -141,6 +139,10 @@ tidy2.step_lead <- function(x, ...) {
   res
 }
 
+#' @export
+tidy.step_lead <- function(x, ...) {
+  tidy2.step_lead(x, ...)
+}
 
 #' @export
 tidy2.step_lag <- function(x, ...) {
@@ -151,10 +153,14 @@ tidy2.step_lag <- function(x, ...) {
     )
   res$key <- paste0(x$prefix, rep(x$lag, times = n_terms), '_', res$terms)
   res$id <- x$id
-  res$name <- 'step_lag'
+  res$step_name <- 'step_lag'
   res
 }
 
+#' @export
+tidy.step_lag <- function(x, ...) {
+  tidy2.step_lag(x, ...)
+}
 
 
 

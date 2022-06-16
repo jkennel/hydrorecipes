@@ -95,12 +95,19 @@ tidy2.recipe <- function(x, number = NA, id = NA, ...) {
           "."
         )
       )
+
     res <- tidy(x$steps[[number]], ...)
-    if("step_name" %in% names(res)) {
-      if (res$step_name[1] %in% c('step_distributed_lag', 'step_earthtide', 'step_ns', 'step_intercept')) {
-        res <- tidy2(x$steps[[number]], ...)
-      }
+    nm  <- class(x$steps[[number]])[1]
+
+    if (nm %in% c('step_distributed_lag',
+                  'step_earthtide',
+                  'step_ns',
+                  'step_intercept',
+                  'step_lag',
+                  'step_lead')) {
+      res <- tidy2(x$steps[[number]], ...)
     }
+
   }
 
 }
@@ -139,8 +146,11 @@ tidy2.step_ns <- function(x, ...) {
   new_cols <- ncol(x$objects[[1]])
 
   ret <- tibble(terms = rep(terms, each = new_cols),
-                id = x$id)
-  ret$key <- paste(rep(terms, each = new_cols), "ns", rep(names0(new_cols, ""), times = length(terms)), sep = "_")
+                id = x$id,
+                step_name = 'step_ns')
+  ret$key <- paste(rep(terms, each = new_cols), "ns",
+                   rep(names0(new_cols, ""),
+                       times = length(terms)), sep = "_")
   ret
 }
 
@@ -156,7 +166,8 @@ tidy2.step_intercept <- function(x, ...) {
   new_cols <- ncol(x$objects[[1]])
 
   ret <- tibble(terms = terms,
-                id = x$id)
+                id = x$id,
+                step_name = 'step_intercept')
   ret$key <- paste(terms, "intercept", sep = "_")
   ret
 }

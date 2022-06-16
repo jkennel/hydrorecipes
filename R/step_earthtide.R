@@ -44,7 +44,7 @@
 #'
 #' @seealso [step_earthtide()] [recipe()]
 #'   [prep.recipe()] [bake.recipe()]
-#' @importFrom recipes add_step step terms_select ellipse_check rand_id
+#' @importFrom recipes add_step step recipes_eval_select ellipse_check rand_id
 step_earthtide <-
   function(recipe,
            ...,
@@ -156,7 +156,7 @@ prep.step_earthtide <- function(x, training, info = NULL, ...) {
     scale = x$scale,
     default = x$default,
     prefix = x$prefix,
-    columns = terms_select(x$terms, info = info),
+    columns = recipes_eval_select(x$terms, training, info = info),
     keep_original_cols = get_keep_original_cols(x),
     skip = x$skip,
     id = x$id
@@ -266,3 +266,8 @@ tidy2.step_earthtide <- function(x, ...) {
   res
 }
 
+#' @export
+tidy.step_earthtide <- function(x, ...) {
+
+  tidy2.step_earthtide(x, ...)
+}
