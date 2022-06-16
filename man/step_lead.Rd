@@ -79,6 +79,7 @@ recipe(~ ., data = df) |>
 }
 \seealso{
 Other row operation steps: 
-\code{\link{step_distributed_lag}()}
+\code{\link{step_distributed_lag}()},
+\code{\link{step_lead_lag}()}
 }
 \concept{row operation steps}
