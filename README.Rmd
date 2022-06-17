@@ -21,25 +21,27 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/jkennel/hydrorecipes/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jkennel/hydrorecipes/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of hydrorecipes is to supplement the recipes package with a few steps
-that can help deal with moderately sized water level datasets.
+The goal of hydrorecipes is to supplement the [recipes package](https://recipes.tidymodels.org) with a few steps
+that can help deal with moderately sized water level datasets. These were developed primarily with regression convolution in mind. The following steps are currently available:
+
+- *step_lead_lag* is a more flexible version of *step_lag* from the [recipes package](https://recipes.tidymodels.org).  Values can be negative which indicates the vector is lead.  In addition, subsetting can be done on the dataset during this process when dealing with very large datasets leading to performance gains without sacrificing temporal accuracy. 
+- *step_distributed_lag* is a distributed lag approach for modelling the response in a flexible yet concise manner.  This is useful when you have a long maximum lag or large datasets.
+- *step_earthtide* uses the [earthtide package](https://cran.rstudio.com/web/packages/earthtide/index.html) to model the synthetic Earth tide given locations and times. This can provide a single Earth tide curve or a set of harmonics that can be used in regression models.
 
 ## Installation
 
 You can install the development version of hydrorecipes from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("jkennel/hydrorecipes")
+# install.packages("remotes")
+remotes::install_github("jkennel/hydrorecipes")
 ```
 
 ## Example
 
-## Kennel 2020
+This is the method of [Kennel 2020](http://hdl.handle.net/10214/17890) which uses a distributed lag model and the [earthtide package](https://cran.rstudio.com/web/packages/earthtide/index.html) to generate synthetic wave groups.  A ~1.5 month dataset of water and barometric pressure having a monitoring frequency of 2 minutes is presented below.  The barometric response is modeled over two days using a distributed lag model with 12 regressor terms. The *knots* are logarithmically separated over two days to accurately capture early and late time responses which can be caused by different physical mechanisms.
 
-This is the method of Kennel 2020 which uses a distributed lag model and the **earthtide** package to generate synthetic wave groups.
-
-```{r}
+```{r message = FALSE}
 library(hydrorecipes)
 library(earthtide)
 
@@ -71,7 +73,7 @@ rec <- recipe(wl~baro+datetime, transducer) |>
                  catalog = catalog,
                  astro_update = 1,
                  wave_groups = wave_groups) |>
-  step_ns(datetime, deg_free = 10) |>
+  step_ns(datetime, deg_free = 12) |>
   prep()
 
 input <- rec |> bake(new_data = NULL)

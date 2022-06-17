@@ -109,7 +109,7 @@ int get_end(int n, int n_out, int lag, int n_subset) {
 //'
 //' @export
 // [[Rcpp::export]]
-Rcpp::NumericVector shift_subset(Rcpp::NumericVector x,
+Rcpp::NumericVector shift_subset(const Rcpp::NumericVector x,
                                  int lag = 0,
                                  int n_subset = 1,
                                  int n_shift = 0) {
@@ -166,8 +166,8 @@ using namespace Rcpp;
 //'
 //' @export
 // [[Rcpp::export]]
-Rcpp::NumericMatrix lag_matrix(Rcpp::NumericVector x,
-                               Rcpp::IntegerVector lags,
+Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericVector& x,
+                               const Rcpp::IntegerVector& lags,
                                int n_subset = 1,
                                int n_shift = 0,
                                std::string var_name = "lag") {
@@ -214,8 +214,12 @@ struct dl_worker: public Worker {
 
   // initialize from Rcpp input and output matrixes (the RMatrix class
   // can be automatically converted to from the Rcpp matrix type)
-  dl_worker(const arma::vec& bv, const arma::mat& bl, arma::mat& cb,
-            int lag_max, int n_subset, int offset)
+  dl_worker(const arma::vec& bv,
+            const arma::mat& bl,
+            arma::mat& cb,
+            int lag_max,
+            int n_subset,
+            int offset)
     : bv(bv), bl(bl), cb(cb), lag_max(lag_max), n_subset(n_subset), offset(offset) {}
 
   void operator() (std::size_t begin, std::size_t end) {

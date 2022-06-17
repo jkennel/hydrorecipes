@@ -64,12 +64,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // shift_subset
-Rcpp::NumericVector shift_subset(Rcpp::NumericVector x, int lag, int n_subset, int n_shift);
+Rcpp::NumericVector shift_subset(const Rcpp::NumericVector x, int lag, int n_subset, int n_shift);
 RcppExport SEXP _hydrorecipes_shift_subset(SEXP xSEXP, SEXP lagSEXP, SEXP n_subsetSEXP, SEXP n_shiftSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< int >::type lag(lagSEXP);
     Rcpp::traits::input_parameter< int >::type n_subset(n_subsetSEXP);
     Rcpp::traits::input_parameter< int >::type n_shift(n_shiftSEXP);
@@ -78,13 +78,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // lag_matrix
-Rcpp::NumericMatrix lag_matrix(Rcpp::NumericVector x, Rcpp::IntegerVector lags, int n_subset, int n_shift, std::string var_name);
+Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericVector& x, const Rcpp::IntegerVector& lags, int n_subset, int n_shift, std::string var_name);
 RcppExport SEXP _hydrorecipes_lag_matrix(SEXP xSEXP, SEXP lagsSEXP, SEXP n_subsetSEXP, SEXP n_shiftSEXP, SEXP var_nameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type lags(lagsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type lags(lagsSEXP);
     Rcpp::traits::input_parameter< int >::type n_subset(n_subsetSEXP);
     Rcpp::traits::input_parameter< int >::type n_shift(n_shiftSEXP);
     Rcpp::traits::input_parameter< std::string >::type var_name(var_nameSEXP);
