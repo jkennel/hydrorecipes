@@ -24,17 +24,17 @@ tidy2 <- function(x, ...) {
 #' @param x A `recipe` object, step, or check (trained or otherwise).
 #' @param number An integer or `NA`. If missing and `id` is not provided,
 #'  the return value is a list of the operations in the recipe.
-#'  If a number is given, a `tidy` method is executed for that operation
+#'  If a number is given, a `tidy2` method is executed for that operation
 #'  in the recipe (if it exists). `number` must not be provided if
 #'  `id` is.
 #' @param id A character string or `NA`. If missing and `number` is not provided,
 #'  the return value is a list of the operations in the recipe.
-#'  If a character string is given, a `tidy` method is executed for that
+#'  If a character string is given, a `tidy2` method is executed for that
 #'  operation in the recipe (if it exists). `id` must not be provided
 #'  if `number` is.
 #' @param ... Not currently used.
 #' @return A tibble with columns that vary depending on what
-#'  `tidy` method is executed. When `number` and `id` are `NA`, a
+#'  `tidy2` method is executed. When `number` and `id` are `NA`, a
 #'  tibble with columns `number` (the operation iteration),
 #'  `operation` (either "step" or "check"),
 #'  `type` (the method, e.g. "nzv", "center"), a logical
@@ -122,7 +122,7 @@ tidy2.recipe <- function(x, number = NA, id = NA, ...) {
 tidy2.step <- function(x, ...) {
   rlang::abort(
     paste0(
-      "No `tidy` method for a step with classes: ",
+      "No `tidy2` method for a step with classes: ",
       paste0(class(x), collapse = ", ")
     )
   )
@@ -132,7 +132,7 @@ tidy2.step <- function(x, ...) {
 tidy2.check <- function(x, ...) {
   rlang::abort(
     paste0(
-      "No `tidy` method for a check with classes: ",
+      "No `tidy2` method for a check with classes: ",
       paste0(class(x), collapse = ", ")
     )
   )
