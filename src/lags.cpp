@@ -206,11 +206,11 @@ struct dl_worker: public Worker {
   // input vector of matrices
   const arma::vec& bv;
   const arma::mat& bl;
+  arma::mat& cb;
   int lag_max;
   int n_subset;
   int offset;
 
-  arma::mat& cb;
 
   // initialize from Rcpp input and output matrixes (the RMatrix class
   // can be automatically converted to from the Rcpp matrix type)
