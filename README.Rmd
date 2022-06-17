@@ -35,10 +35,49 @@ devtools::install_github("jkennel/hydrorecipes")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+## Kennel 2020
 
-```{r example}
+This is the method of Kennel 2020 which uses a distributed lag model and the **earthtide** package to generate synthetic wave groups.
+
+```{r}
 library(hydrorecipes)
-## basic example code
+library(earthtide)
+
+data(transducer)
+
+# convert to numeric because step_ns doesn't handle POSIXct
+transducer$datetime <- as.numeric(transducer$datetime)
+
+# Earth tide inputs
+wave_groups <- earthtide::eterna_wavegroups
+wave_groups <- na.omit(wave_groups[wave_groups$time == '1 month', ])
+wave_groups <- wave_groups[wave_groups$start > 0.5,]
+latitude  <- 34.0
+longitude <- -118.5
+elevation <- 500
+cutoff    <- 1e-6
+catalog   <- 'ksm04'
+method    <- 'volume_strain'
+
+# create recipe 
+rec <- recipe(wl~baro+datetime, transducer) |>
+  step_distributed_lag(baro, knots = log_lags(15, 86400 * 2 / 120)) |>
+  step_earthtide(datetime,
+                 latitude = latitude,
+                 longitude = longitude,
+                 elevation = elevation,
+                 cutoff = cutoff,
+                 method = method,
+                 catalog = catalog,
+                 astro_update = 1,
+                 wave_groups = wave_groups) |>
+  step_ns(datetime, deg_free = 10) |>
+  prep()
+
+input <- rec |> bake(new_data = NULL)
+```
+
+```{r}
+summary(fit <- lm(wl~., input))
 ```
 

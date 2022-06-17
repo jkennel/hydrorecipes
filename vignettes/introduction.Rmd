@@ -98,10 +98,10 @@ This is the method of Kennel 2020 which uses a distributed lag model and the **e
 wave_groups <- earthtide::eterna_wavegroups
 wave_groups <- na.omit(wave_groups[wave_groups$time == '1 month', ])
 wave_groups <- wave_groups[wave_groups$start > 0.5,]
-latitude  <- 34.23411
-longitude <- -118.678
+latitude  <- 34.0
+longitude <- -118.5
 elevation <- 500
-cutoff    <- 1e-7
+cutoff    <- 1e-6
 catalog   <- 'ksm04'
 method    <- 'volume_strain'
 rec_kennel <- recipe(wl~baro+datetime_num, transducer) |>
