@@ -10,11 +10,11 @@ status](https://www.r-pkg.org/badges/version/hydrorecipes)](https://CRAN.R-proje
 [![R-CMD-check](https://github.com/jkennel/hydrorecipes/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jkennel/hydrorecipes/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of hydrorecipes is to supplement the [recipes
+The goal of **hydrorecipes** is to supplement the [recipes
 package](https://recipes.tidymodels.org) with a few steps that can help
 deal with moderately sized water level datasets. These were developed
-primarily with regression convolution in mind. The following steps are
-currently available:
+primarily with regression convolution in mind to be used with *lm* or
+*glmnet*. The following steps are currently available:
 
 -   *step_lead_lag* is a more flexible version of *step_lag* from the
     [recipes package](https://recipes.tidymodels.org). Values can be
@@ -33,7 +33,7 @@ currently available:
 
 ## Installation
 
-You can install the development version of hydrorecipes from
+You can install the development version of **hydrorecipes** from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -70,9 +70,6 @@ wave_groups <- wave_groups[wave_groups$start > 0.5,]
 latitude  <- 34.0
 longitude <- -118.5
 elevation <- 500
-cutoff    <- 1e-6
-catalog   <- 'ksm04'
-method    <- 'volume_strain'
 
 # create recipe 
 rec <- recipe(wl~baro+datetime, transducer) |>
@@ -81,12 +78,9 @@ rec <- recipe(wl~baro+datetime, transducer) |>
                  latitude = latitude,
                  longitude = longitude,
                  elevation = elevation,
-                 cutoff = cutoff,
-                 method = method,
-                 catalog = catalog,
                  astro_update = 1,
                  wave_groups = wave_groups) |>
-  step_ns(datetime, deg_free = 12) |>
+  step_ns(datetime, deg_free = 15) |>
   prep()
 
 input <- rec |> bake(new_data = NULL)
@@ -100,67 +94,70 @@ summary(fit <- lm(wl~., input))
 #> 
 #> Residuals:
 #>        Min         1Q     Median         3Q        Max 
-#> -1.596e-03 -2.392e-04 -1.536e-05  2.183e-04  1.750e-03 
+#> -1.704e-03 -2.225e-04 -1.595e-05  2.001e-04  1.434e-03 
 #> 
 #> Coefficients:
 #>                             Estimate Std. Error   t value Pr(>|t|)    
-#> (Intercept)                5.246e+00  3.027e-03  1732.815  < 2e-16 ***
-#> distributed_lag_baro_0    -1.949e-01  1.203e-02   -16.201  < 2e-16 ***
-#> distributed_lag_baro_1     2.365e-02  9.164e-03     2.581 0.009857 ** 
-#> distributed_lag_baro_2     7.478e-03  5.490e-03     1.362 0.173165    
-#> distributed_lag_baro_4     1.377e-02  2.583e-03     5.329 9.94e-08 ***
-#> distributed_lag_baro_7     9.558e-03  1.279e-03     7.472 8.06e-14 ***
-#> distributed_lag_baro_12    7.833e-03  5.735e-04    13.659  < 2e-16 ***
-#> distributed_lag_baro_22    6.194e-03  2.442e-04    25.364  < 2e-16 ***
-#> distributed_lag_baro_37    3.456e-03  1.009e-04    34.250  < 2e-16 ***
-#> distributed_lag_baro_63    1.618e-03  4.268e-05    37.905  < 2e-16 ***
-#> distributed_lag_baro_106   1.987e-04  1.882e-05    10.561  < 2e-16 ***
-#> distributed_lag_baro_179   7.293e-05  8.501e-06     8.579  < 2e-16 ***
-#> distributed_lag_baro_302  -7.000e-05  4.643e-06   -15.075  < 2e-16 ***
-#> distributed_lag_baro_509  -7.968e-02  1.580e-03   -50.432  < 2e-16 ***
-#> distributed_lag_baro_856   2.068e-01  4.099e-03    50.455  < 2e-16 ***
-#> distributed_lag_baro_1440 -1.272e-01  2.519e-03   -50.499  < 2e-16 ***
-#> earthtide_cos_1            5.839e-06  3.516e-06     1.661 0.096754 .  
-#> earthtide_sin_1           -2.185e-06  3.551e-06    -0.615 0.538351    
-#> earthtide_cos_2           -8.980e-05  3.624e-06   -24.784  < 2e-16 ***
-#> earthtide_sin_2            3.769e-05  3.654e-06    10.315  < 2e-16 ***
-#> earthtide_cos_3           -2.521e-05  3.069e-06    -8.215  < 2e-16 ***
-#> earthtide_sin_3            3.247e-05  2.976e-06    10.911  < 2e-16 ***
-#> earthtide_cos_4           -2.293e-04  8.237e-06   -27.833  < 2e-16 ***
-#> earthtide_sin_4           -3.859e-05  7.148e-06    -5.399 6.74e-08 ***
-#> earthtide_cos_5            3.306e-06  3.424e-06     0.966 0.334237    
-#> earthtide_sin_5            1.281e-05  3.425e-06     3.740 0.000184 ***
-#> earthtide_cos_6           -1.040e-05  3.866e-06    -2.690 0.007139 ** 
-#> earthtide_sin_6            1.148e-05  3.881e-06     2.959 0.003083 ** 
-#> earthtide_cos_7           -3.470e-06  2.159e-06    -1.607 0.107992    
-#> earthtide_sin_7            1.585e-05  2.161e-06     7.336 2.24e-13 ***
-#> earthtide_cos_8           -5.746e-05  2.712e-06   -21.185  < 2e-16 ***
-#> earthtide_sin_8            4.885e-05  2.713e-06    18.006  < 2e-16 ***
-#> earthtide_cos_9           -3.015e-04  2.809e-06  -107.347  < 2e-16 ***
-#> earthtide_sin_9            2.906e-04  2.796e-06   103.947  < 2e-16 ***
-#> earthtide_cos_10          -5.472e-06  3.208e-06    -1.706 0.088029 .  
-#> earthtide_sin_10          -5.066e-05  3.191e-06   -15.878  < 2e-16 ***
-#> earthtide_cos_11          -2.415e-04  6.753e-06   -35.766  < 2e-16 ***
-#> earthtide_sin_11           8.373e-05  6.089e-06    13.749  < 2e-16 ***
-#> earthtide_cos_12          -4.485e-07  2.640e-06    -0.170 0.865086    
-#> earthtide_sin_12           3.140e-06  2.644e-06     1.187 0.235142    
-#> datetime_ns_01            -2.450e-02  3.813e-05  -642.432  < 2e-16 ***
-#> datetime_ns_02            -3.382e-02  5.298e-05  -638.423  < 2e-16 ***
-#> datetime_ns_03            -4.747e-02  4.648e-05 -1021.392  < 2e-16 ***
-#> datetime_ns_04            -6.418e-02  4.692e-05 -1367.631  < 2e-16 ***
-#> datetime_ns_05            -7.759e-02  4.513e-05 -1719.314  < 2e-16 ***
-#> datetime_ns_06            -8.960e-02  4.598e-05 -1948.683  < 2e-16 ***
-#> datetime_ns_07            -1.035e-01  4.563e-05 -2268.022  < 2e-16 ***
-#> datetime_ns_08            -1.185e-01  4.645e-05 -2550.455  < 2e-16 ***
-#> datetime_ns_09            -1.299e-01  4.668e-05 -2781.825  < 2e-16 ***
-#> datetime_ns_10            -1.392e-01  3.033e-05 -4588.477  < 2e-16 ***
-#> datetime_ns_11            -1.621e-01  9.562e-05 -1695.121  < 2e-16 ***
-#> datetime_ns_12            -1.513e-01  1.913e-05 -7911.386  < 2e-16 ***
+#> (Intercept)                5.193e+00  2.901e-03  1790.116  < 2e-16 ***
+#> distributed_lag_baro_0    -1.947e-01  1.065e-02   -18.276  < 2e-16 ***
+#> distributed_lag_baro_1     2.404e-02  8.116e-03     2.962 0.003061 ** 
+#> distributed_lag_baro_2     7.380e-03  4.861e-03     1.518 0.129010    
+#> distributed_lag_baro_4     1.391e-02  2.288e-03     6.078 1.23e-09 ***
+#> distributed_lag_baro_7     9.552e-03  1.133e-03     8.433  < 2e-16 ***
+#> distributed_lag_baro_12    7.935e-03  5.078e-04    15.625  < 2e-16 ***
+#> distributed_lag_baro_22    6.132e-03  2.163e-04    28.354  < 2e-16 ***
+#> distributed_lag_baro_37    3.510e-03  8.935e-05    39.278  < 2e-16 ***
+#> distributed_lag_baro_63    1.592e-03  3.779e-05    42.143  < 2e-16 ***
+#> distributed_lag_baro_106   2.312e-04  1.665e-05    13.886  < 2e-16 ***
+#> distributed_lag_baro_179   5.677e-05  7.512e-06     7.558 4.20e-14 ***
+#> distributed_lag_baro_302  -4.676e-05  4.107e-06   -11.385  < 2e-16 ***
+#> distributed_lag_baro_509  -7.841e-02  1.399e-03   -56.033  < 2e-16 ***
+#> distributed_lag_baro_856   2.035e-01  3.630e-03    56.046  < 2e-16 ***
+#> distributed_lag_baro_1440 -1.251e-01  2.231e-03   -56.078  < 2e-16 ***
+#> earthtide_cos_1           -1.672e-05  3.104e-06    -5.386 7.24e-08 ***
+#> earthtide_sin_1           -2.621e-06  3.135e-06    -0.836 0.403216    
+#> earthtide_cos_2            8.041e-05  3.211e-06    25.041  < 2e-16 ***
+#> earthtide_sin_2           -4.756e-05  3.239e-06   -14.684  < 2e-16 ***
+#> earthtide_cos_3            1.838e-05  2.747e-06     6.692 2.23e-11 ***
+#> earthtide_sin_3           -2.210e-05  2.683e-06    -8.239  < 2e-16 ***
+#> earthtide_cos_4            2.321e-04  7.297e-06    31.805  < 2e-16 ***
+#> earthtide_sin_4            1.630e-05  6.347e-06     2.568 0.010226 *  
+#> earthtide_cos_5           -6.898e-06  3.003e-06    -2.297 0.021617 *  
+#> earthtide_sin_5           -1.605e-05  3.004e-06    -5.341 9.32e-08 ***
+#> earthtide_cos_6            1.615e-05  3.432e-06     4.705 2.55e-06 ***
+#> earthtide_sin_6           -1.245e-05  3.445e-06    -3.615 0.000301 ***
+#> earthtide_cos_7            3.086e-06  1.907e-06     1.618 0.105654    
+#> earthtide_sin_7           -1.594e-05  1.909e-06    -8.348  < 2e-16 ***
+#> earthtide_cos_8            5.805e-05  2.366e-06    24.535  < 2e-16 ***
+#> earthtide_sin_8           -4.849e-05  2.367e-06   -20.488  < 2e-16 ***
+#> earthtide_cos_9            3.043e-04  2.490e-06   122.224  < 2e-16 ***
+#> earthtide_sin_9           -2.929e-04  2.478e-06  -118.172  < 2e-16 ***
+#> earthtide_cos_10          -8.925e-06  3.062e-06    -2.915 0.003565 ** 
+#> earthtide_sin_10           5.301e-05  3.054e-06    17.357  < 2e-16 ***
+#> earthtide_cos_11           2.210e-04  5.982e-06    36.938  < 2e-16 ***
+#> earthtide_sin_11          -7.191e-05  5.399e-06   -13.319  < 2e-16 ***
+#> earthtide_cos_12           1.078e-06  2.338e-06     0.461 0.644709    
+#> earthtide_sin_12          -1.086e-06  2.342e-06    -0.464 0.642922    
+#> datetime_ns_01            -2.149e-02  5.417e-05  -396.716  < 2e-16 ***
+#> datetime_ns_02            -3.292e-02  6.895e-05  -477.473  < 2e-16 ***
+#> datetime_ns_03            -3.858e-02  6.018e-05  -640.965  < 2e-16 ***
+#> datetime_ns_04            -5.205e-02  7.135e-05  -729.510  < 2e-16 ***
+#> datetime_ns_05            -6.417e-02  6.298e-05 -1018.779  < 2e-16 ***
+#> datetime_ns_06            -7.597e-02  6.574e-05 -1155.742  < 2e-16 ***
+#> datetime_ns_07            -8.600e-02  6.383e-05 -1347.281  < 2e-16 ***
+#> datetime_ns_08            -9.567e-02  6.486e-05 -1475.032  < 2e-16 ***
+#> datetime_ns_09            -1.074e-01  6.477e-05 -1658.190  < 2e-16 ***
+#> datetime_ns_10            -1.188e-01  6.598e-05 -1800.144  < 2e-16 ***
+#> datetime_ns_11            -1.294e-01  6.432e-05 -2011.838  < 2e-16 ***
+#> datetime_ns_12            -1.376e-01  6.325e-05 -2175.965  < 2e-16 ***
+#> datetime_ns_13            -1.453e-01  4.279e-05 -3395.285  < 2e-16 ***
+#> datetime_ns_14            -1.692e-01  1.362e-04 -1242.976  < 2e-16 ***
+#> datetime_ns_15            -1.532e-01  2.308e-05 -6640.503  < 2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
-#> Residual standard error: 0.0003716 on 35229 degrees of freedom
+#> Residual standard error: 0.0003291 on 35226 degrees of freedom
 #>   (1440 observations deleted due to missingness)
 #> Multiple R-squared:  0.9999, Adjusted R-squared:  0.9999 
-#> F-statistic: 9.426e+06 on 51 and 35229 DF,  p-value: < 2.2e-16
+#> F-statistic: 1.135e+07 on 54 and 35226 DF,  p-value: < 2.2e-16
 ```
