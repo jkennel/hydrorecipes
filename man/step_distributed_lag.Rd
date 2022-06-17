@@ -11,7 +11,6 @@ step_distributed_lag(
   trained = FALSE,
   knots = NULL,
   basis_mat = NULL,
-  default = NA,
   prefix = "distributed_lag_",
   keep_original_cols = FALSE,
   columns = NULL,
@@ -42,9 +41,6 @@ preprocessing have been estimated.}
 \item{basis_mat}{The matrix of basis kernels to convolve. This is
 `NULL` until computed by [prep.recipe()].}
 
-\item{default}{Passed to `dplyr::lag`, determines what fills empty rows
-left by lagging (defaults to NA).}
-
 \item{prefix}{A prefix for generated column names, default to "lag_".}
 
 \item{keep_original_cols}{A logical to keep the original variables in the
@@ -66,9 +62,7 @@ the computations for subsequent operations.}
 `step_distributed_lag` creates a *specification* of a recipe step that
   will add new columns of lagged data. Lagged data will
   by default include NA values where the lag was induced.
-  These can be removed with [step_naomit()], or you may
-  specify an alternative filler value with the `default`
-  argument.
+  These can be removed with [step_naomit()].
 }
 \details{
 The step assumes that the data are already _in the proper sequential

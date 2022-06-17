@@ -9,11 +9,11 @@ lag_matrix(x, lags, n_subset = 1L, n_shift = 0L, var_name = "lag")
 \arguments{
 \item{x}{\code{numeric vector} to lag}
 
-\item{lags}{\code{integer vector} with the lags}
+\item{lags}{\code{numeric vector} lead or lag values}
 
-\item{n_subset}{\code{integer} subset every n_subset values}
+\item{n_subset}{A single integer. subset every n_subset values}
 
-\item{n_shift}{\code{integer} amount to shift results}
+\item{n_shift}{A single integer amount to shift results in number of observations}
 
 \item{var_name}{\code{character} name for the generated matrix columns}
 }

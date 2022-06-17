@@ -3,9 +3,9 @@
 #' @description  Turn an object into a tidy2 tibble
 #'
 #' @name tidy2
-
-#' @param x An object to be converted into a tidy [tibble::tibble()].
-#' @param ... Additional arguments to tidying method.
+#' @inheritParams recipes::tidy
+#' @inheritParams generics::tidy
+#'
 #' @return A [tibble::tibble()] with information about model components.
 #'
 #'
@@ -19,21 +19,8 @@ tidy2 <- function(x, ...) {
 #'  regarding a recipe or operation within the recipe (when a `tidy`
 #'  method for the operation exists).
 #'
-#' @name tidy2.recipe
+#' @name tidy1.recipe
 #'
-#'
-#' @param x A `recipe` object, step, or check (trained or otherwise).
-#' @param number An integer or `NA`. If missing and `id` is not provided,
-#'  the return value is a list of the operations in the recipe.
-#'  If a number is given, a `tidy2` method is executed for that operation
-#'  in the recipe (if it exists). `number` must not be provided if
-#'  `id` is.
-#' @param id A character string or `NA`. If missing and `number` is not provided,
-#'  the return value is a list of the operations in the recipe.
-#'  If a character string is given, a `tidy2` method is executed for that
-#'  operation in the recipe (if it exists). `id` must not be provided
-#'  if `number` is.
-#' @param ... Not currently used.
 #' @return A tibble with columns that vary depending on what
 #'  `tidy2` method is executed. When `number` and `id` are `NA`, a
 #'  tibble with columns `number` (the operation iteration),

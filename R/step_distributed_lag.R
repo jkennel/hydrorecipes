@@ -3,9 +3,7 @@
 #' `step_distributed_lag` creates a *specification* of a recipe step that
 #'   will add new columns of lagged data. Lagged data will
 #'   by default include NA values where the lag was induced.
-#'   These can be removed with [step_naomit()], or you may
-#'   specify an alternative filler value with the `default`
-#'   argument.
+#'   These can be removed with [step_naomit()].
 #'
 #' @inheritParams recipes::step_pca
 #' @inheritParams recipes::step_center
@@ -15,8 +13,6 @@
 #' @param prefix A prefix for generated column names, default to "lag_".
 #' @param columns A character string of variable names that will
 #'  be populated (eventually) by the `terms` argument.
-#' @param default Passed to `dplyr::lag`, determines what fills empty rows
-#'   left by lagging (defaults to NA).
 #' @details The step assumes that the data are already _in the proper sequential
 #'  order_ for lagging.
 #' @family row operation steps
@@ -38,7 +34,6 @@ step_distributed_lag <-
            trained = FALSE,
            knots = NULL,
            basis_mat = NULL,
-           default = NA,
            prefix = "distributed_lag_",
            keep_original_cols = FALSE,
            columns = NULL,
@@ -66,7 +61,6 @@ step_distributed_lag <-
         trained = trained,
         knots = knots,
         basis_mat = basis_mat,
-        default = default,
         prefix = prefix,
         keep_original_cols = keep_original_cols,
         columns = columns,
@@ -77,7 +71,7 @@ step_distributed_lag <-
   }
 
 step_distributed_lag_new <-
-  function(terms, role, trained, knots, basis_mat, default, prefix, keep_original_cols,
+  function(terms, role, trained, knots, basis_mat, prefix, keep_original_cols,
            columns, skip, id) {
     step(
       subclass = "distributed_lag",
@@ -86,7 +80,6 @@ step_distributed_lag_new <-
       trained = trained,
       knots = knots,
       basis_mat = basis_mat,
-      default = default,
       prefix = prefix,
       keep_original_cols = keep_original_cols,
       columns = columns,
@@ -104,7 +97,7 @@ step_distributed_lag_new <-
 #'
 #' @inheritParams splines::ns
 #'
-#' @return matrix with distributed lag terms
+#' @return \code{numeric matrix} with distributed lag terms
 #'
 #' @importFrom splines ns
 #'
@@ -117,6 +110,7 @@ basis_lag <- function(knots) {
   n_knots  <- length(knots)
 
   # generate basis lag
+  # should we allow other spline options?
   splines::ns(min(knots):max_knot,
              knots = knots[-c(1, n_knots)],
              Boundary.knots = range(knots),
@@ -131,7 +125,7 @@ basis_lag <- function(knots) {
 #' (NA, or small maximum knot).
 #'
 #' @inheritParams splines::ns
-#' @param basis_mat lag matrix for convolution
+#' @param basis_mat \code{numeric matrix} lag matrix for convolution
 #'
 #' @return matrix with distributed lag terms
 #'
@@ -161,10 +155,10 @@ distributed_lag <- function(x, basis_mat, knots) {
 
 #' convolve_fft
 #'
-#' @param x numeric vector
-#' @param y convolution kernel
+#' @param x \code{numeric vector} to convolve with convolution kernel
+#' @param y \code{numeric vector} convolution kernel
 #'
-#' @return numeric vector result of convolution
+#' @return \code{numeric vector} result of convolution
 #' @export
 #'
 convolve_fft <- function(x, y)
@@ -183,8 +177,8 @@ convolve_fft <- function(x, y)
 
 #' cross_basis_fft
 #'
-#' @param basis_var numeric vector
-#' @param basis_mat lagging matrix
+#' @param basis_var \code{numeric matrix} matrix of input vectors
+#' @param basis_mat \code{numeric matrix} lagging matrix
 #'
 #' @return numeric vector result of convolution
 #' @export
@@ -232,7 +226,6 @@ prep.step_distributed_lag <- function(x, training, info = NULL, ...) {
     trained = TRUE,
     knots = x$knots,
     basis_mat = basis_mat,
-    default = x$default,
     prefix = x$prefix,
     keep_original_cols = x$keep_original_cols,
     columns = recipes_eval_select(x$terms, training, info),

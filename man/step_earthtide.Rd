@@ -25,7 +25,6 @@ step_earthtide(
   eop = NULL,
   scale = TRUE,
   prefix = "earthtide_",
-  default = NA,
   columns = NULL,
   keep_original_cols = FALSE,
   skip = FALSE,
@@ -97,9 +96,6 @@ following columns: datetime, ddt, ut1_utc, lod, x, y, dx, dy}
 
 \item{prefix}{A prefix for generated column names, default to
 "earthtide_".}
-
-\item{default}{Passed to \code{dplyr::lag}, determines what fills empty rows
-left by lagging (defaults to NA).}
 
 \item{columns}{A character string of variable names that will
 be populated (eventually) by the \code{terms} argument.}

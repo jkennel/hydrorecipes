@@ -9,7 +9,7 @@ distributed_lag(x, basis_mat, knots)
 \arguments{
 \item{x}{the predictor variable.  Missing values are allowed.}
 
-\item{basis_mat}{lag matrix for convolution}
+\item{basis_mat}{\code{numeric matrix} lag matrix for convolution}
 
 \item{knots}{breakpoints that define the spline.  The default is no
     knots; together with the natural boundary conditions this results in

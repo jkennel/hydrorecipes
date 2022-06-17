@@ -9,11 +9,13 @@ shift_subset(x, lag = 0L, n_subset = 1L, n_shift = 0L)
 \arguments{
 \item{x}{\code{numeric vector} to lag}
 
-\item{lag}{\code{integer vector} with the lags}
+\item{lag}{A vector of integers. Each specified column will be
+lag for each value in the vector. Negative values are accepted and indicate
+leading the vector (i.e. the reverse of lagging)}
 
-\item{n_subset}{\code{integer} subset every n_subset values}
+\item{n_subset}{A single integer. subset every n_subset values}
 
-\item{n_shift}{\code{integer} amount to shift results}
+\item{n_shift}{A single integer amount to shift results in number of observations}
 }
 \value{
 vector with lagged values

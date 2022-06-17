@@ -14,7 +14,7 @@ basis_lag(knots)
     \code{Boundary.knots}.}
 }
 \value{
-matrix with distributed lag terms
+\code{numeric matrix} with distributed lag terms
 }
 \description{
 Depending on the vector to lag and the maximum knot, distributed_lag will

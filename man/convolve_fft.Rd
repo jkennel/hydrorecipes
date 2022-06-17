@@ -7,12 +7,12 @@
 convolve_fft(x, y)
 }
 \arguments{
-\item{x}{numeric vector}
+\item{x}{\code{numeric vector} to convolve with convolution kernel}
 
-\item{y}{convolution kernel}
+\item{y}{\code{numeric vector} convolution kernel}
 }
 \value{
-numeric vector result of convolution
+\code{numeric vector} result of convolution
 }
 \description{
 convolve_fft

@@ -75,7 +75,6 @@ step_earthtide <-
            eop = NULL,
            scale = TRUE,
            prefix = "earthtide_",
-           default = NA,
            columns = NULL,
            keep_original_cols = FALSE,
            skip = FALSE,
@@ -101,7 +100,6 @@ step_earthtide <-
         catalog = catalog,
         eop = eop,
         scale = scale,
-        default = default,
         prefix = prefix,
         columns = columns,
         keep_original_cols = keep_original_cols,
@@ -114,7 +112,7 @@ step_earthtide <-
 step_earthtide_new <-
   function(terms, role, trained, do_predict, method, astro_update, latitude, longitude,
            elevation, azimuth, gravity, earth_radius, earth_eccen, cutoff,
-           wave_groups, catalog, eop, scale, default, prefix, columns,
+           wave_groups, catalog, eop, scale, prefix, columns,
            keep_original_cols,skip, id) {
     step(
       subclass = "earthtide",
@@ -136,7 +134,6 @@ step_earthtide_new <-
       catalog = catalog,
       eop = eop,
       scale = scale,
-      default = default,
       prefix = prefix,
       columns = columns,
       keep_original_cols = keep_original_cols,
@@ -167,7 +164,6 @@ prep.step_earthtide <- function(x, training, info = NULL, ...) {
     catalog = x$catalog,
     eop = x$eop,
     scale = x$scale,
-    default = x$default,
     prefix = x$prefix,
     columns = recipes_eval_select(x$terms, training, info = info),
     keep_original_cols = get_keep_original_cols(x),

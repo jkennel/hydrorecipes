@@ -7,7 +7,7 @@
 tidy2(x, ...)
 }
 \arguments{
-\item{x}{An object to be converted into a tidy [tibble::tibble()].}
+\item{x}{An object to be converted into a tidy \code{\link[tibble:tibble]{tibble::tibble()}}.}
 
 \item{...}{Additional arguments to tidying method.}
 }

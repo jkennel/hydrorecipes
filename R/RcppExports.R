@@ -23,10 +23,8 @@ get_end <- function(n, n_out, lag, n_subset) {
 #' @description
 #' lag data and subset the results
 #'
+#' @inheritParams step_lead_lag
 #' @param x \code{numeric vector} to lag
-#' @param lag \code{integer vector} with the lags
-#' @param n_subset \code{integer} subset every n_subset values
-#' @param n_shift \code{integer} amount to shift results
 #'
 #' @return vector with lagged values
 #'
@@ -42,10 +40,9 @@ shift_subset <- function(x, lag = 0L, n_subset = 1L, n_shift = 0L) {
 #' @description
 #' lag data and subset the results
 #'
+#' @inheritParams step_lead_lag
 #' @param x \code{numeric vector} to lag
-#' @param lags \code{integer vector} with the lags
-#' @param n_subset \code{integer} subset every n_subset values
-#' @param n_shift \code{integer} amount to shift results
+#' @param lags \code{numeric vector} lead or lag values
 #' @param var_name \code{character} name for the generated matrix columns
 #'
 #' @return matrix with lagged values
@@ -63,11 +60,10 @@ lag_matrix <- function(x, lags, n_subset = 1L, n_shift = 0L, var_name = "lag") {
 #' This method calculates the basis for a distributed lag in parallel.  It is currently
 #' slow.
 #'
+#' @inheritParams step_lead_lag
 #' @param x matrix value of lag
 #' @param bl matrix the basis lags
 #' @param lag_max integer maximum number of lags
-#' @param n_subset integer subset the data
-#' @param n_shift integer to shift
 #'
 #' @return distributed lag basis
 #'

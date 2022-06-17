@@ -62,9 +62,7 @@ the computations for subsequent operations.}
 `step_lead_lag` creates a *specification* of a recipe step that
   will add new columns of lead data. lead data will
   by default include NA values where the lead was induced.
-  These can be removed with [step_naomit()], or you may
-  specify an alternative filler value with the `default`
-  argument.
+  These can be removed with [step_naomit()].
 }
 \details{
 The step assumes that the data are already _in the proper sequential

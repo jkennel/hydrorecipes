@@ -13,9 +13,9 @@ distributed_lag_parallel(x, bl, lag_max, n_subset = 1L, n_shift = 0L)
 
 \item{lag_max}{integer maximum number of lags}
 
-\item{n_subset}{integer subset the data}
+\item{n_subset}{A single integer. subset every n_subset values}
 
-\item{n_shift}{integer to shift}
+\item{n_shift}{A single integer amount to shift results in number of observations}
 }
 \value{
 distributed lag basis
