@@ -13,6 +13,7 @@ step_lead_lag(
   n_subset = 1,
   n_shift = 0,
   prefix = "lead_lag_",
+  keep_original_cols = FALSE,
   columns = NULL,
   skip = FALSE,
   id = rand_id("lead_lag")
@@ -36,7 +37,14 @@ preprocessing have been estimated.}
 lag for each value in the vector. Negative values are accepted and indicate
 leading the vector (i.e. the reverse of lagging)}
 
+\item{n_subset}{A single integer. subset every n_subset values}
+
+\item{n_shift}{A single integer amount to shift results in number of observations}
+
 \item{prefix}{A prefix for generated column names, default to "lag_lead_".}
+
+\item{keep_original_cols}{A logical to keep the original variables in the
+output. Defaults to \code{FALSE}.}
 
 \item{columns}{A character string of variable names that will
 be populated (eventually) by the `terms` argument.}
@@ -63,22 +71,26 @@ The step assumes that the data are already _in the proper sequential
  order_ for leading.
 }
 \examples{
-n <- 10
-start <- as.Date('1999/01/01')
-end <- as.Date('1999/01/10')
+data(wipp30)
 
-df <- data.frame(x = runif(n),
-                 index = 1:n,
-                 day = seq(start, end, by = "day"))
-
-recipe(~ ., data = df) |>
-  step_lead_lag(index, day, lead = 2:3) |>
+recipe(wl~., data = wipp30) |>
+  step_lead_lag(baro, lag = -2:2, n_subset = 1, n_shift = 0) |>
   prep() |>
-  bake(df)
+  bake(new_data = wipp30)
+
+recipe(wl~ ., data = wipp30) |>
+  step_lead_lag(baro, lag = -2:2, n_subset = 2, n_shift = 0) |>
+  prep() |>
+  bake(new_data = wipp30)
+
+recipe(wl~ ., data = wipp30) |>
+  step_lead_lag(baro, lag = -2:2, n_subset = 2, n_shift = 1) |>
+  prep() |>
+  bake(new_data = wipp30)
+
 }
 \seealso{
 Other row operation steps: 
-\code{\link{step_distributed_lag}()},
-\code{\link{step_lead}()}
+\code{\link{step_distributed_lag}()}
 }
 \concept{row operation steps}

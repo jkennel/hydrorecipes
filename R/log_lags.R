@@ -15,11 +15,21 @@
 #' log_lags(12, 86401)
 log_lags <- function(n, max_time_lag) {
 
+  if(length(n) != 1) {
+    stop('n must be length 1')
+  }
+
+  if(length(max_time_lag) != 1) {
+    stop('n must be length 1')
+  }
 
   if(n <= 0) {
     stop('n must be greater than 0')
   }
 
+  if(max_time_lag < 0) {
+    stop('max_time_lag must be non-negative')
+  }
 
   if(!is.numeric(n)) {
     stop('n must be an integer or coercible to an integer')
@@ -29,14 +39,15 @@ log_lags <- function(n, max_time_lag) {
     stop('max_time_lag must be an integer or coercible to an integer')
   }
 
-
-  if(!is.integer(n) | !is.integer(max_time_lag)) {
+  if(!is.integer(n)) {
     n <- as.integer(n)
+  }
+
+  if(!is.integer(max_time_lag)) {
     max_time_lag <- as.integer(max_time_lag)
   }
 
-
-  if(n > max_time_lag) {
+  if(n > (max_time_lag + 1L)) {
     warning('The number of lags is greater than the maximum time lag')
     return(0L:max_time_lag)
   }
@@ -48,7 +59,7 @@ log_lags <- function(n, max_time_lag) {
   wh <- which(lags <= 0L:(n-1L))
 
   if(length(wh) > 0L) {
-    lags[wh] <- wh-1
+    lags[wh] <- wh - 1L
   }
 
   as.integer(lags)

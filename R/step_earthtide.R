@@ -29,16 +29,25 @@
 #' library(earthtide)
 #' data(eterna_wavegroups)
 #' data(transducer)
-#' t_sub <- transducer[1:1000, c('datetime', 'wl')]
-#' rec <- recipe(wl ~ .,
-#'               data = t_sub)
 #'
+#' t_sub <- transducer[1:1000, c('datetime', 'wl')]
 #' wg <- na.omit(eterna_wavegroups[eterna_wavegroups$time == '1 month',])
-#' with_et <- rec |>
+#'
+#' recipe(wl ~ ., data = t_sub) |>
 #'   step_earthtide(datetime,
 #'                  latitude = 34,
 #'                  longitude = -118.5,
-#'                  wave_groups = wg) |>
+#'                  wave_groups = wg,
+#'                  do_predict = FALSE) |>
+#'   prep() |>
+#'   bake(new_data = t_sub)
+#'
+#'   recipe(wl ~ ., data = t_sub) |>
+#'   step_earthtide(datetime,
+#'                  latitude = 34,
+#'                  longitude = -118.5,
+#'                  wave_groups = wg,
+#'                  do_predict = TRUE) |>
 #'   prep() |>
 #'   bake(new_data = t_sub)
 #'
@@ -50,6 +59,7 @@ step_earthtide <-
            ...,
            role = "predictor",
            trained = FALSE,
+           do_predict = FALSE,
            method = "gravity",
            astro_update = 1L,
            latitude = 0,
@@ -76,6 +86,7 @@ step_earthtide <-
         terms = ellipse_check(...),
         role = role,
         trained = trained,
+        do_predict = do_predict,
         method = method,
         astro_update = astro_update,
         latitude = latitude,
@@ -101,7 +112,7 @@ step_earthtide <-
   }
 
 step_earthtide_new <-
-  function(terms, role, trained, method, astro_update, latitude, longitude,
+  function(terms, role, trained, do_predict, method, astro_update, latitude, longitude,
            elevation, azimuth, gravity, earth_radius, earth_eccen, cutoff,
            wave_groups, catalog, eop, scale, default, prefix, columns,
            keep_original_cols,skip, id) {
@@ -110,6 +121,7 @@ step_earthtide_new <-
       terms = terms,
       role = role,
       trained = trained,
+      do_predict = do_predict,
       method = method,
       astro_update = astro_update,
       latitude = latitude,
@@ -140,6 +152,7 @@ prep.step_earthtide <- function(x, training, info = NULL, ...) {
     terms = x$terms,
     role = x$role,
     trained = TRUE,
+    do_predict = x$do_predict,
     method = x$method,
     astro_update = x$astro_update,
     latitude = x$latitude,
@@ -173,7 +186,7 @@ prep.step_earthtide <- function(x, training, info = NULL, ...) {
 bake.step_earthtide <- function(object, new_data, ...) {
 
   et <- as_tibble(calc_earthtide(utc = new_data[[object$columns]],
-                                 do_predict = FALSE,
+                                 do_predict = object$do_predict,
                                  method = object$method,
                                  astro_update = object$astro_update,
                                  latitude = object$latitude,
@@ -189,10 +202,13 @@ bake.step_earthtide <- function(object, new_data, ...) {
                                  eop = object$eop,
                                  scale = object$scale,
                                  return_matrix = TRUE))
-
-  names(et) <- paste0(object$prefix,
-                      rep(c('cos', 'sin'), times = nrow(object$wave_groups)),
-                      '_', rep(1:nrow(object$wave_groups), each = 2))
+  if(object$do_predict) {
+    names(et) <- paste0(object$prefix, object$columns)
+  } else {
+    names(et) <- paste0(object$prefix,
+                        rep(c('cos', 'sin'), times = nrow(object$wave_groups)),
+                        '_', rep(1:nrow(object$wave_groups), each = 2))
+  }
 
   bind_cols(new_data, et)
 

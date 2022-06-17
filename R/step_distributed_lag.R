@@ -24,18 +24,13 @@
 #' @rdname step_distributed_lag
 #'
 #' @examples
-#' n <- 100
-#' start <- as.Date('1999/01/01')
-#' end <- as.Date('1999/01/10')
+#' data(transducer)
 #'
-#' df <- data.frame(x = runif(n),
-#'                  index = 1:n,
-#'                  day = seq(start, end, by = "day"))
-#'
-#' rec <- recipe(~ ., data = df) |>
-#'   step_distributed_lag(index, knots = c(0,4,6)) |>
+#' recipe(~ ., data = transducer) |>
+#'   step_distributed_lag(baro, knots = log_lags(10, 86400 * 2 / 120)) |>
 #'   prep() |>
-#'   bake(df)
+#'   bake(transducer)
+#'
 step_distributed_lag <-
   function(recipe,
            ...,
@@ -45,9 +40,24 @@ step_distributed_lag <-
            basis_mat = NULL,
            default = NA,
            prefix = "distributed_lag_",
+           keep_original_cols = FALSE,
            columns = NULL,
            skip = FALSE,
            id = rand_id("distributed_lag")) {
+
+    if(length(unique(knots)) < length(knots)) {
+      rlang::warn("step_distributed_lag should have uniquely valued 'knots'.  Taking unique values")
+      knots <- unique(knots)
+    }
+    if(any(knots < 0)) {
+      rlang::abort("step_distributed_lag requires 'knots' argument to be greater than or equal to 0")
+    }
+    if(length(knots) < 2) {
+      rlang::abort("step_distributed_lag requires at least two 'knots'")
+    }
+
+
+
     add_step(
       recipe,
       step_distributed_lag_new(
@@ -58,6 +68,7 @@ step_distributed_lag <-
         basis_mat = basis_mat,
         default = default,
         prefix = prefix,
+        keep_original_cols = keep_original_cols,
         columns = columns,
         skip = skip,
         id = id
@@ -66,7 +77,7 @@ step_distributed_lag <-
   }
 
 step_distributed_lag_new <-
-  function(terms, role, trained, knots, basis_mat, default, prefix,
+  function(terms, role, trained, knots, basis_mat, default, prefix, keep_original_cols,
            columns, skip, id) {
     step(
       subclass = "distributed_lag",
@@ -77,6 +88,7 @@ step_distributed_lag_new <-
       basis_mat = basis_mat,
       default = default,
       prefix = prefix,
+      keep_original_cols = keep_original_cols,
       columns = columns,
       skip = skip,
       id = id
@@ -209,7 +221,7 @@ prep.step_distributed_lag <- function(x, training, info = NULL, ...) {
   x_len <- nrow(training)
 
   if(max(x$knots) > x_len) {
-    stop('The maximum knot cannot be larger than the number of elements in x')
+    rlang::abort('The maximum knot cannot be larger than the number of elements in x')
   }
 
   basis_mat <- basis_lag(x$knots)
@@ -222,6 +234,7 @@ prep.step_distributed_lag <- function(x, training, info = NULL, ...) {
     basis_mat = basis_mat,
     default = x$default,
     prefix = x$prefix,
+    keep_original_cols = x$keep_original_cols,
     columns = recipes_eval_select(x$terms, training, info),
     skip = x$skip,
     id = x$id
@@ -245,6 +258,12 @@ bake.step_distributed_lag <- function(object, new_data, ...) {
 
     new_data <- bind_cols(new_data, as_tibble(dl))
 
+  }
+
+  keep_original_cols <- get_keep_original_cols(object)
+  if (!keep_original_cols) {
+    new_data <-
+      new_data[, !(colnames(new_data) %in% object$columns), drop = FALSE]
   }
 
   new_data

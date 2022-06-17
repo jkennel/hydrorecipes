@@ -13,6 +13,7 @@ step_distributed_lag(
   basis_mat = NULL,
   default = NA,
   prefix = "distributed_lag_",
+  keep_original_cols = FALSE,
   columns = NULL,
   skip = FALSE,
   id = rand_id("distributed_lag")
@@ -46,6 +47,9 @@ left by lagging (defaults to NA).}
 
 \item{prefix}{A prefix for generated column names, default to "lag_".}
 
+\item{keep_original_cols}{A logical to keep the original variables in the
+output. Defaults to \code{FALSE}.}
+
 \item{columns}{A character string of variable names that will
 be populated (eventually) by the `terms` argument.}
 
@@ -71,22 +75,16 @@ The step assumes that the data are already _in the proper sequential
  order_ for lagging.
 }
 \examples{
-n <- 100
-start <- as.Date('1999/01/01')
-end <- as.Date('1999/01/10')
+data(transducer)
 
-df <- data.frame(x = runif(n),
-                 index = 1:n,
-                 day = seq(start, end, by = "day"))
-
-rec <- recipe(~ ., data = df) |>
-  step_distributed_lag(index, knots = c(0,4,6)) |>
+recipe(~ ., data = transducer) |>
+  step_distributed_lag(baro, knots = log_lags(10, 86400 * 2 / 120)) |>
   prep() |>
-  bake(df)
+  bake(transducer)
+
 }
 \seealso{
 Other row operation steps: 
-\code{\link{step_lead_lag}()},
-\code{\link{step_lead}()}
+\code{\link{step_lead_lag}()}
 }
 \concept{row operation steps}

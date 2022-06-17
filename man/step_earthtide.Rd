@@ -9,6 +9,7 @@ step_earthtide(
   ...,
   role = "predictor",
   trained = FALSE,
+  do_predict = FALSE,
   method = "gravity",
   astro_update = 1L,
   latitude = 0,
@@ -44,6 +45,8 @@ currently used.}
 
 \item{trained}{A logical to indicate if the quantities for
 preprocessing have been estimated.}
+
+\item{do_predict}{run in predict or analyze mode}
 
 \item{method}{One or more of "gravity", 
 "tidal_potential", "tidal_tilt", "vertical_displacement", 
@@ -131,16 +134,25 @@ An updated version of `recipe` with the new step
 library(earthtide)
 data(eterna_wavegroups)
 data(transducer)
-t_sub <- transducer[1:1000, c('datetime', 'wl')]
-rec <- recipe(wl ~ .,
-              data = t_sub)
 
+t_sub <- transducer[1:1000, c('datetime', 'wl')]
 wg <- na.omit(eterna_wavegroups[eterna_wavegroups$time == '1 month',])
-with_et <- rec |>
+
+recipe(wl ~ ., data = t_sub) |>
   step_earthtide(datetime,
                  latitude = 34,
                  longitude = -118.5,
-                 wave_groups = wg) |>
+                 wave_groups = wg,
+                 do_predict = FALSE) |>
+  prep() |>
+  bake(new_data = t_sub)
+
+  recipe(wl ~ ., data = t_sub) |>
+  step_earthtide(datetime,
+                 latitude = 34,
+                 longitude = -118.5,
+                 wave_groups = wg,
+                 do_predict = TRUE) |>
   prep() |>
   bake(new_data = t_sub)
 

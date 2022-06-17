@@ -103,8 +103,7 @@ tidy2.recipe <- function(x, number = NA, id = NA, ...) {
                   'step_earthtide',
                   'step_ns',
                   'step_intercept',
-                  'step_lag',
-                  'step_lead')) {
+                  'step_lead_lag')) {
       res <- tidy2(x$steps[[number]], ...)
     }
 
@@ -134,8 +133,6 @@ tidy2.check <- function(x, ...) {
 
 
 
-
-
 #' @export
 tidy2.step_ns <- function(x, ...) {
   if (is_trained(x)) {
@@ -155,20 +152,17 @@ tidy2.step_ns <- function(x, ...) {
 }
 
 
+#' @export
+tidy.step_intercept <- function(x, ...) {
+  tidy2.step_intercept(x, ...)
+}
 
 #' @export
 tidy2.step_intercept <- function(x, ...) {
-  if (is_trained(x)) {
-    terms <- names(x$objects)
-  } else {
-    terms <- sel2char(x$terms)
-  }
-  new_cols <- ncol(x$objects[[1]])
 
-  ret <- tibble(terms = terms,
-                id = x$id,
+  ret <- tibble(id = x$id,
                 step_name = 'step_intercept')
-  ret$key <- paste(terms, "intercept", sep = "_")
+  ret$key <- "intercept"
   ret
 }
 

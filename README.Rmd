@@ -17,6 +17,8 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
+[![CRAN status](https://www.r-pkg.org/badges/version/hydrorecipes)](https://CRAN.R-project.org/package=hydrorecipes)
+[![R-CMD-check](https://github.com/jkennel/hydrorecipes/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jkennel/hydrorecipes/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of hydrorecipes is to supplement the recipes package with a few steps
