@@ -24,6 +24,7 @@ The **hydrorecipes** package aims to provide a few steps to improve the analysis
 
 ```{r setup}
 library(hydrorecipes)
+library(earthtide)
 library(ggplot2)
 library(tidyr)
 
@@ -162,7 +163,7 @@ ggplot(pred_long, aes(x = datetime, y = value)) +
 
 The response describes how the water pressure changes after there is a change in one of the input stresses. The **hydrorecipes** package describes the response in one of two ways; using harmonics, or a response function.  These can be thought of as equivalent with one being in the time domain and the other the frequency domain.  Both method provides similar information, but depending on the analysis model or background knowledge one may be preferred over the other. Below we use a response function for barometric pressure and harmonic analysis for the Earth tides.
 
-```{r fig.height = 5, fig.width = 5, out.width = '60%'}
+```{r fig.height = 5, fig.width = 10, out.width = '90%'}
 
 resp <- response(fit_kennel, rec_kennel)
 resp_ba <- resp[resp$name == 'cumulative',]

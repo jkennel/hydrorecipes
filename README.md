@@ -51,7 +51,7 @@ package](https://cran.rstudio.com/web/packages/earthtide/index.html) to
 generate synthetic wave groups. A \~1.5 month dataset of water and
 barometric pressure having a monitoring frequency of 2 minutes is
 presented below. The barometric response is modeled over two days using
-a distributed lag model with 12 regressor terms. The *knots* are
+a distributed lag model with 15 regressor terms. The *knots* are
 logarithmically separated over two days to accurately capture early and
 late time responses which can be caused by different physical
 mechanisms.
@@ -59,11 +59,16 @@ mechanisms.
 ``` r
 library(hydrorecipes)
 library(earthtide)
+library(tidyr)
+library(ggplot2)
 
 data(transducer)
 
 # convert to numeric because step_ns doesn't handle POSIXct
 transducer$datetime <- as.numeric(transducer$datetime)
+
+unique(diff(transducer$datetime)) # times are regularly spaced
+#> [1] 120
 
 # Earth tide inputs
 wave_groups <- earthtide::eterna_wavegroups
@@ -163,3 +168,50 @@ summary(fit <- lm(wl~., input))
 #> Multiple R-squared:  0.9999, Adjusted R-squared:  0.9999 
 #> F-statistic: 1.135e+07 on 54 and 35226 DF,  p-value: < 2.2e-16
 ```
+
+## Decomposition
+
+``` r
+pred <- predict_terms(fit = fit, 
+                      rec = rec,
+                      data = input)
+pred <- bind_cols(transducer[, c('datetime', 'wl')], pred)
+pred_long <- pivot_longer(pred, cols = !datetime)
+ggplot(pred_long, aes(x = datetime, y = value)) +
+  geom_line() + 
+  facet_grid(name~., scales = 'free_y') + 
+  theme_bw()
+#> Warning: Removed 1440 row(s) containing missing values (geom_path).
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="90%" />
+
+## Response
+
+``` r
+resp <- response(fit, rec)
+resp_ba <- resp[resp$name == 'cumulative',]
+resp_ba <- resp_ba[resp_ba$term == 'baro',]
+
+ggplot(resp_ba, aes(x = x * 120, y = value)) +
+  ggtitle('Barometric Loading response') + 
+  xlab('lag (seconds)') +
+  ylab('Cumulative response') +
+  scale_y_continuous(limits = c(0,1)) +
+  geom_line() + 
+  theme_bw()
+```
+
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="90%" />
+
+``` r
+
+resp_et <- resp[resp$name %in% c('amplitude', 'phase'),]
+ggplot(resp_et, aes(x = x, xend = x, y = 0, yend = value)) +
+  geom_segment() + 
+  ggtitle('Earthtide Response') +
+  facet_grid(name~., scales = 'free_y') + 
+  theme_bw()
+```
+
+<img src="man/figures/README-unnamed-chunk-5-2.png" width="90%" />
