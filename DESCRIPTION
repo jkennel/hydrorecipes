@@ -9,6 +9,8 @@ Authors@R: c(
 Maintainer: Jonathan Kennel <jkennel@uoguelph.ca>
 Description: This package is to be used alongside the recipes package.  It adds 
     a few steps that may be useful for the analysis of water level data.
+BugReports: https://github.com/jkennel/hydrorecipes/issues
+URL: https://github.com/jkennel/hydrorecipes
 License: GPL-3
 Depends: 
   R (>= 4.1.0),
@@ -35,4 +37,6 @@ Suggests:
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 LazyData: true
+NeedsCompilation: yes
+SystemRequirements: C++11
 Config/testthat/edition: 3

@@ -8,6 +8,14 @@
 \description{
 This package is to be used alongside the recipes package. It adds a few steps that may be useful for the analysis of water level data.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/jkennel/hydrorecipes}
+  \item Report bugs at \url{https://github.com/jkennel/hydrorecipes/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Jonathan Kennel \email{jkennel@uoguelph.ca}
 

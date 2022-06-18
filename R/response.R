@@ -99,7 +99,7 @@ response.lm <- function(fit, rec, verbose = FALSE, ...) {
 
   co <- coefficients(fit)
 
-  response.numeric(co, rec, verbose = FALSE,...)
+  response.numeric(co, rec, verbose = verbose,...)
 
 }
 
@@ -113,7 +113,7 @@ response.cv.glmnet <- function(fit, rec, verbose = FALSE, ...) {
   co <- as.vector(co)
   names(co) <- co_names
 
-  response.numeric(co, rec, ...)
+  response.numeric(co, rec, verbose = verbose, ...)
 }
 
 #' @rdname response

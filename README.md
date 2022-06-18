@@ -15,7 +15,7 @@ v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/li
 The goal of **hydrorecipes** is to supplement the [recipes
 package](https://recipes.tidymodels.org) with a few steps that can help
 deal with moderately sized water level datasets. These were developed
-primarily with regression convolution in mind to be used with *lm* or
+primarily with regression deconvolution in mind to be used with *lm* or
 *glmnet*. The following steps are currently available:
 
 -   *step_lead_lag* is a more flexible version of *step_lag* from the
