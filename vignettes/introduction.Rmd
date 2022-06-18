@@ -182,6 +182,7 @@ resp_et <- resp[resp$name %in% c('amplitude', 'phase'),]
 ggplot(resp_et, aes(x = x, xend = x, y = 0, yend = value)) +
   geom_segment() + 
   ggtitle('Earthtide Response') +
+  xlab('Frequency (cycles per day)') +
   facet_grid(name~., scales = 'free_y') + 
   theme_bw()
 
