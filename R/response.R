@@ -27,7 +27,7 @@ response_lag <- function(co, step_info) {
 
   tibble(coefficient = co,
          cumulative = cumsum(co),
-         lag = step_info$shift
+         x = step_info$shift
   )
 
 }

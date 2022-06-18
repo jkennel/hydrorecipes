@@ -14,8 +14,6 @@ knitr::opts_chunk$set(
   comment = "#>",
   message = FALSE,
   dev = 'png',
-  fig.width = 6,
-  fig.asp = 0.8,
   out.width = "90%"
 )
 ```
@@ -26,6 +24,9 @@ The **hydrorecipes** package aims to provide a few steps to improve the analysis
 
 ```{r setup}
 library(hydrorecipes)
+library(ggplot2)
+library(tidyr)
+
 data(transducer, package = "hydrorecipes")
 head(transducer)
 transducer$datetime_num <- as.numeric(transducer$datetime)
@@ -143,13 +144,48 @@ knitr::kable(model_results[,c('name', 'r.squared', 'sigma', 'AIC', 'BIC', 'df.re
 
 ## Decomposition
 
-```{r}
+The water pressure dataset can be thought of as a sum of multiple components.  The regression deconvolution method attempts to separate these components so that you can see the influence that each stress has on the resultant water pressure signal.
+
+```{r fig.height = 12, fig.width = 12, out.width = '90%'}
 pred <- predict_terms(fit = fit_kennel, 
                       rec = rec_kennel,
                       data = input_kennel)
-pred <- bind_cols(transducer[, c('datetime', 'wl', 'baro')], pred)
-resp <- response(fit_kennel, rec_kennel)
+pred <- bind_cols(transducer[, c('datetime', 'wl')], pred)
+pred_long <- pivot_longer(pred, cols = !datetime)
+ggplot(pred_long, aes(x = datetime, y = value)) +
+  geom_line() + 
+  facet_grid(name~., scales = 'free_y') + 
+  theme_bw()
 ```
+
+## Response
+
+The response describes how the water pressure changes after there is a change in one of the input stresses. The **hydrorecipes** package describes the response in one of two ways; using harmonics, or a response function.  These can be thought of as equivalent with one being in the time domain and the other the frequency domain.  Both method provides similar information, but depending on the analysis model or background knowledge one may be preferred over the other. Below we use a response function for barometric pressure and harmonic analysis for the Earth tides.
+
+```{r fig.height = 5, fig.width = 5, out.width = '60%'}
+
+resp <- response(fit_kennel, rec_kennel)
+resp_ba <- resp[resp$name == 'cumulative',]
+resp_ba <- resp_ba[resp_ba$term == 'baro',]
+
+ggplot(resp_ba, aes(x = x * 120, y = value)) +
+  ggtitle('Barometric Loading response') + 
+  xlab('lag (seconds)') +
+  ylab('Cumulative response') +
+  scale_y_continuous(limits = c(0,1)) +
+  geom_line() + 
+  theme_bw()
+
+
+resp_et <- resp[resp$name %in% c('amplitude', 'phase'),]
+ggplot(resp_et, aes(x = x, xend = x, y = 0, yend = value)) +
+  geom_segment() + 
+  ggtitle('Earthtide Response') +
+  facet_grid(name~., scales = 'free_y') + 
+  theme_bw()
+
+```
+
 
 # References
 

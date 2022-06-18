@@ -40,7 +40,7 @@ remotes::install_github("jkennel/hydrorecipes")
 
 ## Example
 
-This is the method of [Kennel 2020](http://hdl.handle.net/10214/17890) which uses a distributed lag model and the [earthtide package](https://cran.rstudio.com/web/packages/earthtide/index.html) to generate synthetic wave groups.  A ~1.5 month dataset of water and barometric pressure having a monitoring frequency of 2 minutes is presented below.  The barometric response is modeled over two days using a distributed lag model with 12 regressor terms. The *knots* are logarithmically separated over two days to accurately capture early and late time responses which can be caused by different physical mechanisms.
+This is the method of [Kennel 2020](http://hdl.handle.net/10214/17890) which uses a distributed lag model and the [earthtide package](https://cran.rstudio.com/web/packages/earthtide/index.html) to generate synthetic wave groups.  A ~1.5 month dataset of water and barometric pressure having a monitoring frequency of 2 minutes is presented below.  The barometric response is modeled over two days using a distributed lag model with 15 regressor terms. The *knots* are logarithmically separated over two days to accurately capture early and late time responses which can be caused by different physical mechanisms.
 
 ```{r message = FALSE}
 library(hydrorecipes)
@@ -50,6 +50,8 @@ data(transducer)
 
 # convert to numeric because step_ns doesn't handle POSIXct
 transducer$datetime <- as.numeric(transducer$datetime)
+
+unique(diff(transducer$datetime)) # times are regularly spaced
 
 # Earth tide inputs
 wave_groups <- earthtide::eterna_wavegroups

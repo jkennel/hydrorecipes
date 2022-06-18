@@ -2,7 +2,7 @@
 #' log_lags
 #'
 #' @description
-#' Generate lags that are spaced logarithmic. Lags start at 0.
+#' Generate lags or knots that are spaced logarithmic. Lags/knots start at 0.
 #'
 #' @param n number of lags (integer)
 #' @param max_time_lag maximum lag (integer)
@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-#' log_lags(12, 86401)
+#' log_lags(12, 86400)
 log_lags <- function(n, max_time_lag) {
 
   if(length(n) != 1) {

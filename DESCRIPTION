@@ -29,6 +29,7 @@ Suggests:
     knitr,
     rmarkdown,
     tinytest,
+    ggplot2,
     broom,
     glmnet,
     testthat (>= 3.0.0)

@@ -136,27 +136,23 @@ bake.step_lead_lag <- function(object, new_data, ...) {
   if (!all(object$lag == as.integer(object$lag)))
     rlang::abort("step_lead_lag requires 'lead_lag' argument to be integer valued.")
 
-  if(object$n_subset > 1) {
+  lag_mat <- lag_matrix(
+    x = new_data[[object$columns]],
+    lags = object$lag,
+    n_subset = object$n_subset,
+    n_shift = object$n_shift,
+    var_name = 'lead_lag')
+  colnames(lag_mat) <- paste0(colnames(lag_mat), '_', object$columns)
 
+
+  if(object$n_subset > 1) {
     ind <- seq(object$n_shift + 1,
                nrow(new_data),
                object$n_subset)
 
-    new_data <- bind_cols(new_data[ind,],
-                          lag_matrix(
-                            new_data[[object$columns]],
-                            object$lag,
-                            object$n_subset,
-                            object$n_shift))
-
+    new_data <- bind_cols(new_data[ind,], lag_mat)
   } else {
-
-    new_data <- bind_cols(new_data,
-                          lag_matrix(
-                            new_data[[object$columns]],
-                            object$lag,
-                            object$n_subset,
-                            object$n_shift))
+    new_data <- bind_cols(new_data, lag_mat)
   }
 
 
