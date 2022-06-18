@@ -73,7 +73,7 @@ unique(diff(transducer$datetime)) # times are regularly spaced
 # Earth tide inputs
 wave_groups <- earthtide::eterna_wavegroups
 wave_groups <- na.omit(wave_groups[wave_groups$time == '1 month', ])
-wave_groups <- wave_groups[wave_groups$start > 0.5,]
+wave_groups <- wave_groups[wave_groups$start > 0.5, ]
 latitude  <- 34.0
 longitude <- -118.5
 
@@ -183,14 +183,14 @@ ggplot(pred_long, aes(x = datetime, y = value)) +
 
 ``` r
 resp <- response(fit, rec)
-resp_ba <- resp[resp$name == 'cumulative',]
-resp_ba <- resp_ba[resp_ba$term == 'baro',]
+resp_ba <- resp[resp$name == 'cumulative', ]
+resp_ba <- resp_ba[resp_ba$term == 'baro', ]
 
-ggplot(resp_ba, aes(x = x * 120, y = value)) +
-  ggtitle('Barometric Loading response') + 
-  xlab('lag (seconds)') +
+ggplot(resp_ba, aes(x = x * 120 / 3600, y = value)) +
+  ggtitle('Barometric Loading Response') + 
+  xlab('lag (hours)') +
   ylab('Cumulative response') +
-  scale_y_continuous(limits = c(0,1)) +
+  scale_y_continuous(limits = c(0, 1)) +
   geom_line() + 
   theme_bw()
 ```
@@ -199,7 +199,7 @@ ggplot(resp_ba, aes(x = x * 120, y = value)) +
 
 ``` r
 
-resp_et <- resp[resp$name %in% c('amplitude', 'phase'),]
+resp_et <- resp[resp$name %in% c('amplitude', 'phase'), ]
 ggplot(resp_et, aes(x = x, xend = x, y = 0, yend = value)) +
   geom_segment() + 
   ggtitle('Earthtide Response') +
