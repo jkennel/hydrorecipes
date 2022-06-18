@@ -2,7 +2,7 @@
 #' @importFrom recipes prep printer rand_id sel2char step recipes_eval_select
 #' @importFrom recipes check_name get_keep_original_cols tidy get_keep_original_cols
 #' @importFrom rlang enquos abort
-#' @importFrom dplyr bind_cols
+#' @importFrom dplyr bind_cols bind_rows
 #' @importFrom tibble as_tibble tibble
 #' @importFrom tidyr pivot_longer
 #' @importFrom splines ns

@@ -8,13 +8,13 @@
 
 \item{number}{An integer or `NA`. If missing and `id` is not provided,
 the return value is a list of the operations in the recipe.
-If a number is given, a `tidy` method is executed for that operation
+If a number is given, a `tidy2` method is executed for that operation
 in the recipe (if it exists). `number` must not be provided if
 `id` is.}
 
 \item{id}{A character string or `NA`. If missing and `number` is not provided,
 the return value is a list of the operations in the recipe.
-If a character string is given, a `tidy` method is executed for that
+If a character string is given, a `tidy2` method is executed for that
 operation in the recipe (if it exists). `id` must not be provided
 if `number` is.}
 
@@ -22,7 +22,7 @@ if `number` is.}
 }
 \value{
 A tibble with columns that vary depending on what
- `tidy` method is executed. When `number` and `id` are `NA`, a
+ `tidy2` method is executed. When `number` and `id` are `NA`, a
  tibble with columns `number` (the operation iteration),
  `operation` (either "step" or "check"),
  `type` (the method, e.g. "nzv", "center"), a logical

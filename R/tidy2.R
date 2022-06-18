@@ -74,7 +74,7 @@ tidy2.recipe <- function(x, number = NA, id = NA, ...) {
   if (is.na(number)) {
     skipped <- vapply(x$steps, function(x) x$skip, logical(1))
     ids <- vapply(x$steps, function(x) x$id, character(1))
-    step_names <- vapply(x$steps, function(x) paste(x$columns, collapse = ''), character(1))
+    step_names <- vapply(x$steps, function(x) paste(unique(tidy(x)$terms), collapse = ''), character(1))
 
     oper_classes <- lapply(x$steps, class)
     oper_classes <- grep("_", unlist(oper_classes), value = TRUE)
@@ -111,11 +111,13 @@ tidy2.recipe <- function(x, number = NA, id = NA, ...) {
                   'step_ns',
                   'step_intercept',
                   'step_lead_lag')) {
+
       res <- tidy2(x$steps[[number]], ...)
+
     }
 
   }
-
+  res
 }
 
 #' @export
@@ -152,6 +154,7 @@ tidy2.step_ns <- function(x, ...) {
   ret <- tibble(terms = rep(terms, each = new_cols),
                 id = x$id,
                 step_name = 'step_ns')
+
   ret$key <- paste(rep(terms, each = new_cols), "ns",
                    rep(names0(new_cols, ""),
                        times = length(terms)), sep = "_")

@@ -30,6 +30,7 @@ Suggests:
     rmarkdown,
     tinytest,
     broom,
+    glmnet,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 LazyData: true

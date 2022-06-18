@@ -140,6 +140,17 @@ model_results$name <- c('kennel_2020',
 knitr::kable(model_results[,c('name', 'r.squared', 'sigma', 'AIC', 'BIC', 'df.residual', 'nobs')])
 ```
 
+
+## Decomposition
+
+```{r}
+pred <- predict_terms(fit = fit_kennel, 
+                      rec = rec_kennel,
+                      data = input_kennel)
+pred <- bind_cols(transducer[, c('datetime', 'wl', 'baro')], pred)
+resp <- response(fit_kennel, rec_kennel)
+```
+
 # References
 
 Kennel, J., 2020. High Frequency Water Level Responses to Natural Signals (Doctoral dissertation, University of Guelph). http://hdl.handle.net/10214/17890
