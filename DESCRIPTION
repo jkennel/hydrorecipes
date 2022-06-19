@@ -34,7 +34,8 @@ Suggests:
     ggplot2,
     broom,
     glmnet,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    covr
 VignetteBuilder: knitr
 LazyData: true
 NeedsCompilation: yes
