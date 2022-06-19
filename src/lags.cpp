@@ -1,6 +1,8 @@
 // inspired by http://davegiles.blogspot.com/2017/01/explaining-almon-distributed-lag-model.html
 // and the dlnm package
 
+#define ARMA_DONT_PRINT_ERRORS
+// #define ARMA_USE_TBB_ALLOC
 
 #include <RcppArmadillo.h>
 #include <RcppParallel.h>

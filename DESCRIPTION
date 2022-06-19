@@ -9,7 +9,7 @@ Authors@R: c(
 Maintainer: Jonathan Kennel <jkennel@uoguelph.ca>
 Description: Additional steps to be used with the 'recipes' package. New steps
   were designed for regression deconvolution on datasets with millions of rows 
-  with applications to signal decomposition and impulse response 
+  with applications to signal decomposition and response 
   characterization.
 BugReports: https://github.com/jkennel/hydrorecipes/issues
 URL: https://github.com/jkennel/hydrorecipes
@@ -17,7 +17,8 @@ License: GPL-3
 Depends: 
   R (>= 4.1.0),
   recipes (>= 0.1.15)
-Imports: Rcpp (>= 1.0.7),
+Imports: 
+  Rcpp (>= 1.0.7),
   earthtide,
   generics,
   splines,
@@ -26,13 +27,15 @@ Imports: Rcpp (>= 1.0.7),
   rlang,
   tidyr,
   fftw
-LinkingTo: Rcpp, RcppArmadillo, RcppParallel
+LinkingTo: 
+  Rcpp,
+  RcppArmadillo, 
+  RcppParallel
 RoxygenNote: 7.2.0
 Encoding: UTF-8
 Suggests: 
     knitr,
     rmarkdown,
-    tinytest,
     ggplot2,
     broom,
     glmnet,

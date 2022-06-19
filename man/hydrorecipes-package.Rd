@@ -6,7 +6,7 @@
 \alias{hydrorecipes-package}
 \title{hydrorecipes: Hydrogeology Steps for the 'recipes' Package}
 \description{
-Additional steps to be used with the 'recipes' package. New steps were designed for regression deconvolution on datasets with millions of rows with applications to signal decomposition and impulse response characterization.
+Additional steps to be used with the 'recipes' package. New steps were designed for regression deconvolution on datasets with millions of rows with applications to signal decomposition and response characterization.
 }
 \seealso{
 Useful links:
