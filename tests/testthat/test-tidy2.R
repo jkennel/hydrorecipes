@@ -26,5 +26,14 @@ test_that("tidy2 works", {
 
   expect_s3_class(tidy(trained, 1), 'data.frame')
   expect_s3_class(tidy2(trained, 1), 'data.frame')
+  expect_equal(tidy2(trained, 1), tidy(trained, 1))
+
+
+
+  trained <- recipe(wl~., wipp30) |>
+    step_ns()
+
+  expect_s3_class(tidy2(trained), 'data.frame')
+
 })
 

@@ -4,13 +4,13 @@ test_that("response works", {
   library(earthtide)
 
   data(transducer, package = "hydrorecipes")
-  head(transducer)
+  transducer <- transducer[1:5000,]
   transducer$datetime_num <- as.numeric(transducer$datetime)
 
   rec_toll_rasmussen <- recipe(wl~baro+et+datetime_num, transducer) |>
     step_lead_lag(baro, lag = log_lags(100, 86400 * 2 / 120)) |>
     step_lead_lag(et, lag = seq(0, 180, 20)) |>
-    step_ns(datetime_num, deg_free = 10) |>
+    step_ns(datetime_num, deg_free = 3) |>
     prep()
   input_toll_rasmussen <- rec_toll_rasmussen |> bake(new_data = NULL)
   fit_toll_rasmussen <- lm(wl~., input_toll_rasmussen)
@@ -30,7 +30,7 @@ test_that("response works", {
                   frequency = tidal_freqs,
                   cycle_size = 86400,
                   keep_original_cols = TRUE) |>
-    step_ns(datetime_num, deg_free = 10) |>
+    step_ns(datetime_num, deg_free = 3) |>
     prep()
   input_rasmussen_mote <- rec_rasmussen_mote |> bake(new_data = NULL)
   fit_rasmussen_mote <- lm(wl~., input_rasmussen_mote)
@@ -54,7 +54,7 @@ test_that("response works", {
                    longitude = longitude,
                    astro_update = 1,
                    wave_groups = wave_groups) |>
-    step_ns(datetime_num, deg_free = 10) |>
+    step_ns(datetime_num, deg_free = 3) |>
     prep()
 
   input_kennel <- rec_kennel |> bake(new_data = NULL)
@@ -65,6 +65,19 @@ test_that("response works", {
   expect_equal(unique(resp[resp$term == 'baro',]$x), 0:(86400*2/120))
   expect_equal(unique(resp[resp$term == 'datetime_num',]$x), tidal_freqs)
 
+  library(glmnet)
+  xy <- na.omit(input_kennel)
+  x <- as.matrix(xy[, -1])
+  y <- xy[['wl']]
+  fit_cv <- cv.glmnet(x, y, family = 'gaussian', alpha = 0.1)
+  resp <- response(fit_cv, rec_kennel)
+  expect_equal(length(unique(resp$term)), 2)
+  expect_equal(nrow(resp), 86400 * 2 / 120 * 2 + 2 + nrow(wave_groups) * 4)
+  expect_equal(unique(resp[resp$term == 'baro',]$x), 0:(86400*2/120))
+  expect_equal(unique(resp[resp$term == 'datetime_num',]$x), tidal_freqs)
+
+
   expect_output(tmp <- response(fit_kennel, rec_kennel, verbose = TRUE))
+
 
 })

@@ -4,13 +4,13 @@ test_that("predict_terms works", {
   library(earthtide)
 
   data(transducer, package = "hydrorecipes")
-  head(transducer)
   transducer$datetime_num <- as.numeric(transducer$datetime)
+  transducer <- transducer[1:5000,]
 
   rec_toll_rasmussen <- recipe(wl~baro+et+datetime_num, transducer) |>
     step_lead_lag(baro, lag = log_lags(100, 86400 * 2 / 120)) |>
     step_lead_lag(et, lag = seq(0, 180, 20)) |>
-    step_ns(datetime_num, deg_free = 10) |>
+    step_ns(datetime_num, deg_free = 3) |>
     prep()
   input_toll_rasmussen <- rec_toll_rasmussen |> bake(new_data = NULL)
   fit_toll_rasmussen <- lm(wl~., input_toll_rasmussen)
@@ -32,7 +32,7 @@ test_that("predict_terms works", {
                   frequency = tidal_freqs,
                   cycle_size = 86400,
                   keep_original_cols = TRUE) |>
-    step_ns(datetime_num, deg_free = 10) |>
+    step_ns(datetime_num, deg_free = 3) |>
     prep()
   input_rasmussen_mote <- rec_rasmussen_mote |> bake(new_data = NULL)
   fit_rasmussen_mote <- lm(wl~., input_rasmussen_mote)
@@ -58,7 +58,7 @@ test_that("predict_terms works", {
                    longitude = longitude,
                    astro_update = 1,
                    wave_groups = wave_groups) |>
-    step_ns(datetime_num, deg_free = 10) |>
+    step_ns(datetime_num, deg_free = 3) |>
     prep()
   input_kennel <- rec_kennel |> bake(new_data = NULL)
   fit_kennel <- lm(wl~., input_kennel)
@@ -69,5 +69,18 @@ test_that("predict_terms works", {
   expect_equal(ncol(pred), 5)
   expect_equal(names(pred), c('distributed_lag_baro', 'earthtide_datetime_num', 'ns_datetime_num', 'intercept', 'predicted'))
   expect_equal(sum(is.na(pred)), 86400 * 2 * 2 / 120)
+
+
+  library(glmnet)
+  xy <- na.omit(input_kennel)
+  x <- as.matrix(input_kennel[, -1])
+  y <- input_kennel[['wl']]
+  fit_cv <- cv.glmnet(x, y)
+  pred <- predict_terms(fit_cv, rec_kennel, xy)
+  expect_equal(nrow(pred), nrow(xy))
+  expect_equal(ncol(pred), 5)
+  expect_equal(names(pred), c('distributed_lag_baro', 'earthtide_datetime_num', 'ns_datetime_num', 'intercept', 'predicted'))
+  expect_equal((nrow(transducer) - nrow(pred))*2, 86400 * 2 * 2 / 120)
+
 
 })
