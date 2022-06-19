@@ -45,6 +45,10 @@ test_that("step_distributed_lag works", {
                  prep() |>
                  bake(new_data = NULL))
   expect_error(recipe(wl~., wipp30) |>
+                 step_distributed_lag(baro, knots = -10:(-1)) |>
+                 prep() |>
+                 bake(new_data = NULL))
+  expect_error(recipe(wl~., wipp30) |>
                  step_distributed_lag(baro, knots = c(0, nrow(wipp30) + 2)) |>
                  prep() |>
                  bake(new_data = NULL))
@@ -56,8 +60,12 @@ test_that("step_distributed_lag works", {
   rec <- recipe(wl~., wipp30) |>
     step_distributed_lag(baro, knots = log_lags(10, max_time_lag)) |>
     prep()
-
   expect_equal(tidy(rec, 1), tidy2(rec, 1))
 
-  expect_output(print(rec))
+  expect_output(print(rec, 1))
+
+  rec2 <- recipe(wl~., wipp30) |>
+    step_distributed_lag(baro, knots = log_lags(10, max_time_lag))
+  expect_equal(tidy2(rec, 1)$key, tidy2(rec2, 1)$key)
+
 })
