@@ -18,7 +18,7 @@ wipp30
 }
 \description{
 This data.frame contains the water levels, barometric pressure,
-and earthtides for wipp30.  This is the dataset included in BETCO.
+and Earth tides for wipp30.  This is the dataset included in BETCO.
 }
 \examples{
 utils::data(wipp30)
