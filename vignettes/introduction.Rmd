@@ -139,14 +139,27 @@ knitr::kable(model_results[,c('name', 'r.squared', 'sigma', 'AIC', 'BIC', 'df.re
 
 The water pressure dataset can be thought of as a sum of multiple components.  The regression deconvolution method attempts to separate these components so that you can see the influence that each stress has on the resultant water pressure signal.
 
-```{r fig.height = 12, fig.width = 12, out.width = '90%'}
+```{r fig.height = 11, fig.width = 12, out.width = '90%'}
 pred <- predict_terms(fit = fit_kennel, 
                       rec = rec_kennel,
                       data = input_kennel)
 pred <- bind_cols(transducer[, c('datetime', 'wl')], pred)
+pred$residuals <- pred$wl - pred$predicted
 pred_long <- pivot_longer(pred, cols = !datetime)
+levels <-c('intercept', 'ns_datetime_num', 'distributed_lag_baro',
+           'earthtide_datetime_num', 'predicted', 'wl', 'residuals')
+labels <- c('Intercept', 'Background trend', 'Barometric Component',
+            'Earth Tide Component', 'Predicted', 'Water Pressure', 
+            'Residuals (obs-mod)')
+pred_long$name <- factor(pred_long$name, 
+                         levels = levels,
+                         labels = labels)
 ggplot(pred_long, aes(x = datetime, y = value)) +
   geom_line() + 
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_continuous(expand = c(0,0)) + 
+  ggtitle('Water Level Decomposition Results') + 
+  xlab("") + 
   facet_grid(name~., scales = 'free_y') + 
   theme_bw()
 ```
@@ -159,6 +172,7 @@ The response describes how the water pressure changes after there is a change in
 resp    <- response(fit_kennel, rec_kennel)
 resp_ba <- resp[resp$name == 'cumulative', ]
 resp_ba <- resp_ba[resp_ba$term == 'baro', ]
+
 ggplot(resp_ba, aes(x = x * 120 / 3600, y = value)) +
   ggtitle('A: Barometric Loading Response') + 
   xlab('lag (hours)') +
@@ -171,7 +185,7 @@ ggplot(resp_et, aes(x = x, xend = x, y = 0, yend = value)) +
   geom_segment() + 
   ggtitle('B: Earthtide Response') +
   xlab('Frequency (cycles per day)') +
-  ylab('Phase (radians)   |   Amplitude (meters water)') +
+  ylab('Phase (radians)   |   Amplitude (dbar)') +
   facet_grid(name~., scales = 'free_y') + 
   theme_bw()
 ```

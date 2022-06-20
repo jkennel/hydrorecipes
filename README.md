@@ -67,9 +67,9 @@ library(ggplot2)
 data(transducer)
 
 # convert to numeric because step_ns doesn't handle POSIXct
-transducer$datetime <- as.numeric(transducer$datetime)
+transducer$datetime_num <- as.numeric(transducer$datetime)
 
-unique(diff(transducer$datetime)) # times are regularly spaced
+unique(diff(transducer$datetime_num)) # times are regularly spaced
 #> [1] 120
 
 # Earth tide inputs
@@ -80,14 +80,14 @@ latitude    <- 34.0
 longitude   <- -118.5
 
 # create recipe 
-rec <- recipe(wl~baro+datetime, transducer) |>
+rec <- recipe(wl~baro+datetime_num, transducer) |>
   step_distributed_lag(baro, knots = log_lags(15, 86400 * 2 / 120)) |>
-  step_earthtide(datetime,
+  step_earthtide(datetime_num,
                  latitude = latitude,
                  longitude = longitude,
                  astro_update = 1,
                  wave_groups = wave_groups) |>
-  step_ns(datetime, deg_free = 10) |>
+  step_ns(datetime_num, deg_free = 10) |>
   prep()
 
 input <- rec |> bake(new_data = NULL)
@@ -145,16 +145,16 @@ summary(fit <- lm(wl~., input))
 #> earthtide_sin_11          -5.476e-05  5.819e-06    -9.410  < 2e-16 ***
 #> earthtide_cos_12           2.122e-06  2.531e-06     0.838  0.40194    
 #> earthtide_sin_12          -2.205e-06  2.536e-06    -0.870  0.38448    
-#> datetime_ns_01            -2.965e-02  2.892e-05 -1025.095  < 2e-16 ***
-#> datetime_ns_02            -4.064e-02  3.792e-05 -1071.627  < 2e-16 ***
-#> datetime_ns_03            -6.178e-02  3.313e-05 -1864.753  < 2e-16 ***
-#> datetime_ns_04            -7.808e-02  3.445e-05 -2266.602  < 2e-16 ***
-#> datetime_ns_05            -9.233e-02  3.316e-05 -2784.028  < 2e-16 ***
-#> datetime_ns_06            -1.100e-01  3.553e-05 -3095.275  < 2e-16 ***
-#> datetime_ns_07            -1.264e-01  3.354e-05 -3768.390  < 2e-16 ***
-#> datetime_ns_08            -1.355e-01  2.239e-05 -6053.491  < 2e-16 ***
-#> datetime_ns_09            -1.639e-01  7.195e-05 -2278.361  < 2e-16 ***
-#> datetime_ns_10            -1.499e-01  1.563e-05 -9587.262  < 2e-16 ***
+#> datetime_num_ns_01        -2.965e-02  2.892e-05 -1025.095  < 2e-16 ***
+#> datetime_num_ns_02        -4.064e-02  3.792e-05 -1071.627  < 2e-16 ***
+#> datetime_num_ns_03        -6.178e-02  3.313e-05 -1864.753  < 2e-16 ***
+#> datetime_num_ns_04        -7.808e-02  3.445e-05 -2266.602  < 2e-16 ***
+#> datetime_num_ns_05        -9.233e-02  3.316e-05 -2784.028  < 2e-16 ***
+#> datetime_num_ns_06        -1.100e-01  3.553e-05 -3095.275  < 2e-16 ***
+#> datetime_num_ns_07        -1.264e-01  3.354e-05 -3768.390  < 2e-16 ***
+#> datetime_num_ns_08        -1.355e-01  2.239e-05 -6053.491  < 2e-16 ***
+#> datetime_num_ns_09        -1.639e-01  7.195e-05 -2278.361  < 2e-16 ***
+#> datetime_num_ns_10        -1.499e-01  1.563e-05 -9587.262  < 2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
@@ -168,24 +168,39 @@ summary(fit <- lm(wl~., input))
 
 The decomposition consists of:
 
--   **distributed_lag_baro** The barometric component of the water
-    pressure (meters water)
--   **earthtide_datetime** The contribution of Earth tides (meters
-    water)
--   **intercept** A single offset value (meters_water)
--   **ns_datetime** The background trend (meters water)
--   **predicted** The sum of all the components above. This is the
-    predicted water pressure. (meters water)
+-   **Intercept** A single offset value (meters_water)
+-   **Background trend** The background trend determined using natural
+    splines (dbar)
+-   **Barometric Component** The barometric component of the water
+    pressure determined using distributed lag terms (dbar)
+-   **Earth tide Component** The Earth tides component determined using
+    harmonic analysis (dbar)
+-   **Predicted** The sum of all the components above. This is the
+    predicted water pressure. (dbar)
+-   **Water Pressure** The observed water pressure measured with a
+    non-vented transducer (dbar)
+-   **Residuals (obs-mod)** The difference between the observed water
+    pressure and the modeled pressure (Predicted). (dbar)
 
 ``` r
 pred <- predict_terms(fit = fit, 
                       rec = rec,
                       data = input)
 pred <- bind_cols(transducer[, c('datetime', 'wl')], pred)
+pred$residuals <- pred$wl - pred$predicted
 pred_long <- pivot_longer(pred, cols = !datetime)
-
+levels <-c('intercept', 'ns_datetime_num', 'distributed_lag_baro',
+           'earthtide_datetime_num', 'predicted', 'wl', 'residuals')
+labels <- c('Intercept', 'Background trend', 'Barometric Component',
+            'Earth Tide Component', 'Predicted', 'Water Pressure', 
+            'Residuals (obs-mod)')
+pred_long$name <- factor(pred_long$name, 
+                         levels = levels,
+                         labels = labels)
 ggplot(pred_long, aes(x = datetime, y = value)) +
   geom_line() + 
+  scale_y_continuous(labels = scales::comma) + 
+  ggtitle('Water Level Decomposition Results') + 
   xlab("") + 
   facet_grid(name~., scales = 'free_y') + 
   theme_bw()
@@ -229,7 +244,7 @@ ggplot(resp_et, aes(x = x, xend = x, y = 0, yend = value)) +
   geom_segment() + 
   ggtitle('B: Earthtide Response') +
   xlab('Frequency (cycles per day)') +
-  ylab('Phase (radians)   |   Amplitude (meters water)') +
+  ylab('Phase (radians)   |   Amplitude (dbar)') +
   facet_grid(name~., scales = 'free_y') + 
   theme_bw()
 ```
