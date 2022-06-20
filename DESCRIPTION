@@ -37,6 +37,7 @@ Suggests:
     knitr,
     rmarkdown,
     ggplot2,
+    scales,
     broom,
     glmnet,
     testthat (>= 3.0.0),
