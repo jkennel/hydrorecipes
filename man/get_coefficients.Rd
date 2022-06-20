@@ -7,9 +7,9 @@
 get_coefficients(co, step_info)
 }
 \arguments{
-\item{co}{coefficients from a model}
+\item{co}{`coefficients` from a model}
 
-\item{step_info}{info on a recipe step}
+\item{step_info}{info on a `recipe` step}
 }
 \value{
 the coefficients associated with a recipe step

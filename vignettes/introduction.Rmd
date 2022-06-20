@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 ```
 
 
-The **hydrorecipes** package aims to provide a few steps to improve the analysis of water level responses using moderately sized datasets (millions of rows). It aims to work seamlessly within the **tidymodels** framework of packages.  While the package was designed for water levels and pore-pressures, the *steps* may be useful in to other fields of study. Examples in the introduction focus on barometric pressure and Earth tides, the *steps* may also be applied to precipitation, river stage, ocean tides, and pumping responses.
+The **hydrorecipes** package aims to provide a few steps to improve the analysis of water level responses using moderately sized datasets (millions of rows). It aims to work seamlessly within the **tidymodels** framework of packages.  While the package was designed for water levels and pore-pressures, the *steps* may be useful in other fields of study. Examples in the introduction focus on barometric pressure and Earth tides, the *steps* may also be applied to precipitation, river stage, ocean tides, and pumping responses.
 
 
 ```{r setup}

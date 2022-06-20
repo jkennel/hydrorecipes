@@ -3,7 +3,7 @@
 #' @description Predict the contribution for each step.
 #'
 #' @param fit a model object that has a `coefficients` method
-#' @param rec a prepped recipe
+#' @param rec a prepped `recipe`
 #' @param data data.frame with feature columns
 #' @param ... not used
 #'

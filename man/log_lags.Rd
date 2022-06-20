@@ -15,7 +15,7 @@ log_lags(n, max_time_lag)
 integer vector of lags
 }
 \description{
-Generate lags or knots that are spaced logarithmic. Lags/knots start at 0.
+Generate lags or knots with logarithmic spacing. Lags/knots start at 0.
 }
 \examples{
 log_lags(12, 86400)

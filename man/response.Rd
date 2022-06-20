@@ -16,9 +16,9 @@ response(fit, rec, verbose = FALSE, ...)
 \method{response}{numeric}(fit, rec, verbose = FALSE, ...)
 }
 \arguments{
-\item{fit}{a model fit object having a coefficients method.}
+\item{fit}{a model fit object having a `coefficients` method.}
 
-\item{rec}{a prepped recipe object.}
+\item{rec}{a prepped `recipe` object.}
 
 \item{verbose}{print names of steps with no response methods}
 
@@ -29,6 +29,6 @@ a list of response functions corresponding to each step
 }
 \description{
 This function takes a model object and extracts the responses
- from step_distributed_lag, step_lag, step_lead, step_lead_lag, step_harmonic
- and step_earthtide
+ from `step_distributed_lag`, `step_lag`, `step_lead`, `step_lead_lag`,
+ `step_harmonic` and `step_earthtide`
 }

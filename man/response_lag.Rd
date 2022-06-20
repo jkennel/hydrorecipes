@@ -7,12 +7,12 @@
 response_lag(co, step_info)
 }
 \arguments{
-\item{co}{coefficients from a model}
+\item{co}{`coefficients` from a model}
 
-\item{step_info}{info on a recipe step}
+\item{step_info}{info on a `recipe` step}
 }
 \value{
-a tibble containing the responses from lag terms
+a `tibble` containing the responses from lag terms
 }
 \description{
 response_lag

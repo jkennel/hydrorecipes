@@ -18,7 +18,7 @@ predict_terms(fit, rec, data, ...)
 \arguments{
 \item{fit}{a model object that has a `coefficients` method}
 
-\item{rec}{a prepped recipe}
+\item{rec}{a prepped `recipe`}
 
 \item{data}{data.frame with feature columns}
 

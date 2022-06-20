@@ -2,8 +2,8 @@
 #'
 #' @description Get the coefficients by name that are related to a particular step_*
 #'
-#' @param co coefficients from a model
-#' @param step_info info on a recipe step
+#' @param co `coefficients` from a model
+#' @param step_info info on a `recipe` step
 #'
 #' @return the coefficients associated with a recipe step
 #'
@@ -19,7 +19,7 @@ get_coefficients <- function(co, step_info) {
 #'
 #' @inheritParams get_coefficients
 #'
-#' @return a tibble containing the responses from lag terms
+#' @return a `tibble` containing the responses from lag terms
 #'
 response_lag <- function(co, step_info) {
 
@@ -37,7 +37,7 @@ response_lag <- function(co, step_info) {
 #'
 #' @inheritParams get_coefficients
 #'
-#' @return a tibble containing the responses from distributed lag terms
+#' @return a `tibble` containing the responses from distributed lag terms
 #'
 response_distributed_lag <- function(co, step_info) {
 
@@ -59,7 +59,7 @@ response_distributed_lag <- function(co, step_info) {
 #'
 #' @inheritParams get_coefficients
 #'
-#' @return a tibble containing the responses from harmonic terms
+#' @return a `tibble` containing the responses from harmonic terms
 #'
 response_harmonic <- function(co, step_info) {
 
@@ -79,11 +79,11 @@ response_harmonic <- function(co, step_info) {
 #' response
 #'
 #' @description This function takes a model object and extracts the responses
-#'  from step_distributed_lag, step_lag, step_lead, step_lead_lag, step_harmonic
-#'  and step_earthtide
+#'  from `step_distributed_lag`, `step_lag`, `step_lead`, `step_lead_lag`,
+#'  `step_harmonic` and `step_earthtide`
 #'
-#' @param fit a model fit object having a coefficients method.
-#' @param rec a prepped recipe object.
+#' @param fit a model fit object having a `coefficients` method.
+#' @param rec a prepped `recipe` object.
 #' @param verbose print names of steps with no response methods
 #' @param ... currently not used
 #'
