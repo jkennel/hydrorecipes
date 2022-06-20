@@ -88,7 +88,7 @@ The decomposition consists of:
 
 - **distributed_lag_baro** The barometric component of the water pressure (meters water) 
 - **earthtide_datetime** The contribution of Earth tides (meters water)
-- **intercept** The offset (meters_water)
+- **intercept** A single offset value (meters_water)
 - **ns_datetime** The background trend (meters water)
 - **predicted** The sum of all the components above.  This is the predicted water pressure. (meters water)
 
