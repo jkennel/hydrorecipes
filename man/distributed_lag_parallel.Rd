@@ -7,11 +7,11 @@
 distributed_lag_parallel(x, bl, lag_max, n_subset = 1L, n_shift = 0L)
 }
 \arguments{
-\item{x}{matrix value of lag}
+\item{x}{values to lag (numeric vector)}
 
-\item{bl}{matrix the basis lags}
+\item{bl}{the basis lags (numeric matrix)}
 
-\item{lag_max}{integer maximum number of lags}
+\item{lag_max}{maximum number of lags (integer)}
 
 \item{n_subset}{A single integer. subset every n_subset values}
 

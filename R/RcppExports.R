@@ -24,7 +24,8 @@ get_end <- function(n, n_out, lag, n_subset) {
 #' lag data and subset the results
 #'
 #' @inheritParams step_lead_lag
-#' @param x \code{numeric vector} to lag
+#' @param x to lag (numeric vector)
+#' @param lag amount to lag or lead if negative (integer)
 #'
 #' @return vector with lagged values
 #'
@@ -41,15 +42,15 @@ shift_subset <- function(x, lag = 0L, n_subset = 1L, n_shift = 0L) {
 #' lag data and subset the results
 #'
 #' @inheritParams step_lead_lag
-#' @param x \code{numeric vector} to lag
-#' @param lags \code{numeric vector} lead or lag values
-#' @param var_name \code{character} name for the generated matrix columns
+#' @param x to lag (numeric vector)
+#' @param lags lead or lag values (numeric vector)
+#' @param var_name name for the generated matrix columns (character)
 #'
 #' @return matrix with lagged values
 #'
 #'
 #' @export
-lag_matrix <- function(x, lags, n_subset = 1L, n_shift = 0L, var_name = "lag") {
+lag_matrix <- function(x, lags, n_subset = 1L, n_shift = 0L, var_name = "lead_lag") {
     .Call(`_hydrorecipes_lag_matrix`, x, lags, n_subset, n_shift, var_name)
 }
 
@@ -61,9 +62,9 @@ lag_matrix <- function(x, lags, n_subset = 1L, n_shift = 0L, var_name = "lag") {
 #' slow.
 #'
 #' @inheritParams step_lead_lag
-#' @param x matrix value of lag
-#' @param bl matrix the basis lags
-#' @param lag_max integer maximum number of lags
+#' @param x values to lag (numeric vector)
+#' @param bl the basis lags (numeric matrix)
+#' @param lag_max maximum number of lags (integer)
 #'
 #' @return distributed lag basis
 #'

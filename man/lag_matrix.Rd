@@ -4,18 +4,18 @@
 \alias{lag_matrix}
 \title{lag_matrix}
 \usage{
-lag_matrix(x, lags, n_subset = 1L, n_shift = 0L, var_name = "lag")
+lag_matrix(x, lags, n_subset = 1L, n_shift = 0L, var_name = "lead_lag")
 }
 \arguments{
-\item{x}{\code{numeric vector} to lag}
+\item{x}{to lag (numeric vector)}
 
-\item{lags}{\code{numeric vector} lead or lag values}
+\item{lags}{lead or lag values (numeric vector)}
 
 \item{n_subset}{A single integer. subset every n_subset values}
 
 \item{n_shift}{A single integer amount to shift results in number of observations}
 
-\item{var_name}{\code{character} name for the generated matrix columns}
+\item{var_name}{name for the generated matrix columns (character)}
 }
 \value{
 matrix with lagged values

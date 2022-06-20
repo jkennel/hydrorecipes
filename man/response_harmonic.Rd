@@ -7,7 +7,7 @@
 response_harmonic(co, step_info)
 }
 \arguments{
-\item{co}{`coefficients` from a model}
+\item{co}{`coefficients` from a model fit}
 
 \item{step_info}{info on a `recipe` step}
 }

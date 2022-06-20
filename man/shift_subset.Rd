@@ -7,11 +7,9 @@
 shift_subset(x, lag = 0L, n_subset = 1L, n_shift = 0L)
 }
 \arguments{
-\item{x}{\code{numeric vector} to lag}
+\item{x}{to lag (numeric vector)}
 
-\item{lag}{A vector of integers. Each specified column will be
-lag for each value in the vector. Negative values are accepted and indicate
-leading the vector (i.e. the reverse of lagging)}
+\item{lag}{amount to lag or lead if negative (integer)}
 
 \item{n_subset}{A single integer. subset every n_subset values}
 

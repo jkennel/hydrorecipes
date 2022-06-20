@@ -8,7 +8,7 @@
 A \code{data.frame} The columns are:
 \describe{
  \item{\code{datetime}}{POSIXct date and time}
- \item{\code{wl}}{transducer pressure of water column(dbar)}
+ \item{\code{wl}}{transducer pressure of water column and air (dbar)}
  \item{\code{baro}}{barometric pressure (dbar)}
  \item{\code{et}}{synthetic gravity}
 }
@@ -17,11 +17,11 @@ A \code{data.frame} The columns are:
 transducer
 }
 \description{
-This data.frame contains the water levels, barometric pressure,
+This `data.frame` contains the water levels, barometric pressure,
 and synthetic Earth tides from 2016-08-25 to 2016-10-15 (sub-sampled to every
 2 minutes).
 }
 \examples{
-utils::data(transducer)
+data(transducer)
 }
 \keyword{datasets}

@@ -7,12 +7,12 @@
 get_coefficients(co, step_info)
 }
 \arguments{
-\item{co}{`coefficients` from a model}
+\item{co}{`coefficients` from a model fit}
 
 \item{step_info}{info on a `recipe` step}
 }
 \value{
-the coefficients associated with a recipe step
+the coefficients associated with a particular `recipe` `step`
 }
 \description{
 Get the coefficients by name that are related to a particular step_*

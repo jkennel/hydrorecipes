@@ -102,7 +102,8 @@ int get_end(int n, int n_out, int lag, int n_subset) {
 //' lag data and subset the results
 //'
 //' @inheritParams step_lead_lag
-//' @param x \code{numeric vector} to lag
+//' @param x to lag (numeric vector)
+//' @param lag amount to lag or lead if negative (integer)
 //'
 //' @return vector with lagged values
 //'
@@ -156,9 +157,9 @@ using namespace Rcpp;
 //' lag data and subset the results
 //'
 //' @inheritParams step_lead_lag
-//' @param x \code{numeric vector} to lag
-//' @param lags \code{numeric vector} lead or lag values
-//' @param var_name \code{character} name for the generated matrix columns
+//' @param x to lag (numeric vector)
+//' @param lags lead or lag values (numeric vector)
+//' @param var_name name for the generated matrix columns (character)
 //'
 //' @return matrix with lagged values
 //'
@@ -169,7 +170,7 @@ Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericVector& x,
                                const Rcpp::IntegerVector& lags,
                                int n_subset = 1,
                                int n_shift = 0,
-                               std::string var_name = "lag") {
+                               std::string var_name = "lead_lag") {
 
   int n = x.size();
   int n_row;
@@ -179,12 +180,12 @@ Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericVector& x,
   } else {
     n_row = ((n-n_shift-1) / n_subset) + 1;
   }
-  int n_cols = lags.size();
+  int n_col = lags.size();
 
-  Rcpp::CharacterVector nm(n_cols);
-  Rcpp::NumericMatrix out = Rcpp::NumericMatrix(n_row, n_cols);
+  Rcpp::CharacterVector nm(n_col);
+  Rcpp::NumericMatrix out = Rcpp::NumericMatrix(n_row, n_col);
 
-  for (std::size_t i = 0; i < n_cols; i++) {
+  for (std::size_t i = 0; i < n_col; i++) {
     out(_, i) = shift_subset(x, lags[i], n_subset, n_shift);
     if(lags[i] < 0) {
       nm[i] = var_name + '_' + 'n' + std::to_string(abs(lags[i]));
@@ -244,9 +245,9 @@ struct dl_worker: public Worker {
 //' slow.
 //'
 //' @inheritParams step_lead_lag
-//' @param x matrix value of lag
-//' @param bl matrix the basis lags
-//' @param lag_max integer maximum number of lags
+//' @param x values to lag (numeric vector)
+//' @param bl the basis lags (numeric matrix)
+//' @param lag_max maximum number of lags (integer)
 //'
 //' @return distributed lag basis
 //'

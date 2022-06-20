@@ -2,10 +2,10 @@
 #'
 #' @description Get the coefficients by name that are related to a particular step_*
 #'
-#' @param co `coefficients` from a model
+#' @param co `coefficients` from a model fit
 #' @param step_info info on a `recipe` step
 #'
-#' @return the coefficients associated with a recipe step
+#' @return the coefficients associated with a particular `recipe` `step`
 #'
 get_coefficients <- function(co, step_info) {
 
@@ -26,8 +26,8 @@ response_lag <- function(co, step_info) {
   co <- get_coefficients(co, step_info)
 
   tibble(coefficient = co,
-         cumulative = cumsum(co),
-         x = step_info$shift
+         cumulative  = cumsum(co),
+         x           = step_info$shift
   )
 
 }
@@ -42,15 +42,15 @@ response_lag <- function(co, step_info) {
 response_distributed_lag <- function(co, step_info) {
 
   knots <- step_info$knots
-  bl <- basis_lag(knots)
+  bl    <- basis_lag(knots)
 
-  co <- get_coefficients(co, step_info)
+  co    <- get_coefficients(co, step_info)
 
-  resp <- bl %*% co
+  resp  <- bl %*% co
 
   tibble(coefficient = as.numeric(resp),
-         cumulative = cumsum(as.numeric(resp)),
-         x = min(knots):max(knots))
+         cumulative  = cumsum(as.numeric(resp)),
+         x           = min(knots):max(knots))
 
 }
 
@@ -63,7 +63,7 @@ response_distributed_lag <- function(co, step_info) {
 #'
 response_harmonic <- function(co, step_info) {
 
-  co <- get_coefficients(co, step_info)
+  co              <- get_coefficients(co, step_info)
   sin_coefficient <- co[grepl('sin',  names(co))]
   cos_coefficient <- co[grepl('cos',  names(co))]
 
@@ -108,13 +108,14 @@ response.lm <- function(fit, rec, verbose = FALSE, ...) {
 #' @export
 response.cv.glmnet <- function(fit, rec, verbose = FALSE, ...) {
 
-  co <- coefficients(fit)
-  co_names <- rownames(co)
-  co <- as.vector(co)
+  co        <- coefficients(fit)
+  co_names  <- rownames(co)
+  co        <- as.vector(co)
   names(co) <- co_names
 
   response.numeric(co, rec, verbose = verbose, ...)
 }
+
 
 #' @rdname response
 #' @export
@@ -122,16 +123,14 @@ response.numeric <- function(fit, rec, verbose = FALSE, ...) {
 
   x <- NULL
 
-  rec_steps <- tidy2(rec)
-
-  resp <- vector(mode = "list", length = nrow(rec_steps))
+  rec_steps   <- tidy2(rec)
+  resp        <- vector(mode = "list", length = nrow(rec_steps))
   names(resp) <- paste0(rec_steps$type, '_', rec_steps$step_name)
 
   for (i in 1:nrow(rec_steps)) {
 
     step_info <- tidy2(rec, i)
-
-    type <- rec_steps$type[i]
+    type      <- rec_steps$type[i]
 
     if (type %in% c('lead', 'lag', 'lead_lag')) {
       out <- response_lag(fit, step_info)
@@ -146,13 +145,11 @@ response.numeric <- function(fit, rec, verbose = FALSE, ...) {
       out <- NULL
     }
 
-
     if(!is.null(out)) {
 
-      out <- pivot_longer(out, cols = !x)
-      out$type <- type
-      out$term <- unique(step_info$terms)
-
+      out       <- pivot_longer(out, cols = !x)
+      out$type  <- type
+      out$term  <- unique(step_info$terms)
       resp[[i]] <- out
 
     }
