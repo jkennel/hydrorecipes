@@ -76,8 +76,8 @@ unique(diff(transducer$datetime)) # times are regularly spaced
 wave_groups <- earthtide::eterna_wavegroups
 wave_groups <- na.omit(wave_groups[wave_groups$time == '1 month', ])
 wave_groups <- wave_groups[wave_groups$start > 0.5, ]
-latitude  <- 34.0
-longitude <- -118.5
+latitude    <- 34.0
+longitude   <- -118.5
 
 # create recipe 
 rec <- recipe(wl~baro+datetime, transducer) |>
@@ -166,48 +166,72 @@ summary(fit <- lm(wl~., input))
 
 ## Decomposition
 
+The decomposition consists of:
+
+-   **distributed_lag_baro** The barometric component of the water
+    pressure (meters water)
+-   **earthtide_datetime** The contribution of Earth tides (meters
+    water)
+-   **intercept** The offset (meters_water)
+-   **ns_datetime** The background trend (meters water)
+-   **predicted** The sum of all the components above. This is the
+    predicted water pressure. (meters water)
+
 ``` r
 pred <- predict_terms(fit = fit, 
                       rec = rec,
                       data = input)
 pred <- bind_cols(transducer[, c('datetime', 'wl')], pred)
 pred_long <- pivot_longer(pred, cols = !datetime)
+
 ggplot(pred_long, aes(x = datetime, y = value)) +
   geom_line() + 
+  xlab("") + 
   facet_grid(name~., scales = 'free_y') + 
   theme_bw()
-#> Warning: Removed 1440 row(s) containing missing values (geom_path).
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="90%" />
 
 ## Response
 
+There are two responses for this model:
+
+-   **distributed_lag** The barometric loading response. This is an
+    impulse response function and the cumulative response is usually
+    presented. This value typically ranges between 0 and 1 and
+    represents the expected water pressure/level change following a 1
+    unit change in barometric pressure. The same units for water
+    pressure and barometric pressure should be used (Figure A).
+-   **earthtide** The Earth tide response is represented by a set of
+    harmonic wave groups. These results are usually presented as
+    amplitude and phase as a function of frequency. Depending on the
+    length of your dataset you may want to include more harmonic
+    wavegroups. For locations with minimal ocean tide effects it may be
+    useful to compare the relative amplitudes to theory as an assessment
+    of the model quality (how well all other signals were removed). The
+    phase shift for small amplitude components may not be reliable
+    (Figure B).
+
 ``` r
-resp <- response(fit, rec)
+resp    <- response(fit, rec)
 resp_ba <- resp[resp$name == 'cumulative', ]
 resp_ba <- resp_ba[resp_ba$term == 'baro', ]
-
 ggplot(resp_ba, aes(x = x * 120 / 3600, y = value)) +
-  ggtitle('Barometric Loading Response') + 
+  ggtitle('A: Barometric Loading Response') + 
   xlab('lag (hours)') +
-  ylab('Cumulative response') +
+  ylab('Cumulative Response') +
   scale_y_continuous(limits = c(0, 1)) +
   geom_line() + 
   theme_bw()
-```
-
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="90%" />
-
-``` r
-
 resp_et <- resp[resp$name %in% c('amplitude', 'phase'), ]
 ggplot(resp_et, aes(x = x, xend = x, y = 0, yend = value)) +
   geom_segment() + 
-  ggtitle('Earthtide Response') +
+  ggtitle('B: Earthtide Response') +
   xlab('Frequency (cycles per day)') +
+  ylab('Phase (radians)   |   Amplitude (meters water)') +
   facet_grid(name~., scales = 'free_y') + 
   theme_bw()
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-2.png" width="90%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="47%" /><img src="man/figures/README-unnamed-chunk-5-2.png" width="47%" />

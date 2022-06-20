@@ -155,30 +155,27 @@ ggplot(pred_long, aes(x = datetime, y = value)) +
 
 The response describes how the water pressure changes after there is a change in one of the input stresses. The **hydrorecipes** package describes the response in one of two ways; using harmonics, or a response function.  These can be thought of as equivalent with one being in the time domain and the other the frequency domain.  Both method provides similar information, but depending on the analysis model or background knowledge one may be preferred over the other. Below we use a response function for barometric pressure and harmonic analysis for the Earth tides.
 
-```{r fig.height = 5, fig.width = 10, out.width = '90%'}
-
-resp <- response(fit_kennel, rec_kennel)
+```{r fig.height = 5, fig.width = 5, out.width = '47%', fig.show='hold'}
+resp    <- response(fit_kennel, rec_kennel)
 resp_ba <- resp[resp$name == 'cumulative', ]
 resp_ba <- resp_ba[resp_ba$term == 'baro', ]
-
 ggplot(resp_ba, aes(x = x * 120 / 3600, y = value)) +
-  ggtitle('Barometric Loading Response') + 
+  ggtitle('A: Barometric Loading Response') + 
   xlab('lag (hours)') +
-  ylab('Cumulative response') +
+  ylab('Cumulative Response') +
   scale_y_continuous(limits = c(0, 1)) +
   geom_line() + 
   theme_bw()
-
-
 resp_et <- resp[resp$name %in% c('amplitude', 'phase'), ]
 ggplot(resp_et, aes(x = x, xend = x, y = 0, yend = value)) +
   geom_segment() + 
-  ggtitle('Earthtide Response') +
+  ggtitle('B: Earthtide Response') +
   xlab('Frequency (cycles per day)') +
+  ylab('Phase (radians)   |   Amplitude (meters water)') +
   facet_grid(name~., scales = 'free_y') + 
   theme_bw()
-
 ```
+
 
 
 # References
