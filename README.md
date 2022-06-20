@@ -200,6 +200,7 @@ pred_long$name <- factor(pred_long$name,
 ggplot(pred_long, aes(x = datetime, y = value)) +
   geom_line() + 
   scale_y_continuous(labels = scales::comma) + 
+  scale_x_continuous(expand = c(0,0)) + 
   ggtitle('Water Level Decomposition Results') + 
   xlab("") + 
   facet_grid(name~., scales = 'free_y') + 
