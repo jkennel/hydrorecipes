@@ -59,6 +59,8 @@ predict_terms.numeric <- function(fit, rec, data, ...) {
 
     if (length(co_sub) >= 1) {
       term_val <- as.matrix(data[, names(co_sub)]) %*% as.matrix(co_sub)
+    } else {
+      term_val <- rep(0, nrow(data))
     }
 
     resp[[i]] <- term_val
