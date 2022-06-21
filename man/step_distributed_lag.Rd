@@ -74,7 +74,7 @@ data(transducer)
 recipe(~ ., data = transducer) |>
   step_distributed_lag(baro, knots = log_lags(10, 86400 * 2 / 120)) |>
   prep() |>
-  bake(transducer)
+  bake(new_data = transducer)
 
 }
 \seealso{
