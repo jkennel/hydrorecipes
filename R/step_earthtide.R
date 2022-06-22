@@ -30,7 +30,7 @@
 #' data(eterna_wavegroups)
 #' data(transducer)
 #'
-#' t_sub <- transducer[1:1000, c('datetime', 'wl')]
+#' t_sub <- transducer[1:500, c('datetime', 'wl')]
 #' wg <- na.omit(eterna_wavegroups[eterna_wavegroups$time == '1 month',])
 #'
 #' recipe(wl ~ ., data = t_sub) |>
@@ -39,17 +39,15 @@
 #'                  longitude = -118.5,
 #'                  wave_groups = wg,
 #'                  do_predict = FALSE) |>
-#'   prep() |>
-#'   bake(new_data = t_sub)
+#'   prep()
 #'
-#'   recipe(wl ~ ., data = t_sub) |>
+#' recipe(wl ~ ., data = t_sub) |>
 #'   step_earthtide(datetime,
 #'                  latitude = 34,
 #'                  longitude = -118.5,
 #'                  wave_groups = wg,
 #'                  do_predict = TRUE) |>
-#'   prep() |>
-#'   bake(new_data = t_sub)
+#'   prep()
 #'
 #' @seealso [step_earthtide()] [recipe()]
 #'   [prep.recipe()] [bake.recipe()]
