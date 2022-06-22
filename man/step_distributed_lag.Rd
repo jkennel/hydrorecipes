@@ -61,12 +61,11 @@ the computations for subsequent operations.}
 \description{
 `step_distributed_lag` creates a *specification* of a recipe step that
   will add new basis lag columns. The new data will
-  include NA values up to the maximum lag was induced. The inspiration for
-  this step comes from the
+  include NA values up to the maximum lag. These can be removed
+  with [step_naomit()]. The inspiration for this step comes from the
   [dlnm package](https://CRAN.R-project.org/package=dlnm). For large datasets
   with large maximum time lags, convolution is
-  done in the frequency domain for efficiency. These can be removed
-  with [step_naomit()].
+  done in the frequency domain for efficiency.
 }
 \details{
 The step assumes that the data are already _in the proper sequential
