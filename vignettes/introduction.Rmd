@@ -92,9 +92,10 @@ input_rasmussen_mote <- rec_rasmussen_mote |> bake(new_data = NULL)
 fit_rasmussen_mote <- lm(wl~., input_rasmussen_mote) 
 ```
 
-## Kennel 2020
+## Kennel 2020 method for water levels
 
-This is the method of Kennel 2020 which uses a distributed lag model and the **earthtide** package to generate synthetic wave groups.
+This is the method of Kennel 2020 which uses a distributed lag model (Almon, 1965, Gasparrini, 2011) and the [earthtide package](https://CRAN.R-project.org/package=earthtide) to generate synthetic wave groups. The distributed lag model was inspired by the 
+[dlnm package](https://CRAN.R-project.org/package=dlnm), but adapted for datasets with millions of rows and long maximum time lags.
 
 ```{r}
 wave_groups <- earthtide::eterna_wavegroups
@@ -193,6 +194,10 @@ ggplot(resp_et, aes(x = x, xend = x, y = 0, yend = value)) +
 
 
 # References
+
+Almon, S (1965). The Distributed Lag Between Capital Appropriations and Expenditures. Econometrica 33(1), 178.
+
+Gasparrini A. Distributed lag linear and non-linear models in R: the package dlnm. Journal of Statistical Software. 2011; 43(8):1-20. https://doi.org/10.18637/jss.v043.i08
 
 Kennel, J., 2020. High Frequency Water Level Responses to Natural Signals (Doctoral dissertation, University of Guelph). http://hdl.handle.net/10214/17890
 

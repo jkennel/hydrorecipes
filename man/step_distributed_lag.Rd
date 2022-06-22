@@ -60,9 +60,13 @@ the computations for subsequent operations.}
 }
 \description{
 `step_distributed_lag` creates a *specification* of a recipe step that
-  will add new columns of lagged data. Lagged data will
-  by default include NA values where the lag was induced.
-  These can be removed with [step_naomit()].
+  will add new basis lag columns. The new data will
+  include NA values up to the maximum lag was induced. The inspiration for
+  this step comes from the
+  [dlnm package](https://CRAN.R-project.org/package=dlnm). For large datasets
+  with large maximum time lags, convolution is
+  done in the frequency domain for efficiency. These can be removed
+  with [step_naomit()].
 }
 \details{
 The step assumes that the data are already _in the proper sequential
@@ -76,6 +80,14 @@ recipe(~ ., data = transducer) |>
   prep() |>
   bake(new_data = transducer)
 
+}
+\references{
+Almon, S (1965). The Distributed Lag Between Capital Appropriations and
+ Expenditures. Econometrica 33(1), 178.
+
+Gasparrini A. Distributed lag linear and non-linear models in R: the package
+ dlnm. Journal of Statistical Software. 2011; 43(8):1-20.
+ https://doi.org/10.18637/jss.v043.i08
 }
 \seealso{
 Other row operation steps: 

@@ -10,7 +10,9 @@ Maintainer: Jonathan Kennel <jkennel@uoguelph.ca>
 Description: Additional steps to be used with the 'recipes' package. New steps
   were designed for regression deconvolution on datasets with millions of rows 
   with applications to signal decomposition and response 
-  characterization.
+  characterization. The methods in this package were developed as part of 
+  PhD thesis titled [High Frequency Water Level Responses to Natural 
+  Signals](http://hdl.handle.net/10214/17890) by Jonathan Kennel in 2020.
 BugReports: https://github.com/jkennel/hydrorecipes/issues
 URL: https://github.com/jkennel/hydrorecipes
 License: GPL-3

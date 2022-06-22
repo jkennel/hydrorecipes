@@ -30,10 +30,10 @@ primarily with regression deconvolution in mind to be used with *lm* or
     the response in a flexible yet concise manner. This is useful when
     you have a long maximum lag or large datasets.
 -   *step_earthtide* uses the [earthtide
-    package](https://cran.rstudio.com/web/packages/earthtide/index.html)
-    to model the synthetic Earth tide given locations and times. This
-    can provide a single Earth tide curve or a set of harmonics that can
-    be used in regression models.
+    package](https://CRAN.R-project.org/package=earthtide) to model the
+    synthetic Earth tide given locations and times. This can provide a
+    single Earth tide curve or a set of harmonics that can be used in
+    regression models.
 
 ## Installation
 
@@ -49,14 +49,13 @@ remotes::install_github("jkennel/hydrorecipes")
 
 This is the method of [Kennel 2020](http://hdl.handle.net/10214/17890)
 which uses a distributed lag model and the [earthtide
-package](https://cran.rstudio.com/web/packages/earthtide/index.html) to
-generate synthetic wave groups. A \~1.5 month dataset of water and
-barometric pressure having a monitoring frequency of 2 minutes is
-presented below. The barometric response is modeled over two days using
-a distributed lag model with 15 regressor terms. The *knots* are
-logarithmically separated over two days to accurately capture early and
-late time responses which can be caused by different physical
-mechanisms.
+package](https://CRAN.R-project.org/package=earthtide) to generate
+synthetic wave groups. A \~1.5 month dataset of water and barometric
+pressure having a monitoring frequency of 2 minutes is presented below.
+The barometric response is modeled over two days using a distributed lag
+model with 15 regressor terms. The *knots* are logarithmically separated
+over two days to accurately capture early and late time responses which
+can be caused by different physical mechanisms.
 
 ``` r
 library(hydrorecipes)
