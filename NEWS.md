@@ -1,6 +1,7 @@
 # hydrorecipes 0.0.3
 
 * First version submitted to CRAN
+* Allow user specified spline functions
 
 # hydrorecipes 0.0.2
 
