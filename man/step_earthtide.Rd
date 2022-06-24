@@ -119,10 +119,19 @@ added to the sequence of existing steps (if any).
 \description{
 \code{step_earthtide} creates a \emph{specification} of a recipe step
 that are the Earth tide harmonics for a particular
-location. This step requires the \emph{earthtide} package.
+location. This step requires the \href{https://CRAN.R-project.org/package=earthtide}{earthtide package}.
 }
 \details{
-\code{step_earthtide} calculates the Earth tide harmonics
+There are many waves (thousands) that make up a tidal signal.
+\code{step_earthtide} calculates the Earth tide signal for a time and
+location. The tidal signal can be estimated as a single summed curve when
+\code{do_predict = TRUE} or as a set of wave groups when \code{do_predict = FALSE}.
+Wave groups are ranges of frequencies identified by start and end
+frequencies.  For example, if you have one month of data the M2 signal
+could be described as the sum of all the waves between 1.914129 and
+1.950419 cycles per day. The regressors for each wave group have a sin
+and cos component. See \code{\link[recipes:step_harmonic]{recipes::step_harmonic()}} for a simplified
+version of this where each sin and cos curve corresponds to a single wave.
 }
 \examples{
 library(earthtide)
@@ -151,8 +160,8 @@ recipe(wl ~ ., data = t_sub) |>
 
 }
 \seealso{
-\code{\link[=step_earthtide]{step_earthtide()}} \code{\link[=recipe]{recipe()}}
-\code{\link[=prep.recipe]{prep.recipe()}} \code{\link[=bake.recipe]{bake.recipe()}}
+\code{\link[=step_earthtide]{step_earthtide()}} \code{\link[earthtide:calc_earthtide]{earthtide::calc_earthtide()}}
+\code{\link[recipes:step_harmonic]{recipes::step_harmonic()}}
 }
 \concept{generate Earth tide harmonics}
 \keyword{datagen}

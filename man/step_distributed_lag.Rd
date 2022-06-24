@@ -34,33 +34,28 @@ the original variables will be used as \emph{predictors} in a model.}
 \item{trained}{A logical to indicate if the quantities for
 preprocessing have been estimated.}
 
-\item{knots}{breakpoints that define the spline.  The default is no
-    knots; together with the natural boundary conditions this results in
-    a basis for linear regression on \code{x}.  Typical values are the
-    mean or median for one knot, quantiles for more knots.  See also
-    \code{Boundary.knots}.}
+\item{knots}{An integer vector of breakpoints to define the spline. These should
+include the \code{Boundary.knots}. See \href{https://CRAN.R-project.org/package=splines}{splines}
+for more info.}
 
 \item{basis_mat}{The matrix of basis kernels to convolve. This is
 \code{NULL} until computed by \code{\link[=prep.recipe]{prep.recipe()}}. This can also be specified as an
-object generated from the \emph{splines} or \emph{spines2} packages having attributes
-for \code{knots} and \code{Boundary.knots}. In specified like this \code{knots} will be
-obtained from the \code{basis_mat} and \code{knots} specified as a parameter will be
-neglected.}
+object generated from the \href{https://CRAN.R-project.org/package=splines}{splines} or \href{https://CRAN.R-project.org/package=splines2}{splines2} packages having attributes
+for \code{knots} and \code{Boundary.knots}. If specified like this \code{knots} will be
+obtained from the \code{basis_mat} and not from the \code{knots} parameter.}
 
 \item{spline_fun}{Function used for calculating \code{basis_mat}.  This should
 return an object having \code{knots} and \code{Boundary.knots} attributes.}
 
-\item{options}{A list of options to the default method for
-\code{\link[stats:prcomp]{stats::prcomp()}}. Argument defaults are set to \code{retx = FALSE}, \code{center = FALSE}, \code{scale. = FALSE}, and \code{tol = NULL}. \strong{Note} that the argument \code{x}
-should not be passed here (or at all).}
+\item{options}{The arguments to pass to \code{spline_fun}.}
 
-\item{prefix}{A prefix for generated column names, default to "lag_".}
+\item{prefix}{A prefix for generated column names, default to "distributed_lag_".}
 
 \item{keep_original_cols}{A logical to keep the original variables in the
 output. Defaults to \code{FALSE}.}
 
 \item{columns}{A character string of variable names that will
-be populated (eventually) by the \code{terms} argument.}
+be populated elsewhere.}
 
 \item{skip}{A logical. Should the step be skipped when the
 recipe is baked by \code{\link[recipes:bake]{bake()}}? While all operations are baked
@@ -79,17 +74,22 @@ of any existing operations.
 \code{step_distributed_lag} creates a \emph{specification} of a recipe step that
 will add new basis lag columns. The new data will
 include NA values up to the maximum lag. These can be removed
-with \code{\link[=step_naomit]{step_naomit()}}. The inspiration for this step comes from the
+with \code{\link[recipes:step_naomit]{recipes::step_naomit()}}. The inspiration for this step comes from the
 \href{https://CRAN.R-project.org/package=dlnm}{dlnm package}. For large datasets
 with large maximum time lags, convolution is
 done in the frequency domain for efficiency. Samples should be ordered and
-have regular spacing (i.e. Regular time series, regular spatial sampling).
+have regular spacing (i.e. regular time series, regular spatial sampling).
 }
 \details{
-The step assumes that the data are already \emph{in the proper sequential
+This step assumes that the data are already \emph{in the proper sequential
 order} for lagging. The input should be sampled at a regular interval
 (time, space, etc.). When the recipe is baked a set of vectors resulting from
-the convolution of a vector and a basis matrix is returned.
+the convolution of a vector and a basis matrix is returned. Distributed lags
+can be used to model a delayed response to a input
+in a flexible manner with fewer regressor terms. The method achieves this by
+convolving a input stress with a basis lag matrix (commonly spline function)
+which leads to a set of regressors with fewer terms but still capable of
+describing both fast and slow responses.
 }
 \examples{
 data(wipp30)
@@ -128,6 +128,8 @@ dlnm. Journal of Statistical Software. 2011; 43(8):1-20.
 https://doi.org/10.18637/jss.v043.i08
 }
 \seealso{
+\code{\link[=step_lead_lag]{step_lead_lag()}} \code{\link[recipes:step_lag]{recipes::step_lag()}}
+
 Other row operation steps: 
 \code{\link{step_lead_lag}()}
 }

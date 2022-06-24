@@ -17,8 +17,9 @@ coverage](https://codecov.io/gh/jkennel/hydrorecipes/branch/master/graph/badge.s
 The goal of **hydrorecipes** is to supplement the [recipes
 package](https://recipes.tidymodels.org) with a few steps that can help
 deal with moderately sized water level datasets. These were developed
-primarily with regression deconvolution in mind to be used with *lm* or
-*glmnet*. The following steps are currently available:
+primarily with regression deconvolution in mind and used *lm* or
+*glmnet*, but other model engines could also be used. The following
+steps are currently available:
 
 -   *step_lead_lag* is a more flexible version of *step_lag* from the
     [recipes package](https://recipes.tidymodels.org). Values can be

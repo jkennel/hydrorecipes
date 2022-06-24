@@ -18,7 +18,7 @@ tidy2 <- function(x, ...) {
 #' @description `tidy2` will return a data frame that contains information
 #'  regarding a recipe or operation within the recipe (when a `tidy2`
 #'  method for the operation exists). This method ensures that relevant data
-#'  for `predict_terms` and `response` can be easily accessed from a `recipe`
+#'  for `predict_terms` and `response` can be easily accessed from a recipe
 #'  formulation.
 #'
 #' @name tidy2.recipe

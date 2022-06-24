@@ -2,7 +2,7 @@
 #'
 #' `step_earthtide` creates a *specification* of a recipe step
 #'  that are the Earth tide harmonics for a particular
-#'  location. This step requires the *earthtide* package.
+#'  location. This step requires the [earthtide package](https://CRAN.R-project.org/package=earthtide).
 #'
 #' @inheritParams recipes::step_lag
 #' @inheritParams earthtide::calc_earthtide
@@ -22,7 +22,17 @@
 #' @export
 #'
 #'
-#' @details `step_earthtide` calculates the Earth tide harmonics
+#' @details There are many waves (thousands) that make up a tidal signal.
+#'   `step_earthtide` calculates the Earth tide signal for a time and
+#'    location. The tidal signal can be estimated as a single summed curve when
+#'    `do_predict = TRUE` or as a set of wave groups when `do_predict = FALSE`.
+#'    Wave groups are ranges of frequencies identified by start and end
+#'    frequencies.  For example, if you have one month of data the M2 signal
+#'    could be described as the sum of all the waves between 1.914129 and
+#'    1.950419 cycles per day. The regressors for each wave group have a sin
+#'    and cos component. See [recipes::step_harmonic()] for a simplified
+#'    version of this where each sin and cos curve corresponds to a single wave.
+#'
 #' @examples
 #' library(earthtide)
 #' data(eterna_wavegroups)
@@ -48,8 +58,8 @@
 #'                  do_predict = TRUE) |>
 #'   prep()
 #'
-#' @seealso [step_earthtide()] [recipe()]
-#'   [prep.recipe()] [bake.recipe()]
+#' @seealso [step_earthtide()] [earthtide::calc_earthtide()]
+#'  [recipes::step_harmonic()]
 #' @importFrom recipes add_step step recipes_eval_select ellipse_check rand_id
 step_earthtide <-
   function(recipe,

@@ -58,6 +58,6 @@ estimated using \code{prep}, a logical for \code{skip}, and a character column \
 \code{tidy2} will return a data frame that contains information
 regarding a recipe or operation within the recipe (when a \code{tidy2}
 method for the operation exists). This method ensures that relevant data
-for \code{predict_terms} and \code{response} can be easily accessed from a \code{recipe}
+for \code{predict_terms} and \code{response} can be easily accessed from a recipe
 formulation.
 }

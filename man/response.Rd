@@ -16,7 +16,7 @@ response(fit, rec, verbose = FALSE, ...)
 \method{response}{numeric}(fit, rec, verbose = FALSE, ...)
 }
 \arguments{
-\item{fit}{A model object that has a \code{coefficients} method (e.g. lm)}
+\item{fit}{A model object that has a \code{coefficients} method (e.g. \code{lm})}
 
 \item{rec}{A prepped \code{recipe}}
 
@@ -25,12 +25,18 @@ response(fit, rec, verbose = FALSE, ...)
 \item{...}{Currently not used}
 }
 \value{
-A data.frame of response functions corresponding to each step
+A data.frame of impulse response functions, or harmonic components
+corresponding to each step.
 }
 \description{
 This function takes a model object and extracts the responses
 from \code{step_distributed_lag}, \code{step_lead_lag}, \code{step_harmonic} and
-\code{step_earthtide}
+\code{step_earthtide}.
+}
+\details{
+\code{step_distributed_lag} and \code{step_lead_lag} result
+in impulse response functions and \code{step_harmonic} and \code{step_earthtide}
+result in harmonic components (amplitude and phase for each \emph{main} frequency).
 }
 \examples{
 data(transducer)

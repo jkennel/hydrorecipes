@@ -103,12 +103,17 @@ response_harmonic <- function(co, step_info) {
 #'
 #' @description This function takes a model object and extracts the responses
 #'  from `step_distributed_lag`, `step_lead_lag`, `step_harmonic` and
-#'  `step_earthtide`
+#'  `step_earthtide`.
 #'
 #' @inheritParams predict_terms
 #' @param verbose Print names of steps with no response methods
 #'
-#' @return A data.frame of response functions corresponding to each step
+#' @details `step_distributed_lag` and `step_lead_lag` result
+#'   in impulse response functions and `step_harmonic` and `step_earthtide`
+#'   result in harmonic components (amplitude and phase for each _main_ frequency).
+#'
+#' @return A data.frame of impulse response functions, or harmonic components
+#'   corresponding to each step.
 #'
 #' @export
 #' @examples

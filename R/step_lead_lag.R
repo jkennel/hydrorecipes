@@ -3,23 +3,32 @@
 #' `step_lead_lag` creates a *specification* of a recipe step that
 #'   will add new columns that are shifted forward (lag) or backward (lead).
 #'   Data will by default include NA values where the shift was induced.
-#'   These can be removed with [step_naomit()]. Samples should be ordered and
-#'   have regular spacing (i.e. Regular time series, regular spatial sampling).
+#'   These can be removed with [recipes::step_naomit()]. Samples should be ordered and
+#'   have regular spacing (i.e. regular time series, regular spatial sampling).
 #'
 #' @inheritParams recipes::step_lag
 #' @inheritParams recipes::step_center
 #' @inheritParams step_distributed_lag
 #' @param lag A vector of integers. Each specified column will be
-#'  lag for each value in the vector. Negative values are accepted and indicate
+#'  lagged for each value in the vector. Negative values are accepted and indicate
 #'  leading the vector (i.e. the reverse of lagging)
-#' @param n_subset A single integer. subset every n_subset values
-#' @param n_shift A single integer amount to shift results in number of observations
+#' @param n_subset A single integer. Subset every `n_subset` values.
+#' @param n_shift A single integer amount to shift results in number of observations.
 #' @param prefix A prefix for generated column names, default to "lag_lead_".
 #' @param columns A character string of variable names that will
 #'  be populated (eventually) by the `terms` argument.
-#' @details The step assumes that the data are already _in the proper sequential
-#'  order_ for lagging/leading. A set of vectors that are shifted relative to the
-#'  input vector is generated when the recipe is baked.
+#'
+#' @details This step assumes that the data are already _in the proper sequential
+#'  order_ for lagging. This `step` allows a vector to be shifted
+#'  forward (lag) or backward (lead). While forward shifts are commonly used for
+#'  lagged responses, there are cases where a backward shift may be useful. This
+#'  can arise when there are unknown clock errors between two sensors making the
+#'  response appear to occur before the input.  Another situation where a
+#'  backward shift may be useful is in cyclical signals where alignment is
+#'  unknown. The data can also efficiently be subsetted during the lag/leading
+#'  process resulting in smaller model inputs while still utilizing the entire
+#'  lag/lead history.
+#'
 #' @family row operation steps
 #' @export
 #' @rdname step_lead_lag
@@ -42,6 +51,7 @@
 #'   step_lead_lag(baro, lag = -2:2, n_subset = 2, n_shift = 1) |>
 #'   prep()
 #'
+#' @seealso [recipes::step_lag()]
 step_lead_lag <-
   function(recipe,
            ...,

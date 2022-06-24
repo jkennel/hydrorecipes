@@ -3,33 +3,40 @@
 #' `step_distributed_lag` creates a *specification* of a recipe step that
 #'   will add new basis lag columns. The new data will
 #'   include NA values up to the maximum lag. These can be removed
-#'   with [step_naomit()]. The inspiration for this step comes from the
+#'   with [recipes::step_naomit()]. The inspiration for this step comes from the
 #'   [dlnm package](https://CRAN.R-project.org/package=dlnm). For large datasets
 #'   with large maximum time lags, convolution is
 #'   done in the frequency domain for efficiency. Samples should be ordered and
-#'   have regular spacing (i.e. Regular time series, regular spatial sampling).
+#'   have regular spacing (i.e. regular time series, regular spatial sampling).
 #'
 #' @inheritParams recipes::step_pca
 #' @inheritParams recipes::step_center
-#' @inheritParams splines::ns
+#' @param knots An integer vector of breakpoints to define the spline. These should
+#'  include the `Boundary.knots`. See [splines](https://CRAN.R-project.org/package=splines)
+#'  for more info.
 #' @param basis_mat The matrix of basis kernels to convolve. This is
 #'  `NULL` until computed by [prep.recipe()]. This can also be specified as an
-#'  object generated from the *splines* or *spines2* packages having attributes
-#'  for `knots` and `Boundary.knots`. In specified like this `knots` will be
-#'  obtained from the `basis_mat` and `knots` specified as a parameter will be
-#'  neglected.
+#'  object generated from the [splines](https://CRAN.R-project.org/package=splines) or [splines2](https://CRAN.R-project.org/package=splines2) packages having attributes
+#'  for `knots` and `Boundary.knots`. If specified like this `knots` will be
+#'  obtained from the `basis_mat` and not from the `knots` parameter.
 #' @param spline_fun Function used for calculating `basis_mat`.  This should
 #'  return an object having `knots` and `Boundary.knots` attributes.
-#' @param prefix A prefix for generated column names, default to "lag_".
-#' @param columns A character string of variable names that will
-#'  be populated (eventually) by the `terms` argument.
-#' @details The step assumes that the data are already _in the proper sequential
-#'  order_ for lagging. The input should be sampled at a regular interval
-#'  (time, space, etc.). When the recipe is baked a set of vectors resulting from
-#'  the convolution of a vector and a basis matrix is returned.
+#' @param options The arguments to pass to `spline_fun`.
+#' @param prefix A prefix for generated column names, default to "distributed_lag_".
 #' @family row operation steps
 #' @export
 #' @rdname step_distributed_lag
+#'
+#' @details This step assumes that the data are already _in the proper sequential
+#'  order_ for lagging. The input should be sampled at a regular interval
+#'  (time, space, etc.). When the recipe is baked a set of vectors resulting from
+#'  the convolution of a vector and a basis matrix is returned. Distributed lags
+#'  can be used to model a delayed response to a input
+#'  in a flexible manner with fewer regressor terms. The method achieves this by
+#'  convolving a input stress with a basis lag matrix (commonly spline function)
+#'  which leads to a set of regressors with fewer terms but still capable of
+#'  describing both fast and slow responses.
+#'
 #'
 #' @return An updated version of recipe with the new step added to the sequence
 #' of any existing operations.
@@ -69,6 +76,7 @@
 #'                        basis_mat = basis_mat) |>
 #'   prep()
 #'
+#' @seealso [step_lead_lag()] [recipes::step_lag()]
 step_distributed_lag <-
   function(recipe,
            ...,
