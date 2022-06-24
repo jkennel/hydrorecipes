@@ -47,7 +47,7 @@ test_that("response works", {
   wave_groups <- wave_groups[wave_groups$start > 0.5, ]
   latitude  <- 34.0
   longitude <- -118.5
-  rec_kennel <- recipe(wl~baro+datetime_num, transducer) |>
+  rec_dl <- recipe(wl~baro+datetime_num, transducer) |>
     step_distributed_lag(baro, knots = log_lags(15, 86400 * 2 / 120)) |>
     step_earthtide(datetime_num,
                    latitude = latitude,
@@ -57,27 +57,27 @@ test_that("response works", {
     step_ns(datetime_num, deg_free = 3) |>
     prep()
 
-  input_kennel <- rec_kennel |> bake(new_data = NULL)
-  fit_kennel <- lm(wl~., input_kennel)
-  resp <- response(fit_kennel, rec_kennel)
+  input_dl <- rec_dl |> bake(new_data = NULL)
+  fit_dl <- lm(wl~., input_dl)
+  resp <- response(fit_dl, rec_dl)
   expect_equal(length(unique(resp$term)), 2)
   expect_equal(nrow(resp), 86400 * 2 / 120 * 2 + 2 + nrow(wave_groups) * 4)
   expect_equal(unique(resp[resp$term == 'baro',]$x), 0:(86400*2/120))
   expect_equal(unique(resp[resp$term == 'datetime_num',]$x), tidal_freqs)
 
   library(glmnet)
-  xy <- na.omit(input_kennel)
+  xy <- na.omit(input_dl)
   x <- as.matrix(xy[, -1])
   y <- xy[['wl']]
   fit_cv <- cv.glmnet(x, y, family = 'gaussian', alpha = 0.1)
-  resp <- response(fit_cv, rec_kennel)
+  resp <- response(fit_cv, rec_dl)
   expect_equal(length(unique(resp$term)), 2)
   expect_equal(nrow(resp), 86400 * 2 / 120 * 2 + 2 + nrow(wave_groups) * 4)
   expect_equal(unique(resp[resp$term == 'baro',]$x), 0:(86400*2/120))
   expect_equal(unique(resp[resp$term == 'datetime_num',]$x), tidal_freqs)
 
 
-  expect_output(tmp <- response(fit_kennel, rec_kennel, verbose = TRUE))
+  expect_output(tmp <- response(fit_dl, rec_dl, verbose = TRUE))
 
 
 })

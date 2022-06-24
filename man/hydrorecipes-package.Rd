@@ -7,8 +7,8 @@
 \title{hydrorecipes: Hydrogeology Steps for the 'recipes' Package}
 \description{
 The package provides a few steps for the analysis of water level
-datasets of moderately size (millions of rows) using the `recipes` package.
-It aims to work seamlessly within the `tidymodels` framework of packages.
+datasets of moderately size (millions of rows) using the \code{recipes} package.
+It aims to work seamlessly within the \code{tidymodels} framework of packages.
 While the package was designed for water levels and pore-pressures, the
 steps may be useful in other fields of study. Examples in the introduction
 focus on barometric pressure and Earth tides, however, the steps may also be

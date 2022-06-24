@@ -17,6 +17,20 @@ test_that("predict_terms works", {
   pred <- predict_terms(fit = fit_toll_rasmussen,
                         rec = rec_toll_rasmussen,
                         data = input_toll_rasmussen)
+
+  rec_toll_rasmussen2 <- recipe(wl~baro+et+datetime_num, transducer) |>
+    step_lead_lag(baro, lag = log_lags(100, 86400 * 2 / 120), prefix = 'a') |>
+    step_lead_lag(et, lag = seq(0, 180, 20), prefix = 'b_') |>
+    step_ns(datetime_num, deg_free = 3) |>
+    prep()
+  input_toll_rasmussen2 <- rec_toll_rasmussen2 |> bake(new_data = NULL)
+  fit_toll_rasmussen2 <- lm(wl~., input_toll_rasmussen2)
+  pred2 <- predict_terms(fit = fit_toll_rasmussen2,
+                        rec = rec_toll_rasmussen2,
+                        data = input_toll_rasmussen2)
+
+  expect_equal(pred, pred2)
+
   expect_equal(nrow(pred), nrow(transducer))
   expect_equal(ncol(pred), 5)
   expect_equal(names(pred), c('lead_lag_baro', 'lead_lag_et', 'ns_datetime_num', 'intercept', 'predicted'))
@@ -51,7 +65,7 @@ test_that("predict_terms works", {
   wave_groups <- wave_groups[wave_groups$start > 0.5, ]
   latitude  <- 34.0
   longitude <- -118.5
-  rec_kennel <- recipe(wl~baro+datetime_num, transducer) |>
+  rec_dl <- recipe(wl~baro+datetime_num, transducer) |>
     step_distributed_lag(baro, knots = log_lags(15, 86400 * 2 / 120)) |>
     step_earthtide(datetime_num,
                    latitude = latitude,
@@ -60,11 +74,11 @@ test_that("predict_terms works", {
                    wave_groups = wave_groups) |>
     step_ns(datetime_num, deg_free = 3) |>
     prep()
-  input_kennel <- rec_kennel |> bake(new_data = NULL)
-  fit_kennel <- lm(wl~., input_kennel)
-  pred <- predict_terms(fit = fit_kennel,
-                        rec = rec_kennel,
-                        data = input_kennel)
+  input_dl <- rec_dl |> bake(new_data = NULL)
+  fit_dl <- lm(wl~., input_dl)
+  pred <- predict_terms(fit = fit_dl,
+                        rec = rec_dl,
+                        data = input_dl)
   expect_equal(nrow(pred), nrow(transducer))
   expect_equal(ncol(pred), 5)
   expect_equal(names(pred), c('distributed_lag_baro', 'earthtide_datetime_num', 'ns_datetime_num', 'intercept', 'predicted'))
@@ -72,11 +86,11 @@ test_that("predict_terms works", {
 
 
   library(glmnet)
-  xy <- na.omit(input_kennel)
-  x <- as.matrix(input_kennel[, -1])
-  y <- input_kennel[['wl']]
+  xy <- na.omit(input_dl)
+  x <- as.matrix(input_dl[, -1])
+  y <- input_dl[['wl']]
   fit_cv <- cv.glmnet(x, y)
-  pred <- predict_terms(fit_cv, rec_kennel, xy)
+  pred <- predict_terms(fit_cv, rec_dl, xy)
   expect_equal(nrow(pred), nrow(xy))
   expect_equal(ncol(pred), 5)
   expect_equal(names(pred), c('distributed_lag_baro', 'earthtide_datetime_num', 'ns_datetime_num', 'intercept', 'predicted'))

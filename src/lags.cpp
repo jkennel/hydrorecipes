@@ -107,8 +107,8 @@ int get_end(int n, int n_out, int lag, int n_subset) {
 //'
 //' @return vector with lagged values
 //'
+//' @noRd
 //'
-//' @export
 // [[Rcpp::export]]
 Rcpp::NumericVector shift_subset(const Rcpp::NumericVector x,
                                  int lag = 0,
@@ -163,8 +163,7 @@ using namespace Rcpp;
 //'
 //' @return matrix with lagged values
 //'
-//'
-//' @export
+//' @noRd
 // [[Rcpp::export]]
 Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericVector& x,
                                const Rcpp::IntegerVector& lags,
@@ -188,9 +187,9 @@ Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericVector& x,
   for (std::size_t i = 0; i < n_col; i++) {
     out(_, i) = shift_subset(x, lags[i], n_subset, n_shift);
     if(lags[i] < 0) {
-      nm[i] = var_name + '_' + 'n' + std::to_string(abs(lags[i]));
+      nm[i] = var_name + 'n' + std::to_string(abs(lags[i]));
     } else {
-      nm[i] = var_name + '_' + std::to_string(lags[i]);
+      nm[i] = var_name + std::to_string(lags[i]);
     }
   }
 
@@ -251,8 +250,7 @@ struct dl_worker: public Worker {
 //'
 //' @return distributed lag basis
 //'
-//'
-//' @export
+//' @noRd
 //'
 // [[Rcpp::export]]
 arma::mat distributed_lag_parallel(const arma::vec& x,

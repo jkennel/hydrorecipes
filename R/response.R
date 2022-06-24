@@ -2,24 +2,41 @@
 #'
 #' @description Get the coefficients by name that are related to a particular step_*
 #'
-#' @param co `coefficients` from a model fit
+#' @param co named coefficients from a model fit
 #' @param step_info info on a `recipe` step
 #'
 #' @return the coefficients associated with a particular `recipe` `step`
 #'
+#' @noRd
 get_coefficients <- function(co, step_info) {
 
   nms <- step_info$key
-  co[which(names(co) %in% nms)]
+
+  co_sub  <- co[which(names(co) %in% nms)]
+
+  # handle cases where numbers are not present in the key
+  if(length(co_sub) == 0) {
+    co_nms <- names(co)
+    co_nms <- sub(nms, '', co_nms)
+    co_nms <- sub('_', '', co_nms)
+    co_sub <- co[!suppressWarnings(is.na(as.numeric(co_nms)))]
+  }
+  co_sub[is.na(co_sub)] <- 0
+
+  co_sub
 
 }
 
 
 #' response_lag
 #'
+#' @description Calculate the response for a lagged set
+#'
 #' @inheritParams get_coefficients
 #'
 #' @return a `tibble` containing the responses from lag terms
+#'
+#' @noRd
 #'
 response_lag <- function(co, step_info) {
 
@@ -35,31 +52,37 @@ response_lag <- function(co, step_info) {
 
 #' response_distributed_lag
 #'
+#' @description Calculate the response for a distributed lag set
+#'
 #' @inheritParams get_coefficients
 #'
-#' @return a `tibble` containing the responses from distributed lag terms
+#' @return A `tibble` containing the responses from distributed lag terms
+#'
+#' @noRd
 #'
 response_distributed_lag <- function(co, step_info) {
 
-  knots <- step_info$knots
-  bl    <- basis_lag(knots)
-
+  bl    <- step_info$basis_mat[[1]]
   co    <- get_coefficients(co, step_info)
 
   resp  <- bl %*% co
 
   tibble(coefficient = as.numeric(resp),
          cumulative  = cumsum(as.numeric(resp)),
-         x           = min(knots):max(knots))
+         x           = step_info$min_knots:step_info$max_knots)
 
 }
 
 
 #' response_harmonic
 #'
+#' @description Calculate the response (amplitude and phase) for harmonics
+#'
 #' @inheritParams get_coefficients
 #'
 #' @return a `tibble` containing the responses from harmonic terms
+#'
+#' @noRd
 #'
 response_harmonic <- function(co, step_info) {
 
@@ -79,17 +102,30 @@ response_harmonic <- function(co, step_info) {
 #' response
 #'
 #' @description This function takes a model object and extracts the responses
-#'  from `step_distributed_lag`, `step_lag`, `step_lead`, `step_lead_lag`,
-#'  `step_harmonic` and `step_earthtide`
+#'  from `step_distributed_lag`, `step_lead_lag`, `step_harmonic` and
+#'  `step_earthtide`
 #'
-#' @param fit a model fit object having a `coefficients` method.
-#' @param rec a prepped `recipe` object.
-#' @param verbose print names of steps with no response methods
-#' @param ... currently not used
+#' @inheritParams predict_terms
+#' @param verbose Print names of steps with no response methods
 #'
-#' @return a list of response functions corresponding to each step
+#' @return A data.frame of response functions corresponding to each step
+#'
 #' @export
+#' @examples
+#' data(transducer)
+#' transducer$datetime_num <- as.numeric(transducer$datetime)
 #'
+#' rec_toll_rasmussen <- recipe(wl~baro + datetime_num, transducer) |>
+#'    step_lead_lag(baro, lag = log_lags(100, 86400 * 2 / 120)) |>
+#'    step_ns(datetime_num, deg_free = 10) |>
+#'    prep()
+#'
+#' input_toll_rasmussen <- rec_toll_rasmussen |> bake(new_data = NULL)
+#'
+#' fit_toll_rasmussen <- lm(wl~., input_toll_rasmussen)
+#' resp <- response(fit_toll_rasmussen,
+#'                  rec_toll_rasmussen)
+#' plot(value~x, resp[resp$name == 'cumulative',], type = 'l')
 response <- function(fit, rec, verbose = FALSE, ...) UseMethod("response")
 
 

@@ -16,19 +16,35 @@ response(fit, rec, verbose = FALSE, ...)
 \method{response}{numeric}(fit, rec, verbose = FALSE, ...)
 }
 \arguments{
-\item{fit}{a model fit object having a `coefficients` method.}
+\item{fit}{A model object that has a \code{coefficients} method (e.g. lm)}
 
-\item{rec}{a prepped `recipe` object.}
+\item{rec}{A prepped \code{recipe}}
 
-\item{verbose}{print names of steps with no response methods}
+\item{verbose}{Print names of steps with no response methods}
 
-\item{...}{currently not used}
+\item{...}{Currently not used}
 }
 \value{
-a list of response functions corresponding to each step
+A data.frame of response functions corresponding to each step
 }
 \description{
 This function takes a model object and extracts the responses
- from `step_distributed_lag`, `step_lag`, `step_lead`, `step_lead_lag`,
- `step_harmonic` and `step_earthtide`
+from \code{step_distributed_lag}, \code{step_lead_lag}, \code{step_harmonic} and
+\code{step_earthtide}
+}
+\examples{
+data(transducer)
+transducer$datetime_num <- as.numeric(transducer$datetime)
+
+rec_toll_rasmussen <- recipe(wl~baro + datetime_num, transducer) |>
+   step_lead_lag(baro, lag = log_lags(100, 86400 * 2 / 120)) |>
+   step_ns(datetime_num, deg_free = 10) |>
+   prep()
+
+input_toll_rasmussen <- rec_toll_rasmussen |> bake(new_data = NULL)
+
+fit_toll_rasmussen <- lm(wl~., input_toll_rasmussen)
+resp <- response(fit_toll_rasmussen,
+                 rec_toll_rasmussen)
+plot(value~x, resp[resp$name == 'cumulative',], type = 'l')
 }

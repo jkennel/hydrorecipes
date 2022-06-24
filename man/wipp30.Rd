@@ -7,20 +7,24 @@
 \format{
 A \code{data.frame} The columns are:
 \describe{
- \item{\code{time}}{time in hours}
- \item{\code{wl}}{water level}
- \item{\code{baro}}{barometric pressure}
- \item{\code{et}}{synthetic gravity}
+\item{\code{time}}{elapsed time in hours}
+\item{\code{wl}}{water level}
+\item{\code{baro}}{barometric pressure}
+\item{\code{et}}{synthetic gravity}
 }
 }
 \usage{
 wipp30
 }
 \description{
-This `data.frame` contains the water levels, barometric pressure,
+This \code{data.frame} contains the water levels, barometric pressure,
 and Earth tides for wipp30.  This is the dataset included in BETCO.
 }
 \examples{
 data(wipp30)
+}
+\references{
+Toll NJ, Rasmussen TC, 2007, "Removal of barometric pressure effects and
+Earth tides from observed water levels", Ground Water 45(1):101-105
 }
 \keyword{datasets}

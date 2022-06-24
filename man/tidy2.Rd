@@ -12,8 +12,8 @@ tidy2(x, ...)
 \item{...}{Additional arguments to tidying method.}
 }
 \value{
-A [tibble::tibble()] with information about model components.
+A \code{\link[tibble:tibble]{tibble::tibble()}} with information about model components.
 }
 \description{
-Turn an object into a tidy2 tibble
+Turn an object into a tidy2 tibble.
 }

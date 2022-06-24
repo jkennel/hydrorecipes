@@ -2,14 +2,29 @@
 #'
 #' @description Predict the contribution for each step.
 #'
-#' @param fit a model object that has a `coefficients` method
-#' @param rec a prepped `recipe`
-#' @param data data.frame with feature columns
-#' @param ... not used
+#' @param fit A model object that has a `coefficients` method (e.g. lm)
+#' @param rec A prepped `recipe`
+#' @param data A data.frame with feature columns
+#' @param ... Currently not used
 #'
-#' @return a list of response functions corresponding to each step
+#' @return A data.frame of predicted values for each step
+#'
 #' @export
+#' @examples
+#' data(transducer)
+#' transducer$datetime_num <- as.numeric(transducer$datetime)
 #'
+#'  rec_toll_rasmussen <- recipe(wl~baro + et + datetime_num, transducer) |>
+#'    step_lead_lag(baro, lag = log_lags(100, 86400 * 2 / 120)) |>
+#'    step_ns(datetime_num, deg_free = 10) |>
+#'    prep()
+#'
+#'  input_toll_rasmussen <- rec_toll_rasmussen |> bake(new_data = NULL)
+#'
+#'  fit_toll_rasmussen <- lm(wl~., input_toll_rasmussen)
+#'  pred <- predict_terms(fit_toll_rasmussen,
+#'                        rec_toll_rasmussen,
+#'                        input_toll_rasmussen)
 predict_terms <- function(fit, rec, data, ...) UseMethod("predict_terms")
 
 
@@ -26,6 +41,7 @@ predict_terms.lm <- function(fit, rec, data, ...) {
 
 #' @rdname predict_terms
 #' @export
+#'
 predict_terms.cv.glmnet <- function(fit, rec, data, ...) {
 
   co <- coefficients(fit)

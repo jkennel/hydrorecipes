@@ -1,9 +1,10 @@
 #' Create a lead predictor
 #'
 #' `step_lead_lag` creates a *specification* of a recipe step that
-#'   will add new columns of lead data. lead data will
-#'   by default include NA values where the lead was induced.
-#'   These can be removed with [step_naomit()].
+#'   will add new columns that are shifted forward (lag) or backward (lead).
+#'   Data will by default include NA values where the shift was induced.
+#'   These can be removed with [step_naomit()]. Samples should be ordered and
+#'   have regular spacing (i.e. Regular time series, regular spatial sampling).
 #'
 #' @inheritParams recipes::step_lag
 #' @inheritParams recipes::step_center
@@ -17,28 +18,29 @@
 #' @param columns A character string of variable names that will
 #'  be populated (eventually) by the `terms` argument.
 #' @details The step assumes that the data are already _in the proper sequential
-#'  order_ for leading.
+#'  order_ for lagging/leading. A set of vectors that are shifted relative to the
+#'  input vector is generated when the recipe is baked.
 #' @family row operation steps
 #' @export
 #' @rdname step_lead_lag
+#'
+#' @return An updated version of recipe with the new step added to the sequence
+#'  of any existing operations.
 #'
 #' @examples
 #' data(wipp30)
 #'
 #' recipe(wl~., data = wipp30) |>
 #'   step_lead_lag(baro, lag = -2:2, n_subset = 1, n_shift = 0) |>
-#'   prep() |>
-#'   bake(new_data = wipp30)
+#'   prep()
 #'
 #' recipe(wl~ ., data = wipp30) |>
 #'   step_lead_lag(baro, lag = -2:2, n_subset = 2, n_shift = 0) |>
-#'   prep() |>
-#'   bake(new_data = wipp30)
+#'   prep()
 #'
 #' recipe(wl~ ., data = wipp30) |>
 #'   step_lead_lag(baro, lag = -2:2, n_subset = 2, n_shift = 1) |>
-#'   prep() |>
-#'   bake(new_data = wipp30)
+#'   prep()
 #'
 step_lead_lag <-
   function(recipe,
@@ -141,7 +143,7 @@ bake.step_lead_lag <- function(object, new_data, ...) {
     lags = object$lag,
     n_subset = object$n_subset,
     n_shift = object$n_shift,
-    var_name = 'lead_lag')
+    var_name = object$prefix)
   colnames(lag_mat) <- paste0(colnames(lag_mat), '_', object$columns)
 
 
@@ -179,7 +181,7 @@ tidy.step_lead_lag <- function(x, ...) {
   tidy2.step_lead_lag(x, ...)
 }
 
-
+#' @rdname tidy2.recipe
 #' @export
 tidy2.step_lead_lag <- function(x, ...) {
   n_terms <- length(x$terms)

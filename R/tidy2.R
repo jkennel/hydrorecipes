@@ -1,6 +1,6 @@
 #' @title tidy2
 #'
-#' @description  Turn an object into a tidy2 tibble
+#' @description  Turn an object into a tidy2 tibble.
 #'
 #' @name tidy2
 #' @inheritParams recipes::tidy
@@ -17,39 +17,24 @@ tidy2 <- function(x, ...) {
 #' @title tidy2.recipe
 #' @description `tidy2` will return a data frame that contains information
 #'  regarding a recipe or operation within the recipe (when a `tidy2`
-#'  method for the operation exists).
+#'  method for the operation exists). This method ensures that relevant data
+#'  for `predict_terms` and `response` can be easily accessed from a `recipe`
+#'  formulation.
 #'
 #' @name tidy2.recipe
-#'
-#' @param x A `recipe` object, step, or check (trained or otherwise).
-#' @param number An integer or `NA`. If missing and `id` is not provided,
-#'  the return value is a list of the operations in the recipe.
-#'  If a number is given, a `tidy2` method is executed for that operation
-#'  in the recipe (if it exists). `number` must not be provided if
-#'  `id` is.
-#' @param id A character string or `NA`. If missing and `number` is not provided,
-#'  the return value is a list of the operations in the recipe.
-#'  If a character string is given, a `tidy2` method is executed for that
-#'  operation in the recipe (if it exists). `id` must not be provided
-#'  if `number` is.
-#' @param ... Not currently used.
-#' @return A tibble with columns that vary depending on what
-#'  `tidy2` method is executed. When `number` and `id` are `NA`, a
-#'  tibble with columns `number` (the operation iteration),
-#'  `operation` (either "step" or "check"),
-#'  `type` (the method, e.g. "nzv", "center"), a logical
-#'  column called `trained` for whether the operation has been
-#'  estimated using `prep`, a logical for `skip`, and a character column `id`.
+#' @inheritParams recipes::tidy.recipe
 #'
 #' @return A tibble with columns that vary depending on what
 #'  `tidy2` method is executed. When `number` and `id` are `NA`, a
 #'  tibble with columns `number` (the operation iteration),
 #'  `operation` (either "step" or "check"),
-#'  `type` (the method, e.g. "nzv", "center"), a logical
+#'  `type` (the method, e.g. 'lead_lag', 'distributed_lag'), a logical
 #'  column called `trained` for whether the operation has been
 #'  estimated using `prep`, a logical for `skip`, and a character column `id`.
+#'
 NULL
 
+#' rdname tidy2.recipe
 #' @export
 tidy2.recipe <- function(x, number = NA, id = NA, ...) {
 
@@ -120,6 +105,8 @@ tidy2.recipe <- function(x, number = NA, id = NA, ...) {
   res
 }
 
+
+#' @rdname tidy2.recipe
 #' @export
 tidy2.step <- function(x, ...) {
   rlang::abort(
@@ -130,6 +117,7 @@ tidy2.step <- function(x, ...) {
   )
 }
 
+#' @rdname tidy2.recipe
 #' @export
 tidy2.check <- function(x, ...) {
   rlang::abort(
@@ -141,7 +129,7 @@ tidy2.check <- function(x, ...) {
 }
 
 
-
+#' @rdname tidy2.recipe
 #' @export
 tidy2.step_ns <- function(x, ...) {
   if (is_trained(x)) {
@@ -161,12 +149,12 @@ tidy2.step_ns <- function(x, ...) {
   ret
 }
 
-
 #' @export
 tidy.step_intercept <- function(x, ...) {
   tidy2.step_intercept(x, ...)
 }
 
+#' @rdname tidy2.recipe
 #' @export
 tidy2.step_intercept <- function(x, ...) {
 

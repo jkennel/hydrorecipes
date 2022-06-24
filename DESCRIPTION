@@ -33,6 +33,7 @@ LinkingTo:
   Rcpp,
   RcppArmadillo, 
   RcppParallel
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Encoding: UTF-8
 Suggests: 
@@ -43,8 +44,10 @@ Suggests:
     broom,
     glmnet,
     testthat (>= 3.0.0),
-    covr
-VignetteBuilder: knitr
+    covr,
+    splines2
+VignetteBuilder: 
+    knitr
 LazyData: true
 NeedsCompilation: yes
 SystemRequirements: C++11

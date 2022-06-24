@@ -11,6 +11,8 @@ step_distributed_lag(
   trained = FALSE,
   knots = NULL,
   basis_mat = NULL,
+  spline_fun = splines::ns,
+  options = list(intercept = TRUE),
   prefix = "distributed_lag_",
   keep_original_cols = FALSE,
   columns = NULL,
@@ -39,7 +41,18 @@ preprocessing have been estimated.}
     \code{Boundary.knots}.}
 
 \item{basis_mat}{The matrix of basis kernels to convolve. This is
-`NULL` until computed by [prep.recipe()].}
+\code{NULL} until computed by \code{\link[=prep.recipe]{prep.recipe()}}. This can also be specified as an
+object generated from the \emph{splines} or \emph{spines2} packages having attributes
+for \code{knots} and \code{Boundary.knots}. In specified like this \code{knots} will be
+obtained from the \code{basis_mat} and \code{knots} specified as a parameter will be
+neglected.}
+
+\item{spline_fun}{Function used for calculating \code{basis_mat}.  This should
+return an object having \code{knots} and \code{Boundary.knots} attributes.}
+
+\item{options}{A list of options to the default method for
+\code{\link[stats:prcomp]{stats::prcomp()}}. Argument defaults are set to \code{retx = FALSE}, \code{center = FALSE}, \code{scale. = FALSE}, and \code{tol = NULL}. \strong{Note} that the argument \code{x}
+should not be passed here (or at all).}
 
 \item{prefix}{A prefix for generated column names, default to "lag_".}
 
@@ -47,7 +60,7 @@ preprocessing have been estimated.}
 output. Defaults to \code{FALSE}.}
 
 \item{columns}{A character string of variable names that will
-be populated (eventually) by the `terms` argument.}
+be populated (eventually) by the \code{terms} argument.}
 
 \item{skip}{A logical. Should the step be skipped when the
 recipe is baked by \code{\link[recipes:bake]{bake()}}? While all operations are baked
@@ -58,35 +71,61 @@ the computations for subsequent operations.}
 
 \item{id}{A character string that is unique to this step to identify it.}
 }
+\value{
+An updated version of recipe with the new step added to the sequence
+of any existing operations.
+}
 \description{
-`step_distributed_lag` creates a *specification* of a recipe step that
-  will add new basis lag columns. The new data will
-  include NA values up to the maximum lag. These can be removed
-  with [step_naomit()]. The inspiration for this step comes from the
-  [dlnm package](https://CRAN.R-project.org/package=dlnm). For large datasets
-  with large maximum time lags, convolution is
-  done in the frequency domain for efficiency.
+\code{step_distributed_lag} creates a \emph{specification} of a recipe step that
+will add new basis lag columns. The new data will
+include NA values up to the maximum lag. These can be removed
+with \code{\link[=step_naomit]{step_naomit()}}. The inspiration for this step comes from the
+\href{https://CRAN.R-project.org/package=dlnm}{dlnm package}. For large datasets
+with large maximum time lags, convolution is
+done in the frequency domain for efficiency. Samples should be ordered and
+have regular spacing (i.e. Regular time series, regular spatial sampling).
 }
 \details{
-The step assumes that the data are already _in the proper sequential
- order_ for lagging.
+The step assumes that the data are already \emph{in the proper sequential
+order} for lagging. The input should be sampled at a regular interval
+(time, space, etc.). When the recipe is baked a set of vectors resulting from
+the convolution of a vector and a basis matrix is returned.
 }
 \examples{
-data(transducer)
+data(wipp30)
 
-recipe(~ ., data = transducer) |>
-  step_distributed_lag(baro, knots = log_lags(10, 86400 * 2 / 120)) |>
-  prep() |>
-  bake(new_data = transducer)
+rec_base <- recipe(wl~baro, data = wipp30)
+
+# default uses splines::ns
+rec <- rec_base |>
+  step_distributed_lag(baro,
+                       knots = log_lags(4, 72)) |>
+  prep()
+
+# use different spline function
+rec <- rec_base |>
+  step_distributed_lag(baro,
+                       spline_fun = splines::bs,
+                       options = list(intercept = TRUE,
+                                      degree = 4L),
+                       knots = log_lags(4, 72)) |>
+  prep()
+
+# specify basis_mat
+basis_mat <- splines2::mSpline(0:72, knots = c(3,16))
+rec <- rec_base |>
+  step_distributed_lag(baro,
+                       basis_mat = basis_mat) |>
+  prep()
 
 }
 \references{
 Almon, S (1965). The Distributed Lag Between Capital Appropriations and
- Expenditures. Econometrica 33(1), 178.
+Expenditures. Econometrica 33(1), 178.
 
 Gasparrini A. Distributed lag linear and non-linear models in R: the package
- dlnm. Journal of Statistical Software. 2011; 43(8):1-20.
- https://doi.org/10.18637/jss.v043.i08
+dlnm. Journal of Statistical Software. 2011; 43(8):1-20.
+https://doi.org/10.18637/jss.v043.i08
 }
 \seealso{
 Other row operation steps: 

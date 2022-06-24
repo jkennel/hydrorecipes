@@ -7,15 +7,18 @@
 log_lags(n, max_time_lag)
 }
 \arguments{
-\item{n}{number of lags (integer)}
+\item{n}{The total number of lags (integer)}
 
-\item{max_time_lag}{maximum lag (integer)}
+\item{max_time_lag}{The maximum lag in number of samples (integer)}
 }
 \value{
-integer vector of lags
+An integer vector of lags
 }
 \description{
-Generate lags or knots with logarithmic spacing. Lags/knots start at 0.
+Generate lags or knots with logarithmic spacing. Lags/knots start at 0. Lags
+are in terms of samples. For example, if samples are taken every 60, a
+lag of 1 corresponds to 60 seconds, a lag of 4 would correspond to 240
+seconds.
 }
 \examples{
 log_lags(12, 86400)

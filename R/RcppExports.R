@@ -29,8 +29,8 @@ get_end <- function(n, n_out, lag, n_subset) {
 #'
 #' @return vector with lagged values
 #'
+#' @noRd
 #'
-#' @export
 shift_subset <- function(x, lag = 0L, n_subset = 1L, n_shift = 0L) {
     .Call(`_hydrorecipes_shift_subset`, x, lag, n_subset, n_shift)
 }
@@ -48,8 +48,7 @@ shift_subset <- function(x, lag = 0L, n_subset = 1L, n_shift = 0L) {
 #'
 #' @return matrix with lagged values
 #'
-#'
-#' @export
+#' @noRd
 lag_matrix <- function(x, lags, n_subset = 1L, n_shift = 0L, var_name = "lead_lag") {
     .Call(`_hydrorecipes_lag_matrix`, x, lags, n_subset, n_shift, var_name)
 }
@@ -68,8 +67,7 @@ lag_matrix <- function(x, lags, n_subset = 1L, n_shift = 0L, var_name = "lead_la
 #'
 #' @return distributed lag basis
 #'
-#'
-#' @export
+#' @noRd
 #'
 distributed_lag_parallel <- function(x, bl, lag_max, n_subset = 1L, n_shift = 0L) {
     .Call(`_hydrorecipes_distributed_lag_parallel`, x, bl, lag_max, n_subset, n_shift)

@@ -2,7 +2,7 @@
 #'
 #' `step_earthtide` creates a *specification* of a recipe step
 #'  that are the Earth tide harmonics for a particular
-#'  location.  Requires the *earthtide* package
+#'  location. This step requires the *earthtide* package.
 #'
 #' @inheritParams recipes::step_lag
 #' @inheritParams earthtide::calc_earthtide
@@ -16,9 +16,7 @@
 #' @param keep_original_cols A logical to keep the original variables in the
 #'  output. Defaults to `FALSE`.
 #' @return An updated version of `recipe` with the new step
-#'  added to the sequence of existing steps (if any). For the
-#'  `tidy` method, a tibble with columns `terms` which is
-#'  the columns that will be affected and `holiday`.
+#'  added to the sequence of existing steps (if any).
 #' @keywords datagen
 #' @concept generate Earth tide harmonics
 #' @export
@@ -30,7 +28,8 @@
 #' data(eterna_wavegroups)
 #' data(transducer)
 #'
-#' t_sub <- transducer[1:500, c('datetime', 'wl')]
+#' transducer <- transducer[, c('datetime', 'wl'),]
+#' t_sub <- transducer[(as.numeric(transducer$datetime) %% 14400) == 0, ]
 #' wg <- na.omit(eterna_wavegroups[eterna_wavegroups$time == '1 month',])
 #'
 #' recipe(wl ~ ., data = t_sub) |>
@@ -222,7 +221,7 @@ tidy.step_earthtide <- function(x, ...) {
  tidy2(x, ...)
 }
 
-
+#' @rdname tidy2.recipe
 #' @export
 tidy2.step_earthtide <- function(x, ...) {
 

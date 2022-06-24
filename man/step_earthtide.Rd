@@ -36,8 +36,8 @@ step_earthtide(
 sequence of operations for this recipe.}
 
 \item{...}{One or more selector functions to choose which
-variables are affected by the step. See [selections()]
-for more details. For the `tidy` method, these are not
+variables are affected by the step. See \code{\link[=selections]{selections()}}
+for more details. For the \code{tidy} method, these are not
 currently used.}
 
 \item{role}{Defaults to "earthtide"}
@@ -101,7 +101,7 @@ following columns: datetime, ddt, ut1_utc, lod, x, y, dx, dy}
 be populated (eventually) by the \code{terms} argument.}
 
 \item{keep_original_cols}{A logical to keep the original variables in the
-output. Defaults to `FALSE`.}
+output. Defaults to \code{FALSE}.}
 
 \item{skip}{A logical. Should the step be skipped when the
 recipe is baked by \code{\link[recipes:bake]{bake()}}? While all operations are baked
@@ -113,25 +113,24 @@ the computations for subsequent operations.}
 \item{id}{A character string that is unique to this step to identify it.}
 }
 \value{
-An updated version of `recipe` with the new step
- added to the sequence of existing steps (if any). For the
- `tidy` method, a tibble with columns `terms` which is
- the columns that will be affected and `holiday`.
+An updated version of \code{recipe} with the new step
+added to the sequence of existing steps (if any).
 }
 \description{
-`step_earthtide` creates a *specification* of a recipe step
- that are the Earth tide harmonics for a particular
- location.  Requires the *earthtide* package
+\code{step_earthtide} creates a \emph{specification} of a recipe step
+that are the Earth tide harmonics for a particular
+location. This step requires the \emph{earthtide} package.
 }
 \details{
-`step_earthtide` calculates the Earth tide harmonics
+\code{step_earthtide} calculates the Earth tide harmonics
 }
 \examples{
 library(earthtide)
 data(eterna_wavegroups)
 data(transducer)
 
-t_sub <- transducer[1:1000, c('datetime', 'wl')]
+transducer <- transducer[, c('datetime', 'wl'),]
+t_sub <- transducer[(as.numeric(transducer$datetime) \%\% 14400) == 0, ]
 wg <- na.omit(eterna_wavegroups[eterna_wavegroups$time == '1 month',])
 
 recipe(wl ~ ., data = t_sub) |>
@@ -140,22 +139,20 @@ recipe(wl ~ ., data = t_sub) |>
                  longitude = -118.5,
                  wave_groups = wg,
                  do_predict = FALSE) |>
-  prep() |>
-  bake(new_data = t_sub)
+  prep()
 
-  recipe(wl ~ ., data = t_sub) |>
+recipe(wl ~ ., data = t_sub) |>
   step_earthtide(datetime,
                  latitude = 34,
                  longitude = -118.5,
                  wave_groups = wg,
                  do_predict = TRUE) |>
-  prep() |>
-  bake(new_data = t_sub)
+  prep()
 
 }
 \seealso{
-[step_earthtide()] [recipe()]
-  [prep.recipe()] [bake.recipe()]
+\code{\link[=step_earthtide]{step_earthtide()}} \code{\link[=recipe]{recipe()}}
+\code{\link[=prep.recipe]{prep.recipe()}} \code{\link[=bake.recipe]{bake.recipe()}}
 }
 \concept{generate Earth tide harmonics}
 \keyword{datagen}

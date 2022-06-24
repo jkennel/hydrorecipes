@@ -6,21 +6,33 @@
 #'   with [step_naomit()]. The inspiration for this step comes from the
 #'   [dlnm package](https://CRAN.R-project.org/package=dlnm). For large datasets
 #'   with large maximum time lags, convolution is
-#'   done in the frequency domain for efficiency.
+#'   done in the frequency domain for efficiency. Samples should be ordered and
+#'   have regular spacing (i.e. Regular time series, regular spatial sampling).
 #'
 #' @inheritParams recipes::step_pca
 #' @inheritParams recipes::step_center
 #' @inheritParams splines::ns
 #' @param basis_mat The matrix of basis kernels to convolve. This is
-#'  `NULL` until computed by [prep.recipe()].
+#'  `NULL` until computed by [prep.recipe()]. This can also be specified as an
+#'  object generated from the *splines* or *spines2* packages having attributes
+#'  for `knots` and `Boundary.knots`. In specified like this `knots` will be
+#'  obtained from the `basis_mat` and `knots` specified as a parameter will be
+#'  neglected.
+#' @param spline_fun Function used for calculating `basis_mat`.  This should
+#'  return an object having `knots` and `Boundary.knots` attributes.
 #' @param prefix A prefix for generated column names, default to "lag_".
 #' @param columns A character string of variable names that will
 #'  be populated (eventually) by the `terms` argument.
 #' @details The step assumes that the data are already _in the proper sequential
-#'  order_ for lagging.
+#'  order_ for lagging. The input should be sampled at a regular interval
+#'  (time, space, etc.). When the recipe is baked a set of vectors resulting from
+#'  the convolution of a vector and a basis matrix is returned.
 #' @family row operation steps
 #' @export
 #' @rdname step_distributed_lag
+#'
+#' @return An updated version of recipe with the new step added to the sequence
+#' of any existing operations.
 #'
 #' @references
 #' Almon, S (1965). The Distributed Lag Between Capital Appropriations and
@@ -31,10 +43,30 @@
 #'  https://doi.org/10.18637/jss.v043.i08
 #'
 #' @examples
-#' data(transducer)
+#' data(wipp30)
 #'
-#' recipe(~ ., data = transducer) |>
-#'   step_distributed_lag(baro, knots = log_lags(10, 86400 * 2 / 120)) |>
+#' rec_base <- recipe(wl~baro, data = wipp30)
+#'
+#' # default uses splines::ns
+#' rec <- rec_base |>
+#'   step_distributed_lag(baro,
+#'                        knots = log_lags(4, 72)) |>
+#'   prep()
+#'
+#' # use different spline function
+#' rec <- rec_base |>
+#'   step_distributed_lag(baro,
+#'                        spline_fun = splines::bs,
+#'                        options = list(intercept = TRUE,
+#'                                       degree = 4L),
+#'                        knots = log_lags(4, 72)) |>
+#'   prep()
+#'
+#' # specify basis_mat
+#' basis_mat <- splines2::mSpline(0:72, knots = c(3,16))
+#' rec <- rec_base |>
+#'   step_distributed_lag(baro,
+#'                        basis_mat = basis_mat) |>
 #'   prep()
 #'
 step_distributed_lag <-
@@ -44,6 +76,8 @@ step_distributed_lag <-
            trained = FALSE,
            knots = NULL,
            basis_mat = NULL,
+           spline_fun = splines::ns,
+           options = list(intercept = TRUE),
            prefix = "distributed_lag_",
            keep_original_cols = FALSE,
            columns = NULL,
@@ -51,14 +85,19 @@ step_distributed_lag <-
            id = rand_id("distributed_lag")) {
 
     if(length(unique(knots)) < length(knots)) {
-      rlang::warn("step_distributed_lag should have uniquely valued 'knots'.  Taking unique values")
+      # rlang::warn("step_distributed_lag should have uniquely valued 'knots'.  Taking unique values")
       knots <- unique(knots)
     }
     if(any(knots < 0)) {
       rlang::abort("step_distributed_lag requires 'knots' argument to be greater than or equal to 0")
     }
     if(length(knots) < 2) {
-      rlang::abort("step_distributed_lag requires at least two 'knots'")
+      if(is.null(basis_mat)) {
+        rlang::abort("step_distributed_lag requires at least two 'knots'")
+      }
+    }
+    if(!all(as.integer(knots) == knots)) {
+      rlang::warn("step_distributed_lag should have integer valued 'knots'")
     }
 
 
@@ -71,6 +110,8 @@ step_distributed_lag <-
         trained = trained,
         knots = knots,
         basis_mat = basis_mat,
+        spline_fun = spline_fun,
+        options = options,
         prefix = prefix,
         keep_original_cols = keep_original_cols,
         columns = columns,
@@ -81,8 +122,8 @@ step_distributed_lag <-
   }
 
 step_distributed_lag_new <-
-  function(terms, role, trained, knots, basis_mat, prefix, keep_original_cols,
-           columns, skip, id) {
+  function(terms, role, trained, knots, basis_mat, spline_fun, options, prefix,
+           keep_original_cols, columns, skip, id) {
     step(
       subclass = "distributed_lag",
       terms = terms,
@@ -90,6 +131,8 @@ step_distributed_lag_new <-
       trained = trained,
       knots = knots,
       basis_mat = basis_mat,
+      spline_fun = spline_fun,
+      options = options,
       prefix = prefix,
       keep_original_cols = keep_original_cols,
       columns = columns,
@@ -101,49 +144,53 @@ step_distributed_lag_new <-
 
 #' basis_lag
 #'
-#' Depending on the vector to lag and the maximum knot, distributed_lag will
-#' either use an FFT (no NA and large maximum knot), or a parallel method
-#' (NA, or small maximum knot).
+#' Create a spline basis matrix. This function passes a list of knots and
+#' options to a spline function.  Common spline functions used come from the
+#' `splines` and `splines2` packages.
 #'
 #' @inheritParams splines::ns
+#' @inheritParams step_distributed_lag
+#' @param options list of named variables to pass to spline_fun
 #'
 #' @return \code{numeric matrix} with distributed lag terms
 #'
 #' @importFrom splines ns
 #'
-#' @export
-#'
-basis_lag <- function(knots) {
+#' @noRd
+basis_lag <- function(knots,
+                      spline_fun = splines::ns,
+                      options = list(intercept = TRUE)) {
 
   # generate basis functions
   max_knot <- max(knots)
   n_knots  <- length(knots)
 
   # generate basis lag
-  # should we allow other spline options?
-  splines::ns(min(knots):max_knot,
-             knots = knots[-c(1, n_knots)],
-             Boundary.knots = range(knots),
-             intercept = TRUE)
+  do.call(spline_fun,
+          c(list(x = min(knots):max(knots)),
+                 list(knots = knots[-c(1, n_knots)]),
+                 options))
+
 }
 
 
 #' distributed_lag
 #'
-#' Depending on the vector to lag and the maximum knot, distributed_lag will
-#' either use an FFT (no NA and large maximum knot), or a parallel method
-#' (NA, or small maximum knot).
+#' Convolves a vector or matrix with a basis matrix (a cross basis matrix).
+#' Depending on the input and the maximum knot, distributed_lag will
+#' either use an FFT (no NA values and large maximum knot), or a parallel method
+#' (NA values present, or small maximum knot).
 #'
 #' @inheritParams splines::ns
-#' @param basis_mat \code{numeric matrix} lag matrix for convolution
+#' @param basis_mat \code{numeric matrix} spline basis matrix for convolution
 #'
 #' @return matrix with distributed lag terms
 #'
 #' @importFrom splines ns
 #'
-#' @export
+#' @noRd
 distributed_lag <- function(x, basis_mat, knots) {
-  # x_len    <- length(as.numeric(x))
+
   max_knot <- max(knots)
 
   # convolution - fft for large number of lags, otherwise use parallel version
@@ -165,12 +212,14 @@ distributed_lag <- function(x, basis_mat, knots) {
 
 #' convolve_fft
 #'
-#' @param x \code{numeric vector} to convolve with convolution kernel
-#' @param y \code{numeric vector} convolution kernel
+#' Do an FFT convolution of two vectors using the fftw package.
 #'
-#' @return \code{numeric vector} result of convolution
-#' @export
+#' @param x numeric vector to convolve with y
+#' @param y numeric vector convolution kernel
 #'
+#' @return numeric vector that is the result of convolution
+#'
+#' @noRd
 convolve_fft <- function(x, y)
 {
   n_in <- length(x)
@@ -187,12 +236,15 @@ convolve_fft <- function(x, y)
 
 #' cross_basis_fft
 #'
-#' @param basis_var \code{numeric matrix} matrix of input vectors
-#' @param basis_mat \code{numeric matrix} lagging matrix
+#' Convolve each column of a input matrix (`basis_var`) with a matrix of basis
+#' splines (`basis_mat`)
+#'
+#' @param basis_var numeric matrix of input vectors
+#' @param basis_mat numeric matrix of basis splines
 #'
 #' @return numeric vector result of convolution
-#' @export
 #'
+#' @noRd
 cross_basis_fft <- function(basis_var, basis_mat)
 {
 
@@ -224,11 +276,31 @@ prep.step_distributed_lag <- function(x, training, info = NULL, ...) {
 
   x_len <- nrow(training)
 
+
+
+  # check if basis_mat is provided
+  if(is.null(x$basis_mat)) {
+    basis_mat <- basis_lag(x$knots, x$spline_fun, x$options)
+
+    # use provided basis_mat
+  } else {
+    if(length(intersect(c('knots', 'Boundary.knots'),
+                        names(attributes(x$basis_mat)))) == 2) {
+      x$knots <- sort(unique(c(attr(x$basis_mat, 'knots'),
+                               attr(x$basis_mat, 'Boundary.knots'))))
+      # rlang::warn('step_distributed_lag: knots are determined from basis_mat')
+    } else {
+      if(nrow(x$basis_mat) != (diff(range(x$knots)) + 1)) {
+        rlang::abort('step_distributed_lag: basis_mat number of rows must equal
+                     the range of knots plus 1')
+      }
+    }
+    basis_mat <- x$basis_mat
+  }
+
   if(max(x$knots) > x_len) {
     rlang::abort('The maximum knot cannot be larger than the number of elements in x')
   }
-
-  basis_mat <- basis_lag(x$knots)
 
   step_distributed_lag_new(
     terms = x$terms,
@@ -236,6 +308,8 @@ prep.step_distributed_lag <- function(x, training, info = NULL, ...) {
     trained = TRUE,
     knots = x$knots,
     basis_mat = basis_mat,
+    spline_fun = x$spline_fun,
+    options = x$options,
     prefix = x$prefix,
     keep_original_cols = x$keep_original_cols,
     columns = recipes_eval_select(x$terms, training, info),
@@ -248,15 +322,15 @@ prep.step_distributed_lag <- function(x, training, info = NULL, ...) {
 #' @export
 bake.step_distributed_lag <- function(object, new_data, ...) {
 
+
   for(i in seq_along(object$columns)) {
 
     dl <- distributed_lag(new_data[[object$columns[i]]],
                           object$basis_mat,
                           object$knots)
 
-
     colnames(dl) <- paste0(object$prefix, object$columns[i], '_',
-                           object$knots)
+                           1:ncol(object$basis_mat))
 
 
     new_data <- bind_cols(new_data, as_tibble(dl))
@@ -287,24 +361,24 @@ tidy.step_distributed_lag <- function(x, ...) {
   tidy2.step_distributed_lag(x, ...)
 }
 
+
+# We want to store the basis_matrix for
+#' @rdname tidy2.recipe
 #' @export
 tidy2.step_distributed_lag <- function(x, ...) {
 
   if (is_trained(x)) {
-    res <-
-      tibble(terms = rep(x$columns, each = length(x$knots)),
-             knots = rep(x$knots, times = length(x$columns)))
-    res$key <- paste0(x$prefix, res$terms, '_', res$knots)
-
+    term_names = x$columns
   } else {
     term_names <- sel2char(x$terms)
-
-    res <- tibble(terms = rep(term_names, each = length(x$knots),
-                              knots = rep(x$knots, times = length(term_names))))
-    res$key <- paste0(x$prefix, res$terms, '_',
-                      rep(x$knots, times = length(term_names)))
-
   }
+
+  res <- tibble(terms = term_names,
+                key = paste0(x$prefix, term_names),
+                min_knots = min(x$knots),
+                max_knots = max(x$knots),
+                spline_fun = list(x$spline_fun),
+                basis_mat = list(x$basis_mat))
 
   res$id <- x$id
   res$step_name <- 'step_distributed_lag'

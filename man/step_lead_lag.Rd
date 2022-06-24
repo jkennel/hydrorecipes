@@ -47,7 +47,7 @@ leading the vector (i.e. the reverse of lagging)}
 output. Defaults to \code{FALSE}.}
 
 \item{columns}{A character string of variable names that will
-be populated (eventually) by the `terms` argument.}
+be populated (eventually) by the \code{terms} argument.}
 
 \item{skip}{A logical. Should the step be skipped when the
 recipe is baked by \code{\link[recipes:bake]{bake()}}? While all operations are baked
@@ -58,33 +58,36 @@ the computations for subsequent operations.}
 
 \item{id}{A character string that is unique to this step to identify it.}
 }
+\value{
+An updated version of recipe with the new step added to the sequence
+of any existing operations.
+}
 \description{
-`step_lead_lag` creates a *specification* of a recipe step that
-  will add new columns of lead data. lead data will
-  by default include NA values where the lead was induced.
-  These can be removed with [step_naomit()].
+\code{step_lead_lag} creates a \emph{specification} of a recipe step that
+will add new columns that are shifted forward (lag) or backward (lead).
+Data will by default include NA values where the shift was induced.
+These can be removed with \code{\link[=step_naomit]{step_naomit()}}. Samples should be ordered and
+have regular spacing (i.e. Regular time series, regular spatial sampling).
 }
 \details{
-The step assumes that the data are already _in the proper sequential
- order_ for leading.
+The step assumes that the data are already \emph{in the proper sequential
+order} for lagging/leading. A set of vectors that are shifted relative to the
+input vector is generated when the recipe is baked.
 }
 \examples{
 data(wipp30)
 
 recipe(wl~., data = wipp30) |>
   step_lead_lag(baro, lag = -2:2, n_subset = 1, n_shift = 0) |>
-  prep() |>
-  bake(new_data = wipp30)
+  prep()
 
 recipe(wl~ ., data = wipp30) |>
   step_lead_lag(baro, lag = -2:2, n_subset = 2, n_shift = 0) |>
-  prep() |>
-  bake(new_data = wipp30)
+  prep()
 
 recipe(wl~ ., data = wipp30) |>
   step_lead_lag(baro, lag = -2:2, n_subset = 2, n_shift = 1) |>
-  prep() |>
-  bake(new_data = wipp30)
+  prep()
 
 }
 \seealso{

@@ -24,11 +24,15 @@
 #'
 #' @format A \code{data.frame} The columns are:
 #' \describe{
-#'  \item{\code{time}}{time in hours}
+#'  \item{\code{time}}{elapsed time in hours}
 #'  \item{\code{wl}}{water level}
 #'  \item{\code{baro}}{barometric pressure}
 #'  \item{\code{et}}{synthetic gravity}
 #' }
+#'
+#' @references
+#' Toll NJ, Rasmussen TC, 2007, "Removal of barometric pressure effects and
+#'   Earth tides from observed water levels", Ground Water 45(1):101-105
 #'
 #' @examples
 #' data(wipp30)

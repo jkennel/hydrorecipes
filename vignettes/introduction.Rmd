@@ -26,6 +26,7 @@ The **hydrorecipes** package aims to provide a few steps to improve the analysis
 library(hydrorecipes)
 library(earthtide)
 library(ggplot2)
+library(splines2)
 library(tidyr)
 
 data(transducer, package = "hydrorecipes")
@@ -98,33 +99,37 @@ This is the method of Kennel 2020 which uses a distributed lag model (Almon, 196
 [dlnm package](https://CRAN.R-project.org/package=dlnm), but adapted for datasets with millions of rows and long maximum time lags.
 
 ```{r}
+
 wave_groups <- earthtide::eterna_wavegroups
 wave_groups <- na.omit(wave_groups[wave_groups$time == '1 month', ])
 wave_groups <- wave_groups[wave_groups$start > 0.5, ]
 latitude  <- 34.0
 longitude <- -118.5
-rec_kennel <- recipe(wl~baro+datetime_num, transducer) |>
-  step_distributed_lag(baro, knots = log_lags(15, 86400 * 2 / 120)) |>
+rec_dl <- recipe(wl~baro+datetime_num, transducer) |>
+  step_distributed_lag(baro, spline_fun = splines2::bSpline,
+                       knots = log_lags(15, 86400 * 2 / 120)) |>
   step_earthtide(datetime_num,
                  latitude = latitude,
                  longitude = longitude,
                  astro_update = 1,
+                 cutoff = 1e-5,
                  wave_groups = wave_groups) |>
   step_ns(datetime_num, deg_free = 10) |>
   prep()
 
-input_kennel <- rec_kennel |> bake(new_data = NULL)
+input_dl <- rec_dl |> bake(new_data = NULL)
+
 ```
 
 ```{r}
-fit_kennel <- lm(wl~., input_kennel) 
+fit_dl <- lm(wl~., input_dl) 
 ```
 
 We can compare the three models and they give similar results.  The distributed lag version is particularly suited to long lag times and large datasets (small sampling interval). *step_earthtide* allows for easily estimating phase shifts unlike *step_harmonic* and the lagged version.
 
 ```{r results = 'asis'}
 
-model_results <- rbind(broom::glance(fit_kennel),
+model_results <- rbind(broom::glance(fit_dl),
                        broom::glance(fit_toll_rasmussen),
                        broom::glance(fit_rasmussen_mote)
 )
@@ -132,7 +137,8 @@ model_results$name <- c('kennel_2020',
                         'toll_rasmussen_2007',
                         'rasmussen_mote_2007'
 )
-knitr::kable(model_results[,c('name', 'r.squared', 'sigma', 'AIC', 'BIC', 'df.residual', 'nobs')])
+knitr::kable(model_results[,c('name', 'r.squared', 'sigma', 
+                              'AIC', 'BIC', 'df.residual', 'nobs')])
 ```
 
 
@@ -141,9 +147,9 @@ knitr::kable(model_results[,c('name', 'r.squared', 'sigma', 'AIC', 'BIC', 'df.re
 The water pressure dataset can be thought of as a sum of multiple components.  The regression deconvolution method attempts to separate these components so that you can see the influence that each stress has on the resultant water pressure signal.
 
 ```{r fig.height = 11, fig.width = 12, out.width = '90%'}
-pred <- predict_terms(fit = fit_kennel, 
-                      rec = rec_kennel,
-                      data = input_kennel)
+pred <- predict_terms(fit = fit_dl, 
+                      rec = rec_dl,
+                      data = input_dl)
 pred <- bind_cols(transducer[, c('datetime', 'wl')], pred)
 pred$residuals <- pred$wl - pred$predicted
 pred_long <- pivot_longer(pred, cols = !datetime)
@@ -170,7 +176,7 @@ ggplot(pred_long, aes(x = datetime, y = value)) +
 The response describes how the water pressure changes after there is a change in one of the input stresses. The **hydrorecipes** package describes the response in one of two ways; using harmonics, or a response function.  These can be thought of as equivalent with one being in the time domain and the other the frequency domain.  Both method provides similar information, but depending on the analysis model or background knowledge one may be preferred over the other. Below we use a response function for barometric pressure and harmonic analysis for the Earth tides.
 
 ```{r fig.height = 5, fig.width = 5, out.width = '47%', fig.show='hold'}
-resp    <- response(fit_kennel, rec_kennel)
+resp    <- response(fit_dl, rec_dl)
 resp_ba <- resp[resp$name == 'cumulative', ]
 resp_ba <- resp_ba[resp_ba$term == 'baro', ]
 
