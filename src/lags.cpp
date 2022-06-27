@@ -110,7 +110,7 @@ int get_end(int n, int n_out, int lag, int n_subset) {
 //' @noRd
 //'
 // [[Rcpp::export]]
-Rcpp::NumericVector shift_subset(const Rcpp::NumericVector x,
+Rcpp::NumericVector shift_subset(const Rcpp::NumericVector& x,
                                  int lag = 0,
                                  int n_subset = 1,
                                  int n_shift = 0) {
@@ -165,13 +165,15 @@ using namespace Rcpp;
 //'
 //' @noRd
 // [[Rcpp::export]]
-Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericVector& x,
+Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericMatrix& x,
                                const Rcpp::IntegerVector& lags,
+                               Rcpp::CharacterVector suffix,
+                               std::string prefix,
                                int n_subset = 1,
-                               int n_shift = 0,
-                               std::string var_name = "lead_lag") {
+                               int n_shift = 0
+) {
 
-  int n = x.size();
+  int n = x.nrow();
   int n_row;
 
   if(n_subset == 1){
@@ -180,16 +182,21 @@ Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericVector& x,
     n_row = ((n-n_shift-1) / n_subset) + 1;
   }
   int n_col = lags.size();
+  int n_var = x.ncol();
 
-  Rcpp::CharacterVector nm(n_col);
-  Rcpp::NumericMatrix out = Rcpp::NumericMatrix(n_row, n_col);
 
-  for (std::size_t i = 0; i < n_col; i++) {
-    out(_, i) = shift_subset(x, lags[i], n_subset, n_shift);
-    if(lags[i] < 0) {
-      nm[i] = var_name + 'n' + std::to_string(abs(lags[i]));
-    } else {
-      nm[i] = var_name + std::to_string(lags[i]);
+
+  Rcpp::CharacterVector nm(n_col * n_var);
+  Rcpp::NumericMatrix out = Rcpp::NumericMatrix(n_row, n_col * n_var);
+
+  for(std::size_t j = 0; j < n_var; j++) {
+    for (std::size_t i = 0; i < n_col; i++) {
+      out(_, i + j * n_col) = shift_subset(x(_,j), lags[i], n_subset, n_shift);
+      if(lags[i] < 0) {
+        nm[i + j * n_col] = prefix + 'n' + std::to_string(abs(lags[i])) + '_' + suffix[j];
+      } else {
+        nm[i + j * n_col] = prefix + std::to_string(lags[i]) + '_' + suffix[j];
+      }
     }
   }
 

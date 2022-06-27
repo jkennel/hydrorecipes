@@ -64,12 +64,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // shift_subset
-Rcpp::NumericVector shift_subset(const Rcpp::NumericVector x, int lag, int n_subset, int n_shift);
+Rcpp::NumericVector shift_subset(const Rcpp::NumericVector& x, int lag, int n_subset, int n_shift);
 RcppExport SEXP _hydrorecipes_shift_subset(SEXP xSEXP, SEXP lagSEXP, SEXP n_subsetSEXP, SEXP n_shiftSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
     Rcpp::traits::input_parameter< int >::type lag(lagSEXP);
     Rcpp::traits::input_parameter< int >::type n_subset(n_subsetSEXP);
     Rcpp::traits::input_parameter< int >::type n_shift(n_shiftSEXP);
@@ -78,17 +78,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // lag_matrix
-Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericVector& x, const Rcpp::IntegerVector& lags, int n_subset, int n_shift, std::string var_name);
-RcppExport SEXP _hydrorecipes_lag_matrix(SEXP xSEXP, SEXP lagsSEXP, SEXP n_subsetSEXP, SEXP n_shiftSEXP, SEXP var_nameSEXP) {
+Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericMatrix& x, const Rcpp::IntegerVector& lags, Rcpp::CharacterVector suffix, std::string prefix, int n_subset, int n_shift);
+RcppExport SEXP _hydrorecipes_lag_matrix(SEXP xSEXP, SEXP lagsSEXP, SEXP suffixSEXP, SEXP prefixSEXP, SEXP n_subsetSEXP, SEXP n_shiftSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type lags(lagsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type suffix(suffixSEXP);
+    Rcpp::traits::input_parameter< std::string >::type prefix(prefixSEXP);
     Rcpp::traits::input_parameter< int >::type n_subset(n_subsetSEXP);
     Rcpp::traits::input_parameter< int >::type n_shift(n_shiftSEXP);
-    Rcpp::traits::input_parameter< std::string >::type var_name(var_nameSEXP);
-    rcpp_result_gen = Rcpp::wrap(lag_matrix(x, lags, n_subset, n_shift, var_name));
+    rcpp_result_gen = Rcpp::wrap(lag_matrix(x, lags, suffix, prefix, n_subset, n_shift));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -114,7 +115,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_get_start", (DL_FUNC) &_hydrorecipes_get_start, 3},
     {"_hydrorecipes_get_end", (DL_FUNC) &_hydrorecipes_get_end, 4},
     {"_hydrorecipes_shift_subset", (DL_FUNC) &_hydrorecipes_shift_subset, 4},
-    {"_hydrorecipes_lag_matrix", (DL_FUNC) &_hydrorecipes_lag_matrix, 5},
+    {"_hydrorecipes_lag_matrix", (DL_FUNC) &_hydrorecipes_lag_matrix, 6},
     {"_hydrorecipes_distributed_lag_parallel", (DL_FUNC) &_hydrorecipes_distributed_lag_parallel, 5},
     {NULL, NULL, 0}
 };

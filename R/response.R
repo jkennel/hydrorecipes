@@ -102,8 +102,8 @@ response_harmonic <- function(co, step_info) {
 #' response
 #'
 #' @description This function takes a model object and extracts the responses
-#'  from `step_distributed_lag`, `step_lead_lag`, `step_harmonic` and
-#'  `step_earthtide`.
+#'  (i.e. the relationship between the inputs and output) from
+#'  `step_distributed_lag`, `step_lead_lag`, `step_harmonic` and `step_earthtide`.
 #'
 #' @inheritParams predict_terms
 #' @param verbose Print names of steps with no response methods

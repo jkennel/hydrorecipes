@@ -30,8 +30,8 @@ corresponding to each step.
 }
 \description{
 This function takes a model object and extracts the responses
-from \code{step_distributed_lag}, \code{step_lead_lag}, \code{step_harmonic} and
-\code{step_earthtide}.
+(i.e. the relationship between the inputs and output) from
+\code{step_distributed_lag}, \code{step_lead_lag}, \code{step_harmonic} and \code{step_earthtide}.
 }
 \details{
 \code{step_distributed_lag} and \code{step_lead_lag} result
