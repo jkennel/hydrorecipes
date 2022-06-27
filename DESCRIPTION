@@ -1,8 +1,8 @@
 Package: hydrorecipes
 Type: Package
 Title: Hydrogeology Steps for the 'recipes' Package
-Version: 0.0.3
-Date: 2022-06-24
+Version: 0.0.4
+Date: 2022-06-27
 Authors@R: c(
       person("Jonathan", "Kennel", email="jkennel@uoguelph.ca", role = c("aut", "cre")),
       person("Beth", "Parker", role="ths")
