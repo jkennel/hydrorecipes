@@ -10,6 +10,7 @@ status](https://www.r-pkg.org/badges/version/hydrorecipes)](https://CRAN.R-proje
 [![CRAN download
 count](http://cranlogs.r-pkg.org/badges/grand-total/hydrorecipes?color=green)](https://cran.r-project.org/package=hydrorecipes)
 [![R-CMD-check](https://github.com/jkennel/hydrorecipes/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jkennel/hydrorecipes/actions/workflows/R-CMD-check.yaml)
+[![DOI](https://zenodo.org/badge/436375294.svg)](https://zenodo.org/badge/latestdoi/436375294)
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Codecov test
