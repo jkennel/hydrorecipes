@@ -26,10 +26,10 @@ steps are currently available:
 
 -   *step_lead_lag* is a more flexible version of *step_lag* from the
     [recipes package](https://recipes.tidymodels.org). Values can be
-    negative which indicates the vector is lead. In addition, subsetting
-    can be done on the dataset during this process when dealing with
-    very large datasets leading to performance gains without sacrificing
-    temporal accuracy.
+    negative which indicates the vector is leading. In addition,
+    subsetting can be done on the dataset during this process when
+    dealing with very large datasets leading to performance gains
+    without sacrificing temporal accuracy.
 -   *step_distributed_lag* is a distributed lag approach for modelling
     the response in a flexible yet concise manner. This is useful when
     you have a long maximum lag or large datasets.
@@ -79,7 +79,7 @@ unique(diff(transducer$datetime_num)) # times are regularly spaced
 wave_groups <- earthtide::eterna_wavegroups
 wave_groups <- na.omit(wave_groups[wave_groups$time == '1 month', ])
 wave_groups <- wave_groups[wave_groups$start > 0.5, ]
-latitude    <- 34.0
+latitude    <-   34.0
 longitude   <- -118.5
 
 # create recipe 

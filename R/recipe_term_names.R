@@ -50,6 +50,7 @@ recipe_term_names.step_lag <- function(object, ...) {
 #' @rdname recipe_term_names
 #' @export
 recipe_term_names.step_distributed_lag <- function(object, ...) {
+
   new_names <- list()
 
   for (i in seq_along(object$columns)) {
@@ -76,7 +77,7 @@ recipe_term_names.step_lead_lag <- function(object, ...) {
 recipe_term_names.step_harmonic <- function(object, ...) {
   col_names <- names(object$starting_val)
   n_frequency <- length(object$frequency)
-
+  new_names <- list()
   for (i in seq_along(col_names)) {
 
     new_names[[i]] <- paste0(
@@ -117,5 +118,28 @@ recipe_term_names.step_ns <- function(object, ...) {
 
 }
 
+
+#' @rdname recipe_term_names
+#' @export
+recipe_term_names.step_dummy <- function(object, ...) {
+
+  n    <- length(object$terms)
+  lvls <- object$levels
+  nms  <- names(lvls)
+  new_names <- list()
+
+  for (i in 1:length(nms)) {
+    if(object$one_hot) {
+      lvls_vals <- attr(lvls[[i]], "values")
+      new_names[[i]] <- object$naming(nms[i], lvls_vals)
+    } else {
+      lvls_vals <- attr(lvls[[i]], "values")[-1]
+      new_names[[i]] <- object$naming(nms[i], lvls_vals)
+    }
+  }
+
+  return(new_names)
+
+}
 
 
