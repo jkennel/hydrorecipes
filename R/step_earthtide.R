@@ -152,6 +152,12 @@ step_earthtide_new <-
 #' @export
 prep.step_earthtide <- function(x, training, info = NULL, ...) {
 
+  col_names <- recipes_eval_select(x$terms, training, info = info)
+
+  if(length(col_names) != 1) {
+    rlang::abort("'step_earthtide' only works with one term")
+  }
+
   step_earthtide_new(
     terms = x$terms,
     role = x$role,
@@ -172,7 +178,7 @@ prep.step_earthtide <- function(x, training, info = NULL, ...) {
     eop = x$eop,
     scale = x$scale,
     prefix = x$prefix,
-    columns = recipes_eval_select(x$terms, training, info = info),
+    columns = col_names,
     keep_original_cols = get_keep_original_cols(x),
     skip = x$skip,
     id = x$id
