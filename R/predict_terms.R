@@ -44,9 +44,9 @@ predict_terms.lm <- function(fit, rec, data, ...) {
 #'
 predict_terms.cv.glmnet <- function(fit, rec, data, ...) {
 
-  co <- coefficients(fit)
-  co_names <- rownames(co)
-  co <- as.vector(co)
+  co        <- coefficients(fit)
+  co_names  <- rownames(co)
+  co        <- as.vector(co)
   names(co) <- co_names
 
   predict_terms.numeric(co, rec, data, ...)

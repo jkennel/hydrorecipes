@@ -115,6 +115,10 @@ Rcpp::NumericVector shift_subset(const Rcpp::NumericVector& x,
                                  int n_subset = 1,
                                  int n_shift = 0) {
 
+  if(n_shift >= n_subset) {
+    throw std::range_error("shift_subset: n_shift must be less than n_subset");
+  }
+
   int n = x.size();
   int n_out;
   int start, end;
@@ -129,18 +133,16 @@ Rcpp::NumericVector shift_subset(const Rcpp::NumericVector& x,
   start = get_start(n_out, lag, n_subset);
   end   = get_end(n, n_out, lag, n_subset);
 
+  if(start >= end) {
+    throw std::range_error("shift_subset: the number of lags, n_subset or n_shift is too large");
+  }
+
   for (int i = start; i < end; i++) {
+
     wh = (i * n_subset) - lag;
 
-    if (wh < 0) {
-      throw std::range_error("negative wh value");
-    } else if (wh < n) {
+    out[i] = x[wh];
 
-      out[i] = x[wh];
-
-    } else {
-      throw std::range_error("lag is too large");
-    }
   }
 
   return(out);
@@ -177,9 +179,9 @@ Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericMatrix& x,
   int n_row;
 
   if(n_subset == 1){
-    n_row = (n-n_shift);
+    n_row = (n - n_shift);
   } else {
-    n_row = ((n-n_shift-1) / n_subset) + 1;
+    n_row = ((n - n_shift - 1) / n_subset) + 1;
   }
   int n_col = lags.size();
   int n_var = x.ncol();
@@ -191,7 +193,7 @@ Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericMatrix& x,
 
   for(std::size_t j = 0; j < n_var; j++) {
     for (std::size_t i = 0; i < n_col; i++) {
-      out(_, i + j * n_col) = shift_subset(x(_,j), lags[i], n_subset, n_shift);
+      out(_, i + j * n_col) = shift_subset(x(_, j), lags[i], n_subset, n_shift);
       if(lags[i] < 0) {
         nm[i + j * n_col] = prefix + 'n' + std::to_string(abs(lags[i])) + '_' + suffix[j];
       } else {
@@ -277,6 +279,9 @@ arma::mat distributed_lag_parallel(const arma::vec& x,
   int end;
   int offset;
 
+  if(n_subset < 1) {
+    throw std::range_error("n_subset should be 1 or greater.");
+  }
   if(n_shift >= (n_subset)) {
     throw std::range_error("The absolute value of n_shift should be less than n_subset - 1.");
   }
@@ -307,17 +312,17 @@ arma::mat distributed_lag_parallel(const arma::vec& x,
 
   int wh = (n_out - start - 1) * n_subset + offset - n_shift + lag_max;
 
-  if (wh < (n_row-n_subset)) {
+  if (wh < (n_row - n_subset)) {
     start = start - 1;
     offset = offset - n_shift;
   } else {
     offset = offset - n_shift;
   }
-  if(offset < 0) {
-    n_out = n_out - 1;
-    end = end - 1;
-    offset = offset + n_subset;
-  }
+  // if(offset < 0) {
+  //   n_out = n_out - 1;
+  //   end = end - 1;
+  //   offset = offset + n_subset;
+  // }
 
 
   arma::mat cb(n_col, n_out);
