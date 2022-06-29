@@ -90,8 +90,8 @@ summary(fit <- lm(wl~., input))
 
 The decomposition consists of:
 
-- **Intercept** A single offset value (meters_water)
-- **Background trend** The background trend determined using natural splines (dbar)
+- **Intercept** A single offset value (dbar)
+- **Background Trend** The background trend determined using natural splines (dbar)
 - **Barometric Component** The barometric component of the water pressure determined using distributed lag terms (dbar) 
 - **Earth tide Component** The Earth tides component determined using harmonic analysis (dbar)
 - **Predicted** The sum of all the components above.  This is the predicted water pressure. (dbar)
