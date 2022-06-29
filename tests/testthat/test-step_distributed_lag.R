@@ -6,6 +6,23 @@ test_that("step_distributed_lag works", {
   rec <- recipe(wl~baro, wipp30)
 
 
+  # probably needs a few more subset tests
+  sub1 <- rec |>
+    step_distributed_lag(baro,
+                         knots = c(0, 6000),
+                         n_subset = 10) |>
+    prep() |>
+    bake(new_data = NULL)
+  sub2 <- rec |>
+    step_lead_lag(baro,
+                         lag = c(0, 6000),
+                         n_subset = 10) |>
+    prep() |>
+    bake(new_data = NULL)
+
+  expect_equal(nrow(sub1), nrow(sub2))
+
+
   expect_equal(rec |>
                  step_distributed_lag(baro,
                                       knots = c(0, 6000)) |>

@@ -210,7 +210,8 @@ bake.step_earthtide <- function(object, new_data, ...) {
                                  catalog = object$catalog,
                                  eop = object$eop,
                                  scale = object$scale,
-                                 return_matrix = TRUE))
+                                 return_matrix = TRUE),
+                  .name_repair = 'minimal')
   if(object$do_predict) {
     names(et) <- paste0(object$prefix, object$columns)
   } else {

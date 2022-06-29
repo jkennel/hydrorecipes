@@ -8,4 +8,5 @@ bibentry(bibtype = "Manual",
                     person("Beth", "Parker")),
          year = year,
          note = note,
+         doi = "10.5281/zenodo.6773849",
          url = "https://github.com/jkennel/hydrorecipes")

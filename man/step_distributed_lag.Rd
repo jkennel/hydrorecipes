@@ -12,6 +12,8 @@ step_distributed_lag(
   knots = NULL,
   basis_mat = NULL,
   spline_fun = splines::ns,
+  n_subset = 1L,
+  n_shift = 0L,
   options = list(intercept = TRUE),
   prefix = "distributed_lag_",
   keep_original_cols = FALSE,
@@ -46,6 +48,10 @@ obtained from the \code{basis_mat} and not from the \code{knots} parameter.}
 
 \item{spline_fun}{Function used for calculating \code{basis_mat}.  This should
 return an object having \code{knots} and \code{Boundary.knots} attributes.}
+
+\item{n_subset}{A single integer. Subset every \code{n_subset} values.}
+
+\item{n_shift}{A single integer amount to shift results in number of observations.}
 
 \item{options}{The arguments to pass to \code{spline_fun}.}
 

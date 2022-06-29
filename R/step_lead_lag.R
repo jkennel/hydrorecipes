@@ -7,8 +7,7 @@
 #'   have regular spacing (i.e. regular time series, regular spatial sampling).
 #'
 #' @inheritParams recipes::step_lag
-#' @inheritParams recipes::step_center
-#' @inheritParams step_distributed_lag
+#' @inheritParams recipes::step_harmonic
 #' @param lag A vector of integers. Each specified column will be
 #'  lagged for each value in the vector. Negative values are accepted and indicate
 #'  leading the vector (i.e. the reverse of lagging)
@@ -149,14 +148,15 @@ bake.step_lead_lag <- function(object, new_data, ...) {
     rlang::abort("step_lead_lag requires 'lead_lag' argument to be integer valued.")
 
 
-  lag_mat <- lag_matrix(
-    x = as.matrix(new_data[,object$columns]),
-    lags = object$lag,
-    suffix = object$columns,
-    prefix = object$prefix,
-    n_subset = object$n_subset,
-    n_shift = object$n_shift
-  )
+  lag_mat <-
+    lag_matrix(
+      x = as.matrix(new_data[,object$columns]),
+      lags = object$lag,
+      suffix = object$columns,
+      prefix = object$prefix,
+      n_subset = object$n_subset,
+      n_shift = object$n_shift
+    )
 
   keep_original_cols <- get_keep_original_cols(object)
   if (!keep_original_cols) {
@@ -164,19 +164,11 @@ bake.step_lead_lag <- function(object, new_data, ...) {
       new_data[, !(colnames(new_data) %in% object$columns), drop = FALSE]
   }
 
-  if(object$n_subset > 1) {
-    ind <- seq(object$n_shift + 1,
-               nrow(new_data),
-               object$n_subset)
+  subset_bind(new_data,
+              lag_mat,
+              object$n_subset,
+              object$n_shift)
 
-    new_data <- bind_cols(new_data[ind,], as_tibble(lag_mat))
-  } else {
-    new_data <- bind_cols(new_data, as_tibble(lag_mat))
-  }
-
-
-
-  new_data
 }
 
 #' @importFrom recipes printer

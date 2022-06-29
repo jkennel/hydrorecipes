@@ -11,6 +11,8 @@
 #'
 #' @inheritParams recipes::step_pca
 #' @inheritParams recipes::step_center
+#' @inheritParams step_lead_lag
+#'
 #' @param knots An integer vector of breakpoints to define the spline. These should
 #'  include the `Boundary.knots`. See [splines](https://CRAN.R-project.org/package=splines)
 #'  for more info.
@@ -85,6 +87,8 @@ step_distributed_lag <-
            knots = NULL,
            basis_mat = NULL,
            spline_fun = splines::ns,
+           n_subset = 1L,
+           n_shift = 0L,
            options = list(intercept = TRUE),
            prefix = "distributed_lag_",
            keep_original_cols = FALSE,
@@ -108,6 +112,13 @@ step_distributed_lag <-
       rlang::warn("step_distributed_lag should have integer valued 'knots'")
     }
 
+    if(n_subset <= 0) {
+      rlang::abort("'n_subset' in step_distributed_lag should be greater than 0")
+    }
+
+    if(n_shift >= n_subset) {
+      rlang::abort("'n_shift' should be less than 'n_subset' in step_distributed_lag")
+    }
 
 
     add_step(
@@ -119,6 +130,8 @@ step_distributed_lag <-
         knots = knots,
         basis_mat = basis_mat,
         spline_fun = spline_fun,
+        n_subset = n_subset,
+        n_shift = n_shift,
         options = options,
         prefix = prefix,
         keep_original_cols = keep_original_cols,
@@ -130,8 +143,8 @@ step_distributed_lag <-
   }
 
 step_distributed_lag_new <-
-  function(terms, role, trained, knots, basis_mat, spline_fun, options, prefix,
-           keep_original_cols, columns, skip, id) {
+  function(terms, role, trained, knots, basis_mat, spline_fun, n_subset, n_shift,
+           options, prefix, keep_original_cols, columns, skip, id) {
     step(
       subclass = "distributed_lag",
       terms = terms,
@@ -140,6 +153,8 @@ step_distributed_lag_new <-
       knots = knots,
       basis_mat = basis_mat,
       spline_fun = spline_fun,
+      n_subset = n_subset,
+      n_shift = n_shift,
       options = options,
       prefix = prefix,
       keep_original_cols = keep_original_cols,
@@ -176,8 +191,8 @@ basis_lag <- function(knots,
   # generate basis lag
   do.call(spline_fun,
           c(list(x = min(knots):max(knots)),
-                 list(knots = knots[-c(1, n_knots)]),
-                 options))
+            list(knots = knots[-c(1, n_knots)]),
+            options))
 
 }
 
@@ -190,6 +205,7 @@ basis_lag <- function(knots,
 #' (NA values present, or small maximum knot).
 #'
 #' @inheritParams splines::ns
+#' @inheritParams step_lead_lag
 #' @param basis_mat \code{numeric matrix} spline basis matrix for convolution
 #'
 #' @return matrix with distributed lag terms
@@ -197,17 +213,17 @@ basis_lag <- function(knots,
 #' @importFrom splines ns
 #'
 #' @noRd
-distributed_lag <- function(x, basis_mat, knots) {
+distributed_lag <- function(x, basis_mat, knots, n_subset, n_shift) {
 
   max_knot <- max(knots)
 
   # convolution - fft for large number of lags, otherwise use parallel version
-  if(any(is.na(x)) | max_knot < 5000) {
+  if(any(is.na(x)) | max_knot < 5000 | n_subset != 1L) {
     dist_lag_mat <- distributed_lag_parallel(rev(x),
                                              t(as.matrix(basis_mat)),
                                              max(knots) - min(knots),
-                                             n_subset = 1,
-                                             n_shift = 0
+                                             n_subset = n_subset,
+                                             n_shift = n_shift
     )
   } else {
     dist_lag_mat <- cross_basis_fft(as.matrix(x), basis_mat)
@@ -284,8 +300,6 @@ prep.step_distributed_lag <- function(x, training, info = NULL, ...) {
 
   x_len <- nrow(training)
 
-
-
   # check if basis_mat is provided
   if(is.null(x$basis_mat)) {
     basis_mat <- basis_lag(x$knots, x$spline_fun, x$options)
@@ -307,7 +321,15 @@ prep.step_distributed_lag <- function(x, training, info = NULL, ...) {
   }
 
   if(max(x$knots) > x_len) {
-    rlang::abort('The maximum knot cannot be larger than the number of elements in x')
+    rlang::abort("step_distributed_lag: The maximum knot cannot be larger than the number of elements in x")
+  }
+
+  if(x$n_subset > x_len) {
+    rlang::abort("step_distributed_lag: 'n_subset' cannot be larger than the number of elements in x")
+  }
+
+  if((x$n_subset + max(x$knots)) > x_len) {
+    rlang::abort("step_distributed_lag: 'n_subset' plus the maximum knot cannot be larger than the number of elements in x")
   }
 
   step_distributed_lag_new(
@@ -317,6 +339,8 @@ prep.step_distributed_lag <- function(x, training, info = NULL, ...) {
     knots = x$knots,
     basis_mat = basis_mat,
     spline_fun = x$spline_fun,
+    n_subset = x$n_subset,
+    n_shift = x$n_shift,
     options = x$options,
     prefix = x$prefix,
     keep_original_cols = x$keep_original_cols,
@@ -330,18 +354,21 @@ prep.step_distributed_lag <- function(x, training, info = NULL, ...) {
 #' @export
 bake.step_distributed_lag <- function(object, new_data, ...) {
 
+  dl <- x <- vector(mode = "list",
+                    length = length(object$columns))
+  names(dl) <- paste0(object$columns)
 
   for(i in seq_along(object$columns)) {
 
-    dl <- distributed_lag(new_data[[object$columns[i]]],
-                          object$basis_mat,
-                          object$knots)
+    dl[[i]] <-
+      distributed_lag(new_data[[object$columns[i]]],
+                      object$basis_mat,
+                      object$knots,
+                      object$n_subset,
+                      object$n_shift)
 
-    colnames(dl) <- paste0(object$prefix, object$columns[i], '_',
-                           1:ncol(object$basis_mat))
-
-
-    new_data <- bind_cols(new_data, as_tibble(dl))
+    colnames(dl[[i]]) <- paste0(object$prefix, object$columns[i], '_',
+                                1:ncol(object$basis_mat))
 
   }
 
@@ -351,7 +378,10 @@ bake.step_distributed_lag <- function(object, new_data, ...) {
       new_data[, !(colnames(new_data) %in% object$columns), drop = FALSE]
   }
 
-  new_data
+  subset_bind(new_data,
+              do.call('cbind', dl),
+              object$n_subset,
+              object$n_shift)
 
 }
 
