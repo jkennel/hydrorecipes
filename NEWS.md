@@ -1,3 +1,8 @@
+# hydrorecipes 0.0.4
+
+* Add n_subset and n_shift to step_distributed_lag 
+* Allow multiple terms for step_lead_lag and step_distributed_lag
+
 # hydrorecipes 0.0.3
 
 * First version submitted to CRAN
