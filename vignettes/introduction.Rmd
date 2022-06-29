@@ -28,6 +28,7 @@ library(earthtide)
 library(ggplot2)
 library(splines2)
 library(tidyr)
+library(broom)
 
 data(transducer, package = "hydrorecipes")
 head(transducer)
@@ -63,6 +64,17 @@ input_toll_rasmussen <- rec_toll_rasmussen |> bake(new_data = NULL)
 
 ```{r}
 fit_toll_rasmussen <- lm(wl~., input_toll_rasmussen) 
+glance(fit_toll_rasmussen)
+```
+
+```{r fig.height = 3, fig.width = 12, out.width = '90%'}
+wh <- complete.cases(input_toll_rasmussen)
+
+ggplot(tibble(x = transducer$datetime[wh], y = fit_toll_rasmussen$residuals)) +
+  geom_line(aes(x = x, y = y)) + 
+  xlab('') +
+  ylab('residuals (dbar)')+
+  theme_bw()
 ```
 
 ## Modified Rasmussen  and Mote 2007
@@ -91,7 +103,18 @@ input_rasmussen_mote <- rec_rasmussen_mote |> bake(new_data = NULL)
 
 ```{r}
 fit_rasmussen_mote <- lm(wl~., input_rasmussen_mote) 
+glance(fit_rasmussen_mote)
 ```
+
+```{r fig.height = 3, fig.width = 12, out.width = '90%'}
+wh <- complete.cases(input_rasmussen_mote)
+ggplot(tibble(x = transducer$datetime[wh], y = fit_rasmussen_mote$residuals)) +
+  geom_line(aes(x = x, y = y)) + 
+  xlab('') +
+  ylab('residuals (dbar)')+
+  theme_bw()
+```
+
 
 ## Kennel 2020 method for water levels
 
@@ -138,7 +161,7 @@ model_results$name <- c('kennel_2020',
                         'rasmussen_mote_2007'
 )
 knitr::kable(model_results[,c('name', 'r.squared', 'sigma', 
-                              'AIC', 'BIC', 'df.residual', 'nobs')])
+                              'AIC', 'BIC', 'df', 'nobs')])
 ```
 
 
@@ -199,7 +222,8 @@ ggplot(resp_et, aes(x = x, xend = x, y = 0, yend = value)) +
 
 
 
-# References
+
+## References
 
 Almon, S (1965). The Distributed Lag Between Capital Appropriations and Expenditures. Econometrica 33(1), 178.
 
