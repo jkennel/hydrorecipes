@@ -1,5 +1,6 @@
 # hydrorecipes 0.0.4
 
+* Speed up step_distributed_lag
 * Add n_subset and n_shift to step_distributed_lag 
 * Allow multiple terms for step_lead_lag and step_distributed_lag to be consistent with the recipes package
 

@@ -141,4 +141,13 @@ test_that("step_distributed_lag works", {
   )
 
 
+  x  <- as.matrix(rnorm(10000))
+  bl <- splines::ns(0:1000, knots = log_lags(5, 999))
+  expect_equal(a <- hydrorecipes:::convolve_fft(x, bl),
+               b <- hydrorecipes:::distributed_lag(x,
+                                                   (as.matrix(bl)),
+                                                   0:1000,
+                                                   n_subset = 1,
+                                                   n_shift = 0))
+
 })

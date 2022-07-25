@@ -108,6 +108,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// arma_shift
+arma::mat arma_shift(arma::mat x, int n);
+RcppExport SEXP _hydrorecipes_arma_shift(SEXP xSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(arma_shift(x, n));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_check_lag", (DL_FUNC) &_hydrorecipes_check_lag, 3},
@@ -117,6 +129,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_shift_subset", (DL_FUNC) &_hydrorecipes_shift_subset, 4},
     {"_hydrorecipes_lag_matrix", (DL_FUNC) &_hydrorecipes_lag_matrix, 6},
     {"_hydrorecipes_distributed_lag_parallel", (DL_FUNC) &_hydrorecipes_distributed_lag_parallel, 5},
+    {"_hydrorecipes_arma_shift", (DL_FUNC) &_hydrorecipes_arma_shift, 2},
     {NULL, NULL, 0}
 };
 

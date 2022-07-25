@@ -59,7 +59,7 @@ predict_terms.cv.glmnet <- function(fit, rec, data, ...) {
 predict_terms.numeric <- function(fit, rec, data, ...) {
 
   rec_steps <- tidy2(rec)
-  rec_steps <- rec_steps[!rec_steps$type %in% 'rm', ]
+  rec_steps <- rec_steps[!rec_steps$type %in% c('rm'), ]
 
   # output list
   resp <- vector(mode = "list",
@@ -70,7 +70,6 @@ predict_terms.numeric <- function(fit, rec, data, ...) {
   for (i in 1:nrow(rec_steps)) {
 
     step_info <- tidy2(rec, i)
-
     co_sub <- get_coefficients(fit, step_info)
 
     if (length(co_sub) >= 1) {

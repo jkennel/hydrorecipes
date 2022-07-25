@@ -101,6 +101,7 @@ recipe(wl~ ., data = wipp30) |>
 \code{\link[recipes:step_lag]{recipes::step_lag()}}
 
 Other row operation steps: 
-\code{\link{step_distributed_lag}()}
+\code{\link{step_distributed_lag}()},
+\code{\link{step_make_regular}()}
 }
 \concept{row operation steps}

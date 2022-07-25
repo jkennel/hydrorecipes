@@ -95,7 +95,8 @@ tidy2.recipe <- function(x, number = NA, id = NA, ...) {
                   'step_earthtide',
                   'step_ns',
                   'step_intercept',
-                  'step_lead_lag')) {
+                  'step_lead_lag',
+                  'step_mutate')) {
 
       res <- tidy2(x$steps[[number]], ...)
 
@@ -161,6 +162,21 @@ tidy2.step_intercept <- function(x, ...) {
   ret <- tibble(id = x$id,
                 step_name = 'step_intercept')
   ret$key <- "intercept"
+  ret
+}
+
+#' @rdname tidy2.recipe
+#' @export
+tidy2.step_mutate <- function(x, ...) {
+
+  inputs <- x$inputs
+
+  terms <- names(rlang::quos_auto_name(inputs))
+
+  ret <- tibble(terms = terms,
+                id = x$id,
+                step_name = 'step_mutate')
+  ret$key <- "mutate"
   ret
 }
 

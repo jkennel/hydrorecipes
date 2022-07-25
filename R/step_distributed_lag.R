@@ -24,7 +24,7 @@
 #' @param spline_fun Function used for calculating `basis_mat`.  This should
 #'  return an object having `knots` and `Boundary.knots` attributes.
 #' @param options The arguments to pass to `spline_fun`.
-#' @param prefix A prefix for generated column names, default to "distributed_lag_".
+#' @param prefix A prefix for generated column names, defaults to "distributed_lag_".
 #' @family row operation steps
 #' @export
 #' @rdname step_distributed_lag
@@ -72,7 +72,7 @@
 #'   prep()
 #'
 #' # specify basis_mat
-#' basis_mat <- splines2::mSpline(0:72, knots = c(3,16))
+#' basis_mat <- splines2::mSpline(0:72, knots = c(3,16, 24, 48))
 #' rec <- rec_base |>
 #'   step_distributed_lag(baro,
 #'                        basis_mat = basis_mat) |>
@@ -207,31 +207,41 @@ basis_lag <- function(knots,
 #' @inheritParams splines::ns
 #' @inheritParams step_lead_lag
 #' @param basis_mat \code{numeric matrix} spline basis matrix for convolution
+#' @param reverse \code{logical} reverse kernel/data prior to calculation?
 #'
-#' @return matrix with distributed lag terms
+#' @return matrix with convolution results
 #'
 #' @importFrom splines ns
 #'
 #' @noRd
-distributed_lag <- function(x, basis_mat, knots, n_subset, n_shift) {
+distributed_lag <- function(x, basis_mat, knots, n_subset, n_shift, reverse = TRUE) {
 
   max_knot <- max(knots)
 
+
   # convolution - fft for large number of lags, otherwise use parallel version
   if(any(is.na(x)) | max_knot < 5000 | n_subset != 1L) {
-    dist_lag_mat <- distributed_lag_parallel(rev(x),
+
+    if(reverse) {
+      x <- rev(x)
+    }
+    dist_lag_mat <- distributed_lag_parallel(x,
                                              t(as.matrix(basis_mat)),
                                              max(knots) - min(knots),
                                              n_subset = n_subset,
                                              n_shift = n_shift
     )
+
+
   } else {
-    dist_lag_mat <- cross_basis_fft(as.matrix(x), basis_mat)
+
+    dist_lag_mat <- convolve_fft(x,
+                                 basis_mat,
+                                 reverse = reverse)
   }
 
   return(dist_lag_mat)
 }
-
 
 
 #' convolve_fft
@@ -240,54 +250,59 @@ distributed_lag <- function(x, basis_mat, knots, n_subset, n_shift) {
 #'
 #' @param x numeric vector to convolve with y
 #' @param y numeric vector convolution kernel
+#' @param keep_partial logical  whether to keep incomplete portion of convolution
+#' @param reverse logical should the kernel be reversed
 #'
 #' @return numeric vector that is the result of convolution
 #'
-#' @noRd
-convolve_fft <- function(x, y)
-{
-  n_in <- length(x)
-  ny   <- length(y)
-  n1   <- ny - 1
-  x    <- c(rep.int(0, n1), x)
-  n    <- length(y <- c(y, rep.int(0, n_in - 1)))
-  x    <- fftw::IFFT(fftw::FFT(x) * Conj(fftw::FFT(y)), scale = FALSE) / n
-  x[1:n1] <- NA_real_
-  return(Re(x)[1:n_in])
-}
-
-
-
-#' cross_basis_fft
-#'
-#' Convolve each column of a input matrix (`basis_var`) with a matrix of basis
-#' splines (`basis_mat`)
-#'
-#' @param basis_var numeric matrix of input vectors
-#' @param basis_mat numeric matrix of basis splines
-#'
-#' @return numeric vector result of convolution
-#'
-#' @noRd
-cross_basis_fft <- function(basis_var, basis_mat)
+#' @export
+convolve_fft <- function(x, y, keep_partial = FALSE, reverse = TRUE)
 {
 
-  mat <- matrix(NA_real_,
-                nrow = nrow(basis_var),
-                ncol = ncol(basis_var) * ncol(basis_mat))
-
-
-  for(v in seq(length = ncol(basis_var))) {
-    for(l in seq(length = ncol(basis_mat))) {
-
-      mat[, ncol(basis_mat) * (v-1)+l] <-
-        convolve_fft(basis_var[,v], rev(basis_mat[,l]))
-
-    }
+  if(!is.matrix(x)) {
+    x <- as.matrix(x)
+  }
+  if(!is.matrix(y)) {
+    y <- as.matrix(y)
   }
 
-  return(mat)
+  nr_x <- nrow(x)
+  nr_y <- nrow(y)
+  nc_y <- ncol(y)
+  nc_x <- ncol(x)
+  n1   <- nr_y - 1
+  n    <- nextn(nr_x + n1, c(2, 3))
 
+  x_add <- rep.int(0, n - nr_x)
+  y_add <- rep.int(0, n - nr_y)
+
+  p <- fftw::planFFT(n, 0)
+
+  z    <- matrix(NA_real_, ncol = nc_y * nc_x, nrow = nr_x)
+
+  if(reverse) {
+    x_new <- c(x_add, rev(x))
+    sub  <- n:(n - nr_x + 1)
+  } else {
+    x_new <- c(x_add, x)
+    sub  <- 1:nr_x
+  }
+  f <- fftw::FFT(x_new, p)
+
+  for (i in 1:ncol(y)) {
+
+    y_new  <- c(y[, i], y_add)
+    z[, i] <- Re(fftw::IFFT(f * Conj(fftw::FFT(y_new, p)), plan = p, scale = FALSE)[sub]) / n
+
+    if(!keep_partial) {
+      z[1:n1, i] <- NA_real_
+    }
+
+  }
+
+
+
+  return(z)
 }
 
 
@@ -344,7 +359,7 @@ prep.step_distributed_lag <- function(x, training, info = NULL, ...) {
     options = x$options,
     prefix = x$prefix,
     keep_original_cols = x$keep_original_cols,
-    columns = recipes_eval_select(x$terms, training, info),
+    columns = col_names,
     skip = x$skip,
     id = x$id
   )

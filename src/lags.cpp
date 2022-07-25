@@ -337,7 +337,15 @@ arma::mat distributed_lag_parallel(const arma::vec& x,
 }
 
 
+// [[Rcpp::export]]
+arma::mat arma_shift(arma::mat x, int n) {
+  arma::mat out = arma::shift(x, n);
+  return out;
+}
+
+
 /***R
 
-
+m <-matrix(1:20, ncol = 2)
+arma_shift(m, 2)
 */

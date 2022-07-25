@@ -31,9 +31,10 @@ Imports:
   tidyr,
   fftw
 LinkingTo: 
-  Rcpp,
   RcppArmadillo, 
-  RcppParallel
+  RcppParallel, 
+  ravetools,
+  Rcpp
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Encoding: UTF-8

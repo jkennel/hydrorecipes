@@ -55,7 +55,7 @@ return an object having \code{knots} and \code{Boundary.knots} attributes.}
 
 \item{options}{The arguments to pass to \code{spline_fun}.}
 
-\item{prefix}{A prefix for generated column names, default to "distributed_lag_".}
+\item{prefix}{A prefix for generated column names, defaults to "distributed_lag_".}
 
 \item{keep_original_cols}{A logical to keep the original variables in the
 output. Defaults to \code{FALSE}.}
@@ -118,7 +118,7 @@ rec <- rec_base |>
   prep()
 
 # specify basis_mat
-basis_mat <- splines2::mSpline(0:72, knots = c(3,16))
+basis_mat <- splines2::mSpline(0:72, knots = c(3,16, 24, 48))
 rec <- rec_base |>
   step_distributed_lag(baro,
                        basis_mat = basis_mat) |>
@@ -137,6 +137,7 @@ https://doi.org/10.18637/jss.v043.i08
 \code{\link[=step_lead_lag]{step_lead_lag()}} \code{\link[recipes:step_lag]{recipes::step_lag()}}
 
 Other row operation steps: 
-\code{\link{step_lead_lag}()}
+\code{\link{step_lead_lag}()},
+\code{\link{step_make_regular}()}
 }
 \concept{row operation steps}
