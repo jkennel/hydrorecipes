@@ -24,6 +24,7 @@ Imports:
   Rcpp (>= 1.0.7),
   earthtide,
   generics,
+  collapse,
   splines,
   tibble,
   dplyr,
@@ -33,7 +34,6 @@ Imports:
 LinkingTo: 
   RcppArmadillo, 
   RcppParallel, 
-  ravetools,
   Rcpp
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0

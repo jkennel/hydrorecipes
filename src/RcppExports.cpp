@@ -64,12 +64,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // shift_subset
-Rcpp::NumericVector shift_subset(const Rcpp::NumericVector& x, int lag, int n_subset, int n_shift);
+NumericVector shift_subset(const NumericVector& x, int lag, int n_subset, int n_shift);
 RcppExport SEXP _hydrorecipes_shift_subset(SEXP xSEXP, SEXP lagSEXP, SEXP n_subsetSEXP, SEXP n_shiftSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type x(xSEXP);
     Rcpp::traits::input_parameter< int >::type lag(lagSEXP);
     Rcpp::traits::input_parameter< int >::type n_subset(n_subsetSEXP);
     Rcpp::traits::input_parameter< int >::type n_shift(n_shiftSEXP);
@@ -120,6 +120,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// to_dummy
+IntegerMatrix to_dummy(IntegerVector x, size_t n_fact);
+RcppExport SEXP _hydrorecipes_to_dummy(SEXP xSEXP, SEXP n_factSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_fact(n_factSEXP);
+    rcpp_result_gen = Rcpp::wrap(to_dummy(x, n_fact));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_check_lag", (DL_FUNC) &_hydrorecipes_check_lag, 3},
@@ -130,6 +142,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_lag_matrix", (DL_FUNC) &_hydrorecipes_lag_matrix, 6},
     {"_hydrorecipes_distributed_lag_parallel", (DL_FUNC) &_hydrorecipes_distributed_lag_parallel, 5},
     {"_hydrorecipes_arma_shift", (DL_FUNC) &_hydrorecipes_arma_shift, 2},
+    {"_hydrorecipes_to_dummy", (DL_FUNC) &_hydrorecipes_to_dummy, 2},
     {NULL, NULL, 0}
 };
 

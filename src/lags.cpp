@@ -1,17 +1,7 @@
 // inspired by http://davegiles.blogspot.com/2017/01/explaining-almon-distributed-lag-model.html
 // and the dlnm package
 
-#define ARMA_DONT_PRINT_ERRORS
-// #define ARMA_USE_TBB_ALLOC
-
-#include <RcppArmadillo.h>
-#include <RcppParallel.h>
-
-using namespace RcppParallel;
-using namespace arma;
-using namespace Rcpp;
-
-// [[Rcpp::depends(RcppArmadillo)]]
+#include "hydrorecipes.h"
 
 // [[Rcpp::export]]
 int check_lag(int n, int lag, int n_shift) {
@@ -110,10 +100,10 @@ int get_end(int n, int n_out, int lag, int n_subset) {
 //' @noRd
 //'
 // [[Rcpp::export]]
-Rcpp::NumericVector shift_subset(const Rcpp::NumericVector& x,
-                                 int lag = 0,
-                                 int n_subset = 1,
-                                 int n_shift = 0) {
+NumericVector shift_subset(const NumericVector& x,
+                           int lag,
+                           int n_subset,
+                           int n_shift) {
 
   if(n_shift >= n_subset) {
     throw std::range_error("shift_subset: n_shift must be less than n_subset");
@@ -150,7 +140,6 @@ Rcpp::NumericVector shift_subset(const Rcpp::NumericVector& x,
 
 
 
-using namespace Rcpp;
 
 //' @title
 //' lag_matrix
@@ -171,8 +160,8 @@ Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericMatrix& x,
                                const Rcpp::IntegerVector& lags,
                                Rcpp::CharacterVector suffix,
                                std::string prefix,
-                               int n_subset = 1,
-                               int n_shift = 0
+                               int n_subset,
+                               int n_shift
 ) {
 
   int n = x.nrow();
@@ -265,8 +254,8 @@ struct dl_worker: public Worker {
 arma::mat distributed_lag_parallel(const arma::vec& x,
                                    const arma::mat& bl,
                                    int lag_max,
-                                   int n_subset = 1,
-                                   int n_shift = 0) {
+                                   int n_subset,
+                                   int n_shift) {
 
   // result matrix
   int n_row = x.n_elem;
@@ -295,7 +284,7 @@ arma::mat distributed_lag_parallel(const arma::vec& x,
 
   //lag   = check_lag(n_row, lag_max, n_shift);
   n_out = get_length(n_row, n_subset);
-  Rcpp::NumericVector out(n_out, NA_REAL);
+  // arma::vec out(n_out, NA_REAL);
 
   start = get_start(n_out, lag_max, n_subset);
   end   = get_end(n_row, n_out, lag_max, n_subset);
@@ -325,14 +314,14 @@ arma::mat distributed_lag_parallel(const arma::vec& x,
   // }
 
 
-  arma::mat cb(n_col, n_out);
-  cb = cb.fill(NA_REAL);
+  arma::mat cb(n_col, n_out, fill::value(NA_REAL));
+  // cb = cb.fill(NA_REAL);
 
   dl_worker calc_dl(x, bl, cb, lag_max, n_subset, offset);
 
   RcppParallel::parallelFor(n_out - end, n_out - start, calc_dl);
-
-  return arma::flipud(cb.t());
+  arma::inplace_trans(cb);
+  return arma::flipud(cb);
 
 }
 
@@ -345,7 +334,9 @@ arma::mat arma_shift(arma::mat x, int n) {
 
 
 /***R
+n <- 100000L
+m <- as.matrix(1:n)
+v <- 1:n
+hydrorecipes:::lag_matrix(m, -1, suffix = 'a', prefix = 'b', n_subset = 2, n_shift = 0)
 
-m <-matrix(1:20, ncol = 2)
-arma_shift(m, 2)
 */

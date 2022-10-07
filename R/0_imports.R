@@ -9,6 +9,7 @@
 #' @importFrom generics tidy
 #' @importFrom stats coefficients predict na.omit lm formula nextn
 #' @importFrom fftw IFFT FFT
+#' @importFrom collapse qF
 #' @importFrom utils data
 NULL
 

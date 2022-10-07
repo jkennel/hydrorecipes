@@ -1,0 +1,119 @@
+---
+title: "Creating regular series"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{regular_series}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message = FALSE}
+library(hydrorecipes)
+library(ggplot2)
+```
+
+Lagging and leading often relies on the dataset having regular spacing in time or space.  Regular spacing means that there is a constant time difference or constant distance between ordered samples.  When the data is not regularly spaced, it may be useful to convert the results to regularly spaced before lagging. We will start with a regular time series and convert it to an irregular series by sampling the rows and making sure the results are ordered.
+
+```{r}
+data(wipp30)
+set.seed(123)
+
+# subsample data
+wipp30_irregular <- wipp30|>
+  sample_n(13000) |>
+  arrange(time)
+
+# unique time differences in hours
+wipp30_irregular$time |>
+  diff() |>
+  unique() |>
+  sort()
+```
+
+Next we will create a recipe that will make the times series have a regular spacing of one hours. The value `NA` is entered where there were no corresponding measurements for a time that was inserted. Lagging and leading a variable can now be done on one of the measurement variables. NOTE: NA will be inserted when lagging if there is a missing value in the measurement variable.
+
+```{r}
+wipp30_regular <- recipe(wipp30_irregular) |>
+  step_make_regular(time, delta = 1) |> 
+  prep() |>
+  bake(new_data = NULL)
+
+nrow(wipp30)
+nrow(wipp30_regular)
+sum(is.na(wipp30_regular))
+
+```
+
+
+One other key point is that this can be used when monitoring frequencies are different.  For example, suppose you monitored barometric pressure every hour but water level every day. We can do the barometric pressure lagging every hour, but use daily water level measurements. In other words, we can get a barometric response at a higher time scale than our water level monitoring interval.  For this example doing nothing or using `step_naomit` will achieve the same result, however, `step_make_regular` allows finer control over the subsetting and can be used to speed up the model fitting process.
+
+```{r fig.height=4, fig.width = 8, dev='svg'}
+wipp30_uneven <- wipp30
+n_sub <- 24
+wipp30_uneven[!wipp30_uneven$time %in% seq(n_sub, max(wipp30_uneven$time), n_sub), 'wl'] <- NA
+head(wipp30_uneven)
+
+# daily water level measurements
+rec_daily <- recipe(wl ~ baro + time + et, wipp30_uneven) |>
+  step_distributed_lag(baro, knots = log_lags(4, n_sub)) |>
+  step_lead_lag(et, lag = 0:6) |>
+  step_make_regular(time, delta = n_sub, start = n_sub) |>
+  step_ns(time, deg_free = 48) |>
+  prep() 
+wipp30_daily <- rec_daily |> bake(new_data = NULL)
+
+# hourly water level measurements
+rec_hourly <- recipe(wl ~ baro + time + et, wipp30) |>
+  step_distributed_lag(baro, knots = log_lags(4, n_sub)) |>
+  step_lead_lag(et, lag = 0:6) |>
+  step_ns(time, deg_free = 48) |>
+  prep() 
+wipp30_hourly <- rec_hourly |> bake(new_data = NULL)
+
+# fit linear models to the dataset
+fit_daily  <- lm(wl~., wipp30_daily)
+fit_hourly <- lm(wl~., wipp30_hourly)
+
+model_results <- rbind(broom::glance(fit_daily), broom::glance(fit_hourly))
+model_results$name <- c('Daily', 'Hourly')
+
+knitr::kable(model_results[,c('name', 'r.squared', 'sigma', 
+                              'AIC', 'BIC', 'df', 'nobs')])
+coef_results <- data.frame(
+  Term   = broom::tidy(fit_daily)[['term']],
+  Daily  = broom::tidy(fit_daily)[['estimate']],
+  Hourly = broom::tidy(fit_hourly)[['estimate']]
+)
+knitr::kable(coef_results)
+# Get response functions
+resp_hourly <- response(fit_hourly, rec_hourly)
+resp_hourly <- resp_hourly[resp_hourly$name == 'cumulative', ]
+resp_hourly <- resp_hourly[resp_hourly$term == 'baro', ]
+resp_daily  <- response(fit_daily, rec_daily)
+resp_daily  <- resp_daily[resp_daily$name == 'cumulative', ]
+resp_daily  <- resp_daily[resp_daily$term == 'baro', ]
+resp_hourly$interval <- 'Hourly'
+resp_daily$interval <- 'Daily'
+
+resp <- rbind(resp_hourly, resp_daily)
+ggplot(resp, aes(x = x, y = -value, color = interval, linetype = interval)) +
+  ggtitle('A: Barometric Loading Response') + 
+  xlab('lag (hours)') +
+  ylab('Cumulative Response') +
+  scale_y_continuous(limits = c(0, 1)) +
+  scale_color_brewer() +
+  geom_abline(intercept = 0.7, slope = 0, color = '#00000050', linetype = 'dashed') +
+  geom_line(size = 1) + 
+  theme_bw()
+
+```
+
+
+

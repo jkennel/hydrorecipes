@@ -31,7 +31,7 @@ get_end <- function(n, n_out, lag, n_subset) {
 #'
 #' @noRd
 #'
-shift_subset <- function(x, lag = 0L, n_subset = 1L, n_shift = 0L) {
+shift_subset <- function(x, lag, n_subset, n_shift) {
     .Call(`_hydrorecipes_shift_subset`, x, lag, n_subset, n_shift)
 }
 
@@ -49,7 +49,7 @@ shift_subset <- function(x, lag = 0L, n_subset = 1L, n_shift = 0L) {
 #' @return matrix with lagged values
 #'
 #' @noRd
-lag_matrix <- function(x, lags, suffix, prefix, n_subset = 1L, n_shift = 0L) {
+lag_matrix <- function(x, lags, suffix, prefix, n_subset, n_shift) {
     .Call(`_hydrorecipes_lag_matrix`, x, lags, suffix, prefix, n_subset, n_shift)
 }
 
@@ -69,11 +69,15 @@ lag_matrix <- function(x, lags, suffix, prefix, n_subset = 1L, n_shift = 0L) {
 #'
 #' @noRd
 #'
-distributed_lag_parallel <- function(x, bl, lag_max, n_subset = 1L, n_shift = 0L) {
+distributed_lag_parallel <- function(x, bl, lag_max, n_subset, n_shift) {
     .Call(`_hydrorecipes_distributed_lag_parallel`, x, bl, lag_max, n_subset, n_shift)
 }
 
 arma_shift <- function(x, n) {
     .Call(`_hydrorecipes_arma_shift`, x, n)
+}
+
+to_dummy <- function(x, n_fact) {
+    .Call(`_hydrorecipes_to_dummy`, x, n_fact)
 }
 

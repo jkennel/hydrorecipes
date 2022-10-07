@@ -80,4 +80,13 @@ test_that("response works", {
   expect_output(tmp <- response(fit_dl, rec_dl, verbose = TRUE))
 
 
+  # multiple steps
+  rec <- recipe(wl~., wipp30) |>
+    step_lead_lag(baro, lag = 0:5) |>
+    step_lead_lag(et, lag = 0:6) |>
+    prep()
+  input <- rec |> bake(new_data = NULL)
+  fit  <- lm(wl~., input)
+  resp <- response(fit, rec)
+
 })

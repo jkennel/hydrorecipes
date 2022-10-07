@@ -77,7 +77,7 @@ ggplot(tibble(x = transducer$datetime[wh], y = fit_toll_rasmussen$residuals)) +
   theme_bw()
 ```
 
-## Modified Rasmussen  and Mote 2007
+## Modified Rasmussen and Mote 2007
 
 Next we will use the **recipes** package alone using a modified Rasmussen and 
 Mote, 2007 approach. We use logarithmically spaced lags instead of 

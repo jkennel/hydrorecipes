@@ -150,7 +150,7 @@ bake.step_lead_lag <- function(object, new_data, ...) {
 
   lag_mat <-
     lag_matrix(
-      x = as.matrix(new_data[,object$columns]),
+      x = as.matrix(new_data[, object$columns]),
       lags = object$lag,
       suffix = object$columns,
       prefix = object$prefix,

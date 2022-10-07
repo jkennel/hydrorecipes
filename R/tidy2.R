@@ -96,7 +96,8 @@ tidy2.recipe <- function(x, number = NA, id = NA, ...) {
                   'step_ns',
                   'step_intercept',
                   'step_lead_lag',
-                  'step_mutate')) {
+                  'step_mutate',
+                  'step_cut')) {
 
       res <- tidy2(x$steps[[number]], ...)
 
@@ -181,4 +182,19 @@ tidy2.step_mutate <- function(x, ...) {
 }
 
 
+#' @rdname tidy2.recipe
+#' @export
+tidy2.step_cut <- function(x, ...) {
+  if (is_trained(x)) {
+    term_names <- names(x$breaks)
+  } else {
+    term_names <- sel2char(x$terms)
+  }
+  res <- tibble(terms = term_names,
+                breaks = rep(x$breaks[[1]], length(term_names)))
+  res_step_name <- 'step_cut'
+  res$id <- x$id
+  res$key <- 'cut'
+  res
+}
 

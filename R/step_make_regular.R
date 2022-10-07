@@ -1,7 +1,8 @@
 #' Create a lead predictor
 #'
 #' `step_make_regular` creates a *specification* of a recipe step that
-#'   will generate an regularly spaced column.
+#'   will generate an regularly spaced column and fill in the other columns with
+#'   NA if missing.  It can also be used for subsetting.
 #'
 #' @inheritParams recipes::step_lag
 #' @param delta A single numeric. This is the spacing for the regular series.
@@ -34,6 +35,12 @@
 #'   bake(new_data = NULL)
 #' nrow(wipp30_complete)
 #'
+#' wipp30_subsample_2 <- recipe(wl~., data = wipp30_missing) |>
+#'   step_make_regular(time, delta = 2) |>
+#'   prep() |>
+#'   bake(new_data = NULL)
+#' nrow(wipp30_complete)
+#'
 #' @seealso [recipes::step_lag()] [step_distributed_lag()]
 step_make_regular <-
   function(recipe,
@@ -43,7 +50,6 @@ step_make_regular <-
            delta = 1,
            start = NULL,
            prefix = "make_regular_",
-           # keep_original_cols = FALSE,
            columns = NULL,
            skip = FALSE,
            id = rand_id("make_regular")) {
@@ -62,7 +68,6 @@ step_make_regular <-
         delta = delta,
         start = start,
         prefix = prefix,
-        # keep_original_cols = keep_original_cols,
         columns = columns,
         skip = skip,
         id = id
@@ -80,7 +85,6 @@ step_make_regular_new <-
       delta = delta,
       start = start,
       prefix = prefix,
-      # keep_original_cols = keep_original_cols,
       columns = columns,
       skip = skip,
       id = id
@@ -103,7 +107,6 @@ prep.step_make_regular <- function(x, training, info = NULL, ...) {
     delta = x$delta,
     start = x$start,
     prefix = x$prefix,
-    # keep_original_cols = x$keep_original_cols,
     columns = col_names,
     skip = x$skip,
     id = x$id
@@ -118,7 +121,7 @@ bake.step_make_regular <- function(object, new_data, ...) {
   new_data <- new_data[order(new_data[[object$columns]]),]
 
   # create sequence
-  rng <- as.numeric(range(new_data[[object$columns]]))
+  rng <- as.numeric(range(new_data[[object$columns]], na.rm = TRUE))
 
   if(!is.null(object$start)) {
     if(object$start <= rng[2]){
@@ -131,13 +134,7 @@ bake.step_make_regular <- function(object, new_data, ...) {
   names(new) <- object$columns
 
   # do join
-  new_data <- left_join(new, new_data, by = object$columns)
-
-  # keep_original_cols <- get_keep_original_cols(object)
-  # if (!keep_original_cols) {
-  #   new_data <-
-  #     new_data[, !(colnames(new_data) %in% object$columns), drop = FALSE]
-  # }
+  left_join(new, new_data, by = object$columns)
 
 
 }
