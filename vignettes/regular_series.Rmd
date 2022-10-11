@@ -54,7 +54,7 @@ sum(is.na(wipp30_regular))
 
 One other key point is that this can be used when monitoring frequencies are different.  For example, suppose you monitored barometric pressure every hour but water level every day. We can do the barometric pressure lagging every hour, but use daily water level measurements. In other words, we can get a barometric response at a higher time scale than our water level monitoring interval.  For this example doing nothing or using `step_naomit` will achieve the same result, however, `step_make_regular` allows finer control over the subsetting and can be used to speed up the model fitting process.
 
-```{r fig.height=4, fig.width = 8, dev='svg'}
+```{r fig.height=4, fig.width = 8, dev='png'}
 wipp30_uneven <- wipp30
 n_sub <- 24
 wipp30_uneven[!wipp30_uneven$time %in% seq(n_sub, max(wipp30_uneven$time), n_sub), 'wl'] <- NA
