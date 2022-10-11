@@ -45,6 +45,9 @@ options are 'dummy', 'one_hot', 'factor' or 'integer' encoding. Defaults to
 \item{keep_original_cols}{A logical to keep the original variables in the
 output. Defaults to \code{FALSE}.}
 
+\item{columns}{A character string of variable names that will
+be populated (eventually) by the \code{terms} argument.}
+
 \item{skip}{A logical. Should the step be skipped when the
 recipe is baked by \code{\link[recipes:bake]{bake()}}? While all operations are baked
 when \code{\link[recipes:prep]{prep()}} is run, some operations may not be able to be

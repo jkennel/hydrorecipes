@@ -6,6 +6,7 @@
 #'
 #' @inheritParams recipes::step_dummy
 #' @inheritParams recipes::step_cut
+#' @inheritParams recipes::step_lag
 #' @inheritParams base::findInterval
 #' @param encoding Character string specifying the type of encoding to use. The
 #'   options are 'dummy', 'one_hot', 'factor' or 'integer' encoding. Defaults to
