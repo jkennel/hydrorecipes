@@ -57,7 +57,8 @@ of any existing operations.
 }
 \description{
 \code{step_make_regular} creates a \emph{specification} of a recipe step that
-will generate an regularly spaced column.
+will generate an regularly spaced column and fill in the other columns with
+NA if missing.  It can also be used for subsetting.
 }
 \details{
 This step sorts the data and converts a column to a regular series.
@@ -71,6 +72,12 @@ wipp30_missing <- wipp30[-(2:10),]
 nrow(wipp30_missing)
 wipp30_complete <- recipe(wl~., data = wipp30_missing) |>
   step_make_regular(time) |>
+  prep() |>
+  bake(new_data = NULL)
+nrow(wipp30_complete)
+
+wipp30_subsample_2 <- recipe(wl~., data = wipp30_missing) |>
+  step_make_regular(time, delta = 2) |>
   prep() |>
   bake(new_data = NULL)
 nrow(wipp30_complete)

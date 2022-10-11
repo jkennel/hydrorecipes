@@ -176,7 +176,6 @@ Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericMatrix& x,
   int n_var = x.ncol();
 
 
-
   Rcpp::CharacterVector nm(n_col * n_var);
   Rcpp::NumericMatrix out = Rcpp::NumericMatrix(n_row, n_col * n_var);
 
@@ -199,38 +198,38 @@ Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericMatrix& x,
 
 
 
-struct dl_worker: public Worker {
-  // input vector of matrices
-  const arma::vec& bv;
-  const arma::mat& bl;
-  arma::mat& cb;
-  int lag_max;
-  int n_subset;
-  int offset;
-
-
-  // initialize from Rcpp input and output matrixes (the RMatrix class
-  // can be automatically converted to from the Rcpp matrix type)
-  dl_worker(const arma::vec& bv,
-            const arma::mat& bl,
-            arma::mat& cb,
-            int lag_max,
-            int n_subset,
-            int offset)
-    : bv(bv), bl(bl), cb(cb), lag_max(lag_max), n_subset(n_subset), offset(offset) {}
-
-  void operator() (std::size_t begin, std::size_t end) {
-
-
-    for (std::size_t i = begin; i < end; i++) {
-
-      int wh = (i * n_subset) + offset;
-
-      cb.col(i) = bl * bv.subvec(wh, wh + lag_max);
-
-    }
-  };
-};
+// struct dl_worker: public Worker {
+//   // input vector of matrices
+//   const arma::vec& bv;
+//   const arma::mat& bl;
+//   arma::mat& cb;
+//   int lag_max;
+//   int n_subset;
+//   int offset;
+//
+//
+//   // initialize from Rcpp input and output matrixes (the RMatrix class
+//   // can be automatically converted to from the Rcpp matrix type)
+//   dl_worker(const arma::vec& bv,
+//             const arma::mat& bl,
+//             arma::mat& cb,
+//             int lag_max,
+//             int n_subset,
+//             int offset)
+//     : bv(bv), bl(bl), cb(cb), lag_max(lag_max), n_subset(n_subset), offset(offset) {}
+//
+//   void operator() (std::size_t begin, std::size_t end) {
+//
+//
+//     for (std::size_t i = begin; i < end; i++) {
+//
+//       int wh = (i * n_subset) + offset;
+//
+//       cb.col(i) = bl * bv.subvec(wh, wh + lag_max);
+//
+//     }
+//   };
+// };
 
 
 //==============================================================================
@@ -251,15 +250,15 @@ struct dl_worker: public Worker {
 //' @noRd
 //'
 // [[Rcpp::export]]
-arma::mat distributed_lag_parallel(const arma::vec& x,
-                                   const arma::mat& bl,
-                                   int lag_max,
-                                   int n_subset,
-                                   int n_shift) {
+Eigen::MatrixXd distributed_lag_parallel(const Eigen::VectorXd& x,
+                                         const Eigen::MatrixXd& bl,
+                                         int lag_max,
+                                         int n_subset,
+                                         int n_shift) {
 
   // result matrix
-  int n_row = x.n_elem;
-  int n_col = bl.n_rows;
+  int n_row = x.size();
+  int n_col = bl.rows();
 
   // added
   //int lag;
@@ -314,23 +313,35 @@ arma::mat distributed_lag_parallel(const arma::vec& x,
   // }
 
 
-  arma::mat cb(n_col, n_out, fill::value(NA_REAL));
-  // cb = cb.fill(NA_REAL);
+  Eigen::MatrixXd cb(n_col, n_out);
+  cb = cb.setConstant(NA_REAL);
 
-  dl_worker calc_dl(x, bl, cb, lag_max, n_subset, offset);
+  // dl_worker calc_dl(x, bl, cb, lag_max, n_subset, offset);
 
-  RcppParallel::parallelFor(n_out - end, n_out - start, calc_dl);
-  arma::inplace_trans(cb);
-  return arma::flipud(cb);
+  // RcppParallel::parallelFor(n_out - end, n_out - start, calc_dl);
+
+  // for (std::size_t i = n_out - end; i < n_out - start; i++) {
+  RcppThread::parallelFor( n_out - end, n_out - start, [&] (size_t i) {
+
+    int wh = (i * n_subset) + offset;
+
+    cb.col(i) = bl * x.segment(wh, lag_max);
+
+  });
+
+  cb.transposeInPlace();
+
+  // arma::inplace_trans(cb);
+  return cb.colwise().reverse();
 
 }
 
 
-// [[Rcpp::export]]
-arma::mat arma_shift(arma::mat x, int n) {
-  arma::mat out = arma::shift(x, n);
-  return out;
-}
+// // [[Rcpp::export]]
+// arma::mat arma_shift(arma::mat x, int n) {
+//   arma::mat out = arma::shift(x, n);
+//   return out;
+// }
 
 
 /***R
@@ -338,5 +349,36 @@ n <- 100000L
 m <- as.matrix(1:n)
 v <- 1:n
 hydrorecipes:::lag_matrix(m, -1, suffix = 'a', prefix = 'b', n_subset = 2, n_shift = 0)
+
+
+library(data.table)
+data(wipp30)
+max_time_lag <- 1000
+n_lags <- 10
+n <- 1e6
+wl <- rnorm(n)
+baro <- rnorm(n)
+wi <- data.table(wl, baro)
+rec <- recipe(wl~baro, wi)
+
+
+# probably needs a few more subset tests
+a <- bench::mark(
+  sub1 <- rec |>
+    step_distributed_lag(baro,
+                         knots = c(0, 5000),
+                         n_subset = 10) |>
+    prep() |>
+    bake(new_data = NULL),
+  sub2 <- rec |>
+    step_distributed_lag(baro,
+                         knots = c(0, 6000, 9000)) |>
+    prep() |>
+    bake(new_data = NULL),
+  check = FALSE
+)
+data.table::setDT(a)
+a
+
 
 */

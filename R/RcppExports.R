@@ -73,10 +73,6 @@ distributed_lag_parallel <- function(x, bl, lag_max, n_subset, n_shift) {
     .Call(`_hydrorecipes_distributed_lag_parallel`, x, bl, lag_max, n_subset, n_shift)
 }
 
-arma_shift <- function(x, n) {
-    .Call(`_hydrorecipes_arma_shift`, x, n)
-}
-
 to_dummy <- function(x, n_fact) {
     .Call(`_hydrorecipes_to_dummy`, x, n_fact)
 }

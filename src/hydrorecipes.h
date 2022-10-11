@@ -1,14 +1,26 @@
-#define ARMA_DONT_PRINT_ERRORS
-// #define ARMA_USE_TBB_ALLOC
+// [[Rcpp::depends(RcppEigen)]]
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(RcppThread)]]
 
-#include <RcppArmadillo.h>
-#include <RcppParallel.h>
+#include <RcppEigen.h>
+#include <Eigen/StdVector>
 
-using namespace RcppParallel;
-using namespace arma;
+#include <RcppThread.h>
+
+using namespace Eigen;
+using Eigen::MatrixXd;
+using Eigen::MatrixXi;
+using Eigen::VectorXd;
+using Eigen::VectorXi;
+using Eigen::ArrayXd;
+using Eigen::ArrayXi;
+using Eigen::MatrixXcd;
+using Eigen::VectorXcd;
+using Eigen::Vector3d;
+using Eigen::Vector2d;
+
 using namespace Rcpp;
 
-// [[Rcpp::depends(RcppArmadillo)]]
 
 // to_dummy.cpp
 IntegerMatrix to_dummy(const IntegerVector& x,
@@ -30,9 +42,8 @@ NumericMatrix lag_matrix(const NumericMatrix& x,
                          std::string prefix,
                          int n_subset = 1,
                          int n_shift = 0);
-mat distributed_lag_parallel(const vec& x,
-                             const mat& bl,
+Eigen::MatrixXd distributed_lag_parallel(const Eigen::VectorXd& x,
+                             const Eigen::MatrixXd& bl,
                              int lag_max,
                              int n_subset = 1,
                              int n_shift = 0);
-mat arma_shift(mat x, int n);
