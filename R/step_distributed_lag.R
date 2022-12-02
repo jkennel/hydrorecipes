@@ -438,3 +438,8 @@ tidy2.step_distributed_lag <- function(x, ...) {
 
   res
 }
+
+#' @export
+required_pkgs.step_distributed_lag <- function(x, ...) {
+  c("hydrorecipes", "fftw")
+}

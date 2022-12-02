@@ -201,5 +201,7 @@ tidy2.step_find_interval <- function(x, ...) {
 
 }
 
-
-
+#' @export
+required_pkgs.step_find_interval <- function(x, ...) {
+  c("hydrorecipes", "collapse")
+}

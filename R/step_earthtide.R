@@ -273,3 +273,8 @@ tidy.step_earthtide <- function(x, ...) {
 
   tidy2.step_earthtide(x, ...)
 }
+
+#' @export
+required_pkgs.step_earthtide <- function(x, ...) {
+  c("hydrorecipes", "earthtide")
+}

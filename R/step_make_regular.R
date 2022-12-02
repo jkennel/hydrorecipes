@@ -168,5 +168,7 @@ tidy2.step_make_regular <- function(x, ...) {
 
 }
 
-
-
+#' @export
+required_pkgs.step_make_regular <- function(x, ...) {
+  c("hydrorecipes")
+}
