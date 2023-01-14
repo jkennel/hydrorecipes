@@ -7,6 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
 ```{r, include = FALSE}
 
 knitr::opts_chunk$set(
@@ -26,7 +27,6 @@ The **hydrorecipes** package aims to provide a few steps to improve the analysis
 library(hydrorecipes)
 library(earthtide)
 library(ggplot2)
-library(splines2)
 library(tidyr)
 library(broom)
 
@@ -129,7 +129,7 @@ wave_groups <- wave_groups[wave_groups$start > 0.5, ]
 latitude  <- 34.0
 longitude <- -118.5
 rec_dl <- recipe(wl~baro+datetime_num, transducer) |>
-  step_distributed_lag(baro, spline_fun = splines2::bSpline,
+  step_distributed_lag(baro, spline_fun = splines::bs,
                        knots = log_lags(15, 86400 * 2 / 120)) |>
   step_earthtide(datetime_num,
                  latitude = latitude,

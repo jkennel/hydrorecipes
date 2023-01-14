@@ -3,15 +3,12 @@
 \name{response}
 \alias{response}
 \alias{response.lm}
-\alias{response.cv.glmnet}
 \alias{response.numeric}
 \title{response}
 \usage{
 response(fit, rec, verbose = FALSE, ...)
 
 \method{response}{lm}(fit, rec, verbose = FALSE, ...)
-
-\method{response}{cv.glmnet}(fit, rec, verbose = FALSE, ...)
 
 \method{response}{numeric}(fit, rec, verbose = FALSE, ...)
 }

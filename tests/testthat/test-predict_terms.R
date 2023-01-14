@@ -85,16 +85,16 @@ test_that("predict_terms works", {
   expect_equal(sum(is.na(pred)), 86400 * 2 * 2 / 120)
 
 
-  library(glmnet)
-  xy <- na.omit(input_dl)
-  x <- as.matrix(input_dl[, -1])
-  y <- input_dl[['wl']]
-  fit_cv <- cv.glmnet(x, y)
-  pred <- predict_terms(fit_cv, rec_dl, xy)
-  expect_equal(nrow(pred), nrow(xy))
-  expect_equal(ncol(pred), 5)
-  expect_equal(names(pred), c('distributed_lag_baro', 'earthtide_datetime_num', 'ns_datetime_num', 'intercept', 'predicted'))
-  expect_equal((nrow(transducer) - nrow(pred))*2, 86400 * 2 * 2 / 120)
+  # library(glmnet)
+  # xy <- na.omit(input_dl)
+  # x <- as.matrix(input_dl[, -1])
+  # y <- input_dl[['wl']]
+  # fit_cv <- cv.glmnet(x, y)
+  # pred <- predict_terms(fit_cv, rec_dl, xy)
+  # expect_equal(nrow(pred), nrow(xy))
+  # expect_equal(ncol(pred), 5)
+  # expect_equal(names(pred), c('distributed_lag_baro', 'earthtide_datetime_num', 'ns_datetime_num', 'intercept', 'predicted'))
+  # expect_equal((nrow(transducer) - nrow(pred))*2, 86400 * 2 * 2 / 120)
 
 
 })

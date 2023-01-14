@@ -65,16 +65,16 @@ test_that("response works", {
   expect_equal(unique(resp[resp$term == 'baro',]$x), 0:(86400*2/120))
   expect_equal(unique(resp[resp$term == 'datetime_num',]$x), tidal_freqs)
 
-  library(glmnet)
-  xy <- na.omit(input_dl)
-  x <- as.matrix(xy[, -1])
-  y <- xy[['wl']]
-  fit_cv <- cv.glmnet(x, y, family = 'gaussian', alpha = 0.1)
-  resp <- response(fit_cv, rec_dl)
-  expect_equal(length(unique(resp$term)), 2)
-  expect_equal(nrow(resp), 86400 * 2 / 120 * 2 + 2 + nrow(wave_groups) * 4)
-  expect_equal(unique(resp[resp$term == 'baro',]$x), 0:(86400*2/120))
-  expect_equal(unique(resp[resp$term == 'datetime_num',]$x), tidal_freqs)
+  # library(glmnet)
+  # xy <- na.omit(input_dl)
+  # x <- as.matrix(xy[, -1])
+  # y <- xy[['wl']]
+  # fit_cv <- cv.glmnet(x, y, family = 'gaussian', alpha = 0.1)
+  # resp <- response(fit_cv, rec_dl)
+  # expect_equal(length(unique(resp$term)), 2)
+  # expect_equal(nrow(resp), 86400 * 2 / 120 * 2 + 2 + nrow(wave_groups) * 4)
+  # expect_equal(unique(resp[resp$term == 'baro',]$x), 0:(86400*2/120))
+  # expect_equal(unique(resp[resp$term == 'datetime_num',]$x), tidal_freqs)
 
 
   expect_output(tmp <- response(fit_dl, rec_dl, verbose = TRUE))

@@ -39,19 +39,6 @@ predict_terms.lm <- function(fit, rec, data, ...) {
 }
 
 
-#' @rdname predict_terms
-#' @export
-#'
-predict_terms.cv.glmnet <- function(fit, rec, data, ...) {
-
-  co        <- coefficients(fit)
-  co_names  <- rownames(co)
-  co        <- as.vector(co)
-  names(co) <- co_names
-
-  predict_terms.numeric(co, rec, data, ...)
-
-}
 
 
 #' @rdname predict_terms
@@ -91,3 +78,19 @@ predict_terms.numeric <- function(fit, rec, data, ...) {
   df
 
 }
+
+
+
+# #' @rdname predict_terms
+# #' @export
+# #'
+# predict_terms.cv.glmnet <- function(fit, rec, data, ...) {
+#
+#   co        <- coefficients(fit)
+#   co_names  <- rownames(co)
+#   co        <- as.vector(co)
+#   names(co) <- co_names
+#
+#   predict_terms.numeric(co, rec, data, ...)
+#
+# }

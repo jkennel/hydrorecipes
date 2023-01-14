@@ -12,6 +12,533 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// b_spline
+Eigen::MatrixXd b_spline(const Eigen::ArrayXd& x, const Eigen::ArrayXd& knots, size_t degree);
+RcppExport SEXP _hydrorecipes_b_spline(SEXP xSEXP, SEXP knotsSEXP, SEXP degreeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::ArrayXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Eigen::ArrayXd& >::type knots(knotsSEXP);
+    Rcpp::traits::input_parameter< size_t >::type degree(degreeSEXP);
+    rcpp_result_gen = Rcpp::wrap(b_spline(x, knots, degree));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fft_matrix
+Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x, size_t n_new);
+RcppExport SEXP _hydrorecipes_fft_matrix(SEXP xSEXP, SEXP n_newSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_new(n_newSEXP);
+    rcpp_result_gen = Rcpp::wrap(fft_matrix(x, n_new));
+    return rcpp_result_gen;
+END_RCPP
+}
+// convolve_vec
+Eigen::VectorXd convolve_vec(Eigen::VectorXd x, Eigen::VectorXd y);
+RcppExport SEXP _hydrorecipes_convolve_vec(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(convolve_vec(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// convolve_tf
+Eigen::VectorXd convolve_tf(Eigen::VectorXd x, Eigen::VectorXcd y);
+RcppExport SEXP _hydrorecipes_convolve_tf(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXcd >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(convolve_tf(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// convolve_matrix
+Eigen::MatrixXd convolve_matrix(const Eigen::VectorXd& x, const Eigen::MatrixXd& y, bool remove_partial, bool reverse);
+RcppExport SEXP _hydrorecipes_convolve_matrix(SEXP xSEXP, SEXP ySEXP, SEXP remove_partialSEXP, SEXP reverseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< bool >::type remove_partial(remove_partialSEXP);
+    Rcpp::traits::input_parameter< bool >::type reverse(reverseSEXP);
+    rcpp_result_gen = Rcpp::wrap(convolve_matrix(x, y, remove_partial, reverse));
+    return rcpp_result_gen;
+END_RCPP
+}
+// multiply_ffts
+Eigen::MatrixXcd multiply_ffts(Eigen::MatrixXcd& x);
+RcppExport SEXP _hydrorecipes_multiply_ffts(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXcd& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(multiply_ffts(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fill_lower_left
+Eigen::MatrixXcd fill_lower_left(Eigen::MatrixXcd& x, size_t start);
+RcppExport SEXP _hydrorecipes_fill_lower_left(SEXP xSEXP, SEXP startSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXcd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< size_t >::type start(startSEXP);
+    rcpp_result_gen = Rcpp::wrap(fill_lower_left(x, start));
+    return rcpp_result_gen;
+END_RCPP
+}
+// spec_pgram
+Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper);
+RcppExport SEXP _hydrorecipes_spec_pgram(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type spans(spansSEXP);
+    Rcpp::traits::input_parameter< bool >::type detrend(detrendSEXP);
+    Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
+    Rcpp::traits::input_parameter< double >::type taper(taperSEXP);
+    rcpp_result_gen = Rcpp::wrap(spec_pgram(x, spans, detrend, demean, taper));
+    return rcpp_result_gen;
+END_RCPP
+}
+// spec_welch
+Eigen::MatrixXcd spec_welch(const Eigen::MatrixXd& x, size_t length_subset, double overlap, Eigen::VectorXd window);
+RcppExport SEXP _hydrorecipes_spec_welch(SEXP xSEXP, SEXP length_subsetSEXP, SEXP overlapSEXP, SEXP windowSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< size_t >::type length_subset(length_subsetSEXP);
+    Rcpp::traits::input_parameter< double >::type overlap(overlapSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type window(windowSEXP);
+    rcpp_result_gen = Rcpp::wrap(spec_welch(x, length_subset, overlap, window));
+    return rcpp_result_gen;
+END_RCPP
+}
+// solve_cplx_parallel
+Eigen::MatrixXcd solve_cplx_parallel(const Eigen::MatrixXcd& x);
+RcppExport SEXP _hydrorecipes_solve_cplx_parallel(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXcd& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_cplx_parallel(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// solve_cplx_irr
+Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x, size_t power, size_t n_groups, size_t min_aggregate);
+RcppExport SEXP _hydrorecipes_solve_cplx_irr(SEXP xSEXP, SEXP powerSEXP, SEXP n_groupsSEXP, SEXP min_aggregateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXcd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< size_t >::type power(powerSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_groups(n_groupsSEXP);
+    Rcpp::traits::input_parameter< size_t >::type min_aggregate(min_aggregateSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_cplx_irr(x, power, n_groups, min_aggregate));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ordinary_coherence_phase
+Eigen::MatrixXd ordinary_coherence_phase(const Eigen::ArrayXXcd& x);
+RcppExport SEXP _hydrorecipes_ordinary_coherence_phase(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::ArrayXXcd& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(ordinary_coherence_phase(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// frequency_to_time_domain
+Eigen::MatrixXd frequency_to_time_domain(Eigen::MatrixXcd& x);
+RcppExport SEXP _hydrorecipes_frequency_to_time_domain(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXcd& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(frequency_to_time_domain(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// interpolate_frf
+Eigen::MatrixXcd interpolate_frf(const Eigen::ArrayXd& x, const Eigen::MatrixXcd& y, Eigen::VectorXd& knots, size_t degree, const Eigen::ArrayXd& x_interp);
+RcppExport SEXP _hydrorecipes_interpolate_frf(SEXP xSEXP, SEXP ySEXP, SEXP knotsSEXP, SEXP degreeSEXP, SEXP x_interpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::ArrayXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXcd& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd& >::type knots(knotsSEXP);
+    Rcpp::traits::input_parameter< size_t >::type degree(degreeSEXP);
+    Rcpp::traits::input_parameter< const Eigen::ArrayXd& >::type x_interp(x_interpSEXP);
+    rcpp_result_gen = Rcpp::wrap(interpolate_frf(x, y, knots, degree, x_interp));
+    return rcpp_result_gen;
+END_RCPP
+}
+// transfer_pgram_smooth
+Eigen::MatrixXcd transfer_pgram_smooth(Eigen::MatrixXd& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper, double power, size_t n_groups);
+RcppExport SEXP _hydrorecipes_transfer_pgram_smooth(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP, SEXP powerSEXP, SEXP n_groupsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type spans(spansSEXP);
+    Rcpp::traits::input_parameter< bool >::type detrend(detrendSEXP);
+    Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
+    Rcpp::traits::input_parameter< double >::type taper(taperSEXP);
+    Rcpp::traits::input_parameter< double >::type power(powerSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_groups(n_groupsSEXP);
+    rcpp_result_gen = Rcpp::wrap(transfer_pgram_smooth(x, spans, detrend, demean, taper, power, n_groups));
+    return rcpp_result_gen;
+END_RCPP
+}
+// transfer_pgram
+Eigen::MatrixXcd transfer_pgram(Eigen::MatrixXd& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper);
+RcppExport SEXP _hydrorecipes_transfer_pgram(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type spans(spansSEXP);
+    Rcpp::traits::input_parameter< bool >::type detrend(detrendSEXP);
+    Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
+    Rcpp::traits::input_parameter< double >::type taper(taperSEXP);
+    rcpp_result_gen = Rcpp::wrap(transfer_pgram(x, spans, detrend, demean, taper));
+    return rcpp_result_gen;
+END_RCPP
+}
+// transfer_welch
+Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x, size_t length_subset, double overlap, Eigen::VectorXd window);
+RcppExport SEXP _hydrorecipes_transfer_welch(SEXP xSEXP, SEXP length_subsetSEXP, SEXP overlapSEXP, SEXP windowSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< size_t >::type length_subset(length_subsetSEXP);
+    Rcpp::traits::input_parameter< double >::type overlap(overlapSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type window(windowSEXP);
+    rcpp_result_gen = Rcpp::wrap(transfer_welch(x, length_subset, overlap, window));
+    return rcpp_result_gen;
+END_RCPP
+}
+// predict_pgram_frf
+Eigen::MatrixXd predict_pgram_frf(Eigen::MatrixXd& x, Eigen::VectorXi span);
+RcppExport SEXP _hydrorecipes_predict_pgram_frf(SEXP xSEXP, SEXP spanSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXi >::type span(spanSEXP);
+    rcpp_result_gen = Rcpp::wrap(predict_pgram_frf(x, span));
+    return rcpp_result_gen;
+END_RCPP
+}
+// index_from_i_j
+size_t index_from_i_j(size_t i, size_t j, size_t n_col);
+RcppExport SEXP _hydrorecipes_index_from_i_j(SEXP iSEXP, SEXP jSEXP, SEXP n_colSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type i(iSEXP);
+    Rcpp::traits::input_parameter< size_t >::type j(jSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_col(n_colSEXP);
+    rcpp_result_gen = Rcpp::wrap(index_from_i_j(i, j, n_col));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_column_number
+size_t get_column_number(size_t n);
+RcppExport SEXP _hydrorecipes_get_column_number(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_column_number(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// index_from_j_i
+size_t index_from_j_i(size_t i, size_t j, size_t n_col);
+RcppExport SEXP _hydrorecipes_index_from_j_i(SEXP iSEXP, SEXP jSEXP, SEXP n_colSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type i(iSEXP);
+    Rcpp::traits::input_parameter< size_t >::type j(jSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_col(n_colSEXP);
+    rcpp_result_gen = Rcpp::wrap(index_from_j_i(i, j, n_col));
+    return rcpp_result_gen;
+END_RCPP
+}
+// next_n_eigen
+size_t next_n_eigen(size_t n);
+RcppExport SEXP _hydrorecipes_next_n_eigen(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(next_n_eigen(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pad_vector
+Eigen::VectorXd pad_vector(Eigen::VectorXd x, size_t n_old, size_t n_new);
+RcppExport SEXP _hydrorecipes_pad_vector(SEXP xSEXP, SEXP n_oldSEXP, SEXP n_newSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_old(n_oldSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_new(n_newSEXP);
+    rcpp_result_gen = Rcpp::wrap(pad_vector(x, n_old, n_new));
+    return rcpp_result_gen;
+END_RCPP
+}
+// detrend_matrix
+Eigen::MatrixXd detrend_matrix(const Eigen::MatrixXd& x);
+RcppExport SEXP _hydrorecipes_detrend_matrix(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(detrend_matrix(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// demean_matrix
+Eigen::MatrixXd demean_matrix(const Eigen::MatrixXd& x);
+RcppExport SEXP _hydrorecipes_demean_matrix(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(demean_matrix(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// detrend_and_demean_matrix
+Eigen::MatrixXd detrend_and_demean_matrix(const Eigen::MatrixXd& x, bool detrend, bool demean);
+RcppExport SEXP _hydrorecipes_detrend_and_demean_matrix(SEXP xSEXP, SEXP detrendSEXP, SEXP demeanSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< bool >::type detrend(detrendSEXP);
+    Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
+    rcpp_result_gen = Rcpp::wrap(detrend_and_demean_matrix(x, detrend, demean));
+    return rcpp_result_gen;
+END_RCPP
+}
+// modified_daniell
+Eigen::VectorXd modified_daniell(Eigen::VectorXi spans, size_t n);
+RcppExport SEXP _hydrorecipes_modified_daniell(SEXP spansSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXi >::type spans(spansSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(modified_daniell(spans, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kernel_apply
+Eigen::MatrixXcd kernel_apply(Eigen::MatrixXcd& x, Eigen::VectorXd& y);
+RcppExport SEXP _hydrorecipes_kernel_apply(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXcd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd& >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(kernel_apply(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// spec_taper
+Eigen::VectorXd spec_taper(size_t n_row, double p);
+RcppExport SEXP _hydrorecipes_spec_taper(SEXP n_rowSEXP, SEXP pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n_row(n_rowSEXP);
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    rcpp_result_gen = Rcpp::wrap(spec_taper(n_row, p));
+    return rcpp_result_gen;
+END_RCPP
+}
+// make_groups
+Eigen::VectorXi make_groups(size_t n_row, size_t power, size_t n_groups, size_t min_aggregate);
+RcppExport SEXP _hydrorecipes_make_groups(SEXP n_rowSEXP, SEXP powerSEXP, SEXP n_groupsSEXP, SEXP min_aggregateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n_row(n_rowSEXP);
+    Rcpp::traits::input_parameter< size_t >::type power(powerSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_groups(n_groupsSEXP);
+    Rcpp::traits::input_parameter< size_t >::type min_aggregate(min_aggregateSEXP);
+    rcpp_result_gen = Rcpp::wrap(make_groups(n_row, power, n_groups, min_aggregate));
+    return rcpp_result_gen;
+END_RCPP
+}
+// power_spaced
+Eigen::ArrayXd power_spaced(size_t n, double min, double max, double power);
+RcppExport SEXP _hydrorecipes_power_spaced(SEXP nSEXP, SEXP minSEXP, SEXP maxSEXP, SEXP powerSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type min(minSEXP);
+    Rcpp::traits::input_parameter< double >::type max(maxSEXP);
+    Rcpp::traits::input_parameter< double >::type power(powerSEXP);
+    rcpp_result_gen = Rcpp::wrap(power_spaced(n, min, max, power));
+    return rcpp_result_gen;
+END_RCPP
+}
+// group_frequency
+Eigen::VectorXd group_frequency(Eigen::ArrayXd frequencies, size_t power, size_t n_groups, size_t min_aggregate);
+RcppExport SEXP _hydrorecipes_group_frequency(SEXP frequenciesSEXP, SEXP powerSEXP, SEXP n_groupsSEXP, SEXP min_aggregateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::ArrayXd >::type frequencies(frequenciesSEXP);
+    Rcpp::traits::input_parameter< size_t >::type power(powerSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_groups(n_groupsSEXP);
+    Rcpp::traits::input_parameter< size_t >::type min_aggregate(min_aggregateSEXP);
+    rcpp_result_gen = Rcpp::wrap(group_frequency(frequencies, power, n_groups, min_aggregate));
+    return rcpp_result_gen;
+END_RCPP
+}
+// determine_frequency
+Eigen::VectorXd determine_frequency(size_t n);
+RcppExport SEXP _hydrorecipes_determine_frequency(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(determine_frequency(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// check_ffts
+Eigen::MatrixXcd check_ffts(Eigen::MatrixXcd& x, double cutoff);
+RcppExport SEXP _hydrorecipes_check_ffts(SEXP xSEXP, SEXP cutoffSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXcd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type cutoff(cutoffSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_ffts(x, cutoff));
+    return rcpp_result_gen;
+END_RCPP
+}
+// which_indices
+Eigen::VectorXi which_indices(const Eigen::VectorXd& x, const Eigen::VectorXd& knots);
+RcppExport SEXP _hydrorecipes_which_indices(SEXP xSEXP, SEXP knotsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type knots(knotsSEXP);
+    rcpp_result_gen = Rcpp::wrap(which_indices(x, knots));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_hann
+Eigen::VectorXd window_hann(size_t n);
+RcppExport SEXP _hydrorecipes_window_hann(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_hann(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_tukey
+Eigen::VectorXd window_tukey(size_t n, double r);
+RcppExport SEXP _hydrorecipes_window_tukey(SEXP nSEXP, SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_tukey(n, r));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_hann_cplx
+Eigen::VectorXcd window_hann_cplx(size_t n);
+RcppExport SEXP _hydrorecipes_window_hann_cplx(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_hann_cplx(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_rectangle
+Eigen::VectorXd window_rectangle(size_t n);
+RcppExport SEXP _hydrorecipes_window_rectangle(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_rectangle(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_scale
+double window_scale(Eigen::VectorXd window, size_t n_new, size_t n_fft);
+RcppExport SEXP _hydrorecipes_window_scale(SEXP windowSEXP, SEXP n_newSEXP, SEXP n_fftSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type window(windowSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_new(n_newSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_fft(n_fftSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_scale(window, n_new, n_fft));
+    return rcpp_result_gen;
+END_RCPP
+}
+// harmonic_double
+Eigen::MatrixXd harmonic_double(const Eigen::VectorXd& x, const Eigen::RowVectorXd& frequency, double cycle_size);
+RcppExport SEXP _hydrorecipes_harmonic_double(SEXP xSEXP, SEXP frequencySEXP, SEXP cycle_sizeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Eigen::RowVectorXd& >::type frequency(frequencySEXP);
+    Rcpp::traits::input_parameter< double >::type cycle_size(cycle_sizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(harmonic_double(x, frequency, cycle_size));
+    return rcpp_result_gen;
+END_RCPP
+}
+// log_lags_eigen
+Eigen::ArrayXd log_lags_eigen(size_t n, size_t max_lag);
+RcppExport SEXP _hydrorecipes_log_lags_eigen(SEXP nSEXP, SEXP max_lagSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    Rcpp::traits::input_parameter< size_t >::type max_lag(max_lagSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_lags_eigen(n, max_lag));
+    return rcpp_result_gen;
+END_RCPP
+}
 // check_lag
 int check_lag(int n, int lag, int n_shift);
 RcppExport SEXP _hydrorecipes_check_lag(SEXP nSEXP, SEXP lagSEXP, SEXP n_shiftSEXP) {
@@ -79,14 +606,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // lag_matrix
-Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericMatrix& x, const Rcpp::IntegerVector& lags, Rcpp::CharacterVector suffix, std::string prefix, int n_subset, int n_shift);
+Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericMatrix& x, const Rcpp::IntegerVector& lags, const Rcpp::CharacterVector suffix, std::string prefix, int n_subset, int n_shift);
 RcppExport SEXP _hydrorecipes_lag_matrix(SEXP xSEXP, SEXP lagsSEXP, SEXP suffixSEXP, SEXP prefixSEXP, SEXP n_subsetSEXP, SEXP n_shiftSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type lags(lagsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type suffix(suffixSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::CharacterVector >::type suffix(suffixSEXP);
     Rcpp::traits::input_parameter< std::string >::type prefix(prefixSEXP);
     Rcpp::traits::input_parameter< int >::type n_subset(n_subsetSEXP);
     Rcpp::traits::input_parameter< int >::type n_shift(n_shiftSEXP);
@@ -123,6 +650,48 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_hydrorecipes_b_spline", (DL_FUNC) &_hydrorecipes_b_spline, 3},
+    {"_hydrorecipes_fft_matrix", (DL_FUNC) &_hydrorecipes_fft_matrix, 2},
+    {"_hydrorecipes_convolve_vec", (DL_FUNC) &_hydrorecipes_convolve_vec, 2},
+    {"_hydrorecipes_convolve_tf", (DL_FUNC) &_hydrorecipes_convolve_tf, 2},
+    {"_hydrorecipes_convolve_matrix", (DL_FUNC) &_hydrorecipes_convolve_matrix, 4},
+    {"_hydrorecipes_multiply_ffts", (DL_FUNC) &_hydrorecipes_multiply_ffts, 1},
+    {"_hydrorecipes_fill_lower_left", (DL_FUNC) &_hydrorecipes_fill_lower_left, 2},
+    {"_hydrorecipes_spec_pgram", (DL_FUNC) &_hydrorecipes_spec_pgram, 5},
+    {"_hydrorecipes_spec_welch", (DL_FUNC) &_hydrorecipes_spec_welch, 4},
+    {"_hydrorecipes_solve_cplx_parallel", (DL_FUNC) &_hydrorecipes_solve_cplx_parallel, 1},
+    {"_hydrorecipes_solve_cplx_irr", (DL_FUNC) &_hydrorecipes_solve_cplx_irr, 4},
+    {"_hydrorecipes_ordinary_coherence_phase", (DL_FUNC) &_hydrorecipes_ordinary_coherence_phase, 1},
+    {"_hydrorecipes_frequency_to_time_domain", (DL_FUNC) &_hydrorecipes_frequency_to_time_domain, 1},
+    {"_hydrorecipes_interpolate_frf", (DL_FUNC) &_hydrorecipes_interpolate_frf, 5},
+    {"_hydrorecipes_transfer_pgram_smooth", (DL_FUNC) &_hydrorecipes_transfer_pgram_smooth, 7},
+    {"_hydrorecipes_transfer_pgram", (DL_FUNC) &_hydrorecipes_transfer_pgram, 5},
+    {"_hydrorecipes_transfer_welch", (DL_FUNC) &_hydrorecipes_transfer_welch, 4},
+    {"_hydrorecipes_predict_pgram_frf", (DL_FUNC) &_hydrorecipes_predict_pgram_frf, 2},
+    {"_hydrorecipes_index_from_i_j", (DL_FUNC) &_hydrorecipes_index_from_i_j, 3},
+    {"_hydrorecipes_get_column_number", (DL_FUNC) &_hydrorecipes_get_column_number, 1},
+    {"_hydrorecipes_index_from_j_i", (DL_FUNC) &_hydrorecipes_index_from_j_i, 3},
+    {"_hydrorecipes_next_n_eigen", (DL_FUNC) &_hydrorecipes_next_n_eigen, 1},
+    {"_hydrorecipes_pad_vector", (DL_FUNC) &_hydrorecipes_pad_vector, 3},
+    {"_hydrorecipes_detrend_matrix", (DL_FUNC) &_hydrorecipes_detrend_matrix, 1},
+    {"_hydrorecipes_demean_matrix", (DL_FUNC) &_hydrorecipes_demean_matrix, 1},
+    {"_hydrorecipes_detrend_and_demean_matrix", (DL_FUNC) &_hydrorecipes_detrend_and_demean_matrix, 3},
+    {"_hydrorecipes_modified_daniell", (DL_FUNC) &_hydrorecipes_modified_daniell, 2},
+    {"_hydrorecipes_kernel_apply", (DL_FUNC) &_hydrorecipes_kernel_apply, 2},
+    {"_hydrorecipes_spec_taper", (DL_FUNC) &_hydrorecipes_spec_taper, 2},
+    {"_hydrorecipes_make_groups", (DL_FUNC) &_hydrorecipes_make_groups, 4},
+    {"_hydrorecipes_power_spaced", (DL_FUNC) &_hydrorecipes_power_spaced, 4},
+    {"_hydrorecipes_group_frequency", (DL_FUNC) &_hydrorecipes_group_frequency, 4},
+    {"_hydrorecipes_determine_frequency", (DL_FUNC) &_hydrorecipes_determine_frequency, 1},
+    {"_hydrorecipes_check_ffts", (DL_FUNC) &_hydrorecipes_check_ffts, 2},
+    {"_hydrorecipes_which_indices", (DL_FUNC) &_hydrorecipes_which_indices, 2},
+    {"_hydrorecipes_window_hann", (DL_FUNC) &_hydrorecipes_window_hann, 1},
+    {"_hydrorecipes_window_tukey", (DL_FUNC) &_hydrorecipes_window_tukey, 2},
+    {"_hydrorecipes_window_hann_cplx", (DL_FUNC) &_hydrorecipes_window_hann_cplx, 1},
+    {"_hydrorecipes_window_rectangle", (DL_FUNC) &_hydrorecipes_window_rectangle, 1},
+    {"_hydrorecipes_window_scale", (DL_FUNC) &_hydrorecipes_window_scale, 3},
+    {"_hydrorecipes_harmonic_double", (DL_FUNC) &_hydrorecipes_harmonic_double, 3},
+    {"_hydrorecipes_log_lags_eigen", (DL_FUNC) &_hydrorecipes_log_lags_eigen, 2},
     {"_hydrorecipes_check_lag", (DL_FUNC) &_hydrorecipes_check_lag, 3},
     {"_hydrorecipes_get_length", (DL_FUNC) &_hydrorecipes_get_length, 2},
     {"_hydrorecipes_get_start", (DL_FUNC) &_hydrorecipes_get_start, 3},

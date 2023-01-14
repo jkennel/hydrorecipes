@@ -118,7 +118,7 @@ rec <- rec_base |>
   prep()
 
 # specify basis_mat
-basis_mat <- splines2::mSpline(0:72, knots = c(3,16, 24, 48))
+basis_mat <- splines::bs(0:72, knots = c(3, 16, 24, 48))
 rec <- rec_base |>
   step_distributed_lag(baro,
                        basis_mat = basis_mat) |>

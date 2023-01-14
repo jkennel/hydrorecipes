@@ -199,5 +199,9 @@ tidy2.step_lead_lag <- function(x, ...) {
 
 }
 
+#' @export
+required_pkgs.step_lead_lag <- function(x, ...) {
+  c("hydrorecipes")
+}
 
 

@@ -145,18 +145,6 @@ response.lm <- function(fit, rec, verbose = FALSE, ...) {
 }
 
 
-#' @rdname response
-#' @export
-response.cv.glmnet <- function(fit, rec, verbose = FALSE, ...) {
-
-  co        <- coefficients(fit)
-  co_names  <- rownames(co)
-  co        <- as.vector(co)
-  names(co) <- co_names
-
-  response.numeric(co, rec, verbose = verbose, ...)
-}
-
 
 #' @rdname response
 #' @export
@@ -199,3 +187,18 @@ response.numeric <- function(fit, rec, verbose = FALSE, ...) {
 
   bind_rows(resp)
 }
+
+
+
+# #' @rdname response
+# #' @export
+# response.cv.glmnet <- function(fit, rec, verbose = FALSE, ...) {
+#
+#   co        <- coefficients(fit)
+#   co_names  <- rownames(co)
+#   co        <- as.vector(co)
+#   names(co) <- co_names
+#
+#   response.numeric(co, rec, verbose = verbose, ...)
+# }
+

@@ -3,15 +3,12 @@
 \name{predict_terms}
 \alias{predict_terms}
 \alias{predict_terms.lm}
-\alias{predict_terms.cv.glmnet}
 \alias{predict_terms.numeric}
 \title{predict_terms}
 \usage{
 predict_terms(fit, rec, data, ...)
 
 \method{predict_terms}{lm}(fit, rec, data, ...)
-
-\method{predict_terms}{cv.glmnet}(fit, rec, data, ...)
 
 \method{predict_terms}{numeric}(fit, rec, data, ...)
 }

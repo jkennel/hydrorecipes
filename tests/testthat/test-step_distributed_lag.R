@@ -15,8 +15,8 @@ test_that("step_distributed_lag works", {
     bake(new_data = NULL)
   sub2 <- rec |>
     step_lead_lag(baro,
-                         lag = c(0, 6000),
-                         n_subset = 10) |>
+                  lag = c(0, 6000),
+                  n_subset = 10) |>
     prep() |>
     bake(new_data = NULL)
 
@@ -143,11 +143,11 @@ test_that("step_distributed_lag works", {
 
   x  <- as.matrix(rnorm(10000))
   bl <- splines::ns(0:1000, knots = log_lags(5, 999))
-  expect_equal(a <- hydrorecipes:::convolve_fft(x, bl),
-               b <- hydrorecipes:::distributed_lag(x,
-                                                   (as.matrix(bl)),
-                                                   0:1000,
-                                                   n_subset = 1,
-                                                   n_shift = 0))
+  expect_equal(a <- convolve_fft(x, bl),
+               b <- distributed_lag(x,
+                                    (as.matrix(bl)),
+                                    0:1000,
+                                    n_subset = 1,
+                                    n_shift = 0))
 
 })

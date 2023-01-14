@@ -72,7 +72,7 @@
 #'   prep()
 #'
 #' # specify basis_mat
-#' basis_mat <- splines2::mSpline(0:72, knots = c(3,16, 24, 48))
+#' basis_mat <- splines::bs(0:72, knots = c(3, 16, 24, 48))
 #' rec <- rec_base |>
 #'   step_distributed_lag(baro,
 #'                        basis_mat = basis_mat) |>
@@ -437,4 +437,9 @@ tidy2.step_distributed_lag <- function(x, ...) {
   res$step_name <- 'step_distributed_lag'
 
   res
+}
+
+#' @export
+required_pkgs.step_distributed_lag <- function(x, ...) {
+  c("hydrorecipes", "fftw")
 }

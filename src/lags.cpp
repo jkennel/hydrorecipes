@@ -3,6 +3,40 @@
 
 #include "hydrorecipes.h"
 
+//==============================================================================
+// [[Rcpp::export]]
+Eigen::ArrayXd log_lags_eigen(size_t n, size_t max_lag) {
+
+  // check inputs
+  if (n <= 0) {
+    Rcpp::stop("log_lags_eigen: n must be greater than 0");
+  }
+
+  if (max_lag < 0) {
+    Rcpp::stop("log_lags_eigen: max_time_lag must be non-negative");
+  }
+
+  if(n > (max_lag + 1L)) {
+    Rcpp::warning("The number of lags is greater than the maximum time lag");
+    return(ArrayXd::LinSpaced(max_lag + 1.0, 0.0, max_lag));
+  }
+
+  // Lags begin at zero
+  ArrayXd lags = pow(10.0, ArrayXd::LinSpaced(n, 0.0, std::log10(max_lag + 1.0))) - 1.0;
+
+  // lags cannot be spaced closer than one sample
+  for(size_t i = 0; i < n; ++i) {
+    if(lags(i) < i) {
+      lags(i) = i;
+    }
+  }
+
+  return(lags.round());
+}
+//==============================================================================
+
+
+//==============================================================================
 // [[Rcpp::export]]
 int check_lag(int n, int lag, int n_shift) {
 
@@ -17,7 +51,10 @@ int check_lag(int n, int lag, int n_shift) {
   }
 
 }
+//==============================================================================
 
+
+//==============================================================================
 // [[Rcpp::export]]
 int get_length(int n, int n_subset) {
 
@@ -35,8 +72,10 @@ int get_length(int n, int n_subset) {
   }
   return(n_out);
 }
+//==============================================================================
 
 
+//==============================================================================
 // [[Rcpp::export]]
 int get_start(int n_out, int lag, int n_subset) {
   int start;
@@ -58,7 +97,10 @@ int get_start(int n_out, int lag, int n_subset) {
 
   return(start);
 }
+//==============================================================================
 
+
+//==============================================================================
 // [[Rcpp::export]]
 int get_end(int n, int n_out, int lag, int n_subset) {
 
@@ -83,8 +125,10 @@ int get_end(int n, int n_out, int lag, int n_subset) {
   }
   return(end);
 }
+//==============================================================================
 
 
+//==============================================================================
 //' @title
 //' shift_subset
 //'
@@ -137,20 +181,20 @@ NumericVector shift_subset(const NumericVector& x,
 
   return(out);
 }
+//==============================================================================
 
 
 
-
+//==============================================================================
 //' @title
 //' lag_matrix
 //'
 //' @description
-//' lag data and subset the results
+//' Lag data and subset the results.  Each column of \code(x) will be lagged.
 //'
 //' @inheritParams step_lead_lag
 //' @param x to lag (numeric vector)
 //' @param lags lead or lag values (numeric vector)
-//' @param var_name name for the generated matrix columns (character)
 //'
 //' @return matrix with lagged values
 //'
@@ -158,27 +202,28 @@ NumericVector shift_subset(const NumericVector& x,
 // [[Rcpp::export]]
 Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericMatrix& x,
                                const Rcpp::IntegerVector& lags,
-                               Rcpp::CharacterVector suffix,
+                               const Rcpp::CharacterVector suffix,
                                std::string prefix,
                                int n_subset,
                                int n_shift
 ) {
 
+  // calculate the number of rows for the output
   int n = x.nrow();
   int n_row;
-
   if(n_subset == 1){
     n_row = (n - n_shift);
   } else {
     n_row = ((n - n_shift - 1) / n_subset) + 1;
   }
+
   int n_col = lags.size();
   int n_var = x.ncol();
-
 
   Rcpp::CharacterVector nm(n_col * n_var);
   Rcpp::NumericMatrix out = Rcpp::NumericMatrix(n_row, n_col * n_var);
 
+  // lag columns and generate column names
   for(std::size_t j = 0; j < n_var; j++) {
     for (std::size_t i = 0; i < n_col; i++) {
       out(_, i + j * n_col) = shift_subset(x(_, j), lags[i], n_subset, n_shift);
@@ -194,6 +239,7 @@ Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericMatrix& x,
 
   return(out);
 }
+//==============================================================================
 
 
 
@@ -261,11 +307,10 @@ Eigen::MatrixXd distributed_lag_parallel(const Eigen::VectorXd& x,
   int n_col = bl.rows();
 
   // added
-  //int lag;
   int n_out;
   int start;
   int end;
-  int offset;
+  int offset = 0;
 
   if(n_subset < 1) {
     throw std::range_error("n_subset should be 1 or greater.");
@@ -280,13 +325,10 @@ Eigen::MatrixXd distributed_lag_parallel(const Eigen::VectorXd& x,
     throw std::range_error("n_shift + lag_max must be less than the length of x");
   }
 
-
-  //lag   = check_lag(n_row, lag_max, n_shift);
   n_out = get_length(n_row, n_subset);
-  // arma::vec out(n_out, NA_REAL);
-
   start = get_start(n_out, lag_max, n_subset);
   end   = get_end(n_row, n_out, lag_max, n_subset);
+
 
   if(n_subset != 1) {
     if(n_row % n_subset == 0) {
@@ -294,34 +336,20 @@ Eigen::MatrixXd distributed_lag_parallel(const Eigen::VectorXd& x,
     } else {
       offset = abs(n_row - ((n_row / n_subset) * n_subset + 1));
     }
-  } else {
-    offset = 0;
   }
 
   int wh = (n_out - start - 1) * n_subset + offset - n_shift + lag_max;
 
   if (wh < (n_row - n_subset)) {
     start = start - 1;
-    offset = offset - n_shift;
-  } else {
-    offset = offset - n_shift;
   }
-  // if(offset < 0) {
-  //   n_out = n_out - 1;
-  //   end = end - 1;
-  //   offset = offset + n_subset;
-  // }
+  offset = offset - n_shift;
 
 
   Eigen::MatrixXd cb(n_col, n_out);
   cb = cb.setConstant(NA_REAL);
 
-  // dl_worker calc_dl(x, bl, cb, lag_max, n_subset, offset);
-
-  // RcppParallel::parallelFor(n_out - end, n_out - start, calc_dl);
-
-  // for (std::size_t i = n_out - end; i < n_out - start; i++) {
-  RcppThread::parallelFor( n_out - end, n_out - start, [&] (size_t i) {
+  RcppThread::parallelFor(n_out - end, n_out - start, [&] (size_t i) {
 
     int wh = (i * n_subset) + offset;
 
@@ -331,10 +359,10 @@ Eigen::MatrixXd distributed_lag_parallel(const Eigen::VectorXd& x,
 
   cb.transposeInPlace();
 
-  // arma::inplace_trans(cb);
   return cb.colwise().reverse();
 
 }
+//==============================================================================
 
 
 // // [[Rcpp::export]]
@@ -366,13 +394,13 @@ rec <- recipe(wl~baro, wi)
 a <- bench::mark(
   sub1 <- rec |>
     step_distributed_lag(baro,
-                         knots = c(0, 5000),
+                         knots = c(0, 1000, 5000),
                          n_subset = 10) |>
     prep() |>
     bake(new_data = NULL),
   sub2 <- rec |>
     step_distributed_lag(baro,
-                         knots = c(0, 6000, 9000)) |>
+                         knots = c(0, 5000, 9000)) |>
     prep() |>
     bake(new_data = NULL),
   check = FALSE
