@@ -3,21 +3,22 @@
 #' `step_lead_lag` creates a *specification* of a recipe step that
 #'   will add new columns that are shifted forward (lag) or backward (lead).
 #'   Data will by default include NA values where the shift was induced.
-#'   These can be removed with [recipes::step_naomit()]. Samples should be ordered and
-#'   have regular spacing (i.e. regular time series, regular spatial sampling).
+#'   These can be removed with [recipes::step_naomit()]. Samples should be
+#'   ordered and have regular spacing (i.e. regular time series, regular
+#'   spatial sampling).
 #'
 #' @inheritParams recipes::step_lag
 #' @inheritParams recipes::step_harmonic
 #' @param lag A vector of integers. Each specified column will be
-#'  lagged for each value in the vector. Negative values are accepted and indicate
-#'  leading the vector (i.e. the reverse of lagging)
+#'  lagged for each value in the vector. Negative values are accepted and
+#'  indicate leading the vector (i.e. the reverse of lagging)
 #' @param n_subset A single integer. Subset every `n_subset` values.
-#' @param n_shift A single integer amount to shift results in number of observations.
+#' @param n_shift A single integer to shift results in number of observations.
 #' @param prefix A prefix for generated column names, default to "lag_lead_".
 #' @param columns A character string of variable names that will
 #'  be populated (eventually) by the `terms` argument.
 #'
-#' @details This step assumes that the data are already _in the proper sequential
+#' @details This step assumes that the data are already in the proper sequential
 #'  order_ for lagging. This `step` allows a vector to be shifted
 #'  forward (lag) or backward (lead). While forward shifts are commonly used for
 #'  lagged responses, there are cases where a backward shift may be useful. This
@@ -38,15 +39,15 @@
 #' @examples
 #' data(wipp30)
 #'
-#' recipe(wl~., data = wipp30) |>
+#' recipe(wl ~ ., data = wipp30) |>
 #'   step_lead_lag(baro, lag = -2:2, n_subset = 1, n_shift = 0) |>
 #'   prep()
 #'
-#' recipe(wl~ ., data = wipp30) |>
+#' recipe(wl ~ ., data = wipp30) |>
 #'   step_lead_lag(baro, lag = -2:2, n_subset = 2, n_shift = 0) |>
 #'   prep()
 #'
-#' recipe(wl~ ., data = wipp30) |>
+#' recipe(wl ~ ., data = wipp30) |>
 #'   step_lead_lag(baro, lag = -2:2, n_subset = 2, n_shift = 1) |>
 #'   prep()
 #'
@@ -64,17 +65,16 @@ step_lead_lag <-
            columns = NULL,
            skip = FALSE,
            id = rand_id("lead_lag")) {
-
-    if(length(unique(lag)) < length(lag)) {
-      rlang::warn("step_lead_lag should have uniquely valued 'lag'.  Taking unique values")
+    if (length(unique(lag)) < length(lag)) {
+      rlang::warn("step_lead_lag should have uniquely valued 'lag'. Taking unique values")
       lag <- unique(lag)
     }
 
-    if(n_subset <= 0) {
+    if (n_subset <= 0) {
       rlang::abort("'n_subset' in step_lead_lag should be greater than 0 in step_lead_lag")
     }
 
-    if(n_shift >= n_subset) {
+    if (n_shift >= n_subset) {
       rlang::abort("'n_shift' should be less than 'n_subset' in step_lead_lag")
     }
 
@@ -98,7 +98,9 @@ step_lead_lag <-
   }
 
 step_lead_lag_new <-
-  function(terms, role, trained, lag, n_subset, n_shift, prefix, keep_original_cols, columns, skip, id) {
+  function(
+      terms, role, trained, lag, n_subset, n_shift, prefix,
+      keep_original_cols, columns, skip, id) {
     step(
       subclass = "lead_lag",
       terms = terms,
@@ -117,7 +119,6 @@ step_lead_lag_new <-
 
 #' @export
 prep.step_lead_lag <- function(x, training, info = NULL, ...) {
-
   col_names <- recipes_eval_select(x$terms, training, info)
   check_type(training[, col_names])
 
@@ -134,18 +135,17 @@ prep.step_lead_lag <- function(x, training, info = NULL, ...) {
     skip = x$skip,
     id = x$id
   )
-
 }
 
 #' @export
 bake.step_lead_lag <- function(object, new_data, ...) {
-
-  if(any(abs(object$lag) > nrow(new_data))) {
+  if (any(abs(object$lag) > nrow(new_data))) {
     rlang::abort("lag (lead) values cannot be greater than the number of rows in the dataset.")
   }
 
-  if (!all(object$lag == as.integer(object$lag)))
+  if (!all(object$lag == as.integer(object$lag))) {
     rlang::abort("step_lead_lag requires 'lead_lag' argument to be integer valued.")
+  }
 
 
   lag_mat <-
@@ -164,17 +164,18 @@ bake.step_lead_lag <- function(object, new_data, ...) {
       new_data[, !(colnames(new_data) %in% object$columns), drop = FALSE]
   }
 
-  subset_bind(new_data,
-              lag_mat,
-              object$n_subset,
-              object$n_shift)
-
+  subset_bind(
+    new_data,
+    lag_mat,
+    object$n_subset,
+    object$n_shift
+  )
 }
 
 #' @importFrom recipes printer
 print.step_lead_lag <-
   function(x, width = max(20, options()$width - 30), ...) {
-    cat("lead_lag ",  sep = "")
+    cat("lead_lag ", sep = "")
     printer(x$columns, x$terms, x$trained, width = width)
     invisible(x)
   }
@@ -189,19 +190,17 @@ tidy.step_lead_lag <- function(x, ...) {
 tidy2.step_lead_lag <- function(x, ...) {
   n_terms <- length(x$terms)
   res <-
-    tibble(terms = rep(sel2char(x$terms), each = length(x$lag)),
-           shift = rep(x$lag, times = n_terms)
+    tibble(
+      terms = rep(sel2char(x$terms), each = length(x$lag)),
+      shift = rep(x$lag, times = n_terms)
     )
-  res$key <- paste0(x$prefix, rep(x$lag, times = n_terms), '_', res$terms)
+  res$key <- paste0(x$prefix, rep(x$lag, times = n_terms), "_", res$terms)
   res$id <- x$id
-  res$step_name <- 'step_lead'
+  res$step_name <- "step_lead"
   res
-
 }
 
 #' @export
 required_pkgs.step_lead_lag <- function(x, ...) {
   c("hydrorecipes")
 }
-
-
