@@ -1,8 +1,7 @@
 # Rtools contains fftw3, use that version
 
-CXX_STD = CXX11
-PKG_CXXFLAGS=-I../inst/include
-PKG_CPPFLAGS=
+CXX_STD = CXX17
+PKG_CXXFLAGS=-I../inst/include -std=gnu++17
 PKG_LIBS= -lfftw3 -lm
 
 all: $(SHLIB)

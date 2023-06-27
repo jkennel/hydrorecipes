@@ -47,19 +47,13 @@ preprocessing have been estimated.}
 
 \item{do_predict}{run in predict or analyze mode}
 
-\item{method}{One or more of "gravity", 
-"tidal_potential", "tidal_tilt", "vertical_displacement", 
+\item{method}{One or more of "gravity",
+"tidal_potential", "tidal_tilt", "vertical_displacement",
 "horizontal_displacement", "n_s_displacement", "e_w_displacement",
 "vertical_strain", "areal_strain", "volume_strain", "horizontal_strain",
-or "ocean_tides", "pole_tide", "lod_tide". The pole tide and lod_tide 
+or "ocean_tides", "pole_tide", "lod_tide". The pole tide and lod_tide
 are used in predict mode even if do_predict is FALSE. More than one value
 can only be used if do_predict == TRUE.}
-
-\item{astro_update}{Integer that
-determines how often to phases are updated in number of samples. Defaults
-to 1 (every sample), but speed gains are realized with larger values.
-Typically updating every hour will have speed gains and keep precision 
-(ie 3600 for one second data, 60 for minute data, 1 for hourly data).}
 
 \item{latitude}{The station latitude (numeric) defaults to 0.}
 
@@ -69,27 +63,27 @@ Typically updating every hour will have speed gains and keep precision
 
 \item{azimuth}{Earth azimuth (numeric) defaults to 0.}
 
-\item{gravity}{Gravity at the station (m/s^2) (numeric) 0 to 
+\item{gravity}{Gravity at the station (m/s^2) (numeric) 0 to
 estimate gravity from elevation and latitude.}
 
 \item{earth_radius}{Radius of earth (m) (numeric) defaults to 6378136.3}
 
-\item{earth_eccen}{Eccentricity of earth (numeric) 
+\item{earth_eccen}{Eccentricity of earth (numeric)
 defaults to 6.69439795140e-3}
 
-\item{cutoff}{Cutoff amplitude for constituents (numeric) 
+\item{cutoff}{Cutoff amplitude for constituents (numeric)
 defaults to 1e-6.}
 
-\item{wave_groups}{Two column data.frame having start and end of 
+\item{wave_groups}{Two column data.frame having start and end of
 frequency groups (data.frame). This data.frame must have two columns
-with the names 'start', and 'end' signifying the start and end of the 
-wave groupings.  An optional third column 'multiplier' can be provided 
+with the names 'start', and 'end' signifying the start and end of the
+wave groupings.  An optional third column 'multiplier' can be provided
 to scale the particular wave group.  If column names do no match, the
 inferred column positions are start, end, multiplier.}
 
 \item{catalog}{Use the "hw95s" catalog or "ksm04" catalog (character).}
 
-\item{eop}{User defined Earth Orientation Parameter (EOP) data.frame with the 
+\item{eop}{User defined Earth Orientation Parameter (EOP) data.frame with the
 following columns: datetime, ddt, ut1_utc, lod, x, y, dx, dy}
 
 \item{scale}{Scale results when do_predict is FALSE}
@@ -119,7 +113,8 @@ added to the sequence of existing steps (if any).
 \description{
 \code{step_earthtide} creates a \emph{specification} of a recipe step
 that are the Earth tide harmonics for a particular
-location. This step requires the \href{https://CRAN.R-project.org/package=earthtide}{earthtide package}.
+location. This step requires the
+\href{https://CRAN.R-project.org/package=earthtide}{earthtide package}.
 }
 \details{
 There are many waves (thousands) that make up a tidal signal.
@@ -138,24 +133,26 @@ library(earthtide)
 data(eterna_wavegroups)
 data(transducer)
 
-transducer <- transducer[, c('datetime', 'wl'),]
+transducer <- transducer[, c("datetime", "wl"), ]
 t_sub <- transducer[(as.numeric(transducer$datetime) \%\% 14400) == 0, ]
-wg <- na.omit(eterna_wavegroups[eterna_wavegroups$time == '1 month',])
+wg <- na.omit(eterna_wavegroups[eterna_wavegroups$time == "1 month", ])
 
 recipe(wl ~ ., data = t_sub) |>
   step_earthtide(datetime,
-                 latitude = 34,
-                 longitude = -118.5,
-                 wave_groups = wg,
-                 do_predict = FALSE) |>
+    latitude = 34,
+    longitude = -118.5,
+    wave_groups = wg,
+    do_predict = FALSE
+  ) |>
   prep()
 
 recipe(wl ~ ., data = t_sub) |>
   step_earthtide(datetime,
-                 latitude = 34,
-                 longitude = -118.5,
-                 wave_groups = wg,
-                 do_predict = TRUE) |>
+    latitude = 34,
+    longitude = -118.5,
+    wave_groups = wg,
+    do_predict = TRUE
+  ) |>
   prep()
 
 }

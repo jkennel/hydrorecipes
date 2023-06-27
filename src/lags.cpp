@@ -228,7 +228,7 @@ Rcpp::NumericMatrix lag_matrix(const Rcpp::NumericMatrix& x,
     for (std::size_t i = 0; i < n_col; i++) {
       out(_, i + j * n_col) = shift_subset(x(_, j), lags[i], n_subset, n_shift);
       if(lags[i] < 0) {
-        nm[i + j * n_col] = prefix + 'n' + std::to_string(abs(lags[i])) + '_' + suffix[j];
+        nm[i + j * n_col] = prefix + 'n' + std::to_string(std::abs(lags[i])) + '_' + suffix[j];
       } else {
         nm[i + j * n_col] = prefix + std::to_string(lags[i]) + '_' + suffix[j];
       }
@@ -312,16 +312,16 @@ Eigen::MatrixXd distributed_lag_parallel(const Eigen::VectorXd& x,
   int end;
   int offset = 0;
 
-  if(n_subset < 1) {
+  if (n_subset < 1) {
     throw std::range_error("n_subset should be 1 or greater.");
   }
-  if(n_shift >= (n_subset)) {
+  if (n_shift >= (n_subset)) {
     throw std::range_error("The absolute value of n_shift should be less than n_subset - 1.");
   }
-  if(n_shift < 0) {
+  if (n_shift < 0) {
     throw std::range_error("n_shift should be positive.");
   }
-  if((n_shift + lag_max) > n_row) {
+  if ((n_shift + lag_max) > n_row) {
     throw std::range_error("n_shift + lag_max must be less than the length of x");
   }
 
@@ -329,9 +329,12 @@ Eigen::MatrixXd distributed_lag_parallel(const Eigen::VectorXd& x,
   start = get_start(n_out, lag_max, n_subset);
   end   = get_end(n_row, n_out, lag_max, n_subset);
 
+  MatrixXd cb(n_col, n_out);
+  cb = cb.setConstant(NA_REAL);
 
-  if(n_subset != 1) {
-    if(n_row % n_subset == 0) {
+
+  if (n_subset != 1) {
+    if (n_row % n_subset == 0) {
       offset = n_subset - 1;
     } else {
       offset = abs(n_row - ((n_row / n_subset) * n_subset + 1));
@@ -345,9 +348,6 @@ Eigen::MatrixXd distributed_lag_parallel(const Eigen::VectorXd& x,
   }
   offset = offset - n_shift;
 
-
-  Eigen::MatrixXd cb(n_col, n_out);
-  cb = cb.setConstant(NA_REAL);
 
   RcppThread::parallelFor(n_out - end, n_out - start, [&] (size_t i) {
 

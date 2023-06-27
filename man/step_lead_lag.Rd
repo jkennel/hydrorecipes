@@ -34,12 +34,12 @@ the original variables will be used as \emph{predictors} in a model.}
 preprocessing have been estimated.}
 
 \item{lag}{A vector of integers. Each specified column will be
-lagged for each value in the vector. Negative values are accepted and indicate
-leading the vector (i.e. the reverse of lagging)}
+lagged for each value in the vector. Negative values are accepted and
+indicate leading the vector (i.e. the reverse of lagging)}
 
 \item{n_subset}{A single integer. Subset every \code{n_subset} values.}
 
-\item{n_shift}{A single integer amount to shift results in number of observations.}
+\item{n_shift}{A single integer to shift results in number of observations.}
 
 \item{prefix}{A prefix for generated column names, default to "lag_lead_".}
 
@@ -66,12 +66,13 @@ of any existing operations.
 \code{step_lead_lag} creates a \emph{specification} of a recipe step that
 will add new columns that are shifted forward (lag) or backward (lead).
 Data will by default include NA values where the shift was induced.
-These can be removed with \code{\link[recipes:step_naomit]{recipes::step_naomit()}}. Samples should be ordered and
-have regular spacing (i.e. regular time series, regular spatial sampling).
+These can be removed with \code{\link[recipes:step_naomit]{recipes::step_naomit()}}. Samples should be
+ordered and have regular spacing (i.e. regular time series, regular
+spatial sampling).
 }
 \details{
-This step assumes that the data are already \emph{in the proper sequential
-order} for lagging. This \code{step} allows a vector to be shifted
+This step assumes that the data are already in the proper sequential
+order_ for lagging. This \code{step} allows a vector to be shifted
 forward (lag) or backward (lead). While forward shifts are commonly used for
 lagged responses, there are cases where a backward shift may be useful. This
 can arise when there are unknown clock errors between two sensors making the
@@ -84,15 +85,15 @@ lag/lead history.
 \examples{
 data(wipp30)
 
-recipe(wl~., data = wipp30) |>
+recipe(wl ~ ., data = wipp30) |>
   step_lead_lag(baro, lag = -2:2, n_subset = 1, n_shift = 0) |>
   prep()
 
-recipe(wl~ ., data = wipp30) |>
+recipe(wl ~ ., data = wipp30) |>
   step_lead_lag(baro, lag = -2:2, n_subset = 2, n_shift = 0) |>
   prep()
 
-recipe(wl~ ., data = wipp30) |>
+recipe(wl ~ ., data = wipp30) |>
   step_lead_lag(baro, lag = -2:2, n_subset = 2, n_shift = 1) |>
   prep()
 

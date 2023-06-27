@@ -17,8 +17,9 @@ A \code{data.frame} The columns are:
 wipp30
 }
 \description{
-This \code{data.frame} contains the water levels, barometric pressure,
-and Earth tides for wipp30.  This is the dataset included in BETCO.
+This \code{data.frame} contains the water levels,
+barometric pressure, and Earth tides for wipp30. This is the dataset
+included in BETCO.
 }
 \examples{
 data(wipp30)

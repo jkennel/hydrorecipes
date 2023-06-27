@@ -62,19 +62,20 @@ unique(diff(transducer$datetime_num)) # times are regularly spaced
 
 # Earth tide inputs
 wave_groups <- earthtide::eterna_wavegroups
-wave_groups <- na.omit(wave_groups[wave_groups$time == '1 month', ])
+wave_groups <- na.omit(wave_groups[wave_groups$time == "1 month", ])
 wave_groups <- wave_groups[wave_groups$start > 0.5, ]
-latitude    <-   34.0
-longitude   <- -118.5
+latitude <- 34.0
+longitude <- -118.5
 
-# create recipe 
-rec <- recipe(wl~baro+datetime_num, transducer) |>
+# create recipe
+rec <- recipe(wl ~ baro + datetime_num, transducer) |>
   step_distributed_lag(baro, knots = log_lags(15, 86400 * 2 / 120)) |>
   step_earthtide(datetime_num,
-                 latitude = latitude,
-                 longitude = longitude,
-                 astro_update = 1,
-                 wave_groups = wave_groups) |>
+    latitude = latitude,
+    longitude = longitude,
+    astro_update = 1,
+    wave_groups = wave_groups
+  ) |>
   step_ns(datetime_num, deg_free = 10) |>
   prep()
 
@@ -82,7 +83,7 @@ input <- rec |> bake(new_data = NULL)
 ```
 
 ```{r}
-summary(fit <- lm(wl~., input))
+summary(fit <- lm(wl ~ ., input))
 ```
 
 
@@ -99,27 +100,34 @@ The decomposition consists of:
 - **Residuals (obs-mod)** The difference between the observed water pressure and the modeled pressure (Predicted). (dbar)
 
 ```{r fig.height = 11, fig.width = 12, out.width = '90%', warning = FALSE}
-pred <- predict_terms(fit = fit, 
-                      rec = rec,
-                      data = input)
-pred <- bind_cols(transducer[, c('datetime', 'wl')], pred)
+pred <- predict_terms(
+  fit = fit,
+  rec = rec,
+  data = input
+)
+pred <- bind_cols(transducer[, c("datetime", "wl")], pred)
 pred$residuals <- pred$wl - pred$predicted
 pred_long <- pivot_longer(pred, cols = !datetime)
-levels <-c('intercept', 'ns_datetime_num', 'distributed_lag_baro',
-           'earthtide_datetime_num', 'predicted', 'wl', 'residuals')
-labels <- c('Intercept', 'Background trend', 'Barometric Component',
-            'Earth Tide Component', 'Predicted', 'Water Pressure', 
-            'Residuals (obs-mod)')
-pred_long$name <- factor(pred_long$name, 
-                         levels = levels,
-                         labels = labels)
+levels <- c(
+  "intercept", "ns_datetime_num", "distributed_lag_baro",
+  "earthtide_datetime_num", "predicted", "wl", "residuals"
+)
+labels <- c(
+  "Intercept", "Background trend", "Barometric Component",
+  "Earth Tide Component", "Predicted", "Water Pressure",
+  "Residuals (obs-mod)"
+)
+pred_long$name <- factor(pred_long$name,
+  levels = levels,
+  labels = labels
+)
 ggplot(pred_long, aes(x = datetime, y = value)) +
-  geom_line() + 
-  scale_y_continuous(labels = scales::comma) + 
-  scale_x_datetime(expand = c(0,0)) + 
-  ggtitle('Water Level Decomposition Results') + 
-  xlab("") + 
-  facet_grid(name~., scales = 'free_y') + 
+  geom_line() +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_datetime(expand = c(0, 0)) +
+  ggtitle("Water Level Decomposition Results") +
+  xlab("") +
+  facet_grid(name ~ ., scales = "free_y") +
   theme_bw()
 ```
 
@@ -132,22 +140,28 @@ There are two responses for this model:
 
 
 ```{r fig.height = 5, fig.width = 5, out.width = '47%', fig.show='hold'}
-resp    <- response(fit, rec)
-resp_ba <- resp[resp$name == 'cumulative', ]
-resp_ba <- resp_ba[resp_ba$term == 'baro', ]
+resp <- response(fit, rec)
+resp_ba <- resp[resp$name == "cumulative", ]
+resp_ba <- resp_ba[resp_ba$term == "baro", ]
 ggplot(resp_ba, aes(x = x * 120 / 3600, y = value)) +
-  ggtitle('A: Barometric Loading Response') + 
-  xlab('lag (hours)') +
-  ylab('Cumulative Response') +
+  ggtitle("A: Barometric Loading Response") +
+  xlab("lag (hours)") +
+  ylab("Cumulative Response") +
   scale_y_continuous(limits = c(0, 1)) +
-  geom_line() + 
+  geom_line() +
   theme_bw()
-resp_et <- resp[resp$name %in% c('amplitude', 'phase'), ]
+resp_et <- resp[resp$name %in% c("amplitude", "phase"), ]
 ggplot(resp_et, aes(x = x, xend = x, y = 0, yend = value)) +
-  geom_segment() + 
-  ggtitle('B: Earthtide Response') +
-  xlab('Frequency (cycles per day)') +
-  ylab('Phase (radians)   |   Amplitude (dbar)') +
-  facet_grid(name~., scales = 'free_y') + 
+  geom_segment() +
+  ggtitle("B: Earthtide Response") +
+  xlab("Frequency (cycles per day)") +
+  ylab("Phase (radians)   |   Amplitude (dbar)") +
+  facet_grid(name ~ ., scales = "free_y") +
   theme_bw()
 ```
+
+
+Todo:
+- step_dimensionless_time
+- step_theis
+- step_hantush

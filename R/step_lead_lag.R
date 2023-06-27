@@ -194,9 +194,11 @@ tidy2.step_lead_lag <- function(x, ...) {
       terms = rep(sel2char(x$terms), each = length(x$lag)),
       shift = rep(x$lag, times = n_terms)
     )
-  res$key <- paste0(x$prefix, rep(x$lag, times = n_terms), "_", res$terms)
+  res$key <- paste0(x$prefix,
+                    ifelse(x$lag < 0, "n", ""),
+                    rep(abs(x$lag), times = n_terms), "_", res$terms)
   res$id <- x$id
-  res$step_name <- "step_lead"
+  res$step_name <- "step_lead_lag"
   res
 }
 

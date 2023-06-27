@@ -68,15 +68,15 @@ matching time.
 \examples{
 data(wipp30)
 nrow(wipp30)
-wipp30_missing <- wipp30[-(2:10),]
+wipp30_missing <- wipp30[-(2:10), ]
 nrow(wipp30_missing)
-wipp30_complete <- recipe(wl~., data = wipp30_missing) |>
+wipp30_complete <- recipe(wl ~ ., data = wipp30_missing) |>
   step_make_regular(time) |>
   prep() |>
   bake(new_data = NULL)
 nrow(wipp30_complete)
 
-wipp30_subsample_2 <- recipe(wl~., data = wipp30_missing) |>
+wipp30_subsample_2 <- recipe(wl ~ ., data = wipp30_missing) |>
   step_make_regular(time, delta = 2) |>
   prep() |>
   bake(new_data = NULL)

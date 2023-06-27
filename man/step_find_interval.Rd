@@ -37,10 +37,11 @@ preprocessing have been estimated.}
     say.}
 
 \item{encoding}{Character string specifying the type of encoding to use. The
-options are 'dummy', 'one_hot', 'factor' or 'integer' encoding. Defaults to
-'one_hot'.}
+options are "dummy", "one_hot", "factor" or "integer" encoding. Defaults to
+"one_hot".}
 
-\item{prefix}{A prefix for generated column names, default to "find_interval_".}
+\item{prefix}{A prefix for generated column names, default to
+"find_interval_".}
 
 \item{keep_original_cols}{A logical to keep the original variables in the
 output. Defaults to \code{FALSE}.}
@@ -64,7 +65,8 @@ of any existing operations.
 \description{
 \code{step_find_interval} creates a \emph{specification} of a recipe step that
 will add binary terms (one-hot) that are based on provided boundary values.
-This is an efficient combination of \code{recipes::step_cut} and \code{recipes::step_dummy}.
+This is an efficient combination of \code{recipes::step_cut} and
+\code{recipes::step_dummy}.
 }
 \details{
 This function uses \code{base::find_interval()} to find data within a set
@@ -74,28 +76,30 @@ or with dummy encoding.
 \examples{
 data(wipp30)
 
-r_fi_one_hot <- recipe(wl~., data = wipp30) |>
+r_fi_one_hot <- recipe(wl ~ ., data = wipp30) |>
   step_find_interval(time,
-                     vec = c(9000, 12000),
-                     keep_original_cols = TRUE,
-                     encoding = 'one_hot') |>
+    vec = c(9000, 12000),
+    keep_original_cols = TRUE,
+    encoding = "one_hot"
+  ) |>
   prep() |>
   bake(new_data = NULL)
 
-r_fi_dummy <- recipe(wl~., data = wipp30) |>
+r_fi_dummy <- recipe(wl ~ ., data = wipp30) |>
   step_find_interval(time,
-                     vec = c(9000, 12000),
-                     encoding = 'dummy') |>
+    vec = c(9000, 12000),
+    encoding = "dummy"
+  ) |>
   prep() |>
   bake(new_data = NULL)
 
-r_fact <- recipe(wl~., data = wipp30) |>
+r_fact <- recipe(wl ~ ., data = wipp30) |>
   step_find_interval(time,
-                     vec = c(9000, 12000),
-                     encoding = 'factor') |>
+    vec = c(9000, 12000),
+    encoding = "factor"
+  ) |>
   prep() |>
   bake(new_data = NULL)
-
 
 }
 \seealso{

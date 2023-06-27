@@ -288,7 +288,7 @@ test_that("group_frequency works", {
 
 
 
-# test_that("interpolate_frf works", {
+# test_that("interpolate_tf works", {
 #   scale <- 0.37
 #   x <- rnorm(1e4)
 #   y <- x * scale
@@ -297,7 +297,7 @@ test_that("group_frequency works", {
 #                              0.1, 2, 50)
 #   g  <- make_groups(1e4, power = 2, n_groups = 50, min_aggregate = 2)
 #   at <- cumsum(g)-1
-#   # aa <- interpolate_frf(at,
+#   # aa <- interpolate_tf(at,
 #   #                       y = tf,
 #   #                       knots = c(0, 5, 10, 50, 9999),
 #   #                       degree = 3)

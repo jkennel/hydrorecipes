@@ -18,14 +18,14 @@
 //'
 // [[Rcpp::export]]
 Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
-                            size_t n_new){
+                            size_t n_new) {
 
   size_t n_row = x.rows();
   size_t n_col = x.cols();
 
-  Eigen::VectorXcd x_fft(n_new);
-  Eigen::VectorXd  x_padded(n_new);
-  Eigen::MatrixXcd out(n_new, n_col);
+  VectorXcd x_fft(n_new);
+  VectorXd  x_padded(n_new);
+  MatrixXcd out(n_new, n_col);
 
   Eigen::FFT<double> fft;
 
@@ -74,9 +74,9 @@ Eigen::VectorXd convolve_vec(Eigen::VectorXd x, Eigen::VectorXd y) {
     Rcpp::stop("convolve_vec: the lengths of x and y should be the same");
   }
 
-  Eigen::VectorXcd fft_x(n_x);
-  Eigen::VectorXcd fft_y(n_x);
-  Eigen::VectorXd z(n_x);
+  VectorXcd fft_x(n_x);
+  VectorXcd fft_y(n_x);
+  VectorXd z(n_x);
 
   fft.fwd(fft_x, x);
   fft.fwd(fft_y, y);
@@ -85,6 +85,233 @@ Eigen::VectorXd convolve_vec(Eigen::VectorXd x, Eigen::VectorXd y) {
   fft.inv(z, fft_x);
 
   return(z);
+}
+//==============================================================================
+
+//==============================================================================
+//' @title
+//' convolve_filter
+//'
+//' @description
+//' convolution of vector with matrix
+//'
+//' @param x vector to convolve with y (numeric vector)
+//' @param y numeric matrix to convolve with x (column by column convolution)
+//'  (numeric matrix)
+//' @param remove_partial keep the end values or fill with NA (boolean)
+//' @param reverse should x be reversed before convolution (boolean)
+//'
+//' @return numeric matrix of convolved values
+//'
+//' @export
+//'
+//' @importFrom Rcpp sourceCpp
+//' @importFrom stats nextn
+//' @importFrom stats convolve
+//' @importFrom stats spec.pgram
+//'
+//' @examples
+//' a <- convolve_filter(x = 1:100,
+//'                      y = c(1:10, rep(0, 90)),
+//'                      remove_partial = FALSE,
+//'                      reverse = TRUE)
+//'
+//' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
+//'
+// [[Rcpp::export]]
+Eigen::VectorXd convolve_filter(const Eigen::VectorXd& x,
+                               const Eigen::VectorXd& y,
+                               bool remove_partial,
+                               bool reverse) {
+
+  size_t n_x = x.size();
+  size_t n_y = y.size();
+
+  Eigen::FFT<double> fft;
+  size_t n_new = next_n_eigen(n_x + n_y - 1);
+
+  // Temporary vectors
+  VectorXd x_dbl = VectorXd::Zero(n_new);
+  VectorXd out_dbl = VectorXd::Zero(n_new);
+
+  VectorXcd fft_x(n_new);
+  VectorXcd fft_y(n_new);
+
+  // Output
+  VectorXd out(n_y);
+
+
+  if (reverse) {
+    x_dbl.tail(n_x) = x.reverse();
+  } else {
+    x_dbl.tail(n_x) = x;
+  }
+
+  // do fft for x
+  fft.fwd(fft_x, x_dbl);
+
+
+  // do fft for y and convolution
+  out_dbl.head(n_y) = y;
+
+  fft.fwd(fft_y, out_dbl);
+
+  fft_y = fft_x.array() * fft_y.conjugate().array();
+
+  fft.inv(out_dbl, fft_y);
+
+  if(reverse) {
+    out = out_dbl.tail(n_y).reverse();
+  } else {
+    out = out_dbl.head(n_y);
+  }
+
+
+  if(remove_partial) {
+    out.head(n_x - 1).setConstant(NA_REAL);
+  }
+
+  return(out);
+
+}
+//==============================================================================
+
+
+//==============================================================================
+//' @title
+//' convolve_overlap_add
+//'
+//' @description
+//' Multiply a transfer function with a real input and take the inverse FFT.
+//'
+//' @param x the vector that holds the series (numeric vector)
+//' @param y the kernel to convolve with x (complex numeric vector)
+//'
+//'
+//' @return the linear convolution of two vectors
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::VectorXd convolve_overlap_add(Eigen::VectorXd& x, Eigen::VectorXd& y) {
+
+
+  Eigen::FFT<double> fft;
+  size_t n_x = x.size();
+  size_t n_y = y.size();
+  size_t n_pad = next_n_eigen(n_y * 4);
+  if (n_y > n_x) Rcpp::stop("n_y cannot be larger than n_x");
+  if (n_pad > n_x) n_pad = n_x;
+
+  // size_t n_times = n_x / n_y - 1;
+  Eigen::VectorXd x_sub = Eigen::VectorXd::Zero(n_pad);
+  Eigen::VectorXd y_sub = pad_vector(y.reverse(), n_y, n_pad);
+
+  VectorXcd fft_y(n_pad);
+  fft.fwd(fft_y, y_sub);
+  VectorXcd fft_x(n_pad);
+  VectorXd z(n_pad);
+  VectorXd out = Eigen::VectorXd::Zero(n_x + n_pad);
+
+
+  size_t i = 0;
+  size_t x_len = n_pad - n_y + 1;
+
+  while (i < n_x) {
+    x_len = std::min(x_len, (n_x - i));
+
+    x_sub.head(x_len) = x.segment(i, x_len);
+
+    fft.fwd(fft_x, x_sub);
+    fft_x = fft_x.array() * fft_y.array();
+    fft.inv(z, fft_x);
+    out.segment(i, n_pad) += z;
+
+    i += x_len;
+
+  }
+
+  out.head(n_y - 1).setConstant(NA_REAL);
+
+  out.conservativeResize(n_x);
+
+  return(out);
+}
+//==============================================================================
+
+
+
+//==============================================================================
+//' @title
+//' convolve_overlap_save
+//'
+//' @description
+//' Multiply a transfer function with a real input and take the inverse FFT.
+//'
+//' @param x the vector that holds the series (numeric vector)
+//' @param y the kernel to convolve with x (complex numeric vector)
+//'
+//'
+//' @return the linear convolution of two vectors
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd& x, Eigen::VectorXd& y) {
+
+
+  Eigen::FFT<double> fft;
+  size_t n_x = x.size();
+  size_t n_y = y.size();
+
+  // need a better way of choosing this
+  size_t n_pad = next_n_eigen(n_y * 4);
+  if (n_y > n_x) Rcpp::stop("n_y cannot be larger than n_x");
+  // if (n_y > n_pad) n_pad = next_n_eigen(n_y * 2 - 1);
+  if (n_pad > n_x) n_pad = n_x;
+
+
+  Eigen::VectorXd x_sub = Eigen::VectorXd::Zero(n_pad);
+  Eigen::VectorXd y_sub = pad_vector(y.reverse(), n_y, n_pad);
+
+  VectorXcd fft_y(n_pad);
+  fft.fwd(fft_y, y_sub);
+  VectorXcd fft_x(n_pad);
+  VectorXd z(n_pad);
+  VectorXd out = VectorXd::Zero(n_x);
+
+
+  size_t i = n_x - n_pad;
+  size_t x_len = n_pad;
+  size_t fin_size = x_len - n_y;
+
+  while (i >= 0) {
+
+    // x_sub = x.segment(i, x_len);
+
+    fft.fwd(fft_x, x.segment(i, x_len));
+    fft_x = fft_x.array() * fft_y.array();
+    fft.inv(z, fft_x);
+
+    out.segment(i + n_y - 1, fin_size + 1) = z.tail(fin_size + 1);
+
+
+    if(i == 0) {
+      break;
+    } else if (fin_size > i) {
+      i = 0;
+    } else {
+      i -= fin_size;
+    }
+
+
+  }
+
+  out.head(n_y - 1).setConstant(NA_REAL);
+
+  // out.conservativeResize(n_x);
+
+  return(out);
 }
 //==============================================================================
 
@@ -116,8 +343,8 @@ Eigen::VectorXd convolve_tf(Eigen::VectorXd x, Eigen::VectorXcd y) {
     Rcpp::stop("convolve_tf: the lengths of x and y should be the same");
   }
 
-  Eigen::VectorXcd fft_x(n_x);
-  Eigen::VectorXd z(n_x);
+  VectorXcd fft_x(n_x);
+  VectorXd z(n_x);
 
   fft.fwd(fft_x, x);
 
@@ -150,7 +377,6 @@ Eigen::VectorXd convolve_tf(Eigen::VectorXd x, Eigen::VectorXcd y) {
 //' @importFrom stats nextn
 //' @importFrom stats convolve
 //' @importFrom stats spec.pgram
-//' @useDynLib hydrorecipes, .registration=TRUE
 //'
 //' @examples
 //' a <- convolve_matrix(x = 1:100,
@@ -178,14 +404,14 @@ Eigen::MatrixXd convolve_matrix(const Eigen::VectorXd& x,
   size_t n_new = next_n_eigen(n_row + n_row_y - 1);
 
   // Temporary vectors
-  Eigen::VectorXd x_dbl(n_new);
-  Eigen::VectorXd out_dbl(n_new);
+  VectorXd x_dbl(n_new);
+  VectorXd out_dbl(n_new);
 
-  Eigen::VectorXcd fft_x(n_new);
-  Eigen::VectorXcd fft_y(n_new);
+  VectorXcd fft_x(n_new);
+  VectorXcd fft_y(n_new);
 
   // Output
-  Eigen::MatrixXd out(n_row, n_col);
+  MatrixXd out(n_row, n_col);
 
   x_dbl.setZero();
 
@@ -259,7 +485,7 @@ Eigen::MatrixXcd multiply_ffts(Eigen::MatrixXcd& x) {
   size_t n_col_pgram = double(n_col / 2.0) * (n_col + 1);
 
   size_t n_row = x.rows();
-  Eigen::MatrixXcd pgram_mat(n_row, n_col_pgram);
+  MatrixXcd pgram_mat(n_row, n_col_pgram);
 
   // complete set
   for (size_t i = 0; i < n_col; ++i) {
@@ -361,7 +587,7 @@ Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd& x,
                                    n_new);
 
   // do a check on small values
-  // x_fft_mat = check_ffts(x_fft_mat, 300);
+  // x_fft_mat = check_ffts(x_fft_mat, 1000);
 
 
   // calculate upper triangle
@@ -374,14 +600,10 @@ Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd& x,
 
   // kernel multiplication
   if (spans(0) > 1) {
-    VectorXd kernel = modified_daniell(spans / 2, n_new);
+    VectorXd kernel = modified_daniell(spans / 2);
     pgram_mat = kernel_apply(pgram_mat, kernel);
   }
 
-  // // calculate lower left (just the complex conjugate)
-  // if(!truncated) {
-  //   pgram_mat = fill_lower_left(pgram_mat, n_col, start);
-  // }
 
   return(pgram_mat);
 }
@@ -407,7 +629,6 @@ Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd& x,
 //' @param length_subset length of each subset (integer)
 //' @param overlap percent to overlap subsets (double)
 //' @param window vector of length length_subset (numeric vector)
-//' @param trunc save memory with a truncated result (boolean)
 //'
 //'
 //' @return periodogram from an input matrix using a Fast Fourier Transform and
@@ -416,23 +637,22 @@ Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd& x,
 //' @noRd
 //'
 // [[Rcpp::export]]
-Eigen::MatrixXcd spec_welch(const Eigen::MatrixXd& x,
+Eigen::MatrixXcd spec_welch(Eigen::MatrixXd& x,
                                   size_t length_subset,
                                   double overlap,
                                   Eigen::VectorXd window
                                  ) {
 
-  if(window.size() == 0) {
-    Eigen::VectorXd window = window_rectangle(length_subset);
-  }
-
-  if(window.size() != length_subset) {
-    Rcpp::stop("spec_welch: `length_subset` cannot be greater than the number of rows in `x`");
-  }
 
   size_t n_row = x.rows();
   size_t n_col = x.cols();
 
+  if(window.size() == 0) {
+    VectorXd window = window_rectangle(length_subset);
+  }
+  if(window.size() != length_subset) {
+    Rcpp::stop("spec_welch: `length_subset` cannot be greater than the number of rows in `x`");
+  }
   // check inputs
   if(length_subset > n_row) {
     Rcpp::stop("spec_welch: `length_subset` cannot be greater than the number of rows in `x`");
@@ -444,13 +664,20 @@ Eigen::MatrixXcd spec_welch(const Eigen::MatrixXd& x,
     Rcpp::stop("spec_welch: `overlap` must be less than 1.0 and greater than 0.0");
   }
 
+
   size_t n_overlap = floor(length_subset * overlap);
 
   size_t n_new = next_n_eigen(length_subset);
+
   size_t n_fft = ceil((double)(n_row - length_subset) / (double)(length_subset - n_overlap));
 
+  // suppose you want 10
+  // size_t n_fft_10 = 1 - ceil((double)(n_row - length_subset)) / 10 / length_subset;
+
+  Rcpp::Rcout << "The value n_fft " << n_fft << std::endl;
+
   // get the starting index of each subset
-  Eigen::VectorXi starts = Eigen::VectorXi::LinSpaced(n_fft, 0, n_fft-1);
+  VectorXi starts = Eigen::VectorXi::LinSpaced(n_fft, 0, n_fft-1);
   starts = starts.array() * (length_subset - n_overlap);
 
 
@@ -459,9 +686,9 @@ Eigen::MatrixXcd spec_welch(const Eigen::MatrixXd& x,
   size_t n_col_pgram = n_col * double(n_col + 1) / 2;
 
   // temporary matrices and output
-  Eigen::MatrixXd x_block(n_col, length_subset);
-  Eigen::MatrixXcd x_fft_mat(n_new, n_col);
-  Eigen::MatrixXcd pgram_mat(n_new, n_col_pgram);
+  MatrixXd x_block(n_col, length_subset);
+  MatrixXcd x_fft_mat(n_new, n_col);
+  MatrixXcd pgram_mat(n_new, n_col_pgram);
   pgram_mat.setZero();
 
   size_t ind;
@@ -471,6 +698,7 @@ Eigen::MatrixXcd spec_welch(const Eigen::MatrixXd& x,
     ind = 0;
     x_block = x.middleRows(starts[k], length_subset);
     x_block = x_block.array().colwise() * window.array();
+    x_block = detrend_and_demean_matrix(x_block, true, true);
 
     // calculate FFT
     x_fft_mat = fft_matrix(x_block, n_new);
@@ -492,11 +720,17 @@ Eigen::MatrixXcd spec_welch(const Eigen::MatrixXd& x,
 
   pgram_mat.row(0) = 0.5 * (pgram_mat.row(1).array() + pgram_mat.row(n_new-1).array());
   pgram_mat *= scale;
-  //  0,  1,  2,  3,  4,
-  //  5,  6,  7,  8,  9,
-  // 10, 11, 12, 13, 14,
-  // 15, 16, 17, 18, 19,
-  // 20, 21, 22, 23, 24
+
+  // MatrixXd m =  pgram_mat.cwiseAbs2();
+  // double mx = m.col(2).maxCoeff();
+  // Rcpp::Rcout << "The value max " << mx << std::endl;
+  // std::complex<double> cplx_zero = std::complex<double>(1e-12, 1e-12);
+  //
+  // for (size_t i = 0; i < n_new; ++i) {
+  //   if(abs(pgram_mat(i,2)) < 0.01) {
+  //     pgram_mat(i, 2) = cplx_zero;
+  //   }
+  // }
 
   return(pgram_mat);
 }
@@ -648,15 +882,13 @@ Eigen::MatrixXcd solve_cplx_parallel(const Eigen::MatrixXcd& x) {
 //'
 // [[Rcpp::export]]
 Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
-                                size_t power,
-                                size_t n_groups,
-                                size_t min_aggregate) {
+                                size_t n_groups) {
 
   // original number of series
   size_t n_col = get_column_number(x.cols());
 
   size_t n_row = x.rows() / 2 + 1; // half spectrum only
-  VectorXi groups = make_groups(n_row, power, n_groups, min_aggregate);
+  VectorXi groups = make_groups(n_groups, n_row);
   size_t n_ols = groups.size();
   size_t sub_size = n_col - 1;
 
@@ -703,6 +935,87 @@ Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
 
   return(out);
 }
+
+
+
+
+
+// //==============================================================================
+// //' @title
+// //' solve_cplx_irr2
+// //'
+// //' @description
+// //' Calculate the transfer function from a periodogram with irregular sized
+// //' groups. This is experimental to see if we can improve efficiency.
+// //' Instead of fitting every frequency it fits groups of frequencies
+// //' The goal is to lump many high frequency signals to increase signal to
+// //' noise ratios, and only few low frequency signals to keep resolution at low
+// //' frequency.
+// //'
+// //' @inheritParams make_groups
+// //' @inheritParams fill_lower_left
+// //'
+// //'
+// //' @return the transfer functions.
+// //'
+// //' @noRd
+// //'
+// // [[Rcpp::export]]
+// Eigen::MatrixXcd solve_cplx_irr2(Eigen::MatrixXcd& x,
+//                                 size_t n,
+//                                 size_t max_lag) {
+//
+//   // original number of series
+//   size_t n_col = get_column_number(x.cols());
+//
+//   size_t n_row = x.rows() / 2 + 1; // half spectrum only
+//   ArrayXd groups = log_lags_eigen(n, max_lag-1);
+//   size_t n_ols = groups.size();
+//   size_t sub_size = n_col - 1;
+//
+//   VectorXi ind_sum(n_ols);
+//
+//   ind_sum(0) = 0;
+//   for(size_t j = 1; j < n_ols; ++j) {
+//     ind_sum(j) = ind_sum(j - 1) + groups(j - 1);
+//   }
+//
+//   MatrixXcd out(n_ols, sub_size);
+//
+//   RcppThread::parallelFor(0, n_ols, [&] (size_t i) {
+//
+//     size_t group_size = groups(i);
+//
+//     MatrixXcd sub = x.middleRows(ind_sum(i), group_size);
+//     VectorXcd y(group_size * sub_size);
+//
+//     MatrixXcd X(group_size * sub_size, sub_size);
+//
+//     // handle upper right
+//     size_t ind = n_col;
+//
+//     for(size_t i = 0; i < sub_size; ++i) {
+//       for(size_t j = i; j < sub_size; ++j) {
+//
+//         if(i == 0) {
+//           y.segment(j * group_size, group_size) = sub.col(ind - sub_size).conjugate();
+//         }
+//
+//         X.col(j).segment(i * group_size, group_size) = sub.col(ind);
+//
+//         if (i != j) {
+//            X.col(i).segment(j * group_size, group_size) = sub.col(ind).conjugate();
+//         }
+//
+//         ind = ind + 1;
+//       }
+//     }
+//
+//     out.row(i) = X.colPivHouseholderQr().solve(y);
+//   });
+//
+//   return(out);
+// }
 
 //==============================================================================
 
@@ -798,8 +1111,9 @@ Eigen::MatrixXd ordinary_coherence_phase(const Eigen::ArrayXXcd& x) {
 //' @description
 //' Convert from frequency to time domain
 //'
-//' @param x the frequency response function. (complex matrix)
-//'
+//' @param pgram. (complex matrix)
+//' @param n_groups the frequency response functions. (numeric vector)
+//' @param knots knot positions for cubic spline interpolation. (numeric vector)
 //'
 //'
 //' @return the time domain cumulative impulse response.
@@ -807,28 +1121,43 @@ Eigen::MatrixXd ordinary_coherence_phase(const Eigen::ArrayXXcd& x) {
 //' @noRd
 //'
 // [[Rcpp::export]]
-Eigen::MatrixXd frequency_to_time_domain(Eigen::MatrixXcd& x) {
+Eigen::MatrixXd frequency_to_time_domain(Eigen::MatrixXcd& pgram,
+                                         size_t n_groups
+                                         ) {
 
+  // Get frequencies
+  ArrayXd fs_all = determine_frequency(pgram.rows());
+  ArrayXd fs_sub = group_frequency(fs_all, n_groups);
+
+  // Determine transfer function
+  MatrixXcd tf = solve_cplx_irr(pgram, n_groups);
+
+  // Determine knot spacing
+  VectorXd knots = power_spaced(n_groups / 2, fs_all.minCoeff(), fs_all.maxCoeff(), 10);
+
+  // Smoothly interpolate transfer function
+  MatrixXcd tf_i = interpolate_tf(tf, fs_sub, fs_all, knots);
+
+  // Perform inverse fft on transfer function
   Eigen::FFT<double> fft;
-  size_t n_row = x.rows();
+  size_t n_row = tf_i.rows();
   size_t n_half = n_row / 2;
-  size_t n_col = x.cols();
-  // size_t n_new = next_n_eigen(n_row - 1);
+  size_t n_col = tf_i.cols();
 
-  Eigen::VectorXcd x_out(n_row);
-  Eigen::VectorXd z(n_row);
-  Eigen::MatrixXd out(n_half, n_col);
+  VectorXcd tf_i_out(n_row);
+  VectorXd z(n_row);
+  MatrixXd out(n_half, n_col);
 
   // remove DC components of transfer function
-  x.row(0) = x.row(1);
-  x.row(n_half) = x.row(n_half - 1);
+  tf_i.row(0) = tf_i.row(1);
+  tf_i.row(n_half) = tf_i.row(n_half - 1);
 
   for (size_t i = 0; i < n_col; ++i){
-    x_out.setZero();
+    tf_i_out.setZero();
     z.setZero();
     // x_out.head(n_row) = x.col(i);
-    x_out = x.col(i);
-    fft.inv(z, x_out);
+    tf_i_out = tf_i.col(i);
+    fft.inv(z, tf_i_out);
     out.col(i) = z.head(n_half).array() + z.reverse().head(n_half).array();
   }
 
@@ -930,7 +1259,7 @@ Eigen::MatrixXd frequency_to_time_domain(Eigen::MatrixXcd& x) {
 // knots for the spline regression fit
 // degree fro the spline regresssion fit
 //' @title
-//' interpolate_frf
+//' interpolate_tf
 //'
 //' @description
 //' Go from irregularly spaced frequency response function to a regularly
@@ -952,41 +1281,42 @@ Eigen::MatrixXd frequency_to_time_domain(Eigen::MatrixXcd& x) {
 //' @noRd
 //'
 // [[Rcpp::export]]
-Eigen::MatrixXcd interpolate_frf(const Eigen::ArrayXd& x,
-                                 const Eigen::MatrixXcd& y,
-                                 Eigen::VectorXd& knots,
-                                 size_t degree,
-                                 const Eigen::ArrayXd& x_interp) {
+Eigen::MatrixXcd interpolate_tf(Eigen::MatrixXcd& x,
+                                 const Eigen::ArrayXd& frequency_irregular,
+                                 const Eigen::ArrayXd& frequency_regular,
+                                 Eigen::VectorXd& knots
+) {
 
-  size_t n_y = y.rows();   // transfer function values
-  size_t n_x = x.size();   // frequencies for transfer function
-  size_t n_col = y.cols(); // number of series
-  size_t n = n_y - 2;      // n without dc components
+  size_t n_x = x.rows();   // transfer function values
+  size_t n_freq = frequency_irregular.size(); // frequencies for transfer function
+  size_t n_col = x.cols(); // number of series
+  size_t n = n_x - 2;      // n without dc components
   size_t n_knots = knots.size();
 
+
   // check inputs
-  if (n_y != n_x) stop("interpolate_frf: x and y lengths must be equal");
-  if (n_y < n_knots) stop("interpolate_frf: the number of knots cannot be greater than the input length");
+  if (n_x != n_freq) stop("interpolate_tf: x and y lengths must be equal");
+  if (n_x < n_knots) stop("interpolate_tf: the number of knots cannot be greater than the input length");
+
 
   // check knots
   for(size_t i = 0; i < knots.size(); ++i) {
-    if(knots(i) < x(i+1)) {
-      knots(i) = (x(i+1) + x(i+2))/2.0;
+    if(knots(i) < frequency_irregular(i + 1)) {
+      knots(i) = (frequency_irregular(i + 1) + frequency_irregular(i + 2)) / 2.0;
     }
   }
-  // Rcpp::Rcout << "The value knots " << knots << std::endl;
-
 
   // we don't want to use the dc values in the interpolation
-  Eigen::VectorXcd dc1 = y.row(0);
-  Eigen::VectorXcd dc2 = y.row(n_y - 1);
+  VectorXcd dc1 = x.row(0);
+  VectorXcd dc2 = x.row(n_x - 1);
 
-  VectorXd x_sub = x.segment(1, n);
-  size_t max = x_interp.size();
+
+  VectorXd frequency_sub = frequency_irregular.segment(1, n);
+  size_t max = frequency_regular.size();
 
   // generate knots
-  MatrixXd bs_in  = b_spline(x_sub, knots, degree);
-  MatrixXd bs_out = b_spline(x_interp, knots, degree);
+  MatrixXd bs_in  = b_spline(frequency_sub, knots);
+  MatrixXd bs_out = b_spline(frequency_regular, knots);
   // size_t n_interp = x_interp.size();
 
   VectorXcd frf(max);
@@ -994,17 +1324,17 @@ Eigen::MatrixXcd interpolate_frf(const Eigen::ArrayXd& x,
   VectorXd fit_imag(n);
   VectorXd re(n);
   VectorXd im(n);
-  VectorXcd y_sub(n);
+  VectorXcd x_sub(n);
   Eigen::MatrixXcd out(max * 2 , n_col);
 
 
   for(size_t i = 0; i < n_col; ++i) {
-    // do y by col
-    y_sub = y.col(i).segment(1, n);
-    // Rcpp::Rcout << "The value head " << y_sub.head(5) << std::endl;
 
-    fit_real = bs_in.colPivHouseholderQr().solve(y_sub.real());;
-    fit_imag = bs_in.colPivHouseholderQr().solve(y_sub.imag());;
+    // do y by col
+    x_sub = x.col(i).segment(1, n);
+
+    fit_real = bs_in.colPivHouseholderQr().solve(x_sub.real());;
+    fit_imag = bs_in.colPivHouseholderQr().solve(x_sub.imag());;
 
     re = bs_out * fit_real;
     im = bs_out * fit_imag;
@@ -1018,7 +1348,7 @@ Eigen::MatrixXcd interpolate_frf(const Eigen::ArrayXd& x,
 
     // out.col(i) << dc1(i), frf, dc2(i), frf.reverse().conjugate();
     // out.col(i) << y_sub(1), frf, y_sub.tail(1), frf.reverse().conjugate();
-    out.col(i) << frf, frf(0),frf.tail(max-1).reverse().conjugate();
+    out.col(i) << frf, frf(0), frf.tail(max-1).reverse().conjugate();
     // out.col(i) << frf(0), frf, frf.tail(1), frf.reverse().conjugate();
       // Rcpp::Rcout << "The value out head " << out.col(i).head(5) << std::endl;
       // Rcpp::Rcout << "The value out tail" << out.col(i).tail(5) << std::endl;
@@ -1056,24 +1386,22 @@ Eigen::MatrixXcd interpolate_frf(const Eigen::ArrayXd& x,
 //'
 // [[Rcpp::export]]
 Eigen::MatrixXcd transfer_pgram_smooth(Eigen::MatrixXd& x,
-                                             const Eigen::VectorXi& spans,
-                                             bool detrend,
-                                             bool demean,
-                                             double taper,
-                                             double power,
-                                             size_t n_groups) {
+                                       const Eigen::VectorXi& spans,
+                                       bool detrend,
+                                       bool demean,
+                                       double taper,
+                                       double power,
+                                       size_t n_groups) {
 
-  size_t min_aggregate = 1;
-  if(spans(0) == 0) {
-    min_aggregate = 3;
-  }
+  // size_t min_aggregate = 1;
 
+  // if(spans(0) == 0) {
+  //   min_aggregate = 3;
+  // }
 
-  Eigen::MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper);
-  Eigen::MatrixXcd out = solve_cplx_irr(pgram,
-                                        power,
-                                        n_groups,
-                                        min_aggregate);
+  MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper);
+  MatrixXcd out   = solve_cplx_irr(pgram, n_groups);
+
   return(out);
 }
 //==============================================================================
@@ -1082,13 +1410,13 @@ Eigen::MatrixXcd transfer_pgram_smooth(Eigen::MatrixXd& x,
 //==============================================================================
 // [[Rcpp::export]]
 Eigen::MatrixXcd transfer_pgram(Eigen::MatrixXd& x,
-                                      const Eigen::VectorXi& spans,
-                                      bool detrend,
-                                      bool demean,
-                                      double taper) {
+                                const Eigen::VectorXi& spans,
+                                bool detrend,
+                                bool demean,
+                                double taper) {
 
   Eigen::MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper);
-  Eigen::MatrixXcd out = solve_cplx_parallel(pgram);
+  Eigen::MatrixXcd out   = solve_cplx_parallel(pgram);
   return(out);
 }
 //==============================================================================
@@ -1123,9 +1451,8 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
                                 Eigen::VectorXd window
 ) {
 
-  Eigen::MatrixXcd pgram = spec_welch(x, length_subset, overlap, window);
-
-  Eigen::MatrixXcd out = solve_cplx_parallel(pgram);
+  MatrixXcd pgram = spec_welch(x, length_subset, overlap, window);
+  MatrixXcd out   = solve_cplx_parallel(pgram);
 
   return(out);
 }
@@ -1156,51 +1483,47 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 //'
 // [[Rcpp::export]]
 Eigen::MatrixXd predict_pgram_frf(Eigen::MatrixXd& x,
-                                  Eigen::VectorXi span) {
+                                  Eigen::MatrixXd& x_out,
+                                  Eigen::VectorXi spans, // spec_pgram
+                                  size_t n_groups) {
 
+  size_t n = x.rows();
+  size_t n_out = x_out.rows();
 
-  Eigen::MatrixXcd pgram = spec_pgram(x, span, false, false, 0.5);
+  // Get frequencies
+  ArrayXd fs_all = determine_frequency(n);
+  ArrayXd fs_out = determine_frequency(n_out);
+  ArrayXd fs_sub = group_frequency(fs_all, n_groups);
 
-  Eigen::MatrixXcd frf = solve_cplx_parallel(pgram);
-  Eigen::MatrixXd ret(frf.rows(), frf.cols());
-  // size_t sub_size = frf.cols();
-  // VectorXcd dc1 = irf.row(0);
-  // VectorXcd dc2 = irf.row(irf.size() - 1);
-  // VectorXcd out(x.rows(), sub_size);
-  Rcpp::Rcout << "The value frf rows " << frf.rows() << std::endl;
+  // calculate periodogram
+  MatrixXcd pgram = spec_pgram(x, spans, true, true, 0.1);
+
+  // estimate transfer function
+  MatrixXcd tf = solve_cplx_irr(pgram, n_groups);
+
+  // Determine knot spacing
+  VectorXd knots = power_spaced(n_groups / 2, fs_all.minCoeff(), fs_all.maxCoeff(), 10);
+
+  // interpolate to length similar to x_out
+  MatrixXcd x_interp = interpolate_tf(tf, fs_sub, fs_out, knots);
+
+  MatrixXd ret(x_interp.rows(), x_interp.cols());
+
+  Rcpp::Rcout << "The value frf rows " << tf.rows() << std::endl;
   Rcpp::Rcout << "The value pgram rows " << pgram.rows() << std::endl;
-  Rcpp::Rcout << "The value x rows " << x.rows() << std::endl;
+  Rcpp::Rcout << "The value x_interp rows " << x_interp.rows() << std::endl;
+  Rcpp::Rcout << "The value x_out rows " << x_out.rows() << std::endl;
 
-  // for(size_t i = 1; i < frf.cols(); ++i) {
-  //   size_t tt = index_from_i_j(i+1,i+1, 3) - 3;
-  //   for(size_t j = 0; j < pgram.rows(); ++j) {
-  //     if(std::abs(pgram(j,tt)) < 100) {
-  //       frf(j, i) = std::complex<double>(0.0, 0.0);
-  //     }
-  //   }
-  // }
-
-  for(size_t i = 0; i < frf.cols(); ++i) {
-    ret.col(i) = convolve_tf(pad_vector(x.col(i+1),
-                             x.rows(),
-                             frf.rows()),
-                             frf.col(i).reverse());
+  for(size_t i = 0; i < x_interp.cols(); ++i) {
+    ret.col(i) = convolve_tf(x_out.col(i+1),
+                             x_interp.col(i).reverse());
   }
-
-
-  // Eigen::FFT<double> fft;
-  // size_t n = irf.size();
-  // Eigen::VectorXcd x_out(n * 2 + 2);
-  // Eigen::VectorXcd dc1 = out.row(0);
-  // Eigen::VectorXcd dc2 = out.row(out.rows() - 1);
-  //
-  // // x_out << dc1, x, dc2, x.reverse().conjugate();
-  // Rcpp::Rcout << "The value xout " << x_out.rows() << std::endl;
-
 
   return(ret);
 }
 //==============================================================================
+
+
 
 //
 // //==============================================================================
@@ -1242,7 +1565,7 @@ Eigen::MatrixXd predict_pgram_frf(Eigen::MatrixXd& x,
 //   // }
 //   // knots(0) = fs_all(0);
 //   // knots(fs_sub.size()/4) = fs_all(pgram.rows() / 2 - 2);
-//   Eigen::MatrixXcd frf = interpolate_frf(fs_sub, out, knots, 3, fs_all);
+//   Eigen::MatrixXcd frf = interpolate_tf(fs_sub, out, knots, 3, fs_all);
 //
 //   Eigen::MatrixXd ret(frf.rows(), frf.cols());
 //   // size_t sub_size = frf.cols();
@@ -1732,21 +2055,21 @@ Eigen::MatrixXd predict_pgram_frf(Eigen::MatrixXd& x,
 #   reihe <- fft(fR, inverse=TRUE) # go back into time domain
 #   return(Re(reihe)) # imaginary part is 0
 # }
-
+library(hydrorecipes)
 library(data.table)
 library(collapse)
 library(earthtide)
 latitude     <- 34.23411                           # latitude
 longitude    <- -118.678                           # longitude
 elevation    <- 500                                # elevation
-cutoff       <- 1e-9                               # cutoff
+cutoff       <- 1e-5                               # cutoff
 catalog      <- 'hw95s'                            # hartmann wenzel catalog
-astro_update <- 120                                # how often to update astro parameters
+astro_update <- 300                                # how often to update astro parameters
 method       <- 'volume_strain'                    # which potential to calculate
 
 wave_groups_dl <- as.data.table(earthtide::eterna_wavegroups)
-# wave_groups_dl <- na.omit(wave_groups_dl[time == 'all'])
-wave_groups_dl <- wave_groups_dl[name %in% c('O1','P1','K1','S1','N2','M2','S2','K2', 'M3', 'M4', 'M5', 'M6')]
+wave_groups_dl <- na.omit(wave_groups_dl[time == 'all'])
+wave_groups_dl <- wave_groups_dl[name %in% c('Q1','O1','P1','K1','S1','N2','M2','S2','K2', 'M3')]
 # wave_groups_dl <- wave_groups_dl[wave_groups_dl$start > 0.9,]
 # wave_groups_dl <- wave_groups_dl[wave_groups_dl$start < 2.,]
 ngr <- nrow(wave_groups_dl)
@@ -1757,7 +2080,6 @@ fn2 <- '/Users/jonathankennel/Documents/papers/barometric_response_high_frequenc
 wl <- read_fst(fn1, as.data.table = TRUE)
 et <- read_fst(fn2, as.data.table = TRUE)
 nr <- nrow(wl)
-wl <- wl[1:1e6]
 
 wl <- wl[et, on = 'datetime', nomatch = 0]
 wl[, wl_adj := (lm(rd130~as.numeric(datetime))$residuals)]
@@ -1773,10 +2095,13 @@ wl[, volume_strain := calc_earthtide(datetime,
                                      method = method,
                                      do_predict = TRUE,
                                      return_matrix = TRUE)]
-wl[, volume_strain_adj := (volume_strain) / max(volume_strain)]
-wl[, volume_strain_adj := (volume_strain) + rnorm(nrow(wl), sd = 0.02)]
+wl[, volume_strain_adj := (volume_strain) / (max(volume_strain))]
+# wl[, baro_adj := (baro_adj) / (max(baro_adj))]
+# wl[, wl_adj := (wl_adj) / (max(wl_adj))]
+# wl[, volume_strain_adj := (volume_strain_adj) + cumsum(rnorm(nrow(wl), sd = 0.01))]
+# wl[, volume_strain_adj := (volume_strain_adj) + runif(nrow(wl), -0.01, 0.01)]
 
-wl_m <- qM(wl[,list(wl_adj,baro_adj, volume_strain_adj)])
+wl_m <- qM(wl[,list(wl_adj, baro_adj, volume_strain_adj)])
 # wl_m <- qM(wl[,list(wl_adj,baro_adj)])
 wl_m <- wl_m[-1,]
 
@@ -1790,44 +2115,125 @@ bm <- bench::mark(
                      length_subset = 512*10,
                      overlap = 0.5,
                      window = window_hann(512*10)),
+  sw_a <- spec_welch(x = wl_m,
+                     length_subset = 2551392*1,
+                     overlap = 0.99,
+                     window = window_blackman_harris(2551392*1)),
   check = FALSE
 
 )
+
+plot(Mod(sw_a)[1:10000,1], type = 'l', log = 'xy', col = 'darkgreen')
+points(Mod(sw_a)[1:10000,2], type = 'l', log = 'xy', col = 'darkred')
+points(Mod(sw_a)[1:10000,3], type = 'l', log = 'xy', col = 'darkblue')
+
+plot(Mod(sw_a)[1:(86400*2),3], type = 'l', log = 'xy', col = 'darkblue')
 
 setDT(bm)
 bm
 
 bm <- bench::mark(
 
-  sp_a <- spec_pgram(x = wl_m,
+  sp_a <- spec_pgram(x = wl_m[1:(2551392),],
                      spans = c(3),
                      detrend = TRUE,
                      demean = TRUE,
-                     taper = 0.1),
+                     taper = 0.05),
+
+  check = FALSE
+
+)
+plot(Mod(sp_a)[1:10000,1], type = 'l', log = 'xy')
+points(Mod(sp_a)[1:10000,2], type = 'l', log = 'xy', col = 'darkred')
+points(Mod(sp_a)[1:10000,3], type = 'l', log = 'xy', col = 'darkblue')
+
+setDT(bm)
+bm
+
+system.time({
+  sw_a <- spec_welch(x = wl_m,
+                     length_subset = 2551392*1,
+                     overlap = 0.99,
+                     window = window_blackman_harris(2551392*1))
+  a <- frequency_to_time_domain(sw_a, 60)
+  irr <- solve_cplx_irr(sw_a, 60)
+})
+
+
+system.time({
+   sp_a <- spec_pgram(x = wl_m[1:(2551392),],
+                     spans = c(3),
+                     detrend = TRUE,
+                     demean = TRUE,
+                     taper = 0.1)
+  a <- frequency_to_time_domain(sp_a, 60)
+})
+
+
+plot(cumsum(a[1:(86400*2), 1]),
+     type = 'l',
+     log= 'x',
+     col = 'darkgreen',
+     ylim = c(0, 1),
+     lwd = 2)
+plot(cumsum(a[1:(86400*2), 2]),
+     type = 'l',
+     log= 'x',
+     col = 'darkgreen',
+     lwd = 2)
+
+plot(Mod(irr[, 1]),
+     type = 'l',
+     log= 'x',
+     col = 'steelblue', lwd = 2)
+plot(Arg(irr[, 1]),
+     type = 'l',
+     log= 'x',
+     col = 'steelblue',
+     lwd = 2)
+plot(Mod(irr[1:7, 2]),
+     type = 'l',
+     log= 'x',
+     col = 'steelblue',
+     lwd = 2)
+
+wl_m2 <- qM(wl[,list(wl_adj, baro_adj, volume_strain/max(volume_strain))])
+# wl_m <- qM(wl[,list(wl_adj,baro_adj)])
+wl_m2 <- wl_m2[-1,]
+
+
+tmp <- predict_pgram_frf(wl_m[1:1e6,],
+                         wl_m2[(1):3e6,],
+                         c(3), 100)
+
+plot(tmp[seq(1, nrow(tmp), 360),1]+tmp[seq(1, nrow(tmp), 360), 2], type = 'l')
+points(tmp[seq(1, nrow(tmp), 360),1], type = 'l', col = 'grey')
+points(wl_m[seq(1, 3e6,360),1], type = 'l', col = 'red')
+plot(tmp[seq(1, nrow(tmp), 360),2], type = 'l', col = 'blue')
+
+plot(wl_m[seq(1e6+1, 3e6,360),3], type = 'l', col = 'red')
+
+
+bm <- bench::mark(
+
+  tf_ia <- solve_cplx_irr(sp_a, 200),
+  tf_wia <- solve_cplx_irr(sw_a, 4, 200, 1),
+  # tf_pa <- solve_cplx_parallel(sp_a),
+  # tf_wa <- solve_cplx_parallel(sw_a),
 
   check = FALSE
 
 )
 setDT(bm)
 bm
-str(sp_a)
-
-
-bm <- bench::mark(
-
-  tf_ia <- solve_cplx_irr(sp_a, 4, 600, 1),
-  tf_pa <- solve_cplx_parallel(sp_a),
-  tf_wa <- solve_cplx_parallel(sw_a),
-
-  check = FALSE
-
-)
-setDT(bm)
-bm
+plot(Mod(tf_wia[,1]), type = 'h', log = 'x', ylim = c(0,1), lwd = 2)
+plot(Mod(tf_ia[,1]), type = 'h', log = 'x', col = 'red', ylim = c(0, 1), lwd = 1)
+plot((Mod(tf_wia[,1])+Mod(tf_ia[,1]))/2, type = 'h', log = 'x', ylim = c(0,1), lwd = 2, col = 'blue')
+# plot(Mod(tf_ia[,1]), type = 'h', log = 'x', col = 'red', ylim = c(0, 1), lwd = 1)
 
 bm <- bench::mark(
 
-  cp_i <- ordinary_coherence_phase(sp_a),
+  cp_i <- ordinary_coherence_phase(sw_a),
 
 
   check = FALSE
@@ -1843,7 +2249,7 @@ knots = power_spaced(20, min(fs_all), max(fs_all), 5);
 
 bm <- bench::mark(
 
-  tf_iai <- interpolate_frf(fs_sub, tf_ia, knots, 3, fs_all),
+  tf_iai <- interpolate_tf(fs_sub, tf_ia, knots, 3, fs_all),
 
 
   check = FALSE
@@ -1976,7 +2382,7 @@ fs_all = hydrorecipes:::determine_frequency(nrow(tmp1) / 2 - 1);
 fs_sub = hydrorecipes:::group_frequency(fs_all, 3, 500, 1);
 
 knots = hydrorecipes:::power_spaced(50, min(fs_all), max(fs_all), 3);
-frf = hydrorecipes:::interpolate_frf(fs_sub, tf, knots, 3, fs_all);
+frf = hydrorecipes:::interpolate_tf(fs_sub, tf, knots, 3, fs_all);
 
 
 
@@ -2150,7 +2556,7 @@ k <- log_lags(10, max_time_lag = max(at_sub)+1)
 # k <- k[-2]
 # k[1] <- k[1]
 system.time({
-  x2 <- hydrorecipes:::interpolate_frf(x = at,
+  x2 <- hydrorecipes:::interpolate_tf(x = at,
                                        y = bb[, 1, drop = FALSE],
                                        k,
                                        degree = 3)

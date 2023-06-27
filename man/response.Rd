@@ -4,6 +4,7 @@
 \alias{response}
 \alias{response.lm}
 \alias{response.numeric}
+\alias{response.tbl_df}
 \title{response}
 \usage{
 response(fit, rec, verbose = FALSE, ...)
@@ -11,6 +12,8 @@ response(fit, rec, verbose = FALSE, ...)
 \method{response}{lm}(fit, rec, verbose = FALSE, ...)
 
 \method{response}{numeric}(fit, rec, verbose = FALSE, ...)
+
+\method{response}{tbl_df}(fit, rec, verbose = FALSE, ...)
 }
 \arguments{
 \item{fit}{A model object that has a \code{coefficients} method (e.g. \code{lm})}
@@ -28,26 +31,30 @@ corresponding to each step.
 \description{
 This function takes a model object and extracts the responses
 (i.e. the relationship between the inputs and output) from
-\code{step_distributed_lag}, \code{step_lead_lag}, \code{step_harmonic} and \code{step_earthtide}.
+\code{step_distributed_lag}, \code{step_lead_lag}, \code{step_harmonic} and
+\code{step_earthtide}.
 }
 \details{
 \code{step_distributed_lag} and \code{step_lead_lag} result
 in impulse response functions and \code{step_harmonic} and \code{step_earthtide}
-result in harmonic components (amplitude and phase for each \emph{main} frequency).
+result in harmonic components (amplitude and phase for each
+\emph{main} frequency).
 }
 \examples{
 data(transducer)
 transducer$datetime_num <- as.numeric(transducer$datetime)
 
-rec_toll_rasmussen <- recipe(wl~baro + datetime_num, transducer) |>
-   step_lead_lag(baro, lag = log_lags(100, 86400 * 2 / 120)) |>
-   step_ns(datetime_num, deg_free = 10) |>
-   prep()
+rec_toll_rasmussen <- recipe(wl ~ baro + datetime_num, transducer) |>
+  step_lead_lag(baro, lag = log_lags(100, 86400 * 2 / 120)) |>
+  step_ns(datetime_num, deg_free = 10) |>
+  prep()
 
 input_toll_rasmussen <- rec_toll_rasmussen |> bake(new_data = NULL)
 
-fit_toll_rasmussen <- lm(wl~., input_toll_rasmussen)
-resp <- response(fit_toll_rasmussen,
-                 rec_toll_rasmussen)
-plot(value~x, resp[resp$name == 'cumulative',], type = 'l')
+fit_toll_rasmussen <- lm(wl ~ ., input_toll_rasmussen)
+resp <- response(
+  fit_toll_rasmussen,
+  rec_toll_rasmussen
+)
+plot(value ~ x, resp[resp$name == "cumulative", ], type = "l")
 }

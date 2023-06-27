@@ -36,26 +36,29 @@ the original variables will be used as \emph{predictors} in a model.}
 \item{trained}{A logical to indicate if the quantities for
 preprocessing have been estimated.}
 
-\item{knots}{An integer vector of breakpoints to define the spline. These should
-include the \code{Boundary.knots}. See \href{https://CRAN.R-project.org/package=splines}{splines}
-for more info.}
+\item{knots}{An integer vector of breakpoints to define the spline. These
+should include the \code{Boundary.knots}. See
+\href{https://CRAN.R-project.org/package=splines}{splines} for more info.}
 
 \item{basis_mat}{The matrix of basis kernels to convolve. This is
 \code{NULL} until computed by \code{\link[=prep.recipe]{prep.recipe()}}. This can also be specified as an
-object generated from the \href{https://CRAN.R-project.org/package=splines}{splines} or \href{https://CRAN.R-project.org/package=splines2}{splines2} packages having attributes
-for \code{knots} and \code{Boundary.knots}. If specified like this \code{knots} will be
-obtained from the \code{basis_mat} and not from the \code{knots} parameter.}
+object generated from the
+\href{https://CRAN.R-project.org/package=splines}{splines} or
+\href{https://CRAN.R-project.org/package=splines2}{splines2} packages having
+attributes for \code{knots} and \code{Boundary.knots}. If specified like this \code{knots}
+will be obtained from the \code{basis_mat} and not from the \code{knots} parameter.}
 
 \item{spline_fun}{Function used for calculating \code{basis_mat}.  This should
 return an object having \code{knots} and \code{Boundary.knots} attributes.}
 
 \item{n_subset}{A single integer. Subset every \code{n_subset} values.}
 
-\item{n_shift}{A single integer amount to shift results in number of observations.}
+\item{n_shift}{A single integer to shift results in number of observations.}
 
 \item{options}{The arguments to pass to \code{spline_fun}.}
 
-\item{prefix}{A prefix for generated column names, defaults to "distributed_lag_".}
+\item{prefix}{A prefix for generated column names, defaults to
+"distributed_lag_".}
 
 \item{keep_original_cols}{A logical to keep the original variables in the
 output. Defaults to \code{FALSE}.}
@@ -87,9 +90,9 @@ done in the frequency domain for efficiency. Samples should be ordered and
 have regular spacing (i.e. regular time series, regular spatial sampling).
 }
 \details{
-This step assumes that the data are already \emph{in the proper sequential
+This step assumes that data are already \emph{in the proper sequential
 order} for lagging. The input should be sampled at a regular interval
-(time, space, etc.). When the recipe is baked a set of vectors resulting from
+(time, space, etc.). When the recipe is baked a set of vectors from
 the convolution of a vector and a basis matrix is returned. Distributed lags
 can be used to model a delayed response to a input
 in a flexible manner with fewer regressor terms. The method achieves this by
@@ -100,28 +103,33 @@ describing both fast and slow responses.
 \examples{
 data(wipp30)
 
-rec_base <- recipe(wl~baro, data = wipp30)
+rec_base <- recipe(wl ~ baro, data = wipp30)
 
 # default uses splines::ns
 rec <- rec_base |>
   step_distributed_lag(baro,
-                       knots = log_lags(4, 72)) |>
+    knots = log_lags(4, 72)
+  ) |>
   prep()
 
 # use different spline function
 rec <- rec_base |>
   step_distributed_lag(baro,
-                       spline_fun = splines::bs,
-                       options = list(intercept = TRUE,
-                                      degree = 4L),
-                       knots = log_lags(4, 72)) |>
+    spline_fun = splines::bs,
+    options = list(
+      intercept = TRUE,
+      degree = 4L
+    ),
+    knots = log_lags(4, 72)
+  ) |>
   prep()
 
 # specify basis_mat
 basis_mat <- splines::bs(0:72, knots = c(3, 16, 24, 48))
 rec <- rec_base |>
   step_distributed_lag(baro,
-                       basis_mat = basis_mat) |>
+    basis_mat = basis_mat
+  ) |>
   prep()
 
 }

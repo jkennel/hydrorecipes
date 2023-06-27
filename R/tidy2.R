@@ -37,7 +37,6 @@ NULL
 #' rdname tidy2.recipe
 #' @export
 tidy2.recipe <- function(x, number = NA, id = NA, ...) {
-
   # add id = NA as default. If both ID & number are non-NA, error.
   # If number is NA and ID is not, select the step with the corresponding
   # ID. Only a single ID is allowed, as this follows the convention for number
@@ -45,12 +44,14 @@ tidy2.recipe <- function(x, number = NA, id = NA, ...) {
   pattern <- "(^step_)|(^check_)"
 
   if (!is.na(id)) {
-    if (!is.na(number))
+    if (!is.na(number)) {
       rlang::abort("You may specify `number` or `id`, but not both.")
-    if (length(id) != 1L && !is.character(id))
+    }
+    if (length(id) != 1L && !is.character(id)) {
       rlang::abort("If `id` is provided, it must be a length 1 character vector.")
+    }
     step_ids <- vapply(x$steps, function(x) x$id, character(1))
-    if(!(id %in% step_ids)) {
+    if (!(id %in% step_ids)) {
       rlang::abort("Supplied `id` not found in the recipe.")
     }
     number <- which(id == step_ids)
@@ -59,7 +60,7 @@ tidy2.recipe <- function(x, number = NA, id = NA, ...) {
   if (is.na(number)) {
     skipped <- vapply(x$steps, function(x) x$skip, logical(1))
     ids <- vapply(x$steps, function(x) x$id, character(1))
-    step_names <- vapply(x$steps, function(x) paste(unique(tidy(x)$terms), collapse = ''), character(1))
+    step_names <- vapply(x$steps, function(x) paste(unique(tidy(x)$terms), collapse = ""), character(1))
 
     oper_classes <- lapply(x$steps, class)
     oper_classes <- grep("_", unlist(oper_classes), value = TRUE)
@@ -68,18 +69,22 @@ tidy2.recipe <- function(x, number = NA, id = NA, ...) {
     oper <- vapply(oper, function(x) x[1], character(1))
 
     oper_types <- gsub(pattern, "", oper_classes)
-    is_trained <- vapply(x$steps,
-                         function(x) x$trained,
-                         logical(1))
-    res <- tibble(number = seq_along(x$steps),
-                  operation = oper,
-                  type = oper_types,
-                  trained = is_trained,
-                  skip = skipped,
-                  id = ids,
-                  step_name = step_names)
+    is_trained <- vapply(
+      x$steps,
+      function(x) x$trained,
+      logical(1)
+    )
+    res <- tibble(
+      number = seq_along(x$steps),
+      operation = oper,
+      type = oper_types,
+      trained = is_trained,
+      skip = skipped,
+      id = ids,
+      step_name = step_names
+    )
   } else {
-    if (number > num_oper || length(number) > 1)
+    if (number > num_oper || length(number) > 1) {
       rlang::abort(
         paste0(
           "`number` should be a single value between 1 and ",
@@ -87,22 +92,22 @@ tidy2.recipe <- function(x, number = NA, id = NA, ...) {
           "."
         )
       )
-
-    res <- tidy(x$steps[[number]], ...)
-    nm  <- class(x$steps[[number]])[1]
-
-    if (nm %in% c('step_distributed_lag',
-                  'step_earthtide',
-                  'step_ns',
-                  'step_intercept',
-                  'step_lead_lag',
-                  'step_mutate',
-                  'step_cut')) {
-
-      res <- tidy2(x$steps[[number]], ...)
-
     }
 
+    res <- tidy(x$steps[[number]], ...)
+    nm <- class(x$steps[[number]])[1]
+
+    if (nm %in% c(
+      "step_distributed_lag",
+      "step_earthtide",
+      "step_ns",
+      "step_intercept",
+      "step_lead_lag",
+      "step_mutate",
+      "step_cut"
+    )) {
+      res <- tidy2(x$steps[[number]], ...)
+    }
   }
   res
 }
@@ -141,13 +146,18 @@ tidy2.step_ns <- function(x, ...) {
   }
   new_cols <- ncol(x$objects[[1]])
 
-  ret <- tibble(terms = rep(terms, each = new_cols),
-                id = x$id,
-                step_name = 'step_ns')
+  ret <- tibble(
+    terms = rep(terms, each = new_cols),
+    id = x$id,
+    step_name = "step_ns"
+  )
 
   ret$key <- paste(rep(terms, each = new_cols), "ns",
-                   rep(names0(new_cols, ""),
-                       times = length(terms)), sep = "_")
+    rep(names0(new_cols, ""),
+      times = length(terms)
+    ),
+    sep = "_"
+  )
   ret
 }
 
@@ -159,9 +169,10 @@ tidy.step_intercept <- function(x, ...) {
 #' @rdname tidy2.recipe
 #' @export
 tidy2.step_intercept <- function(x, ...) {
-
-  ret <- tibble(id = x$id,
-                step_name = 'step_intercept')
+  ret <- tibble(
+    id = x$id,
+    step_name = "step_intercept"
+  )
   ret$key <- "intercept"
   ret
 }
@@ -169,14 +180,15 @@ tidy2.step_intercept <- function(x, ...) {
 #' @rdname tidy2.recipe
 #' @export
 tidy2.step_mutate <- function(x, ...) {
-
   inputs <- x$inputs
 
   terms <- names(rlang::quos_auto_name(inputs))
 
-  ret <- tibble(terms = terms,
-                id = x$id,
-                step_name = 'step_mutate')
+  ret <- tibble(
+    terms = terms,
+    id = x$id,
+    step_name = "step_mutate"
+  )
   ret$key <- "mutate"
   ret
 }
@@ -190,11 +202,12 @@ tidy2.step_cut <- function(x, ...) {
   } else {
     term_names <- sel2char(x$terms)
   }
-  res <- tibble(terms = term_names,
-                breaks = rep(x$breaks[[1]], length(term_names)))
-  res_step_name <- 'step_cut'
+  res <- tibble(
+    terms = term_names,
+    breaks = rep(x$breaks[[1]], length(term_names))
+  )
+  res$step_name <- "step_cut"
   res$id <- x$id
-  res$key <- 'cut'
+  res$key <- "cut"
   res
 }
-

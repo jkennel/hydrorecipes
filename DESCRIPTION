@@ -25,6 +25,7 @@ Imports:
   earthtide,
   generics,
   collapse,
+  Bessel,
   splines,
   tibble,
   dplyr,
@@ -32,8 +33,9 @@ Imports:
   tidyr,
   fftw
 LinkingTo: 
-  RcppEigen, 
   RcppThread, 
+  RcppEigen, 
+  specialfunctions,
   Rcpp
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
@@ -43,6 +45,7 @@ Suggests:
     splines2,
     rmarkdown,
     data.table,
+    expint,
     gsignal,
     ravetools,
     ggplot2,
@@ -55,5 +58,5 @@ VignetteBuilder:
     knitr
 LazyData: true
 NeedsCompilation: yes
-SystemRequirements: fftw3 (libfftw3-dev (deb), or fftw-devel (rpm)), C++11
+SystemRequirements: fftw3 (libfftw3-dev (deb), or fftw-devel (rpm)), C++17
 Config/testthat/edition: 3

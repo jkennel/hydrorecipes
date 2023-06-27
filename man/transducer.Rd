@@ -17,9 +17,9 @@ A \code{data.frame} The columns are:
 transducer
 }
 \description{
-This \code{data.frame} contains the water levels, barometric pressure,
-and synthetic Earth tides from 2016-08-25 to 2016-10-15 (sub-sampled to every
-2 minutes).
+This \code{data.frame} contains the water levels,
+barometric pressure, and synthetic Earth tides from 2016-08-25 to 2016-10-15
+(sub-sampled to every 2 minutes).
 }
 \examples{
 data(transducer)

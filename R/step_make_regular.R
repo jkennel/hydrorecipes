@@ -27,15 +27,15 @@
 #' @examples
 #' data(wipp30)
 #' nrow(wipp30)
-#' wipp30_missing <- wipp30[-(2:10),]
+#' wipp30_missing <- wipp30[-(2:10), ]
 #' nrow(wipp30_missing)
-#' wipp30_complete <- recipe(wl~., data = wipp30_missing) |>
+#' wipp30_complete <- recipe(wl ~ ., data = wipp30_missing) |>
 #'   step_make_regular(time) |>
 #'   prep() |>
 #'   bake(new_data = NULL)
 #' nrow(wipp30_complete)
 #'
-#' wipp30_subsample_2 <- recipe(wl~., data = wipp30_missing) |>
+#' wipp30_subsample_2 <- recipe(wl ~ ., data = wipp30_missing) |>
 #'   step_make_regular(time, delta = 2) |>
 #'   prep() |>
 #'   bake(new_data = NULL)
@@ -53,8 +53,7 @@ step_make_regular <-
            columns = NULL,
            skip = FALSE,
            id = rand_id("make_regular")) {
-
-    if(length(delta) != 1) {
+    if (length(delta) != 1) {
       rlang::abort("step_make_regular requires a single 'delta' value")
     }
 
@@ -76,7 +75,9 @@ step_make_regular <-
   }
 
 step_make_regular_new <-
-  function(terms, role, trained, delta, start, prefix, keep_original_cols, columns, skip, id) {
+  function(
+      terms, role, trained, delta, start, prefix, keep_original_cols,
+      columns, skip, id) {
     step(
       subclass = "make_regular",
       terms = terms,
@@ -93,9 +94,8 @@ step_make_regular_new <-
 
 #' @export
 prep.step_make_regular <- function(x, training, info = NULL, ...) {
-
   col_names <- recipes_eval_select(x$terms, training, info)
-  if(length(col_names) > 1) {
+  if (length(col_names) > 1) {
     rlang::abort("step_make_regular a single term")
   }
   check_type(training[, col_names])
@@ -111,23 +111,21 @@ prep.step_make_regular <- function(x, training, info = NULL, ...) {
     skip = x$skip,
     id = x$id
   )
-
 }
 
 #' @export
 bake.step_make_regular <- function(object, new_data, ...) {
-
   # make sure data is sorted
-  new_data <- new_data[order(new_data[[object$columns]]),]
+  new_data <- new_data[order(new_data[[object$columns]]), ]
 
   # create sequence
   rng <- as.numeric(range(new_data[[object$columns]], na.rm = TRUE))
 
-  if(!is.null(object$start)) {
-    if(object$start <= rng[2]){
+  if (!is.null(object$start)) {
+    if (object$start <= rng[2]) {
       rng[1] <- object$start
     } else {
-      rlang::abort('step_make_regular requires start to be less than the maximum value of the input column')
+      rlang::abort("step_make_regular requires start to be less than the maximum value of the input column")
     }
   }
   new <- tibble(x = seq(rng[1], rng[2], by = object$delta))
@@ -135,14 +133,12 @@ bake.step_make_regular <- function(object, new_data, ...) {
 
   # do join
   left_join(new, new_data, by = object$columns)
-
-
 }
 
 #' @importFrom recipes printer
 print.step_make_regular <-
   function(x, width = max(20, options()$width - 30), ...) {
-    cat("make_regular ",  sep = "")
+    cat("make_regular ", sep = "")
     printer(x$columns, x$terms, x$trained, width = width)
     invisible(x)
   }
@@ -155,23 +151,19 @@ tidy.step_make_regular <- function(x, ...) {
 #' @rdname tidy2.recipe
 #' @export
 tidy2.step_make_regular <- function(x, ...) {
-  n_terms <- length(x$terms)
   res <-
-    tibble(terms = sel2char(x$terms),
-           delta = x$delta,
-           start = x$start
+    tibble(
+      terms = sel2char(x$terms),
+      delta = x$delta,
+      start = x$start
     )
-  res$key <- paste0(x$prefix, x$delta, '_', res$terms)
+  res$key <- paste0(x$prefix, x$delta, "_", res$terms)
   res$id <- x$id
-  res$step_name <- 'step_make_regular'
+  res$step_name <- "step_make_regular"
   res
-
 }
 
 #' @export
 required_pkgs.step_make_regular <- function(x, ...) {
   c("hydrorecipes")
 }
-
-
-

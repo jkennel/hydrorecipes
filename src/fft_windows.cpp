@@ -16,7 +16,7 @@
 // [[Rcpp::export]]
 Eigen::VectorXd window_hann(size_t n) {
 
-  Eigen::VectorXd out;
+  VectorXd out;
 
   if(n == 0) {
     Rcpp::stop("window_hann: n must be an integer greater than 0");
@@ -106,8 +106,8 @@ Eigen::VectorXd window_tukey(size_t n, double r) {
 Eigen::VectorXcd window_hann_cplx(size_t n) {
 
 
-  Eigen::VectorXd hann = window_hann(n);
-  Eigen::VectorXcd out(n);
+  VectorXd hann = window_hann(n);
+  VectorXcd out(n);
 
   for(size_t i = 0; i < out.size(); ++i) {
     out(i) = std::complex<double>(hann(i), hann(i));
@@ -140,6 +140,137 @@ Eigen::VectorXd window_rectangle(size_t n) {
 }
 //==============================================================================
 
+
+
+// =============================================================================
+//' @title
+//' window_first_deriv
+//'
+//' @description
+//' First derivative window for FFT
+//'
+//' @inheritParams window_hann
+//'
+//' @param a0 \code{double} coefficient
+//' @param a1 \code{double} coefficient
+//' @param a2 \code{double} coefficient
+//' @param a3 \code{double} coefficient
+//'
+//' @return window
+//'
+//' @export
+//'
+//' @examples
+//' # nuttall window
+//' window_first_deriv(100, 0.355768, 0.487396, 0.144232, 0.012604)
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::ArrayXd window_first_deriv(size_t n,
+                                   double a0,
+                                   double a1,
+                                   double a2,
+                                   double a3) {
+
+  ArrayXd k = Eigen::ArrayXd::LinSpaced(n, 0.0, n - 1.0) / double(n - 1.0);
+
+  return(a0 - a1 * (2 * M_PI * k).cos() +
+              a2 * (4 * M_PI * k).cos() -
+              a3 * (6 * M_PI * k).cos());
+
+}
+
+// =============================================================================
+//' @title
+//' window_nuttall
+//'
+//' @description
+//' Nuttall window for FFT
+//'
+//' @inheritParams window_hann
+//'
+//' @return window
+//'
+//' @export
+//'
+//' @examples
+//' window_nuttall(100)
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::ArrayXd window_nuttall(size_t n) {
+
+  double a0 = 0.355768;
+  double a1 = 0.487396;
+  double a2 = 0.144232;
+  double a3 = 0.012604;
+
+  return(window_first_deriv(n, a0, a1, a2, a3));
+
+}
+
+
+// =============================================================================
+//' @title
+//' window_blackman_nuttall
+//'
+//' @description
+//' Blackman-Nuttall window for FFT
+//'
+//' @inheritParams window_hann
+//'
+//' @return window
+//'
+//' @export
+//'
+//' @examples
+//' window_blackman_nuttall(100)
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::ArrayXd window_blackman_nuttall(size_t n) {
+
+  double a0 = 0.3635819;
+  double a1 = 0.4891775;
+  double a2 = 0.1365995;
+  double a3 = 0.0106411;
+
+  return(window_first_deriv(n, a0, a1, a2, a3));
+
+}
+
+// =============================================================================
+//' @title
+//' window_blackman_harris
+//'
+//' @description
+//' Blackman-Harris window for FFT
+//'
+//' @inheritParams window_hann
+//'
+//' @return window
+//'
+//' @export
+//'
+//' @examples
+//' window_blackman_harris(100)
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::ArrayXd window_blackman_harris(size_t n) {
+
+  double a0 = 0.35875;
+  double a1 = 0.48829;
+  double a2 = 0.14128;
+  double a3 = 0.01168;
+
+  return(window_first_deriv(n, a0, a1, a2, a3));
+
+}
 
 //==============================================================================
 //' @title

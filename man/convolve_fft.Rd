@@ -11,7 +11,7 @@ convolve_fft(x, y, keep_partial = FALSE, reverse = TRUE)
 
 \item{y}{numeric vector convolution kernel}
 
-\item{keep_partial}{logical  whether to keep incomplete portion of convolution}
+\item{keep_partial}{logical whether to keep incomplete portion of convolution}
 
 \item{reverse}{logical should the kernel be reversed}
 }

@@ -9,18 +9,19 @@
 #'
 #' @noRd
 subset_bind <- function(new_data, to_bind, n_subset, n_shift) {
+  if (n_subset > 1) {
+    ind <- seq(
+      n_shift + 1,
+      nrow(new_data),
+      n_subset
+    )
 
-  if(n_subset > 1) {
-    ind <- seq(n_shift + 1,
-               nrow(new_data),
-               n_subset)
-
-    return(bind_cols(new_data[ind,],
-                     as_tibble(to_bind, .name_repair = 'minimal'),
-                     .name_repair = 'minimal'))
+    return(bind_cols(new_data[ind, ],
+      as_tibble(to_bind, .name_repair = "minimal"),
+      .name_repair = "minimal"
+    ))
   }
 
 
   bind_cols(new_data, to_bind)
-
 }

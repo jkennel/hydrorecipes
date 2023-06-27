@@ -44,6 +44,7 @@ response_lag <- function(co, step_info) {
     cumulative = cumsum(co),
     x = step_info$shift
   )
+
 }
 
 
@@ -183,6 +184,16 @@ response.numeric <- function(fit, rec, verbose = FALSE, ...) {
 }
 
 
+
+#' @rdname response
+#' @export
+response.tbl_df <- function(fit, rec, verbose = FALSE, ...) {
+
+  co <- fit$estimate
+  names(co) <- fit$term
+  response.numeric(co, rec, verbose, ...)
+
+}
 
 # #' @rdname response
 # #' @export

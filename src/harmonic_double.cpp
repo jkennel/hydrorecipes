@@ -24,7 +24,7 @@ Eigen::MatrixXd harmonic_double(const Eigen::VectorXd& x,
                                 double cycle_size) {
 
   // the different cycles
-  Eigen::VectorXd cycles = (M_2PI / cycle_size) * (x.array() - x(0));
+  VectorXd cycles = (M_2PI / cycle_size) * (x.array() - x(0));
 
   size_t n_freq = frequency.size();
   MatrixXd out(x.size(), n_freq * 2);

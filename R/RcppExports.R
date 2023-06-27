@@ -59,6 +59,75 @@ convolve_vec <- function(x, y) {
 }
 
 #' @title
+#' convolve_filter
+#'
+#' @description
+#' convolution of vector with matrix
+#'
+#' @param x vector to convolve with y (numeric vector)
+#' @param y numeric matrix to convolve with x (column by column convolution)
+#'  (numeric matrix)
+#' @param remove_partial keep the end values or fill with NA (boolean)
+#' @param reverse should x be reversed before convolution (boolean)
+#'
+#' @return numeric matrix of convolved values
+#'
+#' @export
+#'
+#' @importFrom Rcpp sourceCpp
+#' @importFrom stats nextn
+#' @importFrom stats convolve
+#' @importFrom stats spec.pgram
+#'
+#' @examples
+#' a <- convolve_filter(x = 1:100,
+#'                      y = c(1:10, rep(0, 90)),
+#'                      remove_partial = FALSE,
+#'                      reverse = TRUE)
+#'
+#' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
+#'
+convolve_filter <- function(x, y, remove_partial, reverse) {
+    .Call(`_hydrorecipes_convolve_filter`, x, y, remove_partial, reverse)
+}
+
+#' @title
+#' convolve_overlap_add
+#'
+#' @description
+#' Multiply a transfer function with a real input and take the inverse FFT.
+#'
+#' @param x the vector that holds the series (numeric vector)
+#' @param y the kernel to convolve with x (complex numeric vector)
+#'
+#'
+#' @return the linear convolution of two vectors
+#'
+#' @noRd
+#'
+convolve_overlap_add <- function(x, y) {
+    .Call(`_hydrorecipes_convolve_overlap_add`, x, y)
+}
+
+#' @title
+#' convolve_overlap_save
+#'
+#' @description
+#' Multiply a transfer function with a real input and take the inverse FFT.
+#'
+#' @param x the vector that holds the series (numeric vector)
+#' @param y the kernel to convolve with x (complex numeric vector)
+#'
+#'
+#' @return the linear convolution of two vectors
+#'
+#' @noRd
+#'
+convolve_overlap_save <- function(x, y) {
+    .Call(`_hydrorecipes_convolve_overlap_save`, x, y)
+}
+
+#' @title
 #' convolve_tf
 #'
 #' @description
@@ -96,7 +165,6 @@ convolve_tf <- function(x, y) {
 #' @importFrom stats nextn
 #' @importFrom stats convolve
 #' @importFrom stats spec.pgram
-#' @useDynLib hydrorecipes, .registration=TRUE
 #'
 #' @examples
 #' a <- convolve_matrix(x = 1:100,
@@ -179,7 +247,6 @@ spec_pgram <- function(x, spans, detrend, demean, taper) {
 #' @param length_subset length of each subset (integer)
 #' @param overlap percent to overlap subsets (double)
 #' @param window vector of length length_subset (numeric vector)
-#' @param trunc save memory with a truncated result (boolean)
 #'
 #'
 #' @return periodogram from an input matrix using a Fast Fourier Transform and
@@ -227,8 +294,8 @@ solve_cplx_parallel <- function(x) {
 #'
 #' @noRd
 #'
-solve_cplx_irr <- function(x, power, n_groups, min_aggregate) {
-    .Call(`_hydrorecipes_solve_cplx_irr`, x, power, n_groups, min_aggregate)
+solve_cplx_irr <- function(x, n_groups) {
+    .Call(`_hydrorecipes_solve_cplx_irr`, x, n_groups)
 }
 
 #' @title
@@ -254,20 +321,21 @@ ordinary_coherence_phase <- function(x) {
 #' @description
 #' Convert from frequency to time domain
 #'
-#' @param x the frequency response function. (complex matrix)
-#'
+#' @param pgram. (complex matrix)
+#' @param n_groups the frequency response functions. (numeric vector)
+#' @param knots knot positions for cubic spline interpolation. (numeric vector)
 #'
 #'
 #' @return the time domain cumulative impulse response.
 #'
 #' @noRd
 #'
-frequency_to_time_domain <- function(x) {
-    .Call(`_hydrorecipes_frequency_to_time_domain`, x)
+frequency_to_time_domain <- function(pgram, n_groups) {
+    .Call(`_hydrorecipes_frequency_to_time_domain`, pgram, n_groups)
 }
 
 #' @title
-#' interpolate_frf
+#' interpolate_tf
 #'
 #' @description
 #' Go from irregularly spaced frequency response function to a regularly
@@ -288,8 +356,8 @@ frequency_to_time_domain <- function(x) {
 #'
 #' @noRd
 #'
-interpolate_frf <- function(x, y, knots, degree, x_interp) {
-    .Call(`_hydrorecipes_interpolate_frf`, x, y, knots, degree, x_interp)
+interpolate_tf <- function(x, frequency_irregular, frequency_regular, knots) {
+    .Call(`_hydrorecipes_interpolate_tf`, x, frequency_irregular, frequency_regular, knots)
 }
 
 #' @title
@@ -367,8 +435,8 @@ transfer_welch <- function(x, length_subset, overlap, window) {
 #'
 #' @noRd
 #'
-predict_pgram_frf <- function(x, span) {
-    .Call(`_hydrorecipes_predict_pgram_frf`, x, span)
+predict_pgram_frf <- function(x, x_out, spans, n_groups) {
+    .Call(`_hydrorecipes_predict_pgram_frf`, x, x_out, spans, n_groups)
 }
 
 #' @title
@@ -509,8 +577,8 @@ detrend_and_demean_matrix <- function(x, detrend, demean) {
 #'
 #' @noRd
 #'
-modified_daniell <- function(spans, n) {
-    .Call(`_hydrorecipes_modified_daniell`, spans, n)
+modified_daniell <- function(spans) {
+    .Call(`_hydrorecipes_modified_daniell`, spans)
 }
 
 #' @title
@@ -556,8 +624,8 @@ spec_taper <- function(n_row, p) {
 #' Create a set of lengths with increasing sizes useful from grouping results.
 #' The first and last groups have length equal to 1.
 #'
-#' @param n_row the number of values to subset into groups. (integer)
-#' @param power how fast groups get bigger. Larger numbers have a larger range
+#' @param n the number of values to subset into groups. (integer)
+#' @param max_lag how fast groups get bigger. Larger numbers have a larger range
 #' of group sizes. (integer)
 #' @param n_groups the number of groups to create. (integer)
 #' @param min_aggregate the minimum size for a group. (integer)
@@ -567,8 +635,8 @@ spec_taper <- function(n_row, p) {
 #'
 #' @noRd
 #'
-make_groups <- function(n_row, power, n_groups, min_aggregate) {
-    .Call(`_hydrorecipes_make_groups`, n_row, power, n_groups, min_aggregate)
+make_groups <- function(n_groups, n) {
+    .Call(`_hydrorecipes_make_groups`, n_groups, n)
 }
 
 #' @title
@@ -606,8 +674,8 @@ power_spaced <- function(n, min, max, power) {
 #'
 #' @noRd
 #'
-group_frequency <- function(frequencies, power, n_groups, min_aggregate) {
-    .Call(`_hydrorecipes_group_frequency`, frequencies, power, n_groups, min_aggregate)
+group_frequency <- function(frequencies, n_groups) {
+    .Call(`_hydrorecipes_group_frequency`, frequencies, n_groups)
 }
 
 #' @title
@@ -717,6 +785,96 @@ window_rectangle <- function(n) {
 }
 
 #' @title
+#' window_first_deriv
+#'
+#' @description
+#' First derivative window for FFT
+#'
+#' @inheritParams window_hann
+#'
+#' @param a0 \code{double} coefficient
+#' @param a1 \code{double} coefficient
+#' @param a2 \code{double} coefficient
+#' @param a3 \code{double} coefficient
+#'
+#' @return window
+#'
+#' @export
+#'
+#' @examples
+#' # nuttall window
+#' window_first_deriv(100, 0.355768, 0.487396, 0.144232, 0.012604)
+#'
+#' @noRd
+#'
+window_first_deriv <- function(n, a0, a1, a2, a3) {
+    .Call(`_hydrorecipes_window_first_deriv`, n, a0, a1, a2, a3)
+}
+
+#' @title
+#' window_nuttall
+#'
+#' @description
+#' Nuttall window for FFT
+#'
+#' @inheritParams window_hann
+#'
+#' @return window
+#'
+#' @export
+#'
+#' @examples
+#' window_nuttall(100)
+#'
+#' @noRd
+#'
+window_nuttall <- function(n) {
+    .Call(`_hydrorecipes_window_nuttall`, n)
+}
+
+#' @title
+#' window_blackman_nuttall
+#'
+#' @description
+#' Blackman-Nuttall window for FFT
+#'
+#' @inheritParams window_hann
+#'
+#' @return window
+#'
+#' @export
+#'
+#' @examples
+#' window_blackman_nuttall(100)
+#'
+#' @noRd
+#'
+window_blackman_nuttall <- function(n) {
+    .Call(`_hydrorecipes_window_blackman_nuttall`, n)
+}
+
+#' @title
+#' window_blackman_harris
+#'
+#' @description
+#' Blackman-Harris window for FFT
+#'
+#' @inheritParams window_hann
+#'
+#' @return window
+#'
+#' @export
+#'
+#' @examples
+#' window_blackman_harris(100)
+#'
+#' @noRd
+#'
+window_blackman_harris <- function(n) {
+    .Call(`_hydrorecipes_window_blackman_harris`, n)
+}
+
+#' @title
 #' window_scale
 #'
 #' @description
@@ -753,6 +911,24 @@ window_scale <- function(window, n_new, n_fft) {
 #'
 harmonic_double <- function(x, frequency, cycle_size) {
     .Call(`_hydrorecipes_harmonic_double`, x, frequency, cycle_size)
+}
+
+#' @title
+#' impulse_function
+#'
+#' @description
+#' Calculation of the impulse function from a well function.
+#'
+#' @param u well function
+#' @param flow_time_interval time between flow rate measurements in samples
+#'
+#' @return impulse function for convolution
+#'
+#'
+#' @export
+#'
+impulse_function <- function(u, flow_time_interval) {
+    .Call(`_hydrorecipes_impulse_function`, u, flow_time_interval)
 }
 
 log_lags_eigen <- function(n, max_lag) {
@@ -832,5 +1008,82 @@ distributed_lag_parallel <- function(x, bl, lag_max, n_subset, n_shift) {
 
 to_dummy <- function(x, n_fact) {
     .Call(`_hydrorecipes_to_dummy`, x, n_fact)
+}
+
+#' @title
+#' well_function_coefficient
+#'
+#' @description
+#' Calculation Coefficient Q/(4 pi * T)
+#'
+#' @param flow_rate well flow rates
+#' @param transmissivity aquifer transmissivity
+#'
+#' @return coefficient for Theis and Hantush well function
+#'
+#'
+#' @export
+#'
+well_function_coefficient <- function(flow_rate, transmissivity) {
+    .Call(`_hydrorecipes_well_function_coefficient`, flow_rate, transmissivity)
+}
+
+#' @title
+#' grf_coefficient
+#'
+#' @description
+#' Coefficient for the grf without pumping
+#'
+#' @param flow_rate (vector) the flow rate
+#' @param radius (double) distance to center of source
+#' @param K (double) hydraulic conductivity of the fracture system
+#' @param thickness (double) thickness
+#' @param flow_dimension (double) flow dimension
+#'
+#' @return coefficient
+#'
+#'
+#' @export
+#'
+grf_coefficient <- function(flow_rate, radius, K, thickness, flow_dimension) {
+    .Call(`_hydrorecipes_grf_coefficient`, flow_rate, radius, K, thickness, flow_dimension)
+}
+
+#' @title
+#' hantush_epsilon
+#'
+#' @description
+#' Calculation of r^2/(4B^2)
+#'
+#' @param radius distance to monitoring well
+#' @param leakage aquifer transmissivity
+#'
+#' @return coefficient Hantush well function
+#'
+#'
+#' @export
+#'
+hantush_epsilon <- function(radius, leakage) {
+    .Call(`_hydrorecipes_hantush_epsilon`, radius, leakage)
+}
+
+#' @title
+#' grf_u_time
+#'
+#' @description
+#' Calculation of grf u
+#'
+#' @param radius distance to monitoring interval
+#' @param storativity aquifer storativity
+#' @param K aquifer hydraulic conductivity
+#' @param time prediction times
+#'
+#' @return u for well function
+#'
+#'
+#' @export
+#'
+grf_u <- function(radius, storativity, K, time) {
+    .Call(`_hydrorecipes_grf_u`, radius, storativity, K, time)
 }
 
