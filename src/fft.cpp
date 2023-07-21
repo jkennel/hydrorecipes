@@ -674,7 +674,7 @@ Eigen::MatrixXcd spec_welch(Eigen::MatrixXd& x,
   // suppose you want 10
   // size_t n_fft_10 = 1 - ceil((double)(n_row - length_subset)) / 10 / length_subset;
 
-  Rcpp::Rcout << "The value n_fft " << n_fft << std::endl;
+  // Rcpp::Rcout << "The value n_fft " << n_fft << std::endl;
 
   // get the starting index of each subset
   VectorXi starts = Eigen::VectorXi::LinSpaced(n_fft, 0, n_fft-1);

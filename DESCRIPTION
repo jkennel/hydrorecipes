@@ -23,6 +23,7 @@ Depends:
 Imports: 
   Rcpp (>= 1.0.7),
   earthtide,
+  data.table,
   generics,
   collapse,
   Bessel,
