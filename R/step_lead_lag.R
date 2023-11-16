@@ -1,0 +1,69 @@
+#' R6 Class
+#'
+#' `StepLeadLag` generates lagged (or leading) vectors.
+#'
+#' @param lag
+#' @param n_shift
+#' @param n_subset
+#' @inheritParams Step
+#'
+#' @export
+StepLeadLag <- R6Class(
+  classname = 'step_lead_lag',
+  inherit = Step,
+
+  public = list(
+
+    # step specific variables
+    lag = NULL,
+    n_shift = NULL,
+    n_subset = NULL,
+
+    initialize = function(...,
+                          lag,
+                          n_shift = 0,
+                          n_subset = 1,
+                          role = "predictor",
+                          skip = FALSE,
+                          keep_original_cols = FALSE) {
+
+      # get function parameters to pass to parent
+      step_name    <- "step_lead_lag"
+      type         <- 'add'
+      inputs <- c(
+        as.list(rlang::quos(...)),
+        rlang::env_get_list(env = environment(),
+                            formalArgs(super$initialize)[-1])
+      )
+      do.call(super$initialize, inputs)
+
+      # step specific values
+      self$lag      <- sort(lag)
+      self$n_shift  <- n_shift
+      self$n_subset <- n_subset
+
+      invisible(self)
+    },
+
+    bake = function(new_data) {
+
+      column_name <- self$columns
+
+      tmp <- lag_list(unclass(new_data)[[column_name]],
+                      self$lag,
+                      n_subset = self$n_subset,
+                      n_shift = self$n_shift)
+
+      names(tmp) <- file.path(self$id, self$lag, column_name, fsep = '_')
+      self$result <- append(self$result, tmp)
+
+
+      self$result
+
+    }
+
+  )
+)
+
+
+

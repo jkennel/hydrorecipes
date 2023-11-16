@@ -1,0 +1,22 @@
+Package: frecipes
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    R6 (>= 2.3.0),
+    Rcpp,
+    RcppArmadillo,
+    RcppThread,
+    RcppEigen,
+    earthtide,
+    splines2
+LinkingTo: Rcpp, RcppArmadillo, RcppThread, RcppEigen, splines2
+SystemRequirements: fftw3 (libfftw3-dev (deb), or fftw-devel (rpm)), C++17
+RoxygenNote: 7.2.3
