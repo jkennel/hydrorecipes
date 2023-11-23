@@ -378,6 +378,11 @@ results <- bench::press(
                    num_comp = 12L) |>
           prep() |>
           bake(new_data = NULL)},
+      rec4  = {recipe(formula = formula, data = dat) |>
+          step_pca(a,b,c,d,e,f,g,h,i,j,k,l, 
+                   num_comp = 5L) |>
+          prep() |>
+          bake(new_data = NULL)},
       check = FALSE,
       relative = TRUE,
       min_iterations = 1
@@ -385,7 +390,8 @@ results <- bench::press(
   }
 )
 
-results
+print(results, n = 100)
+
 
 
 ```
