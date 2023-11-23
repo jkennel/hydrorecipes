@@ -28,6 +28,7 @@ StepDropColumns <- R6Class(
 
       invisible(self)
     },
+
     bake = function(new_data) {
 
       for(i in seq_along(self$columns)) {

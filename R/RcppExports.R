@@ -803,6 +803,54 @@ lag_list <- function(x, lags, n_subset, n_shift) {
     .Call(`_frecipes_lag_list`, x, lags, n_subset, n_shift)
 }
 
+scale_list_param_eigen <- function(x, center, scale) {
+    .Call(`_frecipes_scale_list_param_eigen`, x, center, scale)
+}
+
+cor_list_eigen <- function(x, center, scale) {
+    .Call(`_frecipes_cor_list_eigen`, x, center, scale)
+}
+
+pca_list_eigen <- function(x, center, scale, prep) {
+    .Call(`_frecipes_pca_list_eigen`, x, center, scale, prep)
+}
+
+scale_list_matrix_eigen <- function(x, center = TRUE, scale = TRUE) {
+    .Call(`_frecipes_scale_list_matrix_eigen`, x, center, scale)
+}
+
+pca_list_rotation_eigen <- function(x, center, scale, n_comp) {
+    .Call(`_frecipes_pca_list_rotation_eigen`, x, center, scale, n_comp)
+}
+
+pca_eigen <- function(x, center = TRUE, scale = TRUE) {
+    .Call(`_frecipes_pca_eigen`, x, center, scale)
+}
+
+cor_eigen <- function(X) {
+    .Call(`_frecipes_cor_eigen`, X)
+}
+
+pca <- function(x, center = TRUE, scale = TRUE) {
+    .Call(`_frecipes_pca`, x, center, scale)
+}
+
+pca_with_params <- function(x, center, scale) {
+    .Call(`_frecipes_pca_with_params`, x, center, scale)
+}
+
+pca_list_with_params <- function(x, center, scale) {
+    .Call(`_frecipes_pca_list_with_params`, x, center, scale)
+}
+
+corEigen <- function(X) {
+    .Call(`_frecipes_corEigen`, X)
+}
+
+corEigen2 <- function(X) {
+    .Call(`_frecipes_corEigen2`, X)
+}
+
 fi <- function(x, vec, rightmost_closed, all_inside, left_open) {
     .Call(`_frecipes_fi`, x, vec, rightmost_closed, all_inside, left_open)
 }

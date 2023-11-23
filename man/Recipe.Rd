@@ -79,9 +79,9 @@ R6 Class
 \item \href{#method-recipe-new}{\code{Recipe$new()}}
 \item \href{#method-recipe-add_step}{\code{Recipe$add_step()}}
 \item \href{#method-recipe-prep}{\code{Recipe$prep()}}
-\item \href{#method-recipe-get_step_types}{\code{Recipe$get_step_types()}}
 \item \href{#method-recipe-bake}{\code{Recipe$bake()}}
 \item \href{#method-recipe-train_info}{\code{Recipe$train_info()}}
+\item \href{#method-recipe-get_step_types}{\code{Recipe$get_step_types()}}
 \item \href{#method-recipe-clone}{\code{Recipe$clone()}}
 }
 }
@@ -141,21 +141,12 @@ An updated `Recipe` object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-recipe-get_step_types"></a>}}
-\if{latex}{\out{\hypertarget{method-recipe-get_step_types}{}}}
-\subsection{Method \code{get_step_types()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Recipe$get_step_types()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-recipe-bake"></a>}}
 \if{latex}{\out{\hypertarget{method-recipe-bake}{}}}
 \subsection{Method \code{bake()}}{
 Create the dataset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Recipe$bake(new_data = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Recipe$bake(new_data = NULL, type = "list")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -176,6 +167,15 @@ features.
 \subsection{Method \code{train_info()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Recipe$train_info(x)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-recipe-get_step_types"></a>}}
+\if{latex}{\out{\hypertarget{method-recipe-get_step_types}{}}}
+\subsection{Method \code{get_step_types()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Recipe$get_step_types()}\if{html}{\out{</div>}}
 }
 
 }

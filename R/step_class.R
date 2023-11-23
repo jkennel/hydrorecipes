@@ -62,9 +62,6 @@ Step <- R6Class(
     prep = function(new_data) {
 
       self$trained <- TRUE
-      # self$result  <- vector(mode = "list", length(self$columns))
-      #
-      # names(self$result) <- file.path(self$id, self$columns, fsep = '_')
 
       invisible(self)
     },

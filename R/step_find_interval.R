@@ -42,9 +42,9 @@ StepFindInterval <- R6Class(
     },
     bake = function(new_data) {
 
-      column_name     <- self$columns
+      column_name <- self$columns
 
-      dum <- to_dummy_list(unclass(new_data)[[column_name]], self$vec)
+      dum <- to_dummy_list(new_data, self$vec)
       names(dum) <- file.path(self$id, names(dum), column_name, fsep = '_')
 
       dum

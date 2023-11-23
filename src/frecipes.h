@@ -11,6 +11,7 @@
 
 #define EIGEN_FFTW_DEFAULT
 #include <unsupported/Eigen/FFT>
+#include <Eigen/Eigenvalues>
 #include <fftw3.h>
 #include <splines2Armadillo.h>
 

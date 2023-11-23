@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jonathan Kennel">
+
+<title>Benchmarking frecipes</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="benchmarking_files/libs/clipboard/clipboard.min.js"></script>
+<script src="benchmarking_files/libs/quarto-html/quarto.js"></script>
+<script src="benchmarking_files/libs/quarto-html/popper.min.js"></script>
+<script src="benchmarking_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="benchmarking_files/libs/quarto-html/anchor.min.js"></script>
+<link href="benchmarking_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="benchmarking_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="benchmarking_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="benchmarking_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="benchmarking_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Benchmarking frecipes</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jonathan Kennel </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="timings-frecipes-vs-recipes" class="level1">
+<h1>Timings <em>frecipes</em> vs <em>recipes</em></h1>
+<section id="creating-a-recipe" class="level2">
+<h2 class="anchored" data-anchor-id="creating-a-recipe">Creating a recipe</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression     rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;    &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec           1000  60.39µs  64.29µs    14883.  750.03KB    12.1 
+2 rec            1000   1.31ms   1.36ms      695.    1.32MB     6.12
+3 frec         100000  60.76µs  64.17µs    15288.        0B    10.2 
+4 rec          100000   1.32ms    1.4ms      666.  394.19KB     6.13
+5 frec       10000000  60.43µs  63.26µs    15529.        0B     9.71
+6 rec        10000000   1.29ms   1.33ms      734.   38.15MB     6.13</code></pre>
+</div>
+</div>
+</section>
+<section id="add-a-step" class="level2">
+<h2 class="anchored" data-anchor-id="add-a-step">Add a step</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression     rows   min median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 frec           1000  1      1         7.57      40.4     1.68
+2 rec            1000  6.98   7.10      1          1       1   
+3 frec         100000  1      1         7.06       1       1.67
+4 rec          100000  6.96   6.92      1        131.      1   
+5 frec       10000000  1      1         6.73       1       1   
+6 rec        10000000  6.91   6.77      1      12922.      1.11</code></pre>
+</div>
+</div>
+</section>
+<section id="step_center-prep" class="level2">
+<h2 class="anchored" data-anchor-id="step_center-prep">step_center prep</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression     rows   min median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 frec           1000  1      1        42.8       1        1.28
+2 rec            1000 43.9   43.0       1        29.8      1   
+3 frec         100000  1      1        27.7       1        2.54
+4 rec          100000 32.7   28.3       1         3.05     1   
+5 frec       10000000  1      1         6.42      1        1.95
+6 rec        10000000  7.58   6.39      1         3.00     1   </code></pre>
+</div>
+</div>
+</section>
+<section id="step_center-bake" class="level2">
+<h2 class="anchored" data-anchor-id="step_center-bake">step_center bake</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression     rows   min median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 frec           1000  1      1        40.1       1        1.53
+2 rec            1000 41.6   41.0       1        10.5      1   
+3 frec         100000  1      1        19.7       1        2.11
+4 rec          100000 21.0   20.2       1         2.54     1   
+5 frec       10000000  1      1         3.74      1        1   
+6 rec        10000000  4.41   4.34      1         2.50     1.07</code></pre>
+</div>
+</div>
+</section>
+<section id="step_scale-bake" class="level2">
+<h2 class="anchored" data-anchor-id="step_scale-bake">step_scale bake</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression     rows   min median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 frec           1000  1      1        40.4       3.61     1   
+2 rec            1000 41.6   41.1       1         1        1.07
+3 frec         100000  1      1        17.3       1        1   
+4 rec          100000 18.9   17.4       1         2.56     3.24
+5 frec       10000000  1      1         2.98      1        1.91
+6 rec        10000000  2.98   3.00      1         2.50     1   </code></pre>
+</div>
+</div>
+</section>
+<section id="step_lag-bake" class="level2">
+<h2 class="anchored" data-anchor-id="step_lag-bake">step_lag bake</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression     rows   min median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 frec           1000  1      1        41.8       2.12     1.27
+2 rec            1000 43.5   42.8       1         1        1   
+3 frec         100000  1      1        24.3       1        4.06
+4 rec          100000 38.8   25.2       1         2.85     1   
+5 frec       10000000  1      1         4.70      1        1.64
+6 rec        10000000  6.78   7.08      1         2.83     1   </code></pre>
+</div>
+</div>
+</section>
+<section id="step_distributed_lag-bake" class="level2">
+<h2 class="anchored" data-anchor-id="step_distributed_lag-bake">step_distributed_lag bake</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression     rows   min median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 frec           1000  1      1        31.1       1        1   
+2 rec            1000 31.7   31.4       1         4.64     1.05
+3 frec         100000  1      1         5.48      1      NaN   
+4 rec          100000  4.99   6.05      1         2.94   Inf   
+5 frec       10000000  1      1         3.20      1        1   
+6 rec        10000000  3.06   3.10      1         2.93     1.11</code></pre>
+</div>
+</div>
+</section>
+<section id="step_harmonic-bake" class="level2">
+<h2 class="anchored" data-anchor-id="step_harmonic-bake">step_harmonic bake</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression     rows   min median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 frec           1000  1      1        33.3       1.63     1   
+2 rec            1000 32.5   33.7       1         1        1.43
+3 frec         100000  1      1         3.34      1        1.01
+4 rec          100000  3.20   3.30      1         3.51     1   
+5 frec       10000000  1      1         1.61      1        1   
+6 rec        10000000  1.68   1.65      1         3.50     2.48</code></pre>
+</div>
+</div>
+</section>
+<section id="step_find_interval-bake" class="level2">
+<h2 class="anchored" data-anchor-id="step_find_interval-bake">step_find_interval bake</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression     rows   min median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 frec           1000   1      1        57.0      1        1   
+2 rec            1000  55.9   56.9       1        1.51     1.10
+3 frec         100000   1      1        39.9      1      Inf   
+4 rec          100000  46.5   45.9       1        9.41   NaN   
+5 frec       10000000   1      1        43.0      1        3.58
+6 rec        10000000  54.6   49.3       1        8.86     1   </code></pre>
+</div>
+</div>
+</section>
+<section id="mulitple-steps" class="level2">
+<h2 class="anchored" data-anchor-id="mulitple-steps">Mulitple steps</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression     rows   min median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 frec           1000  1      1        29.9       1      Inf   
+2 rec            1000 31.0   29.7       1         3.66   NaN   
+3 frec         100000  1      1         3.93      1        1   
+4 rec          100000  4.24   4.10      1         2.86     2.32
+5 frec       10000000  1      1         1.68      1        1.68
+6 rec        10000000  1.68   1.68      1         2.85     1   </code></pre>
+</div>
+</div>
+</section>
+<section id="step_b_spline-bake" class="level2">
+<h2 class="anchored" data-anchor-id="step_b_spline-bake">step_b_spline bake</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># formula &lt;- as.formula(y~x)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># results &lt;- bench::press(</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   rows = n,</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   {</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     dat &lt;- data.frame(x = rnorm(rows), </span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#                       y = 1:rows,</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#                       z = rnorm(rows))</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     bench::mark(</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">#       frec = {Recipe$new(formula = formula, data = dat)$</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">#           add_step(StepBSpline$new(x, ))$</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#           prep()$</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">#           bake()},</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#       rec  = {recipe(formula = formula, data = dat) |&gt;</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">#           step_spline_b(x, deg_free = 5) |&gt;</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co">#           prep() |&gt;</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co">#           bake(new_data = NULL)},</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co">#       check = FALSE,</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co">#       relative = TRUE,</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="co">#       min_iterations = 10</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="co">#   }</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="co"># results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- ```{r} -->
+<!-- x <- alloc(1.0, 1e6) # Vector -->
+<!-- bench::mark( x %*=% 1.0, x %/=% 1.0,x %-=% 0.0, x %+=% 0.0, 1.0/1.0, check = FALSE) -->
+<!-- n <- 1000000 -->
+<!-- input <- data.frame(i = 1:n, -->
+<!--                     c = sample(letters, n, replace = TRUE), -->
+<!--                     f = factor(sample(letters, n, replace = TRUE)), -->
+<!--                     d = rnorm(n)) -->
+<!-- bench::mark(input[[1]], -->
+<!--             unclass(input)[[1]], -->
+<!--             get_vars(input, 1),  -->
+<!--             get_elem(input, 1, recursive = FALSE), -->
+<!--             check = FALSE, relative = TRUE) -->
+<!-- initial <- data.frame(z = 1:n) -->
+<!-- tmp <- findInterval(input[['f']],c(3,7)) -->
+<!-- lst <- as.list(input)  -->
+<!-- m   <- as.matrix(input) -->
+
+<!-- dt  <- as.data.table(input) -->
+<!-- tbl <- as_tibble(input) -->
+<!-- df  <- input -->
+<!-- mm  <- qDF(m) -->
+<!-- # m <- matrix(rnorm(3e6), ncol = 3) -->
+<!-- # df <- qDF(m) -->
+<!-- # bench::mark(colMeans(m),as.numeric(colMeans(df)), fmean(m), as.numeric(fmean(df)), check = FALSE) -->
+<!-- microbenchmark( -->
+<!--   bind_cols(initial, lst, .name_repair = 'minimal'), -->
+<!--   bind_cols(initial, dt, .name_repair = 'minimal'), -->
+<!--   bind_cols(initial, unclass(dt), .name_repair = 'minimal'), -->
+<!--   bind_cols(initial, m, .name_repair = 'minimal'), -->
+<!--   bind_cols(initial, tbl, .name_repair = 'minimal'), -->
+<!--   bind_cols(initial, df, .name_repair = 'minimal'), -->
+<!--   cbind(initial, qDF(lst), stringsAsFactors = FALSE), -->
+<!--   cbind(initial, qDF(dt), stringsAsFactors = FALSE), -->
+<!--   cbind(initial, qDF(unclass(dt)), stringsAsFactors = FALSE), -->
+<!--   cbind(initial, qDF(m), stringsAsFactors = FALSE), -->
+<!--   cbind(initial, qDF(tbl), stringsAsFactors = FALSE), -->
+<!--   cbind(initial, qDF(df), stringsAsFactors = FALSE), -->
+<!--   cbind(initial, (lst), stringsAsFactors = FALSE), -->
+<!--   cbind(initial, (dt), stringsAsFactors = FALSE), -->
+<!--   cbind(initial, (unclass(dt)), stringsAsFactors = FALSE), -->
+<!--   cbind(initial, (m), stringsAsFactors = FALSE), -->
+<!--   cbind(initial, (tbl), stringsAsFactors = FALSE), -->
+<!--   cbind(initial, (df), stringsAsFactors = FALSE), -->
+<!--   initial[['a']] <- m[,1], -->
+<!--   cbind(cbind(initial, df), df), -->
+<!--   cbind(cbind(initial, qDF(lst)), qDF(lst)), -->
+<!--   cbind(cbind(initial, tbl), tbl), -->
+<!--   bind_cols(bind_cols(initial, lst), lst, .name_repair = 'minimal'), -->
+<!--   times = 3 -->
+<!-- ) -->
+<!-- bench::mark(   -->
+<!--   to_dummy_lst(tmp, 3), -->
+<!--   check = FALSE -->
+<!-- ) -->
+<!-- n <- 5 -->
+<!-- microbenchmark::microbenchmark( -->
+<!--   to_dummy(tmp, n), -->
+<!--   to_dummy2(tmp, n), -->
+<!--   to_dummy3(tmp, n), -->
+<!--   to_dummy4(tmp, n), -->
+<!--   to_dummy5(tmp, n), -->
+<!--   to_dummy_list(tmp, n), -->
+<!--   # to_dummy6(tmp, n), -->
+<!--   # to_dummy_lst(tmp, n, paste0('x', 1:n)), -->
+<!--   # cbind(initial,to_dummy_lst2(cbind(tmp, tmp), n, paste0('x', 1:n))), -->
+<!--   # to_dummy_df(tmp, n, paste0('x', 1:n)), -->
+<!--   times = 3 -->
+<!-- ) -->
+<!-- bench::mark( -->
+<!--   qDF(to_dummy(tmp, 10)), -->
+<!--   to_dummy_lst(tmp, 10, paste0('x', 1:10)), -->
+<!--   to_dummy_df(tmp, 10, paste0('x', 1:10)), -->
+<!--   check = FALSE -->
+<!-- ) -->
+<!-- n <- 10 -->
+<!-- microbenchmark::microbenchmark( -->
+<!--   cbind(initial, qDF(to_dummy(tmp, n))), -->
+<!--   cbind(initial, qDF(to_dummy3(tmp, n))), -->
+<!--   cbind(initial, to_dummy_lst(tmp, n, paste0('x', 1:n))), -->
+<!--   cbind(initial, to_dummy_df(tmp, n, paste0('x', 1:n))), -->
+<!--   times = 5 -->
+<!-- ) -->
+<!-- bench::mark( -->
+<!--   cbind(initial, qDF(to_dummy(tmp, 6))), -->
+<!--   cbind(initial, to_dummy_lst(tmp, 6, paste0('x', 1:6))), -->
+<!--   cbind(initial, to_dummy_df(tmp, 6, paste0('x', 1:6))), -->
+<!--   check = FALSE -->
+<!-- ) -->
+<!-- bench::mark( -->
+<!--   cbind(initial, (lst), stringsAsFactors = FALSE), -->
+<!--   cbind(initial, (df), stringsAsFactors = FALSE), -->
+<!--   cbind(initial, (tbl), stringsAsFactors = FALSE), -->
+<!--   check = FALSE -->
+<!-- ) -->
+<!-- str(cbind(initial, (lst), stringsAsFactors = FALSE)) -->
+<!-- str(cbind(initial, (df), stringsAsFactors = FALSE)) -->
+<!-- n <- 1000000L -->
+<!-- m <- as.matrix(1:n) -->
+<!-- d <- sample(1:10, 1e5, replace = TRUE) -->
+<!-- v <- 1:n -->
+<!-- nn <- 10 -->
+<!-- microbenchmark::microbenchmark( -->
+<!--   m0 <- lag_matrix(m, 1:nn, suffix = 'a', prefix = 'b', n_subset = 1), -->
+<!--   m1 <- lag_matrix(m, 1:nn, suffix = 'a', prefix = 'b', n_subset = 5), -->
+<!--   m3 <- lag_lead_matrix(v, 1:nn, 1, 0), -->
+<!--   m4 <- lag_lead_matrix(v, 1:nn, 5, 0), -->
+<!--   times = 3 -->
+<!-- ) -->
+<!-- bench::mark( -->
+<!--   m0 <- lag_matrix(m, 1:nn, suffix = 'a', prefix = 'b', n_subset = 1), -->
+<!--   m1 <- lag_matrix(m, 1:nn, suffix = 'a', prefix = 'b', n_subset = 5), -->
+<!--   m3 <- lag_lead_matrix(v, 1:nn, 1, 0), -->
+<!--   m4 <- lag_lead_matrix(v, 1:nn, 5, 0), -->
+<!--   check = FALSE -->
+<!-- ) -->
+<!-- n <- 10000L -->
+<!-- t <- sort(rnorm(n)) -->
+<!-- m <- matrix(1:(8*n), ncol = 8) -->
+<!-- bench::mark( -->
+<!--   h1 <- harmonic(t, c(1,2,4,5)), -->
+<!--   h2 <- harmonic_float(t, c(1,2,4,5)), -->
+<!--   h3 <- harmonic_field(t, c(1,2,4,5)), -->
+<!--   check = FALSE -->
+<!-- ) -->
+<!-- microbenchmark::microbenchmark( -->
+<!--   b <- harmonic(t, c(1,2,4,5, 8, 9)), -->
+<!--   a <- harmonic_float(t, c(1,2,4,5, 8, 9)), -->
+<!--   c <- harmonic_field(t, c(1,2,4,5, 8, 9)), -->
+<!--   times = 3 -->
+<!-- ) -->
+<!-- ``` -->
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -49,22 +49,20 @@ StepHarmonic <- R6Class(
 
       n_frequency <- length(self$frequency)
 
-
       column_name     <- self$columns
 
-      tmp <- harmonic_list(unclass(new_data)[[column_name]],
+      hals <- harmonic_list(new_data,
                            frequency = self$frequency,
                            start = self$starting_value,
                            cycle_size = self$cycle_size)
 
-      names(tmp) <- file.path(rep(self$id, n_frequency * 2),
+      names(hals) <- file.path(rep(self$id, n_frequency * 2),
                               rep(c("sin", "cos"), n_frequency),
                               rep(1:n_frequency, each = 2),
                               rep(column_name, n_frequency * 2),
                               fsep = '_')
-      self$result <- append(self$result, tmp)
 
-      self$result
+      hals
 
     }
 

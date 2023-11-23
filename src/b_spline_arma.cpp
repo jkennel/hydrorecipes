@@ -172,7 +172,7 @@ arma::vec log_lags_arma(arma::uword n, arma::uword max_lag) {
 
 /*** R
 
-n <- 1e5
+n <- 1e7
 m <- sort(rnorm(n))
 bk <- range(m)
 knots <- quantile(bk, probs = seq(0.05, 0.95, 0.3))

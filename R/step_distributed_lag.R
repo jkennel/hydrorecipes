@@ -45,7 +45,7 @@ StepDistributedLag <- R6Class(
       column_name <- self$columns
 
       dl <- distributed_lag_list3(
-        unclass(new_data)[[column_name]],
+        new_data,
         self$n_lag,
         self$max_lag,
         0L,
@@ -59,10 +59,11 @@ StepDistributedLag <- R6Class(
       )
 
       names(dl) <- file.path(self$id, seq_len(length(dl)), column_name, fsep = '_')
-      self$result <- append(self$result, dl)
+      # self$result <- append(self$result, dl)
 
 
-      self$result
+      # self$result
+      dl
 
     }
 

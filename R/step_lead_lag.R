@@ -21,8 +21,8 @@ StepLeadLag <- R6Class(
 
     initialize = function(...,
                           lag,
-                          n_shift = 0,
-                          n_subset = 1,
+                          n_shift = 0L,
+                          n_subset = 1L,
                           role = "predictor",
                           skip = FALSE,
                           keep_original_cols = FALSE) {
@@ -38,9 +38,9 @@ StepLeadLag <- R6Class(
       do.call(super$initialize, inputs)
 
       # step specific values
-      self$lag      <- sort(lag)
-      self$n_shift  <- n_shift
-      self$n_subset <- n_subset
+      self$lag      <- as.integer(sort(lag))
+      self$n_shift  <- as.integer(n_shift)
+      self$n_subset <- as.integer(n_subset)
 
       invisible(self)
     },
@@ -49,16 +49,13 @@ StepLeadLag <- R6Class(
 
       column_name <- self$columns
 
-      tmp <- lag_list(unclass(new_data)[[column_name]],
+      ll <- lag_list(new_data,
                       self$lag,
                       n_subset = self$n_subset,
                       n_shift = self$n_shift)
+      names(ll) <- file.path(self$id, self$lag, column_name, fsep = '_')
 
-      names(tmp) <- file.path(self$id, self$lag, column_name, fsep = '_')
-      self$result <- append(self$result, tmp)
-
-
-      self$result
+      ll
 
     }
 

@@ -30,7 +30,7 @@ The `Step` class hold common info for each step.
 \if{latex}{\out{\hypertarget{method-step-prep}{}}}
 \subsection{Method \code{prep()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Step$prep()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Step$prep(new_data)}\if{html}{\out{</div>}}
 }
 
 }

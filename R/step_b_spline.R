@@ -4,10 +4,10 @@
 #'
 #' @param df
 #' @param internal_knots
-#' @param degree
-#' @param intercept
 #' @param boundary_knots
+#' @param intercept
 #' @param periodic
+#' @param degree
 #' @inheritParams Step
 #'
 #' @export
@@ -28,10 +28,10 @@ StepBSpline <- R6Class(
     initialize = function(...,
                           df = 0L,
                           internal_knots = NULL,
-                          degree = 3L,
-                          intercept = FALSE,
                           boundary_knots = NULL,
+                          intercept = FALSE,
                           periodic = FALSE,
+                          degree = 3L,
                           role = "predictor",
                           skip = FALSE,
                           keep_original_cols = FALSE) {
@@ -55,22 +55,36 @@ StepBSpline <- R6Class(
       self$periodic <- periodic
 
       invisible(self)
+
+    },
+    prep = function(new_data) {
+
+      if (self$df != 0L) {
+        ik <- collapse::fquantile(new_data,
+                                  probs = seq(0, 1, self$df),
+                                  na.rm = TRUE)
+        self$boundary_knots = ik[c(1, length(ik))]
+        self$internal_knots <- ik[-c(1, length(ik))]
+      }
+
     },
     bake = function(new_data) {
 
       column_name     <- self$columns
 
-      basis <- b_spline_list(x = unclass(new_data)[[column_name]],
-                         df = self$df,
-                         degree = 3L,
-                         internal_knots = self$internal_knots,
-                         boundary_knots = self$boundary_knots
-                         )
+      basis <- b_spline_list(x = new_data,
+                             df = self$df,
+                             degree = 3L,
+                             internal_knots = self$internal_knots,
+                             boundary_knots = self$boundary_knots
+      )
 
-      names(basis) <- file.path(self$id, seq_len(length(basis)), column_name, fsep = '_')
-      self$result <- append(self$result, basis)
+      names(basis) <- file.path(self$id,
+                                seq_len(length(basis)),
+                                column_name,
+                                fsep = '_')
 
-      self$result
+      basis
     }
   )
 )

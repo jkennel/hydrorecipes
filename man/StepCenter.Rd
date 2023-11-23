@@ -32,10 +32,10 @@
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StepCenter$new(
   ...,
-  role = "modify",
+  role = "predictor",
   skip = FALSE,
   na_rm = TRUE,
-  center_fun = collapse::fmean,
+  fun = collapse::fmean,
   keep_original_cols = FALSE
 )}\if{html}{\out{</div>}}
 }

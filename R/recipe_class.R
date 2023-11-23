@@ -69,7 +69,7 @@ Recipe <- R6Class(
         bake = setNames(object = logical(), nm = character())
       )
 
-      self$add_step(StepAddVars$new(vars = vars))
+      # self$add_step(StepAddVars$new(vars = vars))#$prep()$bake(data)
 
       invisible(self)
 
@@ -90,10 +90,16 @@ Recipe <- R6Class(
     #' Do prep operations.
     #' @return An updated `Recipe` object.
     prep = function(retain = TRUE) {
-      lapply(self$steps, function(x) x$prep(self$template))
+
+      for (i in seq_along(self$steps)) {
+        columns <- self$steps[[i]]$columns
+        self$steps[[i]]$prep(unclass(self$template)[columns])
+      }
+
       self$retained <- retain
       invisible(self)
     },
+
     #' @description
     #' Create the dataset.
     #' @param new_data The input data to the recipe.
@@ -102,15 +108,30 @@ Recipe <- R6Class(
     bake = function(new_data = NULL, type = "list") {
       types <- self$get_step_types()
 
+      if(is.null(new_data)) {
+        self$result <- self$template
+      } else {
+        self$result <- unclass(new_data)[unique(self$vars)]
+      }
+
       for (i in seq_along(types)) {
+        columns <- self$steps[[i]]$columns
+        # only one column allowed
         if (types[i] == "add"){
-          self$result <- append(self$result, self$steps[[i]]$bake(new_data))
+
+          self$result <- append(self$result,
+                                self$steps[[i]]$bake(unclass(self$result)[[columns]]))
+
         } else if (types[i] == "modify") {
-          self$result <- self$steps[[i]]$bake(self$result)
+          self$result <- modifyList(self$result,
+                                    self$steps[[i]]$bake(unclass(self$result)[columns]))
+          # self$result[self$steps[[i]]$columns] %cr%
+          #                           self$steps[[i]]$bake(self$result[self$steps[[i]]$columns])
         } else if (types[i] == "check") {
 
         }
       }
+
       # if(all(types) == "add") {
       #   # may convert to an environment
       #   if (is.null(new_data)) {
@@ -119,20 +140,20 @@ Recipe <- R6Class(
       #     self$result <- (unlist(lapply(self$steps, function(x) x$bake(new_data)), recursive = FALSE))
       #   }
       # }
-      return(
+      # return(
+      #
+      #   switch(
+      #     type,
+      #     "list" = self$result,
+      #     "data.frame" = collapse::qDF(self$result),
+      #     "data.table" = collapse::qDT(self$result),
+      #     "tibble" = collapse::qTBL(self$result),
+      #     "matrix" = collapse::qM(self$result)
+      #   )
+      #
+      # )
 
-        switch(
-          type,
-          "list" = self$result,
-          "data.frame" = collapse::qDF(self$result),
-          "data.table" = collapse::qDT(self$result),
-          "tibble" = collapse::qTBL(self$result),
-          "matrix" = collapse::qM(self$result)
-        )
-
-      )
-
-      # invisible(self$result)
+      invisible(self)
 
     },
     ## short summary of training set.

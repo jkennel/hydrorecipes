@@ -13,6 +13,7 @@
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-step_b_spline-new}{\code{StepBSpline$new()}}
+\item \href{#method-step_b_spline-prep}{\code{StepBSpline$prep()}}
 \item \href{#method-step_b_spline-bake}{\code{StepBSpline$bake()}}
 \item \href{#method-step_b_spline-clone}{\code{StepBSpline$clone()}}
 }
@@ -20,7 +21,6 @@
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="frecipes" data-topic="step" data-id="prep"><a href='../../frecipes/html/step.html#method-step-prep'><code>frecipes::step$prep()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="frecipes" data-topic="step" data-id="tidy"><a href='../../frecipes/html/step.html#method-step-tidy'><code>frecipes::step$tidy()</code></a></span></li>
 </ul>
 </details>
@@ -34,14 +34,23 @@
   ...,
   df = 0L,
   internal_knots = NULL,
-  degree = 3L,
-  intercept = FALSE,
   boundary_knots = NULL,
+  intercept = FALSE,
   periodic = FALSE,
+  degree = 3L,
   role = "predictor",
   skip = FALSE,
   keep_original_cols = FALSE
 )}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-step_b_spline-prep"></a>}}
+\if{latex}{\out{\hypertarget{method-step_b_spline-prep}{}}}
+\subsection{Method \code{prep()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{StepBSpline$prep(new_data)}\if{html}{\out{</div>}}
 }
 
 }

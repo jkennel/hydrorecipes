@@ -79,7 +79,7 @@ StepEarthtide <- R6Class(
 
       column_name     <- self$columns
 
-      et <- calc_earthtide(unclass(new_data)[[column_name]],
+      et <- calc_earthtide(new_data,
                             do_predict = self$do_predict,
                             method = self$method,
                             latitude = self$latitude,
@@ -97,10 +97,10 @@ StepEarthtide <- R6Class(
       )
 
 
-      self$result <- append(self$result, et)
+      # self$result <- append(self$result, et)
 
-      self$result
-
+      # self$result
+      et
     }
 
   )

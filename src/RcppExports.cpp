@@ -862,6 +862,158 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// scale_list_param_eigen
+Rcpp::List scale_list_param_eigen(Rcpp::List x, Eigen::VectorXd center, Eigen::VectorXd scale);
+RcppExport SEXP _frecipes_scale_list_param_eigen(SEXP xSEXP, SEXP centerSEXP, SEXP scaleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type scale(scaleSEXP);
+    rcpp_result_gen = Rcpp::wrap(scale_list_param_eigen(x, center, scale));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cor_list_eigen
+Eigen::MatrixXd cor_list_eigen(Rcpp::List x, Eigen::VectorXd center, Eigen::VectorXd scale);
+RcppExport SEXP _frecipes_cor_list_eigen(SEXP xSEXP, SEXP centerSEXP, SEXP scaleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type scale(scaleSEXP);
+    rcpp_result_gen = Rcpp::wrap(cor_list_eigen(x, center, scale));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pca_list_eigen
+Rcpp::List pca_list_eigen(Rcpp::List x, Eigen::RowVectorXd center, Eigen::RowVectorXd scale, bool prep);
+RcppExport SEXP _frecipes_pca_list_eigen(SEXP xSEXP, SEXP centerSEXP, SEXP scaleSEXP, SEXP prepSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::RowVectorXd >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< Eigen::RowVectorXd >::type scale(scaleSEXP);
+    Rcpp::traits::input_parameter< bool >::type prep(prepSEXP);
+    rcpp_result_gen = Rcpp::wrap(pca_list_eigen(x, center, scale, prep));
+    return rcpp_result_gen;
+END_RCPP
+}
+// scale_list_matrix_eigen
+Eigen::MatrixXd scale_list_matrix_eigen(const Rcpp::List x, bool center, bool scale);
+RcppExport SEXP _frecipes_scale_list_matrix_eigen(SEXP xSEXP, SEXP centerSEXP, SEXP scaleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< bool >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< bool >::type scale(scaleSEXP);
+    rcpp_result_gen = Rcpp::wrap(scale_list_matrix_eigen(x, center, scale));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pca_list_rotation_eigen
+Eigen::MatrixXd pca_list_rotation_eigen(Rcpp::List x, Eigen::VectorXd center, Eigen::VectorXd scale, int n_comp);
+RcppExport SEXP _frecipes_pca_list_rotation_eigen(SEXP xSEXP, SEXP centerSEXP, SEXP scaleSEXP, SEXP n_compSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type scale(scaleSEXP);
+    Rcpp::traits::input_parameter< int >::type n_comp(n_compSEXP);
+    rcpp_result_gen = Rcpp::wrap(pca_list_rotation_eigen(x, center, scale, n_comp));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pca_eigen
+Rcpp::List pca_eigen(const Rcpp::List x, bool center, bool scale);
+RcppExport SEXP _frecipes_pca_eigen(SEXP xSEXP, SEXP centerSEXP, SEXP scaleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< bool >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< bool >::type scale(scaleSEXP);
+    rcpp_result_gen = Rcpp::wrap(pca_eigen(x, center, scale));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cor_eigen
+Eigen::MatrixXd cor_eigen(Eigen::Map<Eigen::MatrixXd>& X);
+RcppExport SEXP _frecipes_cor_eigen(SEXP XSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
+    rcpp_result_gen = Rcpp::wrap(cor_eigen(X));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pca
+Rcpp::List pca(Eigen::Map<Eigen::MatrixXd> x, bool center, bool scale);
+RcppExport SEXP _frecipes_pca(SEXP xSEXP, SEXP centerSEXP, SEXP scaleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type x(xSEXP);
+    Rcpp::traits::input_parameter< bool >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< bool >::type scale(scaleSEXP);
+    rcpp_result_gen = Rcpp::wrap(pca(x, center, scale));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pca_with_params
+Rcpp::List pca_with_params(Eigen::Map<Eigen::MatrixXd> x, Eigen::RowVectorXd center, Eigen::RowVectorXd scale);
+RcppExport SEXP _frecipes_pca_with_params(SEXP xSEXP, SEXP centerSEXP, SEXP scaleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::RowVectorXd >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< Eigen::RowVectorXd >::type scale(scaleSEXP);
+    rcpp_result_gen = Rcpp::wrap(pca_with_params(x, center, scale));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pca_list_with_params
+Rcpp::List pca_list_with_params(Rcpp::List x, Eigen::RowVectorXd center, Eigen::RowVectorXd scale);
+RcppExport SEXP _frecipes_pca_list_with_params(SEXP xSEXP, SEXP centerSEXP, SEXP scaleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::RowVectorXd >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< Eigen::RowVectorXd >::type scale(scaleSEXP);
+    rcpp_result_gen = Rcpp::wrap(pca_list_with_params(x, center, scale));
+    return rcpp_result_gen;
+END_RCPP
+}
+// corEigen
+Eigen::MatrixXd corEigen(Eigen::Map<Eigen::MatrixXd>& X);
+RcppExport SEXP _frecipes_corEigen(SEXP XSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
+    rcpp_result_gen = Rcpp::wrap(corEigen(X));
+    return rcpp_result_gen;
+END_RCPP
+}
+// corEigen2
+Eigen::MatrixXd corEigen2(Eigen::Map<Eigen::MatrixXd>& X);
+RcppExport SEXP _frecipes_corEigen2(SEXP XSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
+    rcpp_result_gen = Rcpp::wrap(corEigen2(X));
+    return rcpp_result_gen;
+END_RCPP
+}
 // fi
 IntegerVector fi(const NumericVector& x, const NumericVector& vec, const bool rightmost_closed, const bool all_inside, const bool left_open);
 RcppExport SEXP _frecipes_fi(SEXP xSEXP, SEXP vecSEXP, SEXP rightmost_closedSEXP, SEXP all_insideSEXP, SEXP left_openSEXP) {
@@ -970,6 +1122,18 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_get_end", (DL_FUNC) &_frecipes_get_end, 4},
     {"_frecipes_shift_subset", (DL_FUNC) &_frecipes_shift_subset, 4},
     {"_frecipes_lag_list", (DL_FUNC) &_frecipes_lag_list, 4},
+    {"_frecipes_scale_list_param_eigen", (DL_FUNC) &_frecipes_scale_list_param_eigen, 3},
+    {"_frecipes_cor_list_eigen", (DL_FUNC) &_frecipes_cor_list_eigen, 3},
+    {"_frecipes_pca_list_eigen", (DL_FUNC) &_frecipes_pca_list_eigen, 4},
+    {"_frecipes_scale_list_matrix_eigen", (DL_FUNC) &_frecipes_scale_list_matrix_eigen, 3},
+    {"_frecipes_pca_list_rotation_eigen", (DL_FUNC) &_frecipes_pca_list_rotation_eigen, 4},
+    {"_frecipes_pca_eigen", (DL_FUNC) &_frecipes_pca_eigen, 3},
+    {"_frecipes_cor_eigen", (DL_FUNC) &_frecipes_cor_eigen, 1},
+    {"_frecipes_pca", (DL_FUNC) &_frecipes_pca, 3},
+    {"_frecipes_pca_with_params", (DL_FUNC) &_frecipes_pca_with_params, 3},
+    {"_frecipes_pca_list_with_params", (DL_FUNC) &_frecipes_pca_list_with_params, 3},
+    {"_frecipes_corEigen", (DL_FUNC) &_frecipes_corEigen, 1},
+    {"_frecipes_corEigen2", (DL_FUNC) &_frecipes_corEigen2, 1},
     {"_frecipes_fi", (DL_FUNC) &_frecipes_fi, 5},
     {"_frecipes_to_dummy_list_base", (DL_FUNC) &_frecipes_to_dummy_list_base, 2},
     {"_frecipes_to_dummy_list", (DL_FUNC) &_frecipes_to_dummy_list, 5},

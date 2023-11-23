@@ -33,8 +33,8 @@
 \if{html}{\out{<div class="r">}}\preformatted{StepLeadLag$new(
   ...,
   lag,
-  n_shift = 0,
-  n_subset = 1,
+  n_shift = 0L,
+  n_subset = 1L,
   role = "predictor",
   skip = FALSE,
   keep_original_cols = FALSE
