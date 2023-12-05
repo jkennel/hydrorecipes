@@ -24,7 +24,7 @@ StepAddVars <- R6Class(
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1])
+                            formalArgs(super$initialize)[-1L])
       )
       do.call(super$initialize, inputs)
 

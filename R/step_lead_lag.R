@@ -33,7 +33,7 @@ StepLeadLag <- R6Class(
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1])
+                            formalArgs(super$initialize)[-1L])
       )
       do.call(super$initialize, inputs)
 
@@ -49,11 +49,19 @@ StepLeadLag <- R6Class(
 
       column_name <- self$columns
 
-      ll <- lag_list(new_data,
-                      self$lag,
-                      n_subset = self$n_subset,
-                      n_shift = self$n_shift)
-      names(ll) <- file.path(self$id, self$lag, column_name, fsep = '_')
+      if(self$n_subset == 1) {
+        ll <- collapse::flag(list(new_data), self$lag)
+      } else {
+        ll <- lag_list(new_data,
+                       self$lag,
+                       n_subset = self$n_subset,
+                       n_shift = self$n_shift)
+      }
+
+      names(ll) <- file.path(self$id,
+                             column_name,
+                             pad_num(length(self$lag)),
+                             fsep = '_')
 
       ll
 

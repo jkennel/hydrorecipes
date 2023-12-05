@@ -45,7 +45,7 @@
   catalog = "ksm04",
   eop = NULL,
   scale = TRUE,
-  n_thread = 1,
+  n_thread = 1L,
   role = "predictor",
   skip = FALSE,
   keep_original_cols = FALSE

@@ -106,7 +106,7 @@ int get_end(int n,
  //' @noRd
  //'
  // [[Rcpp::export]]
- NumericVector shift_subset(const NumericVector& x,
+ Rcpp::NumericVector shift_subset(const Rcpp::NumericVector& x,
                             size_t lag,
                             size_t n_subset,
                             size_t n_shift) {
@@ -127,7 +127,7 @@ int get_end(int n,
    start = get_start(n_out, lag, n_subset);
    end   = get_end(n, n_out, lag, n_subset);
 
-   NumericVector out(n_out, NA_REAL);
+   Rcpp::NumericVector out(n_out, NA_REAL);
 
    if(start >= end) {
      throw std::range_error("shift_subset: the number of lags, n_subset or n_shift is too large");
@@ -161,8 +161,8 @@ int get_end(int n,
 //' @export
 //'
 // [[Rcpp::export]]
-List lag_list(const NumericVector& x,
-              const IntegerVector& lags,
+Rcpp::List lag_list(const Rcpp::NumericVector& x,
+              const Rcpp::IntegerVector& lags,
               size_t n_subset,
               size_t n_shift
 ) {
@@ -177,10 +177,10 @@ List lag_list(const NumericVector& x,
   }
   size_t n_col = lags.size();
 
-  List out;
+  Rcpp::List out(n_col);
 
   for (size_t i = 0; i < n_col; ++i) {
-    out.push_back(shift_subset(x, lags(i), n_subset, n_shift));
+    out[i] = shift_subset(x, lags(i), n_subset, n_shift);
   }
 
 
@@ -330,11 +330,11 @@ List lag_list(const NumericVector& x,
 // }
 /*** R
 
-n <- 20000000L
+n <- 2000000L
 m <- 1:n
 nn <- 5
 bench::mark(
-  m1 <- lag_list(m, -1:nn, n_subset = 5, n_shift = 0),
+  m1 <- lag_list(m, -1:nn, n_subset = 1, n_shift = 0),
   check = FALSE,
   iterations = 3
 )

@@ -17,7 +17,40 @@ b_spline_list(
 )
 }
 \arguments{
-\item{integral}{}
+\item{x}{The predictor variable.  Missing values are allowed and will be
+returned as they are.}
+
+\item{df}{Degree of freedom that equals to the column number of the returned
+matrix.  One can specify \code{df} rather than \code{knots}, then the
+function chooses \code{df - degree - as.integer(intercept)} internal
+knots at suitable quantiles of \code{x} ignoring missing values and
+those \code{x} outside of the boundary.  For periodic splines, \code{df
+- as.integer(intercept)} internal knots will be chosen at suitable
+quantiles of \code{x} relative to the beginning of the cyclic intervals
+they belong to (see Examples) and the number of internal knots must be
+greater or equal to the specified \code{degree - 1}.  If internal knots
+are specified via \code{knots}, the specified \code{df} will be ignored.}
+
+\item{degree}{A nonnegative integer specifying the degree of the piecewise
+polynomial. The default value is \code{3} for cubic splines. Zero degree
+is allowed for piecewise constant basis functions.}
+
+\item{internal_knots}{locations where parameters can change}
+
+\item{boundary_knots}{end points of the spline}
+
+\item{complete_basis}{intercept argument}
+
+\item{periodic}{A logical value.  If \code{TRUE}, the periodic splines will
+be returned.  The default value is \code{FALSE}.}
+
+\item{derivs}{A nonnegative integer specifying the order of derivatives of
+splines basis function.  The default value is \code{0}.}
+
+\item{integral}{A logical value.  If \code{TRUE}, the corresponding
+integrals of spline basis functions will be returned.  The default value
+is \code{FALSE}. For periodic splines, the integral of each basis is
+integrated from the left boundary knot.}
 }
 \value{
 List of distributed lags

@@ -12,13 +12,10 @@ to_dummy_list(
   left_open = FALSE
 )
 }
-\arguments{
-\item{left_open}{}
-}
 \value{
 List of dummy encoded terms
 }
 \description{
-Create terms based on intervals. This function uses `findInterval`,
+Create binary terms based on intervals. This function uses `findInterval`,
 followed by a conversion to dummy encoding.
 }

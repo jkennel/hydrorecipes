@@ -42,7 +42,7 @@ StepBSpline <- R6Class(
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1])
+                            formalArgs(super$initialize)[-1L])
       )
       do.call(super$initialize, inputs)
 
@@ -61,10 +61,10 @@ StepBSpline <- R6Class(
 
       if (self$df != 0L) {
         ik <- collapse::fquantile(new_data,
-                                  probs = seq(0, 1, self$df),
+                                  probs = seq(0.0, 1.0, self$df),
                                   na.rm = TRUE)
-        self$boundary_knots = ik[c(1, length(ik))]
-        self$internal_knots <- ik[-c(1, length(ik))]
+        self$boundary_knots = ik[c(1L, length(ik))]
+        self$internal_knots <- ik[-c(1L, length(ik))]
       }
 
     },
@@ -80,8 +80,8 @@ StepBSpline <- R6Class(
       )
 
       names(basis) <- file.path(self$id,
-                                seq_len(length(basis)),
                                 column_name,
+                                pad_num(length(basis)),
                                 fsep = '_')
 
       basis

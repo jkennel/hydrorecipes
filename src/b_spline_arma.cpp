@@ -6,16 +6,10 @@
 //' @description
 //' Create spline terms
 //'
-//' @param x
-//' @param df
-//' @param degree
-//' @param df
-//' @param internal_knots
-//' @param boundary_knots
-//' @param complete_basis
-//' @param periodic
-//' @param derivs
-//' @param integral
+//' @inheritParams splines2::bSpline
+//' @param internal_knots locations where parameters can change
+//' @param boundary_knots end points of the spline
+//' @param complete_basis intercept argument
 //'
 //' @return List of distributed lags
 //'
@@ -48,10 +42,10 @@ Rcpp::List b_spline_list(const arma::vec& x,
   const arma::mat bs_mat = bs_obj.basis(complete_basis);
 
   size_t n = bs_mat.n_cols;
-  Rcpp::List out;
+  Rcpp::List out(n);
 
   for (size_t i = 0; i < n; ++i) {
-    out.push_back(bs_mat.col(i));
+    out[i] = bs_mat.col(i);
   }
 
   return out;
@@ -85,13 +79,13 @@ Rcpp::List b_spline_list2(const arma::vec& x,
   const arma::mat bs_mat = bs_obj.basis(complete_basis);
 
   size_t n = bs_mat.n_cols;
-  Rcpp::List out;
+  Rcpp::List out(n);
 
   for (size_t i = 0; i < n; ++i) {
     arma::vec a_vec = bs_mat.col(i);
     Eigen::VectorXd e_vec = Eigen::Map<Eigen::VectorXd>(a_vec.memptr(),
                                                         a_vec.size());
-    out.push_back(e_vec);
+    out[i] = e_vec;
   }
 
   return out;
@@ -172,14 +166,14 @@ arma::vec log_lags_arma(arma::uword n, arma::uword max_lag) {
 
 /*** R
 
-n <- 1e7
+n <- 2e6
 m <- sort(rnorm(n))
 bk <- range(m)
 knots <- quantile(bk, probs = seq(0.05, 0.95, 0.3))
 bench::mark(
   tmp <- frecipes:::b_spline_list(m, 0L, 3L, knots, bk),
   tmp <- frecipes:::b_spline_list2(m, 0L, 3L, knots, bk),
-  tmp <- frecipes:::b_spline_list3(m, 0L, 3L, knots, numeric()),
+  tmp <- frecipes:::b_spline_list3(m, 0L, 3L, knots, bk),
   check = FALSE,
   min_iterations = 5
 )

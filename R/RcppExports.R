@@ -7,16 +7,10 @@
 #' @description
 #' Create spline terms
 #'
-#' @param x
-#' @param df
-#' @param degree
-#' @param df
-#' @param internal_knots
-#' @param boundary_knots
-#' @param complete_basis
-#' @param periodic
-#' @param derivs
-#' @param integral
+#' @inheritParams splines2::bSpline
+#' @param internal_knots locations where parameters can change
+#' @param boundary_knots end points of the spline
+#' @param complete_basis intercept argument
 #'
 #' @return List of distributed lags
 #'
@@ -36,6 +30,14 @@ b_spline_list3 <- function(x, df, degree, internal_knots, boundary_knots, comple
 
 log_lags_arma <- function(n, max_lag) {
     .Call(`_frecipes_log_lags_arma`, n, max_lag)
+}
+
+hantush_jacob_gauss_kronrod <- function(t, lab, r, T, S, Q, prec) {
+    .Call(`_frecipes_hantush_jacob_gauss_kronrod`, t, lab, r, T, S, Q, prec)
+}
+
+hantush_jacob_quad <- function(t, lab, r, T, S, Q, prec) {
+    .Call(`_frecipes_hantush_jacob_quad`, t, lab, r, T, S, Q, prec)
 }
 
 #' @title
@@ -133,65 +135,89 @@ distributed_lag_list3 <- function(x, n_lag, max_lag, df, degree, internal_knots,
 }
 
 #' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
-NULL
-
+#' fft_matrix
+#'
+#' @description
+#' Do an FFT for each matrix column
+#'
+#' @param x the matrix that holds the series (numeric matrix)
+#' @param detrend remove the linear trend of the columns (boolean)
+#' @param demean remove the mean for each column (boolean)
+#' @param n_new the padded size (integer)
+#'
+#' @return A matrix with FFT results.
+#'
+#' @noRd
+#'
 fft_matrix <- function(x, n_new) {
     .Call(`_frecipes_fft_matrix`, x, n_new)
 }
 
+#' @title
+#' convolve_vec
+#'
+#' @description
+#' Circular convolution of two vectors having the same length
+#'
+#' @param x the vector that holds the series (numeric vector)
+#' @param y the vector to convolve with x (numeric vector)
+#'
+#'
+#' @return numeric vector that is the circular convolution of two vectors
+#'
+#'
+#' @noRd
+#'
 convolve_vec <- function(x, y) {
     .Call(`_frecipes_convolve_vec`, x, y)
 }
 
+#' @title
+#' convolve_filter
+#'
+#' @description
+#' convolution of vector with matrix
+#'
+#' @param x vector to convolve with y (numeric vector)
+#' @param y numeric matrix to convolve with x (column by column convolution)
+#'  (numeric matrix)
+#' @param remove_partial keep the end values or fill with NA (boolean)
+#' @param reverse should x be reversed before convolution (boolean)
+#'
+#' @return numeric matrix of convolved values
+#'
+#' @export
+#'
+#' @importFrom Rcpp sourceCpp
+#' @importFrom stats nextn
+#' @importFrom stats convolve
+#' @importFrom stats spec.pgram
+#'
+#' @examples
+#' a <- convolve_filter(x = 1:100,
+#'                      y = c(1:10, rep(0, 90)),
+#'                      remove_partial = FALSE,
+#'                      reverse = TRUE)
+#'
+#' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
+#'
 convolve_filter <- function(x, y, remove_partial, reverse) {
     .Call(`_frecipes_convolve_filter`, x, y, remove_partial, reverse)
 }
 
+#' @title
+#' convolve_overlap_add
+#'
+#' @description
+#' Multiply a transfer function with a real input and take the inverse FFT.
+#'
+#' @param x the vector that holds the series (numeric vector)
+#' @param y the kernel to convolve with x (complex numeric vector)
+#'
+#' @return the linear convolution of two vectors
+#'
+#' @noRd
+#'
 convolve_overlap_add <- function(x, y) {
     .Call(`_frecipes_convolve_overlap_add`, x, y)
 }
@@ -232,14 +258,86 @@ convolve_overlap_save_list <- function(x, y) {
     .Call(`_frecipes_convolve_overlap_save_list`, x, y)
 }
 
+#' @title
+#' convolve_tf
+#'
+#' @description
+#' Multiply a transfer function with a real input and take the inverse FFT.
+#'
+#' @param x the vector that holds the series (numeric vector)
+#' @param y the transfer function to multiply with x (complex numeric vector)
+#'
+#'
+#' @return the circular convolution of two vectors
+#'
+#' @noRd
+#'
 convolve_tf <- function(x, y) {
     .Call(`_frecipes_convolve_tf`, x, y)
 }
 
+#' @title
+#' convolve_matrix
+#'
+#' @description
+#' convolution of vector with matrix
+#'
+#' @param x vector to convolve with y (numeric vector)
+#' @param y numeric matrix to convolve with x (column by column convolution)
+#'  (numeric matrix)
+#' @param remove_partial keep the end values or fill with NA (boolean)
+#' @param reverse should x be reversed before convolution (boolean)
+#'
+#' @return numeric matrix of convolved values
+#'
+#' @export
+#'
+#' @importFrom Rcpp sourceCpp
+#' @importFrom stats nextn
+#' @importFrom stats convolve
+#' @importFrom stats spec.pgram
+#'
+#' @examples
+#' a <- convolve_matrix(x = 1:100,
+#'                      y = as.matrix(1:10),
+#'                      remove_partial = FALSE,
+#'                      reverse = TRUE)
+#'
+#' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
+#'
 convolve_matrix <- function(x, y, remove_partial, reverse) {
     .Call(`_frecipes_convolve_matrix`, x, y, remove_partial, reverse)
 }
 
+#' @title
+#' convolve_matrix
+#'
+#' @description
+#' convolution of vector with matrix
+#'
+#' @param x vector to convolve with y (numeric vector)
+#' @param y numeric matrix to convolve with x (column by column convolution)
+#'  (numeric matrix)
+#' @param remove_partial keep the end values or fill with NA (boolean)
+#' @param reverse should x be reversed before convolution (boolean)
+#'
+#' @return numeric matrix of convolved values
+#'
+#' @export
+#'
+#' @importFrom Rcpp sourceCpp
+#' @importFrom stats nextn
+#' @importFrom stats convolve
+#' @importFrom stats spec.pgram
+#'
+#' @examples
+#' a <- convolve_matrix(x = 1:100,
+#'                      y = as.matrix(1:10),
+#'                      remove_partial = FALSE,
+#'                      reverse = TRUE)
+#'
+#' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
+#'
 convolve_list <- function(x, y, remove_partial, reverse) {
     .Call(`_frecipes_convolve_list`, x, y, remove_partial, reverse)
 }
@@ -248,34 +346,164 @@ convolve_list2 <- function(x, y, remove_partial, reverse) {
     .Call(`_frecipes_convolve_list2`, x, y, remove_partial, reverse)
 }
 
+#' @title
+#' multiply_ffts
+#'
+#' @description
+#' Multiply each column of a complex matrix with all the columns.
+#'
+#' @param x complex matrix to convolve with itself (complex numeric matrix)
+#' @param n_col number of columns in the original input series (integer)
+#' @param truncated skip the first row to decrease memory use? (boolean)
+#'
+#'
+#' @return pgram of input FFT values.
+#'
+#' @noRd
+#'
 multiply_ffts <- function(x) {
     .Call(`_frecipes_multiply_ffts`, x)
 }
 
+#' @title
+#' fill_lower_left
+#'
+#' @description
+#' Fill in the complex conjugate columns.
+#'
+#' @param x complex matrix of pgram values (complex matrix)
+#' @param n_col number of columns in the original input series (integer)
+#' @param start the first row index to begin on (boolean)
+#'
+#'
+#' @return Matrix with filled in complex conjugate columns.
+#'
+#' @noRd
+#'
 fill_lower_left <- function(x, start) {
     .Call(`_frecipes_fill_lower_left`, x, start)
 }
 
+#' @title
+#' spec_pgram
+#'
+#' @description
+#' Calculate the periodogram.  This method only keeps the columns necessary for
+#' the transfer function calculation. This method is based on `spec.pgram`.
+#'
+#' @inheritParams spec.pgram
+#'
+#'
+#' @return periodogram from an input matrix using a Fast Fourier Transform.
+#' Similar to `spec.pgram` but should be faster.
+#'
+#' @noRd
+#'
 spec_pgram <- function(x, spans, detrend, demean, taper) {
     .Call(`_frecipes_spec_pgram`, x, spans, detrend, demean, taper)
 }
 
+#' @title
+#' spec_welch
+#'
+#' @description
+#' Calculate the periodogram using Welch's method.  This method only keeps the
+#' columns necessary for the transfer function calculation. This method is
+#' based on `spec.pgram`.
+#'
+#' @inheritParams spec.pgram
+#' @param length_subset length of each subset (integer)
+#' @param overlap percent to overlap subsets (double)
+#' @param window vector of length length_subset (numeric vector)
+#'
+#'
+#' @return periodogram from an input matrix using a Fast Fourier Transform and
+#' Welch's method.
+#'
+#' @noRd
+#'
 spec_welch <- function(x, length_subset, overlap, window) {
     .Call(`_frecipes_spec_welch`, x, length_subset, overlap, window)
 }
 
+#' @title
+#' solve_cplx_parallel
+#'
+#' @description
+#' Calculate the transfer function from a periodogram.
+#'
+#' @inheritParams spec.pgram
+#' @inheritParams make_groups
+#'
+#' @return the transfer functions.
+#'
+#' @noRd
+#'
 solve_cplx_parallel <- function(x) {
     .Call(`_frecipes_solve_cplx_parallel`, x)
 }
 
+#' @title
+#' solve_cplx_irr
+#'
+#' @description
+#' Calculate the transfer function from a periodogram with irregular sized
+#' groups. This is experimental to see if we can improve efficiency.
+#' Instead of fitting every frequency it fits groups of frequencies
+#' The goal is to lump many high frequency signals to increase signal to
+#' noise ratios, and only few low frequency signals to keep resolution at low
+#' frequency.
+#'
+#' @inheritParams make_groups
+#' @inheritParams fill_lower_left
+#'
+#'
+#' @return the transfer functions.
+#'
+#' @noRd
+#'
 solve_cplx_irr <- function(x, n_groups) {
     .Call(`_frecipes_solve_cplx_irr`, x, n_groups)
 }
 
+#' @title
+#' ordinary_coherence_phase
+#'
+#' @description
+#' Calculate ordinary coherence and phase from a pgram. Reference:
+#' https://vru.vibrationresearch.com/lesson/coherence-mathematics/
+#'
+#' @param x periodogram matrix (complex matrix)
+#'
+#' @return Matrix with ordinary coherence and phase.
+#'
+#' @noRd
+#'
 ordinary_coherence_phase <- function(x) {
     .Call(`_frecipes_ordinary_coherence_phase`, x)
 }
 
+#' @title
+#' transfer_pgram_smooth
+#'
+#' @description
+#' Calculate the transfer function from an input matrix. This function uses
+#' irregular sized groups using `make_groups`. This is experimental to see if
+#' and designed to be relatively fast. Instead of fitting every frequency and
+#' aggregating post solving, it fits groups of frequencies.
+#' The goal is to lump many high frequency signals to increase signal to
+#' noise ratios, and only few low frequency signals to keep resolution at low
+#' frequency.
+#'
+#' @inheritParams spec.pgram
+#' @inheritParams make_groups
+#' @param n_col number of covariate columns (integer)
+#'
+#'
+#' @return the transfer functions.
+#'
+#' @noRd
+#'
 transfer_pgram_smooth <- function(x, spans, detrend, demean, taper, power, n_groups) {
     .Call(`_frecipes_transfer_pgram_smooth`, x, spans, detrend, demean, taper, power, n_groups)
 }
@@ -284,8 +512,392 @@ transfer_pgram <- function(x, spans, detrend, demean, taper) {
     .Call(`_frecipes_transfer_pgram`, x, spans, detrend, demean, taper)
 }
 
+#' @title
+#' transfer_welch
+#'
+#' @description
+#' Calculate the transfer function from an input matrix. This function uses
+#' irregular sized groups using `make_groups`. This is experimental to see if
+#' and designed to be relatively fast. Instead of fitting every frequency and
+#' aggregating post solving, it fits groups of frequencies.
+#' The goal is to lump many high frequency signals to increase signal to
+#' noise ratios, and only few low frequency signals to keep resolution at low
+#' frequency.
+#'
+#' @inheritParams spec.pgram
+#' @inheritParams make_groups
+#' @param n_col number of covariate columns (integer)
+#'
+#'
+#' @return the transfer functions.
+#'
+#' @noRd
+#'
 transfer_welch <- function(x, length_subset, overlap, window) {
     .Call(`_frecipes_transfer_welch`, x, length_subset, overlap, window)
+}
+
+#' @title
+#' window_hann
+#'
+#' @description
+#' Hann window for FFT.
+#'
+#' @param n length of the window vector (integer)
+#'
+#' @return window of length n.
+#'
+#' @noRd
+#'
+window_hann <- function(n) {
+    .Call(`_frecipes_window_hann`, n)
+}
+
+#' @title
+#' window_tukey
+#'
+#' @description
+#' Tukey window for FFT.
+#'
+#' @inheritParams window_hann
+#' @param r percent on each side to taper (double)
+#'
+#' @return window of length n.
+#'
+#' @noRd
+#'
+window_tukey <- function(n, r) {
+    .Call(`_frecipes_window_tukey`, n, r)
+}
+
+#' @title
+#' window_hann_cplx
+#'
+#' @description
+#' Hann window for complex FFT.
+#'
+#' @inheritParams window_hann
+#'
+#' @return window of length n.
+#'
+#' @noRd
+#'
+window_hann_cplx <- function(n) {
+    .Call(`_frecipes_window_hann_cplx`, n)
+}
+
+#' @title
+#' window_rectangle
+#'
+#' @description
+#' Rectangular window.
+#'
+#' @inheritParams window_hann
+#'
+#' @return window of length n.
+#'
+#' @noRd
+#'
+window_rectangle <- function(n) {
+    .Call(`_frecipes_window_rectangle`, n)
+}
+
+#' @title
+#' window_first_deriv
+#'
+#' @description
+#' First derivative window for FFT
+#'
+#' @inheritParams window_hann
+#'
+#' @param a0 \code{double} coefficient
+#' @param a1 \code{double} coefficient
+#' @param a2 \code{double} coefficient
+#' @param a3 \code{double} coefficient
+#'
+#' @return window
+#'
+#' @export
+#'
+#' @examples
+#' # nuttall window
+#' window_first_deriv(100, 0.355768, 0.487396, 0.144232, 0.012604)
+#'
+#' @noRd
+#'
+window_first_deriv <- function(n, a0, a1, a2, a3) {
+    .Call(`_frecipes_window_first_deriv`, n, a0, a1, a2, a3)
+}
+
+#' @title
+#' window_nuttall
+#'
+#' @description
+#' Nuttall window for FFT
+#'
+#' @inheritParams window_hann
+#'
+#' @return window
+#'
+#' @export
+#'
+#' @examples
+#' window_nuttall(100)
+#'
+#' @noRd
+#'
+window_nuttall <- function(n) {
+    .Call(`_frecipes_window_nuttall`, n)
+}
+
+#' @title
+#' window_blackman_nuttall
+#'
+#' @description
+#' Blackman-Nuttall window for FFT
+#'
+#' @inheritParams window_hann
+#'
+#' @return window
+#'
+#' @export
+#'
+#' @examples
+#' window_blackman_nuttall(100)
+#'
+#' @noRd
+#'
+window_blackman_nuttall <- function(n) {
+    .Call(`_frecipes_window_blackman_nuttall`, n)
+}
+
+#' @title
+#' window_blackman_harris
+#'
+#' @description
+#' Blackman-Harris window for FFT
+#'
+#' @inheritParams window_hann
+#'
+#' @return window
+#'
+#' @export
+#'
+#' @examples
+#' window_blackman_harris(100)
+#'
+#' @noRd
+#'
+window_blackman_harris <- function(n) {
+    .Call(`_frecipes_window_blackman_harris`, n)
+}
+
+#' @title
+#' window_scale
+#'
+#' @description
+#' Scale factor for a window function.
+#'
+#' @param window the window function (numeric vector)
+#' @param n_new length of the padded series (integer)
+#' @param n_fft length of the input series (integer)
+#'
+#' @return window of length n.
+#'
+#' @noRd
+#'
+window_scale <- function(window, n_new, n_fft) {
+    .Call(`_frecipes_window_scale`, window, n_new, n_fft)
+}
+
+gwr_p <- function(time, n_gwr) {
+    .Call(`_frecipes_gwr_p`, time, n_gwr)
+}
+
+barker_herbert_impulse2 <- function(p, radius, radius_patch, t_1, t_2, s_1, s_2) {
+    .Call(`_frecipes_barker_herbert_impulse2`, p, radius, radius_patch, t_1, t_2, s_1, s_2)
+}
+
+gwr_barker_herbert <- function(time, flow_rate, radius, radius_patch, t_1, t_2, s_1, s_2, n_gwr) {
+    .Call(`_frecipes_gwr_barker_herbert`, time, flow_rate, radius, radius_patch, t_1, t_2, s_1, s_2, n_gwr)
+}
+
+#' @title
+#' grf_time
+NULL
+
+#' @title
+NULL
+
+impulse_function <- function(u) {
+    .Call(`_frecipes_impulse_function`, u)
+}
+
+impulse_function_rcpp <- function(u) {
+    .Call(`_frecipes_impulse_function_rcpp`, u)
+}
+
+impulse_function_eigen <- function(u) {
+    .Call(`_frecipes_impulse_function_eigen`, u)
+}
+
+exp_int <- function(u) {
+    .Call(`_frecipes_exp_int`, u)
+}
+
+binary_search <- function(x, y) {
+    .Call(`_frecipes_binary_search`, x, y)
+}
+
+std_to_eigen <- function(u) {
+    .Call(`_frecipes_std_to_eigen`, u)
+}
+
+eigen_to_std <- function(u) {
+    .Call(`_frecipes_eigen_to_std`, u)
+}
+
+std_to_rcpp <- function(u) {
+    .Call(`_frecipes_std_to_rcpp`, u)
+}
+
+rcpp_to_std <- function(u) {
+    .Call(`_frecipes_rcpp_to_std`, u)
+}
+
+calculate_distance <- function(x_well, y_well, x_loc, y_loc) {
+    .Call(`_frecipes_calculate_distance`, x_well, y_well, x_loc, y_loc)
+}
+
+well_function_coefficient <- function(flow_rate, transmissivity) {
+    .Call(`_frecipes_well_function_coefficient`, flow_rate, transmissivity)
+}
+
+well_function_coefficient_vec <- function(flow_rate, transmissivity) {
+    .Call(`_frecipes_well_function_coefficient_vec`, flow_rate, transmissivity)
+}
+
+well_function_coefficient_rcpp <- function(flow_rate, transmissivity) {
+    .Call(`_frecipes_well_function_coefficient_rcpp`, flow_rate, transmissivity)
+}
+
+theis_u <- function(radius, storativity, transmissivity, time) {
+    .Call(`_frecipes_theis_u`, radius, storativity, transmissivity, time)
+}
+
+theis_u_time_vec <- function(radius, storativity, transmissivity, time) {
+    .Call(`_frecipes_theis_u_time_vec`, radius, storativity, transmissivity, time)
+}
+
+theis_u_time_rcpp <- function(radius, storativity, transmissivity, time) {
+    .Call(`_frecipes_theis_u_time_rcpp`, radius, storativity, transmissivity, time)
+}
+
+grf_coefficient <- function(radius, hydraulic_conductivity, thickness, flow_dimension) {
+    .Call(`_frecipes_grf_coefficient`, radius, hydraulic_conductivity, thickness, flow_dimension)
+}
+
+grf_u <- function(radius, specific_storage, hydraulic_conductivity) {
+    .Call(`_frecipes_grf_u`, radius, specific_storage, hydraulic_conductivity)
+}
+
+grf_time <- function(radius, specific_storage, hydraulic_conductivity, thickness, time, flow_rate, flow_dimension) {
+    .Call(`_frecipes_grf_time`, radius, specific_storage, hydraulic_conductivity, thickness, time, flow_rate, flow_dimension)
+}
+
+grf_grid <- function(grid, well_locations, flow_rate, time, specific_storage, hydraulic_conductivity, thickness, flow_dimension) {
+    .Call(`_frecipes_grf_grid`, grid, well_locations, flow_rate, time, specific_storage, hydraulic_conductivity, thickness, flow_dimension)
+}
+
+hantush_epsilon <- function(radius, leakage) {
+    .Call(`_frecipes_hantush_epsilon`, radius, leakage)
+}
+
+#' @title
+#' hantush_well_single
+#'
+#' @description
+#' Result of the hantush well function
+#' J.H.A. Prodanoff; W.J. Mansur; F.C.B. Mascarenhas (2006). Numerical
+#' evaluation of Theis and Hantush-Jacob well functions. , 318(1-4),
+#' 0–183. doi:10.1016/j.jhydrol.2005.05.026
+#'
+#' @param u value of the Theis u
+#' @param b the leakance
+#' @param n_terms the number of terms used in the hantush approximation
+#'
+#'
+#' @return hantush well function
+#'
+#'
+#' @export
+#'
+hantush_well <- function(u, b, precision) {
+    .Call(`_frecipes_hantush_well`, u, b, precision)
+}
+
+hantush_well_vec <- function(u, b, n_terms) {
+    .Call(`_frecipes_hantush_well_vec`, u, b, n_terms)
+}
+
+hantush_well_rcpp <- function(u, b, precision) {
+    .Call(`_frecipes_hantush_well_rcpp`, u, b, precision)
+}
+
+#' @title
+#' hantush_jacob
+#'
+#' @description
+#' Convolution of hantush well function and flow rates in the time domain.
+#' Time series needs to be regularly spaced.
+#'
+#' @param radius distance to monitoring interval
+#' @param storativity aquifer storativity
+#' @param transmissivity aquifer transmissivity
+#' @param leakage hantush leakage
+#' @param time prediction times
+#' @param flow_rate well flow rates
+#' @param flow_time_interval time between flow rate measurements in samples
+#' @param n_terms number of terms to use in Hantush solution.  More is more precise but slower.
+#'
+#' @return hantush jacob solution for multiple pumping scenario
+#'
+#'
+#' @export
+#'
+hantush_jacob <- function(time, flow_rate, radius, storativity, transmissivity, leakage, precision) {
+    .Call(`_frecipes_hantush_jacob`, time, flow_rate, radius, storativity, transmissivity, leakage, precision)
+}
+
+#' @title
+#' harmonic_list
+#'
+#' @description
+#' Create sin and cosine terms for harmonic analysis
+#'
+#' @param time numeric vector of times
+#' @param frequency numeric vector of frequencies
+#' @param start time the cycle starts
+#' @param cycle_size size of the cycle in number of measurements
+#'
+#' @return List of sines and cosines
+#'
+#' @export
+#'
+harmonic_list <- function(time, frequency, start, cycle_size) {
+    .Call(`_frecipes_harmonic_list`, time, frequency, start, cycle_size)
+}
+
+any_decimal <- function(x) {
+    .Call(`_frecipes_any_decimal`, x)
+}
+
+decimal_to_scaled_integer <- function(x) {
+    .Call(`_frecipes_decimal_to_scaled_integer`, x)
+}
+
+gcd <- function(x) {
+    .Call(`_frecipes_gcd`, x)
 }
 
 #' @title
@@ -568,197 +1180,20 @@ which_indices <- function(x, knots) {
     .Call(`_frecipes_which_indices`, x, knots)
 }
 
-#' @title
-#' window_hann
-#'
-#' @description
-#' Hann window for FFT.
-#'
-#' @param n length of the window vector (integer)
-#'
-#' @return window of length n.
-#'
-#' @noRd
-#'
-window_hann <- function(n) {
-    .Call(`_frecipes_window_hann`, n)
+stehfest_v <- function(n) {
+    .Call(`_frecipes_stehfest_v`, n)
 }
 
-#' @title
-#' window_tukey
-#'
-#' @description
-#' Tukey window for FFT.
-#'
-#' @inheritParams window_hann
-#' @param r percent on each side to taper (double)
-#'
-#' @return window of length n.
-#'
-#' @noRd
-#'
-window_tukey <- function(n, r) {
-    .Call(`_frecipes_window_tukey`, n, r)
+stehfest_p <- function(time, n_stehfest) {
+    .Call(`_frecipes_stehfest_p`, time, n_stehfest)
 }
 
-#' @title
-#' window_hann_cplx
-#'
-#' @description
-#' Hann window for complex FFT.
-#'
-#' @inheritParams window_hann
-#'
-#' @return window of length n.
-#'
-#' @noRd
-#'
-window_hann_cplx <- function(n) {
-    .Call(`_frecipes_window_hann_cplx`, n)
+hantush_jacob_laplace <- function(time, c, r, Tr, S, Q, prec, n_stehfest) {
+    .Call(`_frecipes_hantush_jacob_laplace`, time, c, r, Tr, S, Q, prec, n_stehfest)
 }
 
-#' @title
-#' window_rectangle
-#'
-#' @description
-#' Rectangular window.
-#'
-#' @inheritParams window_hann
-#'
-#' @return window of length n.
-#'
-#' @noRd
-#'
-window_rectangle <- function(n) {
-    .Call(`_frecipes_window_rectangle`, n)
-}
-
-#' @title
-#' window_first_deriv
-#'
-#' @description
-#' First derivative window for FFT
-#'
-#' @inheritParams window_hann
-#'
-#' @param a0 \code{double} coefficient
-#' @param a1 \code{double} coefficient
-#' @param a2 \code{double} coefficient
-#' @param a3 \code{double} coefficient
-#'
-#' @return window
-#'
-#' @export
-#'
-#' @examples
-#' # nuttall window
-#' window_first_deriv(100, 0.355768, 0.487396, 0.144232, 0.012604)
-#'
-#' @noRd
-#'
-window_first_deriv <- function(n, a0, a1, a2, a3) {
-    .Call(`_frecipes_window_first_deriv`, n, a0, a1, a2, a3)
-}
-
-#' @title
-#' window_nuttall
-#'
-#' @description
-#' Nuttall window for FFT
-#'
-#' @inheritParams window_hann
-#'
-#' @return window
-#'
-#' @export
-#'
-#' @examples
-#' window_nuttall(100)
-#'
-#' @noRd
-#'
-window_nuttall <- function(n) {
-    .Call(`_frecipes_window_nuttall`, n)
-}
-
-#' @title
-#' window_blackman_nuttall
-#'
-#' @description
-#' Blackman-Nuttall window for FFT
-#'
-#' @inheritParams window_hann
-#'
-#' @return window
-#'
-#' @export
-#'
-#' @examples
-#' window_blackman_nuttall(100)
-#'
-#' @noRd
-#'
-window_blackman_nuttall <- function(n) {
-    .Call(`_frecipes_window_blackman_nuttall`, n)
-}
-
-#' @title
-#' window_blackman_harris
-#'
-#' @description
-#' Blackman-Harris window for FFT
-#'
-#' @inheritParams window_hann
-#'
-#' @return window
-#'
-#' @export
-#'
-#' @examples
-#' window_blackman_harris(100)
-#'
-#' @noRd
-#'
-window_blackman_harris <- function(n) {
-    .Call(`_frecipes_window_blackman_harris`, n)
-}
-
-#' @title
-#' window_scale
-#'
-#' @description
-#' Scale factor for a window function.
-#'
-#' @param window the window function (numeric vector)
-#' @param n_new length of the padded series (integer)
-#' @param n_fft length of the input series (integer)
-#'
-#' @return window of length n.
-#'
-#' @noRd
-#'
-window_scale <- function(window, n_new, n_fft) {
-    .Call(`_frecipes_window_scale`, window, n_new, n_fft)
-}
-
-#' @title
-#' harmonic_list
-#'
-#' @description
-#' Create sin and cosine terms for harmonic analysis
-#'
-#' @param time vector of times
-#' @param frequency
-#' @param start
-#' @param cycle_size size of the cycle
-#'
-#' @return List of sines and cosines
-#'
-#' @export
-#'
-#'
-harmonic_list <- function(time, frequency, start, cycle_size) {
-    .Call(`_frecipes_harmonic_list`, time, frequency, start, cycle_size)
+barker_herbert <- function(time, radius, radius_patch, t_1, t_2, s_1, s_2, Q, prec, n_stehfest) {
+    .Call(`_frecipes_barker_herbert`, time, radius, radius_patch, t_1, t_2, s_1, s_2, Q, prec, n_stehfest)
 }
 
 #' @title
@@ -803,6 +1238,28 @@ lag_list <- function(x, lags, n_subset, n_shift) {
     .Call(`_frecipes_lag_list`, x, lags, n_subset, n_shift)
 }
 
+#' @title
+NULL
+
+#' @title
+NULL
+
+ogata_banks_ind <- function(D, v, C0, x, t) {
+    .Call(`_frecipes_ogata_banks_ind`, D, v, C0, x, t)
+}
+
+ogata_banks_list <- function(time, distance, concentration_initial, velocity, diffusion, retardation, decay) {
+    .Call(`_frecipes_ogata_banks_list`, time, distance, concentration_initial, velocity, diffusion, retardation, decay)
+}
+
+scale_list_param <- function(x, center, scale) {
+    .Call(`_frecipes_scale_list_param`, x, center, scale)
+}
+
+scale_list_param_std <- function(x, center, scale) {
+    .Call(`_frecipes_scale_list_param_std`, x, center, scale)
+}
+
 scale_list_param_eigen <- function(x, center, scale) {
     .Call(`_frecipes_scale_list_param_eigen`, x, center, scale)
 }
@@ -811,7 +1268,7 @@ cor_list_eigen <- function(x, center, scale) {
     .Call(`_frecipes_cor_list_eigen`, x, center, scale)
 }
 
-pca_list_eigen <- function(x, center, scale, prep) {
+pca_list_eigen <- function(x, center, scale, prep = TRUE) {
     .Call(`_frecipes_pca_list_eigen`, x, center, scale, prep)
 }
 
@@ -843,14 +1300,6 @@ pca_list_with_params <- function(x, center, scale) {
     .Call(`_frecipes_pca_list_with_params`, x, center, scale)
 }
 
-corEigen <- function(X) {
-    .Call(`_frecipes_corEigen`, X)
-}
-
-corEigen2 <- function(X) {
-    .Call(`_frecipes_corEigen2`, X)
-}
-
 fi <- function(x, vec, rightmost_closed, all_inside, left_open) {
     .Call(`_frecipes_fi`, x, vec, rightmost_closed, all_inside, left_open)
 }
@@ -860,16 +1309,30 @@ to_dummy_list_base <- function(x, n_fact) {
 }
 
 #' @title
+#' to_dummy
+#'
+#' @description
+#' Create binary terms based on a factor column.
+#'
+#' @params ind integer vector of values to dummy encode
+#'
+#' @return List of dummy encoded terms
+#'
+#' @export
+#'
+#'
+to_dummy <- function(ind) {
+    .Call(`_frecipes_to_dummy`, ind)
+}
+
+#' @title
 #' to_dummy_list
 #'
 #' @description
-#' Create terms based on intervals. This function uses `findInterval`,
+#' Create binary terms based on intervals. This function uses `findInterval`,
 #' followed by a conversion to dummy encoding.
 #'
 #' @inheritParams findInterval
-#' @param rightmost_closed
-#' @param all_inside
-#' @param left_open
 #'
 #' @return List of dummy encoded terms
 #'
@@ -878,5 +1341,40 @@ to_dummy_list_base <- function(x, n_fact) {
 #'
 to_dummy_list <- function(x, vec, rightmost_closed = FALSE, all_inside = FALSE, left_open = FALSE) {
     .Call(`_frecipes_to_dummy_list`, x, vec, rightmost_closed, all_inside, left_open)
+}
+
+weeks_1979 <- function(lag, D, L, precision, inverse) {
+    .Call(`_frecipes_weeks_1979`, lag, D, L, precision, inverse)
+}
+
+#' @title
+#' vadose_response
+#'
+#' @description
+#' weeks_1979 1-D air diffusivity
+#'
+#' @param time numeric vector of elapsed times
+#' @param air_diffusivity A numeric value of the unsaturated zone air diffusivity
+#' @param thickness A numeric value of the unsaturated zone thickness
+#' @param precision A numeric value of for the solution precision
+#' @param inverse A logical value indicating if an inverse water level relationship is desired
+#'
+#' @return weeks 1979 model
+#'
+#'
+#' @export
+#'
+#' @examples
+#' vr <- vadose_response(time = 0:43200,
+#'                        air_diffusivity = 0.20,
+#'                        thickness = 40,
+#'                        precision = 1e-10,
+#'                        inverse = FALSE)
+vadose_response <- function(time, air_diffusivity, thickness, precision, inverse) {
+    .Call(`_frecipes_vadose_response`, time, air_diffusivity, thickness, precision, inverse)
+}
+
+vadose_response2 <- function(time, air_diffusivity, thickness, precision, inverse) {
+    .Call(`_frecipes_vadose_response2`, time, air_diffusivity, thickness, precision, inverse)
 }
 

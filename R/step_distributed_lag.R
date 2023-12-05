@@ -29,7 +29,7 @@ StepDistributedLag <- R6Class(
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1])
+                            formalArgs(super$initialize)[-1L])
       )
       do.call(super$initialize, inputs)
 
@@ -50,7 +50,7 @@ StepDistributedLag <- R6Class(
         self$max_lag,
         0L,
         3L,
-        self$knots[2:(self$n_lag - 1)],
+        self$knots[2:(self$n_lag - 1L)],
         self$knots[c(1, self$n_lag)],
         TRUE,
         FALSE,
@@ -58,11 +58,11 @@ StepDistributedLag <- R6Class(
         FALSE
       )
 
-      names(dl) <- file.path(self$id, seq_len(length(dl)), column_name, fsep = '_')
-      # self$result <- append(self$result, dl)
+      names(dl) <- file.path(self$id,
+                             column_name,
+                             pad_num(length(dl)),
+                             fsep = '_')
 
-
-      # self$result
       dl
 
     }

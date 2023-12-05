@@ -82,6 +82,66 @@
 // }
 //
 
+// [[Rcpp::export]]
+Rcpp::List scale_list_param(const Rcpp::List x,
+                            const NumericVector center,
+                            const NumericVector scale) {
+
+  unsigned int nc = center.size();
+  Rcpp::NumericVector v_tmp;
+
+  Rcpp::List centered(nc);
+
+  for (unsigned int i = 0; i < nc; ++i) {
+    v_tmp = Rcpp::clone(Rcpp::as<Rcpp::NumericVector>(x[i]));
+
+    if(scale(i) == 1.0 & center(i) == 0.0) {
+    } else if (center(i) == 0.0){
+      v_tmp = v_tmp * scale(i);
+    } else if (scale(i) == 1.0){
+      v_tmp = v_tmp - center(i);
+    } else {
+      v_tmp = (v_tmp - center(i)) * scale(i);
+    }
+
+    centered[i] = v_tmp;
+  }
+
+  return centered;
+
+}
+
+// [[Rcpp::export]]
+Rcpp::List scale_list_param_std(const Rcpp::List x,
+                            const NumericVector center,
+                            const NumericVector scale) {
+
+  unsigned int nc = center.size();
+  std::vector<double> v_tmp;
+
+  Rcpp::List centered(nc);
+
+  for (unsigned int i = 0; i < nc; ++i) {
+    v_tmp = Rcpp::as<std::vector<double> >(x[i]);
+
+    if(scale(i) == 1.0 & center(i) == 0.0) {
+    } else if (center(i) == 0.0){
+      for (auto &out : v_tmp)
+        out *= scale(i);
+    } else if (scale(i) == 1.0){
+      for (auto &out : v_tmp)
+        out -= center(i);
+    } else {
+      for (auto &out : v_tmp)
+        out = (out - center(i)) * scale(i);
+    }
+
+    centered[i] = v_tmp;
+  }
+
+  return centered;
+
+}
 
 // [[Rcpp::export]]
 Rcpp::List scale_list_param_eigen(Rcpp::List x,
@@ -98,11 +158,11 @@ Rcpp::List scale_list_param_eigen(Rcpp::List x,
 
     if(scale(i) == 1.0 & center(i) == 0.0) {
     } else if (center(i) == 0.0){
-      v_tmp = v_tmp.array() / scale(i);
+      v_tmp = v_tmp.array() * scale(i);
     } else if (scale(i) == 1.0){
       v_tmp = v_tmp.array() - center(i);
     } else {
-      v_tmp = (v_tmp.array() - center(i)) / scale(i);
+      v_tmp = (v_tmp.array() - center(i)) * scale(i);
     }
 
     centered.push_back(v_tmp);
@@ -140,7 +200,7 @@ Eigen::MatrixXd cor_list_eigen(Rcpp::List x,
 Rcpp::List pca_list_eigen(Rcpp::List x,
                           Eigen::RowVectorXd center,
                           Eigen::RowVectorXd scale,
-                          bool prep = TRUE) {
+                          bool prep = true) {
 
   int nc = center.size();
   Rcpp::NumericVector tmp = x[0];
@@ -291,9 +351,6 @@ Rcpp::List pca_eigen(const Rcpp::List x,
     Rcpp::Named("x") = centered * e_vectors
   );
 
-
-
-
 }
 
 // [[Rcpp::export]]
@@ -354,12 +411,12 @@ Eigen::MatrixXd cor_eigen(Eigen::Map<Eigen::MatrixXd> & X) {
 
 // [[Rcpp::export]]
 Rcpp::List pca(Eigen::Map<Eigen::MatrixXd> x,
-               bool center = true,
-               bool scale = true) {
+               const bool center = true,
+               const bool scale = true) {
 
-  double n = double(x.rows()) - 1.0;
-  int nc = x.cols();
-  int nr = x.rows();
+  const double n = double(x.rows()) - 1.0;
+  const int nc = x.cols();
+  const int nr = x.rows();
 
   Eigen::VectorXd m_vector = Eigen::VectorXd::Zero(nc);
   Eigen::VectorXd sd_vector = Eigen::VectorXd::Zero(nc);
@@ -401,12 +458,12 @@ Rcpp::List pca(Eigen::Map<Eigen::MatrixXd> x,
 
 // [[Rcpp::export]]
 Rcpp::List pca_with_params(Eigen::Map<Eigen::MatrixXd> x,
-                           Eigen::RowVectorXd center,
-                           Eigen::RowVectorXd scale) {
+                           const Eigen::RowVectorXd center,
+                           const Eigen::RowVectorXd scale) {
 
-  double n = double(x.rows()) - 1.0;
-  int nc = x.cols();
-  int nr = x.rows();
+  const double n = double(x.rows()) - 1.0;
+  const int nc = x.cols();
+  const int nr = x.rows();
 
   Eigen::MatrixXd centered = x;
 
@@ -469,59 +526,108 @@ Rcpp::List pca_list_with_params(Rcpp::List x,
 
 
 
-// [[Rcpp::export]]
-Eigen::MatrixXd corEigen(Eigen::Map<Eigen::MatrixXd> & X) {
+// // [[Rcpp::export]]
+// Eigen::MatrixXd corEigen(Eigen::Map<Eigen::MatrixXd> & X) {
+//
+//   // Handle degenerate cases
+//   if (X.rows() == 0 && X.cols() > 0) {
+//     return Eigen::MatrixXd::Constant(X.cols(), X.cols(),
+//                                      Rcpp::NumericVector::get_na());
+//   }
+//
+//   // Computing degrees of freedom
+//   // n - 1 is the unbiased estimate whereas n is the MLE
+//   const int df = X.rows() - 1; // Subtract 1 by default
+//
+//   X.rowwise() -= X.colwise().mean();  // Centering
+//
+//   Eigen::MatrixXd cor = X.transpose() * X / df;   // The covariance matrix
+//
+//   // Get 1 over the standard deviations
+//   Eigen::VectorXd inv_sds = cor.diagonal().array().sqrt().inverse();
+//
+//   // Scale the covariance matrix
+//   cor = cor.cwiseProduct(inv_sds * inv_sds.transpose());
+//
+//   return cor;
+// }
+//
+// // [[Rcpp::export]]
+// Eigen::MatrixXd corEigen2(Eigen::Map<Eigen::MatrixXd> & X) {
+//
+//   // Handle degenerate cases
+//   if (X.rows() == 0 && X.cols() > 0) {
+//     return Eigen::MatrixXd::Constant(X.cols(), X.cols(),
+//                                      Rcpp::NumericVector::get_na());
+//   }
+//
+//   // Computing degrees of freedom
+//   // n - 1 is the unbiased estimate whereas n is the MLE
+//   const int df = X.rows() - 1; // Subtract 1 by default
+//
+//   X.rowwise() -= X.colwise().mean();  // Centering
+//
+//   Eigen::MatrixXd cor = X.adjoint() * X / df;   // The covariance matrix
+//
+//   // Get 1 over the standard deviations
+//   Eigen::VectorXd inv_sds = cor.diagonal().array().sqrt().inverse();
+//
+//   // Scale the covariance matrix
+//   cor = cor.cwiseProduct(inv_sds * inv_sds.transpose());
+//
+//   return cor;
+// }
 
-  // Handle degenerate cases
-  if (X.rows() == 0 && X.cols() > 0) {
-    return Eigen::MatrixXd::Constant(X.cols(), X.cols(),
-                                     Rcpp::NumericVector::get_na());
-  }
 
-  // Computing degrees of freedom
-  // n - 1 is the unbiased estimate whereas n is the MLE
-  const int df = X.rows() - 1; // Subtract 1 by default
-
-  X.rowwise() -= X.colwise().mean();  // Centering
-
-  Eigen::MatrixXd cor = X.transpose() * X / df;   // The covariance matrix
-
-  // Get 1 over the standard deviations
-  Eigen::VectorXd inv_sds = cor.diagonal().array().sqrt().inverse();
-
-  // Scale the covariance matrix
-  cor = cor.cwiseProduct(inv_sds * inv_sds.transpose());
-
-  return cor;
-}
-
-// [[Rcpp::export]]
-Eigen::MatrixXd corEigen2(Eigen::Map<Eigen::MatrixXd> & X) {
-
-  // Handle degenerate cases
-  if (X.rows() == 0 && X.cols() > 0) {
-    return Eigen::MatrixXd::Constant(X.cols(), X.cols(),
-                                     Rcpp::NumericVector::get_na());
-  }
-
-  // Computing degrees of freedom
-  // n - 1 is the unbiased estimate whereas n is the MLE
-  const int df = X.rows() - 1; // Subtract 1 by default
-
-  X.rowwise() -= X.colwise().mean();  // Centering
-
-  Eigen::MatrixXd cor = X.adjoint() * X / df;   // The covariance matrix
-
-  // Get 1 over the standard deviations
-  Eigen::VectorXd inv_sds = cor.diagonal().array().sqrt().inverse();
-
-  // Scale the covariance matrix
-  cor = cor.cwiseProduct(inv_sds * inv_sds.transpose());
-
-  return cor;
-}
+// // [[Rcpp::export]]
+// Eigen::MatrixXd svd_eigen_jac(Eigen::MatrixXd C)
+// {
+//
+//     Eigen::JacobiSVD<Eigen::MatrixXd> svd(C, ComputeThinU | ComputeThinV);
+//     MatrixXd Cp = svd.matrixV();
+//
+//    return(Cp);
+// }
+//
+// // [[Rcpp::export]]
+// Eigen::MatrixXd svd_eigen_bdc(Eigen::MatrixXd C)
+// {
+//
+//     Eigen::BDCSVD<Eigen::MatrixXd> svd(C, Eigen::ComputeThinU | Eigen::ComputeThinV);
+//     MatrixXd Cp = svd.matrixV().leftCols(5);
+//
+//    return(Cp);
+// }
 
 /*** R
+library(frecipes)
+library(collapse)
+nc <- 100
+m <- matrix(rnorm(1e7), ncol = nc)
+l <- unclass(qDF(m))
+center <- fmean(l)
+scale <- fsd(l)
+bench::mark(frecipes:::scale_list_param_eigen(l, center, scale),
+            frecipes:::scale_list_param(l, center, scale),
+            frecipes:::scale_list_param_std(l, center, scale)
+            )
+
+nc <- 100
+m <- matrix(rnorm(2e6), ncol = nc)
+l <- unclass(qDF(m))
+center <- fmean(m)
+scale <- fsd(m)
+
+bench::mark(
+a <- svd(m)$u,
+aa <- corpcor::fast.svd(m),
+b <- frecipes:::svd_eigen_jac(m),
+d <- frecipes:::svd_eigen_bdc(m),
+aaaa <- frecipes:::pca_list_eigen(l, rep(0, nc), rep(1, nc), FALSE),
+check = FALSE
+)
+
+
 library(frecipes)
 library(collapse)
 m <- as.matrix(USArrests)

@@ -26,7 +26,7 @@ StepNormalize <- R6Class(
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1])
+                            formalArgs(super$initialize)[-1L])
       )
       do.call(super$initialize, inputs)
 
@@ -35,6 +35,7 @@ StepNormalize <- R6Class(
       invisible(self)
     },
     prep = function(new_data) {
+
       self$center <- collapse::fmean(new_data,
                                      na.rm = self$na_rm)
       self$scale <- collapse::fsd(new_data,
@@ -42,9 +43,18 @@ StepNormalize <- R6Class(
     },
     # subtract the central value from a column
     bake = function(new_data) {
-      return(scale_list_param_eigen(new_data,
-                                    center = self$center,
-                                    scale = self$scale))
+
+      for(i in seq_along(self$columns)) {
+        new_data[[i]] %-=% self$center[i]
+        new_data[[i]] %*=% (1.0 / self$scale[i])
+      }
+
+      # fscale(new_data, self$center, self$scale)
+      # scale_list_param_std(new_data,
+      #                        center = self$center,
+      #                        scale = 1.0/self$scale)
+
+      new_data
     }
   )
 )

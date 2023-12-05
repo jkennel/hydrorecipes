@@ -135,7 +135,7 @@ Eigen::VectorXcd window_hann_cplx(size_t n) {
 // [[Rcpp::export]]
 Eigen::VectorXd window_rectangle(size_t n) {
 
-  return(VectorXd::Ones(n)/(double)n);
+  return(VectorXd::Ones(n) / (double)n);
 
 }
 //==============================================================================

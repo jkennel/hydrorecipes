@@ -6,9 +6,6 @@
 \usage{
 get_formula_vars(formula, data)
 }
-\arguments{
-\item{data}{}
-}
 \description{
 get_formula_vars
 }

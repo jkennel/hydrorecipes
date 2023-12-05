@@ -35,7 +35,7 @@
   role = "predictor",
   skip = FALSE,
   na_rm = TRUE,
-  n_vectors = 3,
+  n_comp = 3,
   center = TRUE,
   scale = TRUE,
   keep_original_cols = FALSE

@@ -82,6 +82,40 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// hantush_jacob_gauss_kronrod
+double hantush_jacob_gauss_kronrod(double t, double lab, double r, double T, double S, double Q, double prec);
+RcppExport SEXP _frecipes_hantush_jacob_gauss_kronrod(SEXP tSEXP, SEXP labSEXP, SEXP rSEXP, SEXP TSEXP, SEXP SSEXP, SEXP QSEXP, SEXP precSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type t(tSEXP);
+    Rcpp::traits::input_parameter< double >::type lab(labSEXP);
+    Rcpp::traits::input_parameter< double >::type r(rSEXP);
+    Rcpp::traits::input_parameter< double >::type T(TSEXP);
+    Rcpp::traits::input_parameter< double >::type S(SSEXP);
+    Rcpp::traits::input_parameter< double >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< double >::type prec(precSEXP);
+    rcpp_result_gen = Rcpp::wrap(hantush_jacob_gauss_kronrod(t, lab, r, T, S, Q, prec));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hantush_jacob_quad
+std::vector<double> hantush_jacob_quad(std::vector<double> t, double lab, double r, double T, double S, double Q, double prec);
+RcppExport SEXP _frecipes_hantush_jacob_quad(SEXP tSEXP, SEXP labSEXP, SEXP rSEXP, SEXP TSEXP, SEXP SSEXP, SEXP QSEXP, SEXP precSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
+    Rcpp::traits::input_parameter< double >::type lab(labSEXP);
+    Rcpp::traits::input_parameter< double >::type r(rSEXP);
+    Rcpp::traits::input_parameter< double >::type T(TSEXP);
+    Rcpp::traits::input_parameter< double >::type S(SSEXP);
+    Rcpp::traits::input_parameter< double >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< double >::type prec(precSEXP);
+    rcpp_result_gen = Rcpp::wrap(hantush_jacob_quad(t, lab, r, T, S, Q, prec));
+    return rcpp_result_gen;
+END_RCPP
+}
 // distributed_lag_thread
 Eigen::MatrixXd distributed_lag_thread(const Eigen::VectorXd& x, const Eigen::MatrixXd& bl, int n_thread);
 RcppExport SEXP _frecipes_distributed_lag_thread(SEXP xSEXP, SEXP blSEXP, SEXP n_threadSEXP) {
@@ -223,15 +257,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // convolve_filter
-Eigen::VectorXd convolve_filter(const Eigen::VectorXd& x, const Eigen::VectorXd& y, bool remove_partial, bool reverse);
+Eigen::VectorXd convolve_filter(const Eigen::VectorXd& x, const Eigen::VectorXd& y, const bool remove_partial, const bool reverse);
 RcppExport SEXP _frecipes_convolve_filter(SEXP xSEXP, SEXP ySEXP, SEXP remove_partialSEXP, SEXP reverseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< bool >::type remove_partial(remove_partialSEXP);
-    Rcpp::traits::input_parameter< bool >::type reverse(reverseSEXP);
+    Rcpp::traits::input_parameter< const bool >::type remove_partial(remove_partialSEXP);
+    Rcpp::traits::input_parameter< const bool >::type reverse(reverseSEXP);
     rcpp_result_gen = Rcpp::wrap(convolve_filter(x, y, remove_partial, reverse));
     return rcpp_result_gen;
 END_RCPP
@@ -458,6 +492,529 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// window_hann
+Eigen::VectorXd window_hann(size_t n);
+RcppExport SEXP _frecipes_window_hann(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_hann(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_tukey
+Eigen::VectorXd window_tukey(size_t n, double r);
+RcppExport SEXP _frecipes_window_tukey(SEXP nSEXP, SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_tukey(n, r));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_hann_cplx
+Eigen::VectorXcd window_hann_cplx(size_t n);
+RcppExport SEXP _frecipes_window_hann_cplx(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_hann_cplx(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_rectangle
+Eigen::VectorXd window_rectangle(size_t n);
+RcppExport SEXP _frecipes_window_rectangle(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_rectangle(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_first_deriv
+Eigen::ArrayXd window_first_deriv(size_t n, double a0, double a1, double a2, double a3);
+RcppExport SEXP _frecipes_window_first_deriv(SEXP nSEXP, SEXP a0SEXP, SEXP a1SEXP, SEXP a2SEXP, SEXP a3SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type a0(a0SEXP);
+    Rcpp::traits::input_parameter< double >::type a1(a1SEXP);
+    Rcpp::traits::input_parameter< double >::type a2(a2SEXP);
+    Rcpp::traits::input_parameter< double >::type a3(a3SEXP);
+    rcpp_result_gen = Rcpp::wrap(window_first_deriv(n, a0, a1, a2, a3));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_nuttall
+Eigen::ArrayXd window_nuttall(size_t n);
+RcppExport SEXP _frecipes_window_nuttall(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_nuttall(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_blackman_nuttall
+Eigen::ArrayXd window_blackman_nuttall(size_t n);
+RcppExport SEXP _frecipes_window_blackman_nuttall(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_blackman_nuttall(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_blackman_harris
+Eigen::ArrayXd window_blackman_harris(size_t n);
+RcppExport SEXP _frecipes_window_blackman_harris(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_blackman_harris(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// window_scale
+double window_scale(Eigen::VectorXd window, size_t n_new, size_t n_fft);
+RcppExport SEXP _frecipes_window_scale(SEXP windowSEXP, SEXP n_newSEXP, SEXP n_fftSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type window(windowSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_new(n_newSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_fft(n_fftSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_scale(window, n_new, n_fft));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gwr_p
+Eigen::MatrixXd gwr_p(Eigen::VectorXd time, int n_gwr);
+RcppExport SEXP _frecipes_gwr_p(SEXP timeSEXP, SEXP n_gwrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< int >::type n_gwr(n_gwrSEXP);
+    rcpp_result_gen = Rcpp::wrap(gwr_p(time, n_gwr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// barker_herbert_impulse2
+double barker_herbert_impulse2(double p, double radius, double radius_patch, double t_1, double t_2, double s_1, double s_2);
+RcppExport SEXP _frecipes_barker_herbert_impulse2(SEXP pSEXP, SEXP radiusSEXP, SEXP radius_patchSEXP, SEXP t_1SEXP, SEXP t_2SEXP, SEXP s_1SEXP, SEXP s_2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    Rcpp::traits::input_parameter< double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< double >::type radius_patch(radius_patchSEXP);
+    Rcpp::traits::input_parameter< double >::type t_1(t_1SEXP);
+    Rcpp::traits::input_parameter< double >::type t_2(t_2SEXP);
+    Rcpp::traits::input_parameter< double >::type s_1(s_1SEXP);
+    Rcpp::traits::input_parameter< double >::type s_2(s_2SEXP);
+    rcpp_result_gen = Rcpp::wrap(barker_herbert_impulse2(p, radius, radius_patch, t_1, t_2, s_1, s_2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gwr_barker_herbert
+Rcpp::List gwr_barker_herbert(Eigen::VectorXd time, double flow_rate, double radius, double radius_patch, double t_1, double t_2, double s_1, double s_2, unsigned int n_gwr);
+RcppExport SEXP _frecipes_gwr_barker_herbert(SEXP timeSEXP, SEXP flow_rateSEXP, SEXP radiusSEXP, SEXP radius_patchSEXP, SEXP t_1SEXP, SEXP t_2SEXP, SEXP s_1SEXP, SEXP s_2SEXP, SEXP n_gwrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< double >::type flow_rate(flow_rateSEXP);
+    Rcpp::traits::input_parameter< double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< double >::type radius_patch(radius_patchSEXP);
+    Rcpp::traits::input_parameter< double >::type t_1(t_1SEXP);
+    Rcpp::traits::input_parameter< double >::type t_2(t_2SEXP);
+    Rcpp::traits::input_parameter< double >::type s_1(s_1SEXP);
+    Rcpp::traits::input_parameter< double >::type s_2(s_2SEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type n_gwr(n_gwrSEXP);
+    rcpp_result_gen = Rcpp::wrap(gwr_barker_herbert(time, flow_rate, radius, radius_patch, t_1, t_2, s_1, s_2, n_gwr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// impulse_function
+std::vector<double> impulse_function(std::vector<double> u);
+RcppExport SEXP _frecipes_impulse_function(SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(impulse_function(u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// impulse_function_rcpp
+Rcpp::NumericVector impulse_function_rcpp(Rcpp::NumericVector u);
+RcppExport SEXP _frecipes_impulse_function_rcpp(SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(impulse_function_rcpp(u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// impulse_function_eigen
+Eigen::VectorXd impulse_function_eigen(Eigen::VectorXd u);
+RcppExport SEXP _frecipes_impulse_function_eigen(SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(impulse_function_eigen(u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// exp_int
+double exp_int(double u);
+RcppExport SEXP _frecipes_exp_int(SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(exp_int(u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// binary_search
+int binary_search(Eigen::VectorXd x, Eigen::VectorXd y);
+RcppExport SEXP _frecipes_binary_search(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(binary_search(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// std_to_eigen
+Eigen::VectorXd std_to_eigen(std::vector<double> u);
+RcppExport SEXP _frecipes_std_to_eigen(SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(std_to_eigen(u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// eigen_to_std
+std::vector<double> eigen_to_std(Eigen::VectorXd u);
+RcppExport SEXP _frecipes_eigen_to_std(SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(eigen_to_std(u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// std_to_rcpp
+Rcpp::NumericVector std_to_rcpp(std::vector<double> u);
+RcppExport SEXP _frecipes_std_to_rcpp(SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(std_to_rcpp(u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcpp_to_std
+std::vector<double> rcpp_to_std(Rcpp::NumericVector u);
+RcppExport SEXP _frecipes_rcpp_to_std(SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_to_std(u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// calculate_distance
+double calculate_distance(const double x_well, const double y_well, const double x_loc, const double y_loc);
+RcppExport SEXP _frecipes_calculate_distance(SEXP x_wellSEXP, SEXP y_wellSEXP, SEXP x_locSEXP, SEXP y_locSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type x_well(x_wellSEXP);
+    Rcpp::traits::input_parameter< const double >::type y_well(y_wellSEXP);
+    Rcpp::traits::input_parameter< const double >::type x_loc(x_locSEXP);
+    Rcpp::traits::input_parameter< const double >::type y_loc(y_locSEXP);
+    rcpp_result_gen = Rcpp::wrap(calculate_distance(x_well, y_well, x_loc, y_loc));
+    return rcpp_result_gen;
+END_RCPP
+}
+// well_function_coefficient
+double well_function_coefficient(const double flow_rate, const double transmissivity);
+RcppExport SEXP _frecipes_well_function_coefficient(SEXP flow_rateSEXP, SEXP transmissivitySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type flow_rate(flow_rateSEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity(transmissivitySEXP);
+    rcpp_result_gen = Rcpp::wrap(well_function_coefficient(flow_rate, transmissivity));
+    return rcpp_result_gen;
+END_RCPP
+}
+// well_function_coefficient_vec
+std::vector<double> well_function_coefficient_vec(std::vector<double> flow_rate, const double transmissivity);
+RcppExport SEXP _frecipes_well_function_coefficient_vec(SEXP flow_rateSEXP, SEXP transmissivitySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type flow_rate(flow_rateSEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity(transmissivitySEXP);
+    rcpp_result_gen = Rcpp::wrap(well_function_coefficient_vec(flow_rate, transmissivity));
+    return rcpp_result_gen;
+END_RCPP
+}
+// well_function_coefficient_rcpp
+Rcpp::NumericVector well_function_coefficient_rcpp(Rcpp::NumericVector flow_rate, const double transmissivity);
+RcppExport SEXP _frecipes_well_function_coefficient_rcpp(SEXP flow_rateSEXP, SEXP transmissivitySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type flow_rate(flow_rateSEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity(transmissivitySEXP);
+    rcpp_result_gen = Rcpp::wrap(well_function_coefficient_rcpp(flow_rate, transmissivity));
+    return rcpp_result_gen;
+END_RCPP
+}
+// theis_u
+double theis_u(double radius, double storativity, double transmissivity, double time);
+RcppExport SEXP _frecipes_theis_u(SEXP radiusSEXP, SEXP storativitySEXP, SEXP transmissivitySEXP, SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< double >::type storativity(storativitySEXP);
+    Rcpp::traits::input_parameter< double >::type transmissivity(transmissivitySEXP);
+    Rcpp::traits::input_parameter< double >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(theis_u(radius, storativity, transmissivity, time));
+    return rcpp_result_gen;
+END_RCPP
+}
+// theis_u_time_vec
+std::vector<double> theis_u_time_vec(double radius, double storativity, double transmissivity, std::vector<double> time);
+RcppExport SEXP _frecipes_theis_u_time_vec(SEXP radiusSEXP, SEXP storativitySEXP, SEXP transmissivitySEXP, SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< double >::type storativity(storativitySEXP);
+    Rcpp::traits::input_parameter< double >::type transmissivity(transmissivitySEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(theis_u_time_vec(radius, storativity, transmissivity, time));
+    return rcpp_result_gen;
+END_RCPP
+}
+// theis_u_time_rcpp
+Rcpp::NumericVector theis_u_time_rcpp(const double radius, const double storativity, const double transmissivity, const Rcpp::NumericVector time);
+RcppExport SEXP _frecipes_theis_u_time_rcpp(SEXP radiusSEXP, SEXP storativitySEXP, SEXP transmissivitySEXP, SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< const double >::type storativity(storativitySEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity(transmissivitySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(theis_u_time_rcpp(radius, storativity, transmissivity, time));
+    return rcpp_result_gen;
+END_RCPP
+}
+// grf_coefficient
+double grf_coefficient(const double radius, const double hydraulic_conductivity, const double thickness, const double flow_dimension);
+RcppExport SEXP _frecipes_grf_coefficient(SEXP radiusSEXP, SEXP hydraulic_conductivitySEXP, SEXP thicknessSEXP, SEXP flow_dimensionSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< const double >::type hydraulic_conductivity(hydraulic_conductivitySEXP);
+    Rcpp::traits::input_parameter< const double >::type thickness(thicknessSEXP);
+    Rcpp::traits::input_parameter< const double >::type flow_dimension(flow_dimensionSEXP);
+    rcpp_result_gen = Rcpp::wrap(grf_coefficient(radius, hydraulic_conductivity, thickness, flow_dimension));
+    return rcpp_result_gen;
+END_RCPP
+}
+// grf_u
+double grf_u(const double radius, const double specific_storage, const double hydraulic_conductivity);
+RcppExport SEXP _frecipes_grf_u(SEXP radiusSEXP, SEXP specific_storageSEXP, SEXP hydraulic_conductivitySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< const double >::type specific_storage(specific_storageSEXP);
+    Rcpp::traits::input_parameter< const double >::type hydraulic_conductivity(hydraulic_conductivitySEXP);
+    rcpp_result_gen = Rcpp::wrap(grf_u(radius, specific_storage, hydraulic_conductivity));
+    return rcpp_result_gen;
+END_RCPP
+}
+// grf_time
+Rcpp::List grf_time(const double radius, const double specific_storage, const double hydraulic_conductivity, const double thickness, const Rcpp::NumericVector time, const Rcpp::NumericVector flow_rate, const double flow_dimension);
+RcppExport SEXP _frecipes_grf_time(SEXP radiusSEXP, SEXP specific_storageSEXP, SEXP hydraulic_conductivitySEXP, SEXP thicknessSEXP, SEXP timeSEXP, SEXP flow_rateSEXP, SEXP flow_dimensionSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< const double >::type specific_storage(specific_storageSEXP);
+    Rcpp::traits::input_parameter< const double >::type hydraulic_conductivity(hydraulic_conductivitySEXP);
+    Rcpp::traits::input_parameter< const double >::type thickness(thicknessSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type flow_rate(flow_rateSEXP);
+    Rcpp::traits::input_parameter< const double >::type flow_dimension(flow_dimensionSEXP);
+    rcpp_result_gen = Rcpp::wrap(grf_time(radius, specific_storage, hydraulic_conductivity, thickness, time, flow_rate, flow_dimension));
+    return rcpp_result_gen;
+END_RCPP
+}
+// grf_grid
+Eigen::MatrixXd grf_grid(const Eigen::MatrixXd& grid, const Eigen::MatrixXd& well_locations, const Eigen::MatrixXd& flow_rate, const Eigen::VectorXd& time, const double specific_storage, const double hydraulic_conductivity, const double thickness, const double flow_dimension);
+RcppExport SEXP _frecipes_grf_grid(SEXP gridSEXP, SEXP well_locationsSEXP, SEXP flow_rateSEXP, SEXP timeSEXP, SEXP specific_storageSEXP, SEXP hydraulic_conductivitySEXP, SEXP thicknessSEXP, SEXP flow_dimensionSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type grid(gridSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type well_locations(well_locationsSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type flow_rate(flow_rateSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const double >::type specific_storage(specific_storageSEXP);
+    Rcpp::traits::input_parameter< const double >::type hydraulic_conductivity(hydraulic_conductivitySEXP);
+    Rcpp::traits::input_parameter< const double >::type thickness(thicknessSEXP);
+    Rcpp::traits::input_parameter< const double >::type flow_dimension(flow_dimensionSEXP);
+    rcpp_result_gen = Rcpp::wrap(grf_grid(grid, well_locations, flow_rate, time, specific_storage, hydraulic_conductivity, thickness, flow_dimension));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hantush_epsilon
+double hantush_epsilon(const double radius, const double leakage);
+RcppExport SEXP _frecipes_hantush_epsilon(SEXP radiusSEXP, SEXP leakageSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< const double >::type leakage(leakageSEXP);
+    rcpp_result_gen = Rcpp::wrap(hantush_epsilon(radius, leakage));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hantush_well
+double hantush_well(double u, double b, double precision);
+RcppExport SEXP _frecipes_hantush_well(SEXP uSEXP, SEXP bSEXP, SEXP precisionSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type u(uSEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< double >::type precision(precisionSEXP);
+    rcpp_result_gen = Rcpp::wrap(hantush_well(u, b, precision));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hantush_well_vec
+std::vector<double> hantush_well_vec(std::vector<double> u, double b, int n_terms);
+RcppExport SEXP _frecipes_hantush_well_vec(SEXP uSEXP, SEXP bSEXP, SEXP n_termsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type u(uSEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< int >::type n_terms(n_termsSEXP);
+    rcpp_result_gen = Rcpp::wrap(hantush_well_vec(u, b, n_terms));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hantush_well_rcpp
+Rcpp::NumericVector hantush_well_rcpp(Rcpp::NumericVector u, double b, double precision);
+RcppExport SEXP _frecipes_hantush_well_rcpp(SEXP uSEXP, SEXP bSEXP, SEXP precisionSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type u(uSEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< double >::type precision(precisionSEXP);
+    rcpp_result_gen = Rcpp::wrap(hantush_well_rcpp(u, b, precision));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hantush_jacob
+Rcpp::List hantush_jacob(const Rcpp::NumericVector time, const Rcpp::NumericVector flow_rate, const double radius, const double storativity, const double transmissivity, const double leakage, const double precision);
+RcppExport SEXP _frecipes_hantush_jacob(SEXP timeSEXP, SEXP flow_rateSEXP, SEXP radiusSEXP, SEXP storativitySEXP, SEXP transmissivitySEXP, SEXP leakageSEXP, SEXP precisionSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type flow_rate(flow_rateSEXP);
+    Rcpp::traits::input_parameter< const double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< const double >::type storativity(storativitySEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity(transmissivitySEXP);
+    Rcpp::traits::input_parameter< const double >::type leakage(leakageSEXP);
+    Rcpp::traits::input_parameter< const double >::type precision(precisionSEXP);
+    rcpp_result_gen = Rcpp::wrap(hantush_jacob(time, flow_rate, radius, storativity, transmissivity, leakage, precision));
+    return rcpp_result_gen;
+END_RCPP
+}
+// harmonic_list
+List harmonic_list(const NumericVector& time, const NumericVector& frequency, const double start, const double cycle_size);
+RcppExport SEXP _frecipes_harmonic_list(SEXP timeSEXP, SEXP frequencySEXP, SEXP startSEXP, SEXP cycle_sizeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector& >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type frequency(frequencySEXP);
+    Rcpp::traits::input_parameter< const double >::type start(startSEXP);
+    Rcpp::traits::input_parameter< const double >::type cycle_size(cycle_sizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(harmonic_list(time, frequency, start, cycle_size));
+    return rcpp_result_gen;
+END_RCPP
+}
+// any_decimal
+double any_decimal(std::vector<double> x);
+RcppExport SEXP _frecipes_any_decimal(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(any_decimal(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// decimal_to_scaled_integer
+std::vector<double> decimal_to_scaled_integer(std::vector<double> x);
+RcppExport SEXP _frecipes_decimal_to_scaled_integer(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(decimal_to_scaled_integer(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gcd
+unsigned int gcd(std::vector<unsigned int> x);
+RcppExport SEXP _frecipes_gcd(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<unsigned int> >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(gcd(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // index_from_i_j
 size_t index_from_i_j(size_t i, size_t j, size_t n_col);
 RcppExport SEXP _frecipes_index_from_i_j(SEXP iSEXP, SEXP jSEXP, SEXP n_colSEXP) {
@@ -662,123 +1219,64 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// window_hann
-Eigen::VectorXd window_hann(size_t n);
-RcppExport SEXP _frecipes_window_hann(SEXP nSEXP) {
+// stehfest_v
+Eigen::RowVectorXd stehfest_v(int n);
+RcppExport SEXP _frecipes_stehfest_v(SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(window_hann(n));
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(stehfest_v(n));
     return rcpp_result_gen;
 END_RCPP
 }
-// window_tukey
-Eigen::VectorXd window_tukey(size_t n, double r);
-RcppExport SEXP _frecipes_window_tukey(SEXP nSEXP, SEXP rSEXP) {
+// stehfest_p
+Eigen::MatrixXd stehfest_p(Eigen::VectorXd time, int n_stehfest);
+RcppExport SEXP _frecipes_stehfest_p(SEXP timeSEXP, SEXP n_stehfestSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< int >::type n_stehfest(n_stehfestSEXP);
+    rcpp_result_gen = Rcpp::wrap(stehfest_p(time, n_stehfest));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hantush_jacob_laplace
+Rcpp::List hantush_jacob_laplace(Eigen::VectorXd time, double c, double r, double Tr, double S, double Q, double prec, int n_stehfest);
+RcppExport SEXP _frecipes_hantush_jacob_laplace(SEXP timeSEXP, SEXP cSEXP, SEXP rSEXP, SEXP TrSEXP, SEXP SSEXP, SEXP QSEXP, SEXP precSEXP, SEXP n_stehfestSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< double >::type c(cSEXP);
     Rcpp::traits::input_parameter< double >::type r(rSEXP);
-    rcpp_result_gen = Rcpp::wrap(window_tukey(n, r));
+    Rcpp::traits::input_parameter< double >::type Tr(TrSEXP);
+    Rcpp::traits::input_parameter< double >::type S(SSEXP);
+    Rcpp::traits::input_parameter< double >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< double >::type prec(precSEXP);
+    Rcpp::traits::input_parameter< int >::type n_stehfest(n_stehfestSEXP);
+    rcpp_result_gen = Rcpp::wrap(hantush_jacob_laplace(time, c, r, Tr, S, Q, prec, n_stehfest));
     return rcpp_result_gen;
 END_RCPP
 }
-// window_hann_cplx
-Eigen::VectorXcd window_hann_cplx(size_t n);
-RcppExport SEXP _frecipes_window_hann_cplx(SEXP nSEXP) {
+// barker_herbert
+Rcpp::List barker_herbert(Eigen::VectorXd time, double radius, double radius_patch, double t_1, double t_2, double s_1, double s_2, double Q, double prec, int n_stehfest);
+RcppExport SEXP _frecipes_barker_herbert(SEXP timeSEXP, SEXP radiusSEXP, SEXP radius_patchSEXP, SEXP t_1SEXP, SEXP t_2SEXP, SEXP s_1SEXP, SEXP s_2SEXP, SEXP QSEXP, SEXP precSEXP, SEXP n_stehfestSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(window_hann_cplx(n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// window_rectangle
-Eigen::VectorXd window_rectangle(size_t n);
-RcppExport SEXP _frecipes_window_rectangle(SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(window_rectangle(n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// window_first_deriv
-Eigen::ArrayXd window_first_deriv(size_t n, double a0, double a1, double a2, double a3);
-RcppExport SEXP _frecipes_window_first_deriv(SEXP nSEXP, SEXP a0SEXP, SEXP a1SEXP, SEXP a2SEXP, SEXP a3SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
-    Rcpp::traits::input_parameter< double >::type a0(a0SEXP);
-    Rcpp::traits::input_parameter< double >::type a1(a1SEXP);
-    Rcpp::traits::input_parameter< double >::type a2(a2SEXP);
-    Rcpp::traits::input_parameter< double >::type a3(a3SEXP);
-    rcpp_result_gen = Rcpp::wrap(window_first_deriv(n, a0, a1, a2, a3));
-    return rcpp_result_gen;
-END_RCPP
-}
-// window_nuttall
-Eigen::ArrayXd window_nuttall(size_t n);
-RcppExport SEXP _frecipes_window_nuttall(SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(window_nuttall(n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// window_blackman_nuttall
-Eigen::ArrayXd window_blackman_nuttall(size_t n);
-RcppExport SEXP _frecipes_window_blackman_nuttall(SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(window_blackman_nuttall(n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// window_blackman_harris
-Eigen::ArrayXd window_blackman_harris(size_t n);
-RcppExport SEXP _frecipes_window_blackman_harris(SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(window_blackman_harris(n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// window_scale
-double window_scale(Eigen::VectorXd window, size_t n_new, size_t n_fft);
-RcppExport SEXP _frecipes_window_scale(SEXP windowSEXP, SEXP n_newSEXP, SEXP n_fftSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::VectorXd >::type window(windowSEXP);
-    Rcpp::traits::input_parameter< size_t >::type n_new(n_newSEXP);
-    Rcpp::traits::input_parameter< size_t >::type n_fft(n_fftSEXP);
-    rcpp_result_gen = Rcpp::wrap(window_scale(window, n_new, n_fft));
-    return rcpp_result_gen;
-END_RCPP
-}
-// harmonic_list
-List harmonic_list(const NumericVector& time, const NumericVector& frequency, const double start, const double cycle_size);
-RcppExport SEXP _frecipes_harmonic_list(SEXP timeSEXP, SEXP frequencySEXP, SEXP startSEXP, SEXP cycle_sizeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericVector& >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type frequency(frequencySEXP);
-    Rcpp::traits::input_parameter< const double >::type start(startSEXP);
-    Rcpp::traits::input_parameter< const double >::type cycle_size(cycle_sizeSEXP);
-    rcpp_result_gen = Rcpp::wrap(harmonic_list(time, frequency, start, cycle_size));
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< double >::type radius_patch(radius_patchSEXP);
+    Rcpp::traits::input_parameter< double >::type t_1(t_1SEXP);
+    Rcpp::traits::input_parameter< double >::type t_2(t_2SEXP);
+    Rcpp::traits::input_parameter< double >::type s_1(s_1SEXP);
+    Rcpp::traits::input_parameter< double >::type s_2(s_2SEXP);
+    Rcpp::traits::input_parameter< double >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< double >::type prec(precSEXP);
+    Rcpp::traits::input_parameter< int >::type n_stehfest(n_stehfestSEXP);
+    rcpp_result_gen = Rcpp::wrap(barker_herbert(time, radius, radius_patch, t_1, t_2, s_1, s_2, Q, prec, n_stehfest));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -835,12 +1333,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // shift_subset
-NumericVector shift_subset(const NumericVector& x, size_t lag, size_t n_subset, size_t n_shift);
+Rcpp::NumericVector shift_subset(const Rcpp::NumericVector& x, size_t lag, size_t n_subset, size_t n_shift);
 RcppExport SEXP _frecipes_shift_subset(SEXP xSEXP, SEXP lagSEXP, SEXP n_subsetSEXP, SEXP n_shiftSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
     Rcpp::traits::input_parameter< size_t >::type lag(lagSEXP);
     Rcpp::traits::input_parameter< size_t >::type n_subset(n_subsetSEXP);
     Rcpp::traits::input_parameter< size_t >::type n_shift(n_shiftSEXP);
@@ -849,16 +1347,74 @@ BEGIN_RCPP
 END_RCPP
 }
 // lag_list
-List lag_list(const NumericVector& x, const IntegerVector& lags, size_t n_subset, size_t n_shift);
+Rcpp::List lag_list(const Rcpp::NumericVector& x, const Rcpp::IntegerVector& lags, size_t n_subset, size_t n_shift);
 RcppExport SEXP _frecipes_lag_list(SEXP xSEXP, SEXP lagsSEXP, SEXP n_subsetSEXP, SEXP n_shiftSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericVector& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const IntegerVector& >::type lags(lagsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type lags(lagsSEXP);
     Rcpp::traits::input_parameter< size_t >::type n_subset(n_subsetSEXP);
     Rcpp::traits::input_parameter< size_t >::type n_shift(n_shiftSEXP);
     rcpp_result_gen = Rcpp::wrap(lag_list(x, lags, n_subset, n_shift));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ogata_banks_ind
+double ogata_banks_ind(double D, double v, double C0, double x, double t);
+RcppExport SEXP _frecipes_ogata_banks_ind(SEXP DSEXP, SEXP vSEXP, SEXP C0SEXP, SEXP xSEXP, SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type D(DSEXP);
+    Rcpp::traits::input_parameter< double >::type v(vSEXP);
+    Rcpp::traits::input_parameter< double >::type C0(C0SEXP);
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type t(tSEXP);
+    rcpp_result_gen = Rcpp::wrap(ogata_banks_ind(D, v, C0, x, t));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ogata_banks_list
+Rcpp::List ogata_banks_list(Eigen::ArrayXd time, Eigen::ArrayXd distance, double concentration_initial, double velocity, double diffusion, double retardation, double decay);
+RcppExport SEXP _frecipes_ogata_banks_list(SEXP timeSEXP, SEXP distanceSEXP, SEXP concentration_initialSEXP, SEXP velocitySEXP, SEXP diffusionSEXP, SEXP retardationSEXP, SEXP decaySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::ArrayXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< Eigen::ArrayXd >::type distance(distanceSEXP);
+    Rcpp::traits::input_parameter< double >::type concentration_initial(concentration_initialSEXP);
+    Rcpp::traits::input_parameter< double >::type velocity(velocitySEXP);
+    Rcpp::traits::input_parameter< double >::type diffusion(diffusionSEXP);
+    Rcpp::traits::input_parameter< double >::type retardation(retardationSEXP);
+    Rcpp::traits::input_parameter< double >::type decay(decaySEXP);
+    rcpp_result_gen = Rcpp::wrap(ogata_banks_list(time, distance, concentration_initial, velocity, diffusion, retardation, decay));
+    return rcpp_result_gen;
+END_RCPP
+}
+// scale_list_param
+Rcpp::List scale_list_param(const Rcpp::List x, const NumericVector center, const NumericVector scale);
+RcppExport SEXP _frecipes_scale_list_param(SEXP xSEXP, SEXP centerSEXP, SEXP scaleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type scale(scaleSEXP);
+    rcpp_result_gen = Rcpp::wrap(scale_list_param(x, center, scale));
+    return rcpp_result_gen;
+END_RCPP
+}
+// scale_list_param_std
+Rcpp::List scale_list_param_std(const Rcpp::List x, const NumericVector center, const NumericVector scale);
+RcppExport SEXP _frecipes_scale_list_param_std(SEXP xSEXP, SEXP centerSEXP, SEXP scaleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type scale(scaleSEXP);
+    rcpp_result_gen = Rcpp::wrap(scale_list_param_std(x, center, scale));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -954,27 +1510,27 @@ BEGIN_RCPP
 END_RCPP
 }
 // pca
-Rcpp::List pca(Eigen::Map<Eigen::MatrixXd> x, bool center, bool scale);
+Rcpp::List pca(Eigen::Map<Eigen::MatrixXd> x, const bool center, const bool scale);
 RcppExport SEXP _frecipes_pca(SEXP xSEXP, SEXP centerSEXP, SEXP scaleSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type x(xSEXP);
-    Rcpp::traits::input_parameter< bool >::type center(centerSEXP);
-    Rcpp::traits::input_parameter< bool >::type scale(scaleSEXP);
+    Rcpp::traits::input_parameter< const bool >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< const bool >::type scale(scaleSEXP);
     rcpp_result_gen = Rcpp::wrap(pca(x, center, scale));
     return rcpp_result_gen;
 END_RCPP
 }
 // pca_with_params
-Rcpp::List pca_with_params(Eigen::Map<Eigen::MatrixXd> x, Eigen::RowVectorXd center, Eigen::RowVectorXd scale);
+Rcpp::List pca_with_params(Eigen::Map<Eigen::MatrixXd> x, const Eigen::RowVectorXd center, const Eigen::RowVectorXd scale);
 RcppExport SEXP _frecipes_pca_with_params(SEXP xSEXP, SEXP centerSEXP, SEXP scaleSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Eigen::RowVectorXd >::type center(centerSEXP);
-    Rcpp::traits::input_parameter< Eigen::RowVectorXd >::type scale(scaleSEXP);
+    Rcpp::traits::input_parameter< const Eigen::RowVectorXd >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< const Eigen::RowVectorXd >::type scale(scaleSEXP);
     rcpp_result_gen = Rcpp::wrap(pca_with_params(x, center, scale));
     return rcpp_result_gen;
 END_RCPP
@@ -989,28 +1545,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Eigen::RowVectorXd >::type center(centerSEXP);
     Rcpp::traits::input_parameter< Eigen::RowVectorXd >::type scale(scaleSEXP);
     rcpp_result_gen = Rcpp::wrap(pca_list_with_params(x, center, scale));
-    return rcpp_result_gen;
-END_RCPP
-}
-// corEigen
-Eigen::MatrixXd corEigen(Eigen::Map<Eigen::MatrixXd>& X);
-RcppExport SEXP _frecipes_corEigen(SEXP XSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
-    rcpp_result_gen = Rcpp::wrap(corEigen(X));
-    return rcpp_result_gen;
-END_RCPP
-}
-// corEigen2
-Eigen::MatrixXd corEigen2(Eigen::Map<Eigen::MatrixXd>& X);
-RcppExport SEXP _frecipes_corEigen2(SEXP XSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
-    rcpp_result_gen = Rcpp::wrap(corEigen2(X));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1041,6 +1575,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// to_dummy
+List to_dummy(const IntegerVector& ind);
+RcppExport SEXP _frecipes_to_dummy(SEXP indSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const IntegerVector& >::type ind(indSEXP);
+    rcpp_result_gen = Rcpp::wrap(to_dummy(ind));
+    return rcpp_result_gen;
+END_RCPP
+}
 // to_dummy_list
 List to_dummy_list(const NumericVector& x, const NumericVector& vec, const bool rightmost_closed, const bool all_inside, const bool left_open);
 RcppExport SEXP _frecipes_to_dummy_list(SEXP xSEXP, SEXP vecSEXP, SEXP rightmost_closedSEXP, SEXP all_insideSEXP, SEXP left_openSEXP) {
@@ -1056,12 +1601,59 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// weeks_1979
+double weeks_1979(const double lag, const double D, const double L, const double precision, const bool inverse);
+RcppExport SEXP _frecipes_weeks_1979(SEXP lagSEXP, SEXP DSEXP, SEXP LSEXP, SEXP precisionSEXP, SEXP inverseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type lag(lagSEXP);
+    Rcpp::traits::input_parameter< const double >::type D(DSEXP);
+    Rcpp::traits::input_parameter< const double >::type L(LSEXP);
+    Rcpp::traits::input_parameter< const double >::type precision(precisionSEXP);
+    Rcpp::traits::input_parameter< const bool >::type inverse(inverseSEXP);
+    rcpp_result_gen = Rcpp::wrap(weeks_1979(lag, D, L, precision, inverse));
+    return rcpp_result_gen;
+END_RCPP
+}
+// vadose_response
+std::vector<double> vadose_response(std::vector<double> time, const double air_diffusivity, const double thickness, const double precision, const bool inverse);
+RcppExport SEXP _frecipes_vadose_response(SEXP timeSEXP, SEXP air_diffusivitySEXP, SEXP thicknessSEXP, SEXP precisionSEXP, SEXP inverseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const double >::type air_diffusivity(air_diffusivitySEXP);
+    Rcpp::traits::input_parameter< const double >::type thickness(thicknessSEXP);
+    Rcpp::traits::input_parameter< const double >::type precision(precisionSEXP);
+    Rcpp::traits::input_parameter< const bool >::type inverse(inverseSEXP);
+    rcpp_result_gen = Rcpp::wrap(vadose_response(time, air_diffusivity, thickness, precision, inverse));
+    return rcpp_result_gen;
+END_RCPP
+}
+// vadose_response2
+Rcpp::NumericVector vadose_response2(const Rcpp::NumericVector time, double air_diffusivity, double thickness, double precision, bool inverse);
+RcppExport SEXP _frecipes_vadose_response2(SEXP timeSEXP, SEXP air_diffusivitySEXP, SEXP thicknessSEXP, SEXP precisionSEXP, SEXP inverseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< double >::type air_diffusivity(air_diffusivitySEXP);
+    Rcpp::traits::input_parameter< double >::type thickness(thicknessSEXP);
+    Rcpp::traits::input_parameter< double >::type precision(precisionSEXP);
+    Rcpp::traits::input_parameter< bool >::type inverse(inverseSEXP);
+    rcpp_result_gen = Rcpp::wrap(vadose_response2(time, air_diffusivity, thickness, precision, inverse));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_b_spline_list", (DL_FUNC) &_frecipes_b_spline_list, 9},
     {"_frecipes_b_spline_list2", (DL_FUNC) &_frecipes_b_spline_list2, 9},
     {"_frecipes_b_spline_list3", (DL_FUNC) &_frecipes_b_spline_list3, 9},
     {"_frecipes_log_lags_arma", (DL_FUNC) &_frecipes_log_lags_arma, 2},
+    {"_frecipes_hantush_jacob_gauss_kronrod", (DL_FUNC) &_frecipes_hantush_jacob_gauss_kronrod, 7},
+    {"_frecipes_hantush_jacob_quad", (DL_FUNC) &_frecipes_hantush_jacob_quad, 7},
     {"_frecipes_distributed_lag_thread", (DL_FUNC) &_frecipes_distributed_lag_thread, 3},
     {"_frecipes_convolve_eigen", (DL_FUNC) &_frecipes_convolve_eigen, 2},
     {"_frecipes_distributed_lag_eigen", (DL_FUNC) &_frecipes_distributed_lag_eigen, 2},
@@ -1089,6 +1681,47 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_transfer_pgram_smooth", (DL_FUNC) &_frecipes_transfer_pgram_smooth, 7},
     {"_frecipes_transfer_pgram", (DL_FUNC) &_frecipes_transfer_pgram, 5},
     {"_frecipes_transfer_welch", (DL_FUNC) &_frecipes_transfer_welch, 4},
+    {"_frecipes_window_hann", (DL_FUNC) &_frecipes_window_hann, 1},
+    {"_frecipes_window_tukey", (DL_FUNC) &_frecipes_window_tukey, 2},
+    {"_frecipes_window_hann_cplx", (DL_FUNC) &_frecipes_window_hann_cplx, 1},
+    {"_frecipes_window_rectangle", (DL_FUNC) &_frecipes_window_rectangle, 1},
+    {"_frecipes_window_first_deriv", (DL_FUNC) &_frecipes_window_first_deriv, 5},
+    {"_frecipes_window_nuttall", (DL_FUNC) &_frecipes_window_nuttall, 1},
+    {"_frecipes_window_blackman_nuttall", (DL_FUNC) &_frecipes_window_blackman_nuttall, 1},
+    {"_frecipes_window_blackman_harris", (DL_FUNC) &_frecipes_window_blackman_harris, 1},
+    {"_frecipes_window_scale", (DL_FUNC) &_frecipes_window_scale, 3},
+    {"_frecipes_gwr_p", (DL_FUNC) &_frecipes_gwr_p, 2},
+    {"_frecipes_barker_herbert_impulse2", (DL_FUNC) &_frecipes_barker_herbert_impulse2, 7},
+    {"_frecipes_gwr_barker_herbert", (DL_FUNC) &_frecipes_gwr_barker_herbert, 9},
+    {"_frecipes_impulse_function", (DL_FUNC) &_frecipes_impulse_function, 1},
+    {"_frecipes_impulse_function_rcpp", (DL_FUNC) &_frecipes_impulse_function_rcpp, 1},
+    {"_frecipes_impulse_function_eigen", (DL_FUNC) &_frecipes_impulse_function_eigen, 1},
+    {"_frecipes_exp_int", (DL_FUNC) &_frecipes_exp_int, 1},
+    {"_frecipes_binary_search", (DL_FUNC) &_frecipes_binary_search, 2},
+    {"_frecipes_std_to_eigen", (DL_FUNC) &_frecipes_std_to_eigen, 1},
+    {"_frecipes_eigen_to_std", (DL_FUNC) &_frecipes_eigen_to_std, 1},
+    {"_frecipes_std_to_rcpp", (DL_FUNC) &_frecipes_std_to_rcpp, 1},
+    {"_frecipes_rcpp_to_std", (DL_FUNC) &_frecipes_rcpp_to_std, 1},
+    {"_frecipes_calculate_distance", (DL_FUNC) &_frecipes_calculate_distance, 4},
+    {"_frecipes_well_function_coefficient", (DL_FUNC) &_frecipes_well_function_coefficient, 2},
+    {"_frecipes_well_function_coefficient_vec", (DL_FUNC) &_frecipes_well_function_coefficient_vec, 2},
+    {"_frecipes_well_function_coefficient_rcpp", (DL_FUNC) &_frecipes_well_function_coefficient_rcpp, 2},
+    {"_frecipes_theis_u", (DL_FUNC) &_frecipes_theis_u, 4},
+    {"_frecipes_theis_u_time_vec", (DL_FUNC) &_frecipes_theis_u_time_vec, 4},
+    {"_frecipes_theis_u_time_rcpp", (DL_FUNC) &_frecipes_theis_u_time_rcpp, 4},
+    {"_frecipes_grf_coefficient", (DL_FUNC) &_frecipes_grf_coefficient, 4},
+    {"_frecipes_grf_u", (DL_FUNC) &_frecipes_grf_u, 3},
+    {"_frecipes_grf_time", (DL_FUNC) &_frecipes_grf_time, 7},
+    {"_frecipes_grf_grid", (DL_FUNC) &_frecipes_grf_grid, 8},
+    {"_frecipes_hantush_epsilon", (DL_FUNC) &_frecipes_hantush_epsilon, 2},
+    {"_frecipes_hantush_well", (DL_FUNC) &_frecipes_hantush_well, 3},
+    {"_frecipes_hantush_well_vec", (DL_FUNC) &_frecipes_hantush_well_vec, 3},
+    {"_frecipes_hantush_well_rcpp", (DL_FUNC) &_frecipes_hantush_well_rcpp, 3},
+    {"_frecipes_hantush_jacob", (DL_FUNC) &_frecipes_hantush_jacob, 7},
+    {"_frecipes_harmonic_list", (DL_FUNC) &_frecipes_harmonic_list, 4},
+    {"_frecipes_any_decimal", (DL_FUNC) &_frecipes_any_decimal, 1},
+    {"_frecipes_decimal_to_scaled_integer", (DL_FUNC) &_frecipes_decimal_to_scaled_integer, 1},
+    {"_frecipes_gcd", (DL_FUNC) &_frecipes_gcd, 1},
     {"_frecipes_index_from_i_j", (DL_FUNC) &_frecipes_index_from_i_j, 3},
     {"_frecipes_get_column_number", (DL_FUNC) &_frecipes_get_column_number, 1},
     {"_frecipes_index_from_j_i", (DL_FUNC) &_frecipes_index_from_j_i, 3},
@@ -1106,22 +1739,20 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_determine_frequency", (DL_FUNC) &_frecipes_determine_frequency, 1},
     {"_frecipes_check_ffts", (DL_FUNC) &_frecipes_check_ffts, 2},
     {"_frecipes_which_indices", (DL_FUNC) &_frecipes_which_indices, 2},
-    {"_frecipes_window_hann", (DL_FUNC) &_frecipes_window_hann, 1},
-    {"_frecipes_window_tukey", (DL_FUNC) &_frecipes_window_tukey, 2},
-    {"_frecipes_window_hann_cplx", (DL_FUNC) &_frecipes_window_hann_cplx, 1},
-    {"_frecipes_window_rectangle", (DL_FUNC) &_frecipes_window_rectangle, 1},
-    {"_frecipes_window_first_deriv", (DL_FUNC) &_frecipes_window_first_deriv, 5},
-    {"_frecipes_window_nuttall", (DL_FUNC) &_frecipes_window_nuttall, 1},
-    {"_frecipes_window_blackman_nuttall", (DL_FUNC) &_frecipes_window_blackman_nuttall, 1},
-    {"_frecipes_window_blackman_harris", (DL_FUNC) &_frecipes_window_blackman_harris, 1},
-    {"_frecipes_window_scale", (DL_FUNC) &_frecipes_window_scale, 3},
-    {"_frecipes_harmonic_list", (DL_FUNC) &_frecipes_harmonic_list, 4},
+    {"_frecipes_stehfest_v", (DL_FUNC) &_frecipes_stehfest_v, 1},
+    {"_frecipes_stehfest_p", (DL_FUNC) &_frecipes_stehfest_p, 2},
+    {"_frecipes_hantush_jacob_laplace", (DL_FUNC) &_frecipes_hantush_jacob_laplace, 8},
+    {"_frecipes_barker_herbert", (DL_FUNC) &_frecipes_barker_herbert, 10},
     {"_frecipes_check_lag", (DL_FUNC) &_frecipes_check_lag, 3},
     {"_frecipes_get_length", (DL_FUNC) &_frecipes_get_length, 2},
     {"_frecipes_get_start", (DL_FUNC) &_frecipes_get_start, 3},
     {"_frecipes_get_end", (DL_FUNC) &_frecipes_get_end, 4},
     {"_frecipes_shift_subset", (DL_FUNC) &_frecipes_shift_subset, 4},
     {"_frecipes_lag_list", (DL_FUNC) &_frecipes_lag_list, 4},
+    {"_frecipes_ogata_banks_ind", (DL_FUNC) &_frecipes_ogata_banks_ind, 5},
+    {"_frecipes_ogata_banks_list", (DL_FUNC) &_frecipes_ogata_banks_list, 7},
+    {"_frecipes_scale_list_param", (DL_FUNC) &_frecipes_scale_list_param, 3},
+    {"_frecipes_scale_list_param_std", (DL_FUNC) &_frecipes_scale_list_param_std, 3},
     {"_frecipes_scale_list_param_eigen", (DL_FUNC) &_frecipes_scale_list_param_eigen, 3},
     {"_frecipes_cor_list_eigen", (DL_FUNC) &_frecipes_cor_list_eigen, 3},
     {"_frecipes_pca_list_eigen", (DL_FUNC) &_frecipes_pca_list_eigen, 4},
@@ -1132,11 +1763,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_pca", (DL_FUNC) &_frecipes_pca, 3},
     {"_frecipes_pca_with_params", (DL_FUNC) &_frecipes_pca_with_params, 3},
     {"_frecipes_pca_list_with_params", (DL_FUNC) &_frecipes_pca_list_with_params, 3},
-    {"_frecipes_corEigen", (DL_FUNC) &_frecipes_corEigen, 1},
-    {"_frecipes_corEigen2", (DL_FUNC) &_frecipes_corEigen2, 1},
     {"_frecipes_fi", (DL_FUNC) &_frecipes_fi, 5},
     {"_frecipes_to_dummy_list_base", (DL_FUNC) &_frecipes_to_dummy_list_base, 2},
+    {"_frecipes_to_dummy", (DL_FUNC) &_frecipes_to_dummy, 1},
     {"_frecipes_to_dummy_list", (DL_FUNC) &_frecipes_to_dummy_list, 5},
+    {"_frecipes_weeks_1979", (DL_FUNC) &_frecipes_weeks_1979, 5},
+    {"_frecipes_vadose_response", (DL_FUNC) &_frecipes_vadose_response, 5},
+    {"_frecipes_vadose_response2", (DL_FUNC) &_frecipes_vadose_response2, 5},
     {NULL, NULL, 0}
 };
 

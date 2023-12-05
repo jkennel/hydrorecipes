@@ -4,7 +4,7 @@
 \alias{rand_id}
 \title{Make a random identification field for steps}
 \usage{
-rand_id(prefix = "step", len = 5)
+rand_id(prefix = "step", len = 5L)
 }
 \arguments{
 \item{prefix}{A single character string}

@@ -29,18 +29,18 @@ StepEarthtide <- R6Class(
     initialize = function(...,
                           do_predict = TRUE,
                           method = "gravity",
-                          latitude = 0,
-                          longitude = 0,
-                          elevation = 0,
-                          azimuth = 0,
-                          gravity = 0,
+                          latitude = 0.0,
+                          longitude = 0.0,
+                          elevation = 0.0,
+                          azimuth = 0.0,
+                          gravity = 0.0,
                           earth_radius = 6378136.3,
                           earth_eccentricity = 0.0066943979514,
                           cutoff = 1e-6,
                           catalog = "ksm04",
                           eop = NULL,
                           scale = TRUE,
-                          n_thread = 1,
+                          n_thread = 1L,
                           role = "predictor",
                           skip = FALSE,
                           keep_original_cols = FALSE) {
@@ -51,7 +51,7 @@ StepEarthtide <- R6Class(
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1])
+                            formalArgs(super$initialize)[-1L])
       )
       do.call(super$initialize, inputs)
 
@@ -96,10 +96,10 @@ StepEarthtide <- R6Class(
                             n_thread = self$n_thread
       )
 
+      names(et) <- file.path(self$id,
+                             names(et),
+                             fsep = "_")
 
-      # self$result <- append(self$result, et)
-
-      # self$result
       et
     }
 

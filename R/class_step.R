@@ -2,18 +2,21 @@
 #'
 #' The `Step` class hold common info for each step.
 #'
-#' @param type
+#' @inheritParams recipes::step_center
+#' @inheritParams recipes::step_pca
 #' @param role
 #' @param trained
 #' @param skip
 #' @param columns
-#' @param names_vector
 #' @param new_columns
 #' @param step_name
 #' @param keep_original_cols
 #' @param id
 #' @param prefix
 #' @param result
+#'
+#' @importFrom collapse fmean fsd fscale fsum fquantile fndistinct flag
+#' @importFrom collapse qDF qM qF qTBL mctl
 #'
 #' @export
 Step <- R6Class(
@@ -29,20 +32,23 @@ Step <- R6Class(
     trained = FALSE,
     skip = FALSE,
     columns = NULL,
-    names_vector = NULL,
     new_columns = NULL,
     step_name = NULL,
     keep_original_cols = TRUE,
     id = NULL,
     prefix = NULL,
 
-    # result should be in recipe
-    result = NULL,
-
     initialize = function(..., role, skip, type,
-                          keep_original_cols, step_name) {
+                          keep_original_cols, step_name,
+                          enq = NULL) {
       # super specific values
-      self$terms   <- enquos(...)
+
+      if (!is.null(enq)){
+        self$terms   <- enq
+      } else {
+        self$terms   <- enquos(...)
+      }
+
       self$columns <- get_terms(self$terms)
       self$role    <- role
       self$skip    <- skip
@@ -52,15 +58,14 @@ Step <- R6Class(
       self$step_name <- step_name
       self$keep_original_cols <- keep_original_cols
 
-      if(length(self$columns) > 1 & self$type == "add") {
-        rlang::abort("Add steps limit input columns to one.")
-      }
+      # if(length(self$columns) > 1 & self$type == "add") {
+      #   rlang::abort("Add steps limit input columns to one.")
+      # }
 
       invisible(self)
     },
     # these are the base methods - can be overwritten in individual steps
-    prep = function(new_data) {
-
+    prep = function(new_data, info) {
       self$trained <- TRUE
 
       invisible(self)
@@ -94,11 +99,11 @@ Step <- R6Class(
 
 # b <- 10
 #
-a <- function(..., x = 'blah', y = 1, z = NULL) {
-  tmp <- c(`...` = enquos(...), environment())
-  print(get_env(environment()))
-  print(as.list(environment()))
-}
+# a <- function(..., x = 'blah', y = 1, z = NULL) {
+#   tmp <- c(`...` = enquos(...), environment())
+#   print(get_env(environment()))
+#   print(as.list(environment()))
+# }
 #
 # l <- function(..., x = 'blah', y = 1, z = NULL) {
 #   b

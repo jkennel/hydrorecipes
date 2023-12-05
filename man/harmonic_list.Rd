@@ -7,9 +7,13 @@
 harmonic_list(time, frequency, start, cycle_size)
 }
 \arguments{
-\item{time}{vector of times}
+\item{time}{numeric vector of times}
 
-\item{cycle_size}{size of the cycle}
+\item{frequency}{numeric vector of frequencies}
+
+\item{start}{time the cycle starts}
+
+\item{cycle_size}{size of the cycle in number of measurements}
 }
 \value{
 List of sines and cosines

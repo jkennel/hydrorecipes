@@ -7,15 +7,14 @@
 //' @description
 //' Create sin and cosine terms for harmonic analysis
 //'
-//' @param time vector of times
-//' @param frequency
-//' @param start
-//' @param cycle_size size of the cycle
+//' @param time numeric vector of times
+//' @param frequency numeric vector of frequencies
+//' @param start time the cycle starts
+//' @param cycle_size size of the cycle in number of measurements
 //'
 //' @return List of sines and cosines
 //'
 //' @export
-//'
 //'
 // [[Rcpp::export]]
 List harmonic_list(const NumericVector& time,
@@ -24,20 +23,48 @@ List harmonic_list(const NumericVector& time,
                    const double cycle_size) {
 
 
-  NumericVector m = clone(time);
-  size_t n = frequency.size();
+  const NumericVector m = (M_2PI / cycle_size) * (time - start);
+  unsigned int n = frequency.size();
 
-  m = (M_2PI / cycle_size) * (time - start);
+  List out(n * 2);
+  unsigned int j = 0;
 
-  List out;
-
-  for(size_t i = 0; i < frequency.size(); ++i) {
-    out.push_back(sin(m * frequency(i)));
-    out.push_back(cos(m * frequency(i)));
+  for(unsigned int i = 0; i < n; ++i) {
+    out[j] = sin(m * frequency(i));
+    j += 1;
+    out[j] = cos(m * frequency(i));
+    j += 1;
   }
 
   return(out);
 }
+
+
+
+
+// // [[Rcpp::export]]
+// List harmonic_list_2(Eigen::VectorXd& time,
+//                    Eigen::VectorXd& frequency,
+//                    const double start,
+//                    const double cycle_size) {
+//
+//
+//   Eigen::VectorXd m = (M_2PI / cycle_size) * (time.array() - start);
+//   unsigned int n = frequency.size();
+//
+//   List out(n * 2);
+//   unsigned int j = 0;
+//
+//   for(unsigned int i = 0; i < n; ++i) {
+//     out[j] = sin(m.array() * frequency(i));
+//     j += 1;
+//     out[j] = cos(m.array() * frequency(i));
+//     j += 1;
+//   }
+//
+//   return(out);
+// }
+
 
 
 // // [[Rcpp::export]]
@@ -172,13 +199,16 @@ List harmonic_list(const NumericVector& time,
 
 /*** R
 
-n <- 10000000L
+n <- 1e7L
 t <- sort(rnorm(n))
-vec <- c(1,2,3,4,5,6)
+vec <- c(1,2,3,4,5,6,7)
 
 bench::mark(
-  h0 <- harmonic_list(t, vec, 0, 86400),
-  iterations = 3
+  h0 <- frecipes:::harmonic_list(t, vec, 0, 86400),
+  # h1 <- frecipes:::harmonic_list_2(t, vec, 0, 86400),
+  # h1 <- frecipes:::harmonic_std_list(t, vec, 0, 86400),
+  iterations = 3,
+  check = FALSE
 )
 
 */

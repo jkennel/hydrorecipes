@@ -21,7 +21,7 @@ StepDropColumns <- R6Class(
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1])
+                            formalArgs(super$initialize)[-1L])
       )
       do.call(super$initialize, inputs)
 
@@ -31,9 +31,7 @@ StepDropColumns <- R6Class(
 
     bake = function(new_data) {
 
-      for(i in seq_along(self$columns)) {
-        new_data[self$columns[i]] <- NULL
-      }
+      new_data[self$columns] <- list(NULL)
 
       new_data
     }

@@ -33,7 +33,7 @@ StepHarmonic <- R6Class(
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1])
+                            formalArgs(super$initialize)[-1L])
       )
       do.call(super$initialize, inputs)
 
@@ -52,15 +52,15 @@ StepHarmonic <- R6Class(
       column_name     <- self$columns
 
       hals <- harmonic_list(new_data,
-                           frequency = self$frequency,
-                           start = self$starting_value,
-                           cycle_size = self$cycle_size)
+                            frequency = self$frequency,
+                            start = self$starting_value,
+                            cycle_size = self$cycle_size)
 
-      names(hals) <- file.path(rep(self$id, n_frequency * 2),
-                              rep(c("sin", "cos"), n_frequency),
-                              rep(1:n_frequency, each = 2),
-                              rep(column_name, n_frequency * 2),
-                              fsep = '_')
+      names(hals) <- file.path(self$id,
+                               column_name,
+                               rep(c("sin", "cos"), n_frequency),
+                               rep(pad_num(n_frequency), each = 2L),
+                               fsep = '_')
 
       hals
 

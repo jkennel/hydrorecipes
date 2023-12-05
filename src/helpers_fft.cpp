@@ -99,11 +99,15 @@ size_t next_n_eigen(size_t n) {
 // [[Rcpp::export]]
 Eigen::VectorXd pad_vector(Eigen::VectorXd x, size_t n_old, size_t n_new) {
 
+  if(n_new <= 0) {
+    Rcpp::stop("pad_vector: n_new must be positive");
+  }
   if (n_new < n_old) {
     Rcpp::stop("pad_vector: n_new cannot be smaller than n_old");
   } else if (n_new == n_old) {
     return(x);
   }
+
 
   x.conservativeResize(n_new);
   x.tail(n_new - n_old).setZero();

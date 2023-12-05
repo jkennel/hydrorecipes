@@ -1,7 +1,6 @@
 #include "frecipes.h"
 
 
-
 // [[Rcpp::export]]
 IntegerVector fi(const NumericVector& x,
                  const NumericVector& vec,
@@ -22,8 +21,9 @@ IntegerVector fi(const NumericVector& x,
 Rcpp::IntegerVector to_dummy_list_base(const Rcpp::IntegerVector& x,
                                        const int n_fact) {
 
-  Rcpp::IntegerVector z = clone(x);
-
+  Rcpp::IntegerVector z = Rcpp::clone(x);
+  z.attr("levels") = R_NilValue;
+  z.attr("class") = R_NilValue;
   for (auto& elem: z) {
     if (elem == n_fact) {
       elem = 1;
@@ -35,18 +35,44 @@ Rcpp::IntegerVector to_dummy_list_base(const Rcpp::IntegerVector& x,
   return z;
 }
 
+
+//==============================================================================
+//' @title
+//' to_dummy
+//'
+//' @description
+//' Create binary terms based on a factor column.
+//'
+//' @params ind integer vector of values to dummy encode
+//'
+//' @return List of dummy encoded terms
+//'
+//' @export
+//'
+//'
+// [[Rcpp::export]]
+List to_dummy(const IntegerVector& ind) {
+
+  List out;
+  const IntegerVector fact = sort_unique(ind);
+
+  for (size_t i = 0; i < fact.size(); ++i) {
+    out.push_back(to_dummy_list_base(ind, fact[i]), std::to_string(fact[i]));
+  }
+
+  return(out);
+
+}
+
 //==============================================================================
 //' @title
 //' to_dummy_list
 //'
 //' @description
-//' Create terms based on intervals. This function uses `findInterval`,
+//' Create binary terms based on intervals. This function uses `findInterval`,
 //' followed by a conversion to dummy encoding.
 //'
 //' @inheritParams findInterval
-//' @param rightmost_closed
-//' @param all_inside
-//' @param left_open
 //'
 //' @return List of dummy encoded terms
 //'
@@ -66,16 +92,11 @@ List to_dummy_list(const NumericVector& x,
                                all_inside,
                                left_open);
 
-  List out;
-  const IntegerVector fact = sort_unique(ind);
 
-  for (size_t i = 0; i < fact.size(); ++i) {
-    out.push_back(to_dummy_list_base(ind, fact[i]), std::to_string(fact[i]));
-  }
-
-  return(out);
+  return(to_dummy(ind));
 
 }
+
 
 
 

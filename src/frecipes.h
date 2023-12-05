@@ -1,3 +1,4 @@
+// [[Rcpp::depends(BH)]]
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(RcppThread)]]
@@ -11,9 +12,19 @@
 
 #define EIGEN_FFTW_DEFAULT
 #include <unsupported/Eigen/FFT>
+#include <unsupported/Eigen/SpecialFunctions>
+
+#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/expint.hpp>
+#include <boost/math/special_functions/erf.hpp>
+#include <boost/math/special_functions/factorials.hpp>
+#include <boost/math/special_functions/bessel.hpp>
+#include <boost/math/quadrature/gauss_kronrod.hpp>
+
 #include <Eigen/Eigenvalues>
 #include <fftw3.h>
 #include <splines2Armadillo.h>
+#include <specialfunctions.h>
 
 
 #include <RcppEigen.h>

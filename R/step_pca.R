@@ -31,7 +31,7 @@ StepPca <- R6Class(
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1])
+                            formalArgs(super$initialize)[-1L])
       )
       do.call(super$initialize, inputs)
 
@@ -66,18 +66,17 @@ StepPca <- R6Class(
     # subtract the central value from a column
     bake = function(new_data) {
 
-      new_data <- collapse::qM(scale_list_param_eigen(new_data,
-                                    center = self$center,
-                                    scale = self$scale))
+      new_data <- collapse::qM(scale_list_param(new_data,
+                                                center = self$center,
+                                                scale = self$scale))
       new_data <- collapse::mctl(new_data %*% self$pca_results)
 
-      width <- floor(log10(self$n_comp)) + 1
 
-      names(new_data) <- paste0("PC", formatC(1:self$n_comp,
-                                              width = width,
-                                              format = "d",
-                                              flag = "0"))
+      names(new_data) <- file.path(self$id,
+                                   pad_num(self$n_comp),
+                                   fsep = "_")
       new_data
+
     }
   )
 )
