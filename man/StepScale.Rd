@@ -4,7 +4,7 @@
 \alias{StepScale}
 \title{R6 Class}
 \description{
-`StepScale` adjust the dispersion by standard deviation.
+`StepScale` adjust the dispersion by the standard deviation.
 }
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_scale}
@@ -41,6 +41,14 @@
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{fun}}{the function to use for calculating the distpersion. The default is
+`collapse::fsd`}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-step_scale-prep"></a>}}

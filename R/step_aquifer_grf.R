@@ -1,14 +1,18 @@
 #' R6 Class
 #'
-#' `StepAquiferGRF` generates lagged (or leading) vectors.
+#' `StepAquiferGRF` Generates the drawdown using the Generalized Radial Flow (GRF)
+#' model. This method defaults to a fast FFT convolution so many rates can be included,
+#' but requires a regular time series.
 #'
-#' @param time
-#' @param flow_rate
-#' @param thickness
-#' @param radius
-#' @param specific_storage
-#' @param hydraulic_conductivity
-#' @param flow_dimension
+#' @param time numeric vector of input times
+#' @param flow_rate numeric vector of flow rates for each input time
+#' @param thickness numeric thickness of aquifer
+#' @param radius numeric radial distance to monitoring well (> 0.0)
+#' @param specific_storage the specific storage
+#' @param hydraulic_conductivity the hydraulic conductivity
+#' @param flow_dimension numeric value for the flow dimension: 1 = linear,
+#' 2 = radial (i.e. Theis), 3 = spherical.
+#'
 #' @inheritParams Step
 #'
 #' @family aquifer

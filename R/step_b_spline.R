@@ -2,13 +2,10 @@
 #'
 #' `StepBSpline` generates basis splines.
 #'
-#' @param df
-#' @param internal_knots
-#' @param boundary_knots
-#' @param intercept
-#' @param periodic
-#' @param degree
+#' @param internal_knots equivalent to knots from `splines2::bSplines`
+#' @param boundary_knots equivalent to Boundary.knots from `splines2::bSplines`
 #' @inheritParams Step
+#' @inheritParams splines2::bsp
 #'
 #' @export
 StepBSpline <- R6Class(
@@ -39,6 +36,8 @@ StepBSpline <- R6Class(
       # get function parameters to pass to parent
       step_name    <- "step_b_spline"
       type         <- 'add'
+      enq = NULL
+
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),

@@ -11,8 +11,11 @@
 #' @param hydraulic_conductivity_outer
 #' @param specific_storage_inner
 #' @param specific_storage_outer
+#'
 #' @inheritParams Step
+#'
 #' @family aquifer
+#'
 #' @export
 StepAquiferPatch <- R6Class(
 

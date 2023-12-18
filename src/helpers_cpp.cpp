@@ -52,14 +52,17 @@ std::vector<double> decimal_to_scaled_integer(std::vector<double> x)
 unsigned int gcd(std::vector<unsigned int> x)
 {
   unsigned int out = x[0];
-    for (unsigned int i = 0; i < x.size(); ++i) {
-      out = std::gcd(out, x[i]);
-      if(out == 1) {
-        return(1);
-      }
+  for (unsigned int i = 0; i < x.size(); ++i) {
+    out = std::gcd(out, x[i]);
+    if(out == 1) {
+      return(1);
+    }
   }
   return(out);
 }
+
+
+
 
 /*** R
 

@@ -4,7 +4,7 @@
 \alias{hantush_well}
 \title{hantush_well_single}
 \usage{
-hantush_well(u, b, n_terms)
+hantush_well(u, b, precision)
 }
 \arguments{
 \item{u}{value of the Theis u}
@@ -18,7 +18,8 @@ hantush well function
 }
 \description{
 Result of the hantush well function
+
 J.H.A. Prodanoff; W.J. Mansur; F.C.B. Mascarenhas (2006). Numerical
 evaluation of Theis and Hantush-Jacob well functions. , 318(1-4),
-0–183. doi:10.1016/j.jhydrol.2005.05.026
+0–183. doi:10.1016/j.jhydrol.2005.05.026 eq: 10, 11, 12
 }

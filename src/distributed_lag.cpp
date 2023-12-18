@@ -341,7 +341,7 @@ Rcpp::List distributed_lag_list3(Eigen::VectorXd x,
                                integral);
 
 
-  return(convolve_overlap_save_list(x, s));
+  return(convolve_overlap_save_list(x, s, 0));
 }
 
 /*** R
@@ -396,4 +396,10 @@ min_iterations = 1
 a <- rnorm(nextn(1e6))
 b <- rnorm(nextn(1e7))
 bench::mark(fftw::FFT(a), fftw::FFT(b), check = FALSE)
+
+
+# bench::mark(frecipes:::convolve_overlap_save_list(x, k, TRUE),
+#             frecipes:::convolve_overlap_save_list(x, k, FALSE),
+#             check = FALSE)
+
 */

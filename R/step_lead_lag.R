@@ -2,9 +2,12 @@
 #'
 #' `StepLeadLag` generates lagged (or leading) vectors.
 #'
-#' @param lag
-#' @param n_shift
-#' @param n_subset
+#' @param lag integer vector for the amount to lag or lead.  A negative value indicates leading.
+#' @param n_shift the amount to shift the starting point. When `n_subset` is not
+#' equal to 1 it may be useful to start the lagging at an offset from the beginning
+#' of the series. Default is 0.
+#' @param n_subset the spacing in rows between values.
+#'
 #' @inheritParams Step
 #'
 #' @export

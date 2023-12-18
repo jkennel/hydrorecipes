@@ -4,19 +4,14 @@
 #'
 #' @inheritParams recipes::step_center
 #' @inheritParams recipes::step_pca
-#' @param role
-#' @param trained
-#' @param skip
-#' @param columns
-#' @param new_columns
-#' @param step_name
-#' @param keep_original_cols
-#' @param id
-#' @param prefix
-#' @param result
+#' @param step_name the name of the step
 #'
+#' @importFrom rlang quos enquos env_get_list
 #' @importFrom collapse fmean fsd fscale fsum fquantile fndistinct flag
 #' @importFrom collapse qDF qM qF qTBL mctl
+#' @importFrom earthtide calc_earthtide
+#' @importFrom recipes recipes_eval_select
+#' @importFrom R6 R6Class
 #'
 #' @export
 Step <- R6Class(
@@ -32,24 +27,26 @@ Step <- R6Class(
     trained = FALSE,
     skip = FALSE,
     columns = NULL,
-    new_columns = NULL,
     step_name = NULL,
     keep_original_cols = TRUE,
     id = NULL,
     prefix = NULL,
 
-    initialize = function(..., role, skip, type,
+    initialize = function(..., terms, role, skip, type,
                           keep_original_cols, step_name,
                           enq = NULL) {
+
       # super specific values
 
       if (!is.null(enq)){
         self$terms   <- enq
       } else {
+        print('herehere')
         self$terms   <- enquos(...)
       }
+      print(self$terms)
 
-      self$columns <- get_terms(self$terms)
+      # self$columns <- recipes::recipes_eval_select(self$terms)
       self$role    <- role
       self$skip    <- skip
       self$prefix  <- gsub("step_", "", step_name)

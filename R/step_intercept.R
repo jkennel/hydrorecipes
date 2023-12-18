@@ -1,42 +1,41 @@
 #' R6 Class
 #'
-#' `StepAddVars` adds variable vectors.
+#' `StepIntercept` adds variable vectors.
 #' @param vars name of vars
 #'
 #' @inheritParams Step
 #'
 #' @export
-StepAddVars <- R6Class(
-  classname = 'step_add_vars',
+StepIntercept <- R6Class(
+  classname = 'step_intercept',
   inherit = Step,
 
   public = list(
 
     # step specific variables
-    vars = NULL,
 
     initialize = function(...,
-                          vars,
                           role = "predictor",
                           skip = FALSE,
                           keep_original_cols = FALSE) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_add_vars"
+      step_name    <- "step_intercept"
       type         <- 'add'
+      enq          <- NULL
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),
                             formalArgs(super$initialize)[-1L])
       )
+      print(str(inputs))
       do.call(super$initialize, inputs)
-
-      self$vars <- vars
 
       invisible(self)
     },
     bake = function(new_data) {
-      return(unclass(new_data)[unique(self$vars)])
+      return(list(intercept = rep(1.0, length(new_data))))
     }
+
   )
 )

@@ -2,10 +2,8 @@
 #'
 #' `StepHarmonic` generates sin and cosine curves at specified frequencies.
 #'
-#' @param frequency
-#' @param cycle_size
-#' @param starting_value
 #' @inheritParams Step
+#' @inheritParams recipes::step_harmonic
 #'
 #' @export
 StepHarmonic <- R6Class(
@@ -30,6 +28,7 @@ StepHarmonic <- R6Class(
       # get function parameters to pass to parent
       step_name    <- "step_harmonic"
       type         <- 'add'
+      enq          <- NULL
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),

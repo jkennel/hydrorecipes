@@ -9,7 +9,6 @@ StepDropColumns <- R6Class(
   inherit = Step,
 
   public = list(
-    # step specific variables
     initialize = function(...,
                           role = "modify",
                           skip = FALSE,
@@ -18,6 +17,8 @@ StepDropColumns <- R6Class(
       # get function parameters to pass to parent
       step_name    <- "step_drop_columns"
       type         <- 'modify'
+            enq = NULL
+
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),

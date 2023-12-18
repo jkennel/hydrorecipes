@@ -1,7 +1,9 @@
 #' R6 Class
 #'
 #' `StepFindInterval` divides a series into intervals and then performs dummy encoding.
+#'
 #' @param vec a vector of break points
+#'
 #' @inheritParams Step
 #'
 #' @export
@@ -40,6 +42,7 @@ StepFindInterval <- R6Class(
 
       invisible(self)
     },
+
     bake = function(new_data) {
 
       column_name <- self$columns

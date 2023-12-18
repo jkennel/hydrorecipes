@@ -11,7 +11,7 @@ hantush_jacob(
   storativity,
   transmissivity,
   leakage,
-  n_terms
+  precision
 )
 }
 \arguments{
@@ -27,9 +27,9 @@ hantush_jacob(
 
 \item{leakage}{hantush leakage}
 
-\item{n_terms}{number of terms to use in Hantush solution.  More is more precise but slower.}
-
 \item{flow_time_interval}{time between flow rate measurements in samples}
+
+\item{n_terms}{number of terms to use in Hantush solution.  More is more precise but slower.}
 }
 \value{
 hantush jacob solution for multiple pumping scenario

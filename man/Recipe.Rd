@@ -85,6 +85,7 @@ R6 Class
 \item \href{#method-recipe-prep}{\code{Recipe$prep()}}
 \item \href{#method-recipe-bake}{\code{Recipe$bake()}}
 \item \href{#method-recipe-train_info}{\code{Recipe$train_info()}}
+\item \href{#method-recipe-update_term_info}{\code{Recipe$update_term_info()}}
 \item \href{#method-recipe-get_step_types}{\code{Recipe$get_step_types()}}
 \item \href{#method-recipe-data}{\code{Recipe$data()}}
 \item \href{#method-recipe-clone}{\code{Recipe$clone()}}
@@ -173,6 +174,21 @@ features.
 \subsection{Method \code{train_info()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Recipe$train_info(x)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-recipe-update_term_info"></a>}}
+\if{latex}{\out{\hypertarget{method-recipe-update_term_info}{}}}
+\subsection{Method \code{update_term_info()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Recipe$update_term_info(
+  source = "derived",
+  roles = "predictor",
+  type = "numeric",
+  step_name,
+  step_index
+)}\if{html}{\out{</div>}}
 }
 
 }

@@ -4,7 +4,9 @@
 \alias{StepAquiferGRF}
 \title{R6 Class}
 \description{
-`StepAquiferGRF` generates lagged (or leading) vectors.
+`StepAquiferGRF` Generates the drawdown using the Generalized Radial Flow (GRF)
+model. This method defaults to a fast FFT convolution so many rates can be included,
+but requires a regular time series.
 }
 \seealso{
 Other aquifer: 
@@ -52,6 +54,26 @@ Other aquifer:
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{time}}{numeric vector of input times}
+
+\item{\code{flow_rate}}{numeric vector of flow rates for each input time}
+
+\item{\code{thickness}}{numeric thickness of aquifer}
+
+\item{\code{radius}}{numeric radial distance to monitoring well (> 0.0)}
+
+\item{\code{specific_storage}}{the specific storage}
+
+\item{\code{hydraulic_conductivity}}{the hydraulic conductivity}
+
+\item{\code{flow_dimension}}{numeric value for the flow dimension: 1 = linear,
+2 = radial (i.e. Theis), 3 = spherical.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-step_aquifer_grf-bake"></a>}}

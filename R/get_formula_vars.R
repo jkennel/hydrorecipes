@@ -9,7 +9,7 @@ get_formula_vars <- function(formula, data) {
 
   left  <- rlang::f_lhs(formula)
   right <- rlang::f_rhs(formula)
-  sym_dot <- sym(".")
+  sym_dot <- as.symbol(".")
 
   # check special cases
   if(left != sym_dot) {
@@ -44,11 +44,13 @@ parse_formula <- function(y){
 
 
 
+
+
 get_formula_vars_2 <- function(formula, data) {
 
   left  <- rlang::f_lhs(formula)
   right <- rlang::f_rhs(formula)
-  sym_dot <- sym(".")
+  sym_dot <- as.symbol(".")
 
   nms <- names(data)
 
@@ -69,11 +71,11 @@ get_formula_vars_2 <- function(formula, data) {
       right <- parse_formula_2(right)
     }
 
-  # both sides are "."
+    # both sides are "."
   } else if (right == sym_dot) {
     right <- nms
     left  <- nms
-  # left side is "."
+    # left side is "."
   } else {
     right  <- parse_formula_2(right)
     left   <- setdiff(nms, right)
@@ -87,6 +89,51 @@ get_formula_vars_2 <- function(formula, data) {
 
 }
 
+
+
+get_formula_vars_3 <- function(formula, data) {
+
+  dot <- "."
+
+  form_char <- as.character(formula)
+
+  left  <- all.vars(as.formula(file.path(form_char[2],
+                                         form_char[1], ".", fsep = ' ')), unique = FALSE)
+  right <- all.vars(as.formula(file.path(form_char[3],
+                                         form_char[1], ".", fsep = ' ')), unique = FALSE)
+
+  # remove the added "."
+  left <- left[-length(left)]
+  right <- right[-length(right)]
+
+  nms <- names(data)
+
+  if(any(right == dot) & any(left == dot)) {
+    right <- nms
+    left <- nms
+  }
+  if(any(right == dot) & !any(left == dot)) {
+    right <- setdiff(nms, left)
+  }
+  if(!any(right == dot) & any(left == dot)) {
+    left <- setdiff(nms, right)
+  }
+
+  list(
+    predictors = intersect(nms, right),
+    outcomes = intersect(nms, left)
+  )
+
+}
+
+formula <- as.formula(x~.)
+data <- data.frame(x = 1, y = 3, z = 4, a = 1, b = 3)
+bench::mark(
+  get_formula_vars_3(formula, data),
+  get_formula_vars_2(formula, data)
+)
+
+
 parse_formula_2 <- function(y){
   setdiff(unlist(strsplit(deparse(y), " +"), use.names = FALSE), "+")
 }
@@ -96,33 +143,16 @@ parse_formula_2 <- function(y){
 get_types <- function(data) {
   vapply(data,
          FUN = function(x) class(x)[1L],
-         FUN.VALUE = character(1L))
+         FUN.VALUE = character(1L),
+         USE.NAMES = FALSE)
 }
 
 # get column names
 get_terms <- function(x) {
   vapply(x,
          FUN = rlang::as_name,
-         FUN.VALUE = character(1L))
+         FUN.VALUE = character(1L),
+         USE.NAMES = FALSE)
 }
 
 
-#' Make a random identification field for steps
-#'
-#' @export
-#' @param prefix A single character string
-#' @param len An integer for the number of random characters
-#' @return A character string with the prefix and random letters separated by
-#'  and underscore.
-#'
-#' @useDynLib frecipes, .registration = TRUE
-#' @importFrom R6 R6Class
-#' @importFrom Rcpp sourceCpp
-#' @keywords internal
-rand_id <- function(prefix = "step", len = 5L) {
-  candidates <- c(letters, LETTERS, paste(0:9))
-  paste(prefix,
-        paste0(sample(candidates, len, replace = TRUE), collapse = ""),
-        sep = "_"
-  )
-}

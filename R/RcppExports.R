@@ -230,14 +230,19 @@ convolve_overlap_add <- function(x, y) {
 #'
 #' @param x the vector that holds the series (numeric vector)
 #' @param y the kernel to convolve with x (complex numeric vector)
+#' @param align right (0), center (1), or left (2) alignment
 #'
 #'
 #' @return the linear convolution of two vectors
 #'
 #' @noRd
 #'
-convolve_overlap_save <- function(x, y) {
-    .Call(`_frecipes_convolve_overlap_save`, x, y)
+convolve_overlap_save <- function(x, y, align) {
+    .Call(`_frecipes_convolve_overlap_save`, x, y, align)
+}
+
+shift_eigen <- function(x, n) {
+    .Call(`_frecipes_shift_eigen`, x, n)
 }
 
 #' @title
@@ -248,14 +253,14 @@ convolve_overlap_save <- function(x, y) {
 #'
 #' @param x the vector that holds the series (numeric vector)
 #' @param y the list of kernels to convolve with x
-#'
+#' @param align right (0), center (1), or left (2) alignment
 #'
 #' @return the linear convolution of two vectors
 #'
 #' @noRd
 #'
-convolve_overlap_save_list <- function(x, y) {
-    .Call(`_frecipes_convolve_overlap_save_list`, x, y)
+convolve_overlap_save_list <- function(x, y, align) {
+    .Call(`_frecipes_convolve_overlap_save_list`, x, y, align)
 }
 
 #' @title
@@ -818,9 +823,11 @@ hantush_epsilon <- function(radius, leakage) {
 #'
 #' @description
 #' Result of the hantush well function
+#'
 #' J.H.A. Prodanoff; W.J. Mansur; F.C.B. Mascarenhas (2006). Numerical
 #' evaluation of Theis and Hantush-Jacob well functions. , 318(1-4),
-#' 0–183. doi:10.1016/j.jhydrol.2005.05.026
+#' 0–183. doi:10.1016/j.jhydrol.2005.05.026 eq: 10, 11, 12
+#'
 #'
 #' @param u value of the Theis u
 #' @param b the leakance
@@ -1236,6 +1243,10 @@ shift_subset <- function(x, lag, n_subset, n_shift) {
 #'
 lag_list <- function(x, lags, n_subset, n_shift) {
     .Call(`_frecipes_lag_list`, x, lags, n_subset, n_shift)
+}
+
+llt_solve <- function(X, Y) {
+    .Call(`_frecipes_llt_solve`, X, Y)
 }
 
 #' @title

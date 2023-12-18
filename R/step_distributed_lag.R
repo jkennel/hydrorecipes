@@ -2,7 +2,8 @@
 #'
 #' `StepDistributedLag` generates distributed lag vectors.
 #'
-#' @param knots
+#' @param knots the locations of the knots for the basis matrix.
+#'
 #' @inheritParams Step
 #'
 #' @export
@@ -26,6 +27,7 @@ StepDistributedLag <- R6Class(
       # get function parameters to pass to parent
       step_name    <- "step_distributed_lag"
       type         <- 'add'
+      enq = NULL
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),

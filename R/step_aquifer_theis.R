@@ -2,12 +2,6 @@
 #'
 #' `StepAquiferTheis` generates lagged (or leading) vectors.
 #'
-#' @param time
-#' @param flow_rate
-#' @param thickness
-#' @param radius
-#' @param specific_storage
-#' @param hydraulic_conductivity
 #' @inheritParams StepAquiferGRF
 #'
 #' @family aquifer

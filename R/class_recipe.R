@@ -2,6 +2,8 @@
 #'
 #' `Recipe` holds the steps to create model features
 #'
+#' @importFrom recipes recipes_eval_select
+#'
 #' @export
 Recipe <- R6Class(
 
@@ -39,10 +41,16 @@ Recipe <- R6Class(
     #' @field list that holds the created model features.
     result = list(),
 
+    #' @field list that holds the checks.
+    checks = list(),
+
+    vars = NULL,
+
     #' @description
     #' Create a new recipe object.
     #' @param formula The model formula. It cannot contain operations.
-    #' @param data list, data.frame, data.table, tibble of data.
+    #' @param data list, data.frame, data.table, tibble of data. They will all
+    #' be treated as lists.
     #' @return A new `Recipe` object.
     initialize = function(formula, data) {
 
@@ -51,16 +59,18 @@ Recipe <- R6Class(
 
       # parse the formula
       vars_list <- get_formula_vars_2(formula = formula, data = data)
-      vars <- unlist(vars_list, use.names = FALSE)
-      self$template <- unclass(data)[unique(vars)]
+      self$vars <- unlist(vars_list, use.names = FALSE)
+      self$template <- unclass(data)[unique(self$vars)]
 
       # variable info
       self$var_info  <- list(
-        variable = vars,
+        variable = self$vars,
         type = get_types(self$template),
         roles = rep.int(x = c('predictor', 'outcome'),
                         times = vapply(vars_list, FUN = length, FUN.VALUE = numeric(1))),
-        source = rep.int('original', times = length(vars)))
+        source = rep.int('original', times = length(self$vars)),
+        step_index = rep.int(0L, times = length(self$vars)),
+        step_name = rep.int("initial", times = length(self$vars)))
 
       self$term_info <- self$var_info
 
@@ -81,6 +91,11 @@ Recipe <- R6Class(
     #' @return An updated `Recipe` object.
     add_step = function(step) {
 
+      step$columns = recipes::recipes_eval_select(step$terms,
+                                                  self$template,
+                                                  qDF(self$var_info))
+
+
       self$steps <- append(self$steps, step)
       invisible(self)
 
@@ -90,6 +105,7 @@ Recipe <- R6Class(
     #' Do prep operations.
     #' @return An updated `Recipe` object.
     prep = function(retain = TRUE) {
+      self$tr_info <- self$train_info(self$template)
 
       for (i in seq_along(self$steps)) {
         columns <- self$steps[[i]]$columns
@@ -116,6 +132,7 @@ Recipe <- R6Class(
 
       for (i in seq_along(types)) {
         columns <- self$steps[[i]]$columns
+
         # only one column allowed
         if (types[i] == "add"){
 
@@ -125,33 +142,18 @@ Recipe <- R6Class(
         } else if (types[i] == "modify") {
           self$result <- modifyList(self$result,
                                     self$steps[[i]]$bake(unclass(self$result)[columns]))
-          # self$result[self$steps[[i]]$columns] %cr%
-          #                           self$steps[[i]]$bake(self$result[self$steps[[i]]$columns])
-        } else if (types[i] == "check") {
 
+        } else if (types[i] == "supervised_add") {
+          self$result <- append(self$result,
+                                self$steps[[i]]$bake(unclass(self$result), self$term_info))
+
+        } else if (types[i] == "check") {
+          self$checks <- append(self$checks,
+                                self$steps[[i]]$bake(unclass(self$result)[[columns]]))
         }
+        self$update_term_info(step_name = self$steps[[i]]$step_name, step_index=i)
       }
 
-      # if(all(types) == "add") {
-      #   # may convert to an environment
-      #   if (is.null(new_data)) {
-      #     self$result <- (unlist(lapply(self$steps, function(x) x$bake(self$template)), recursive = FALSE))
-      #   } else {
-      #     self$result <- (unlist(lapply(self$steps, function(x) x$bake(new_data)), recursive = FALSE))
-      #   }
-      # }
-      # return(
-      #
-      #   switch(
-      #     type,
-      #     "list" = self$result,
-      #     "data.frame" = collapse::qDF(self$result),
-      #     "data.table" = collapse::qDT(self$result),
-      #     "tibble" = collapse::qTBL(self$result),
-      #     "matrix" = collapse::qM(self$result)
-      #   )
-      #
-      # )
 
       invisible(self)
 
@@ -159,16 +161,61 @@ Recipe <- R6Class(
     ## short summary of training set.
     train_info = function(x) {
       data.frame(
-        nrows = length(x[[1]]),
-        ncomplete = complete.cases(x)
+        nrows = length(x[[1L]]),
+        ncomplete = collapse::fsum(!collapse::missing_cases(x))
       )
     },
+
+    update_term_info = function(source = "derived",
+                                roles = "predictor",
+                                type = "numeric",
+                                step_name,
+                                step_index) {
+
+      variable <- setdiff(names(self$result), self$term_info$variable)
+
+      n <- length(variable)
+
+      self$term_info$variable <- c(self$term_info$variable, variable)
+      self$term_info$roles <- c(self$term_info$roles,
+                                rep.int("predictor", times = n))
+      self$term_info$source <- c(self$term_info$source,
+                                 rep.int(source, times = n))
+      self$term_info$type <- c(self$term_info$type,
+                               rep.int(type, times = n))
+      self$term_info$step_index <- c(self$term_info$step_index,
+                                     rep.int(step_index, times = n))
+      self$term_info$step_name <- c(self$term_info$step_name,
+                                    rep.int(step_name, times = n))
+    },
+
     get_step_types = function() {
       vapply(self$steps, FUN = function(x) x$type, FUN.VALUE = character(1))
+    },
+
+    data = function(type = "df") {
+
+      if (type == "df") {
+        return(collapse::qDF(self$result))
+      }
+
+      if (type == "m") {
+        return(collapse::qM(self$result))
+      }
+
+      if(type == "dt") {
+        return(collapse::qDT(self$result))
+      }
+
+      if(type == "tbl") {
+        return(collapse::qTBL(self$result))
+      }
+
+      return(self$result)
     }
 
 
-)
+  )
 )
 
 
@@ -308,7 +355,7 @@ Recipe <- R6Class(
 # a <- rlang::f_rhs(formula)
 # vapply(a,
 #        FUN = function(x) paste0(deparse(x)),
-#        FUN.VALUE = character(1))[-1]
+#        FUN.VALUE = character(1))[-1L]
 #
 # microbenchmark::microbenchmark(
 #   attr(model.frame(formula, dat, subset = 1L), "terms"),

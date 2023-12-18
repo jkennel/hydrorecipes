@@ -247,6 +247,7 @@ Eigen::VectorXd convolve_overlap_add(Eigen::VectorXd& x,
 //'
 //' @param x the vector that holds the series (numeric vector)
 //' @param y the kernel to convolve with x (complex numeric vector)
+//' @param align right (0), center (1), or left (2) alignment
 //'
 //'
 //' @return the linear convolution of two vectors
@@ -254,8 +255,9 @@ Eigen::VectorXd convolve_overlap_add(Eigen::VectorXd& x,
 //' @noRd
 //'
 // [[Rcpp::export]]
-Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd& x,
-                                       Eigen::VectorXd& y) {
+Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd x,
+                                      Eigen::VectorXd y,
+                                      int align) {
 
    Eigen::FFT<double> fft;
    size_t n_x = x.size();
@@ -264,7 +266,6 @@ Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd& x,
    // need a better way of choosing this
    size_t n_pad = next_n_eigen(n_y * 4);
    if (n_y > n_x) Rcpp::stop("n_y cannot be larger than n_x");
-   // if (n_y > n_pad) n_pad = next_n_eigen(n_y * 2 - 1);
    if (n_pad > n_x) n_pad = n_x;
 
 
@@ -281,16 +282,22 @@ Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd& x,
    size_t i = n_x - n_pad;
    size_t x_len = n_pad;
    size_t fin_size = x_len - n_y;
+   size_t n_align = n_y; // right alignment
+
+   if (align == 1) {
+     n_align = (int)(n_y / 2);
+   }
+   if (align == 2) {
+     n_align = 1;
+   }
 
    while (i >= 0) {
-
-     // x_sub = x.segment(i, x_len);
 
      fft.fwd(fft_x, x.segment(i, x_len));
      fft_x = fft_x.array() * fft_y.array();
      fft.inv(z, fft_x);
 
-     out.segment(i + n_y - 1, fin_size + 1) = z.tail(fin_size + 1);
+     out.segment(i + n_align, fin_size + 1) = z.tail(fin_size + 1);
 
 
      if(i == 0) {
@@ -304,7 +311,16 @@ Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd& x,
 
    }
 
-   out.head(n_y - 1).setConstant(NA_REAL);
+   if (align == 0) {
+     out.head(n_y - 1).setConstant(NA_REAL);
+   }
+   if (align == 1) {
+     out.head(n_align).setConstant(NA_REAL);
+     out.tail(n_align).setConstant(NA_REAL);
+   }
+   if (align == 2) {
+     out.tail(n_y - 1).setConstant(NA_REAL);
+   }
 
    // out.conservativeResize(n_x);
 
@@ -312,6 +328,21 @@ Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd& x,
  }
 //==============================================================================
 
+// [[Rcpp::export]]
+Eigen::VectorXd shift_eigen(Eigen::VectorXd x, int n)
+{
+
+  std::vector<double> x_vec(x.data(), x.data() + x.size());
+
+
+  std::rotate(x_vec.begin(),
+              x_vec.end() - n, // this will be the new first element
+              x_vec.end());
+
+  x = Eigen::Map<Eigen::VectorXd>(x_vec.data(), x.size());
+
+  return(x);
+}
 
 //==============================================================================
 //' @title
@@ -322,7 +353,7 @@ Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd& x,
 //'
 //' @param x the vector that holds the series (numeric vector)
 //' @param y the list of kernels to convolve with x
-//'
+//' @param align right (0), center (1), or left (2) alignment
 //'
 //' @return the linear convolution of two vectors
 //'
@@ -330,68 +361,19 @@ Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd& x,
 //'
 // [[Rcpp::export]]
 List convolve_overlap_save_list(Eigen::VectorXd& x,
-                                List y) {
+                                List y,
+                                int align) {
 
+  size_t n_y = y.size();
+  size_t n_x = x.size();
+  Eigen::VectorXd out(n_x);
+  Rcpp::List out_list(n_y);
 
-   Eigen::FFT<double> fft;
-   size_t n_x = x.size();
+  for (size_t j = 0; j < n_y; ++j) {
+    out = convolve_overlap_save(x, y[j], align);
+    out_list[j] = out;
+  }
 
-   size_t n = y.length();
-   size_t n_y = Rcpp::as<Eigen::Map<Eigen::VectorXd>>(y[0]).size();
-   // size_t n_y = yy.size();
-
-
-   // need a better way of choosing this
-   size_t n_pad = next_n_eigen(n_y * 5);
-   if (n_y > n_x) Rcpp::stop("n_y cannot be larger than n_x");
-   // if (n_y > n_pad) n_pad = next_n_eigen(n_y * 2 - 1);
-   if (n_pad > n_x) n_pad = n_x;
-
-
-   // Eigen::VectorXd x_sub = Eigen::VectorXd::Zero(n_pad);
-   VectorXcd fft_x(n_pad);
-   VectorXd z(n_pad);
-   VectorXcd fft_y(n_pad);
-
-   size_t x_len = n_pad;
-   size_t fin_size = x_len - n_y;
-
-   Rcpp::List out_list;
-
-   VectorXd out = Eigen::VectorXd::Zero(n_x);
-   for (size_t j = 0; j < n; ++j) {
-     // yy = Rcpp::as<Eigen::Map<Eigen::VectorXd>>(y[j]);
-     Eigen::VectorXd y_sub = pad_vector(y[j], n_y, n_pad);
-     fft.fwd(fft_y, y_sub);
-
-     size_t i = n_x - n_pad;
-     fin_size =  x_len - n_y;
-
-     while (i >= 0) {
-       fft.fwd(fft_x, x.segment(i, x_len));
-       fft_x = fft_x.array() * fft_y.array();
-       fft.inv(z, fft_x);
-
-       out.segment(i + n_y - 1, fin_size + 1) = z.tail(fin_size + 1);
-
-
-       if(i == 0) {
-         break;
-       } else if (fin_size > i) {
-         i = 0;
-       } else {
-         i -= fin_size;
-       }
-
-     }
-
-     out.head(n_y - 1).setConstant(NA_REAL);
-
-   // out.conservativeResize(n_x);
-
-     out_list.push_back(out);
-
-   }
    return(out_list);
  }
 
@@ -2280,13 +2262,29 @@ y <- rnorm(1e5)
 # plot(frecipes:::convolve_overlap_add(x, rev(y)), type = 'l', col = "green")
 # points(frecipes:::convolve_filter(x, y, TRUE, TRUE), type = 'l', col = 'red')
 y1 <- rev(y)
-bench::mark(
-  frecipes:::convolve_filter(x, y, TRUE, TRUE),
-  frecipes:::convolve_overlap_add(x, y1),
-  frecipes:::convolve_overlap_save(x, y1),
-  check = TRUE,
-  min_iterations = 5
+tmp <-bench::press(
+  y_len = c(1e2, 3e5),
+  {
+    x <- rnorm(1e7)
+    y <- rnorm(y_len)
+    y1 <- rev(y)
+    bench::mark(
+    frecipes:::convolve_filter(x, y, TRUE, TRUE),
+    frecipes:::convolve_overlap_add(x, y1),
+    frecipes:::convolve_overlap_save(x, y1, 0),
+    # frecipes:::convolve_overlap_save(x, y1, 1),
+    # frecipes:::convolve_overlap_save(x, y1, 2),
+    # frecipes:::convolve_vec(x, frecipes:::pad_vector(y1, y_len, 1e7)),
+    check = TRUE,
+    min_iterations = 2
+  )}
 )
+
+tmp
+x <- cumsum(rnorm(1000000))
+y <- frecipes:::window_nuttall(1000)/sum(window_nuttall(1000))
+plot(x, type = 'l')
+points(frecipes:::convolve_overlap_save(x, y, 1), type = 'l', col = 'red')
 
 
 m <- matrix(rep(y, 20), ncol = 20)

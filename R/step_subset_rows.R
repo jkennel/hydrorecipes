@@ -1,7 +1,9 @@
 #' R6 Class
 #'
 #' `StepSubsetRows` selects rows from output.
+#'
 #' @inheritParams Step
+#' @param row_numbers integer vector of row numbers to keep.
 #'
 #' @export
 StepSubsetRows <- R6Class(
@@ -9,8 +11,10 @@ StepSubsetRows <- R6Class(
   inherit = Step,
 
   public = list(
-    row_numbers = NULL,
+
     # step specific variables
+    row_numbers = NULL,
+
     initialize = function(...,
                           row_numbers,
                           role = "modify",
@@ -31,7 +35,7 @@ StepSubsetRows <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
-      unclass(collapse::qDT(new_data)[self$row_numbers,])
+      unclass(collapse::qDF(new_data)[self$row_numbers,])
     }
   )
 )

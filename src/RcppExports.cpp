@@ -283,26 +283,40 @@ BEGIN_RCPP
 END_RCPP
 }
 // convolve_overlap_save
-Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd& x, Eigen::VectorXd& y);
-RcppExport SEXP _frecipes_convolve_overlap_save(SEXP xSEXP, SEXP ySEXP) {
+Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd x, Eigen::VectorXd y, int align);
+RcppExport SEXP _frecipes_convolve_overlap_save(SEXP xSEXP, SEXP ySEXP, SEXP alignSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::VectorXd& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Eigen::VectorXd& >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(convolve_overlap_save(x, y));
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type y(ySEXP);
+    Rcpp::traits::input_parameter< int >::type align(alignSEXP);
+    rcpp_result_gen = Rcpp::wrap(convolve_overlap_save(x, y, align));
+    return rcpp_result_gen;
+END_RCPP
+}
+// shift_eigen
+Eigen::VectorXd shift_eigen(Eigen::VectorXd x, int n);
+RcppExport SEXP _frecipes_shift_eigen(SEXP xSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(shift_eigen(x, n));
     return rcpp_result_gen;
 END_RCPP
 }
 // convolve_overlap_save_list
-List convolve_overlap_save_list(Eigen::VectorXd& x, List y);
-RcppExport SEXP _frecipes_convolve_overlap_save_list(SEXP xSEXP, SEXP ySEXP) {
+List convolve_overlap_save_list(Eigen::VectorXd& x, List y, int align);
+RcppExport SEXP _frecipes_convolve_overlap_save_list(SEXP xSEXP, SEXP ySEXP, SEXP alignSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::VectorXd& >::type x(xSEXP);
     Rcpp::traits::input_parameter< List >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(convolve_overlap_save_list(x, y));
+    Rcpp::traits::input_parameter< int >::type align(alignSEXP);
+    rcpp_result_gen = Rcpp::wrap(convolve_overlap_save_list(x, y, align));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1360,6 +1374,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// llt_solve
+Eigen::MatrixXd llt_solve(Eigen::Map<Eigen::MatrixXd>& X, Eigen::Map<Eigen::MatrixXd>& Y);
+RcppExport SEXP _frecipes_llt_solve(SEXP XSEXP, SEXP YSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type Y(YSEXP);
+    rcpp_result_gen = Rcpp::wrap(llt_solve(X, Y));
+    return rcpp_result_gen;
+END_RCPP
+}
 // ogata_banks_ind
 double ogata_banks_ind(double D, double v, double C0, double x, double t);
 RcppExport SEXP _frecipes_ogata_banks_ind(SEXP DSEXP, SEXP vSEXP, SEXP C0SEXP, SEXP xSEXP, SEXP tSEXP) {
@@ -1665,8 +1691,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_convolve_vec", (DL_FUNC) &_frecipes_convolve_vec, 2},
     {"_frecipes_convolve_filter", (DL_FUNC) &_frecipes_convolve_filter, 4},
     {"_frecipes_convolve_overlap_add", (DL_FUNC) &_frecipes_convolve_overlap_add, 2},
-    {"_frecipes_convolve_overlap_save", (DL_FUNC) &_frecipes_convolve_overlap_save, 2},
-    {"_frecipes_convolve_overlap_save_list", (DL_FUNC) &_frecipes_convolve_overlap_save_list, 2},
+    {"_frecipes_convolve_overlap_save", (DL_FUNC) &_frecipes_convolve_overlap_save, 3},
+    {"_frecipes_shift_eigen", (DL_FUNC) &_frecipes_shift_eigen, 2},
+    {"_frecipes_convolve_overlap_save_list", (DL_FUNC) &_frecipes_convolve_overlap_save_list, 3},
     {"_frecipes_convolve_tf", (DL_FUNC) &_frecipes_convolve_tf, 2},
     {"_frecipes_convolve_matrix", (DL_FUNC) &_frecipes_convolve_matrix, 4},
     {"_frecipes_convolve_list", (DL_FUNC) &_frecipes_convolve_list, 4},
@@ -1749,6 +1776,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_get_end", (DL_FUNC) &_frecipes_get_end, 4},
     {"_frecipes_shift_subset", (DL_FUNC) &_frecipes_shift_subset, 4},
     {"_frecipes_lag_list", (DL_FUNC) &_frecipes_lag_list, 4},
+    {"_frecipes_llt_solve", (DL_FUNC) &_frecipes_llt_solve, 2},
     {"_frecipes_ogata_banks_ind", (DL_FUNC) &_frecipes_ogata_banks_ind, 5},
     {"_frecipes_ogata_banks_list", (DL_FUNC) &_frecipes_ogata_banks_list, 7},
     {"_frecipes_scale_list_param", (DL_FUNC) &_frecipes_scale_list_param, 3},

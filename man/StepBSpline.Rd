@@ -44,6 +44,15 @@
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{internal_knots}}{equivalent to knots from `splines2::bSplines`}
+
+\item{\code{boundary_knots}}{equivalent to Boundary.knots from `splines2::bSplines`}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-step_b_spline-prep"></a>}}

@@ -13,6 +13,7 @@
 #' @param time prediction times
 #' @param flow_rate well flow rates
 #' @param n_terms number of terms to use in Hantush solution.  More is more precise but slower.
+#'
 #' @inheritParams Step
 #'
 #' @family aquifer

@@ -1,7 +1,10 @@
 #' R6 Class
 #'
-#' `StepPca` adjust the central value to zero.
+#' `StepPca` Does PCA for a set of columns. This currently is an in house function.
+#' Use at your own risk!
+#'
 #' @inheritParams Step
+#' @inheritParams recipes::step_pca
 #'
 #' @export
 StepPca <- R6Class(

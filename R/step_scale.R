@@ -1,7 +1,11 @@
 #' R6 Class
 #'
-#' `StepScale` adjust the dispersion by standard deviation.
+#' `StepScale` adjust the dispersion by the standard deviation.
+#'
 #' @inheritParams Step
+#' @inheritParams recipes::step_scale
+#' @param fun the function to use for calculating the distpersion. The default is
+#' `collapse::fsd`
 #'
 #' @export
 StepScale <- R6Class(
@@ -26,6 +30,7 @@ StepScale <- R6Class(
       # get function parameters to pass to parent
       step_name    <- "step_scale"
       type         <- 'modify'
+      enq          <- NULL
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),

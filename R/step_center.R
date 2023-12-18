@@ -1,7 +1,11 @@
 #' R6 Class
 #'
 #' `StepCenter` adjust the central value to zero.
+#'
 #' @inheritParams Step
+#' @inheritParams recipes::step_center
+#'
+#' @param fun the central function to use. Defaults to `collapse::fmean`.
 #'
 #' @export
 StepCenter <- R6Class(
@@ -24,11 +28,14 @@ StepCenter <- R6Class(
       # get function parameters to pass to parent
       step_name    <- "step_center"
       type         <- 'modify'
+      enq = NULL
       inputs <- c(
         as.list(rlang::quos(...)),
         rlang::env_get_list(env = environment(),
                             formalArgs(super$initialize)[-1L])
       )
+45
+
       do.call(super$initialize, inputs)
 
       self$na_rm <- na_rm

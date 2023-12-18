@@ -1,7 +1,11 @@
 #' R6 Class
 #'
-#' `StepNormalize` adjust the dispersion by standard deviation.
+#' `StepNormalize` adjust the dispersion by the standard deviation and the central
+#' value by the mean.
+#'
 #' @inheritParams Step
+#' @inheritParams recipes::step_normalize
+#'
 #'
 #' @export
 StepNormalize <- R6Class(
@@ -12,7 +16,6 @@ StepNormalize <- R6Class(
     center = c(),
     scale = c(),
     na_rm = NA,
-    fun = NULL,
     # step specific variables
     initialize = function(...,
                           role = "predictor",

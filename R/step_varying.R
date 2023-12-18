@@ -1,7 +1,9 @@
 #' R6 Class
 #'
-#' `StepVarying` adjust the central value to zero.
+#' `StepVarying` remove columns that only contain a single value.
+#'
 #' @inheritParams Step
+#' @inheritParams recipes::step_zv
 #'
 #' @export
 StepVarying <- R6Class(

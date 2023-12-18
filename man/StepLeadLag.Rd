@@ -41,6 +41,19 @@
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{lag}}{integer vector for the amount to lag or lead.  A negative value indicates leading.}
+
+\item{\code{n_shift}}{the amount to shift the starting point. When `n_subset` is not
+equal to 1 it may be useful to start the lagging at an offset from the beginning
+of the series. Default is 0.}
+
+\item{\code{n_subset}}{the spacing in rows between values.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-step_lead_lag-bake"></a>}}

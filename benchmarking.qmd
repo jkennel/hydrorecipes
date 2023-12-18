@@ -103,7 +103,7 @@ results <- bench::press(
 results
 ```
 
-## step_center bake
+## step_center
 
 ```{r}
 #| echo: false
@@ -137,7 +137,7 @@ results <- bench::press(
 results
 ```
 
-## step_scale bake
+## step_scale
 
 ```{r}
 #| echo: false
@@ -172,7 +172,7 @@ results
 ```
 
 
-## step_normalize bake
+## step_normalize
 
 ```{r}
 #| echo: false
@@ -217,7 +217,7 @@ results
 
 ```
 
-## step_lag bake
+## step_lag
 
 ```{r}
 #| echo: false
@@ -251,7 +251,7 @@ results <- bench::press(
 results
 ```
 
-## step_distributed_lag bake
+## step_distributed_lag
 
 ```{r}
 #| echo: false
@@ -286,7 +286,7 @@ results <- bench::press(
 results
 ```
 
-## step_harmonic bake
+## step_harmonic
 
 ```{r}
 #| echo: false
@@ -325,7 +325,7 @@ results <- bench::press(
 results
 ```
 
-## step_pca bake
+## step_pca
 
 ```{r}
 #| echo: false
@@ -411,7 +411,7 @@ print(results, n = 100)
 ```
 
 
-## step_dummy bake
+## step_dummy
 
 ```{r}
 #| echo: false
@@ -446,7 +446,7 @@ results
 
 ```
 
-## step_find_interval bake
+## step_find_interval
 
 - no direct comparison so compare to step_cut
 
@@ -486,7 +486,7 @@ results
 
 
 
-## step_varying bake
+## step_varying
 
 ```{r}
 #| echo: false
@@ -522,6 +522,43 @@ results
 
 ```
 
+## step_kernel_filter
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(RcppRoll)
+formula <- as.formula(y~x+z)
+
+results <- bench::press(
+  rows = c(1e5, 1e6),
+  {
+    dat <- data.frame(x = rep(1, rows), 
+                      y = 1:rows,
+                      z = cumsum(rnorm(rows)))
+    bench::mark(
+      frec = {Recipe$new(formula = formula, data = dat)$
+          add_step(StepKernelFilter$new(z, 
+                                        kernel = list(rep(1, 5001)/5001), align = "center"))$
+          prep()$
+          bake()$
+          data("tbl")},
+      rec  = {recipe(formula = formula, data = dat) |>
+          step_window(z, size = 5001, statistic = "mean") |>
+          prep() |>
+          bake(new_data = NULL)},
+      min_iterations = 1,
+      check = FALSE,
+      relative = TRUE
+    )
+  }
+)
+
+results
+
+
+```
 
 ## Mulitple steps
 
@@ -569,7 +606,7 @@ results
 ```
 
 
-## step_b_spline bake
+## step_b_spline
 
 ```{r}
 #| echo: false

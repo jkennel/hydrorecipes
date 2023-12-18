@@ -4,7 +4,8 @@
 \alias{StepPca}
 \title{R6 Class}
 \description{
-`StepPca` adjust the central value to zero.
+`StepPca` Does PCA for a set of columns. This currently is an in house function.
+Use at your own risk!
 }
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_pca}

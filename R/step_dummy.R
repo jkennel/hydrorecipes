@@ -1,7 +1,7 @@
 #' R6 Class
 #'
 #' `StepDummy` dummy encoding for factor or integer input.
-#' @param vec a vector of break points
+#'
 #' @inheritParams Step
 #'
 #' @export

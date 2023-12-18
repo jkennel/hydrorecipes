@@ -4,7 +4,8 @@
 \alias{StepNormalize}
 \title{R6 Class}
 \description{
-`StepNormalize` adjust the dispersion by standard deviation.
+`StepNormalize` adjust the dispersion by the standard deviation and the central
+value by the mean.
 }
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_normalize}

@@ -128,9 +128,11 @@ Eigen::VectorXd convolve_vec(Eigen::VectorXd x,
 Eigen::VectorXd convolve_overlap_add(Eigen::VectorXd x,
                                      Eigen::VectorXd y);
 Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd x,
-                                      Eigen::VectorXd y);
+                                      Eigen::VectorXd y,
+                                      int align);
 Rcpp::List convolve_overlap_save_list(Eigen::VectorXd& x,
-                                Rcpp::List y);
+                                      Rcpp::List y,
+                                      int align);
 Eigen::VectorXd convolve_tf(Eigen::VectorXd x,
                             Eigen::VectorXcd y);
 Eigen::MatrixXd convolve_matrix(const Eigen::VectorXd& x,
@@ -138,17 +140,17 @@ Eigen::MatrixXd convolve_matrix(const Eigen::VectorXd& x,
                                 bool remove_partial = true,
                                 bool reverse = true);
 Eigen::VectorXd convolve_filter(const Eigen::VectorXd& x,
-                               const Eigen::VectorXd& y,
-                               bool remove_partial,
-                               bool reverse);
+                                const Eigen::VectorXd& y,
+                                bool remove_partial,
+                                bool reverse);
 Rcpp::List convolve_list(const Eigen::VectorXd& x,
-                          const List y,
-                          const bool remove_partial,
-                          const bool reverse);
+                         const List y,
+                         const bool remove_partial,
+                         const bool reverse);
 std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
-                          const std::list<Eigen::VectorXd> y,
-                          const bool remove_partial,
-                          const bool reverse);
+                                          const std::list<Eigen::VectorXd> y,
+                                          const bool remove_partial,
+                                          const bool reverse);
 // Spectrum
 Eigen::MatrixXcd spec_welch(Eigen::MatrixXd& x,
                             size_t length_subset,
@@ -230,23 +232,23 @@ Rcpp::List b_spline_list(const arma::vec& x,
                          const unsigned int derivs,
                          const bool integral);
 Rcpp::List b_spline_list2(const arma::vec& x,
-                         const unsigned int df,
-                         const unsigned int degree,
-                         const arma::vec& internal_knots,
-                         const arma::vec& boundary_knots,
-                         const bool complete_basis,
-                         const bool periodic,
-                         const unsigned int derivs,
-                         const bool integral);
+                          const unsigned int df,
+                          const unsigned int degree,
+                          const arma::vec& internal_knots,
+                          const arma::vec& boundary_knots,
+                          const bool complete_basis,
+                          const bool periodic,
+                          const unsigned int derivs,
+                          const bool integral);
 std::list<Eigen::VectorXd> b_spline_list3(const arma::vec& x,
-                         const unsigned int df,
-                         const unsigned int degree,
-                         const arma::vec& internal_knots,
-                         const arma::vec& boundary_knots,
-                         const bool complete_basis,
-                         const bool periodic,
-                         const unsigned int derivs,
-                         const bool integral);
+                                          const unsigned int df,
+                                          const unsigned int degree,
+                                          const arma::vec& internal_knots,
+                                          const arma::vec& boundary_knots,
+                                          const bool complete_basis,
+                                          const bool periodic,
+                                          const unsigned int derivs,
+                                          const bool integral);
 arma::vec log_lags_arma(arma::uword n, arma::uword max_lag);
 
 //==============================================================================
@@ -274,13 +276,13 @@ Rcpp::List distributed_lag_list(Eigen::Map<Eigen::VectorXd>  x,
                                 const unsigned int derivs = 0,
                                 const bool integral = false);
 Rcpp::List distributed_lag_list3(Eigen::VectorXd  x,
-                                arma::uword n_lag,
-                                arma::uword max_lag,
-                                const unsigned int df,
-                                const unsigned int degree,
-                                const arma::vec& internal_knots,
-                                const arma::vec& boundary_knots,
-                                const bool complete_basis = true,
-                                const bool periodic = false,
-                                const unsigned int derivs = 0,
-                                const bool integral = false);
+                                 arma::uword n_lag,
+                                 arma::uword max_lag,
+                                 const unsigned int df,
+                                 const unsigned int degree,
+                                 const arma::vec& internal_knots,
+                                 const arma::vec& boundary_knots,
+                                 const bool complete_basis = true,
+                                 const bool periodic = false,
+                                 const unsigned int derivs = 0,
+                                 const bool integral = false);
