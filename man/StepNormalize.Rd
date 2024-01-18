@@ -31,13 +31,7 @@ value by the mean.
 \if{latex}{\out{\hypertarget{method-step_normalize-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepNormalize$new(
-  ...,
-  role = "predictor",
-  skip = FALSE,
-  na_rm = TRUE,
-  keep_original_cols = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepNormalize$new(terms, role = "predictor", na_rm = TRUE, ...)}\if{html}{\out{</div>}}
 }
 
 }
@@ -46,7 +40,7 @@ value by the mean.
 \if{latex}{\out{\hypertarget{method-step_normalize-prep}{}}}
 \subsection{Method \code{prep()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepNormalize$prep(new_data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepNormalize$prep(new_data, info)}\if{html}{\out{</div>}}
 }
 
 }

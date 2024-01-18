@@ -31,13 +31,12 @@
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StepScale$new(
-  ...,
-  role = "predictor",
-  skip = FALSE,
+  terms,
   na_rm = TRUE,
   fun = collapse::fsd,
   n_sd = 1L,
-  keep_original_cols = FALSE
+  role = "predictor",
+  ...
 )}\if{html}{\out{</div>}}
 }
 
@@ -55,7 +54,7 @@
 \if{latex}{\out{\hypertarget{method-step_scale-prep}{}}}
 \subsection{Method \code{prep()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepScale$prep(new_data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepScale$prep(new_data, info)}\if{html}{\out{</div>}}
 }
 
 }

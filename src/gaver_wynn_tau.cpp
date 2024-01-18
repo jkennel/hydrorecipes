@@ -149,9 +149,9 @@ bench::mark(
                                     1e-3, 1e-3, 1e-5, 1e-5, 12L)[[1]])
 )
 
-(frecipes:::stehfest_barker_herbert(as.numeric(1:n),
-                                    1.0,
-                                    100.0, 200.0,
-                                    1e-3, 1e-3, 1e-5, 1e-5, 12L)[[1]])
+# (frecipes:::stehfest_barker_herbert(as.numeric(1:n),
+#                                     1.0,
+#                                     100.0, 200.0,
+#                                     1e-3, 1e-3, 1e-5, 1e-5, 12L)[[1]])
 
 */

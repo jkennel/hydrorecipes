@@ -49,8 +49,6 @@ Other aquifer:
   hydraulic_conductivity_outer = 1e-06,
   n_stehfest = 12L,
   role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE,
   ...
 )}\if{html}{\out{</div>}}
 }

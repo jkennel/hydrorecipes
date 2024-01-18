@@ -35,12 +35,7 @@ R6 Class
 \if{latex}{\out{\hypertarget{method-step_dummy-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepDummy$new(
-  ...,
-  role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepDummy$new(terms, one_hot = FALSE, role = "predictor", ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -52,7 +47,7 @@ A new `Step`.
 \if{latex}{\out{\hypertarget{method-step_dummy-prep}{}}}
 \subsection{Method \code{prep()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepDummy$prep(new_data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepDummy$prep(new_data, info)}\if{html}{\out{</div>}}
 }
 
 }

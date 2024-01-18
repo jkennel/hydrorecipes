@@ -155,6 +155,37 @@ Eigen::MatrixXd detrend_matrix(const Eigen::MatrixXd& x) {
 }
 //==============================================================================
 
+//==============================================================================
+//' @title
+//' detrend_vector
+//'
+//' @description
+//' Linearly detrend the columns of a matrix. This is translated from spec.pgram
+//'
+//' @param x the matrix that holds multiple series (numeric matrix)
+//'
+//' @return columns of a matrix that have been linearly detrended.
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::VectorXd detrend_vector(Eigen::VectorXd x) {
+
+  const size_t n = x.rows();
+
+  const double ends = ((double)n - 1.0) / 2.0;
+  const double scale = n * (n * n - 1.0) / 12.0;
+
+  const Eigen::VectorXd x_abscissa = VectorXd::LinSpaced(n, -ends, ends);
+
+  return (x.array() - x.array().mean() -
+    (x.array() * x_abscissa.array()).sum() *
+    x_abscissa.array() / scale);
+
+}
+//==============================================================================
+
+
 
 //==============================================================================
 //' @title
@@ -184,6 +215,28 @@ Eigen::MatrixXd demean_matrix(const Eigen::MatrixXd& x) {
   return(out);
 }
 //==============================================================================
+
+//==============================================================================
+//' @title
+//' demean_matrix
+//'
+//' @description
+//' Remove the mean from each column of a matrix.
+//'
+//' @inheritParams detrend_matrix
+//'
+//' @return columns of a matrix with the means removed.
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::VectorXd demean_vector(Eigen::VectorXd x) {
+
+  return(x.array() - x.mean());
+
+}
+//==============================================================================
+
 
 
 //==============================================================================
@@ -216,6 +269,47 @@ Eigen::MatrixXd detrend_and_demean_matrix(const Eigen::MatrixXd& x,
 }
 //==============================================================================
 
+//==============================================================================
+//' @title
+//' detrend_and_demean_list
+//'
+//' @description
+//' Remove the trend and mean from each column of a matrix.
+//'
+//' @inheritParams detrend_matrix
+//' @param detrend should the trend be removed from each column (boolean)
+//' @param demean should the mean be removed from each column (boolean)
+//'
+//' @return columns of a matrix with the means and/or trends removed.
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Rcpp::List detrend_and_demean_list(Rcpp::List& x,
+                                   bool detrend,
+                                   bool demean) {
+
+
+  const int n = x.size();
+
+  // Rcpp::List y = x;
+
+  for (int i = 0; i < n; ++i) {
+
+    Eigen::VectorXd x_vec = x[i];
+
+    if (detrend) {
+      x[i] = detrend_vector(x[i]);
+    } else if (demean) {
+      x[i] = demean_vector(x[i]);
+    }
+
+  }
+
+
+  return(x);
+}
+//==============================================================================
 
 
 
@@ -433,7 +527,7 @@ Eigen::VectorXd modified_daniell(Eigen::VectorXi spans) {
 //'
 // [[Rcpp::export]]
 Eigen::MatrixXcd kernel_apply(Eigen::MatrixXcd& x,
-                               Eigen::VectorXd& y) {
+                              Eigen::VectorXd& y) {
 
   size_t n_x = x.rows();
   size_t n_col = x.cols();
@@ -455,8 +549,8 @@ Eigen::MatrixXcd kernel_apply(Eigen::MatrixXcd& x,
       double re = 0;
       double im = 0;
 
-      re = y_t * wrap.segment(i+2, n_y).real();
-      im = y_t * wrap.segment(i+2, n_y).imag();
+      re = y_t * wrap.segment(i + 2, n_y).real();
+      im = y_t * wrap.segment(i + 2, n_y).imag();
       out(i, j) = std::complex<double>(re, im);
 
     });
@@ -466,6 +560,62 @@ Eigen::MatrixXcd kernel_apply(Eigen::MatrixXcd& x,
 
 }
 //==============================================================================
+
+//==============================================================================
+//' @title
+//' kernel_apply
+//'
+//' @description
+//' Create a modified daniell kernel using FFT. Adapted from `spec.pgram`. This
+//' only calculates the upper triangle when truncated is FALSE.  When truncated
+//' is TRUE the first row is skipped.
+//'
+//' @inheritParams spec.pgram
+//'
+//'
+//' @return modified Daniell kernel.
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Rcpp::List kernel_apply_list(Rcpp::List x,
+                             Eigen::VectorXd& y) {
+
+  Eigen::VectorXcd tmp = x[0];
+  size_t n_x = tmp.rows();
+  size_t n_col = x.size();
+  size_t n_y = y.size();
+  size_t n_out = n_y * 2 + n_x;
+  size_t y_half = n_y / 2;
+
+  VectorXcd wrap(n_y * 2 + n_x);
+  Rcpp::List out(n_col);
+
+  RowVectorXd y_t = y.reverse().transpose();
+
+  for (size_t j = 0; j < n_col; ++j) {
+    tmp = x[j];
+    wrap << tmp.tail(n_y), tmp, tmp.head(n_y);
+
+    RcppThread::parallelFor(0, n_x, [&] (size_t i) {
+
+      double re = 0;
+      double im = 0;
+
+      re = y_t * wrap.segment(i + 2, n_y).real();
+      im = y_t * wrap.segment(i + 2, n_y).imag();
+
+      tmp[i] = std::complex<double>(re, im);
+    });
+
+    out[j] = tmp;
+  }
+
+  return(out);
+
+}
+//==============================================================================
+
 
 //==============================================================================
 //' @title

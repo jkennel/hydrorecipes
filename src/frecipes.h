@@ -84,12 +84,19 @@ Eigen::VectorXd pad_vector(Eigen::VectorXd x, size_t n_old, size_t n_new);
 
 Eigen::MatrixXd detrend_matrix(const Eigen::MatrixXd& x);
 Eigen::MatrixXd demean_matrix(const Eigen::MatrixXd& x);
+Eigen::VectorXd detrend_vector(Eigen::VectorXd x);
+Eigen::VectorXd demean_vector(Eigen::VectorXd x);
 Eigen::MatrixXd detrend_and_demean_matrix(const Eigen::MatrixXd& x,
+                                          bool detrend,
+                                          bool demean);
+Rcpp::List detrend_and_demean_list( Rcpp::List& x,
                                           bool detrend,
                                           bool demean);
 
 Eigen::VectorXd modified_daniell(Eigen::VectorXi spans);
 Eigen::MatrixXcd kernel_apply(Eigen::MatrixXcd& x,
+                              Eigen::VectorXd& y);
+Rcpp::List kernel_apply_list(Rcpp::List x,
                               Eigen::VectorXd& y);
 Eigen::VectorXd spec_taper(size_t n_row, double p = 0.1);
 

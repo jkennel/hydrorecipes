@@ -35,13 +35,7 @@ R6 Class
 \if{latex}{\out{\hypertarget{method-step_find_interval-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepFindInterval$new(
-  ...,
-  vec,
-  role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepFindInterval$new(terms, vec, role = "predictor", ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

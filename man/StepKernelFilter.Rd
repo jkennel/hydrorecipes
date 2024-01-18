@@ -30,14 +30,7 @@
 \if{latex}{\out{\hypertarget{method-step_kernel_filter-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepKernelFilter$new(
-  ...,
-  kernel,
-  align = "center",
-  role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepKernelFilter$new(terms, kernel, align = "center", role = "predictor", ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

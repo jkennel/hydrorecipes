@@ -45,8 +45,6 @@ Other aquifer:
   specific_storage = 1e-06,
   hydraulic_conductivity = 1e-04,
   role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE,
   ...
 )}\if{html}{\out{</div>}}
 }

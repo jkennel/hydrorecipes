@@ -10,16 +10,16 @@ double any_decimal(std::vector<double> x)
   for (unsigned int i = 0; i < x.size(); ++i) {
     div = std::fmod(abs(x[i]), 1.0);
 
-    if(div > 0.0) {
+    if (div > 0.0) {
       prev = std::min(div, prev);
     }
 
   }
 
-  if(prev == 1.0) {
+  if (prev == 1.0) {
     return(1.0);
   }
-  if(prev >= 0.1) {
+  if (prev >= 0.1) {
     return(10.0);
   }
   if (prev >= 0.01) {
@@ -54,7 +54,7 @@ unsigned int gcd(std::vector<unsigned int> x)
   unsigned int out = x[0];
   for (unsigned int i = 0; i < x.size(); ++i) {
     out = std::gcd(out, x[i]);
-    if(out == 1) {
+    if (out == 1) {
       return(1);
     }
   }

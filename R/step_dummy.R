@@ -13,48 +13,53 @@ StepDummy <- R6Class(
 
     # step specific variables
     levels = NULL,
+    one_hot = NULL,
 
     #' @description
     #' @inheritParams StepAddVars
     #' @return A new `Step`.
-    initialize = function(...,
+    initialize = function(terms,
+                          one_hot = FALSE,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE) {
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_dummy"
-      type         <- 'add'
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_dummy'
+      env_list$type <- 'add'
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
 
       invisible(self)
-    },
-    prep = function(new_data) {
-      self$levels <- levels(new_data)
 
+      self$one_hot <- one_hot
+
+    },
+    prep = function(new_data, info) {
+      super$prep(new_data, info)
+      self$levels <- lapply(unclass(new_data)[self$columns], levels)
+      invisible(self)
     },
     bake = function(new_data) {
 
       column_name <- self$columns
 
-      # check for new level(s)
-      if(sum(levels(new_data) %!in% self$levels) > 0L) {
-        warning(file.path("New levels found during bake step. (", self$id, ")", fsep = ""))
+      dum <- list()
+      for (i in seq_along(column_name)) {
+
+        # check for new level(s)
+        if (sum(levels(unclass(new_data)[[i]]) %!in% self$levels[[i]]) > 0L) {
+          warning(file.path("New levels found during bake step. (", self$id, ")", fsep = ""))
+        }
+
+        dum[[i]] <- to_dummy(unclass(new_data)[[i]], self$one_hot)
+        names(dum[[i]]) <- name_columns(self$id, column_name[i], length(dum[[i]]))
+
       }
 
-      dum <- to_dummy(new_data)
 
-      names(dum) <- file.path(self$id,
-                              column_name,
-                              pad_num(length(dum)),
-                              fsep = "_")
-
-      dum
+      unlist(dum, recursive = FALSE)
     }
 
   )

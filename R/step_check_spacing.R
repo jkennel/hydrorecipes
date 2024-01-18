@@ -1,6 +1,6 @@
 #' R6 Class
 #'
-#' `StepCheckSpacing` adjust the dispersion by standard deviation.
+#' `StepCheckSpacing`
 #' @inheritParams Step
 #'
 #' @export
@@ -10,25 +10,21 @@ StepCheckSpacing <- R6Class(
 
   public = list(
     # step specific variables
-    initialize = function(...,
+    initialize = function(terms,
                           role = "check",
-                          skip = FALSE,
-                          keep_original_cols = FALSE) {
+                          ...) {
 
-      # get function parameters to pass to parent
-      step_name    <- "step_check_spacing"
-      type         <- 'check'
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+     # get function parameters to pass to parent
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- "step_check_spacing"
+      env_list$type <- "check"
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
 
       invisible(self)
     },
 
-    # subtract the central value from a column
     bake = function(new_data) {
 
       chck <- collapse::fndistinct(collapse::fdiff(new_data)) == 1L

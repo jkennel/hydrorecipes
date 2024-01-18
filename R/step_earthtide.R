@@ -26,7 +26,7 @@ StepEarthtide <- R6Class(
     n_thread = NA_integer_,
     do_predict = NA,
     method = NA_character_,
-    initialize = function(...,
+    initialize = function(terms,
                           do_predict = TRUE,
                           method = "gravity",
                           latitude = 0.0,
@@ -42,18 +42,16 @@ StepEarthtide <- R6Class(
                           scale = TRUE,
                           n_thread = 1L,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE) {
+                          ...) {
+
 
       # get function parameters to pass to parent
-      step_name    <- "step_earthtide"
-      type         <- 'add'
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_earthtide'
+      env_list$type <- 'add'
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
 
       # step specific values
       self$method = method
@@ -80,20 +78,20 @@ StepEarthtide <- R6Class(
       column_name     <- self$columns
 
       et <- calc_earthtide(new_data,
-                            do_predict = self$do_predict,
-                            method = self$method,
-                            latitude = self$latitude,
-                            longitude = self$longitude,
-                            elevation = self$elevation,
-                            azimuth = self$azimuth,
-                            gravity = self$gravity,
-                            earth_radius = self$earth_radius,
-                            earth_eccentricity = self$earth_eccentricity,
-                            cutoff = self$cutoff,
-                            catalog = self$catalog,
-                            eop = self$eop,
-                            scale = self$scale,
-                            n_thread = self$n_thread
+                           do_predict = self$do_predict,
+                           method = self$method,
+                           latitude = self$latitude,
+                           longitude = self$longitude,
+                           elevation = self$elevation,
+                           azimuth = self$azimuth,
+                           gravity = self$gravity,
+                           earth_radius = self$earth_radius,
+                           earth_eccentricity = self$earth_eccentricity,
+                           cutoff = self$cutoff,
+                           catalog = self$catalog,
+                           eop = self$eop,
+                           scale = self$scale,
+                           n_thread = self$n_thread
       )
 
       names(et) <- file.path(self$id,

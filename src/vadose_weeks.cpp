@@ -15,7 +15,7 @@ double weeks_1979(const double lag,
   unsigned int m = 1;
   bool more_precise = TRUE;
 
-  if(inverse) {
+  if (inverse) {
     if (d_term < 0.001) {
       return(0.0);
     }
@@ -34,7 +34,7 @@ double weeks_1979(const double lag,
     more_precise = std::abs(term_val) > precision;
   }
 
-  if(inverse) {
+  if (inverse) {
     ret = (1.0 - (4.0 / M_PI) * ret);
     if (ret < 0.0) {
       ret = 0.0;
@@ -45,6 +45,7 @@ double weeks_1979(const double lag,
       ret = 1.0;
     }
   }
+
 
   return(ret);
 
@@ -75,7 +76,7 @@ double weeks_1979(const double lag,
 //'                        precision = 1e-10,
 //'                        inverse = FALSE)
 // [[Rcpp::export]]
-std::vector<double> vadose_response(std::vector<double> time,
+Rcpp::List vadose_response(std::vector<double> time,
                                      const double air_diffusivity,
                                      const double thickness,
                                      const double precision,
@@ -89,7 +90,10 @@ std::vector<double> vadose_response(std::vector<double> time,
       precision,
       inverse);
 
-  return(time);
+  return Rcpp::List::create(Rcpp::Named("vadose_weeks") = time);
+
+
+  // return(time);
 }
 
 
@@ -104,7 +108,7 @@ Rcpp::NumericVector vadose_response2(const Rcpp::NumericVector time,
 
   Rcpp::NumericVector output(n);
 
-  for(unsigned int i = 0; i < n; ++i) {
+  for (unsigned int i = 0; i < n; ++i) {
     output(i) = weeks_1979(
       time(i),
       air_diffusivity,
@@ -112,6 +116,7 @@ Rcpp::NumericVector vadose_response2(const Rcpp::NumericVector time,
       precision,
       inverse);
   }
+
 
   return(output);
 }
@@ -127,10 +132,10 @@ tmp <- frecipes:::vadose_response(time = as.numeric(0:(43200*100)),
                        air_diffusivity = 0.20, thickness = 40,
                        precision = 1e-12,
                        inverse = FALSE),
-tmp2 <- frecipes:::vadose_response2(time = as.numeric(0:(43200*100)),
-                       air_diffusivity = 0.20, thickness = 40,
-                       precision = 1e-12,
-                       inverse = FALSE),
+# tmp2 <- frecipes:::vadose_response2(time = as.numeric(0:(43200*100)),
+#                        air_diffusivity = 0.20, thickness = 40,
+#                        precision = 1e-12,
+#                        inverse = FALSE),
 relative = FALSE
 )
 

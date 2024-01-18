@@ -20,21 +20,20 @@ StepFindInterval <- R6Class(
     #' @description
     #' @inheritParams StepAddVars
     #' @return A new `Step`.
-    initialize = function(...,
+    initialize = function(terms,
                           vec,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE) {
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_find_interval"
-      type         <- 'add'
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_find_interval'
+      env_list$type <- 'add'
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
+
+
 
       # step specific values
       self$vec     <- sort(vec)
@@ -47,13 +46,17 @@ StepFindInterval <- R6Class(
 
       column_name <- self$columns
 
-      dum <- to_dummy_list(new_data, self$vec)
+      dum <- list()
+      for (i in seq_along(column_name)) {
 
-      names(dum) <- file.path(self$id, column_name, names(dum), fsep = '_')
+        dum[[i]] <- to_dummy_list(unclass(new_data)[[i]], self$vec)
 
-      dum
+        names(dum[[i]]) <- name_columns(self$id, column_name[i], length(dum[[i]]))
+
+
+      }
+      unlist(dum, recursive = FALSE)
     }
-
   )
 )
 

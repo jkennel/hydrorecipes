@@ -17,24 +17,21 @@ StepHarmonic <- R6Class(
     cycle_size = NA_real_,
     starting_value = NA_real_,
 
-    initialize = function(...,
+    initialize = function(terms,
                           frequency = NA_real_,
                           cycle_size = NA_real_,
                           starting_value = NA_real_,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE) {
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_harmonic"
-      type         <- 'add'
-      enq          <- NULL
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_harmonic'
+      env_list$type <- 'add'
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
+
 
       # step specific values
       self$frequency <- sort(frequency)
@@ -50,20 +47,21 @@ StepHarmonic <- R6Class(
 
       column_name     <- self$columns
 
-      hals <- harmonic_list(new_data,
-                            frequency = self$frequency,
-                            start = self$starting_value,
-                            cycle_size = self$cycle_size)
+      hals <- list()
+      for (i in seq_along(column_name)) {
+        hals[[i]] <- harmonic_list(unclass(new_data)[[i]],
+                              frequency = self$frequency,
+                              start = self$starting_value,
+                              cycle_size = self$cycle_size)
+        nms <- name_columns(self$id, column_name, n_frequency)
+        names(hals[[i]]) <- paste(rep(nms, each = 2L),
+                              rep(c("sin", "cos"), n_frequency), sep = "_")
+      }
 
-      names(hals) <- file.path(self$id,
-                               column_name,
-                               rep(c("sin", "cos"), n_frequency),
-                               rep(pad_num(n_frequency), each = 2L),
-                               fsep = '_')
-
-      hals
+      unlist(hals, recursive = FALSE)
 
     }
 
   )
 )
+

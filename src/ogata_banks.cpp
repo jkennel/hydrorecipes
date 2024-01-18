@@ -83,14 +83,14 @@
      double decay
  ) {
 
-   const unsigned int n_x = distance.size();
-   const unsigned int n_t = time.size();
+   // const unsigned int n_x = distance.size();
+   // const unsigned int n_t = time.size();
 
    const double B = sqrt(pow((velocity / (2.0 * diffusion)), 2) +
                          (decay * retardation / diffusion));
    const double term = sqrt(pow((velocity / retardation), 2) + (4.0 * decay * diffusion / retardation));
 
-   Rcpp::List output(n_t);
+   // Rcpp::List output(n_t);
 
    const Eigen::ArrayXd exp_x = (B * distance).exp();
    const Eigen::ArrayXd exp_rx = 1.0 / exp_x;
@@ -98,14 +98,16 @@
    const Eigen::ArrayXd co = 1.0 / (2.0 * (diffusion * time / retardation).sqrt());
 
 
-   for (unsigned int i = 0; i < n_t; ++i) {
-     output(i) = 0.5 * concentration_initial * (velocity * distance / (2.0 * diffusion)).exp() *
-       ((exp_rx * ((distance - term_t(i)) * co(i)).erfc()) +
-       (exp_x * ((distance + term_t(i)) * co(i)).erfc()));
+   // this should be changed to just make one column
+   // for (unsigned int i = 0; i < n_t; ++i) {
+   const Eigen::ArrayXd output = 0.5 * concentration_initial * (velocity * distance / (2.0 * diffusion)).exp() *
+       ((exp_rx * ((distance - term_t) * co).erfc()) +
+       (exp_x * ((distance + term_t) * co).erfc()));
 
-   }
+   // }
+  return Rcpp::List::create(Rcpp::Named("ogata_banks") = output);
 
-   return(output);
+   // return(output);
 
  }
 

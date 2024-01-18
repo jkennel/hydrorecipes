@@ -4,7 +4,7 @@
 \alias{to_dummy}
 \title{to_dummy}
 \usage{
-to_dummy(ind)
+to_dummy(ind, one_hot)
 }
 \value{
 List of dummy encoded terms

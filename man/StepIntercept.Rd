@@ -30,12 +30,7 @@
 \if{latex}{\out{\hypertarget{method-step_intercept-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepIntercept$new(
-  ...,
-  role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepIntercept$new(terms, role = "predictor", ...)}\if{html}{\out{</div>}}
 }
 
 }

@@ -10,7 +10,7 @@ std::vector<double> impulse_function(std::vector<double> u)
   int n = u.size();
 
   // calculate the pulse
-  for(unsigned int i = n - 1; i > 0; --i) {
+  for (unsigned int i = n - 1; i > 0; --i) {
     u[i] -= u[i-1];
   }
 
@@ -24,7 +24,7 @@ Rcpp::NumericVector impulse_function_rcpp(Rcpp::NumericVector u)
   int n = u.size();
 
   // calculate the pulse
-  for(size_t i = n - 1; i > 0; --i) {
+  for (size_t i = n - 1; i > 0; --i) {
     u[i] -= u[i-1];
   }
 
@@ -38,7 +38,7 @@ Eigen::VectorXd impulse_function_eigen(Eigen::VectorXd u)
   int n = u.size();
 
   // calculate the pulse
-  for(size_t i = n - 1; i > 0; --i) {
+  for (size_t i = n - 1; i > 0; --i) {
     u[i] -= u[i-1];
   }
 
@@ -67,11 +67,11 @@ int binary_search(Eigen::VectorXd x, Eigen::VectorXd y)
     int r = x.size() - 1;
     int l = 0;
 
-    if(x[l] >= y[l]) {
+    if (x[l] >= y[l]) {
       return(l);
     }
 
-    if(x[r] < y[r]) {
+    if (x[r] < y[r]) {
       return(r);
     }
 
@@ -360,7 +360,7 @@ Rcpp::List grf_time(const double radius,
 
    Eigen::MatrixXd output = Eigen::MatrixXd::Zero(n_grid, n_time);
 
-   // RcppThread::parallelFor(0, n_grid, [&] (size_t i) {
+   // RcppThread::parallelFor (0, n_grid, [&] (size_t i) {
 
    Eigen::VectorXd coef(n_time);
    Eigen::VectorXd wf(n_time);
@@ -445,13 +445,13 @@ double hantush_well(double u, double b, double precision){
   int n_terms = 30;
 
   //eq 10
-  if(b_div_u >= u){
+  if (b_div_u >= u){
     en = exp_int(b_div_u);
 
     for (unsigned int i = 0; i < n_terms; i++) {
       to_add = en * (pow(-u, i) / boost::math::factorial<double>(i));
       out += to_add;
-      if(std::abs(to_add) < precision){
+      if (std::abs(to_add) < precision){
         break;
       }
       en = (1.0 / ((double)i + 1.0)) * (exp(-b_div_u) - b_div_u * en);
@@ -466,7 +466,7 @@ double hantush_well(double u, double b, double precision){
     for (unsigned int i = 0; i < n_terms; i++) {
       to_add = en * (pow(-b_div_u, i) / boost::math::factorial<double>(i));
       out += to_add;
-      if(std::abs(to_add) < precision){
+      if (std::abs(to_add) < precision){
         break;
       }
       en = (1.0 / ((double)i + 1.0)) * (exp(-u) - u * en);
@@ -568,7 +568,7 @@ bench::mark(
 frecipes:::binary_search(x, y)
 )
 
-x <- rnorm(1e7)
+x <- rnorm(1e6)
 y <- 1.2
 bench::mark(
 frecipes:::well_function_coefficient_vec_rcpp(x,y),
@@ -631,10 +631,12 @@ bench::mark(
 
 
 bench::mark(
-  frecipes:::hantush_jacob(x, 0.01, 10),
+  frecipes:::hantush_jacob(x, rep(0.01, length(x)),
+                           radius = 10, 1e-6, 1e-3, 1, 20),
   sapply(1:100, function(x) aquifer:::hantush_well_single(0.1, 0.01, 10)),
   check = FALSE
 )
+
 x <- abs(rnorm(10000))
 bench::mark(
   frecipes:::bessel_eigen(x),

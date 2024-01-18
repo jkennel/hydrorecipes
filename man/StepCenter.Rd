@@ -31,12 +31,11 @@
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StepCenter$new(
-  ...,
-  role = "predictor",
-  skip = FALSE,
+  terms,
   na_rm = TRUE,
   fun = collapse::fmean,
-  keep_original_cols = FALSE
+  role = "predictor",
+  ...
 )}\if{html}{\out{</div>}}
 }
 
@@ -53,7 +52,7 @@
 \if{latex}{\out{\hypertarget{method-step_center-prep}{}}}
 \subsection{Method \code{prep()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepCenter$prep(new_data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepCenter$prep(new_data, info)}\if{html}{\out{</div>}}
 }
 
 }

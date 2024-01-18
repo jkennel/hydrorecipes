@@ -16,10 +16,6 @@ R6 Class
 \describe{
 \item{\code{the}}{model formula.}
 
-\item{\code{information}}{about original variables.}
-
-\item{\code{information}}{about original and predicted variable.}
-
 \item{\code{information}}{about original and predicted variable.}
 
 \item{\code{the}}{recipe steps.}
@@ -48,10 +44,6 @@ R6 Class
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
 \item{\code{the}}{model formula.}
-
-\item{\code{information}}{about original variables.}
-
-\item{\code{information}}{about original and predicted variable.}
 
 \item{\code{information}}{about original and predicted variable.}
 
@@ -97,7 +89,7 @@ R6 Class
 \subsection{Method \code{new()}}{
 Create a new recipe object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Recipe$new(formula, data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Recipe$new(formula, data, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

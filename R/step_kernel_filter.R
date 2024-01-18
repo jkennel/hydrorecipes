@@ -17,26 +17,28 @@ StepKernelFilter <- R6Class(
     kernel = NULL,
     align = NULL,
 
-    initialize = function(...,
+    initialize = function(terms,
                           kernel,
                           align = "center",
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE) {
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name <- "step_kernel_filter"
-      type      <- 'add'
-      enq       <- NULL
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_kernel_filter'
+      env_list$type <- 'add'
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
+
 
       # step specific values
-      self$kernel <- kernel
+      self$kernel <- if (!inherits(kernel, "list")) list(kernel) else kernel
+      n_kernel <- length(kernel)
+      n_align <- length(align)
+      if (n_align != 1) {
+        stop('align should be length 1')
+      }
       self$align  <- align
 
       invisible(self)
@@ -44,21 +46,28 @@ StepKernelFilter <- R6Class(
 
     bake = function(new_data) {
 
-      if(self$align == "center") {
-        new_data <- convolve_overlap_save_list(new_data, self$kernel, 1)
-      }
-      if(self$align == "right") {
-        new_data <- convolve_overlap_save_list(new_data, self$kernel, 0)
-      }
-      if(self$align == "left") {
-        new_data <- convolve_overlap_save_list(new_data, self$kernel, 2)
+      column_name     <- self$columns
+
+      filt <- list()
+      for (i in seq_along(column_name)) {
+
+          if (self$align == "center") {
+            filt[[i]] <- convolve_overlap_save_list(unclass(new_data)[[i]],
+                                                    self$kernel, 1)
+          }
+          if (self$align == "right") {
+            filt[[i]] <- convolve_overlap_save_list(unclass(new_data)[[i]],
+                                                    self$kernel, 0)
+          }
+          if (self$align == "left") {
+            filt[[i]] <- convolve_overlap_save_list(unclass(new_data)[[i]],
+                                                    self$kernel, 2)
+          }
+
+        names(filt[[i]]) <- name_columns(self$id, column_name, length(self$kernel))
       }
 
-      names(new_data) <- file.path(self$id,
-                                   pad_num(length(new_data)),
-                                   fsep = "_")
-
-      return(new_data)
+      unlist(filt, recursive = FALSE)
 
     }
 

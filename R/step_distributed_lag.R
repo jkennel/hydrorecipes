@@ -18,22 +18,18 @@ StepDistributedLag <- R6Class(
     n_lag = NULL,
     max_lag = NULL,
 
-    initialize = function(...,
+    initialize = function(terms,
                           knots,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE) {
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_distributed_lag"
-      type         <- 'add'
-      enq = NULL
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_distributed_lag'
+      env_list$type <- 'add'
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
 
       # step specific values
       self$knots <- knots
@@ -46,26 +42,26 @@ StepDistributedLag <- R6Class(
 
       column_name <- self$columns
 
-      dl <- distributed_lag_list3(
-        new_data,
-        self$n_lag,
-        self$max_lag,
-        0L,
-        3L,
-        self$knots[2:(self$n_lag - 1L)],
-        self$knots[c(1, self$n_lag)],
-        TRUE,
-        FALSE,
-        0L,
-        FALSE
-      )
+      dl <- list()
+      for (i in seq_along(column_name)) {
 
-      names(dl) <- file.path(self$id,
-                             column_name,
-                             pad_num(length(dl)),
-                             fsep = '_')
+        dl[[i]] <- distributed_lag_list3(
+          unclass(new_data)[[i]],
+          self$n_lag,
+          self$max_lag+1,
+          0L,
+          3L,
+          self$knots[2:(self$n_lag - 1L)],
+          self$knots[c(1, self$n_lag)],
+          TRUE,
+          FALSE,
+          0L,
+          FALSE
+        )
+        names(dl[[i]]) <- name_columns(self$id, column_name[i], length(self$n_lag))
 
-      dl
+      }
+      unlist(dl, recursive = FALSE)
 
     }
 

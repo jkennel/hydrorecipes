@@ -95,12 +95,11 @@ Rcpp::List scale_list_param(const Rcpp::List x,
   for (unsigned int i = 0; i < nc; ++i) {
     v_tmp = Rcpp::clone(Rcpp::as<Rcpp::NumericVector>(x[i]));
 
-    if(scale(i) == 1.0 & center(i) == 0.0) {
-    } else if (center(i) == 0.0){
+    if (center(i) == 0.0){
       v_tmp = v_tmp * scale(i);
     } else if (scale(i) == 1.0){
       v_tmp = v_tmp - center(i);
-    } else {
+    } else if (scale(i) == 1.0 & center(i) == 0.0) {
       v_tmp = (v_tmp - center(i)) * scale(i);
     }
 
@@ -124,7 +123,7 @@ Rcpp::List scale_list_param_std(const Rcpp::List x,
   for (unsigned int i = 0; i < nc; ++i) {
     v_tmp = Rcpp::as<std::vector<double> >(x[i]);
 
-    if(scale(i) == 1.0 & center(i) == 0.0) {
+    if (scale(i) == 1.0 & center(i) == 0.0) {
     } else if (center(i) == 0.0){
       for (auto &out : v_tmp)
         out *= scale(i);
@@ -156,7 +155,7 @@ Rcpp::List scale_list_param_eigen(Rcpp::List x,
   for (size_t i = 0; i < nc; ++i) {
     v_tmp = x[i];
 
-    if(scale(i) == 1.0 & center(i) == 0.0) {
+    if (scale(i) == 1.0 & center(i) == 0.0) {
     } else if (center(i) == 0.0){
       v_tmp = v_tmp.array() * scale(i);
     } else if (scale(i) == 1.0){
@@ -221,7 +220,7 @@ Rcpp::List pca_list_eigen(Rcpp::List x,
 
   Eigen::MatrixXd e_vectors = pca.eigenvectors().rowwise().reverse();
 
-  if(prep) {
+  if (prep) {
     return Rcpp::List::create(Rcpp::Named("rotation") = e_vectors);
   }
 
@@ -285,7 +284,7 @@ Eigen::MatrixXd pca_list_rotation_eigen(Rcpp::List x,
 
     v_tmp = x[i];
 
-    if(scale(i) == 1.0 & center(i) == 0.0) {
+    if (scale(i) == 1.0 & center(i) == 0.0) {
       centered.col(i) = v_tmp;
     } else if (center(i) == 0.0){
       centered.col(i) = v_tmp.array() / scale(i);
@@ -301,9 +300,9 @@ Eigen::MatrixXd pca_list_rotation_eigen(Rcpp::List x,
 
   Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> pca(cor);
 
-  Eigen::MatrixXd e_vectors = pca.eigenvectors().rowwise().reverse();
+  Eigen::MatrixXd e_vectors = pca.eigenvectors().rightCols(n_comp).rowwise().reverse();
 
-  return e_vectors.leftCols(n_comp);
+  return e_vectors;
 
 }
 
@@ -424,12 +423,12 @@ Rcpp::List pca(Eigen::Map<Eigen::MatrixXd> x,
 
   for (int i = 0; i < nc; ++i) {
 
-    if(center) {
+    if (center) {
       m_vector(i) = x.col(i).mean();
       centered.col(i) = x.col(i).array() - m_vector(i);
     }
 
-    if(scale) {
+    if (scale) {
       sd_vector(i) = centered.col(i).array().square().sum() / n;
       centered.col(i) = centered.col(i).array() / sqrt(sd_vector(i));
     }
@@ -682,20 +681,20 @@ pca_data <- bake(pca_estimates, USArrests)
 
 mdf <- as.data.frame(m)
 bench::mark(
-  {rec <- recipe(~., data = mdf)  |>
-    step_pca(all_numeric(), num_comp = 3) |>
-    prep() |>
-    bake(new_data = NULL)},
+  # {rec <- recipe(~., data = mdf)  |>
+  #   step_pca(all_numeric(), num_comp = 3) |>
+  #   prep() |>
+  #   bake(new_data = NULL)},
   a <- frecipes:::pca(m, center = FALSE, scale = FALSE),
   b <- prcomp(m,
-              retx = FALSE,
+              retx = TRUE,
               center = FALSE,
               scale = FALSE,
               tol = NULL),
   check = FALSE
 
 )
-
+m <- collapse::qM(dat)
 
 
 m <- matrix(rnorm(2e6), ncol = 100)

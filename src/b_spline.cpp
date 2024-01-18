@@ -73,7 +73,7 @@
 //     n_i = (x.array() <= knots(i)).count();
 //     n_below = n_i - n_old;
 //
-//     if(n_below > 0) {
+//     if (n_below > 0) {
 //       if (i == 0) {
 //         ind.segment(n, n_below).setConstant(i);
 //       } else {
@@ -155,7 +155,7 @@
 //          j_index = ind(i) + j;
 //          i1 = knots_pad(j_index + k_offset + 1);
 //          i2 = knots_pad(j_index + order);
-//          if(i1 == i2) {
+//          if (i1 == i2) {
 //            term = 0;
 //          } else {
 //            den  = i2 - i1;
@@ -170,7 +170,7 @@
 //
 //    std::list<Eigen::VectorXd> o;
 //
-//    for(size_t i = 0; i < out.cols(); ++i) {
+//    for (size_t i = 0; i < out.cols(); ++i) {
 //      o.push_back(out.col(i));
 //    }
 //
@@ -231,7 +231,7 @@
 // //         i1 = knots_pad(j_index + k_offset + 1);
 // //         i2 = knots_pad(j_index + order);
 // //         den  = i2 - i1;
-// //         if(den == 0) {
+// //         if (den == 0) {
 // //           term = 0;
 // //         } else {
 // //           term = out(i, j_index) / den;

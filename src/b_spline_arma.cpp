@@ -32,9 +32,9 @@ Rcpp::List b_spline_list(const arma::vec& x,
   splines2::BSpline bs_obj;
 
   // let splines2 figure out the logic of empty boundary knots
-  if(internal_knots.size() > 0) {
+  if (internal_knots.size() > 0) {
     bs_obj = splines2::BSpline(x, internal_knots, degree, boundary_knots);
-  } else if(df != 0) {
+  } else if (df != 0) {
     bs_obj = splines2::BSpline(x, df, degree, boundary_knots);
   }
 
@@ -69,9 +69,9 @@ Rcpp::List b_spline_list2(const arma::vec& x,
   splines2::BSpline bs_obj;
 
   // let splines2 figure out the logic of empty boundary knots
-  if(internal_knots.size() > 0) {
+  if (internal_knots.size() > 0) {
     bs_obj = splines2::BSpline(x, internal_knots, degree, boundary_knots);
-  } else if(df != 0) {
+  } else if (df != 0) {
     bs_obj = splines2::BSpline(x, df, degree, boundary_knots);
   }
 
@@ -109,9 +109,9 @@ std::list<Eigen::VectorXd> b_spline_list3(const arma::vec& x,
   splines2::BSpline bs_obj;
 
   // let splines2 figure out the logic of empty boundary knots
-  if(internal_knots.size() > 0) {
+  if (internal_knots.size() > 0) {
     bs_obj = splines2::BSpline(x, internal_knots, degree, boundary_knots);
-  } else if(df != 0) {
+  } else if (df != 0) {
     bs_obj = splines2::BSpline(x, df, degree, boundary_knots);
   }
 
@@ -147,7 +147,7 @@ arma::vec log_lags_arma(arma::uword n, arma::uword max_lag) {
     Rcpp::stop("log_lags_eigen: max_time_lag must be non-negative");
   }
 
-  if(n > (max_lag + 1L)) {
+  if (n > (max_lag + 1L)) {
     Rcpp::warning("The number of lags is greater than the maximum time lag");
     return(arma::linspace(0.0, (double)max_lag, max_lag + 1));
   }
@@ -155,8 +155,8 @@ arma::vec log_lags_arma(arma::uword n, arma::uword max_lag) {
   arma::vec lags = arma::exp(arma::linspace(0.0, std::log((double)max_lag + 1.0), n))-1;
 
   // lags cannot be spaced closer than one sample
-  for(size_t i = 0; i < n; ++i) {
-    if(lags(i) < i) {
+  for (size_t i = 0; i < n; ++i) {
+    if (lags(i) < i) {
       lags(i) = i;
     }
   }

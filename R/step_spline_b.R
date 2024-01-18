@@ -1,6 +1,6 @@
 #' R6 Class
 #'
-#' `StepBSpline` generates basis splines.
+#' `StepSplineB` generates basis splines.
 #'
 #' @param internal_knots equivalent to knots from `splines2::bSplines`
 #' @param boundary_knots equivalent to Boundary.knots from `splines2::bSplines`
@@ -8,8 +8,8 @@
 #' @inheritParams splines2::bsp
 #'
 #' @export
-StepBSpline <- R6Class(
-  classname = 'step_b_spline',
+StepSplineB <- R6Class(
+  classname = 'step_spline_b',
   inherit = Step,
 
   public = list(
@@ -22,7 +22,7 @@ StepBSpline <- R6Class(
     boundary_knots = NULL,
     periodic = FALSE,
 
-    initialize = function(...,
+    initialize = function(terms,
                           df = 0L,
                           internal_knots = NULL,
                           boundary_knots = NULL,
@@ -30,23 +30,23 @@ StepBSpline <- R6Class(
                           periodic = FALSE,
                           degree = 3L,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE) {
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_b_spline"
-      type         <- 'add'
-      enq = NULL
-
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_spline_b'
+      env_list$type <- 'add'
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
 
       # step specific values
-      self$df <- df
+      if (df != 0L) {
+        self$df <- df + (1L - intercept)
+      } else {
+        self$df <- 0L
+      }
+
       self$internal_knots  <- as.numeric(sort(internal_knots))
       self$degree <- degree
       self$intercept <- intercept
@@ -56,14 +56,16 @@ StepBSpline <- R6Class(
       invisible(self)
 
     },
-    prep = function(new_data) {
+    prep = function(new_data, info) {
+      super$prep(new_data, info)
 
       if (self$df != 0L) {
-        ik <- collapse::fquantile(new_data,
-                                  probs = seq(0.0, 1.0, self$df),
+        ik <- collapse::fquantile(unclass(new_data)[[self$columns]],
+                                  probs = seq(0.0, 1.0, length.out = self$df - 2),
                                   na.rm = TRUE)
         self$boundary_knots = ik[c(1L, length(ik))]
         self$internal_knots <- ik[-c(1L, length(ik))]
+
       }
 
     },
@@ -71,19 +73,20 @@ StepBSpline <- R6Class(
 
       column_name     <- self$columns
 
-      basis <- b_spline_list(x = new_data,
-                             df = self$df,
-                             degree = 3L,
-                             internal_knots = self$internal_knots,
-                             boundary_knots = self$boundary_knots
-      )
+      basis <- list()
+      for (i in seq_along(column_name)) {
+        basis[[i]] <- b_spline_list(x = unclass(new_data)[[i]],
+                                    df = self$df,
+                                    degree = 3L,
+                                    internal_knots = self$internal_knots,
+                                    boundary_knots = self$boundary_knots,
+                                    complete_basis = self$intercept
+        )
 
-      names(basis) <- file.path(self$id,
-                                column_name,
-                                pad_num(length(basis)),
-                                fsep = '_')
+        names(basis[[i]]) <- name_columns(self$id, column_name, length(basis[[i]]))
+      }
 
-      basis
+      unlist(basis, recursive = FALSE)
     }
   )
 )

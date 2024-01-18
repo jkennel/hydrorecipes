@@ -30,13 +30,7 @@
 \if{latex}{\out{\hypertarget{method-step_subset_rows-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepSubsetRows$new(
-  ...,
-  row_numbers,
-  role = "modify",
-  skip = FALSE,
-  keep_original_cols = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepSubsetRows$new(terms, row_numbers, role = "modify", ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

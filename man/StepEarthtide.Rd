@@ -31,7 +31,7 @@
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StepEarthtide$new(
-  ...,
+  terms,
   do_predict = TRUE,
   method = "gravity",
   latitude = 0,
@@ -47,8 +47,7 @@
   scale = TRUE,
   n_thread = 1L,
   role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE
+  ...
 )}\if{html}{\out{</div>}}
 }
 

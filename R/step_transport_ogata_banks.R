@@ -38,37 +38,34 @@ StepTransportOgataBanks <- R6Class(
                           retardation = 1.0,
                           decay = 0.0,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE,
                           ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_transport_ogata_banks"
-      type         <- 'add'
-      enq <- rlang::enquos(time)
-      enq <- rlang::enquos(distance)
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize))
-      )
-      do.call(super$initialize, inputs)
+      time <- deparse(substitute(time))
+      distance <- deparse(substitute(distance))
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_transport_ogata_banks'
+      env_list$type <- 'add'
+      super$initialize(terms = c(as.symbol(time), as.symbol(distance)),
+                       env_list)
 
       # step specific values
-      self$time = enquos(time)
-      self$distance = enquos(distance)
+      self$time = time
+      self$distance = distance
       self$concentration_initial = concentration_initial
       self$velocity = velocity
       self$diffusion = diffusion
       self$retardation = retardation
       self$decay = decay
 
+      self$columns <- c(time, distance)
+
       invisible(self)
     },
 
     bake = function(new_data) {
 
-      ob <- ogata_banks(
+      ogata_banks_list(
         new_data[[1]],
         new_data[[2]],
         self$concentration_initial,
@@ -77,8 +74,6 @@ StepTransportOgataBanks <- R6Class(
         self$retardation,
         self$decay
       )
-
-      names(ob) <- file.path(self$id, new_data[[1]], fsep = '_')
 
     }
   )

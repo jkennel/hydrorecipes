@@ -53,23 +53,19 @@ StepAquiferPatch <- R6Class(
                           hydraulic_conductivity_outer = 1.0e-6,
                           n_stehfest = 12L,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE,
                           ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_aquifer_patch"
-      type         <- 'add'
-      enq <- rlang::enquos(time)
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize))
-      )
-      do.call(super$initialize, inputs)
+      time <- deparse(substitute(time))
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_aquifer_patch'
+      env_list$type <- 'add'
+      super$initialize(terms = c(as.symbol(time), as.symbol(flow_rate)),
+                       env_list)
 
       # step specific values
-      self$time = enquos(time)
+      self$time = time
+      self$columns = self$time
       self$flow_rate = flow_rate
 
       self$thickness = thickness
@@ -96,7 +92,7 @@ StepAquiferPatch <- R6Class(
 #(frecipes:::stehfest_barker_herbert(as.numeric(1:n),1.0, 100.0, 200.0, 1e-3, 1e-3, 1e-5, 1e-5, 12L)[[1]])
 
     bake = function(new_data) {
-      setNames(stehfest_barker_herbert(
+      setNames(gwr_barker_herbert(
           new_data[[1]],
           self$flow_rate,
           self$radius,

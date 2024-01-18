@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -70,287 +104,1111 @@ ul.task-list li input[type="checkbox"] {
 <section id="timings-frecipes-vs-recipes" class="level1">
 <h1>Timings <em>frecipes</em> vs <em>recipes</em></h1>
 <section id="creating-a-recipe" class="level2">
-<h2 class="anchored" data-anchor-id="creating-a-recipe">Creating a recipe</h2>
+<h2 class="anchored" data-anchor-id="creating-a-recipe">creating a recipe</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>relative <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1e2</span>, <span class="fl">1e4</span>, <span class="fl">1e6</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec =</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">rec  =</span> <span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100  60.68µs  64.12µs    15016.  788.45KB    11.9 
-2 rec            100   1.27ms   1.32ms      748.    1.32MB     8.20
-3 frec         10000  61.17µs  64.21µs    15243.        0B    10.2 
-4 rec          10000   1.27ms    1.3ms      752.   42.63KB     6.13
-5 frec       1000000  60.97µs  64.41µs    15182.        0B    10.4 
-6 rec        1000000   1.27ms   1.31ms      750.    3.82MB     8.22</code></pre>
+1 frec           100  58.88µs  61.83µs    15708.  880.29KB    10.2 
+2 rec            100   1.26ms    1.3ms      747.    1.34MB     8.24
+3 frec         10000  58.84µs  61.75µs    15952.        0B    10.2 
+4 rec          10000   1.26ms    1.3ms      745.   42.63KB     8.21
+5 frec       1000000  58.75µs  61.87µs    15802.        0B    10.4 
+6 rec        1000000   1.26ms   1.29ms      769.    3.82MB     8.22</code></pre>
 </div>
 </div>
 </section>
 <section id="add-a-step" class="level2">
-<h2 class="anchored" data-anchor-id="add-a-step">Add a step</h2>
+<h2 class="anchored" data-anchor-id="add-a-step">add a step</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec =</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(StepCenter<span class="sc">$</span><span class="fu">new</span>(x)),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">rec  =</span> {<span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>          <span class="fu">step_center</span>(x)},</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
-  expression    rows   min median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec           100  1      1         1.63     85.2      1.00
-2 rec            100  1.65   1.63      1         1        1   
-3 frec         10000  1      1         1.63      1        1.13
-4 rec          10000  1.63   1.64      1         3.52     1   
-5 frec       1000000  1      1         1.63      1        1   
-6 rec        1000000  1.65   1.64      1       302.       1.00</code></pre>
+  expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec           100 155.59µs 162.89µs     6087.    1.11MB    10.3 
+2 rec            100   1.32ms   1.35ms      737.   83.34KB     8.25
+3 frec         10000 156.87µs 162.81µs     6093.    3.02KB    10.6 
+4 rec          10000    1.3ms   1.32ms      749.   45.66KB     6.13
+5 frec       1000000 154.28µs 157.85µs     6255.    3.02KB    10.3 
+6 rec        1000000   1.29ms   1.33ms      739.    3.82MB     8.23</code></pre>
 </div>
 </div>
 </section>
 <section id="step_center-prep" class="level2">
 <h2 class="anchored" data-anchor-id="step_center-prep">step_center prep</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    frec <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepCenter<span class="sc">$</span><span class="fu">new</span>(x))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    rec  <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_center</span>(x)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>      frec<span class="sc">$</span><span class="fu">prep</span>(),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>      rec <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>(),</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
-  expression    rows   min median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec           100  1      1         9.77      1        1   
-2 rec            100  9.54   9.87      1        26.8      1.05
-3 frec         10000  1      1         9.59      1        1   
-4 rec          10000 10.1    9.95      1         1.89     1.49
-5 frec       1000000  1      1         6.03      1        1.26
-6 rec        1000000  6.57   6.10      1         1.67     1   </code></pre>
+  expression            rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;           &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec$prep()            100   81.8µs  83.93µs   11712.   144.45KB    10.3 
+2 recipes::prep(rec)     100   7.08ms   7.28ms     134.     3.97MB     8.91
+3 frec$prep()          10000  98.97µs 105.17µs    9375.    78.22KB    26.1 
+4 recipes::prep(rec)   10000   7.33ms   7.47ms     133.   240.62KB     6.33
+5 frec$prep()        1000000   2.14ms   2.35ms     416.     7.63MB   141.  
+6 recipes::prep(rec) 1000000  19.88ms  20.29ms      49.4   19.12MB    74.2 </code></pre>
 </div>
 </div>
 </section>
-<section id="step_center-bake" class="level2">
-<h2 class="anchored" data-anchor-id="step_center-bake">step_center bake</h2>
+<section id="step_center" class="level2">
+<h2 class="anchored" data-anchor-id="step_center">step_center</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x<span class="sc">+</span>z)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">z =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    frec <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepCenter<span class="sc">$</span><span class="fu">new</span>(x, <span class="at">fun =</span> fmean))</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    rec  <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_center</span>(x)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>      frec<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"tbl"</span>),</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>      rec <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>),</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
-  expression    rows   min median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec           100  1      1         8.44      1        1.14
-2 rec            100  8.54   8.91      1         1.89     1   
-3 frec         10000  1      1         9.02      1        1.32
-4 rec          10000  8.69   8.78      1         3.13     1   
-5 frec       1000000  1      1         4.95      1        1   
-6 rec        1000000  5.45   4.91      1         3.00     5.34</code></pre>
+  expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 "frec$prep()$bake()$data…   1e2 128.33µs 134.93µs    7005.     82.8KB     8.29
+2 "recipes::bake(recipes::…   1e2   7.95ms   8.16ms     121.    183.4KB     8.61
+3 "frec$prep()$bake()$data…   1e4 150.22µs 163.67µs    6057.    156.4KB    17.2 
+4 "recipes::bake(recipes::…   1e4    8.1ms   8.38ms     119.    250.9KB     6.36
+5 "frec$prep()$bake()$data…   1e6   2.82ms   3.36ms     298.     15.3MB   136.  
+6 "recipes::bake(recipes::…   1e6  22.02ms  22.99ms      42.4    19.1MB    38.5 </code></pre>
 </div>
 </div>
 </section>
-<section id="step_scale-bake" class="level2">
-<h2 class="anchored" data-anchor-id="step_scale-bake">step_scale bake</h2>
+<section id="step_scale" class="level2">
+<h2 class="anchored" data-anchor-id="step_scale">step_scale</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">z =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    frec <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepScale<span class="sc">$</span><span class="fu">new</span>(x, <span class="at">fun =</span> fsd, <span class="at">n_sd =</span> 2L))</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    rec  <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_scale</span>(x, <span class="at">factor =</span> 2L) </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>      frec<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"tbl"</span>),</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>      rec <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>),</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">5</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
-  expression    rows   min median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec           100  1      1         9.85      4.07     1   
-2 rec            100  9.61   9.87      1         1        1.43
-3 frec         10000  1      1         9.66      1        1.30
-4 rec          10000  9.63   9.67      1         1.64     1   
-5 frec       1000000  1      1         3.54      1        1.05
-6 rec        1000000  3.74   3.52      1         1.34     1   </code></pre>
+  expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 "frec$prep()$bake()$data…   1e2 132.22µs 138.87µs    7044.     46.9KB     8.19
+2 "recipes::bake(recipes::…   1e2   7.89ms   8.04ms     124.    134.2KB     8.70
+3 "frec$prep()$bake()$data…   1e4 177.61µs 190.12µs    5015.    158.9KB    10.6 
+4 "recipes::bake(recipes::…   1e4   7.99ms    8.1ms     122.    211.9KB     6.42
+5 "frec$prep()$bake()$data…   1e6   4.92ms    5.3ms     181.     15.3MB   103.  
+6 "recipes::bake(recipes::…   1e6   21.2ms  22.58ms      41.3    15.3MB    13.8 </code></pre>
 </div>
 </div>
 </section>
-<section id="step_normalize-bake" class="level2">
-<h2 class="anchored" data-anchor-id="step_normalize-bake">step_normalize bake</h2>
+<section id="step_intercept" class="level2">
+<h2 class="anchored" data-anchor-id="step_intercept">step_intercept</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    frec <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepIntercept<span class="sc">$</span><span class="fu">new</span>())</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    rec <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_intercept</span>()</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>      frec<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"tbl"</span>),</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>      rec <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>),</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">2</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 "frec$prep()$bake()$data…   1e2 119.76µs 129.52µs    6947.       896B     8.21
+2 "recipes::bake(recipes::…   1e2   8.27ms  10.38ms      88.3   93.34KB     4.20
+3 "frec$prep()$bake()$data…   1e4 129.64µs 145.22µs    6169.    78.22KB     8.30
+4 "recipes::bake(recipes::…   1e4   7.86ms   9.15ms     104.   123.72KB     6.50
+5 "frec$prep()$bake()$data…   1e6   1.33ms   1.76ms     546.     7.63MB    77.1 
+6 "recipes::bake(recipes::…   1e6  13.55ms  14.11ms      67.4    7.67MB    12.0 </code></pre>
+</div>
+</div>
+</section>
+<section id="step_normalize" class="level2">
+<h2 class="anchored" data-anchor-id="step_normalize">step_normalize</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x<span class="sc">+</span>z)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">z =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    frec1 <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepNormalize<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y, z)))</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    frec2 <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepCenter<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y, z)))<span class="sc">$</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepScale<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y, z)))</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    rec <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_normalize</span>(x, y, z)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>      frec1<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"tbl"</span>),</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>      frec2<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"tbl"</span>),</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>      rec <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>),</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">2</span>,</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">TRUE</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 7
-  expression    rows   min median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec1          100  1      1         7.47     14.5      1.29
-2 frec2          100  1.83   1.78      4.19      1        1.29
-3 rec            100  7.80   7.57      1         2.94     1   
-4 frec1        10000  1      1         6.95      1        1.27
-5 frec2        10000  1.74   1.73      4.10      1.18     1.27
-6 rec          10000  7.19   7.10      1         6.99     1   
-7 frec1      1000000  1      1         3.41      1        1.00
-8 frec2      1000000  1.11   1.11      3.05      1.00     1   
-9 rec        1000000  2.58   2.62      1         7.99     3.19</code></pre>
+  expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 "frec1$prep()$bake()$dat…   1e2 145.22µs 155.31µs    6059.     5.85KB     8.19
+2 "frec2$prep()$bake()$dat…   1e2 201.31µs    213µs    4513.     8.34KB    10.4 
+3 "recipes::bake(recipes::…   1e2   8.57ms   8.98ms     110.    96.69KB     6.44
+4 "frec1$prep()$bake()$dat…   1e4 297.91µs 323.33µs    3041.   315.23KB    17.1 
+5 "frec2$prep()$bake()$dat…   1e4 349.61µs 383.68µs    2605.   549.74KB    24.4 
+6 "recipes::bake(recipes::…   1e4   8.86ms   9.16ms     106.   686.38KB     6.47
+7 "frec1$prep()$bake()$dat…   1e6  17.25ms  17.76ms      56.1   30.52MB    98.2 
+8 "frec2$prep()$bake()$dat…   1e6  17.91ms  18.48ms      52.9   53.41MB    67.4 
+9 "recipes::bake(recipes::…   1e6  41.59ms  44.61ms      22.6   61.09MB    39.5 </code></pre>
 </div>
 </div>
 </section>
-<section id="step_lag-bake" class="level2">
-<h2 class="anchored" data-anchor-id="step_lag-bake">step_lag bake</h2>
+<section id="step_lag" class="level2">
+<h2 class="anchored" data-anchor-id="step_lag">step_lag</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">z =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    frec <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepLeadLag<span class="sc">$</span><span class="fu">new</span>(x, <span class="at">lag =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>))</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    rec  <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_lag</span>(x, <span class="at">lag =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unname</span>(frec<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"tbl"</span>)),</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unname</span>(rec <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>)),</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
-  expression    rows   min median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec           100  1      1         9.47      2.87     1.28
-2 rec            100  9.81   9.67      1         1        1   
-3 frec         10000  1      1         9.68      1        1   
-4 rec          10000  9.90   9.74      1         1.87     1.06
-5 frec       1000000  1      1         5.32      1        4.20
-6 rec        1000000  6.13   5.40      1         1.78     1   </code></pre>
+  expression                   rows     min  median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;                  &lt;dbl&gt; &lt;bch:t&gt; &lt;bch:t&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 "unname(frec$prep()$bake()…   1e2 164.5µs 182.4µs   5058.     97.74KB     8.43
+2 "unname(recipes::bake(reci…   1e2    10ms  12.4ms     81.6   279.56KB     6.61
+3 "unname(frec$prep()$bake()…   1e4 229.3µs 397.4µs   2335.      2.38MB    47.7 
+4 "unname(recipes::bake(reci…   1e4    11ms  13.3ms     73.5     5.88MB     4.20
+5 "unname(frec$prep()$bake()…   1e6  22.7ms  37.3ms     16.7   236.52MB    16.7 
+6 "unname(recipes::bake(reci…   1e6 114.9ms   133ms      6.17  576.14MB     9.25</code></pre>
 </div>
 </div>
 </section>
-<section id="step_distributed_lag-bake" class="level2">
-<h2 class="anchored" data-anchor-id="step_distributed_lag-bake">step_distributed_lag bake</h2>
+<section id="step_distributed_lag" class="level2">
+<h2 class="anchored" data-anchor-id="step_distributed_lag">step_distributed_lag</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> <span class="fu">c</span>(<span class="fl">1e6</span>, <span class="fl">1e7</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">z =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    frec <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepDistributedLag<span class="sc">$</span><span class="fu">new</span>(x,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">knots =</span> frecipes<span class="sc">:::</span><span class="fu">log_lags_arma</span>(<span class="dv">5</span>, <span class="dv">86401</span>)))</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    rec  <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>      hydrorecipes<span class="sc">::</span><span class="fu">step_distributed_lag</span>(x, </span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">knots =</span> frecipes<span class="sc">:::</span><span class="fu">log_lags_arma</span>(<span class="dv">5</span>, <span class="dv">86401</span>)) </span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unname</span>(frec<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"tbl"</span>)),</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unname</span>(rec <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>)),</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">2</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 7
+  expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 "unname(frec$prep()$bake…   1e6 148.95ms 155.15ms     6.19    65.66MB    1.55 
+2 "unname(recipes::bake(re…   1e6 361.13ms 362.85ms     2.76   601.11MB    2.76 
+3 "unname(frec$prep()$bake…   1e7    1.32s    1.34s     0.748  614.97MB    1.12 
+4 "unname(recipes::bake(re…   1e7    5.17s    5.37s     0.186    5.26GB    0.838</code></pre>
+</div>
+</div>
+</section>
+<section id="step_harmonic" class="level2">
+<h2 class="anchored" data-anchor-id="step_harmonic">step_harmonic</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">z =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    frec <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepHarmonic<span class="sc">$</span><span class="fu">new</span>(x, </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>                                <span class="at">frequency =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), </span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>                                <span class="at">cycle_size =</span> <span class="fl">0.1</span>, </span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>                                <span class="at">starting_value =</span> <span class="dv">0</span>))</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    rec  <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_harmonic</span>(x, </span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>                             <span class="at">frequency =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), </span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>                             <span class="at">cycle_size =</span> <span class="fl">0.1</span>, </span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>                             <span class="at">starting_val =</span> <span class="dv">0</span>,</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">keep_original_cols =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># sin and cos terms order is different</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unname</span>(frec<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"tbl"</span>)),</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unname</span>(rec <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>)),</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
-  expression    rows   min median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec           100  1      1        10.2       1        1.30
-2 rec            100  9.80   9.95      1         4.65     1   
-3 frec         10000  1      1         6.98      1        1   
-4 rec          10000  6.85   6.89      1         2.45     1.03
-5 frec       1000000  1      1         1.89      1        1   
-6 rec        1000000  1.87   1.87      1         2.35     1.32</code></pre>
+  expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 "unname(frec$prep()$bake…   1e2 152.68µs 177.65µs    5057.    13.55KB     8.29
+2 "unname(recipes::bake(re…   1e2   9.06ms  10.65ms      89.5  163.94KB     6.39
+3 "unname(frec$prep()$bake…   1e4 673.22µs 754.61µs    1290.   627.91KB     2.05
+4 "unname(recipes::bake(re…   1e4   9.43ms   9.92ms      96.6    1.89MB     6.44
+5 "unname(frec$prep()$bake…   1e6  57.35ms  58.29ms      17.2   61.04MB     0   
+6 "unname(recipes::bake(re…   1e6  86.67ms  90.29ms      11.1  183.16MB     2.78</code></pre>
 </div>
 </div>
 </section>
-<section id="step_harmonic-bake" class="level2">
-<h2 class="anchored" data-anchor-id="step_harmonic-bake">step_harmonic bake</h2>
+<section id="step_pca" class="level2">
+<h2 class="anchored" data-anchor-id="step_pca">step_pca</h2>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 7
-  expression    rows   min median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec           100  1      1         9.60      2.81     1.30
-2 rec            100 10.1    9.74      1         1        1   
-3 frec         10000  1      1         6.86      1        1   
-4 rec          10000  6.86   6.89      1         2.85     2.14
-5 frec       1000000  1      1         1.73      1        1   
-6 rec        1000000  1.57   1.63      1         2.82     1.54</code></pre>
-</div>
-</div>
-</section>
-<section id="step_pca-bake" class="level2">
-<h2 class="anchored" data-anchor-id="step_pca-bake">step_pca bake</h2>
-<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(x<span class="sc">~</span>a<span class="sc">+</span>b<span class="sc">+</span>c<span class="sc">+</span>d<span class="sc">+</span>e<span class="sc">+</span>f<span class="sc">+</span>g<span class="sc">+</span>h<span class="sc">+</span>i<span class="sc">+</span>j<span class="sc">+</span>k<span class="sc">+</span>l)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">a =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">b =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">c =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">d =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">e =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">f =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>                      <span class="at">g =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>                      <span class="at">h =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>                      <span class="at">i =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>                      <span class="at">j =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>                      <span class="at">k =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>                      <span class="at">l =</span> <span class="fu">rnorm</span>(rows)</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    frec1 <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepPca<span class="sc">$</span><span class="fu">new</span>(<span class="fu">all_numeric</span>(),</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>                           <span class="at">n_comp =</span> 12L))</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>    frec2 <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepPca<span class="sc">$</span><span class="fu">new</span>(<span class="fu">all_numeric</span>(),</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>                           <span class="at">n_comp =</span> 5L))</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>    frec3 <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepPca<span class="sc">$</span><span class="fu">new</span>(<span class="fu">all_numeric</span>(),</span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>                           <span class="at">n_comp =</span> 12L,</span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>                           <span class="at">center =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>                           <span class="at">scale =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>    frec4 <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepPca<span class="sc">$</span><span class="fu">new</span>(<span class="fu">all_numeric</span>(),</span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>                           <span class="at">n_comp =</span> 5L,</span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>                           <span class="at">center =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>                           <span class="at">scale =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>    rec1  <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_pca</span>(recipes<span class="sc">::</span><span class="fu">all_numeric</span>(),</span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>                        <span class="at">num_comp =</span> 12L,</span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>                        <span class="at">options =</span> <span class="fu">list</span>(<span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>    rec2  <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_pca</span>(recipes<span class="sc">::</span><span class="fu">all_numeric</span>(),</span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>                        <span class="at">num_comp =</span> 5L,</span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>                        <span class="at">options =</span> <span class="fu">list</span>(<span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a>    rec3  <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_pca</span>(recipes<span class="sc">::</span><span class="fu">all_numeric</span>(),</span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>                        <span class="at">num_comp =</span> 12L)</span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>    rec4  <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_pca</span>(recipes<span class="sc">::</span><span class="fu">all_numeric</span>(),</span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>                        <span class="at">num_comp =</span> 5L) </span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a>      frec1<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>(),</span>
+<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a>      frec2<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>(),</span>
+<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a>      frec3<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>(),</span>
+<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a>      frec4<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>(),</span>
+<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a>      rec1 <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>),</span>
+<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>      rec2 <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>),</span>
+<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>      rec3 <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>),</span>
+<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a>      rec4 <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>),</span>
+<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
+<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">2</span></span>
+<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(results, <span class="at">n =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 24 × 14
-   expression    rows   min median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc
-   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
- 1 frec1          100  1.03   1.04      9.80     14.2      1.28   376     4
- 2 frec2          100  1.01   1.01     10.1       1.05     1.27   393     4
- 3 frec3          100  1.01   1.00     10.2       1.27     1.27   395     4
- 4 frec4          100  1      1        10.1       1        1.28   387     4
- 5 rec1           100  9.96   9.99      1        12.7      1.36    36     4
- 6 rec2           100  9.74   9.63      1.06      6.06     1       39     3
- 7 rec3           100  9.77   9.71      1.05      3.66     1.36    38     4
- 8 rec4           100  9.46   9.43      1.09      3.25     1.37    39     4
- 9 frec1        10000  1.57   1.53      6.53      1.38     1.58   135     4
-10 frec2        10000  1.37   1.28      7.81      1.00     1.16   164     3
-11 frec3        10000  1.26   1.22      8.16      1.38     1.99   167     5
-12 frec4        10000  1      1        10.1       1        1.97   209     5
-13 rec1         10000 11.5   10.4       1         8.52     1.81    18     4
-14 rec2         10000 11.1   10.3       1.01      7.95     1.65    15     3
-15 rec3         10000  9.38   8.48      1.23      3.46     1       20     2
-16 rec4         10000  9.05   8.19      1.28      2.90     1.25    25     3
-17 frec1      1000000  2.07   2.04      5.98      1.38     2.53     3     5
-18 frec2      1000000  1.60   1.57      6.53      1.00     2.21     3     4
-19 frec3      1000000  1.55   1.55      7.85      1.38     1.99     4     4
-20 frec4      1000000  1      1        12.2       1        2.48     5     4
-21 rec1       1000000 12.6   12.1       1         8.55     2.03     1     8
-22 rec2       1000000 11.6   11.1       1.09      7.99     2.50     1     9
-23 rec3       1000000  8.31   7.98      1.52      3.46     1.16     1     3
-24 rec4       1000000  6.42   6.17      1.97      2.89     1        1     2
+   expression    rows      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc
+   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
+ 1 frec1$prep(…   1e2 252.97µs 268.04µs  3668.     159.69KB    8.44   1738     4
+ 2 frec2$prep(…   1e2 236.65µs 248.66µs  3990.      40.31KB    8.30   1922     4
+ 3 frec3$prep(…   1e2 229.27µs 240.34µs  4137.      41.87KB    8.30   1993     4
+ 4 frec4$prep(…   1e2    213µs 224.37µs  4419.      27.05KB    8.41   2102     4
+ 5 recipes::ba…   1e2   9.85ms  10.03ms    98.6    675.81KB    8.77     45     4
+ 6 recipes::ba…   1e2   9.51ms   9.76ms   100.     312.55KB    8.89     45     4
+ 7 recipes::ba…   1e2   9.74ms   9.92ms   100.     182.79KB    8.74     46     4
+ 8 recipes::ba…   1e2   9.34ms   9.53ms   101.     159.88KB    6.48     47     3
+ 9 frec1$prep(…   1e4   1.82ms    2.1ms   466.       3.91MB    2.07    225     1
+10 frec2$prep(…   1e4   1.53ms   1.67ms   557.       2.83MB    0       280     0
+11 frec3$prep(…   1e4   1.16ms   1.47ms   627.       2.91MB    2.19    286     1
+12 frec4$prep(…   1e4 796.47µs 945.64µs   960.       1.84MB    2.11    456     1
+13 recipes::ba…   1e4  19.98ms  20.36ms    49.1     23.21MB    3.51     14     1
+14 recipes::ba…   1e4  19.22ms  19.55ms    50.6     21.61MB    4.40     23     2
+15 recipes::ba…   1e4   15.5ms  15.79ms    63.5      8.83MB    4.38     29     2
+16 recipes::ba…   1e4  14.67ms   14.9ms    66.7      7.22MB    6.67     30     3
+17 frec1$prep(…   1e6 204.28ms 220.76ms     4.48   389.11MB    1.49      3     1
+18 frec2$prep(…   1e6 153.63ms 156.31ms     6.41    282.3MB    0         4     0
+19 frec3$prep(…   1e6 137.53ms  138.4ms     6.95   289.93MB    1.74      4     1
+20 frec4$prep(…   1e6     86ms  86.55ms    11.0    183.11MB    1.84      6     1
+21 recipes::ba…   1e6    1.07s    1.14s     0.876    2.26GB    1.75      2     4
+22 recipes::ba…   1e6    1.01s    1.01s     0.990     2.1GB    0.990     2     2
+23 recipes::ba…   1e6 640.87ms 654.63ms     1.53   873.66MB    0.764     2     1
+24 recipes::ba…   1e6 577.47ms 651.35ms     1.54   713.43MB    0.768     2     1
 # ℹ 5 more variables: total_time &lt;bch:tm&gt;, result &lt;list&gt;, memory &lt;list&gt;,
 #   time &lt;list&gt;, gc &lt;list&gt;</code></pre>
 </div>
 </div>
 </section>
-<section id="step_dummy-bake" class="level2">
-<h2 class="anchored" data-anchor-id="step_dummy-bake">step_dummy bake</h2>
+<section id="step_dummy" class="level2">
+<h2 class="anchored" data-anchor-id="step_dummy">step_dummy</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">qF</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, rows, <span class="at">replace =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">z =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec =</span> <span class="fu">unname</span>(Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">add_step</span>(StepDummy<span class="sc">$</span><span class="fu">new</span>(y))<span class="sc">$</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">bake</span>()<span class="sc">$</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">data</span>(<span class="st">'tbl'</span>)),</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">rec  =</span> <span class="fu">unname</span>(recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>                      recipes<span class="sc">::</span><span class="fu">step_dummy</span>(y, <span class="at">keep_original_cols =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>                      recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>                      recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>)),</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">1</span></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
-  expression    rows   min median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec           100   1      1        10.2      1.12     1   
-2 rec            100  10.6   10.4       1        1        1.07
-3 frec         10000   1      1        18.0      1        1.90
-4 rec          10000  18.4   18.0       1       12.5      1   
-5 frec       1000000   1      1       112.       1        3.89
-6 rec        1000000 219.   169.        1       10.9      1   </code></pre>
+  expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec           100 371.71µs 388.09µs  2528.     590.14KB     8.46
+2 rec            100  10.81ms  10.99ms    90.6    510.12KB     8.84
+3 frec         10000 413.16µs  450.3µs  2219.     435.72KB     8.41
+4 rec          10000  20.07ms  20.44ms    48.8      6.11MB     4.43
+5 frec       1000000    5.9ms   7.26ms   142.      49.97MB     4.81
+6 rec        1000000    1.09s    1.09s     0.914  606.35MB     0   </code></pre>
 </div>
 </div>
 </section>
-<section id="step_find_interval-bake" class="level2">
-<h2 class="anchored" data-anchor-id="step_find_interval-bake">step_find_interval bake</h2>
+<section id="step_find_interval" class="level2">
+<h2 class="anchored" data-anchor-id="step_find_interval">step_find_interval</h2>
 <ul>
 <li>no direct comparison so compare to step_cut</li>
 </ul>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">z =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec =</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(StepFindInterval<span class="sc">$</span><span class="fu">new</span>(x, <span class="at">vec =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.1</span>, <span class="dv">0</span>, <span class="fl">0.1</span>)))<span class="sc">$</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bake</span>(),</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">rec  =</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>        recipes<span class="sc">::</span><span class="fu">step_cut</span>(x, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.1</span>, <span class="dv">0</span>, <span class="fl">0.1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># step_dummy(x) |&gt;</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>        recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>        recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>),</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">1</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
-  expression    rows   min median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec           100  1      1         9.74      2.97     1   
-2 rec            100 10.0   10.0       1         1        1.60
-3 frec         10000  1      1         9.51      1        1   
-4 rec          10000  9.44   9.31      1         1.74     1.67
-5 frec       1000000  1      1         5.42      1        2.96
-6 rec        1000000  5.91   5.39      1         1.63     1   </code></pre>
+  expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec           100 363.55µs  380.3µs    2581.    570.7KB    14.8 
+2 rec            100   9.85ms     10ms      99.3   198.1KB     6.62
+3 frec         10000 469.98µs  497.4µs    2007.    279.3KB     8.53
+4 rec          10000  10.34ms   10.5ms      94.8   570.2KB     6.61
+5 frec       1000000  11.63ms   11.9ms      83.4    26.7MB     0   
+6 rec        1000000  54.57ms   55.8ms      18.0    49.7MB     2.25</code></pre>
 </div>
 </div>
 </section>
-<section id="step_varying-bake" class="level2">
-<h2 class="anchored" data-anchor-id="step_varying-bake">step_varying bake</h2>
+<section id="step_varying" class="level2">
+<h2 class="anchored" data-anchor-id="step_varying">step_varying</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x<span class="sc">+</span>z)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rep</span>(<span class="dv">1</span>, rows), </span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">z =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec =</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(StepVarying<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y, z)))<span class="sc">$</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bake</span>()<span class="sc">$</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">data</span>(<span class="st">"tbl"</span>),</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">rec  =</span> <span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">step_zv</span>(x, y, z) <span class="sc">|&gt;</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">prep</span>() <span class="sc">|&gt;</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>),</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">1</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
-  expression    rows   min median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec           100  1      1         7.69      4.86     1.50
-2 rec            100  7.88   7.83      1         1        1   
-3 frec         10000  1      1         8.34      1        1.50
-4 rec          10000  8.37   8.40      1        10.1      1   
-5 frec       1000000  1      1        18.5       1        1   
-6 rec        1000000 19.9   18.6       1        10.1      1.54</code></pre>
+  expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec           100 337.59µs 346.78µs    2867.    594.3KB    10.6 
+2 rec            100  10.26ms  10.57ms      93.7  126.38KB     6.53
+3 frec         10000 358.01µs 370.58µs    2667.   122.84KB     8.53
+4 rec          10000  10.73ms  10.95ms      91.1    1.36MB     9.34
+5 frec       1000000   2.36ms   2.88ms     351.    11.45MB     2.06
+6 rec        1000000  71.56ms  71.97ms      13.9  115.63MB     0   </code></pre>
 </div>
 </div>
 </section>
-<section id="mulitple-steps" class="level2">
-<h2 class="anchored" data-anchor-id="mulitple-steps">Mulitple steps</h2>
+<section id="step_kernel_filter" class="level2">
+<h2 class="anchored" data-anchor-id="step_kernel_filter">step_kernel_filter</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RcppRoll)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x<span class="sc">+</span>z)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> <span class="fu">c</span>(<span class="fl">1e5</span>, <span class="fl">1e6</span>),</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rep</span>(<span class="dv">1</span>, rows), </span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows,</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">z =</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(rows)))</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec =</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(StepKernelFilter<span class="sc">$</span><span class="fu">new</span>(z, </span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">kernel =</span> <span class="fu">list</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">5001</span>)<span class="sc">/</span><span class="dv">5001</span>), <span class="at">align =</span> <span class="st">"center"</span>))<span class="sc">$</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bake</span>()<span class="sc">$</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">data</span>(<span class="st">"tbl"</span>),</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">rec  =</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>        recipes<span class="sc">::</span><span class="fu">step_window</span>(z, <span class="at">size =</span> <span class="dv">5001</span>, <span class="at">statistic =</span> <span class="st">"mean"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>        recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>        recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>),</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">1</span>,</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> <span class="cn">TRUE</span></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 7
+<pre><code># A tibble: 4 × 7
   expression    rows   min median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec           100  1      1         7.43      1        1.50
-2 rec            100  7.69   7.56      1         3.97     1   
-3 frec         10000  1      1         6.63      1        1   
-4 rec          10000  6.67   6.65      1         2.81     1.03
-5 frec       1000000  1      1         2.77      1        1.06
-6 rec        1000000  3.39   3.24      1         2.77     1   </code></pre>
+1 frec        100000    1      1       256.      1.85      Inf
+2 rec         100000  278.   268.        1       1         NaN
+3 frec       1000000    1      1       415.      1.66      NaN
+4 rec        1000000  428.   419.        1       1         NaN</code></pre>
 </div>
 </div>
 </section>
-<section id="step_b_spline-bake" class="level2">
-<h2 class="anchored" data-anchor-id="step_b_spline-bake">step_b_spline bake</h2>
+<section id="multiple-steps" class="level2">
+<h2 class="anchored" data-anchor-id="multiple-steps">multiple steps</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows), </span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows)</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    frec <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepLeadLag<span class="sc">$</span><span class="fu">new</span>(x, <span class="at">lag =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>))<span class="sc">$</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepHarmonic<span class="sc">$</span><span class="fu">new</span>(x, </span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>                                <span class="at">frequency =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>), </span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>                                <span class="at">cycle_size =</span> <span class="fl">0.1</span>, </span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>                                <span class="at">starting_value =</span> <span class="dv">0</span>))<span class="sc">$</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepCenter<span class="sc">$</span><span class="fu">new</span>(x))</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    rec  <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_lag</span>(x, <span class="at">lag =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">keep_original_cols =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_harmonic</span>(x, </span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>                             <span class="at">frequency =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>), </span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">cycle_size =</span> <span class="fl">0.1</span>, </span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>                             <span class="at">starting_val =</span> <span class="dv">0</span>,</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>                             <span class="at">keep_original_cols =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_center</span>(x)</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>      frec<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"tbl"</span>),</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>      rec <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>),</span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">1</span></span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
-  expression    rows   min median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec           100  1      1        10.3       1.31     1.02
-2 rec            100 11.0   10.2       1         1        1   
-3 frec         10000  1      1        10.1       1        1   
-4 rec          10000 10.4   10.2       1         7.13     1.05
-5 frec       1000000  1      1         7.55      1        1.39
-6 rec        1000000  8.16   9.21      1         7.17     1   </code></pre>
+  expression                   rows     min  median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;                  &lt;dbl&gt; &lt;bch:t&gt; &lt;bch:t&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 "frec$prep()$bake()$data(\…   1e2 288.6µs 302.9µs   3265.     29.56KB     8.52
+2 "recipes::bake(recipes::pr…   1e2  17.8ms  18.1ms     55.2   243.69KB     9.61
+3 "frec$prep()$bake()$data(\…   1e4 853.2µs 950.7µs   1051.      1.77MB     4.20
+4 "recipes::bake(recipes::pr…   1e4  19.1ms  19.6ms     50.7     5.15MB     7.24
+5 "frec$prep()$bake()$data(\…   1e6  73.6ms  75.4ms     13.2   175.49MB     2.20
+6 "recipes::bake(recipes::pr…   1e6 162.8ms 165.3ms      6.05   496.1MB     3.02</code></pre>
 </div>
 </div>
 </section>
+<section id="step_spline_b" class="level2">
+<h2 class="anchored" data-anchor-id="step_spline_b">step_spline_b</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    ik <span class="ot">&lt;-</span> <span class="fu">fquantile</span>(dat<span class="sc">$</span>x, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    bk <span class="ot">&lt;-</span> ik[<span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(ik))]</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    ik <span class="ot">&lt;-</span> ik[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(ik))]</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    frec <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepSplineB<span class="sc">$</span><span class="fu">new</span>(x, <span class="at">df =</span> <span class="dv">13</span>))</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    rec  <span class="ot">=</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>      recipes<span class="sc">::</span><span class="fu">step_spline_b</span>(x, <span class="at">deg_free =</span> <span class="dv">13</span>)</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>      frec<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>(),</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>      rec <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">prep</span>() <span class="sc">|&gt;</span> recipes<span class="sc">::</span><span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>),</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec$prep()$bake()          1e2 161.13µs 170.97µs   5705.      20.5KB     8.59
+2 recipes::bake(recipes::p…   1e2   9.22ms   9.52ms    105.    362.36KB     9.09
+3 frec$prep()$bake()          1e4 709.55µs 776.85µs   1287.      1.15MB     2.06
+4 recipes::bake(recipes::p…   1e4  10.59ms  11.02ms     89.6     4.53MB     6.72
+5 frec$prep()$bake()          1e6  78.72ms  81.62ms     12.2   114.44MB     3.05
+6 recipes::bake(recipes::p…   1e6 214.26ms 218.62ms      4.56  446.38MB     3.80</code></pre>
+</div>
+</div>
+</section>
+<section id="step_aquifer_grf-step_aquifer_theis" class="level2">
+<h2 class="anchored" data-anchor-id="step_aquifer_grf-step_aquifer_theis">step_aquifer_grf &amp; step_aquifer_theis</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows),</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">rep</span>(<span class="fl">0.01</span>, rows))</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> <span class="fu">unname</span>(Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">add_step</span>(StepAquiferGRF<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">flow_rate =</span> y))<span class="sc">$</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">bake</span>()<span class="sc">$</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">data</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec2 =</span> <span class="fu">unname</span>(Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">add_step</span>(StepAquiferTheis<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">flow_rate =</span> y))<span class="sc">$</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">bake</span>()<span class="sc">$</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">data</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative)</span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec1          100  433.8µs 449.61µs    2182.    894.5KB     8.41
+2 frec2          100  476.4µs 496.43µs    1999.    544.3KB     8.28
+3 frec1        10000  943.5µs   1.27ms     810.    403.3KB     2.04
+4 frec2        10000      1ms   1.14ms     834.    326.2KB     4.14
+5 frec1      1000000   84.4ms  85.38ms      11.7    38.2MB     0   
+6 frec2      1000000     83ms  85.45ms      11.7    30.5MB     0   </code></pre>
+</div>
+</div>
+</section>
+<section id="step_aquifer_leaky" class="level2">
+<h2 class="anchored" data-anchor-id="step_aquifer_leaky">step_aquifer_leaky</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows),</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">rep</span>(<span class="fl">0.01</span>, rows))</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> <span class="fu">unname</span>(Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">add_step</span>(StepAquiferLeaky<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">flow_rate =</span> y,</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">leakage =</span> <span class="dv">10000000</span>))<span class="sc">$</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">bake</span>()<span class="sc">$</span></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">data</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec2 =</span> <span class="fu">unname</span>(Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">add_step</span>(StepAquiferTheis<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">flow_rate =</span> y))<span class="sc">$</span></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">bake</span>()<span class="sc">$</span></span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">data</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative)</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec1          100 431.16µs 444.03µs    2238.    573.1KB     8.56
+2 frec2          100 477.04µs 494.58µs    2000.     16.8KB     8.38
+3 frec1        10000   1.01ms   1.27ms     777.      479KB     2.03
+4 frec2        10000   1.02ms   1.12ms     864.    326.2KB     4.30
+5 frec1      1000000  90.69ms  91.77ms      10.9    45.8MB     0   
+6 frec2      1000000  83.65ms  84.78ms      11.8    30.5MB     0   </code></pre>
+</div>
+</div>
+</section>
+<section id="step_aquifer_patch" class="level2">
+<h2 class="anchored" data-anchor-id="step_aquifer_patch">step_aquifer_patch</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> <span class="fu">c</span>(<span class="fl">1e5</span>),</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows),</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">rep</span>(<span class="fl">0.01</span>, rows))</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> <span class="fu">unname</span>(Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">add_step</span>(StepAquiferGRF<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">flow_rate =</span> y))<span class="sc">$</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">bake</span>()<span class="sc">$</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">data</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec3 =</span> <span class="fu">unname</span>(Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">add_step</span>(StepAquiferPatch<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">flow_rate =</span> <span class="fl">0.01</span>,</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">thickness =</span> <span class="fl">1.0</span>,</span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">radius =</span> <span class="fl">100.0</span>,</span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">radius_patch =</span> <span class="fl">200.0</span>,</span>
+<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">specific_storage_inner =</span> <span class="fl">1e-6</span>,</span>
+<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">specific_storage_outer =</span> <span class="fl">1e-6</span>,</span>
+<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">hydraulic_conductivity_inner =</span> <span class="fl">1e-4</span>,</span>
+<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">hydraulic_conductivity_outer =</span> <span class="fl">1e-4</span>,</span>
+<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">n_stehfest =</span> 8L</span>
+<span id="cb39-26"><a href="#cb39-26" aria-hidden="true" tabindex="-1"></a>                       ))<span class="sc">$</span></span>
+<span id="cb39-27"><a href="#cb39-27" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb39-28"><a href="#cb39-28" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">bake</span>()<span class="sc">$</span></span>
+<span id="cb39-29"><a href="#cb39-29" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">data</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb39-30"><a href="#cb39-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb39-31"><a href="#cb39-31" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative)</span>
+<span id="cb39-32"><a href="#cb39-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb39-33"><a href="#cb39-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb39-34"><a href="#cb39-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-35"><a href="#cb39-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-36"><a href="#cb39-36" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 7
+  expression   rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;  &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec1      100000   5.68ms    6.5ms    155.      3.83MB        0
+2 frec3      100000 147.65ms  147.8ms      6.76     2.1MB        0</code></pre>
+</div>
+</div>
+</section>
+<section id="step_vadose_weeks" class="level2">
+<h2 class="anchored" data-anchor-id="step_vadose_weeks">step_vadose_weeks</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows), </span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows))</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> (Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(StepVadoseWeeks<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x, </span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">air_diffusivity =</span> <span class="fl">0.8</span>, </span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">thickness =</span> <span class="dv">5</span>, </span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">precision =</span> <span class="fl">1e-12</span>))<span class="sc">$</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">bake</span>()<span class="sc">$</span></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">data</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span></span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 7
+  expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec1          100 335.46µs 348.46µs     2834.   559.4KB    11.0 
+2 frec1        10000 406.27µs 426.73µs     2323.     320KB     6.24
+3 frec1      1000000   6.26ms   6.83ms      146.    30.5MB     2.09</code></pre>
+</div>
+</div>
+</section>
+<section id="step_transport_ogata_banks" class="level2">
+<h2 class="anchored" data-anchor-id="step_transport_ogata_banks">step_transport_ogata_banks</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">expand.grid</span>(<span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows),<span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)))</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">names</span>(dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'x'</span>, <span class="st">'y'</span>)</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> (Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(StepTransportOgataBanks<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>                                                      <span class="at">distance =</span> y))<span class="sc">$</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">bake</span>()<span class="sc">$</span></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">data</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 7
+  expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec1          100 377.73µs  391.8µs   2500.    582.26KB     8.50
+2 frec1        10000   3.83ms   4.05ms    245.      1.53MB     0   
+3 frec1      1000000 184.34ms 188.71ms      5.32   152.6MB     1.33</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="step_pgram-and-step_welch" class="level1">
+<h1>step_pgram and step_welch</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x <span class="sc">+</span> z)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), <span class="at">y =</span> <span class="fu">rnorm</span>(rows), <span class="at">z =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">q =</span> <span class="fu">rnorm</span>(rows), <span class="at">r =</span> <span class="fu">rnorm</span>(rows), <span class="at">s =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    frec1 <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepPgram<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y), </span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>                             <span class="dv">3</span>,</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">FALSE</span>,</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>                             <span class="fl">0.1</span>))</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>    frec3 <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepPgram<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y), </span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>                             <span class="dv">3</span>,</span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>                             <span class="fl">0.1</span>))</span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>    frec2 <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepWelch<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y),</span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>                             <span class="at">length_subset =</span>  <span class="fu">nrow</span>(dat) <span class="sc">/</span> <span class="dv">10</span>,</span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>                             <span class="at">overlap =</span> <span class="fl">0.60</span>,</span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>                             <span class="at">window =</span> <span class="fu">window_nuttall</span>(<span class="fu">nrow</span>(dat) <span class="sc">/</span> <span class="dv">10</span>)))</span>
+<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a>      frec3<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"dt"</span>),</span>
+<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a>      frec1<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"dt"</span>),</span>
+<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a>      frec2<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"dt"</span>),</span>
+<span id="cb45-31"><a href="#cb45-31" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb45-32"><a href="#cb45-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">3</span></span>
+<span id="cb45-33"><a href="#cb45-33" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb45-34"><a href="#cb45-34" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb45-35"><a href="#cb45-35" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb45-36"><a href="#cb45-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-37"><a href="#cb45-37" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 7
+  expression                   rows     min  median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;                  &lt;dbl&gt; &lt;bch:t&gt; &lt;bch:t&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 "frec3$prep()$bake()$data(…   1e2 196.6µs 219.1µs    4424.    23.45KB     6.57
+2 "frec1$prep()$bake()$data(…   1e2 196.9µs 217.1µs    4457.    24.34KB     6.74
+3 "frec2$prep()$bake()$data(…   1e2 183.5µs 190.6µs    5123.     14.7KB     8.97
+4 "frec3$prep()$bake()$data(…   1e4 695.7µs 916.5µs     924.     1.15MB     2.07
+5 "frec1$prep()$bake()$data(…   1e4 675.4µs   994µs     792.     1.45MB     2.13
+6 "frec2$prep()$bake()$data(…   1e4 929.5µs 966.1µs    1021.   335.19KB     2.09
+7 "frec3$prep()$bake()$data(…   1e6    65ms  66.5ms      14.8  114.45MB     2.46
+8 "frec1$prep()$bake()$data(…   1e6  69.6ms  74.5ms      13.4  144.96MB     2.24
+9 "frec2$prep()$bake()$data(…   1e6  58.5ms  62.1ms      15.8   32.05MB     2.26</code></pre>
+</div>
+</div>
+</section>
+<section id="step_transfer_welch-and-step_transfer_pgram" class="level1">
+<h1>step_transfer_welch and step_transfer_pgram</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), <span class="at">y =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    frec1 <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepTransferPgram<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y), </span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>                                     <span class="dv">3</span>,</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>                                     <span class="cn">TRUE</span>,</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>                                     <span class="cn">TRUE</span>,</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>                                     <span class="fl">0.1</span>))</span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>    frec2 <span class="ot">=</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(StepTransferWelch<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y),</span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">length_subset =</span>  <span class="fu">nrow</span>(dat) <span class="sc">/</span> <span class="dv">10</span>,</span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">overlap =</span> <span class="fl">0.60</span>,</span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">window =</span> <span class="fu">window_nuttall</span>(<span class="fu">nrow</span>(dat) <span class="sc">/</span> <span class="dv">10</span>)))</span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(frec1<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"dt"</span>),</span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>                frec2<span class="sc">$</span><span class="fu">prep</span>()<span class="sc">$</span><span class="fu">bake</span>()<span class="sc">$</span><span class="fu">data</span>(<span class="st">"dt"</span>),</span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">min_iterations =</span> <span class="dv">2</span></span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 "frec1$prep()$bake()$dat…   1e2 220.33µs 271.26µs   3234.      17.1KB     4.25
+2 "frec2$prep()$bake()$dat…   1e2 208.49µs 223.33µs   4367.        14KB     8.93
+3 "frec1$prep()$bake()$dat…   1e4   1.33ms   1.88ms    447.     553.8KB     0   
+4 "frec2$prep()$bake()$dat…   1e4   1.05ms   1.12ms    807.     272.5KB     2.07
+5 "frec1$prep()$bake()$dat…   1e6 126.26ms 130.84ms      7.58    53.4MB     0   
+6 "frec2$prep()$bake()$dat…   1e6  63.98ms  67.57ms     14.8     25.9MB     2.11</code></pre>
+</div>
+</div>
 </section>
 <section id="check" class="level1">
 <h1>check</h1>
 <section id="step_check_spacing" class="level2">
 <h2 class="anchored" data-anchor-id="step_check_spacing">step_check_spacing</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows)</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>    dat[<span class="dv">9</span>, <span class="st">"x"</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>    dat[<span class="dv">9</span>, <span class="st">"y"</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(StepCheckSpacing<span class="sc">$</span><span class="fu">new</span>(y))<span class="sc">$</span></span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(StepCheckNA<span class="sc">$</span><span class="fu">new</span>(y))<span class="sc">$</span></span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bake</span>(),</span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec2 =</span> Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(StepCheckSpacing<span class="sc">$</span><span class="fu">new</span>(x))<span class="sc">$</span></span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(StepCheckNA<span class="sc">$</span><span class="fu">new</span>(x))<span class="sc">$</span></span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bake</span>(),</span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
+<span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span></span>
+<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-28"><a href="#cb49-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-29"><a href="#cb49-29" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
-  expression    rows   min median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 frec1          100  1.01   1.01      1        37.0      1.15
-2 frec2          100  1      1         1.01      1        1   
-3 frec1        10000  1.01   1.02      1         1        1   
-4 frec2        10000  1      1         1.02      1.17     1.00
-5 frec1      1000000  1.92   1.93      1         1        1   
-6 frec2      1000000  1      1         1.90      1.20     3.37</code></pre>
+  expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec1          100 480.85µs 496.18µs    1965.     1.09MB    12.1 
+2 frec2          100 481.67µs 495.59µs    1968.    10.24KB    11.5 
+3 frec1        10000 510.98µs 536.53µs    1831.    243.1KB     9.03
+4 frec2        10000  531.2µs  554.4µs    1770.   164.93KB    11.6 
+5 frec1      1000000   4.64ms   4.93ms     199.     22.9MB     4.58
+6 frec2      1000000   9.17ms   9.97ms      99.0   15.27MB     2.15</code></pre>
 </div>
 </div>
 <!-- ```{r} -->

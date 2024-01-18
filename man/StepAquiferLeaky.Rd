@@ -46,12 +46,10 @@ Other aquifer:
   flow_rate,
   leakage = 100,
   radius = 100,
-  storativity = 1e-05,
+  storativity = 1e-06,
   transmissivity = 1e-04,
   max_terms = 20,
   role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE,
   ...
 )}\if{html}{\out{</div>}}
 }

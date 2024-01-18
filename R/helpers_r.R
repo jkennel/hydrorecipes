@@ -20,17 +20,22 @@ pad_num <- function(n, pad = "0") {
 
 }
 
-create_new_column_names <- function(self, len = 1) {
+name_columns <- function(id, column_name, n) {
+  if (is.null(column_name)) {
+    if (n < 2) {
+      return(file.path(id, fsep = '_'))
+    }
+    return(file.path(id, pad_num(n), fsep = '_'))
+  }
+  if (n < 2) {
+    return(file.path(id, column_name, fsep = '_'))
+  }
 
-  new_columns <-
-    file.path(
-      self$id,
-      pad_num(len),
-      fsep = "_"
-    )
+  file.path(id, column_name, pad_num(n), fsep = '_')
 
-  new_columns
 }
+
+
 
 
 #' Make a random identification field for steps

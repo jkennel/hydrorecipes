@@ -17,39 +17,39 @@ StepNormalize <- R6Class(
     scale = c(),
     na_rm = NA,
     # step specific variables
-    initialize = function(...,
+    initialize = function(terms,
                           role = "predictor",
-                          skip = FALSE,
                           na_rm = TRUE,
-                          keep_original_cols = FALSE) {
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_normalize"
-      type         <- 'modify'
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_normalize'
+      env_list$type <- 'modify'
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
+
 
       self$na_rm <- na_rm
 
       invisible(self)
     },
-    prep = function(new_data) {
+    prep = function(new_data, info) {
+      super$prep(new_data, info)
 
-      self$center <- collapse::fmean(new_data,
-                                     na.rm = self$na_rm)
-      self$scale <- collapse::fsd(new_data,
-                                  na.rm = self$na_rm)
+      self$center <- collapse::fmean(unclass(new_data)[self$columns],
+                                     na.rm = self$na_rm,
+                                     drop = TRUE)
+      self$scale <- collapse::fsd(unclass(new_data)[self$columns],
+                                  na.rm = self$na_rm,
+                                     drop = TRUE)
     },
     # subtract the central value from a column
     bake = function(new_data) {
 
-      for(i in seq_along(self$columns)) {
-        new_data[[i]] %-=% self$center[i]
-        new_data[[i]] %*=% (1.0 / self$scale[i])
+      for (i in seq_along(self$columns)) {
+        new_data[[i]] = (new_data[[i]] - self$center[i]) * (1.0 / self$scale[i])
       }
 
       # fscale(new_data, self$center, self$scale)

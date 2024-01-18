@@ -6,11 +6,11 @@ int check_lag(int n,
               int lag,
               int n_shift) {
 
-  if(lag - n_shift > n) {
+  if (lag - n_shift > n) {
     throw std::range_error(
         "lag + n_shift cannot be greater than series length");
   }
-  if(n_shift == 0) {
+  if (n_shift == 0) {
     return(lag);
   } else {
     return(lag - n_shift);
@@ -25,10 +25,10 @@ int get_length(int n,
   int n_out;
 
   // Get length
-  if(n_subset == 1){
+  if (n_subset == 1){
     n_out = n;
   } else {
-    if((n % n_subset) != 0) {
+    if ((n % n_subset) != 0) {
       n_out = (n / n_subset) + 1;
     } else {
       n_out = (n / n_subset);
@@ -46,14 +46,14 @@ int get_start(int n_out,
   int start;
 
   // bounds
-  if((lag % n_subset) != 0) {
-    if(lag > 0) {
+  if ((lag % n_subset) != 0) {
+    if (lag > 0) {
       start = (lag / n_subset) + 1;
     } else {
       start = 0;
     }
   } else {
-    if(lag > 0) {
+    if (lag > 0) {
       start = (lag / n_subset);
     } else {
       start = 0;
@@ -71,18 +71,18 @@ int get_end(int n,
 
   int end;
   // bounds
-  if((lag % n_subset) != 0) {
-    if(lag > 0) {
+  if ((lag % n_subset) != 0) {
+    if (lag > 0) {
       end = n_out;
     } else {
-      if((n % n_subset) != 0) {
+      if ((n % n_subset) != 0) {
         end = n_out - (-lag / n_subset + 1);
       } else {
         end = n_out - (-lag / n_subset);
       }
     }
   } else {
-    if(lag > 0) {
+    if (lag > 0) {
       end = n_out;
     } else {
       end = n_out - (-lag / n_subset);
@@ -111,7 +111,7 @@ int get_end(int n,
                             size_t n_subset,
                             size_t n_shift) {
 
-   if(n_shift >= n_subset) {
+   if (n_shift >= n_subset) {
      throw std::range_error("shift_subset: n_shift must be less than n_subset");
    }
 
@@ -129,7 +129,7 @@ int get_end(int n,
 
    Rcpp::NumericVector out(n_out, NA_REAL);
 
-   if(start >= end) {
+   if (start >= end) {
      throw std::range_error("shift_subset: the number of lags, n_subset or n_shift is too large");
    }
 
@@ -170,7 +170,7 @@ Rcpp::List lag_list(const Rcpp::NumericVector& x,
   size_t n = x.size();
   size_t n_row;
 
-  if(n_subset == 1){
+  if (n_subset == 1){
     n_row = (n - n_shift);
   } else {
     n_row = ((n - n_shift - 1) / n_subset) + 1;
@@ -214,7 +214,7 @@ Rcpp::List lag_list(const Rcpp::NumericVector& x,
 //    int n = x.nrow();
 //    int n_row;
 //
-//    if(n_subset == 1){
+//    if (n_subset == 1){
 //      n_row = (n - n_shift);
 //    } else {
 //      n_row = ((n - n_shift - 1) / n_subset) + 1;
@@ -225,12 +225,12 @@ Rcpp::List lag_list(const Rcpp::NumericVector& x,
 //    CharacterVector nm(n_col * n_var);
 //    NumericMatrix out = NumericMatrix(n_row, n_col * n_var);
 //
-//    for(int j = 0; j < n_var; ++j) {
+//    for (int j = 0; j < n_var; ++j) {
 //      for (int i = 0; i < n_col; ++i) {
 //        out(_, i + j * n_col) = shift_subset(x(_, j), lags[i], n_subset, n_shift);
 //
 //        // // Column names
-//        // if(lags[i] < 0) {
+//        // if (lags[i] < 0) {
 //        //   nm[i + j * n_col] = prefix + 'n' + std::to_string(abs(lags[i])) + '_' + suffix[j];
 //        // } else {
 //        //   nm[i + j * n_col] = prefix + std::to_string(lags[i]) + '_' + suffix[j];
@@ -246,7 +246,7 @@ Rcpp::List lag_list(const Rcpp::NumericVector& x,
 // // [[Rcpp::export]]
 // colvec arma_shift(const colvec& x, int n) {
 //
-//   if(n == 0) {
+//   if (n == 0) {
 //     return(x);
 //   }
 //
@@ -268,7 +268,7 @@ Rcpp::List lag_list(const Rcpp::NumericVector& x,
 //                          size_t n_subset,
 //                          size_t n_shift) {
 //
-//   if(n_shift >= n_subset) {
+//   if (n_shift >= n_subset) {
 //     throw std::range_error("shift_subset: n_shift must be less than n_subset");
 //   }
 //
@@ -284,7 +284,7 @@ Rcpp::List lag_list(const Rcpp::NumericVector& x,
 //   start = get_start(n_out, lag, n_subset);
 //   end   = get_end(n, n_out, lag, n_subset);
 //
-//   if(start >= end) {
+//   if (start >= end) {
 //     throw std::range_error("shift_subset: the number of lags, n_subset or n_shift is too large");
 //   }
 //
@@ -306,9 +306,9 @@ Rcpp::List lag_list(const Rcpp::NumericVector& x,
 //
 //   field<colvec> out(n.n_elem);
 //
-//   for(size_t i=0; i < n.n_elem; ++i) {
+//   for (size_t i=0; i < n.n_elem; ++i) {
 //
-//     if(n_subset == 1 & n_shift == 0) {
+//     if (n_subset == 1 & n_shift == 0) {
 //       out[i] = arma_shift(x, n[i]);
 //     } else {
 //       out[i] = arma_shift_subset(x, n[i], n_subset, n_shift);

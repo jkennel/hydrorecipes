@@ -29,6 +29,33 @@ Eigen::MatrixXd llt_solve(Eigen::Map<Eigen::MatrixXd> &X,
   return(betahat);
 }
 
+// [[Rcpp::export]]
+Eigen::MatrixXd llt_fitted(Eigen::Map<Eigen::MatrixXd> &X,
+                          Eigen::Map<Eigen::MatrixXd> &Y) {
+  const int n(X.rows());
+  const int p(X.cols());
+
+  const Eigen::LLT<Eigen::MatrixXd> llt(Eigen::MatrixXd(p, p).setZero().selfadjointView<Lower>().
+                                          rankUpdate(X.adjoint()));
+  const MatrixXd betahat(llt.solve(X.adjoint() * Y));
+  const Eigen::MatrixXd fitted(X * betahat);
+  // const Eigen::MatrixXd resid(Y.array() - fitted.array());
+  //
+  // const unsigned int df(n - p);
+  // const Eigen::VectorXd s(resid.colwise().norm().array() / std::sqrt(double(df)));
+  // Eigen::MatrixXd se(s * llt.matrixL().solve(MatrixXd::Identity(p, p)).colwise().norm());
+  // return Rcpp::List::create(Named("coefficients") = betahat,
+  //                           Named("fitted.values") = fitted,
+  //                           Named("residuals") = resid,
+  //                           Named("s") = s,
+  //                           Named("df.residual") = df,
+  //                           Named("rank") = p,
+  //                           Named("Std. Error") = se
+  // );
+
+  return(fitted);
+}
+
 /*** R
 
 x <- matrix(rnorm(100000000), ncol = 50)

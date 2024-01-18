@@ -41,40 +41,40 @@ StepAquiferGRF <- R6Class(
                           hydraulic_conductivity = 1.0e-4,
                           flow_dimension = 2.0,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE,
                           ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_aquifer_grf"
-      type         <- 'add'
-      enq <- rlang::enquos(time, flow_rate)
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize))
-      )
-      do.call(super$initialize, inputs)
+      time <- deparse(substitute(time))
+      flow_rate <- deparse(substitute(flow_rate))
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_aquifer_grf'
+      env_list$type <- 'add'
+      super$initialize(terms = c(as.symbol(time), as.symbol(flow_rate)),
+                       env_list)
+
 
       # step specific values
-      self$time = enquos(time)
-      self$flow_rate = enquos(flow_rate)
+      self$time = time
+      self$flow_rate = flow_rate
       self$thickness = thickness
       self$radius = radius
       self$specific_storage = specific_storage
       self$hydraulic_conductivity = hydraulic_conductivity
       self$flow_dimension = flow_dimension
 
+      self$columns <- c(time, flow_rate)
+
       invisible(self)
     },
 
     bake = function(new_data) {
+
       setNames(grf_time(radius = self$radius,
                         specific_storage = self$specific_storage,
                         hydraulic_conductivity = self$hydraulic_conductivity,
                         thickness = self$thickness,
-                        time = new_data[[1]],
-                        flow_rate = new_data[[2]],
+                        time = new_data[[self$time]],
+                        flow_rate = new_data[[self$flow_rate]],
                         flow_dimension = self$flow_dimension), self$id)
     }
 

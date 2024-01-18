@@ -412,6 +412,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// spec_pgram_list
+Rcpp::List spec_pgram_list(Rcpp::List& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper);
+RcppExport SEXP _frecipes_spec_pgram_list(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type spans(spansSEXP);
+    Rcpp::traits::input_parameter< bool >::type detrend(detrendSEXP);
+    Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
+    Rcpp::traits::input_parameter< double >::type taper(taperSEXP);
+    rcpp_result_gen = Rcpp::wrap(spec_pgram_list(x, spans, detrend, demean, taper));
+    return rcpp_result_gen;
+END_RCPP
+}
 // spec_welch
 Eigen::MatrixXcd spec_welch(Eigen::MatrixXd& x, size_t length_subset, double overlap, Eigen::VectorXd window);
 RcppExport SEXP _frecipes_spec_welch(SEXP xSEXP, SEXP length_subsetSEXP, SEXP overlapSEXP, SEXP windowSEXP) {
@@ -434,6 +449,19 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Eigen::MatrixXcd& >::type x(xSEXP);
     rcpp_result_gen = Rcpp::wrap(solve_cplx_parallel(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// list_to_matrix
+Eigen::MatrixXd list_to_matrix(Rcpp::List& x, int sub_start, int sub_end);
+RcppExport SEXP _frecipes_list_to_matrix(SEXP xSEXP, SEXP sub_startSEXP, SEXP sub_endSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type sub_start(sub_startSEXP);
+    Rcpp::traits::input_parameter< int >::type sub_end(sub_endSEXP);
+    rcpp_result_gen = Rcpp::wrap(list_to_matrix(x, sub_start, sub_end));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1101,6 +1129,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// detrend_vector
+Eigen::VectorXd detrend_vector(Eigen::VectorXd x);
+RcppExport SEXP _frecipes_detrend_vector(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(detrend_vector(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // demean_matrix
 Eigen::MatrixXd demean_matrix(const Eigen::MatrixXd& x);
 RcppExport SEXP _frecipes_demean_matrix(SEXP xSEXP) {
@@ -1109,6 +1148,17 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type x(xSEXP);
     rcpp_result_gen = Rcpp::wrap(demean_matrix(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// demean_vector
+Eigen::VectorXd demean_vector(Eigen::VectorXd x);
+RcppExport SEXP _frecipes_demean_vector(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(demean_vector(x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1122,6 +1172,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type detrend(detrendSEXP);
     Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
     rcpp_result_gen = Rcpp::wrap(detrend_and_demean_matrix(x, detrend, demean));
+    return rcpp_result_gen;
+END_RCPP
+}
+// detrend_and_demean_list
+Rcpp::List detrend_and_demean_list(Rcpp::List& x, bool detrend, bool demean);
+RcppExport SEXP _frecipes_detrend_and_demean_list(SEXP xSEXP, SEXP detrendSEXP, SEXP demeanSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< bool >::type detrend(detrendSEXP);
+    Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
+    rcpp_result_gen = Rcpp::wrap(detrend_and_demean_list(x, detrend, demean));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1145,6 +1208,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Eigen::MatrixXcd& >::type x(xSEXP);
     Rcpp::traits::input_parameter< Eigen::VectorXd& >::type y(ySEXP);
     rcpp_result_gen = Rcpp::wrap(kernel_apply(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kernel_apply_list
+Rcpp::List kernel_apply_list(Rcpp::List x, Eigen::VectorXd& y);
+RcppExport SEXP _frecipes_kernel_apply_list(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd& >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(kernel_apply_list(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1386,6 +1461,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// llt_fitted
+Eigen::MatrixXd llt_fitted(Eigen::Map<Eigen::MatrixXd>& X, Eigen::Map<Eigen::MatrixXd>& Y);
+RcppExport SEXP _frecipes_llt_fitted(SEXP XSEXP, SEXP YSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type Y(YSEXP);
+    rcpp_result_gen = Rcpp::wrap(llt_fitted(X, Y));
+    return rcpp_result_gen;
+END_RCPP
+}
 // ogata_banks_ind
 double ogata_banks_ind(double D, double v, double C0, double x, double t);
 RcppExport SEXP _frecipes_ogata_banks_ind(SEXP DSEXP, SEXP vSEXP, SEXP C0SEXP, SEXP xSEXP, SEXP tSEXP) {
@@ -1602,28 +1689,30 @@ BEGIN_RCPP
 END_RCPP
 }
 // to_dummy
-List to_dummy(const IntegerVector& ind);
-RcppExport SEXP _frecipes_to_dummy(SEXP indSEXP) {
+List to_dummy(const IntegerVector& ind, const bool one_hot);
+RcppExport SEXP _frecipes_to_dummy(SEXP indSEXP, SEXP one_hotSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const IntegerVector& >::type ind(indSEXP);
-    rcpp_result_gen = Rcpp::wrap(to_dummy(ind));
+    Rcpp::traits::input_parameter< const bool >::type one_hot(one_hotSEXP);
+    rcpp_result_gen = Rcpp::wrap(to_dummy(ind, one_hot));
     return rcpp_result_gen;
 END_RCPP
 }
 // to_dummy_list
-List to_dummy_list(const NumericVector& x, const NumericVector& vec, const bool rightmost_closed, const bool all_inside, const bool left_open);
-RcppExport SEXP _frecipes_to_dummy_list(SEXP xSEXP, SEXP vecSEXP, SEXP rightmost_closedSEXP, SEXP all_insideSEXP, SEXP left_openSEXP) {
+List to_dummy_list(const NumericVector& x, const NumericVector& vec, const bool one_hot, const bool rightmost_closed, const bool all_inside, const bool left_open);
+RcppExport SEXP _frecipes_to_dummy_list(SEXP xSEXP, SEXP vecSEXP, SEXP one_hotSEXP, SEXP rightmost_closedSEXP, SEXP all_insideSEXP, SEXP left_openSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const NumericVector& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const NumericVector& >::type vec(vecSEXP);
+    Rcpp::traits::input_parameter< const bool >::type one_hot(one_hotSEXP);
     Rcpp::traits::input_parameter< const bool >::type rightmost_closed(rightmost_closedSEXP);
     Rcpp::traits::input_parameter< const bool >::type all_inside(all_insideSEXP);
     Rcpp::traits::input_parameter< const bool >::type left_open(left_openSEXP);
-    rcpp_result_gen = Rcpp::wrap(to_dummy_list(x, vec, rightmost_closed, all_inside, left_open));
+    rcpp_result_gen = Rcpp::wrap(to_dummy_list(x, vec, one_hot, rightmost_closed, all_inside, left_open));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1643,7 +1732,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // vadose_response
-std::vector<double> vadose_response(std::vector<double> time, const double air_diffusivity, const double thickness, const double precision, const bool inverse);
+Rcpp::List vadose_response(std::vector<double> time, const double air_diffusivity, const double thickness, const double precision, const bool inverse);
 RcppExport SEXP _frecipes_vadose_response(SEXP timeSEXP, SEXP air_diffusivitySEXP, SEXP thicknessSEXP, SEXP precisionSEXP, SEXP inverseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -1701,8 +1790,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_multiply_ffts", (DL_FUNC) &_frecipes_multiply_ffts, 1},
     {"_frecipes_fill_lower_left", (DL_FUNC) &_frecipes_fill_lower_left, 2},
     {"_frecipes_spec_pgram", (DL_FUNC) &_frecipes_spec_pgram, 5},
+    {"_frecipes_spec_pgram_list", (DL_FUNC) &_frecipes_spec_pgram_list, 5},
     {"_frecipes_spec_welch", (DL_FUNC) &_frecipes_spec_welch, 4},
     {"_frecipes_solve_cplx_parallel", (DL_FUNC) &_frecipes_solve_cplx_parallel, 1},
+    {"_frecipes_list_to_matrix", (DL_FUNC) &_frecipes_list_to_matrix, 3},
     {"_frecipes_solve_cplx_irr", (DL_FUNC) &_frecipes_solve_cplx_irr, 2},
     {"_frecipes_ordinary_coherence_phase", (DL_FUNC) &_frecipes_ordinary_coherence_phase, 1},
     {"_frecipes_transfer_pgram_smooth", (DL_FUNC) &_frecipes_transfer_pgram_smooth, 7},
@@ -1755,10 +1846,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_next_n_eigen", (DL_FUNC) &_frecipes_next_n_eigen, 1},
     {"_frecipes_pad_vector", (DL_FUNC) &_frecipes_pad_vector, 3},
     {"_frecipes_detrend_matrix", (DL_FUNC) &_frecipes_detrend_matrix, 1},
+    {"_frecipes_detrend_vector", (DL_FUNC) &_frecipes_detrend_vector, 1},
     {"_frecipes_demean_matrix", (DL_FUNC) &_frecipes_demean_matrix, 1},
+    {"_frecipes_demean_vector", (DL_FUNC) &_frecipes_demean_vector, 1},
     {"_frecipes_detrend_and_demean_matrix", (DL_FUNC) &_frecipes_detrend_and_demean_matrix, 3},
+    {"_frecipes_detrend_and_demean_list", (DL_FUNC) &_frecipes_detrend_and_demean_list, 3},
     {"_frecipes_modified_daniell", (DL_FUNC) &_frecipes_modified_daniell, 1},
     {"_frecipes_kernel_apply", (DL_FUNC) &_frecipes_kernel_apply, 2},
+    {"_frecipes_kernel_apply_list", (DL_FUNC) &_frecipes_kernel_apply_list, 2},
     {"_frecipes_spec_taper", (DL_FUNC) &_frecipes_spec_taper, 2},
     {"_frecipes_make_groups", (DL_FUNC) &_frecipes_make_groups, 2},
     {"_frecipes_power_spaced", (DL_FUNC) &_frecipes_power_spaced, 4},
@@ -1777,6 +1872,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_shift_subset", (DL_FUNC) &_frecipes_shift_subset, 4},
     {"_frecipes_lag_list", (DL_FUNC) &_frecipes_lag_list, 4},
     {"_frecipes_llt_solve", (DL_FUNC) &_frecipes_llt_solve, 2},
+    {"_frecipes_llt_fitted", (DL_FUNC) &_frecipes_llt_fitted, 2},
     {"_frecipes_ogata_banks_ind", (DL_FUNC) &_frecipes_ogata_banks_ind, 5},
     {"_frecipes_ogata_banks_list", (DL_FUNC) &_frecipes_ogata_banks_list, 7},
     {"_frecipes_scale_list_param", (DL_FUNC) &_frecipes_scale_list_param, 3},
@@ -1793,8 +1889,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_pca_list_with_params", (DL_FUNC) &_frecipes_pca_list_with_params, 3},
     {"_frecipes_fi", (DL_FUNC) &_frecipes_fi, 5},
     {"_frecipes_to_dummy_list_base", (DL_FUNC) &_frecipes_to_dummy_list_base, 2},
-    {"_frecipes_to_dummy", (DL_FUNC) &_frecipes_to_dummy, 1},
-    {"_frecipes_to_dummy_list", (DL_FUNC) &_frecipes_to_dummy_list, 5},
+    {"_frecipes_to_dummy", (DL_FUNC) &_frecipes_to_dummy, 2},
+    {"_frecipes_to_dummy_list", (DL_FUNC) &_frecipes_to_dummy_list, 6},
     {"_frecipes_weeks_1979", (DL_FUNC) &_frecipes_weeks_1979, 5},
     {"_frecipes_vadose_response", (DL_FUNC) &_frecipes_vadose_response, 5},
     {"_frecipes_vadose_response2", (DL_FUNC) &_frecipes_vadose_response2, 5},

@@ -18,25 +18,25 @@ StepPca <- R6Class(
     center = NA,
     scale = NA,
 
+    center_values = NA,
+    scale_values = NA,
+
     # step specific variables
-    initialize = function(...,
-                          role = "predictor",
-                          skip = FALSE,
+    initialize = function(terms,
                           na_rm = TRUE,
                           n_comp = 3,
                           center = TRUE,
                           scale = TRUE,
-                          keep_original_cols = FALSE) {
+                          role = "predictor",
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_pca"
-      type         <- 'modify'
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_pca'
+      env_list$type <- 'modify'
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
 
       self$na_rm <- na_rm
       self$n_comp <- n_comp
@@ -45,39 +45,46 @@ StepPca <- R6Class(
 
       invisible(self)
     },
-    prep = function(new_data) {
+    prep = function(new_data, info) {
+      super$prep(new_data, info)
 
-      if(self$center) {
-        self$center <- collapse::fmean(new_data,
+      if (self$center) {
+        self$center_values <- collapse::fmean(new_data,
                                        na.rm = self$na_rm)
       } else {
-        self$center <- rep(0.0, length(new_data))
+        self$center_values <- rep(0.0, length(new_data))
       }
 
-      if(self$scale) {
-        self$scale <- collapse::fsd(new_data,
-                                    na.rm = self$na_rm)
+      if (self$scale) {
+        self$scale_values <- collapse::fsd(new_data,
+                                          na.rm = self$na_rm)
       } else {
-        self$scale <- rep(1.0, length(new_data))
+        self$scale_values <- rep(1.0, length(new_data))
       }
 
       self$pca_results <- pca_list_rotation_eigen(new_data,
-                                                  center = self$center,
-                                                  scale = self$scale,
+                                                  center = self$center_values,
+                                                  scale = self$scale_values,
                                                   n_comp = self$n_comp)
     },
     # subtract the central value from a column
     bake = function(new_data) {
 
-      new_data <- collapse::qM(scale_list_param(new_data,
-                                                center = self$center,
-                                                scale = self$scale))
+      for (i in seq_along(self$columns)) {
+        if (self$center & self$scale) {
+          new_data[[i]] = (new_data[[i]] - self$center_values[i]) * (1.0 / self$scale_values[i])
+        } else if (self$center) {
+          new_data[[i]] = (new_data[[i]] - self$center_values[i])
+        } else if (self$scale) {
+          new_data[[i]] = (new_data[[i]]) * (1.0 / self$scale_values[i])
+        }
+      }
+
+      new_data <- collapse::qM(new_data)
       new_data <- collapse::mctl(new_data %*% self$pca_results)
 
+      names(new_data) <- name_columns(self$id, NULL, self$n_comp)
 
-      names(new_data) <- file.path(self$id,
-                                   pad_num(self$n_comp),
-                                   fsep = "_")
       new_data
 
     }

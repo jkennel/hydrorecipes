@@ -18,7 +18,7 @@ Eigen::VectorXd window_hann(size_t n) {
 
   VectorXd out;
 
-  if(n == 0) {
+  if (n == 0) {
     Rcpp::stop("window_hann: n must be an integer greater than 0");
   }
   if (n == 1) {
@@ -60,7 +60,7 @@ Eigen::VectorXd window_tukey(size_t n, double r) {
 
   size_t n_lobe = std::ceil(r * (double)n / 2.0);
 
-  if(n == 0) {
+  if (n == 0) {
     Rcpp::stop("window_tukey: n must be an integer greater than 0");
   }
   if (n == 1) {
@@ -70,7 +70,7 @@ Eigen::VectorXd window_tukey(size_t n, double r) {
     return(VectorXd::Zero(2));
   }
 
-  if(r <= 0) {
+  if (r <= 0) {
     return(VectorXd::Ones(n));
   } else if (r >= 1) {
     return(window_hann(n));
@@ -109,7 +109,7 @@ Eigen::VectorXcd window_hann_cplx(size_t n) {
   VectorXd hann = window_hann(n);
   VectorXcd out(n);
 
-  for(size_t i = 0; i < out.size(); ++i) {
+  for (size_t i = 0; i < out.size(); ++i) {
     out(i) = std::complex<double>(hann(i), hann(i));
   }
 

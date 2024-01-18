@@ -37,30 +37,26 @@ StepAquiferLeaky <- R6Class(
 
     initialize = function(time,
                           flow_rate,
-                          leakage = 100,
-                          radius = 100,
-                          storativity = 1e-5,
+                          leakage = 100.0,
+                          radius = 100.0,
+                          storativity = 1e-6,
                           transmissivity = 1e-4,
                           max_terms = 20,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE,
                           ...) {
-
       # get function parameters to pass to parent
-      step_name    <- "step_aquifer_leaky"
-      type         <- 'add'
-      enq <- rlang::enquos(time)
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize))
-      )
-      do.call(super$initialize, inputs)
+      time <- deparse(substitute(time))
+      flow_rate <- deparse(substitute(flow_rate))
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_aquifer_leaky'
+      env_list$type <- 'add'
+      super$initialize(terms = c(as.symbol(time), as.symbol(flow_rate)),
+                       env_list)
+
 
       # step specific values
-      self$time = enquos(time)
-      self$flow_rate = enquos(flow_rate)
+      self$time = time
+      self$flow_rate = flow_rate
 
       self$leakage = leakage
       self$radius = radius
@@ -70,12 +66,14 @@ StepAquiferLeaky <- R6Class(
       self$transmissivity = transmissivity
       self$max_terms = max_terms
 
+      self$columns <- c(time, flow_rate)
+
       invisible(self)
     },
 
     bake = function(new_data) {
-      setNames(
-        list(hantush_jacob(
+
+        hantush_jacob(
           new_data[[1]],
           new_data[[2]],
           self$radius,
@@ -83,8 +81,7 @@ StepAquiferLeaky <- R6Class(
           self$transmissivity,
           self$leakage,
           self$max_terms
-        )),
-        self$id)
+        )
     }
   )
 )

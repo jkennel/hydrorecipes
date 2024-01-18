@@ -16,8 +16,6 @@ StepNSE <- R6Class(
 
     initialize = function(terms,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE,
                           ...) {
 
       # get function parameters to pass to parent

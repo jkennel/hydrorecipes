@@ -21,16 +21,9 @@ The `Step` class hold common info for each step.
 \if{latex}{\out{\hypertarget{method-step-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Step$new(..., role, skip, type, keep_original_cols, step_name, enq = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Step$new(terms, ...)}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{step_name}}{the name of the step}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-step-prep"></a>}}

@@ -18,25 +18,19 @@ StepCenter <- R6Class(
     fun = NULL,
 
     # step specific variables
-    initialize = function(...,
-                          role = "predictor",
-                          skip = FALSE,
+    initialize = function(terms,
                           na_rm = TRUE,
                           fun = collapse::fmean,
-                          keep_original_cols = FALSE) {
+                          role = "predictor",
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_center"
-      type         <- 'modify'
-      enq = NULL
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-45
-
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_center'
+      env_list$type <- 'modify'
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
 
       self$na_rm <- na_rm
       self$fun <- fun
@@ -44,7 +38,8 @@ StepCenter <- R6Class(
       invisible(self)
     },
 
-    prep = function(new_data) {
+    prep = function(new_data, info) {
+      super$prep(new_data, info)
       self$column_values <- self$fun(unclass(new_data)[self$columns],
                                      na.rm = self$na_rm, drop = TRUE)
     },
@@ -52,8 +47,8 @@ StepCenter <- R6Class(
     # subtract the central value from a column
     bake = function(new_data) {
 
-      for(i in seq_along(self$columns)) {
-        new_data[[i]] %-=% self$column_values[i]
+      for (i in seq_along(self$columns)) {
+        new_data[[i]] = new_data[[i]] - self$column_values[i]
       }
 
       new_data

@@ -22,22 +22,18 @@ StepAquiferTheis <- R6Class(
                           specific_storage = 1.0e-6,
                           hydraulic_conductivity = 1.0e-4,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE,
                           ...) {
 
-      step_name    <- "step_aquifer_theis"
-      type         <- 'add'
-      flow_dimension = 2.0
+      # get function parameters to pass to parent
+      inputs <- list(time = substitute(time),
+                     flow_rate = substitute(flow_rate),
+                     thickness = thickness,
+                     radius = radius,
+                     specific_storage = specific_storage,
+                     hydraulic_conductivity = hydraulic_conductivity,
+                     role = role,
+                     ...)
 
-      time = enquo(time)
-      flow_rate = enquo(flow_rate)
-
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize))
-      )
       do.call(super$initialize, inputs)
 
       invisible(self)

@@ -10,7 +10,6 @@
 #' @importFrom collapse fmean fsd fscale fsum fquantile fndistinct flag
 #' @importFrom collapse qDF qM qF qTBL mctl
 #' @importFrom earthtide calc_earthtide
-#' @importFrom recipes recipes_eval_select
 #' @importFrom R6 R6Class
 #'
 #' @export
@@ -19,6 +18,7 @@ Step <- R6Class(
   classname = 'step',
 
   public = list(
+
     type = NULL,  # check, add, remove, update/modify
 
     # base step
@@ -32,44 +32,45 @@ Step <- R6Class(
     id = NULL,
     prefix = NULL,
 
-    initialize = function(..., terms, role, skip, type,
-                          keep_original_cols, step_name,
-                          enq = NULL) {
+    initialize = function(terms, ...) {
+
+      if (!missing(terms)) {
+        if (length(terms)==1){
+          self$terms <- get_terms_and_symbols(c(terms))
+        } else {
+          self$terms <- get_terms_and_symbols(terms)
+        }
+      }
+
+      dots <- c(...)
+      self$role <- dots$role
+      self$skip <- dots$skip
+      self$keep_original_cols <- dots$keep_original_cols
+      self$step_name <- dots$step_name
+      self$type <- dots$type
 
       # super specific values
-
-      if (!is.null(enq)){
-        self$terms   <- enq
-      } else {
-        print('herehere')
-        self$terms   <- enquos(...)
-      }
-      print(self$terms)
-
-      # self$columns <- recipes::recipes_eval_select(self$terms)
-      self$role    <- role
-      self$skip    <- skip
-      self$prefix  <- gsub("step_", "", step_name)
+      self$prefix  <- gsub("step_", "", self$step_name)
       self$id      <- rand_id(self$prefix)
-      self$type    <- type
-      self$step_name <- step_name
-      self$keep_original_cols <- keep_original_cols
-
-      # if(length(self$columns) > 1 & self$type == "add") {
-      #   rlang::abort("Add steps limit input columns to one.")
-      # }
 
       invisible(self)
     },
+
     # these are the base methods - can be overwritten in individual steps
     prep = function(new_data, info) {
+
+      nms <- names(new_data)
+      self$columns <- get_terms_from_info(self$terms, nms, info)
       self$trained <- TRUE
 
       invisible(self)
+
     },
+
     bake = function() {
       invisible(self)
     },
+
     tidy = function() {
 
       if (self$type == 'add') {

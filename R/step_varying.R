@@ -14,25 +14,22 @@ StepVarying <- R6Class(
     to_remove = NULL,
 
     # step specific variables
-    initialize = function(...,
+    initialize = function(terms,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE) {
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_varying"
-      type         <- 'modify'
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_varying'
+      env_list$type <- 'modify'
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
+
 
       invisible(self)
     },
 
-    # subtract the central value from a column
     bake = function(new_data) {
 
       self$to_remove <- !varying(new_data)

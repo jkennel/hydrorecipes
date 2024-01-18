@@ -14,27 +14,22 @@ StepIntercept <- R6Class(
 
     # step specific variables
 
-    initialize = function(...,
+    initialize = function(terms,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE) {
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_intercept"
-      type         <- 'add'
-      enq          <- NULL
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      print(str(inputs))
-      do.call(super$initialize, inputs)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_intercept'
+      env_list$type <- 'add'
+      super$initialize(terms = NULL,
+                       env_list[names(env_list) != "terms"])
+
 
       invisible(self)
     },
     bake = function(new_data) {
-      return(list(intercept = rep(1.0, length(new_data))))
+      return(setNames(list(rep(1.0, length(new_data[[1]]))), self$id))
     }
 
   )

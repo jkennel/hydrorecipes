@@ -31,13 +31,12 @@
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StepHarmonic$new(
-  ...,
+  terms,
   frequency = NA_real_,
   cycle_size = NA_real_,
   starting_value = NA_real_,
   role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE
+  ...
 )}\if{html}{\out{</div>}}
 }
 

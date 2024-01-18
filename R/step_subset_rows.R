@@ -7,7 +7,7 @@
 #'
 #' @export
 StepSubsetRows <- R6Class(
-  classname = 'step_subset_rows',
+  classname = "step_subset_rows",
   inherit = Step,
 
   public = list(
@@ -15,21 +15,19 @@ StepSubsetRows <- R6Class(
     # step specific variables
     row_numbers = NULL,
 
-    initialize = function(...,
+    initialize = function(terms,
                           row_numbers,
                           role = "modify",
-                          skip = FALSE,
-                          keep_original_cols = FALSE) {
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_subset_rows"
-      type         <- 'modify'
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- "step_subset_rows"
+      env_list$type <- "modify"
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
+
 
       self$row_numbers <- as.integer(row_numbers)
       invisible(self)

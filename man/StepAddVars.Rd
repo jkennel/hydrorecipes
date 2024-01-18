@@ -30,13 +30,7 @@
 \if{latex}{\out{\hypertarget{method-step_add_vars-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepAddVars$new(
-  ...,
-  vars,
-  role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepAddVars$new(terms, vars, role = "predictor", ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

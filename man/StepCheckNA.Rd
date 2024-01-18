@@ -4,7 +4,7 @@
 \alias{StepCheckNA}
 \title{R6 Class}
 \description{
-`StepCheckNA` adjust the dispersion by standard deviation.
+`StepCheckNA`
 }
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_check_na}
@@ -30,7 +30,7 @@
 \if{latex}{\out{\hypertarget{method-step_check_na-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepCheckNA$new(..., role = "check", skip = FALSE, keep_original_cols = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepCheckNA$new(terms, role = "check", ...)}\if{html}{\out{</div>}}
 }
 
 }

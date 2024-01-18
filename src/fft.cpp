@@ -2,42 +2,42 @@
 
 //==============================================================================
 //' @title
-//' fft_matrix
-//'
-//' @description
-//' Do an FFT for each matrix column
-//'
-//' @param x the matrix that holds the series (numeric matrix)
-//' @param detrend remove the linear trend of the columns (boolean)
-//' @param demean remove the mean for each column (boolean)
-//' @param n_new the padded size (integer)
-//'
-//' @return A matrix with FFT results.
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
-                            size_t n_new) {
+ //' fft_matrix
+ //'
+ //' @description
+ //' Do an FFT for each matrix column
+ //'
+ //' @param x the matrix that holds the series (numeric matrix)
+ //' @param detrend remove the linear trend of the columns (boolean)
+ //' @param demean remove the mean for each column (boolean)
+ //' @param n_new the padded size (integer)
+ //'
+ //' @return A matrix with FFT results.
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
+                             size_t n_new) {
 
-  size_t n_row = x.rows();
-  size_t n_col = x.cols();
+   size_t n_row = x.rows();
+   size_t n_col = x.cols();
 
-  VectorXcd x_fft(n_new);
-  VectorXd  x_padded(n_new);
-  MatrixXcd out(n_new, n_col);
+   VectorXcd x_fft(n_new);
+   VectorXd  x_padded(n_new);
+   MatrixXcd out(n_new, n_col);
 
-  Eigen::FFT<double> fft;
+   Eigen::FFT<double> fft;
 
-  for (size_t i = 0; i < n_col; ++i) {
-    x_padded = pad_vector(x.col(i), n_row, n_new);
-    fft.fwd(x_fft, x_padded, 0);
-    out.col(i) = x_fft;
-  }
+   for (size_t i = 0; i < n_col; ++i) {
+     x_padded = pad_vector(x.col(i), n_row, n_new);
+     fft.fwd(x_fft, x_padded, 0);
+     out.col(i) = x_fft;
+   }
 
 
-  return(out);
-}
+   return(out);
+ }
 //==============================================================================
 
 
@@ -48,216 +48,216 @@ Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
 //******************************************************************************
 //==============================================================================
 //' @title
-//' convolve_vec
-//'
-//' @description
-//' Circular convolution of two vectors having the same length
-//'
-//' @param x the vector that holds the series (numeric vector)
-//' @param y the vector to convolve with x (numeric vector)
-//'
-//'
-//' @return numeric vector that is the circular convolution of two vectors
-//'
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::VectorXd convolve_vec(Eigen::VectorXd x,
-                             Eigen::VectorXd y) {
+ //' convolve_vec
+ //'
+ //' @description
+ //' Circular convolution of two vectors having the same length
+ //'
+ //' @param x the vector that holds the series (numeric vector)
+ //' @param y the vector to convolve with x (numeric vector)
+ //'
+ //'
+ //' @return numeric vector that is the circular convolution of two vectors
+ //'
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::VectorXd convolve_vec(Eigen::VectorXd x,
+                              Eigen::VectorXd y) {
 
-  Eigen::FFT<double> fft;
-  size_t n_x = x.size();
-  size_t n_y = y.size();
+   Eigen::FFT<double> fft;
+   size_t n_x = x.size();
+   size_t n_y = y.size();
 
-  if(n_y != n_x) {
-    Rcpp::stop("convolve_vec: the lengths of x and y should be the same");
-  }
+   if (n_y != n_x) {
+     Rcpp::stop("convolve_vec: the lengths of x and y should be the same");
+   }
 
-  VectorXcd fft_x(n_x);
-  VectorXcd fft_y(n_x);
-  VectorXd z(n_x);
+   VectorXcd fft_x(n_x);
+   VectorXcd fft_y(n_x);
+   VectorXd z(n_x);
 
-  fft.fwd(fft_x, x);
-  fft.fwd(fft_y, y);
+   fft.fwd(fft_x, x);
+   fft.fwd(fft_y, y);
 
-  fft_x = fft_x.array() * fft_y.array();
-  fft.inv(z, fft_x);
+   fft_x = fft_x.array() * fft_y.array();
+   fft.inv(z, fft_x);
 
-  return(z);
-}
+   return(z);
+ }
 //==============================================================================
 
 //==============================================================================
 //' @title
-//' convolve_filter
-//'
-//' @description
-//' convolution of vector with matrix
-//'
-//' @param x vector to convolve with y (numeric vector)
-//' @param y numeric matrix to convolve with x (column by column convolution)
-//'  (numeric matrix)
-//' @param remove_partial keep the end values or fill with NA (boolean)
-//' @param reverse should x be reversed before convolution (boolean)
-//'
-//' @return numeric matrix of convolved values
-//'
-//' @export
-//'
-//' @importFrom Rcpp sourceCpp
-//' @importFrom stats nextn
-//' @importFrom stats convolve
-//' @importFrom stats spec.pgram
-//'
-//' @examples
-//' a <- convolve_filter(x = 1:100,
-//'                      y = c(1:10, rep(0, 90)),
-//'                      remove_partial = FALSE,
-//'                      reverse = TRUE)
-//'
-//' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
-//'
-// [[Rcpp::export]]
-Eigen::VectorXd convolve_filter(const Eigen::VectorXd& x,
-                                const Eigen::VectorXd& y,
-                                const bool remove_partial,
-                                const bool reverse) {
+ //' convolve_filter
+ //'
+ //' @description
+ //' convolution of vector with matrix
+ //'
+ //' @param x vector to convolve with y (numeric vector)
+ //' @param y numeric matrix to convolve with x (column by column convolution)
+ //'  (numeric matrix)
+ //' @param remove_partial keep the end values or fill with NA (boolean)
+ //' @param reverse should x be reversed before convolution (boolean)
+ //'
+ //' @return numeric matrix of convolved values
+ //'
+ //' @export
+ //'
+ //' @importFrom Rcpp sourceCpp
+ //' @importFrom stats nextn
+ //' @importFrom stats convolve
+ //' @importFrom stats spec.pgram
+ //'
+ //' @examples
+ //' a <- convolve_filter(x = 1:100,
+ //'                      y = c(1:10, rep(0, 90)),
+ //'                      remove_partial = FALSE,
+ //'                      reverse = TRUE)
+ //'
+ //' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
+ //'
+ // [[Rcpp::export]]
+ Eigen::VectorXd convolve_filter(const Eigen::VectorXd& x,
+                                 const Eigen::VectorXd& y,
+                                 const bool remove_partial,
+                                 const bool reverse) {
 
-  size_t n_x = x.size();
-  size_t n_y = y.size();
+   size_t n_x = x.size();
+   size_t n_y = y.size();
 
-  Eigen::FFT<double> fft;
-  size_t n_new = next_n_eigen(n_x + n_y - 1);
+   Eigen::FFT<double> fft;
+   size_t n_new = next_n_eigen(n_x + n_y - 1);
 
-  // Temporary vectors
-  VectorXd x_dbl = VectorXd::Zero(n_new);
-  VectorXd out_dbl = VectorXd::Zero(n_new);
+   // Temporary vectors
+   VectorXd x_dbl = VectorXd::Zero(n_new);
+   VectorXd out_dbl = VectorXd::Zero(n_new);
 
-  VectorXcd fft_x(n_new);
-  VectorXcd fft_y(n_new);
+   VectorXcd fft_x(n_new);
+   VectorXcd fft_y(n_new);
 
-  // Output
-  VectorXd out(n_y);
+   // Output
+   VectorXd out(n_y);
 
-  if (reverse) {
-    x_dbl.tail(n_x) = x.reverse();
-  } else {
-    x_dbl.tail(n_x) = x;
-  }
+   if (reverse) {
+     x_dbl.tail(n_x) = x.reverse();
+   } else {
+     x_dbl.tail(n_x) = x;
+   }
 
-  // do fft for x
-  fft.fwd(fft_x, x_dbl);
+   // do fft for x
+   fft.fwd(fft_x, x_dbl);
 
-  // do fft for y and convolution
-  out_dbl.head(n_y) = y;
+   // do fft for y and convolution
+   out_dbl.head(n_y) = y;
 
-  fft.fwd(fft_y, out_dbl);
+   fft.fwd(fft_y, out_dbl);
 
-  fft_y = fft_x.array() * fft_y.conjugate().array();
+   fft_y = fft_x.array() * fft_y.conjugate().array();
 
-  fft.inv(out_dbl, fft_y);
+   fft.inv(out_dbl, fft_y);
 
-  if(reverse) {
-    out = out_dbl.tail(n_x).reverse();
-  } else {
-    out = out_dbl.head(n_x);
-  }
+   if (reverse) {
+     out = out_dbl.tail(n_x).reverse();
+   } else {
+     out = out_dbl.head(n_x);
+   }
 
-  if(remove_partial) {
-    out.head(n_y - 1).setConstant(NA_REAL);
-  }
+   if (remove_partial) {
+     out.head(n_y - 1).setConstant(NA_REAL);
+   }
 
-  return(out);
+   return(out);
 
-}
+ }
 //==============================================================================
 
 
 //==============================================================================
 //' @title
-//' convolve_overlap_add
-//'
-//' @description
-//' Multiply a transfer function with a real input and take the inverse FFT.
-//'
-//' @param x the vector that holds the series (numeric vector)
-//' @param y the kernel to convolve with x (complex numeric vector)
-//'
-//' @return the linear convolution of two vectors
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::VectorXd convolve_overlap_add(Eigen::VectorXd& x,
-                                     Eigen::VectorXd& y) {
+ //' convolve_overlap_add
+ //'
+ //' @description
+ //' Multiply a transfer function with a real input and take the inverse FFT.
+ //'
+ //' @param x the vector that holds the series (numeric vector)
+ //' @param y the kernel to convolve with x (complex numeric vector)
+ //'
+ //' @return the linear convolution of two vectors
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::VectorXd convolve_overlap_add(Eigen::VectorXd& x,
+                                      Eigen::VectorXd& y) {
 
 
-  Eigen::FFT<double> fft;
-  size_t n_x = x.size();
-  size_t n_y = y.size();
-  size_t n_pad = next_n_eigen(n_y * 4);
-  if (n_y > n_x) Rcpp::stop("n_y cannot be larger than n_x");
-  if (n_pad > n_x) n_pad = n_x;
+   Eigen::FFT<double> fft;
+   size_t n_x = x.size();
+   size_t n_y = y.size();
+   size_t n_pad = next_n_eigen(n_y * 4);
+   if (n_y > n_x) Rcpp::stop("n_y cannot be larger than n_x");
+   if (n_pad > n_x) n_pad = n_x;
 
-  // size_t n_times = n_x / n_y - 1;
-  Eigen::VectorXd x_sub = Eigen::VectorXd::Zero(n_pad);
-  Eigen::VectorXd y_sub = pad_vector(y.reverse(), n_y, n_pad);
+   // size_t n_times = n_x / n_y - 1;
+   Eigen::VectorXd x_sub = Eigen::VectorXd::Zero(n_pad);
+   Eigen::VectorXd y_sub = pad_vector(y.reverse(), n_y, n_pad);
 
-  VectorXcd fft_y(n_pad);
-  fft.fwd(fft_y, y_sub);
-  VectorXcd fft_x(n_pad);
-  VectorXd z(n_pad);
-  VectorXd out = Eigen::VectorXd::Zero(n_x + n_pad);
+   VectorXcd fft_y(n_pad);
+   fft.fwd(fft_y, y_sub);
+   VectorXcd fft_x(n_pad);
+   VectorXd z(n_pad);
+   VectorXd out = Eigen::VectorXd::Zero(n_x + n_pad);
 
 
-  size_t i = 0;
-  size_t x_len = n_pad - n_y + 1;
+   size_t i = 0;
+   size_t x_len = n_pad - n_y + 1;
 
-  while (i < n_x) {
-    x_len = std::min(x_len, (n_x - i));
+   while (i < n_x) {
+     x_len = std::min(x_len, (n_x - i));
 
-    x_sub.head(x_len) = x.segment(i, x_len);
+     x_sub.head(x_len) = x.segment(i, x_len);
 
-    fft.fwd(fft_x, x_sub);
-    fft_x = fft_x.array() * fft_y.array();
-    fft.inv(z, fft_x);
-    out.segment(i, n_pad) += z;
+     fft.fwd(fft_x, x_sub);
+     fft_x = fft_x.array() * fft_y.array();
+     fft.inv(z, fft_x);
+     out.segment(i, n_pad) += z;
 
-    i += x_len;
+     i += x_len;
 
-  }
+   }
 
-  out.head(n_y - 1).setConstant(NA_REAL);
+   out.head(n_y - 1).setConstant(NA_REAL);
 
-  // out.conservativeResize(n_x);
+   // out.conservativeResize(n_x);
 
-  return(out.head(n_x));
-}
+   return(out.head(n_x));
+ }
 //==============================================================================
 
 
 
 //==============================================================================
 //' @title
-//' convolve_overlap_save
-//'
-//' @description
-//' Multiply a transfer function with a real input and take the inverse FFT.
-//'
-//' @param x the vector that holds the series (numeric vector)
-//' @param y the kernel to convolve with x (complex numeric vector)
-//' @param align right (0), center (1), or left (2) alignment
-//'
-//'
-//' @return the linear convolution of two vectors
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd x,
-                                      Eigen::VectorXd y,
-                                      int align) {
+ //' convolve_overlap_save
+ //'
+ //' @description
+ //' Multiply a transfer function with a real input and take the inverse FFT.
+ //'
+ //' @param x the vector that holds the series (numeric vector)
+ //' @param y the kernel to convolve with x (complex numeric vector)
+ //' @param align right (0), center (1), or left (2) alignment
+ //'
+ //'
+ //' @return the linear convolution of two vectors
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd x,
+                                       Eigen::VectorXd y,
+                                       int align) {
 
    Eigen::FFT<double> fft;
    size_t n_x = x.size();
@@ -300,7 +300,7 @@ Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd x,
      out.segment(i + n_align, fin_size + 1) = z.tail(fin_size + 1);
 
 
-     if(i == 0) {
+     if (i == 0) {
        break;
      } else if (fin_size > i) {
        i = 0;
@@ -346,33 +346,33 @@ Eigen::VectorXd shift_eigen(Eigen::VectorXd x, int n)
 
 //==============================================================================
 //' @title
-//' convolve_overlap_save_list
-//'
-//' @description
-//' Multiply a transfer function with a real input and take the inverse FFT.
-//'
-//' @param x the vector that holds the series (numeric vector)
-//' @param y the list of kernels to convolve with x
-//' @param align right (0), center (1), or left (2) alignment
-//'
-//' @return the linear convolution of two vectors
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-List convolve_overlap_save_list(Eigen::VectorXd& x,
-                                List y,
-                                int align) {
+ //' convolve_overlap_save_list
+ //'
+ //' @description
+ //' Multiply a transfer function with a real input and take the inverse FFT.
+ //'
+ //' @param x the vector that holds the series (numeric vector)
+ //' @param y the list of kernels to convolve with x
+ //' @param align right (0), center (1), or left (2) alignment
+ //'
+ //' @return the linear convolution of two vectors
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ List convolve_overlap_save_list(Eigen::VectorXd& x,
+                                 List y,
+                                 int align) {
 
-  size_t n_y = y.size();
-  size_t n_x = x.size();
-  Eigen::VectorXd out(n_x);
-  Rcpp::List out_list(n_y);
+   size_t n_y = y.size();
+   size_t n_x = x.size();
+   Eigen::VectorXd out(n_x);
+   Rcpp::List out_list(n_y);
 
-  for (size_t j = 0; j < n_y; ++j) {
-    out = convolve_overlap_save(x, y[j], align);
-    out_list[j] = out;
-  }
+   for (size_t j = 0; j < n_y; ++j) {
+     out = convolve_overlap_save(x, y[j], align);
+     out_list[j] = out;
+   }
 
    return(out_list);
  }
@@ -380,254 +380,181 @@ List convolve_overlap_save_list(Eigen::VectorXd& x,
 
 //==============================================================================
 //' @title
-//' convolve_tf
-//'
-//' @description
-//' Multiply a transfer function with a real input and take the inverse FFT.
-//'
-//' @param x the vector that holds the series (numeric vector)
-//' @param y the transfer function to multiply with x (complex numeric vector)
-//'
-//'
-//' @return the circular convolution of two vectors
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::VectorXd convolve_tf(Eigen::VectorXd x,
-                            Eigen::VectorXcd y) {
+ //' convolve_tf
+ //'
+ //' @description
+ //' Multiply a transfer function with a real input and take the inverse FFT.
+ //'
+ //' @param x the vector that holds the series (numeric vector)
+ //' @param y the transfer function to multiply with x (complex numeric vector)
+ //'
+ //'
+ //' @return the circular convolution of two vectors
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::VectorXd convolve_tf(Eigen::VectorXd x,
+                             Eigen::VectorXcd y) {
 
-  Eigen::FFT<double> fft;
-  size_t n_x = x.size();
-  size_t n_y = y.size();
+   Eigen::FFT<double> fft;
+   size_t n_x = x.size();
+   size_t n_y = y.size();
 
-  if(n_y != n_x) {
-    Rcpp::stop("convolve_tf: the lengths of x and y should be the same");
-  }
+   if (n_y != n_x) {
+     Rcpp::stop("convolve_tf: the lengths of x and y should be the same");
+   }
 
-  VectorXcd fft_x(n_x);
-  VectorXd z(n_x);
+   VectorXcd fft_x(n_x);
+   VectorXd z(n_x);
 
-  fft.fwd(fft_x, x);
+   fft.fwd(fft_x, x);
 
-  fft_x = fft_x.array() * y.array();
-  fft.inv(z, fft_x);
+   fft_x = fft_x.array() * y.array();
+   fft.inv(z, fft_x);
 
-  return(z);
-}
+   return(z);
+ }
 //==============================================================================
 
 
 //==============================================================================
 //' @title
-//' convolve_matrix
-//'
-//' @description
-//' convolution of vector with matrix
-//'
-//' @param x vector to convolve with y (numeric vector)
-//' @param y numeric matrix to convolve with x (column by column convolution)
-//'  (numeric matrix)
-//' @param remove_partial keep the end values or fill with NA (boolean)
-//' @param reverse should x be reversed before convolution (boolean)
-//'
-//' @return numeric matrix of convolved values
-//'
-//' @export
-//'
-//' @importFrom Rcpp sourceCpp
-//' @importFrom stats nextn
-//' @importFrom stats convolve
-//' @importFrom stats spec.pgram
-//'
-//' @examples
-//' a <- convolve_matrix(x = 1:100,
-//'                      y = as.matrix(1:10),
-//'                      remove_partial = FALSE,
-//'                      reverse = TRUE)
-//'
-//' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
-//'
-// [[Rcpp::export]]
-Eigen::MatrixXd convolve_matrix(const Eigen::VectorXd& x,
-                                const Eigen::MatrixXd& y,
-                                const bool remove_partial,
-                                const bool reverse) {
+ //' convolve_matrix
+ //'
+ //' @description
+ //' convolution of vector with matrix
+ //'
+ //' @param x vector to convolve with y (numeric vector)
+ //' @param y numeric matrix to convolve with x (column by column convolution)
+ //'  (numeric matrix)
+ //' @param remove_partial keep the end values or fill with NA (boolean)
+ //' @param reverse should x be reversed before convolution (boolean)
+ //'
+ //' @return numeric matrix of convolved values
+ //'
+ //' @export
+ //'
+ //' @importFrom Rcpp sourceCpp
+ //' @importFrom stats nextn
+ //' @importFrom stats convolve
+ //' @importFrom stats spec.pgram
+ //'
+ //' @examples
+ //' a <- convolve_matrix(x = 1:100,
+ //'                      y = as.matrix(1:10),
+ //'                      remove_partial = FALSE,
+ //'                      reverse = TRUE)
+ //'
+ //' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
+ //'
+ // [[Rcpp::export]]
+ Eigen::MatrixXd convolve_matrix(const Eigen::VectorXd& x,
+                                 const Eigen::MatrixXd& y,
+                                 const bool remove_partial,
+                                 const bool reverse) {
 
-  size_t n_row   = x.size();
-  size_t n_row_y = y.rows();
-  size_t n_col   = y.cols();
+   size_t n_row   = x.size();
+   size_t n_row_y = y.rows();
+   size_t n_col   = y.cols();
 
-  if(n_row_y > n_row) {
-    Rcpp::stop("convolve_matrix: y cannot have more rows than x");
-  }
+   if (n_row_y > n_row) {
+     Rcpp::stop("convolve_matrix: y cannot have more rows than x");
+   }
 
-  Eigen::FFT<double> fft;
-  size_t n_new = next_n_eigen(n_row + n_row_y - 1);
+   Eigen::FFT<double> fft;
+   size_t n_new = next_n_eigen(n_row + n_row_y - 1);
 
-  // Temporary vectors
-  VectorXd x_dbl(n_new);
-  VectorXd out_dbl(n_new);
+   // Temporary vectors
+   VectorXd x_dbl(n_new);
+   VectorXd out_dbl(n_new);
 
-  VectorXcd fft_x(n_new);
-  VectorXcd fft_y(n_new);
+   VectorXcd fft_x(n_new);
+   VectorXcd fft_y(n_new);
 
-  // Output
-  MatrixXd out(n_row, n_col);
+   // Output
+   MatrixXd out(n_row, n_col);
 
-  x_dbl.setZero();
+   x_dbl.setZero();
 
-  if (reverse) {
-    x_dbl.tail(n_row) = x.reverse();
-  } else {
-    x_dbl.tail(n_row) = x;
-  }
+   if (reverse) {
+     x_dbl.tail(n_row) = x.reverse();
+   } else {
+     x_dbl.tail(n_row) = x;
+   }
 
-  // do fft for x
-  fft.fwd(fft_x, x_dbl);
+   // do fft for x
+   fft.fwd(fft_x, x_dbl);
 
 
-  // do fft for y and convolution
-  for(size_t i = 0; i < n_col; ++i) {
-    out_dbl.setZero();
+   // do fft for y and convolution
+   for (size_t i = 0; i < n_col; ++i) {
+     out_dbl.setZero();
 
-    out_dbl.head(n_row_y) = y.col(i);
+     out_dbl.head(n_row_y) = y.col(i);
 
-    fft.fwd(fft_y, out_dbl);
+     fft.fwd(fft_y, out_dbl);
 
-    fft_y = fft_x.array() * fft_y.conjugate().array();
+     fft_y = fft_x.array() * fft_y.conjugate().array();
 
-    fft.inv(out_dbl, fft_y);
+     fft.inv(out_dbl, fft_y);
 
-    if(reverse) {
-      out.col(i) = out_dbl.tail(n_row).reverse();
-    } else {
-      out.col(i) = out_dbl.head(n_row);
-    }
-  }
+     if (reverse) {
+       out.col(i) = out_dbl.tail(n_row).reverse();
+     } else {
+       out.col(i) = out_dbl.head(n_row);
+     }
+   }
 
-  if(remove_partial) {
-    out.topRows(n_row_y - 1).setConstant(NA_REAL);
-  }
+   if (remove_partial) {
+     out.topRows(n_row_y - 1).setConstant(NA_REAL);
+   }
 
-  return(out);
+   return(out);
 
-}
+ }
 //==============================================================================
 
 //==============================================================================
 //' @title
-//' convolve_matrix
-//'
-//' @description
-//' convolution of vector with matrix
-//'
-//' @param x vector to convolve with y (numeric vector)
-//' @param y numeric matrix to convolve with x (column by column convolution)
-//'  (numeric matrix)
-//' @param remove_partial keep the end values or fill with NA (boolean)
-//' @param reverse should x be reversed before convolution (boolean)
-//'
-//' @return numeric matrix of convolved values
-//'
-//' @export
-//'
-//' @importFrom Rcpp sourceCpp
-//' @importFrom stats nextn
-//' @importFrom stats convolve
-//' @importFrom stats spec.pgram
-//'
-//' @examples
-//' a <- convolve_matrix(x = 1:100,
-//'                      y = as.matrix(1:10),
-//'                      remove_partial = FALSE,
-//'                      reverse = TRUE)
-//'
-//' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
-//'
-// [[Rcpp::export]]
-Rcpp::List convolve_list(const Eigen::VectorXd& x,
-                         const List y,
-                         const bool remove_partial,
-                         const bool reverse) {
-
-  size_t n = y.length();
-  size_t n_x = x.size();
-
-  Eigen::VectorXd yy = Rcpp::as<Eigen::Map<Eigen::VectorXd>>(y[0]);
-  size_t n_y = yy.size();
-
-  Eigen::FFT<double> fft;
-  size_t n_new = next_n_eigen(n_x + n_y - 1);
-
-  // Temporary vectors
-  VectorXd x_dbl = VectorXd::Zero(n_new);
-  VectorXd out_dbl = VectorXd::Zero(n_new);
-
-  VectorXcd fft_x(n_new);
-  VectorXcd fft_y(n_new);
-
-  // Output
-  Rcpp::List out;
-
-  if (reverse) {
-    x_dbl.tail(n_x) = x.reverse();
-  } else {
-    x_dbl.tail(n_x) = x;
-  }
-
-  // do fft for x
-  fft.fwd(fft_x, x_dbl);
-
-  // do fft for y and convolution
-
-  for(size_t i = 0; i < n; ++i) {
-    yy = Rcpp::as<Eigen::Map<Eigen::VectorXd>>(y[i]);
-
-    out_dbl.head(n_y) = yy;
-
-    fft.fwd(fft_y, out_dbl);
-
-    fft_y = fft_x.array() * fft_y.conjugate().array();
-
-    fft.inv(out_dbl, fft_y);
-
-    if(reverse) {
-
-      if(remove_partial) {
-        out_dbl.tail(n_y - 1).setConstant(NA_REAL);
-      }
-
-      out.push_back(out_dbl.tail(n_x).reverse());
-
-    } else {
-
-      if(remove_partial) {
-        out_dbl.head(n_y - 1).setConstant(NA_REAL);
-      }
-
-      out.push_back(out_dbl.head(n_x));
-
-    }
-
-  }
-
-
-  return(out);
-
-}
-
-//==============================================================================
-// [[Rcpp::export]]
-std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
-                          const std::list<Eigen::VectorXd> y,
+ //' convolve_matrix
+ //'
+ //' @description
+ //' convolution of vector with matrix
+ //'
+ //' @param x vector to convolve with y (numeric vector)
+ //' @param y numeric matrix to convolve with x (column by column convolution)
+ //'  (numeric matrix)
+ //' @param remove_partial keep the end values or fill with NA (boolean)
+ //' @param reverse should x be reversed before convolution (boolean)
+ //'
+ //' @return numeric matrix of convolved values
+ //'
+ //' @export
+ //'
+ //' @importFrom Rcpp sourceCpp
+ //' @importFrom stats nextn
+ //' @importFrom stats convolve
+ //' @importFrom stats spec.pgram
+ //'
+ //' @examples
+ //' a <- convolve_matrix(x = 1:100,
+ //'                      y = as.matrix(1:10),
+ //'                      remove_partial = FALSE,
+ //'                      reverse = TRUE)
+ //'
+ //' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
+ //'
+ // [[Rcpp::export]]
+ Rcpp::List convolve_list(const Eigen::VectorXd& x,
+                          const List y,
                           const bool remove_partial,
                           const bool reverse) {
 
-   size_t n = y.size();
+   size_t n = y.length();
    size_t n_x = x.size();
 
-   Eigen::VectorXd yy = y.front();
+   Eigen::VectorXd yy = Rcpp::as<Eigen::Map<Eigen::VectorXd>>(y[0]);
    size_t n_y = yy.size();
 
    Eigen::FFT<double> fft;
@@ -641,7 +568,7 @@ std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
    VectorXcd fft_y(n_new);
 
    // Output
-   std::list<Eigen::VectorXd> out;
+   Rcpp::List out;
 
    if (reverse) {
      x_dbl.tail(n_x) = x.reverse();
@@ -653,9 +580,9 @@ std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
    fft.fwd(fft_x, x_dbl);
 
    // do fft for y and convolution
-   for (auto yy : y) {
-   // for(size_t i = y.cbegin(); i < y.cend(); ++i) {
-     // yy = y[i];
+
+   for (size_t i = 0; i < n; ++i) {
+     yy = Rcpp::as<Eigen::Map<Eigen::VectorXd>>(y[i]);
 
      out_dbl.head(n_y) = yy;
 
@@ -665,9 +592,9 @@ std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
 
      fft.inv(out_dbl, fft_y);
 
-     if(reverse) {
+     if (reverse) {
 
-       if(remove_partial) {
+       if (remove_partial) {
          out_dbl.tail(n_y - 1).setConstant(NA_REAL);
        }
 
@@ -675,7 +602,7 @@ std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
 
      } else {
 
-       if(remove_partial) {
+       if (remove_partial) {
          out_dbl.head(n_y - 1).setConstant(NA_REAL);
        }
 
@@ -690,6 +617,79 @@ std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
 
  }
 
+//==============================================================================
+// [[Rcpp::export]]
+std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
+                                          const std::list<Eigen::VectorXd> y,
+                                          const bool remove_partial,
+                                          const bool reverse) {
+
+  size_t n = y.size();
+  size_t n_x = x.size();
+
+  Eigen::VectorXd yy = y.front();
+  size_t n_y = yy.size();
+
+  Eigen::FFT<double> fft;
+  size_t n_new = next_n_eigen(n_x + n_y - 1);
+
+  // Temporary vectors
+  VectorXd x_dbl = VectorXd::Zero(n_new);
+  VectorXd out_dbl = VectorXd::Zero(n_new);
+
+  VectorXcd fft_x(n_new);
+  VectorXcd fft_y(n_new);
+
+  // Output
+  std::list<Eigen::VectorXd> out;
+
+  if (reverse) {
+    x_dbl.tail(n_x) = x.reverse();
+  } else {
+    x_dbl.tail(n_x) = x;
+  }
+
+  // do fft for x
+  fft.fwd(fft_x, x_dbl);
+
+  // do fft for y and convolution
+  for (auto yy : y) {
+    // for (size_t i = y.cbegin(); i < y.cend(); ++i) {
+    // yy = y[i];
+
+    out_dbl.head(n_y) = yy;
+
+    fft.fwd(fft_y, out_dbl);
+
+    fft_y = fft_x.array() * fft_y.conjugate().array();
+
+    fft.inv(out_dbl, fft_y);
+
+    if (reverse) {
+
+      if (remove_partial) {
+        out_dbl.tail(n_y - 1).setConstant(NA_REAL);
+      }
+
+      out.push_back(out_dbl.tail(n_x).reverse());
+
+    } else {
+
+      if (remove_partial) {
+        out_dbl.head(n_y - 1).setConstant(NA_REAL);
+      }
+
+      out.push_back(out_dbl.head(n_x));
+
+    }
+
+  }
+
+
+  return(out);
+
+}
+
 
 //******************************************************************************
 // Pgram
@@ -698,153 +698,244 @@ std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
 
 //==============================================================================
 //' @title
-//' multiply_ffts
-//'
-//' @description
-//' Multiply each column of a complex matrix with all the columns.
-//'
-//' @param x complex matrix to convolve with itself (complex numeric matrix)
-//' @param n_col number of columns in the original input series (integer)
-//' @param truncated skip the first row to decrease memory use? (boolean)
-//'
-//'
-//' @return pgram of input FFT values.
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::MatrixXcd multiply_ffts(Eigen::MatrixXcd& x) {
+ //' multiply_ffts
+ //'
+ //' @description
+ //' Multiply each column of a complex matrix with all the columns.
+ //'
+ //' @param x complex matrix to convolve with itself (complex numeric matrix)
+ //' @param n_col number of columns in the original input series (integer)
+ //' @param truncated skip the first row to decrease memory use? (boolean)
+ //'
+ //'
+ //' @return pgram of input FFT values.
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::MatrixXcd multiply_ffts(Eigen::MatrixXcd& x) {
 
-  size_t ind = 0;
-  size_t n_col = x.cols();
+   size_t ind = 0;
+   size_t n_col = x.cols();
 
-  size_t n_col_pgram = double(n_col / 2.0) * (n_col + 1);
+   size_t n_col_pgram = double(n_col / 2.0) * (n_col + 1);
 
-  size_t n_row = x.rows();
-  MatrixXcd pgram_mat(n_row, n_col_pgram);
+   size_t n_row = x.rows();
+   MatrixXcd pgram_mat(n_row, n_col_pgram);
 
-  // complete set
-  for (size_t i = 0; i < n_col; ++i) {
-    for (size_t j = i; j < n_col; ++j) {
+   // complete set
+   for (size_t i = 0; i < n_col; ++i) {
+     for (size_t j = i; j < n_col; ++j) {
 
-      pgram_mat.col(ind) = x.col(i).array() *
-        x.col(j).conjugate().array();
+       pgram_mat.col(ind) = x.col(i).array() *
+         x.col(j).conjugate().array();
 
-      ind += 1;
+       ind += 1;
 
-    }
-  }
+     }
+   }
 
-  return(pgram_mat);
+   return(pgram_mat);
 
-}
+ }
 //==============================================================================
 
 
 //==============================================================================
 //' @title
-//' fill_lower_left
-//'
-//' @description
-//' Fill in the complex conjugate columns.
-//'
-//' @param x complex matrix of pgram values (complex matrix)
-//' @param n_col number of columns in the original input series (integer)
-//' @param start the first row index to begin on (boolean)
-//'
-//'
-//' @return Matrix with filled in complex conjugate columns.
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::MatrixXcd fill_lower_left(Eigen::MatrixXcd& x,
-                                 size_t start) {
-  size_t ind;
-  size_t ind_inv;
+ //' fill_lower_left
+ //'
+ //' @description
+ //' Fill in the complex conjugate columns.
+ //'
+ //' @param x complex matrix of pgram values (complex matrix)
+ //' @param n_col number of columns in the original input series (integer)
+ //' @param start the first row index to begin on (boolean)
+ //'
+ //'
+ //' @return Matrix with filled in complex conjugate columns.
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::MatrixXcd fill_lower_left(Eigen::MatrixXcd& x,
+                                  size_t start) {
+   size_t ind;
+   size_t ind_inv;
 
-  size_t n_col = sqrt(x.cols() * 2 - x.cols());
+   size_t n_col = sqrt(x.cols() * 2 - x.cols());
 
-  // assign lower left with the complex conjugate
-  for (size_t i = start; i < n_col - 1 + start; ++i){
-    for (size_t j = i + 1; j < n_col; ++j){
-      ind     = index_from_i_j(i - start, j, n_col);
-      ind_inv = index_from_j_i(i, j - start, n_col);
-      x.col(ind_inv) = x.col(ind).conjugate();
-    }
-  }
+   // assign lower left with the complex conjugate
+   for (size_t i = start; i < n_col - 1 + start; ++i){
+     for (size_t j = i + 1; j < n_col; ++j){
+       ind     = index_from_i_j(i - start, j, n_col);
+       ind_inv = index_from_j_i(i, j - start, n_col);
+       x.col(ind_inv) = x.col(ind).conjugate();
+     }
+   }
 
-  return(x);
-}
+   return(x);
+ }
 //==============================================================================
 
 
 //==============================================================================
 //' @title
-//' spec_pgram
-//'
-//' @description
-//' Calculate the periodogram.  This method only keeps the columns necessary for
-//' the transfer function calculation. This method is based on `spec.pgram`.
-//'
-//' @inheritParams spec.pgram
-//'
-//'
-//' @return periodogram from an input matrix using a Fast Fourier Transform.
-//' Similar to `spec.pgram` but should be faster.
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd& x,
+ //' spec_pgram
+ //'
+ //' @description
+ //' Calculate the periodogram.  This method only keeps the columns necessary for
+ //' the transfer function calculation. This method is based on `spec.pgram`.
+ //'
+ //' @inheritParams spec.pgram
+ //'
+ //'
+ //' @return periodogram from an input matrix using a Fast Fourier Transform.
+ //' Similar to `spec.pgram` but should be faster.
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd& x,
+                             const Eigen::VectorXi& spans,
+                             bool detrend,
+                             bool demean,
+                             double taper) {
+
+   if (spans.size() < 1) {
+     Rcpp::stop("spec_pgram: spans must be length 1 or larger.");
+   }
+
+   // detrend or demean
+   x = detrend_and_demean_matrix(x, detrend, demean);
+
+   size_t n_row = x.rows();
+   size_t n_new = next_n_eigen(n_row);
+
+   std::complex<double> scale = 1.0 / n_row; // or n_new
+
+   // taper vector
+   ArrayXd taper_array = spec_taper(n_row, taper).array();
+
+
+   // Do FFTs
+   MatrixXcd x_fft_mat = fft_matrix(x.array().colwise() * taper_array,
+                                    n_new);
+
+   // do a check on small values
+   // x_fft_mat = check_ffts(x_fft_mat, 1000);
+
+
+   // calculate upper triangle
+   MatrixXcd pgram_mat = multiply_ffts(x_fft_mat).array() * scale;
+
+
+   // interpolate first value (do we want to do this?)
+   pgram_mat.row(0) = 0.5 * (pgram_mat.row(1).array() + pgram_mat.row(n_new - 1).array());
+
+
+   // kernel multiplication
+   if (spans(0) > 1) {
+     VectorXd kernel = modified_daniell(spans / 2);
+     pgram_mat = kernel_apply(pgram_mat, kernel);
+   }
+
+
+   return(pgram_mat);
+ }
+//==============================================================================
+
+
+//==============================================================================
+//' @title
+ //' spec_pgram
+ //'
+ //' @description
+ //' Calculate the periodogram.  This method only keeps the columns necessary for
+ //' the transfer function calculation. This method is based on `spec.pgram`.
+ //'
+ //' @inheritParams spec.pgram
+ //'
+ //'
+ //' @return periodogram from an input matrix using a Fast Fourier Transform.
+ //' Similar to `spec.pgram` but should be faster.
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Rcpp::List spec_pgram_list(Rcpp::List& x,
                             const Eigen::VectorXi& spans,
                             bool detrend,
                             bool demean,
                             double taper) {
 
-  if (spans.size() < 1) {
-    Rcpp::stop("spec_pgram: spans must be length 1 or larger.");
-  }
+   if (spans.size() < 1) {
+     Rcpp::stop("spec_pgram: spans must be length 1 or larger.");
+   }
 
-  // detrend or demean
-  x = detrend_and_demean_matrix(x, detrend, demean);
+   Eigen::VectorXd tmp = x[0];
+   size_t ind = 0;
+   size_t n_row = tmp.size();
+   size_t n_new = next_n_eigen(n_row);
+   size_t n = x.size();
+   size_t n_col_pgram = double(n / 2.0) * (n + 1);
+   Rcpp::List pgram(n_col_pgram);
 
-  size_t n_row = x.rows();
-  size_t n_new = next_n_eigen(n_row);
+   std::complex<double> scale = 1.0 / n_row; // or n_new
 
-  std::complex<double> scale = 1.0 / n_row; // or n_new
+   // taper vector
+   Eigen::ArrayXd taper_array = spec_taper(n_row, taper).array();
 
-  // taper vector
-  ArrayXd taper_array = spec_taper(n_row, taper).array();
+   // Do FFTs
+   Rcpp::List x_fft_list(n);// = fft_list(x.array().colwise() * taper_array,n_new);
+
+   Eigen::VectorXcd x_fft(n_new);
+   Eigen::VectorXd  x_padded(n_new);
+   Eigen::VectorXd  x_tmp(n_row);
+   // MatrixXcd out(n_new, n_col);
+
+   Eigen::FFT<double> fft;
+
+   // detrend or demean
+   x = detrend_and_demean_list(x, detrend, demean);
+
+   for (size_t i = 0; i < n; ++i) {
+     x_tmp = x[i];
+     x_tmp.array() *= taper_array;
+     x_padded = pad_vector(x_tmp, n_row, n_new);
+     fft.fwd(x_fft, x_padded, 0);
+
+     x_fft_list[i] = x_fft.array() * scale;
+   }
+
+   Eigen::VectorXcd t1;
+   Eigen::VectorXcd t2;
+
+   for (size_t i = 0; i < n; ++i) {
+     t1 = x_fft_list[i];
+
+     for (size_t j = i; j < n; ++j) {
+       t2 = x_fft_list[j];
+       t2 = t1.array() * t2.conjugate().array();
+
+       // interpolate first value (do we want to do this?)
+       t2[0] = 0.5 * (t2(1) + t2(n_new - 1));
+       pgram[ind] = t2;
+       ind += 1;
+     }
+   }
 
 
-  // Do FFTs
-  MatrixXcd x_fft_mat = fft_matrix(x.array().colwise() * taper_array,
-                                   n_new);
-
-  // do a check on small values
-  // x_fft_mat = check_ffts(x_fft_mat, 1000);
-
-
-  // calculate upper triangle
-  MatrixXcd pgram_mat = multiply_ffts(x_fft_mat).array() * scale;
+   // kernel multiplication
+   if (spans(0) > 1) {
+     Eigen::VectorXd kernel = modified_daniell(spans / 2);
+     pgram = kernel_apply_list(pgram, kernel);
+   }
 
 
-  // interpolate first value (do we want to do this?)
-  pgram_mat.row(0) = 0.5 * (pgram_mat.row(1).array() + pgram_mat.row(n_new - 1).array());
-
-
-  // kernel multiplication
-  if (spans(0) > 1) {
-    VectorXd kernel = modified_daniell(spans / 2);
-    pgram_mat = kernel_apply(pgram_mat, kernel);
-  }
-
-
-  return(pgram_mat);
-}
+   return(pgram);
+ }
 //==============================================================================
-
 
 
 
@@ -854,122 +945,122 @@ Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd& x,
 
 //==============================================================================
 //' @title
-//' spec_welch
-//'
-//' @description
-//' Calculate the periodogram using Welch's method.  This method only keeps the
-//' columns necessary for the transfer function calculation. This method is
-//' based on `spec.pgram`.
-//'
-//' @inheritParams spec.pgram
-//' @param length_subset length of each subset (integer)
-//' @param overlap percent to overlap subsets (double)
-//' @param window vector of length length_subset (numeric vector)
-//'
-//'
-//' @return periodogram from an input matrix using a Fast Fourier Transform and
-//' Welch's method.
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::MatrixXcd spec_welch(Eigen::MatrixXd& x,
-                            size_t length_subset,
-                            double overlap,
-                            Eigen::VectorXd window
-) {
+ //' spec_welch
+ //'
+ //' @description
+ //' Calculate the periodogram using Welch's method.  This method only keeps the
+ //' columns necessary for the transfer function calculation. This method is
+ //' based on `spec.pgram`.
+ //'
+ //' @inheritParams spec.pgram
+ //' @param length_subset length of each subset (integer)
+ //' @param overlap percent to overlap subsets (double)
+ //' @param window vector of length length_subset (numeric vector)
+ //'
+ //'
+ //' @return periodogram from an input matrix using a Fast Fourier Transform and
+ //' Welch's method.
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::MatrixXcd spec_welch(Eigen::MatrixXd& x,
+                             size_t length_subset,
+                             double overlap,
+                             Eigen::VectorXd window
+ ) {
 
 
-  size_t n_row = x.rows();
-  size_t n_col = x.cols();
+   size_t n_row = x.rows();
+   size_t n_col = x.cols();
 
-  if(window.size() == 0) {
-    VectorXd window = window_rectangle(length_subset);
-  }
-  if(window.size() != length_subset) {
-    Rcpp::stop("spec_welch: `length_subset` cannot be greater than the number of rows in `x`");
-  }
-  // check inputs
-  if(length_subset > n_row) {
-    Rcpp::stop("spec_welch: `length_subset` cannot be greater than the number of rows in `x`");
-  }
-  if(length_subset <= 0) {
-    Rcpp::stop("spec_welch: `length_subset` must be a positive integer");
-  }
-  if(overlap > 1.0 || overlap < 0.0) {
-    Rcpp::stop("spec_welch: `overlap` must be less than 1.0 and greater than 0.0");
-  }
-
-
-  size_t n_overlap = floor(length_subset * overlap);
-
-  size_t n_new = next_n_eigen(length_subset);
-
-  size_t n_fft = ceil((double)(n_row - length_subset) / (double)(length_subset - n_overlap));
-
-  // suppose you want 10
-  // size_t n_fft_10 = 1 - ceil((double)(n_row - length_subset)) / 10 / length_subset;
-
-  // Rcpp::Rcout << "The value n_fft " << n_fft << std::endl;
-
-  // get the starting index of each subset
-  VectorXi starts = Eigen::VectorXi::LinSpaced(n_fft, 0, n_fft-1);
-  starts = starts.array() * (length_subset - n_overlap);
+   if (window.size() == 0) {
+     VectorXd window = window_rectangle(length_subset);
+   }
+   if (window.size() != length_subset) {
+     Rcpp::stop("spec_welch: `length_subset` must be the same length as window");
+   }
+   // check inputs
+   if (length_subset > n_row) {
+     Rcpp::stop("spec_welch: `length_subset` cannot be greater than the number of rows in `x`");
+   }
+   if (length_subset <= 0) {
+     Rcpp::stop("spec_welch: `length_subset` must be a positive integer");
+   }
+   if (overlap > 1.0 || overlap < 0.0) {
+     Rcpp::stop("spec_welch: `overlap` must be less than 1.0 and greater than 0.0");
+   }
 
 
-  // window
-  double scale = window_scale(window, n_new, n_fft);
-  size_t n_col_pgram = n_col * double(n_col + 1) / 2;
+   size_t n_overlap = floor(length_subset * overlap);
 
-  // temporary matrices and output
-  MatrixXd x_block(n_col, length_subset);
-  MatrixXcd x_fft_mat(n_new, n_col);
-  MatrixXcd pgram_mat(n_new, n_col_pgram);
-  pgram_mat.setZero();
+   size_t n_new = next_n_eigen(length_subset);
 
-  size_t ind;
+   size_t n_fft = ceil((double)(n_row - length_subset) / (double)(length_subset - n_overlap));
 
-  // calculate upper right -- doing in parallel requires additional work --
-  for (size_t k = 0; k < n_fft; ++k) {
-    ind = 0;
-    x_block = x.middleRows(starts[k], length_subset);
-    x_block = x_block.array().colwise() * window.array();
-    x_block = detrend_and_demean_matrix(x_block, true, true);
+   // suppose you want 10
+   // size_t n_fft_10 = 1 - ceil((double)(n_row - length_subset)) / 10 / length_subset;
 
-    // calculate FFT
-    x_fft_mat = fft_matrix(x_block, n_new);
+   // Rcpp::Rcout << "The value n_fft " << n_fft << std::endl;
 
-    for(size_t i = 0; i < n_col; ++i) {
-      for(size_t j = i; j < n_col; ++j) {
-
-        pgram_mat.col(ind) = pgram_mat.col(ind).array() +
-          x_fft_mat.col(i).array() * x_fft_mat.col(j).conjugate().array();
+   // get the starting index of each subset
+   VectorXi starts = Eigen::VectorXi::LinSpaced(n_fft, 0, n_fft-1);
+   starts = starts.array() * (length_subset - n_overlap);
 
 
-        ind += 1;
+   // window
+   double scale = window_scale(window, n_new, n_fft);
+   size_t n_col_pgram = n_col * double(n_col + 1) / 2;
 
-      }
-    }
-  }
+   // temporary matrices and output
+   MatrixXd x_block(n_col, length_subset);
+   MatrixXcd x_fft_mat(n_new, n_col);
+   MatrixXcd pgram_mat(n_new, n_col_pgram);
+   pgram_mat.setZero();
 
-  // pgram_mat = fill_lower_left(pgram_mat, n_col, start);
+   size_t ind;
 
-  pgram_mat.row(0) = 0.5 * (pgram_mat.row(1).array() + pgram_mat.row(n_new-1).array());
-  pgram_mat *= scale;
+   // calculate upper right -- doing in parallel requires additional work --
+   for (size_t k = 0; k < n_fft; ++k) {
+     ind = 0;
+     x_block = x.middleRows(starts[k], length_subset);
+     x_block = x_block.array().colwise() * window.array();
+     x_block = detrend_and_demean_matrix(x_block, true, true);
 
-  // MatrixXd m =  pgram_mat.cwiseAbs2();
-  // double mx = m.col(2).maxCoeff();
-  // Rcpp::Rcout << "The value max " << mx << std::endl;
-  // std::complex<double> cplx_zero = std::complex<double>(1e-12, 1e-12);
-  //
-  // for (size_t i = 0; i < n_new; ++i) {
-  //   if(abs(pgram_mat(i,2)) < 0.01) {
-  //     pgram_mat(i, 2) = cplx_zero;
-  //   }
-  // }
+     // calculate FFT
+     x_fft_mat = fft_matrix(x_block, n_new);
 
-  return(pgram_mat);
-}
+     for (size_t i = 0; i < n_col; ++i) {
+       for (size_t j = i; j < n_col; ++j) {
+
+         pgram_mat.col(ind) = pgram_mat.col(ind).array() +
+           x_fft_mat.col(i).array() * x_fft_mat.col(j).conjugate().array();
+
+
+         ind += 1;
+
+       }
+     }
+   }
+
+   // pgram_mat = fill_lower_left(pgram_mat, n_col, start);
+
+   pgram_mat.row(0) = 0.5 * (pgram_mat.row(1).array() + pgram_mat.row(n_new-1).array());
+   pgram_mat *= scale;
+
+   // MatrixXd m =  pgram_mat.cwiseAbs2();
+   // double mx = m.col(2).maxCoeff();
+   // Rcpp::Rcout << "The value max " << mx << std::endl;
+   // std::complex<double> cplx_zero = std::complex<double>(1e-12, 1e-12);
+   //
+   // for (size_t i = 0; i < n_new; ++i) {
+   //   if (abs(pgram_mat(i,2)) < 0.01) {
+   //     pgram_mat(i, 2) = cplx_zero;
+   //   }
+   // }
+
+   return(pgram_mat);
+ }
 //==============================================================================
 
 
@@ -1039,138 +1130,170 @@ Eigen::MatrixXcd spec_welch(Eigen::MatrixXd& x,
 
 //==============================================================================
 //' @title
-//' solve_cplx_parallel
-//'
-//' @description
-//' Calculate the transfer function from a periodogram.
-//'
-//' @inheritParams spec.pgram
-//' @inheritParams make_groups
-//'
-//' @return the transfer functions.
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::MatrixXcd solve_cplx_parallel(const Eigen::MatrixXcd& x) {
+ //' solve_cplx_parallel
+ //'
+ //' @description
+ //' Calculate the transfer function from a periodogram.
+ //'
+ //' @inheritParams spec.pgram
+ //' @inheritParams make_groups
+ //'
+ //' @return the transfer functions.
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::MatrixXcd solve_cplx_parallel(const Eigen::MatrixXcd& x) {
 
-  // original number of series
-  size_t n_col = get_column_number(x.cols());
+   // original number of series
+   size_t n_col = get_column_number(x.cols());
 
-  size_t n_row = x.rows();
-  size_t sub_size = n_col - 1;
-  MatrixXcd out(n_row, sub_size);
+   size_t n_row = x.rows();
+   size_t sub_size = n_col - 1;
+   MatrixXcd out(n_row, sub_size);
 
-  RcppThread::parallelFor(0, n_row, [&] (size_t i) {
+   RcppThread::parallelFor(0, n_row, [&] (size_t i) {
 
-    size_t ind = n_col;
-    RowVectorXcd sub_v = x.row(i);
+     size_t ind = n_col;
+     RowVectorXcd sub_v = x.row(i);
 
-    VectorXcd y = sub_v.segment(1, sub_size).conjugate();
+     VectorXcd y = sub_v.segment(1, sub_size).conjugate();
 
-    MatrixXcd X(sub_size, sub_size);
+     MatrixXcd X(sub_size, sub_size);
+     const int p = sub_size;
 
-    for(size_t i = 0; i < sub_size; ++i) {
-      for(size_t j = i; j < sub_size; ++j) {
+     for (size_t i = 0; i < sub_size; ++i) {
+       for (size_t j = i; j < sub_size; ++j) {
 
-        X(i, j) = sub_v(ind);
+         X(i, j) = sub_v(ind);
 
-        if (i != j) {
-          X(j, i) = std::conj(sub_v(ind));
-        }
+         if (i != j) {
+           X(j, i) = std::conj(sub_v(ind));
+         }
 
-        ind += 1;
+         ind += 1;
 
-      }
-    }
+       }
+     }
 
-    // fullPivLu works fast for small matrices
-    // ldlt/llt will be faster but sacrifices precision
-    // https://eigen.tuxfamily.org/dox/group__TutorialLinearAlgebra.html
-    out.row(i) = X.colPivHouseholderQr().solve(y);
 
-  });
+     // ldlt/llt will be faster but sacrifices precision
+     // Eigen::LLT<Eigen::MatrixXcd> llt(Eigen::MatrixXcd(p, p).setZero().selfadjointView<Lower>().
+     //                                      rankUpdate(X.adjoint()));
+     // out.row(i) = (llt.solve(X.adjoint() * y));
 
-  return(out);
-}
+
+     // fullPivLu works fast for small matrices
+     // ldlt/llt will be faster but sacrifices precision
+     // https://eigen.tuxfamily.org/dox/group__TutorialLinearAlgebra.html
+     out.row(i) = X.colPivHouseholderQr().solve(y);
+
+   });
+
+   return(out);
+ }
 //==============================================================================
 
+// [[Rcpp::export]]
+Eigen::MatrixXd list_to_matrix(Rcpp::List& x, int sub_start, int sub_end) {
+
+  int n_cols = x.size();
+  int n_rows = sub_end - sub_start + 1;
+
+  Eigen::VectorXd sub_vector(n_rows);
+  Eigen::VectorXd tmp;
+  Eigen::MatrixXd y(n_rows, n_cols);
+
+
+  for (int i = 0; i < n_cols; ++i) {
+    tmp = x[i];
+    y.col(i) = tmp.segment(sub_start, n_rows);
+  }
+
+  return(y);
+
+}
 
 //==============================================================================
 //' @title
-//' solve_cplx_irr
-//'
-//' @description
-//' Calculate the transfer function from a periodogram with irregular sized
-//' groups. This is experimental to see if we can improve efficiency.
-//' Instead of fitting every frequency it fits groups of frequencies
-//' The goal is to lump many high frequency signals to increase signal to
-//' noise ratios, and only few low frequency signals to keep resolution at low
-//' frequency.
-//'
-//' @inheritParams make_groups
-//' @inheritParams fill_lower_left
-//'
-//'
-//' @return the transfer functions.
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
-                                size_t n_groups) {
+ //' solve_cplx_irr
+ //'
+ //' @description
+ //' Calculate the transfer function from a periodogram with irregular sized
+ //' groups. This is experimental to see if we can improve efficiency.
+ //' Instead of fitting every frequency it fits groups of frequencies
+ //' The goal is to lump many high frequency signals to increase signal to
+ //' noise ratios, and only few low frequency signals to keep resolution at low
+ //' frequency.
+ //'
+ //' @inheritParams make_groups
+ //' @inheritParams fill_lower_left
+ //'
+ //'
+ //' @return the transfer functions.
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
+                                 size_t n_groups) {
 
-  // original number of series
-  size_t n_col = get_column_number(x.cols());
+   // original number of series
+   size_t n_col = get_column_number(x.cols());
 
-  size_t n_row = x.rows() / 2 + 1; // half spectrum only
-  VectorXi groups = make_groups(n_groups, n_row);
-  size_t n_ols = groups.size();
-  size_t sub_size = n_col - 1;
+   size_t n_row = x.rows() / 2 + 1; // half spectrum only
+   VectorXi groups = make_groups(n_groups, n_row);
+   size_t n_ols = groups.size();
+   size_t sub_size = n_col - 1;
 
-  VectorXi ind_sum(n_ols);
+   VectorXi ind_sum(n_ols);
 
-  ind_sum(0) = 0;
-  for(size_t j = 1; j < n_ols; ++j) {
-    ind_sum(j) = ind_sum(j - 1) + groups(j - 1);
-  }
+   ind_sum(0) = 0;
+   for (size_t j = 1; j < n_ols; ++j) {
+     ind_sum(j) = ind_sum(j - 1) + groups(j - 1);
+   }
 
-  MatrixXcd out(n_ols, sub_size);
+   MatrixXcd out(n_ols, sub_size);
 
-  RcppThread::parallelFor(0, n_ols, [&] (size_t i) {
+   RcppThread::parallelFor(0, n_ols, [&] (size_t i) {
 
-    size_t group_size = groups(i);
+     size_t group_size = groups(i);
 
-    MatrixXcd sub = x.middleRows(ind_sum(i), group_size);
-    VectorXcd y(group_size * sub_size);
+     MatrixXcd sub = x.middleRows(ind_sum(i), group_size);
+     VectorXcd y(group_size * sub_size);
 
-    MatrixXcd X(group_size * sub_size, sub_size);
+     MatrixXcd X(group_size * sub_size, sub_size);
+     const int p = sub_size;
 
-    // handle upper right
-    size_t ind = n_col;
+     // handle upper right
+     size_t ind = n_col;
 
-    for(size_t i = 0; i < sub_size; ++i) {
-      for(size_t j = i; j < sub_size; ++j) {
+     for (size_t i = 0; i < sub_size; ++i) {
+       for (size_t j = i; j < sub_size; ++j) {
 
-        if(i == 0) {
-          y.segment(j * group_size, group_size) = sub.col(ind - sub_size).conjugate();
-        }
+         if (i == 0) {
+           y.segment(j * group_size, group_size) = sub.col(ind - sub_size).conjugate();
+         }
 
-        X.col(j).segment(i * group_size, group_size) = sub.col(ind);
+         X.col(j).segment(i * group_size, group_size) = sub.col(ind);
 
-        if (i != j) {
-          X.col(i).segment(j * group_size, group_size) = sub.col(ind).conjugate();
-        }
+         if (i != j) {
+           X.col(i).segment(j * group_size, group_size) = sub.col(ind).conjugate();
+         }
 
-        ind = ind + 1;
-      }
-    }
+         ind = ind + 1;
+       }
+     }
 
-    out.row(i) = X.colPivHouseholderQr().solve(y);
-  });
+     // Eigen::LLT<Eigen::MatrixXcd> llt(Eigen::MatrixXcd(p, p).setZero().selfadjointView<Lower>().
+     //                                      rankUpdate(X.adjoint()));
+     // out.row(i) = (llt.solve(X.adjoint() * y));
 
-  return(out);
-}
+     out.row(i) = X.colPivHouseholderQr().solve(y);
+   });
+
+   return(out);
+ }
 
 
 
@@ -1212,13 +1335,13 @@ Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
 //   VectorXi ind_sum(n_ols);
 //
 //   ind_sum(0) = 0;
-//   for(size_t j = 1; j < n_ols; ++j) {
+//   for (size_t j = 1; j < n_ols; ++j) {
 //     ind_sum(j) = ind_sum(j - 1) + groups(j - 1);
 //   }
 //
 //   MatrixXcd out(n_ols, sub_size);
 //
-//   RcppThread::parallelFor(0, n_ols, [&] (size_t i) {
+//   RcppThread::parallelFor (0, n_ols, [&] (size_t i) {
 //
 //     size_t group_size = groups(i);
 //
@@ -1230,10 +1353,10 @@ Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
 //     // handle upper right
 //     size_t ind = n_col;
 //
-//     for(size_t i = 0; i < sub_size; ++i) {
-//       for(size_t j = i; j < sub_size; ++j) {
+//     for (size_t i = 0; i < sub_size; ++i) {
+//       for (size_t j = i; j < sub_size; ++j) {
 //
-//         if(i == 0) {
+//         if (i == 0) {
 //           y.segment(j * group_size, group_size) = sub.col(ind - sub_size).conjugate();
 //         }
 //
@@ -1260,73 +1383,73 @@ Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
 
 //==============================================================================
 //' @title
-//' ordinary_coherence_phase
-//'
-//' @description
-//' Calculate ordinary coherence and phase from a pgram. Reference:
-//' https://vru.vibrationresearch.com/lesson/coherence-mathematics/
-//'
-//' @param x periodogram matrix (complex matrix)
-//'
-//' @return Matrix with ordinary coherence and phase.
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::MatrixXd ordinary_coherence_phase(const Eigen::ArrayXXcd& x) {
+ //' ordinary_coherence_phase
+ //'
+ //' @description
+ //' Calculate ordinary coherence and phase from a pgram. Reference:
+ //' https://vru.vibrationresearch.com/lesson/coherence-mathematics/
+ //'
+ //' @param x periodogram matrix (complex matrix)
+ //'
+ //' @return Matrix with ordinary coherence and phase.
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::MatrixXd ordinary_coherence_phase(const Eigen::ArrayXXcd& x) {
 
-  // original number of series
-  size_t n_col = get_column_number(x.cols());
+   // original number of series
+   size_t n_col = get_column_number(x.cols());
 
-  if (n_col == 1) {
-    Rcpp::stop("Cannot calculate coherency for a single periodogram");
-  }
+   if (n_col == 1) {
+     Rcpp::stop("Cannot calculate coherency for a single periodogram");
+   }
 
-  size_t sub_size = n_col - 1;
-  size_t n_coh_phase = n_col * (sub_size) / 2;
-  size_t n_row = x.rows();
-  size_t ind_0, ind_1, ind_2, ind_3;
-  ind_0 = 0;
+   size_t sub_size = n_col - 1;
+   size_t n_coh_phase = n_col * (sub_size) / 2;
+   size_t n_row = x.rows();
+   size_t ind_0, ind_1, ind_2, ind_3;
+   ind_0 = 0;
 
-  MatrixXd coh_phase(n_row, n_coh_phase * 2);
-  VectorXi diag(n_col);
+   MatrixXd coh_phase(n_row, n_coh_phase * 2);
+   VectorXi diag(n_col);
 
-  diag(0) = 0;
-  for (size_t k = 0; k < sub_size; ++k) {
-    diag(k+1) = diag(k) + n_col - k;
-  }
+   diag(0) = 0;
+   for (size_t k = 0; k < sub_size; ++k) {
+     diag(k+1) = diag(k) + n_col - k;
+   }
 
-  for (size_t i = 0; i < sub_size; ++i) {
-    for (size_t j = i + 1; j < n_col; ++j) {
+   for (size_t i = 0; i < sub_size; ++i) {
+     for (size_t j = i + 1; j < n_col; ++j) {
 
-      ind_1 = diag(i) + j - i;
-      ind_2 = diag(i);
-      ind_3 = diag(j);
+       ind_1 = diag(i) + j - i;
+       ind_2 = diag(i);
+       ind_3 = diag(j);
 
-      coh_phase.col(ind_0) = (x.col(ind_1).abs2() /
-        (x.col(ind_2) * x.col(ind_3))).real();
+       coh_phase.col(ind_0) = (x.col(ind_1).abs2() /
+         (x.col(ind_2) * x.col(ind_3))).real();
 
-      coh_phase.col(ind_0 + n_coh_phase) = x.col(ind_1).arg();
+       coh_phase.col(ind_0 + n_coh_phase) = x.col(ind_1).arg();
 
-      ind_0 += 1;
-    }
-  }
+       ind_0 += 1;
+     }
+   }
 
-  // 0,1,2
-  // 3,4,5
-  // 6,7,8
-  //
-  // 0,1,2
-  // -,3,4
-  // -,-,5
-  //
-  // 0,1,2,3
-  // -,4,5,6
-  // -,-,7,8
-  // -,-,-,9
+   // 0,1,2
+   // 3,4,5
+   // 6,7,8
+   //
+   // 0,1,2
+   // -,3,4
+   // -,-,5
+   //
+   // 0,1,2,3
+   // -,4,5,6
+   // -,-,7,8
+   // -,-,-,9
 
-  return(coh_phase);
-}
+   return(coh_phase);
+ }
 //==============================================================================
 
 
@@ -1536,8 +1659,8 @@ Eigen::MatrixXd ordinary_coherence_phase(const Eigen::ArrayXXcd& x) {
 //
 //
 //   // check knots
-//   for(size_t i = 0; i < knots.size(); ++i) {
-//     if(knots(i) < frequency_irregular(i + 1)) {
+//   for (size_t i = 0; i < knots.size(); ++i) {
+//     if (knots(i) < frequency_irregular(i + 1)) {
 //       knots(i) = (frequency_irregular(i + 1) + frequency_irregular(i + 2)) / 2.0;
 //     }
 //   }
@@ -1564,7 +1687,7 @@ Eigen::MatrixXd ordinary_coherence_phase(const Eigen::ArrayXXcd& x) {
 //   Eigen::MatrixXcd out(max * 2 , n_col);
 //
 //
-//   for(size_t i = 0; i < n_col; ++i) {
+//   for (size_t i = 0; i < n_col; ++i) {
 //
 //     // do y by col
 //     x_sub = x.col(i).segment(1, n);
@@ -1576,7 +1699,7 @@ Eigen::MatrixXd ordinary_coherence_phase(const Eigen::ArrayXXcd& x) {
 //     im = bs_out * fit_imag;
 //
 //     // generate full length sequence
-//     for(size_t j = 0; j < max; ++j) {
+//     for (size_t j = 0; j < max; ++j) {
 //       frf(j) = std::complex<double>(re[j], im[j]);
 //     }
 //       // Rcpp::Rcout << "The value frf head " << frf.head(5) << std::endl;
@@ -1600,46 +1723,46 @@ Eigen::MatrixXd ordinary_coherence_phase(const Eigen::ArrayXXcd& x) {
 
 //==============================================================================
 //' @title
-//' transfer_pgram_smooth
-//'
-//' @description
-//' Calculate the transfer function from an input matrix. This function uses
-//' irregular sized groups using `make_groups`. This is experimental to see if
-//' and designed to be relatively fast. Instead of fitting every frequency and
-//' aggregating post solving, it fits groups of frequencies.
-//' The goal is to lump many high frequency signals to increase signal to
-//' noise ratios, and only few low frequency signals to keep resolution at low
-//' frequency.
-//'
-//' @inheritParams spec.pgram
-//' @inheritParams make_groups
-//' @param n_col number of covariate columns (integer)
-//'
-//'
-//' @return the transfer functions.
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::MatrixXcd transfer_pgram_smooth(Eigen::MatrixXd& x,
-                                       const Eigen::VectorXi& spans,
-                                       bool detrend,
-                                       bool demean,
-                                       double taper,
-                                       double power,
-                                       size_t n_groups) {
+ //' transfer_pgram_smooth
+ //'
+ //' @description
+ //' Calculate the transfer function from an input matrix. This function uses
+ //' irregular sized groups using `make_groups`. This is experimental to see if
+ //' and designed to be relatively fast. Instead of fitting every frequency and
+ //' aggregating post solving, it fits groups of frequencies.
+ //' The goal is to lump many high frequency signals to increase signal to
+ //' noise ratios, and only few low frequency signals to keep resolution at low
+ //' frequency.
+ //'
+ //' @inheritParams spec.pgram
+ //' @inheritParams make_groups
+ //' @param n_col number of covariate columns (integer)
+ //'
+ //'
+ //' @return the transfer functions.
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::MatrixXcd transfer_pgram_smooth(Eigen::MatrixXd& x,
+                                        const Eigen::VectorXi& spans,
+                                        bool detrend,
+                                        bool demean,
+                                        double taper,
+                                        double power,
+                                        size_t n_groups) {
 
-  // size_t min_aggregate = 1;
+   // size_t min_aggregate = 1;
 
-  // if(spans(0) == 0) {
-  //   min_aggregate = 3;
-  // }
+   // if (spans(0) == 0) {
+   //   min_aggregate = 3;
+   // }
 
-  MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper);
-  MatrixXcd out   = solve_cplx_irr(pgram, n_groups);
+   MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper);
+   MatrixXcd out   = solve_cplx_irr(pgram, n_groups);
 
-  return(out);
-}
+   return(out);
+ }
 //==============================================================================
 
 
@@ -1658,40 +1781,42 @@ Eigen::MatrixXcd transfer_pgram(Eigen::MatrixXd& x,
 //==============================================================================
 
 
+
+
 //==============================================================================
 //' @title
-//' transfer_welch
-//'
-//' @description
-//' Calculate the transfer function from an input matrix. This function uses
-//' irregular sized groups using `make_groups`. This is experimental to see if
-//' and designed to be relatively fast. Instead of fitting every frequency and
-//' aggregating post solving, it fits groups of frequencies.
-//' The goal is to lump many high frequency signals to increase signal to
-//' noise ratios, and only few low frequency signals to keep resolution at low
-//' frequency.
-//'
-//' @inheritParams spec.pgram
-//' @inheritParams make_groups
-//' @param n_col number of covariate columns (integer)
-//'
-//'
-//' @return the transfer functions.
-//'
-//' @noRd
-//'
-// [[Rcpp::export]]
-Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
-                                size_t length_subset,
-                                double overlap,
-                                Eigen::VectorXd window
-) {
+ //' transfer_welch
+ //'
+ //' @description
+ //' Calculate the transfer function from an input matrix. This function uses
+ //' irregular sized groups using `make_groups`. This is experimental to see if
+ //' and designed to be relatively fast. Instead of fitting every frequency and
+ //' aggregating post solving, it fits groups of frequencies.
+ //' The goal is to lump many high frequency signals to increase signal to
+ //' noise ratios, and only few low frequency signals to keep resolution at low
+ //' frequency.
+ //'
+ //' @inheritParams spec.pgram
+ //' @inheritParams make_groups
+ //' @param n_col number of covariate columns (integer)
+ //'
+ //'
+ //' @return the transfer functions.
+ //'
+ //' @noRd
+ //'
+ // [[Rcpp::export]]
+ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
+                                 size_t length_subset,
+                                 double overlap,
+                                 Eigen::VectorXd window
+ ) {
 
-  MatrixXcd pgram = spec_welch(x, length_subset, overlap, window);
-  MatrixXcd out   = solve_cplx_parallel(pgram);
+   MatrixXcd pgram = spec_welch(x, length_subset, overlap, window);
+   MatrixXcd out   = solve_cplx_parallel(pgram);
 
-  return(out);
-}
+   return(out);
+ }
 //==============================================================================
 
 
@@ -1750,7 +1875,7 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 //   Rcpp::Rcout << "The value x_interp rows " << x_interp.rows() << std::endl;
 //   Rcpp::Rcout << "The value x_out rows " << x_out.rows() << std::endl;
 //
-//   for(size_t i = 0; i < x_interp.cols(); ++i) {
+//   for (size_t i = 0; i < x_interp.cols(); ++i) {
 //     ret.col(i) = convolve_tf(x_out.col(i+1),
 //                              x_interp.col(i).reverse());
 //   }
@@ -1796,7 +1921,7 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 //                                               n_groups,
 //                                               min_aggregate);
 //
-//   // for(size_t i = 0; i < fs_sub.size()/4; ++i){
+//   // for (size_t i = 0; i < fs_sub.size()/4; ++i){
 //   //   knots(i) = fs_sub.segment(i*4, 3).mean();
 //   // }
 //   // knots(0) = fs_all(0);
@@ -1810,16 +1935,16 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 //   Rcpp::Rcout << "The value pgram rows " << pgram.rows() << std::endl;
 //   Rcpp::Rcout << "The value x rows " << x.rows() << std::endl;
 //
-//   for(size_t i = 1; i < frf.cols(); ++i) {
+//   for (size_t i = 1; i < frf.cols(); ++i) {
 //     size_t tt = 5;
-//     for(size_t j = 0; j < pgram.rows(); ++j) {
-//       if(std::abs(pgram(j, tt)) < 1e4) {
+//     for (size_t j = 0; j < pgram.rows(); ++j) {
+//       if (std::abs(pgram(j, tt)) < 1e4) {
 //         frf(j, i) = std::complex<double>(0.0, 0.0);
 //       }
 //     }
 //   }
 //
-//   for(size_t i = 0; i < frf.cols(); ++i) {
+//   for (size_t i = 0; i < frf.cols(); ++i) {
 //     ret.col(i) = convolve_tf(
 //       pad_vector(
 //         x.col(i+1),
@@ -1879,7 +2004,7 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 //
 //   MatrixXcd out(n_groups, sub_size);
 //
-//   RcppThread::parallelFor(0, n_groups, [&] (size_t i) {
+//   RcppThread::parallelFor (0, n_groups, [&] (size_t i) {
 //     size_t group_size = sizes(i);
 //     MatrixXcd sub = x.middleRows(groups(i), group_size);
 //     VectorXcd y(group_size * sub_size);
@@ -1887,11 +2012,11 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 //     size_t rem;
 //     size_t int_div;
 //
-//     for(size_t j = 0; j < n_col * sub_size; ++j) {
+//     for (size_t j = 0; j < n_col * sub_size; ++j) {
 //       rem = j % n_col;
 //       int_div = floor(j / n_col);
 //
-//       if(rem == 0) {
+//       if (rem == 0) {
 //         y.segment(int_div * group_size, group_size) = sub.col(j).array() * window_hann_eigen(group_size).array();
 //       } else {
 //         X.col(rem - 1).segment(int_div * group_size, group_size) = sub.col(j).array()* window_hann_eigen(group_size).array();
@@ -1945,7 +2070,7 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 //     groups(i) = (size_t)groups_f(i);
 //   }
 //   size_t g_sum = groups.sum();
-//   if(g_sum > n_row/2) {
+//   if (g_sum > n_row/2) {
 //     groups(n_groups - 1) -= (g_sum - n_row / 2);
 //   }
 //   return(groups);
@@ -1974,20 +2099,20 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 //   Eigen::ArrayXd alpha1 = VectorXd::Zero(n);
 //   Eigen::ArrayXd alpha2 = VectorXd::Zero(n);
 //
-//   if(degree == 0) {
+//   if (degree == 0) {
 //     out.setOnes();
-//     //   for(size_t j = 0; j < n; j++) {
-//     //     if(x(j) >= knots(i) & x(j) < knots(i+1)) {
+//     //   for (size_t j = 0; j < n; j++) {
+//     //     if (x(j) >= knots(i) & x(j) < knots(i+1)) {
 //     //       out(j) = 1.0;
 //     //     } else {
 //     //       out(j) = 0.0;
 //     //     }
 //     //   }
 //   } else {
-//     if(knots(degree + i) - knots(i) != 0) {
+//     if (knots(degree + i) - knots(i) != 0) {
 //       alpha1 = (x.array() - knots(i)) / (knots(degree + i) - knots(i));
 //     }
-//     if(knots(degree + i + 1) - knots(i + 1) != 0) {
+//     if (knots(degree + i + 1) - knots(i + 1) != 0) {
 //       alpha2 = (knots(i + degree + 1) - x.array()) /
 //         (knots(degree + i + 1) - knots(i + 1));
 //     }
@@ -2019,15 +2144,15 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 //   knots_pad.segment(degree, n_knots) = knots;
 //
 //
-//   // for(size_t i = 0; i < k; ++i) {
-//   RcppThread::parallelFor(0, k, [&] (size_t i) {
+//   // for (size_t i = 0; i < k; ++i) {
+//   RcppThread::parallelFor (0, k, [&] (size_t i) {
 //
 //     out.col(i) = basis_eigen(x, degree, i, knots_pad);
 //     // }
 //   });
 //
-//   for(size_t j = n_x-1; j > 0; --j) {
-//     if(x(j) >= knots(n_knots-1)){
+//   for (size_t j = n_x-1; j > 0; --j) {
+//     if (x(j) >= knots(n_knots-1)){
 //       out(j, k-1) = 1.0;
 //     } else {
 //       break;
@@ -2091,8 +2216,8 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 //   x_out = (x_out.array() - min_x) / (max_x - min_x);
 //   Eigen::VectorXcd values(n);
 //
-//   // for(int i = 0; i < n; ++i) {
-//   RcppThread::parallelFor(0, n, [&] (size_t i) {
+//   // for (int i = 0; i < n; ++i) {
+//   RcppThread::parallelFor (0, n, [&] (size_t i) {
 //     double re = spline_re(x_out(i))[1];
 //     double im = spline_im(x_out(i))[1];
 //     std::complex<double> cplx(re, im);
@@ -2135,8 +2260,8 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 //   RowVectorXd re = spline.BasisFunctions(0.5, 3, knots_in);
 //
 //   // re = spline(0.351659507062997);
-//   // for(int i = 0; i < n; ++i) {
-//   // // RcppThread::parallelFor(0, n, [&] (size_t i) {
+//   // for (int i = 0; i < n; ++i) {
+//   // // RcppThread::parallelFor (0, n, [&] (size_t i) {
 //   //   re = spline(x_out(i));
 //   //   // std::complex<double> cplx(re, im);
 //   //   values.row(i) = re;
@@ -2166,7 +2291,7 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 //   Eigen::VectorXd values(n);
 //   double x_in;
 //
-//   for(size_t i = 0; i < n; ++i) {
+//   for (size_t i = 0; i < n; ++i) {
 //     x_in = x_out(i);
 //     values(i) = spline(x_in).coeff(0);
 //   }
@@ -2256,7 +2381,7 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 /*** R
 
 x <- rnorm(1e7)
-y <- rnorm(1e5)
+y <- rnorm(1e6)
 
 # plot(frecipes:::convolve_overlap_save(x, rev(y)), type = 'l')
 # plot(frecipes:::convolve_overlap_add(x, rev(y)), type = 'l', col = "green")
@@ -2269,15 +2394,15 @@ tmp <-bench::press(
     y <- rnorm(y_len)
     y1 <- rev(y)
     bench::mark(
-    frecipes:::convolve_filter(x, y, TRUE, TRUE),
-    frecipes:::convolve_overlap_add(x, y1),
-    frecipes:::convolve_overlap_save(x, y1, 0),
-    # frecipes:::convolve_overlap_save(x, y1, 1),
-    # frecipes:::convolve_overlap_save(x, y1, 2),
-    # frecipes:::convolve_vec(x, frecipes:::pad_vector(y1, y_len, 1e7)),
-    check = TRUE,
-    min_iterations = 2
-  )}
+      frecipes:::convolve_filter(x, y, TRUE, TRUE),
+      frecipes:::convolve_overlap_add(x, y1),
+      frecipes:::convolve_overlap_save(x, y1, 0),
+      # frecipes:::convolve_overlap_save(x, y1, 1),
+      # frecipes:::convolve_overlap_save(x, y1, 2),
+      # frecipes:::convolve_vec(x, frecipes:::pad_vector(y1, y_len, 1e7)),
+      check = TRUE,
+      min_iterations = 2
+    )}
 )
 
 tmp
@@ -2287,10 +2412,11 @@ plot(x, type = 'l')
 points(frecipes:::convolve_overlap_save(x, y, 1), type = 'l', col = 'red')
 
 
-m <- matrix(rep(y, 20), ncol = 20)
+m <- matrix(rep(y, 10), ncol = 10)
 l <- list(y,y,y,y,y,y,
-          y,y,y,y,y,y,
-          y,y,y,y,y,y,y,y)
+          # y,y,y,y,y,y,
+          # y,y,y,y,y,y,
+          y,y,y,y)
 bench::mark(
   a <- frecipes:::convolve_overlap_save_list(x, l),
   b <- frecipes:::convolve_list(x, l, TRUE, TRUE),
@@ -2299,5 +2425,14 @@ bench::mark(
   check = FALSE,
   min_iterations = 1
 )
+
+bench::mark(
+  a <- frecipes:::spec_pgram(m, spans = 3, TRUE, TRUE, taper = 0.1),
+  base <- spec.pgram(m, spans = 3, demean = TRUE, detrend = TRUE, taper = 0.1, plot = FALSE),
+  b <- collapse::qM(frecipes:::spec_pgram_list(l, spans = 3, TRUE, TRUE, taper = 0.1)),
+  check = FALSE
+)
+
+
 
 */

@@ -135,108 +135,78 @@ distributed_lag_list3 <- function(x, n_lag, max_lag, df, degree, internal_knots,
 }
 
 #' @title
-#' fft_matrix
-#'
-#' @description
-#' Do an FFT for each matrix column
-#'
-#' @param x the matrix that holds the series (numeric matrix)
-#' @param detrend remove the linear trend of the columns (boolean)
-#' @param demean remove the mean for each column (boolean)
-#' @param n_new the padded size (integer)
-#'
-#' @return A matrix with FFT results.
-#'
-#' @noRd
-#'
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
+#' @title
+NULL
+
 fft_matrix <- function(x, n_new) {
     .Call(`_frecipes_fft_matrix`, x, n_new)
 }
 
-#' @title
-#' convolve_vec
-#'
-#' @description
-#' Circular convolution of two vectors having the same length
-#'
-#' @param x the vector that holds the series (numeric vector)
-#' @param y the vector to convolve with x (numeric vector)
-#'
-#'
-#' @return numeric vector that is the circular convolution of two vectors
-#'
-#'
-#' @noRd
-#'
 convolve_vec <- function(x, y) {
     .Call(`_frecipes_convolve_vec`, x, y)
 }
 
-#' @title
-#' convolve_filter
-#'
-#' @description
-#' convolution of vector with matrix
-#'
-#' @param x vector to convolve with y (numeric vector)
-#' @param y numeric matrix to convolve with x (column by column convolution)
-#'  (numeric matrix)
-#' @param remove_partial keep the end values or fill with NA (boolean)
-#' @param reverse should x be reversed before convolution (boolean)
-#'
-#' @return numeric matrix of convolved values
-#'
-#' @export
-#'
-#' @importFrom Rcpp sourceCpp
-#' @importFrom stats nextn
-#' @importFrom stats convolve
-#' @importFrom stats spec.pgram
-#'
-#' @examples
-#' a <- convolve_filter(x = 1:100,
-#'                      y = c(1:10, rep(0, 90)),
-#'                      remove_partial = FALSE,
-#'                      reverse = TRUE)
-#'
-#' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
-#'
 convolve_filter <- function(x, y, remove_partial, reverse) {
     .Call(`_frecipes_convolve_filter`, x, y, remove_partial, reverse)
 }
 
-#' @title
-#' convolve_overlap_add
-#'
-#' @description
-#' Multiply a transfer function with a real input and take the inverse FFT.
-#'
-#' @param x the vector that holds the series (numeric vector)
-#' @param y the kernel to convolve with x (complex numeric vector)
-#'
-#' @return the linear convolution of two vectors
-#'
-#' @noRd
-#'
 convolve_overlap_add <- function(x, y) {
     .Call(`_frecipes_convolve_overlap_add`, x, y)
 }
 
-#' @title
-#' convolve_overlap_save
-#'
-#' @description
-#' Multiply a transfer function with a real input and take the inverse FFT.
-#'
-#' @param x the vector that holds the series (numeric vector)
-#' @param y the kernel to convolve with x (complex numeric vector)
-#' @param align right (0), center (1), or left (2) alignment
-#'
-#'
-#' @return the linear convolution of two vectors
-#'
-#' @noRd
-#'
 convolve_overlap_save <- function(x, y, align) {
     .Call(`_frecipes_convolve_overlap_save`, x, y, align)
 }
@@ -245,104 +215,18 @@ shift_eigen <- function(x, n) {
     .Call(`_frecipes_shift_eigen`, x, n)
 }
 
-#' @title
-#' convolve_overlap_save_list
-#'
-#' @description
-#' Multiply a transfer function with a real input and take the inverse FFT.
-#'
-#' @param x the vector that holds the series (numeric vector)
-#' @param y the list of kernels to convolve with x
-#' @param align right (0), center (1), or left (2) alignment
-#'
-#' @return the linear convolution of two vectors
-#'
-#' @noRd
-#'
 convolve_overlap_save_list <- function(x, y, align) {
     .Call(`_frecipes_convolve_overlap_save_list`, x, y, align)
 }
 
-#' @title
-#' convolve_tf
-#'
-#' @description
-#' Multiply a transfer function with a real input and take the inverse FFT.
-#'
-#' @param x the vector that holds the series (numeric vector)
-#' @param y the transfer function to multiply with x (complex numeric vector)
-#'
-#'
-#' @return the circular convolution of two vectors
-#'
-#' @noRd
-#'
 convolve_tf <- function(x, y) {
     .Call(`_frecipes_convolve_tf`, x, y)
 }
 
-#' @title
-#' convolve_matrix
-#'
-#' @description
-#' convolution of vector with matrix
-#'
-#' @param x vector to convolve with y (numeric vector)
-#' @param y numeric matrix to convolve with x (column by column convolution)
-#'  (numeric matrix)
-#' @param remove_partial keep the end values or fill with NA (boolean)
-#' @param reverse should x be reversed before convolution (boolean)
-#'
-#' @return numeric matrix of convolved values
-#'
-#' @export
-#'
-#' @importFrom Rcpp sourceCpp
-#' @importFrom stats nextn
-#' @importFrom stats convolve
-#' @importFrom stats spec.pgram
-#'
-#' @examples
-#' a <- convolve_matrix(x = 1:100,
-#'                      y = as.matrix(1:10),
-#'                      remove_partial = FALSE,
-#'                      reverse = TRUE)
-#'
-#' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
-#'
 convolve_matrix <- function(x, y, remove_partial, reverse) {
     .Call(`_frecipes_convolve_matrix`, x, y, remove_partial, reverse)
 }
 
-#' @title
-#' convolve_matrix
-#'
-#' @description
-#' convolution of vector with matrix
-#'
-#' @param x vector to convolve with y (numeric vector)
-#' @param y numeric matrix to convolve with x (column by column convolution)
-#'  (numeric matrix)
-#' @param remove_partial keep the end values or fill with NA (boolean)
-#' @param reverse should x be reversed before convolution (boolean)
-#'
-#' @return numeric matrix of convolved values
-#'
-#' @export
-#'
-#' @importFrom Rcpp sourceCpp
-#' @importFrom stats nextn
-#' @importFrom stats convolve
-#' @importFrom stats spec.pgram
-#'
-#' @examples
-#' a <- convolve_matrix(x = 1:100,
-#'                      y = as.matrix(1:10),
-#'                      remove_partial = FALSE,
-#'                      reverse = TRUE)
-#'
-#' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
-#'
 convolve_list <- function(x, y, remove_partial, reverse) {
     .Call(`_frecipes_convolve_list`, x, y, remove_partial, reverse)
 }
@@ -351,164 +235,42 @@ convolve_list2 <- function(x, y, remove_partial, reverse) {
     .Call(`_frecipes_convolve_list2`, x, y, remove_partial, reverse)
 }
 
-#' @title
-#' multiply_ffts
-#'
-#' @description
-#' Multiply each column of a complex matrix with all the columns.
-#'
-#' @param x complex matrix to convolve with itself (complex numeric matrix)
-#' @param n_col number of columns in the original input series (integer)
-#' @param truncated skip the first row to decrease memory use? (boolean)
-#'
-#'
-#' @return pgram of input FFT values.
-#'
-#' @noRd
-#'
 multiply_ffts <- function(x) {
     .Call(`_frecipes_multiply_ffts`, x)
 }
 
-#' @title
-#' fill_lower_left
-#'
-#' @description
-#' Fill in the complex conjugate columns.
-#'
-#' @param x complex matrix of pgram values (complex matrix)
-#' @param n_col number of columns in the original input series (integer)
-#' @param start the first row index to begin on (boolean)
-#'
-#'
-#' @return Matrix with filled in complex conjugate columns.
-#'
-#' @noRd
-#'
 fill_lower_left <- function(x, start) {
     .Call(`_frecipes_fill_lower_left`, x, start)
 }
 
-#' @title
-#' spec_pgram
-#'
-#' @description
-#' Calculate the periodogram.  This method only keeps the columns necessary for
-#' the transfer function calculation. This method is based on `spec.pgram`.
-#'
-#' @inheritParams spec.pgram
-#'
-#'
-#' @return periodogram from an input matrix using a Fast Fourier Transform.
-#' Similar to `spec.pgram` but should be faster.
-#'
-#' @noRd
-#'
 spec_pgram <- function(x, spans, detrend, demean, taper) {
     .Call(`_frecipes_spec_pgram`, x, spans, detrend, demean, taper)
 }
 
-#' @title
-#' spec_welch
-#'
-#' @description
-#' Calculate the periodogram using Welch's method.  This method only keeps the
-#' columns necessary for the transfer function calculation. This method is
-#' based on `spec.pgram`.
-#'
-#' @inheritParams spec.pgram
-#' @param length_subset length of each subset (integer)
-#' @param overlap percent to overlap subsets (double)
-#' @param window vector of length length_subset (numeric vector)
-#'
-#'
-#' @return periodogram from an input matrix using a Fast Fourier Transform and
-#' Welch's method.
-#'
-#' @noRd
-#'
+spec_pgram_list <- function(x, spans, detrend, demean, taper) {
+    .Call(`_frecipes_spec_pgram_list`, x, spans, detrend, demean, taper)
+}
+
 spec_welch <- function(x, length_subset, overlap, window) {
     .Call(`_frecipes_spec_welch`, x, length_subset, overlap, window)
 }
 
-#' @title
-#' solve_cplx_parallel
-#'
-#' @description
-#' Calculate the transfer function from a periodogram.
-#'
-#' @inheritParams spec.pgram
-#' @inheritParams make_groups
-#'
-#' @return the transfer functions.
-#'
-#' @noRd
-#'
 solve_cplx_parallel <- function(x) {
     .Call(`_frecipes_solve_cplx_parallel`, x)
 }
 
-#' @title
-#' solve_cplx_irr
-#'
-#' @description
-#' Calculate the transfer function from a periodogram with irregular sized
-#' groups. This is experimental to see if we can improve efficiency.
-#' Instead of fitting every frequency it fits groups of frequencies
-#' The goal is to lump many high frequency signals to increase signal to
-#' noise ratios, and only few low frequency signals to keep resolution at low
-#' frequency.
-#'
-#' @inheritParams make_groups
-#' @inheritParams fill_lower_left
-#'
-#'
-#' @return the transfer functions.
-#'
-#' @noRd
-#'
+list_to_matrix <- function(x, sub_start, sub_end) {
+    .Call(`_frecipes_list_to_matrix`, x, sub_start, sub_end)
+}
+
 solve_cplx_irr <- function(x, n_groups) {
     .Call(`_frecipes_solve_cplx_irr`, x, n_groups)
 }
 
-#' @title
-#' ordinary_coherence_phase
-#'
-#' @description
-#' Calculate ordinary coherence and phase from a pgram. Reference:
-#' https://vru.vibrationresearch.com/lesson/coherence-mathematics/
-#'
-#' @param x periodogram matrix (complex matrix)
-#'
-#' @return Matrix with ordinary coherence and phase.
-#'
-#' @noRd
-#'
 ordinary_coherence_phase <- function(x) {
     .Call(`_frecipes_ordinary_coherence_phase`, x)
 }
 
-#' @title
-#' transfer_pgram_smooth
-#'
-#' @description
-#' Calculate the transfer function from an input matrix. This function uses
-#' irregular sized groups using `make_groups`. This is experimental to see if
-#' and designed to be relatively fast. Instead of fitting every frequency and
-#' aggregating post solving, it fits groups of frequencies.
-#' The goal is to lump many high frequency signals to increase signal to
-#' noise ratios, and only few low frequency signals to keep resolution at low
-#' frequency.
-#'
-#' @inheritParams spec.pgram
-#' @inheritParams make_groups
-#' @param n_col number of covariate columns (integer)
-#'
-#'
-#' @return the transfer functions.
-#'
-#' @noRd
-#'
 transfer_pgram_smooth <- function(x, spans, detrend, demean, taper, power, n_groups) {
     .Call(`_frecipes_transfer_pgram_smooth`, x, spans, detrend, demean, taper, power, n_groups)
 }
@@ -517,27 +279,6 @@ transfer_pgram <- function(x, spans, detrend, demean, taper) {
     .Call(`_frecipes_transfer_pgram`, x, spans, detrend, demean, taper)
 }
 
-#' @title
-#' transfer_welch
-#'
-#' @description
-#' Calculate the transfer function from an input matrix. This function uses
-#' irregular sized groups using `make_groups`. This is experimental to see if
-#' and designed to be relatively fast. Instead of fitting every frequency and
-#' aggregating post solving, it fits groups of frequencies.
-#' The goal is to lump many high frequency signals to increase signal to
-#' noise ratios, and only few low frequency signals to keep resolution at low
-#' frequency.
-#'
-#' @inheritParams spec.pgram
-#' @inheritParams make_groups
-#' @param n_col number of covariate columns (integer)
-#'
-#'
-#' @return the transfer functions.
-#'
-#' @noRd
-#'
 transfer_welch <- function(x, length_subset, overlap, window) {
     .Call(`_frecipes_transfer_welch`, x, length_subset, overlap, window)
 }
@@ -998,6 +739,22 @@ detrend_matrix <- function(x) {
 }
 
 #' @title
+#' detrend_vector
+#'
+#' @description
+#' Linearly detrend the columns of a matrix. This is translated from spec.pgram
+#'
+#' @param x the matrix that holds multiple series (numeric matrix)
+#'
+#' @return columns of a matrix that have been linearly detrended.
+#'
+#' @noRd
+#'
+detrend_vector <- function(x) {
+    .Call(`_frecipes_detrend_vector`, x)
+}
+
+#' @title
 #' demean_matrix
 #'
 #' @description
@@ -1011,6 +768,22 @@ detrend_matrix <- function(x) {
 #'
 demean_matrix <- function(x) {
     .Call(`_frecipes_demean_matrix`, x)
+}
+
+#' @title
+#' demean_matrix
+#'
+#' @description
+#' Remove the mean from each column of a matrix.
+#'
+#' @inheritParams detrend_matrix
+#'
+#' @return columns of a matrix with the means removed.
+#'
+#' @noRd
+#'
+demean_vector <- function(x) {
+    .Call(`_frecipes_demean_vector`, x)
 }
 
 #' @title
@@ -1029,6 +802,24 @@ demean_matrix <- function(x) {
 #'
 detrend_and_demean_matrix <- function(x, detrend, demean) {
     .Call(`_frecipes_detrend_and_demean_matrix`, x, detrend, demean)
+}
+
+#' @title
+#' detrend_and_demean_list
+#'
+#' @description
+#' Remove the trend and mean from each column of a matrix.
+#'
+#' @inheritParams detrend_matrix
+#' @param detrend should the trend be removed from each column (boolean)
+#' @param demean should the mean be removed from each column (boolean)
+#'
+#' @return columns of a matrix with the means and/or trends removed.
+#'
+#' @noRd
+#'
+detrend_and_demean_list <- function(x, detrend, demean) {
+    .Call(`_frecipes_detrend_and_demean_list`, x, detrend, demean)
 }
 
 #' @title
@@ -1066,6 +857,25 @@ modified_daniell <- function(spans) {
 #'
 kernel_apply <- function(x, y) {
     .Call(`_frecipes_kernel_apply`, x, y)
+}
+
+#' @title
+#' kernel_apply
+#'
+#' @description
+#' Create a modified daniell kernel using FFT. Adapted from `spec.pgram`. This
+#' only calculates the upper triangle when truncated is FALSE.  When truncated
+#' is TRUE the first row is skipped.
+#'
+#' @inheritParams spec.pgram
+#'
+#'
+#' @return modified Daniell kernel.
+#'
+#' @noRd
+#'
+kernel_apply_list <- function(x, y) {
+    .Call(`_frecipes_kernel_apply_list`, x, y)
 }
 
 #' @title
@@ -1249,6 +1059,10 @@ llt_solve <- function(X, Y) {
     .Call(`_frecipes_llt_solve`, X, Y)
 }
 
+llt_fitted <- function(X, Y) {
+    .Call(`_frecipes_llt_fitted`, X, Y)
+}
+
 #' @title
 NULL
 
@@ -1332,8 +1146,8 @@ to_dummy_list_base <- function(x, n_fact) {
 #' @export
 #'
 #'
-to_dummy <- function(ind) {
-    .Call(`_frecipes_to_dummy`, ind)
+to_dummy <- function(ind, one_hot) {
+    .Call(`_frecipes_to_dummy`, ind, one_hot)
 }
 
 #' @title
@@ -1350,8 +1164,8 @@ to_dummy <- function(ind) {
 #' @export
 #'
 #'
-to_dummy_list <- function(x, vec, rightmost_closed = FALSE, all_inside = FALSE, left_open = FALSE) {
-    .Call(`_frecipes_to_dummy_list`, x, vec, rightmost_closed, all_inside, left_open)
+to_dummy_list <- function(x, vec, one_hot = FALSE, rightmost_closed = FALSE, all_inside = FALSE, left_open = FALSE) {
+    .Call(`_frecipes_to_dummy_list`, x, vec, one_hot, rightmost_closed, all_inside, left_open)
 }
 
 weeks_1979 <- function(lag, D, L, precision, inverse) {

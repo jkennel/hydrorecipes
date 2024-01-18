@@ -31,13 +31,12 @@
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StepLeadLag$new(
-  ...,
+  terms,
   lag,
   n_shift = 0L,
   n_subset = 1L,
   role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE
+  ...
 )}\if{html}{\out{</div>}}
 }
 

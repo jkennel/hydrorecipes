@@ -40,8 +40,6 @@
   retardation = 1,
   decay = 0,
   role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE,
   ...
 )}\if{html}{\out{</div>}}
 }

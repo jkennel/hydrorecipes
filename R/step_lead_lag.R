@@ -22,23 +22,21 @@ StepLeadLag <- R6Class(
     n_shift = NULL,
     n_subset = NULL,
 
-    initialize = function(...,
+    initialize = function(terms,
                           lag,
                           n_shift = 0L,
                           n_subset = 1L,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE) {
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_lead_lag"
-      type         <- 'add'
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_lead_lag'
+      env_list$type <- 'add'
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
+
 
       # step specific values
       self$lag      <- as.integer(sort(lag))
@@ -52,26 +50,26 @@ StepLeadLag <- R6Class(
 
       column_name <- self$columns
 
-      if(self$n_subset == 1) {
-        ll <- collapse::flag(list(new_data), self$lag)
-      } else {
-        ll <- lag_list(new_data,
-                       self$lag,
-                       n_subset = self$n_subset,
-                       n_shift = self$n_shift)
+      ll <- list()
+      for (i in seq_along(column_name)) {
+        if (self$n_subset == 1) {
+          ll[[i]] <- collapse::flag(new_data[i], self$lag)
+        } else {
+          ll[[i]] <- lag_list(unclass(new_data)[[i]],
+                              self$lag,
+                              n_subset = self$n_subset,
+                              n_shift = self$n_shift)
+        }
+
+        names(ll[[i]]) <- name_columns(self$id, column_name[i], length(self$lag))
       }
 
-      names(ll) <- file.path(self$id,
-                             column_name,
-                             pad_num(length(self$lag)),
-                             fsep = '_')
 
-      ll
+      unlist(ll, recursive = FALSE)
 
     }
 
   )
 )
-
 
 

@@ -30,13 +30,7 @@
 \if{latex}{\out{\hypertarget{method-step_distributed_lag-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepDistributedLag$new(
-  ...,
-  knots,
-  role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepDistributedLag$new(terms, knots, role = "predictor", ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

@@ -2,7 +2,6 @@
 #'
 #' `Recipe` holds the steps to create model features
 #'
-#' @importFrom recipes recipes_eval_select
 #'
 #' @export
 Recipe <- R6Class(
@@ -13,12 +12,8 @@ Recipe <- R6Class(
 
     #' @field the model formula.
     formula   = NULL,
-    #' @field information about original variables.
-    var_info  = NULL,
     #' @field information about original and predicted variable.
     term_info = NULL,
-    #' @field information about original and predicted variable.
-    last_term_info = NULL,
     #' @field the recipe steps.
     steps     = list(),
     #' @field the data.
@@ -52,34 +47,42 @@ Recipe <- R6Class(
     #' @param data list, data.frame, data.table, tibble of data. They will all
     #' be treated as lists.
     #' @return A new `Recipe` object.
-    initialize = function(formula, data) {
+    initialize = function(formula, data, ...) {
 
       # specify data used with formula notation
+      # if (!is.formula(formula)) {
+      #   stop("You must specify a valid formula")
+      # }
+      if (!class(data) %in% c("list", "data.frame", "data.table", "tbl")) {
+        stop("data must be a data.frame like object or list")
+      }
+
       self$formula <- formula
 
+
       # parse the formula
-      vars_list <- get_formula_vars_2(formula = formula, data = data)
+      vars_list <- get_formula_vars(formula = formula, data = data)
       self$vars <- unlist(vars_list, use.names = FALSE)
       self$template <- unclass(data)[unique(self$vars)]
 
       # variable info
-      self$var_info  <- list(
+      self$term_info  <- list(
         variable = self$vars,
         type = get_types(self$template),
+        sub_type = get_sub_types(self$template),
         roles = rep.int(x = c('predictor', 'outcome'),
-                        times = vapply(vars_list, FUN = length, FUN.VALUE = numeric(1))),
+                        times = vapply(vars_list,
+                                       FUN = length,
+                                       FUN.VALUE = numeric(1L))),
         source = rep.int('original', times = length(self$vars)),
         step_index = rep.int(0L, times = length(self$vars)),
-        step_name = rep.int("initial", times = length(self$vars)))
-
-      self$term_info <- self$var_info
+        step_name = rep.int("initial", times = length(self$vars))
+      )
 
 
       self$requirements <- list(
         bake = setNames(object = logical(), nm = character())
       )
-
-      # self$add_step(StepAddVars$new(vars = vars))#$prep()$bake(data)
 
       invisible(self)
 
@@ -91,11 +94,6 @@ Recipe <- R6Class(
     #' @return An updated `Recipe` object.
     add_step = function(step) {
 
-      step$columns = recipes::recipes_eval_select(step$terms,
-                                                  self$template,
-                                                  qDF(self$var_info))
-
-
       self$steps <- append(self$steps, step)
       invisible(self)
 
@@ -105,11 +103,10 @@ Recipe <- R6Class(
     #' Do prep operations.
     #' @return An updated `Recipe` object.
     prep = function(retain = TRUE) {
-      self$tr_info <- self$train_info(self$template)
+      self$tr_info <- self$train_info()
 
       for (i in seq_along(self$steps)) {
-        columns <- self$steps[[i]]$columns
-        self$steps[[i]]$prep(unclass(self$template)[columns])
+        self$steps[[i]]$prep(unclass(self$template), self$term_info)
       }
 
       self$retained <- retain
@@ -124,7 +121,7 @@ Recipe <- R6Class(
     bake = function(new_data = NULL, type = "list") {
       types <- self$get_step_types()
 
-      if(is.null(new_data)) {
+      if (is.null(new_data)) {
         self$result <- self$template
       } else {
         self$result <- unclass(new_data)[unique(self$vars)]
@@ -132,12 +129,15 @@ Recipe <- R6Class(
 
       for (i in seq_along(types)) {
         columns <- self$steps[[i]]$columns
+        if (is.null(columns)) {
+          columns <- names(self$result)[1]
+        }
 
         # only one column allowed
         if (types[i] == "add"){
 
           self$result <- append(self$result,
-                                self$steps[[i]]$bake(unclass(self$result)[[columns]]))
+                                self$steps[[i]]$bake(unclass(self$result)[columns]))
 
         } else if (types[i] == "modify") {
           self$result <- modifyList(self$result,
@@ -151,7 +151,8 @@ Recipe <- R6Class(
           self$checks <- append(self$checks,
                                 self$steps[[i]]$bake(unclass(self$result)[[columns]]))
         }
-        self$update_term_info(step_name = self$steps[[i]]$step_name, step_index=i)
+        self$update_term_info(step_name = self$steps[[i]]$step_name,
+                              step_index = i)
       }
 
 
@@ -161,8 +162,8 @@ Recipe <- R6Class(
     ## short summary of training set.
     train_info = function(x) {
       data.frame(
-        nrows = length(x[[1L]]),
-        ncomplete = collapse::fsum(!collapse::missing_cases(x))
+        nrows = length(self$template[[1L]]),
+        ncomplete = collapse::fsum(!collapse::missing_cases(self$template))
       )
     },
 
@@ -171,22 +172,38 @@ Recipe <- R6Class(
                                 type = "numeric",
                                 step_name,
                                 step_index) {
+      nms <- names(self$result)
+      variable <- setdiff(nms, self$term_info$variable)
+      variable_rem <- setdiff(self$term_info$variable, nms)
 
-      variable <- setdiff(names(self$result), self$term_info$variable)
+      n_rem <- length(variable_rem)
 
       n <- length(variable)
 
-      self$term_info$variable <- c(self$term_info$variable, variable)
-      self$term_info$roles <- c(self$term_info$roles,
-                                rep.int("predictor", times = n))
-      self$term_info$source <- c(self$term_info$source,
-                                 rep.int(source, times = n))
-      self$term_info$type <- c(self$term_info$type,
-                               rep.int(type, times = n))
-      self$term_info$step_index <- c(self$term_info$step_index,
-                                     rep.int(step_index, times = n))
-      self$term_info$step_name <- c(self$term_info$step_name,
-                                    rep.int(step_name, times = n))
+      if (n > 0) {
+
+        self$term_info$variable <- c(self$term_info$variable, variable)
+        self$term_info$roles <- c(self$term_info$roles,
+                                  rep.int("predictor", times = n))
+        self$term_info$source <- c(self$term_info$source,
+                                   rep.int(source, times = n))
+        self$term_info$type <- c(self$term_info$type,
+                                 rep.int(type, times = n))
+        self$term_info$sub_type <- c(self$term_info$sub_type,
+                                     rep.int(type, times = n))
+        self$term_info$step_index <- c(self$term_info$step_index,
+                                       rep.int(step_index, times = n))
+        self$term_info$step_name <- c(self$term_info$step_name,
+                                      rep.int(step_name, times = n))
+      }
+
+      if (n_rem > 0) {
+        wh <- which(self$term_info$variable %in% variable_rem)
+        self$term_info$source[wh] <- "removed"
+        self$term_info$step_index[wh] <- step_index
+      }
+
+      self
     },
 
     get_step_types = function() {
@@ -194,6 +211,9 @@ Recipe <- R6Class(
     },
 
     data = function(type = "df") {
+      if (type == "list") {
+        return(self$result)
+      }
 
       if (type == "df") {
         return(collapse::qDF(self$result))
@@ -203,11 +223,11 @@ Recipe <- R6Class(
         return(collapse::qM(self$result))
       }
 
-      if(type == "dt") {
+      if (type == "dt") {
         return(collapse::qDT(self$result))
       }
 
-      if(type == "tbl") {
+      if (type == "tbl") {
         return(collapse::qTBL(self$result))
       }
 
@@ -395,11 +415,11 @@ Recipe <- R6Class(
 # require(data.table)
 # k <- "keycol"
 # N <- 1e7
-# DT = data.table(a = runif(N), b = rnorm(N))
-# DF = data.frame(a = runif(N), b = rnorm(N))
-# L <- list(a = runif(N), b = rnorm(N))
+# DT = data.table(a = runif (N), b = rnorm(N))
+# DF = data.frame(a = runif (N), b = rnorm(N))
+# L <- list(a = runif (N), b = rnorm(N))
 # sl <- seq_len(nrow(DT))
-# tb <- tibble(a = runif(N), b = rnorm(N))
+# tb <- tibble(a = runif (N), b = rnorm(N))
 # ans <- capture.output(microbenchmark(
 #     DT[,keycol := sl],
 #     DT$keycol <- sl,     #as mentioned in vignette, this is slow

@@ -29,7 +29,7 @@ List harmonic_list(const NumericVector& time,
   List out(n * 2);
   unsigned int j = 0;
 
-  for(unsigned int i = 0; i < n; ++i) {
+  for (unsigned int i = 0; i < n; ++i) {
     out[j] = sin(m * frequency(i));
     j += 1;
     out[j] = cos(m * frequency(i));
@@ -55,7 +55,7 @@ List harmonic_list(const NumericVector& time,
 //   List out(n * 2);
 //   unsigned int j = 0;
 //
-//   for(unsigned int i = 0; i < n; ++i) {
+//   for (unsigned int i = 0; i < n; ++i) {
 //     out[j] = sin(m.array() * frequency(i));
 //     j += 1;
 //     out[j] = cos(m.array() * frequency(i));
@@ -73,7 +73,7 @@ List harmonic_list(const NumericVector& time,
 //                           float start,
 //                           float cycle_size) {
 //
-//   // if(start == NA_REAL) {
+//   // if (start == NA_REAL) {
 //   //   start = time[0];
 //   // }
 //
@@ -103,7 +103,7 @@ List harmonic_list(const NumericVector& time,
 //                     double start,
 //                     double cycle_size) {
 //
-//    //   if(start == NA_REAL) {
+//    //   if (start == NA_REAL) {
 //    //     start = time[0];
 //    //   }
 //
@@ -120,14 +120,14 @@ List harmonic_list(const NumericVector& time,
 //                                          double start,
 //                                          double cycle_size) {
 //
-//   // if(start == NA_REAL) {
+//   // if (start == NA_REAL) {
 //   //   start = time[0];
 //   // }
 //
 //   arma::vec m = (M_2PI / cycle_size) * (time - time[0]);
 //   arma::field<arma::colvec> out(2 * frequency.n_elem);
 //
-//   for(size_t i = 0; i < frequency.n_elem; ++i) {
+//   for (size_t i = 0; i < frequency.n_elem; ++i) {
 //     out[i] = arma::sin(m * frequency[i]);
 //     out[i + frequency.n_elem] = arma::cos(m * frequency[i]);
 //   }
@@ -149,7 +149,7 @@ List harmonic_list(const NumericVector& time,
 //   const arma::vec m = (M_2PI / cycle_size) * (time-start);
 //   List out;
 //
-//   for(size_t i = 0; i < frequency.size(); ++i) {
+//   for (size_t i = 0; i < frequency.size(); ++i) {
 //     out.push_back(sin(m * frequency(i)));
 //     out.push_back(cos(m * frequency(i)));
 //   }

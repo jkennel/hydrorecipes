@@ -30,12 +30,7 @@
 \if{latex}{\out{\hypertarget{method-step_drop_columns-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepDropColumns$new(
-  ...,
-  role = "modify",
-  skip = FALSE,
-  keep_original_cols = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepDropColumns$new(terms, role = "modify", ...)}\if{html}{\out{</div>}}
 }
 
 }

@@ -4,7 +4,7 @@
 \alias{StepCheckSpacing}
 \title{R6 Class}
 \description{
-`StepCheckSpacing` adjust the dispersion by standard deviation.
+`StepCheckSpacing`
 }
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_check_spacing}
@@ -30,12 +30,7 @@
 \if{latex}{\out{\hypertarget{method-step_check_spacing-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepCheckSpacing$new(
-  ...,
-  role = "check",
-  skip = FALSE,
-  keep_original_cols = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepCheckSpacing$new(terms, role = "check", ...)}\if{html}{\out{</div>}}
 }
 
 }

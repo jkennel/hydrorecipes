@@ -1,13 +1,13 @@
 #' R6 Class
 #'
-#' `StepPredictOLS` Uses the Eigen C++ library fast versions to generate
+#' `StepOlsPredict` Uses the Eigen C++ library fast versions to generate
 #' predictions from different steps.
 #'
 #' @inheritParams Step
 #'
 #' @export
-StepPredictOLS <- R6Class(
-  classname = 'step_predict_ols',
+StepOlsPredict <- R6Class(
+  classname = 'step_ols_predict',
   inherit = Step,
 
   public = list(
@@ -23,41 +23,37 @@ StepPredictOLS <- R6Class(
     # rank = NULL,
     # std_error = NULL,
 
-    initialize = function(...,
+    initialize = function(terms,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE) {
+                          ...) {
 
       # get function parameters to pass to parent
-      step_name    <- "step_predict_ols"
-      type         <- 'supervised_add'
-      enq <- NULL
-      inputs <- c(
-        as.list(rlang::quos(...)),
-        rlang::env_get_list(env = environment(),
-                            formalArgs(super$initialize)[-1L])
-      )
-      do.call(super$initialize, inputs)
+      terms <- substitute(terms)
+      env_list <- get_function_arguments()
+      env_list$step_name <- 'step_ols_predict'
+      env_list$type <- 'add'
+      super$initialize(terms = terms,
+                       env_list[names(env_list) != "terms"])
+
       invisible(self)
     },
-    # subtract the central value from a column
     bake = function(new_data, term_info) {
 
-
-      # remove na values
       nms <- names(new_data)
 
-
       # term info data
-      ti  <- qDF(term_info)
-      ti  <- ti[ti$variable %in% nms,]
-
+      ti <- collapse::qDF(term_info)
+      ti <- ti[ti$source != "removed", ]
+      ti <- ti[ti$variable %in% nms, ]
 
       # create regression matrices
       outcomes   <- ti[ti$roles == "outcome", ]
       predictors <- ti[ti$roles == "predictor", ]
       predictors$inds <- 1:nrow(predictors)
-      subsets <- split(predictors$inds, data.table::rleid(predictors$step_index))
+
+      # subsets are the regressor groups
+      subsets <- split(predictors$inds,
+                       data.table::rleid(predictors$step_index))
 
       # save predictor and outcome info
       self$predictors <- predictors
@@ -67,12 +63,11 @@ StepPredictOLS <- R6Class(
       outcome_ids <- which(nms %in% outcomes$variable)
       predictor_ids <- which(nms %in% predictors$variable)
 
-
       # outcome and predictor data
       to_rem <- missing_cases(new_data)
-      # no_na <- new_data[!to_rem,,drop = FALSE]
-      m_predictors <- collapse::qM(new_data[predictor_ids])
-      m_outcomes <- collapse::qM(new_data[outcome_ids])
+
+      m_predictors <- collapse::qM(unclass(new_data)[predictor_ids])
+      m_outcomes <- collapse::qM(unclass(new_data)[outcome_ids])
 
       # solve
       fit <- llt_solve(m_predictors[!to_rem, , drop = FALSE],
@@ -90,9 +85,7 @@ StepPredictOLS <- R6Class(
 
       }
 
-      names(lst) <- file.path(self$id,
-                              pad_num(length(lst)),
-                              fsep = "_")
+      names(lst) <- name_columns(self$id, NULL, length(self$lst))
 
       lst
 

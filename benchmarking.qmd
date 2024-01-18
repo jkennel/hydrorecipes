@@ -22,13 +22,13 @@ library(ggbeeswarm)
 
 ```
 
-## Creating a recipe
+## creating a recipe
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
-relative <- TRUE
+relative <- FALSE
 n <- c(1e2, 1e4, 1e6)
 formula <- as.formula(y~x)
 
@@ -48,10 +48,10 @@ results <- bench::press(
 results
 ```
 
-## Add a step
+## add a step
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 results <- bench::press(
@@ -74,11 +74,10 @@ results
 ```
 
 
-
 ## step_center prep
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 results <- bench::press(
@@ -86,13 +85,13 @@ results <- bench::press(
   {
     dat <- data.frame(x = rnorm(rows), 
                       y = 1:rows)
+    frec = Recipe$new(formula = formula, data = dat)$
+      add_step(StepCenter$new(x))
+    rec  = recipes::recipe(formula = formula, data = dat) |>
+      recipes::step_center(x)
     bench::mark(
-      frec = Recipe$new(formula = formula, data = dat)$
-        add_step(StepCenter$new(x))$
-        prep(),
-      rec  = {recipe(formula = formula, data = dat) |>
-          step_center(x) |>
-          prep()},
+      frec$prep(),
+      rec |> recipes::prep(),
       check = FALSE,
       min_iterations = 10,
       relative = relative
@@ -106,7 +105,7 @@ results
 ## step_center
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x+z)
@@ -117,16 +116,13 @@ results <- bench::press(
     dat <- data.frame(x = rnorm(rows), 
                       y = 1:rows,
                       z = rnorm(rows))
+    frec = Recipe$new(formula = formula, data = dat)$
+      add_step(StepCenter$new(x, fun = fmean))
+    rec  = recipes::recipe(formula = formula, data = dat) |>
+      recipes::step_center(x)
     bench::mark(
-      frec = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepCenter$new(x, z, fun = fmean))$
-          prep()$
-          bake()$
-          data("tbl")},
-      rec  = {recipe(formula = formula, data = dat) |>
-          step_center(x, z) |>
-          prep() |>
-          bake(new_data = NULL)},
+      frec$prep()$bake()$data("tbl"),
+      rec |> recipes::prep() |> recipes::bake(new_data = NULL),
       check = TRUE,
       min_iterations = 10,
       relative = relative
@@ -140,7 +136,7 @@ results
 ## step_scale
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x)
@@ -151,16 +147,13 @@ results <- bench::press(
     dat <- data.frame(x = rnorm(rows), 
                       y = 1:rows,
                       z = rnorm(rows))
+    frec = Recipe$new(formula = formula, data = dat)$
+      add_step(StepScale$new(x, fun = fsd, n_sd = 2L))
+    rec  = recipes::recipe(formula = formula, data = dat) |>
+      recipes::step_scale(x, factor = 2L) 
     bench::mark(
-      frec = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepScale$new(x, fun = fsd, n_sd = 2L))$
-          prep()$
-          bake()$
-          data("tbl")},
-      rec  = {recipe(formula = formula, data = dat) |>
-          step_scale(x, factor = 2L) |>
-          prep() |>
-          bake(new_data = NULL)},
+      frec$prep()$bake()$data("tbl"),
+      rec |> recipes::prep() |> recipes::bake(new_data = NULL),
       check = TRUE,
       relative = relative,
       min_iterations = 5
@@ -172,10 +165,42 @@ results
 ```
 
 
+## step_intercept
+
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x)
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(x = rnorm(rows), 
+                      y = rnorm(rows))
+    frec = Recipe$new(formula = formula, data = dat)$
+      add_step(StepIntercept$new())
+    rec = recipes::recipe(formula = formula, data = dat) |>
+      recipes::step_intercept()
+    
+    bench::mark(
+      (frec$prep()$bake()$data("tbl")),
+      (rec |> recipes::prep() |> recipes::bake(new_data = NULL)),
+      check = FALSE,
+      relative = relative,
+      min_iterations = 2
+    )
+  }
+)
+
+results
+
+
+```
+
 ## step_normalize
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x+z)
@@ -185,29 +210,23 @@ results <- bench::press(
     dat <- data.frame(x = rnorm(rows), 
                       y = rnorm(rows),
                       z = rnorm(rows))
+    frec1 = Recipe$new(formula = formula, data = dat)$
+      add_step(StepNormalize$new(c(x, y, z)))
+    
+    frec2 = Recipe$new(formula = formula, data = dat)$
+      add_step(StepCenter$new(c(x, y, z)))$
+      add_step(StepScale$new(c(x, y, z)))
+    
+    rec = recipes::recipe(formula = formula, data = dat) |>
+      recipes::step_normalize(x, y, z)
+    
     bench::mark(
-      frec1 = Recipe$new(formula = formula, data = dat)$
-        add_step(StepNormalize$new(x,y,z))$
-        prep()$
-        bake()$
-        data("tbl")
-      ,
-      frec2 = Recipe$new(formula = formula, data = dat)$
-        add_step(StepCenter$new(x, y, z))$
-        add_step(StepScale$new(x, y, z))$
-        prep()$
-        bake()$
-        data("tbl")
-      ,
-      rec  = {recipe(formula = formula, data = dat) |>
-          step_normalize(x, y, z) |>
-          prep() |>
-          bake(new_data = NULL)
-      },
-      # fscale(dat),
-      check = TRUE,
+      frec1$prep()$bake()$data("tbl"),
+      frec2$prep()$bake()$data("tbl"),
+      rec |> recipes::prep() |> recipes::bake(new_data = NULL),
       relative = relative,
-      min_iterations = 2
+      min_iterations = 2,
+      check = TRUE
     )
   }
 )
@@ -220,7 +239,7 @@ results
 ## step_lag
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x)
@@ -231,17 +250,14 @@ results <- bench::press(
     dat <- data.frame(x = rnorm(rows), 
                       y = 1:rows,
                       z = rnorm(rows))
+    frec = Recipe$new(formula = formula, data = dat)$
+      add_step(StepLeadLag$new(x, lag = 1:30))
+    rec  = recipes::recipe(formula = formula, data = dat) |>
+      recipes::step_lag(x, lag = 1:30)
     bench::mark(
-      frec = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepLeadLag$new(x, lag = 1:3))$
-          prep()$
-          bake()$
-          data("tbl")},
-      rec  = {recipe(formula = formula, data = dat) |>
-          step_lag(x, lag = 1:3) |>
-          prep() |>
-          bake(new_data = NULL)},
-      check = FALSE,
+      unname(frec$prep()$bake()$data("tbl")),
+      unname(rec |> recipes::prep() |> recipes::bake(new_data = NULL)),
+      check = TRUE,
       relative = relative,
       min_iterations = 10
     )
@@ -254,31 +270,29 @@ results
 ## step_distributed_lag
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x)
 
 results <- bench::press(
-  rows = n,
+  rows = c(1e6, 1e7),
   {
     dat <- data.frame(x = rnorm(rows), 
                       y = 1:rows,
                       z = rnorm(rows))
+    frec = Recipe$new(formula = formula, data = dat)$
+      add_step(StepDistributedLag$new(x,
+                                      knots = frecipes:::log_lags_arma(5, 86401)))
+    rec  = recipes::recipe(formula = formula, data = dat) |>
+      hydrorecipes::step_distributed_lag(x, 
+                                         knots = frecipes:::log_lags_arma(5, 86401)) 
     bench::mark(
-      frec = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepDistributedLag$new(x, 
-                                          knots = frecipes:::log_lags_arma(5, 80)))$
-          prep()$
-          bake()},
-      rec  = {recipe(formula = formula, data = dat) |>
-          hydrorecipes::step_distributed_lag(x, 
-                                             knots = frecipes:::log_lags_arma(5, 80)) |>
-          prep() |>
-          bake(new_data = NULL)},
+      unname(frec$prep()$bake()$data("tbl")),
+      unname(rec |> recipes::prep() |> recipes::bake(new_data = NULL)),
       check = FALSE,
       relative = relative,
-      min_iterations = 10
+      min_iterations = 2
     )
   }
 )
@@ -289,7 +303,7 @@ results
 ## step_harmonic
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x)
@@ -300,21 +314,22 @@ results <- bench::press(
     dat <- data.frame(x = rnorm(rows), 
                       y = 1:rows,
                       z = rnorm(rows))
+    frec = Recipe$new(formula = formula, data = dat)$
+      add_step(StepHarmonic$new(x, 
+                                frequency = c(1, 2, 3), 
+                                cycle_size = 0.1, 
+                                starting_value = 0))
+    rec  = recipes::recipe(formula = formula, data = dat) |>
+      recipes::step_harmonic(x, 
+                             frequency = c(1, 2, 3), 
+                             cycle_size = 0.1, 
+                             starting_val = 0,
+                             keep_original_cols = TRUE) 
+    
+    # sin and cos terms order is different
     bench::mark(
-      frec = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepHarmonic$new(x, 
-                                    frequency = c(1,2,3), 
-                                    cycle_size = 0.1, 
-                                    starting_value = 0))$
-          prep()$
-          bake()},
-      rec  = {recipe(formula = formula, data = dat) |>
-          step_harmonic(x, 
-                        frequency = c(1,2,3), 
-                        cycle_size = 0.1, 
-                        starting_val = 0) |>
-          prep() |>
-          bake(new_data = NULL)},
+      unname(frec$prep()$bake()$data("tbl")),
+      unname(rec |> recipes::prep() |> recipes::bake(new_data = NULL)),
       check = FALSE,
       relative = relative,
       min_iterations = 10
@@ -322,13 +337,14 @@ results <- bench::press(
   }
 )
 
+
 results
 ```
 
 ## step_pca
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 set.seed(1)
 formula <- as.formula(x~a+b+c+d+e+f+g+h+i+j+k+l)
@@ -350,55 +366,48 @@ results <- bench::press(
                       k = rnorm(rows),
                       l = rnorm(rows)
     )
+    frec1 = Recipe$new(formula = formula, data = dat)$
+      add_step(StepPca$new(all_numeric(),
+                           n_comp = 12L))
+    frec2 = Recipe$new(formula = formula, data = dat)$
+      add_step(StepPca$new(all_numeric(),
+                           n_comp = 5L))
+    frec3 = Recipe$new(formula = formula, data = dat)$
+      add_step(StepPca$new(all_numeric(),
+                           n_comp = 12L,
+                           center = FALSE,
+                           scale = FALSE))
+    frec4 = Recipe$new(formula = formula, data = dat)$
+      add_step(StepPca$new(all_numeric(),
+                           n_comp = 5L,
+                           center = FALSE,
+                           scale = FALSE))
+    rec1  = recipes::recipe(formula = formula, data = dat) |>
+      recipes::step_pca(recipes::all_numeric(),
+                        num_comp = 12L,
+                        options = list(center = TRUE, scale. = TRUE))
+    rec2  = recipes::recipe(formula = formula, data = dat) |>
+      recipes::step_pca(recipes::all_numeric(),
+                        num_comp = 5L,
+                        options = list(center = TRUE, scale. = TRUE))
+    rec3  = recipes::recipe(formula = formula, data = dat) |>
+      recipes::step_pca(recipes::all_numeric(),
+                        num_comp = 12L)
+    rec4  = recipes::recipe(formula = formula, data = dat) |>
+      recipes::step_pca(recipes::all_numeric(),
+                        num_comp = 5L) 
     bench::mark(
-      frec1 = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepPca$new(all_numeric(),
-                               n_comp = 12L))$
-          prep()$
-          bake()},
-      frec2 = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepPca$new(all_numeric(),
-                               n_comp = 5L))$
-          prep()$
-          bake()},
-      frec3 = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepPca$new(all_numeric(),
-                               n_comp = 12L,
-                               center = FALSE,
-                               scale = FALSE))$
-          prep()$
-          bake()},
-      frec4 = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepPca$new(all_numeric(),
-                               n_comp = 5L,
-                               center = FALSE,
-                               scale = FALSE))$
-          prep()$
-          bake()},
-      rec1  = {recipe(formula = formula, data = dat) |>
-          step_pca(all_numeric(),
-                   num_comp = 12L,
-                   options = list(center = TRUE, scale. = TRUE)) |>
-          prep() |>
-          bake(new_data = NULL)},
-      rec2  = {recipe(formula = formula, data = dat) |>
-          step_pca(all_numeric(),
-                   num_comp = 5L,
-                   options = list(center = TRUE, scale. = TRUE)) |>
-          prep() |>
-          bake(new_data = NULL)},
-      rec3  = {recipe(formula = formula, data = dat) |>
-          step_pca(all_numeric(),
-                   num_comp = 12L) |>
-          prep() |>
-          bake(new_data = NULL)},
-      rec4  = {recipe(formula = formula, data = dat) |>
-          step_pca(all_numeric(),
-                   num_comp = 5L) |>
-          prep() |>
-          bake(new_data = NULL)},
+      frec1$prep()$bake(),
+      frec2$prep()$bake(),
+      frec3$prep()$bake(),
+      frec4$prep()$bake(),
+      rec1 |> recipes::prep() |> recipes::bake(new_data = NULL),
+      rec2 |> recipes::prep() |> recipes::bake(new_data = NULL),
+      rec3 |> recipes::prep() |> recipes::bake(new_data = NULL),
+      rec4 |> recipes::prep() |> recipes::bake(new_data = NULL),
       check = FALSE,
-      relative = relative
+      relative = relative,
+      min_iterations = 2
     )
   }
 )
@@ -414,7 +423,7 @@ print(results, n = 100)
 ## step_dummy
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x)
@@ -426,16 +435,17 @@ results <- bench::press(
                       y = qF(sample(1:10, rows, replace = TRUE)),
                       z = rnorm(rows))
     bench::mark(
-      frec = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepDummy$new(y))$
-          prep()$
-          bake()},
-      rec  = {recipe(formula = formula, data = dat) |>
-          step_dummy(y) |>
-          prep() |>
-          bake(new_data = NULL)},
-      check = FALSE,
-      relative = relative,
+      frec = unname(Recipe$new(formula = formula, data = dat)$
+                      add_step(StepDummy$new(y))$
+                      prep()$
+                      bake()$
+                      data('tbl')),
+      rec  = unname(recipes::recipe(formula = formula, data = dat) |>
+                      recipes::step_dummy(y, keep_original_cols = TRUE) |>
+                      recipes::prep() |>
+                      recipes::bake(new_data = NULL)),
+      check = TRUE,
+      relative = FALSE,
       min_iterations = 1
     )
   }
@@ -451,7 +461,7 @@ results
 - no direct comparison so compare to step_cut
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x)
@@ -463,15 +473,15 @@ results <- bench::press(
                       y = 1:rows,
                       z = rnorm(rows))
     bench::mark(
-      frec = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepFindInterval$new(x, vec = c(-0.1, 0, 0.1)))$
-          prep()$
-          bake()},
-      rec  = {recipe(formula = formula, data = dat) |>
-          step_cut(x, breaks = c(-0.1, 0, 0.1)) |>
-          # step_dummy(x) |>
-          prep() |>
-          bake(new_data = NULL)},
+      frec = Recipe$new(formula = formula, data = dat)$
+        add_step(StepFindInterval$new(x, vec = c(-0.1, 0, 0.1)))$
+        prep()$
+        bake(),
+      rec  = recipes::recipe(formula = formula, data = dat) |>
+        recipes::step_cut(x, breaks = c(-0.1, 0, 0.1)) |>
+        # step_dummy(x) |>
+        recipes::prep() |>
+        recipes::bake(new_data = NULL),
       check = FALSE,
       relative = relative,
       min_iterations = 1
@@ -489,7 +499,7 @@ results
 ## step_varying
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x+z)
@@ -501,15 +511,15 @@ results <- bench::press(
                       y = 1:rows,
                       z = rnorm(rows))
     bench::mark(
-      frec = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepVarying$new(x, y, z))$
-          prep()$
-          bake()$
-          data("tbl")},
-      rec  = {recipe(formula = formula, data = dat) |>
-          step_zv(x, y, z) |>
-          prep() |>
-          bake(new_data = NULL)},
+      frec = Recipe$new(formula = formula, data = dat)$
+        add_step(StepVarying$new(c(x, y, z)))$
+        prep()$
+        bake()$
+        data("tbl"),
+      rec  = recipe(formula = formula, data = dat) |>
+        step_zv(x, y, z) |>
+        prep() |>
+        bake(new_data = NULL),
       check = TRUE,
       relative = relative,
       min_iterations = 1
@@ -525,7 +535,7 @@ results
 ## step_kernel_filter
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 library(RcppRoll)
@@ -538,16 +548,16 @@ results <- bench::press(
                       y = 1:rows,
                       z = cumsum(rnorm(rows)))
     bench::mark(
-      frec = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepKernelFilter$new(z, 
-                                        kernel = list(rep(1, 5001)/5001), align = "center"))$
-          prep()$
-          bake()$
-          data("tbl")},
-      rec  = {recipe(formula = formula, data = dat) |>
-          step_window(z, size = 5001, statistic = "mean") |>
-          prep() |>
-          bake(new_data = NULL)},
+      frec = Recipe$new(formula = formula, data = dat)$
+        add_step(StepKernelFilter$new(z, 
+                                      kernel = list(rep(1, 5001)/5001), align = "center"))$
+        prep()$
+        bake()$
+        data("tbl"),
+      rec  = recipes::recipe(formula = formula, data = dat) |>
+        recipes::step_window(z, size = 5001, statistic = "mean") |>
+        recipes::prep() |>
+        recipes::bake(new_data = NULL),
       min_iterations = 1,
       check = FALSE,
       relative = TRUE
@@ -560,10 +570,10 @@ results
 
 ```
 
-## Mulitple steps
+## multiple steps
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x)
@@ -573,26 +583,24 @@ results <- bench::press(
   {
     dat <- data.frame(x = as.numeric(1:rows), 
                       y = 1:rows)
+    frec = Recipe$new(formula = formula, data = dat)$
+      add_step(StepLeadLag$new(x, lag = 1:10))$
+      add_step(StepHarmonic$new(x, 
+                                frequency = c(1,2,3,4,5), 
+                                cycle_size = 0.1, 
+                                starting_value = 0))$
+      add_step(StepCenter$new(x))
+    rec  = recipes::recipe(formula = formula, data = dat) |>
+      recipes::step_lag(x, lag = 1:10, keep_original_cols = TRUE) |>
+      recipes::step_harmonic(x, 
+                             frequency = c(1,2,3,4,5), 
+                             cycle_size = 0.1, 
+                             starting_val = 0,
+                             keep_original_cols = TRUE) |>
+      recipes::step_center(x)
     bench::mark(
-      frec = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepLeadLag$new(x, lag = 1:10))$
-          add_step(StepHarmonic$new(x, 
-                                    frequency = c(1,2,3,4,5), 
-                                    cycle_size = 0.1, 
-                                    starting_value = 0))$
-          add_step(StepCenter$new(x))$
-          prep()$
-          bake()},
-      rec  = {recipe(formula = formula, data = dat) |>
-          step_lag(x, lag = 1:10, keep_original_cols = TRUE) |>
-          step_harmonic(x, 
-                        frequency = c(1,2,3,4,5), 
-                        cycle_size = 0.1, 
-                        starting_val = 0,
-                        keep_original_cols = TRUE) |>
-          step_center(x) |>
-          prep() |>
-          bake(new_data = NULL)},
+      frec$prep()$bake()$data("tbl"),
+      rec |> recipes::prep() |> recipes::bake(new_data = NULL),
       check = FALSE,
       relative = relative,
       min_iterations = 1
@@ -606,10 +614,10 @@ results
 ```
 
 
-## step_b_spline
+## step_spline_b
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x)
@@ -622,19 +630,15 @@ results <- bench::press(
     ik <- fquantile(dat$x, probs = seq(0, 1, 0.1))
     bk <- ik[c(1, length(ik))]
     ik <- ik[-c(1, length(ik))]
+    frec = Recipe$new(formula = formula, data = dat)$
+      add_step(StepSplineB$new(x, df = 13))
+    rec  = recipes::recipe(formula = formula, data = dat) |>
+      recipes::step_spline_b(x, deg_free = 13, keep_original_cols = TRUE)
+    
     bench::mark(
-      frec = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepBSpline$new(x,
-                                   internal_knots = ik,
-                                   boundary_knots = bk,
-                                   degree = 3))$
-          prep()$
-          bake()},
-      rec  = {recipe(formula = formula, data = dat) |>
-          step_spline_b(x, deg_free = 13) |>
-          prep() |>
-          bake(new_data = NULL)},
-      check = FALSE,
+      unname(frec$prep()$bake()$data("tbl")),
+      unname(rec |> recipes::prep() |> recipes::bake(new_data = NULL)),
+      check = TRUE,
       relative = relative,
       min_iterations = 10
     )
@@ -649,7 +653,7 @@ results
 ## step_aquifer_grf & step_aquifer_theis
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x)
@@ -661,17 +665,54 @@ results <- bench::press(
                       y = rep(0.01, rows))
     bench::mark(
       frec1 = unname(Recipe$new(formula = formula, data = dat)$
-        add_step(StepAquiferGRF$new(time = x,
-                                           flow_rate = y))$
-        prep()$
-        bake()$
-        data("dt")),
+                       add_step(StepAquiferGRF$new(time = x,
+                                                   flow_rate = y))$
+                       prep()$
+                       bake()$
+                       data("dt")),
       frec2 = unname(Recipe$new(formula = formula, data = dat)$
-        add_step(StepAquiferTheis$new(time = x,
-                               flow_rate = y))$
-        prep()$
-        bake()$
-        data("dt")),
+                       add_step(StepAquiferTheis$new(time = x,
+                                                     flow_rate = y))$
+                       prep()$
+                       bake()$
+                       data("dt")),
+      check = TRUE,
+      relative = relative)
+  }
+)
+
+results
+
+
+```
+
+## step_aquifer_leaky
+
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x)
+
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(x = as.numeric(1:rows),
+                      y = rep(0.01, rows))
+    bench::mark(
+      frec1 = unname(Recipe$new(formula = formula, data = dat)$
+                       add_step(StepAquiferLeaky$new(time = x,
+                                                     flow_rate = y,
+                                                     leakage = 10000000))$
+                       prep()$
+                       bake()$
+                       data("dt")),
+      frec2 = unname(Recipe$new(formula = formula, data = dat)$
+                       add_step(StepAquiferTheis$new(time = x,
+                                                     flow_rate = y))$
+                       prep()$
+                       bake()$
+                       data("dt")),
       check = TRUE,
       relative = relative)
   }
@@ -685,7 +726,7 @@ results
 ## step_aquifer_patch
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x)
@@ -697,66 +738,220 @@ results <- bench::press(
                       y = rep(0.01, rows))
     bench::mark(
       frec1 = unname(Recipe$new(formula = formula, data = dat)$
-        add_step(StepAquiferGRF$new(time = x,
-                                           flow_rate = y))$
-        prep()$
-        bake()$
-        data("dt")),
+                       add_step(StepAquiferGRF$new(time = x,
+                                                   flow_rate = y))$
+                       prep()$
+                       bake()$
+                       data("dt")),
       frec3 = unname(Recipe$new(formula = formula, data = dat)$
-        add_step(StepAquiferPatch$new(time = x,
-                                      flow_rate = 0.01,
-                                      thickness = 1.0,
-                                      radius = 100.0,
-                                      radius_patch = 200.0,
-                                      specific_storage_inner = 1e-6,
-                                      specific_storage_outer = 1e-6,
-                                      hydraulic_conductivity_inner = 1e-4,
-                                      hydraulic_conductivity_outer = 1e-4,
-                                      n_stehfest = 8L
-                                      ))$
-        prep()$
-        bake()$
-        data("dt")),
+                       add_step(StepAquiferPatch$new(time = x,
+                                                     flow_rate = 0.01,
+                                                     thickness = 1.0,
+                                                     radius = 100.0,
+                                                     radius_patch = 200.0,
+                                                     specific_storage_inner = 1e-6,
+                                                     specific_storage_outer = 1e-6,
+                                                     hydraulic_conductivity_inner = 1e-4,
+                                                     hydraulic_conductivity_outer = 1e-4,
+                                                     n_stehfest = 8L
+                       ))$
+                       prep()$
+                       bake()$
+                       data("dt")),
       check = FALSE,
       relative = relative)
   }
 )
 
 
-dat <- data.frame(x = as.numeric(1:1000),
-                  y = rep(0.01, 1000))
-
-c1 <- (Recipe$new(formula = formula, data = dat)$
-         add_step(StepAquiferGRF$new(time = x,
-                                     flow_rate = y))$
-         prep()$
-         bake()$
-         data("dt"))[[3]]
-c2 <- Recipe$new(formula = formula, data = dat)$
-  add_step(StepAquiferPatch$new(time = x,
-                                flow_rate = 1.0,
-                                thickness = 1.0,
-                                radius = 100.0,
-                                radius_patch = 200.0,
-                                specific_storage_inner = 1e-6,
-                                specific_storage_outer = 1e-6,
-                                hydraulic_conductivity_inner = 1e-4,
-                                hydraulic_conductivity_outer = 1e-2,n_stehfest = 18L
-  ))$
-  prep()$
-  bake()$
-  data("dt")[[3]][[1]]
-
-plot(c1-c2, type = 'l')
 results
 ```
 
-# check 
+## step_vadose_weeks
+
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x)
+
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(x = as.numeric(1:rows), 
+                      y = as.numeric(1:rows))
+    bench::mark(
+      frec1 = (Recipe$new(formula = formula, data = dat)$
+                 add_step(StepVadoseWeeks$new(time = x, 
+                                              air_diffusivity = 0.8, 
+                                              thickness = 5, 
+                                              precision = 1e-12))$
+                 prep()$
+                 bake()$
+                 data("dt")),
+      check = FALSE,
+      min_iterations = 10
+    )
+  }
+)
+
+results
+```
+
+## step_transport_ogata_banks
+
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x)
+
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(expand.grid(as.numeric(1:rows),as.numeric(1:10)))
+    names(dat) <- c('x', 'y')
+    bench::mark(
+      frec1 = (Recipe$new(formula = formula, data = dat)$
+                 add_step(StepTransportOgataBanks$new(time = x,
+                                                      distance = y))$
+                 prep()$
+                 bake()$
+                 data("dt")),
+      check = FALSE,
+      min_iterations = 10
+    )
+  }
+)
+
+results
+```
+
+## step_pgram and step_welch
+
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x + z)
+
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(x = rnorm(rows), y = rnorm(rows), z = rnorm(rows),
+                      q = rnorm(rows), r = rnorm(rows), s = rnorm(rows))
+    frec1 = Recipe$new(formula = formula, data = dat)$
+      add_step(StepPgram$new(c(x, y), 
+                             3,
+                             TRUE,
+                             TRUE,
+                             FALSE,
+                             0.1))
+    frec3 = Recipe$new(formula = formula, data = dat)$
+      add_step(StepPgram$new(c(x, y), 
+                             3,
+                             TRUE,
+                             TRUE,
+                             TRUE,
+                             0.1))
+    frec2 = Recipe$new(formula = formula, data = dat)$
+      add_step(StepWelch$new(c(x, y),
+                             length_subset =  nrow(dat) / 10,
+                             overlap = 0.60,
+                             window = window_nuttall(nrow(dat) / 10)))
+    bench::mark(
+      frec3$prep()$bake()$data("dt"),
+      frec1$prep()$bake()$data("dt"),
+      frec2$prep()$bake()$data("dt"),
+      check = FALSE,
+      min_iterations = 3
+    )
+  }
+)
+
+results
+```
+
+## step_transfer_welch and step_transfer_pgram
+
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x)
+
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(x = rnorm(rows), y = rnorm(rows))
+    frec1 = Recipe$new(formula = formula, data = dat)$
+      add_step(StepTransferPgram$new(c(x, y), 
+                                     3,
+                                     TRUE,
+                                     TRUE,
+                                     0.1))
+    frec2 = Recipe$new(formula = formula, data = dat)$
+      add_step(StepTransferWelch$new(c(x, y),
+                                     length_subset =  nrow(dat) / 10,
+                                     overlap = 0.60,
+                                     window = window_nuttall(nrow(dat) / 10)))
+    bench::mark(frec1$prep()$bake()$data("dt"),
+                frec2$prep()$bake()$data("dt"),
+                check = FALSE,
+                min_iterations = 2
+    )
+  }
+)
+
+results
+```
+
+
+## step_ols_gap_fill
+
+```{r}
+#| echo: true
+#| warning: false
+
+set.seed(123)
+n <- 100000
+frm <- formula(x ~ y + z)
+x <- cumsum(rnorm(n))
+dat <- data.table(x = x, y = x, z = as.numeric(1:n))
+dat[, x := x + c(rep(20, n/2), rep(0, n/2))]
+dat[, x := x + 3.0 * sin(z * 1/n)]
+tmp <- copy(dat$x)
+plot(tmp, type = 'l')
+dat[60000:70000, x := NA_real_]
+
+dat <- unclass(dat)
+f = Recipe$new(formula = frm, data = (dat))$
+  add_step(StepFindInterval$new(z, vec = c(0, n/2, n)))$
+  add_step(StepIntercept$new())$
+  add_step(StepSplineB$new(z, df = 4))$
+  add_step(StepDropColumns$new(z))
+
+results <- bench::mark(
+  frec = Recipe$new(formula = frm, data = dat)$
+    add_step(StepOlsGapFill$new(c(x, y, z), recipe = f))
+)
+
+results
+frec = Recipe$new(formula = frm, data = dat)$
+    add_step(StepOlsGapFill$new(c(x, y, z), recipe = f))
+tmp2 <- frec$prep()$bake()$data()
+points(dat$x, type = 'p', pch = 20, cex = 0.2, col = "yellow")
+points(tmp2$update, type = 'l', col = 'red')
+
+```
+
+
+# check
 
 ## step_check_spacing
 
 ```{r}
-#| echo: false
+#| echo: true
 #| warning: false
 
 formula <- as.formula(y~x)
@@ -766,19 +961,20 @@ results <- bench::press(
   {
     dat <- data.frame(x = rnorm(rows),
                       y = 1:rows)
-    dat[9,"x"] <- NA
-
+    dat[9, "x"] <- NA
+    dat[9, "y"] <- NA
+    
     bench::mark(
-      frec1 = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepCheckSpacing$new(x))$
-          add_step(StepCheckNA$new(x))$
-          prep()$
-          bake()},
-      frec2 = {Recipe$new(formula = formula, data = dat)$
-          add_step(StepCheckSpacing$new(y))$
-          add_step(StepCheckNA$new(y))$
-          prep()$
-          bake()},
+      frec1 = Recipe$new(formula = formula, data = dat)$
+        add_step(StepCheckSpacing$new(y))$
+        add_step(StepCheckNA$new(y))$
+        prep()$
+        bake(),
+      frec2 = Recipe$new(formula = formula, data = dat)$
+        add_step(StepCheckSpacing$new(x))$
+        add_step(StepCheckNA$new(x))$
+        prep()$
+        bake(),
       check = FALSE,
       relative = relative,
       min_iterations = 10

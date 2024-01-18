@@ -51,12 +51,18 @@ Rcpp::IntegerVector to_dummy_list_base(const Rcpp::IntegerVector& x,
 //'
 //'
 // [[Rcpp::export]]
-List to_dummy(const IntegerVector& ind) {
+List to_dummy(const IntegerVector& ind, const bool one_hot) {
 
   List out;
   const IntegerVector fact = sort_unique(ind);
+  const size_t n = fact.size();
 
-  for (size_t i = 0; i < fact.size(); ++i) {
+  size_t start = 0;
+  if (!one_hot & (n > 1)) {
+    start = 1;
+  }
+
+  for (size_t i = start; i < n; ++i) {
     out.push_back(to_dummy_list_base(ind, fact[i]), std::to_string(fact[i]));
   }
 
@@ -82,9 +88,11 @@ List to_dummy(const IntegerVector& ind) {
 // [[Rcpp::export]]
 List to_dummy_list(const NumericVector& x,
                    const NumericVector& vec,
+                   const bool one_hot = false,
                    const bool rightmost_closed = false,
                    const bool all_inside = false,
-                   const bool left_open = false) {
+                   const bool left_open = false
+                   ) {
 
   const IntegerVector ind = fi(x,
                                vec,
@@ -93,7 +101,7 @@ List to_dummy_list(const NumericVector& x,
                                left_open);
 
 
-  return(to_dummy(ind));
+  return(to_dummy(ind, one_hot));
 
 }
 
@@ -107,7 +115,7 @@ List to_dummy_list(const NumericVector& x,
 //
 //   IntegerMatrix y(x.size(), n_fact);
 //
-//   if(!intercept) {
+//   if (!intercept) {
 //     n_fact -= 1;
 //   }
 //
@@ -125,7 +133,7 @@ List to_dummy_list(const NumericVector& x,
 //
 //   IntegerMatrix y(x.size(), n_fact);
 //
-//   if(!intercept) {
+//   if (!intercept) {
 //     n_fact -= 1;
 //   }
 //
@@ -200,7 +208,7 @@ List to_dummy_list(const NumericVector& x,
 //   int n = x.n_elem;
 //   arma::imat y(n, n_fact);
 //
-//   for(int i = 0; i < n_fact; ++i) {
+//   for (int i = 0; i < n_fact; ++i) {
 //     y.elem(arma::find(x == i)).ones();
 //   }
 //
@@ -215,7 +223,7 @@ List to_dummy_list(const NumericVector& x,
 //   int n = x.n_elem;
 //   imat y(n, n_fact);
 //
-//   if(!intercept) {
+//   if (!intercept) {
 //     n_fact -= 1;
 //   }
 //
@@ -234,7 +242,7 @@ List to_dummy_list(const NumericVector& x,
 //   int n = x.n_elem;
 //   imat y(n_fact,n);
 //
-//   if(!intercept) {
+//   if (!intercept) {
 //     n_fact -= 1;
 //   }
 //
@@ -253,7 +261,7 @@ List to_dummy_list(const NumericVector& x,
 //   size_t n = x.n_elem;
 //   arma::imat y( n_fact, n);
 //
-//   if(!intercept) {
+//   if (!intercept) {
 //     n_fact -= 1;
 //   }
 //
@@ -274,7 +282,7 @@ List to_dummy_list(const NumericVector& x,
 // //   arma::imat y( n, n_fact);
 // //   y.fill(0);
 // //   arma::ivec z(n);
-// //   if(!intercept) {
+// //   if (!intercept) {
 // //     n_fact -= 1;
 // //   }
 // //
@@ -293,7 +301,7 @@ List to_dummy_list(const NumericVector& x,
 //   int n = x.size();
 //   Eigen::MatrixXi y(n, n_fact);
 //
-//   if(!intercept) {
+//   if (!intercept) {
 //     n_fact -= 1;
 //   }
 //
@@ -312,7 +320,7 @@ List to_dummy_list(const NumericVector& x,
 //   int n = x.size();
 //   Eigen::MatrixXi y(n_fact, n);
 //
-//   if(!intercept) {
+//   if (!intercept) {
 //     n_fact -= 1;
 //   }
 //
@@ -333,7 +341,7 @@ List to_dummy_list(const NumericVector& x,
 //
 //   Eigen::MatrixXi y(n, n_fact);
 //
-//   if(!intercept) {
+//   if (!intercept) {
 //     n_fact -= 1;
 //   }
 //   x = n*x;
@@ -355,7 +363,7 @@ List to_dummy_list(const NumericVector& x,
 //   IntegerVector y(x.length());
 //   std::string nm;
 //
-//   if(!intercept) {
+//   if (!intercept) {
 //     n_fact -= 1;
 //   }
 //
@@ -380,7 +388,7 @@ List to_dummy_list(const NumericVector& x,
 //
 //   std::string nm;
 //
-//   if(!intercept) {
+//   if (!intercept) {
 //     n_fact -= 1;
 //   }
 //
@@ -455,7 +463,7 @@ List to_dummy_list(const NumericVector& x,
 //
 //   // IntegerVector y(x.length());
 //
-//   if(!intercept) {
+//   if (!intercept) {
 //     n_fact -= 1;
 //   }
 //   List out_lst(n_fact);

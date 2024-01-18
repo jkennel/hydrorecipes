@@ -38,8 +38,6 @@
   precision = 1e-12,
   inverse = FALSE,
   role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE,
   ...
 )}\if{html}{\out{</div>}}
 }

@@ -7,6 +7,7 @@
 to_dummy_list(
   x,
   vec,
+  one_hot = FALSE,
   rightmost_closed = FALSE,
   all_inside = FALSE,
   left_open = FALSE

@@ -50,7 +50,7 @@ Eigen::VectorXd convolve_eigen(const Eigen::VectorXd& x,
   Eigen::VectorXd out(n_row);
   out.setConstant(NA_REAL);
 
-  for(int k = 0; k < n_row - n_rem + 1; ++k) {
+  for (int k = 0; k < n_row - n_rem + 1; ++k) {
     out(n_row - k - 1) = y.dot(x.segment(k, n_rem));
   }
 
@@ -83,7 +83,7 @@ Rcpp::List distributed_lag_eigen(Eigen::Map<Eigen::VectorXd> x,
 
   Rcpp::List cb(n_col);
 
-  for(int i = 0; i < n_col; ++i){
+  for (int i = 0; i < n_col; ++i){
     cb(i) = convolve_eigen(x, bl.row(i));
   };
 
@@ -102,7 +102,7 @@ Rcpp::List distributed_lag_eigen(Eigen::Map<Eigen::VectorXd> x,
 //   arma::vec out(n_row);
 //   out.fill(NA_REAL);
 //
-//   for(size_t k = 0; k < n_row - n_rem + 1; ++k) {
+//   for (size_t k = 0; k < n_row - n_rem + 1; ++k) {
 //     out(n_row - k - 1) = as_scalar(x.subvec(k, k+n_rem-1) * y);
 //   }
 //
@@ -121,7 +121,7 @@ Rcpp::List distributed_lag_eigen(Eigen::Map<Eigen::VectorXd> x,
 //
 //   Rcpp::List cb(n_col);
 //
-//   for(size_t i = 0; i < n_col; ++i){
+//   for (size_t i = 0; i < n_col; ++i){
 //     cb(i) = convolve_arma(x, bl.col(i));
 //   };
 //
@@ -170,7 +170,7 @@ List distributed_lag_thread_eigen(Eigen::Map<Eigen::VectorXd> x,
     throw std::range_error("n_subset should be 1 or greater.");
   }
   if (n_shift >= (n_subset)) {
-    throw std::range_error("The absolute value of n_shift should be less than n_subset - 1.");
+    throw std::range_error("The absolute value of n_shift should be less than n_subset.");
   }
   if (n_shift < 0) {
     throw std::range_error("n_shift should be positive.");
@@ -215,7 +215,7 @@ List distributed_lag_thread_eigen(Eigen::Map<Eigen::VectorXd> x,
 
   List out;
 
-  for(size_t i = 0; i < cb.rows(); ++i) {
+  for (size_t i = 0; i < cb.rows(); ++i) {
     out.push_back(cb.row(i));
   }
 
@@ -314,16 +314,16 @@ std::list<Eigen::VectorXd> distributed_lag_list2(Eigen::Map<Eigen::VectorXd> x,
 
 // [[Rcpp::export]]
 Rcpp::List distributed_lag_list3(Eigen::VectorXd x,
-                                arma::uword n_lag,
-                                arma::uword max_lag,
-                                const unsigned int df,
-                                const unsigned int degree,
-                                const arma::vec& internal_knots,
-                                const arma::vec& boundary_knots,
-                                const bool complete_basis,
-                                const bool periodic,
-                                const unsigned int derivs,
-                                const bool integral
+                                 arma::uword n_lag,
+                                 arma::uword max_lag,
+                                 const unsigned int df,
+                                 const unsigned int degree,
+                                 const arma::vec& internal_knots,
+                                 const arma::vec& boundary_knots,
+                                 const bool complete_basis,
+                                 const bool periodic,
+                                 const unsigned int derivs,
+                                 const bool integral
 ) {
 
   arma::vec rng = arma::linspace(0, max_lag, max_lag + 1);
@@ -340,7 +340,11 @@ Rcpp::List distributed_lag_list3(Eigen::VectorXd x,
                                derivs,
                                integral);
 
+  int n_x = x.size();
 
+  if (n_x < max_lag * 10) {
+    return(convolve_list(x, s, true, true));
+  }
   return(convolve_overlap_save_list(x, s, 0));
 }
 
@@ -384,7 +388,14 @@ bench::mark(
   # frecipes:::b_spline_list(y, df = 0L, degree = 3L,internal_knots = ll[2:19], boundary_knots = c(ll[1], ll[length(ll)])),
   # frecipes:::b_spline_list2(y, df = 0L, degree = 3L,internal_knots = ll[2:19], boundary_knots = c(ll[1], ll[length(ll)])),
 # ((frecipes:::distributed_lag_list(x, 20, 1e5, 0, 3, ll[2:19], c(ll[1], ll[length(ll)]), TRUE, FALSE, 0, FALSE))[[1]]),
-((frecipes:::distributed_lag_list3(x, n_lags, max_lag, 0, 3, ll[2:(n_lags-1)], c(ll[1], ll[length(ll)]), TRUE, FALSE, 0, FALSE))[[1]]),
+((frecipes:::distributed_lag_list3(x,
+                                   n_lags,
+                                   max_lag,
+                                   0,
+                                   3,
+                                   ll[2:(n_lags-1)],
+                                   c(ll[1], ll[length(ll)]),
+                                   TRUE, FALSE, 0, FALSE))[[1]]),
 #a <- frecipes:::convolve_list(x, l, TRUE, TRUE),
 # a <- frecipes:::convolve_list(x, l, FALSE, FALSE),
 # a <- frecipes:::convolve_matrix(x, m, TRUE, TRUE),
