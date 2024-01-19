@@ -30,16 +30,9 @@
 \if{latex}{\out{\hypertarget{method-step_add_vars-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepAddVars$new(terms, vars, role = "predictor", ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepAddVars$new(terms, role = "predictor", ...)}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{vars}}{name of vars}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-step_add_vars-bake"></a>}}

@@ -31,7 +31,7 @@ StepOlsPredict <- R6Class(
       terms <- substitute(terms)
       env_list <- get_function_arguments()
       env_list$step_name <- 'step_ols_predict'
-      env_list$type <- 'add'
+      env_list$type <- 'supervised_add'
       super$initialize(terms = terms,
                        env_list[names(env_list) != "terms"])
 
@@ -64,7 +64,7 @@ StepOlsPredict <- R6Class(
       predictor_ids <- which(nms %in% predictors$variable)
 
       # outcome and predictor data
-      to_rem <- missing_cases(new_data)
+      to_rem <- collapse::missing_cases(new_data)
 
       m_predictors <- collapse::qM(unclass(new_data)[predictor_ids])
       m_outcomes <- collapse::qM(unclass(new_data)[outcome_ids])
@@ -80,8 +80,8 @@ StepOlsPredict <- R6Class(
       lst <- list()
       for (i in seq_along(subsets)) {
 
-        lst[[i]] <- m_predictors[, subsets[[i]], drop = FALSE] %*%
-          fit[subsets[[i]], , drop = FALSE]
+        lst[[i]] <- collapse::mctl(m_predictors[, subsets[[i]], drop = FALSE] %*%
+                                  fit[subsets[[i]], , drop = FALSE])
 
       }
 

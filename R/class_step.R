@@ -8,6 +8,7 @@
 #'
 #' @importFrom rlang quos enquos env_get_list
 #' @importFrom collapse fmean fsd fscale fsum fquantile fndistinct flag
+#' @importFrom collapse missing_cases
 #' @importFrom collapse qDF qM qF qTBL mctl
 #' @importFrom earthtide calc_earthtide
 #' @importFrom R6 R6Class

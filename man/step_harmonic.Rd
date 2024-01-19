@@ -43,7 +43,9 @@ curves. This may be specified to have more control over the signal phase.}
 Add sin and cos terms for harmonic analysis
 }
 \examples{
-rec <- recipe(y~x, data = list(x = 1:10, y = rnorm(10))) |>
+dat <- data.frame(x = 1:10, y = rnorm(10))
+
+rec <- recipe(y~x, data = dat) |>
        step_harmonic(x,
                      frequency = 2.0,
                      cycle_size = 4.0,

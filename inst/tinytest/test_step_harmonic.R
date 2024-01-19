@@ -9,9 +9,7 @@ frec = Recipe$new(formula = formula, data = dat)$
                             frequency = c(3),
                             cycle_size = 0.1,
                             starting_value = 0))$
-  prep()$
-  bake()$
-  data("tbl")
+  plate("tbl")
 
 rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::step_harmonic(y,

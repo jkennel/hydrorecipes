@@ -44,10 +44,10 @@ StepOlsGapFill <- R6Class(
     bake = function(new_data) {
 
       rec <- self$recipe
-      rec <- rec$prep()$bake(new_data = new_data)
+      rec <- rec$prep()$bake(data = new_data)
       ti <- collapse::qDF(rec$term_info)
       ti <- ti[ti$source != "removed", ]
-      dat <- rec$data(type = "list")
+      dat <- rec$plate(type = "list")
       nms <- names(dat)
 
       outcomes   <- ti[ti$roles == "outcome", ]
@@ -69,9 +69,11 @@ StepOlsGapFill <- R6Class(
                        m_outcomes[wh, , drop = FALSE])
       self$coefficients <- fit
 
-      return(list(update = m_predictors[, , drop = FALSE] %*%
-                           fit[, , drop = FALSE]))
+      lst <- collapse::mctl(m_predictors[, , drop = FALSE] %*% fit[, , drop = FALSE])
 
+      names(lst) <- name_columns(self$id, outcomes$variable, length(outcome_ids))
+
+      lst
     }
 
   )
@@ -102,7 +104,7 @@ StepOlsGapFill <- R6Class(
 # frec = Recipe$new(formula = frm, data = dat)$
 #       add_step(StepRegressionGapFill$new(c(x, y, z), recipe = f))
 #
-# tmp <- frec$prep()$bake()$data()
+# tmp <- frec$prep()$bake()$plate()
 # points(dat$x, type = 'p', pch = 20)
 # points(tmp$update, type = 'l', col = 'red')
 

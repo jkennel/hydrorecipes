@@ -6,9 +6,7 @@ dat <- data.frame(x = rnorm(rows),
                   z = rnorm(rows))
 frec = Recipe$new(formula = formula, data = dat)$
   add_step(StepCenter$new(x))$
-  prep()$
-  bake()$
-  data("tbl")
+  plate("tbl")
 
 rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::step_center(x) |>

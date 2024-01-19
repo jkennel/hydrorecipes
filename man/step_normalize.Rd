@@ -36,6 +36,9 @@ and y you would write `c(x,y)` in the frecipes package.}
 step_normalize
 }
 \examples{
-rec <- recipe(y~x, data = list(x = rnorm(10), y = rnorm(10))) |>
+dat <- data.frame(x = rnorm(10), y = rnorm(10))
+
+rec <- recipe(y~x, data = dat) |>
        step_normalize(x)
+
 }

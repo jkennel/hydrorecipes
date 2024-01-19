@@ -5,9 +5,7 @@ dat <- data.frame(x = rnorm(rows),
                   y = qF(sample(1:10, rows, replace = TRUE)))
 frec = Recipe$new(formula = formula, data = dat)$
   add_step(StepDummy$new(y))$
-  prep()$
-  bake()$
-  data("tbl")
+  plate("tbl")
 
 rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::step_dummy(y, keep_original_cols = TRUE, one_hot = FALSE) |>
@@ -18,9 +16,7 @@ tinytest::expect_equivalent(frec, rec)
 
 frec = Recipe$new(formula = formula, data = dat)$
   add_step(StepDummy$new(y, one_hot = TRUE))$
-  prep()$
-  bake()$
-  data("tbl")
+  plate("tbl")
 
 rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::step_dummy(y, keep_original_cols = TRUE, one_hot = TRUE) |>

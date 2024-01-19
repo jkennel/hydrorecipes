@@ -40,6 +40,9 @@ data.frame like object.}
 Adds a step to center a data column(s)
 }
 \examples{
-rec <- recipe(y~x, data = list(x = rnorm(10), y = rnorm(10))) |>
+dat <- data.frame(x = rnorm(10), y = rnorm(10))
+
+rec <- recipe(y~x, data = dat) |>
        step_center(x)
+
 }

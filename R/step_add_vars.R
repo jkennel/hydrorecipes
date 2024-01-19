@@ -13,10 +13,8 @@ StepAddVars <- R6Class(
   public = list(
 
     # step specific variables
-    vars = NULL,
 
     initialize = function(terms,
-                          vars,
                           role = "predictor",
                           ...) {
 
@@ -24,16 +22,14 @@ StepAddVars <- R6Class(
       terms <- substitute(terms)
       env_list <- get_function_arguments()
       env_list$step_name <- 'step_add_vars'
-      env_list$type <- 'add'
+      env_list$type <- 'add_from_template'
       super$initialize(terms = terms,
                        env_list[names(env_list) != "terms"])
-
-      self$vars <- vars
 
       invisible(self)
     },
     bake = function(new_data) {
-      return(unclass(new_data)[unique(self$vars)])
+      return(unclass(new_data))
     }
   )
 )

@@ -1,6 +1,7 @@
-
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
 # new recipe -------------------------------------------------------------------
-
+#
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' Create a new R6 recipe. This is analogous to the the list structure that the
 #' *recipes* package uses.
@@ -13,15 +14,49 @@
 #' @export
 #'
 #' @examples
-#' rec <- recipe(y~x, data = list(x = rnorm(10), y = rnorm(10)))
+#' dat <- data.frame(x = rnorm(10), y = rnorm(10))
+#'
+#' rec <- recipe(y~x, data = dat)
 #'
 recipe <- function(formula, data, ...) {
   Recipe$new(formula, data, ...)
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+#
 # steps ------------------------------------------------------------------------
-
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' step_add_vars
+#'
+#' @description
+#'   Add a variable from the initial data set after recipe creation.
+#'
+#' @inheritParams step_scale
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' dat <- data.frame(x = rnorm(10), y = rnorm(10), z = rnorm(10))
+#'
+#' rec <- recipe(y~x, data = dat) |>
+#'        step_add_vars(z) |> plate()
+#'
+#' rec <- recipe(y~x, data = dat) |>
+#'        plate()
+step_add_vars <- function(.rec,
+                          terms,
+                          role = "predictor",
+                          skip = FALSE,
+                          keep_original_cols = FALSE,
+                          ...) {
+  terms <- substitute(terms)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepAddVars$new,
+                        env_list))
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_scale
 #'
@@ -47,8 +82,11 @@ recipe <- function(formula, data, ...) {
 #'
 #' @examples
 #'
-#' rec <- recipe(y~x, data = list(x = rnorm(10), y = rnorm(10))) |>
+#' dat <- data.frame(x = rnorm(10), y = rnorm(10))
+#'
+#' rec <- recipe(y~x, data = dat) |>
 #'        step_scale(x)
+#'
 step_scale <- function(.rec,
                        terms,
                        role = "predictor",
@@ -64,7 +102,7 @@ step_scale <- function(.rec,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+#
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_center
 #' @description
@@ -76,8 +114,11 @@ step_scale <- function(.rec,
 #' @export
 #'
 #' @examples
-#' rec <- recipe(y~x, data = list(x = rnorm(10), y = rnorm(10))) |>
+#' dat <- data.frame(x = rnorm(10), y = rnorm(10))
+#'
+#' rec <- recipe(y~x, data = dat) |>
 #'        step_center(x)
+#'
 step_center <- function(.rec,
                         terms,
                         role = "predictor",
@@ -92,7 +133,7 @@ step_center <- function(.rec,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+#
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_normalize
 #'
@@ -102,8 +143,11 @@ step_center <- function(.rec,
 #' @export
 #'
 #' @examples
-#' rec <- recipe(y~x, data = list(x = rnorm(10), y = rnorm(10))) |>
+#' dat <- data.frame(x = rnorm(10), y = rnorm(10))
+#'
+#' rec <- recipe(y~x, data = dat) |>
 #'        step_normalize(x)
+#'
 step_normalize <- function(.rec,
                            terms,
                            role = "predictor",
@@ -117,8 +161,8 @@ step_normalize <- function(.rec,
   .rec$add_step(do.call(StepNormalize$new,
                         env_list))
 }
-
-
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_harmonic
 #'
@@ -135,7 +179,9 @@ step_normalize <- function(.rec,
 #' @export
 #'
 #' @examples
-#' rec <- recipe(y~x, data = list(x = 1:10, y = rnorm(10))) |>
+#' dat <- data.frame(x = 1:10, y = rnorm(10))
+#'
+#' rec <- recipe(y~x, data = dat) |>
 #'        step_harmonic(x,
 #'                      frequency = 2.0,
 #'                      cycle_size = 4.0,
@@ -155,7 +201,7 @@ step_harmonic <- function(.rec,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+#
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_lead_lag
 #'
@@ -175,11 +221,15 @@ step_harmonic <- function(.rec,
 #' @export
 #'
 #' @examples
-#' rec <- recipe(y~x, data = list(x = rnorm(10), y = rnorm(10))) |>
+#' dat <- data.frame(x = rnorm(10), y = rnorm(10))
+#'
+#' rec <- recipe(y~x, data = dat) |>
 #'        step_lead_lag(x, lag = 1)
-#' rec <- recipe(y~x, data = list(x = rnorm(10), y = rnorm(10))) |>
+#'
+#' rec <- recipe(y~x, data = dat) |>
 #'        step_lead_lag(x, lag = 1, n_subset = 5)
-#' rec <- recipe(y~x, data = list(x = rnorm(10), y = rnorm(10))) |>
+#'
+#' rec <- recipe(y~x, data = dat) |>
 #'        step_lead_lag(x, lag = 1, n_shift = 2, n_subset = 5)
 #'
 step_lead_lag <- function(terms,
@@ -196,7 +246,7 @@ step_lead_lag <- function(terms,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+#
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_dummy
 #'
@@ -229,19 +279,93 @@ step_dummy <- function(terms,
   .rec$add_step(do.call(StepDummy$new,
                         env_list))
 }
-
-
-# prep --------------------------------------------------------------------
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# prep -------------------------------------------------------------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title prep
+#'
+#' @description
+#'   prep a recipe
+#'
+#' @inheritParams step_scale
+#' @param retain logical - currently not implemented
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' rec <- recipe(y~x, data = list(x = rnorm(10), y = rnorm(10))) |>
+#'        step_scale(x) |>
+#'        prep()
 prep <- function(.rec, retain = TRUE) {
   .rec$prep(retain)
 }
-
-
-# bake --------------------------------------------------------------------
-
-bake <- function(.rec, new_data = NULL, type = "list") {
-  .rec$bake(new_data, type)
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# bake -------------------------------------------------------------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title bake
+#'
+#' @description
+#'   Evaluate the steps and store the recipe results
+#'
+#' @inheritParams step_scale
+#' @inheritParams stats::lm
+#' @param type
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' rec <- recipe(y~x, data = list(x = rnorm(10), y = rnorm(10))) |>
+#'        step_scale(x) |>
+#'        prep() |>
+#'        bake()
+bake <- function(.rec, data = NULL) {
+  .rec$bake(data = data)
 }
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# plate ------------------------------------------------------------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title plate
+#'
+#' @description
+#'   Get the results from the recipe. If the recipe hasn't been prepped and
+#'   baked, this will do those steps and return the result.
+#'
+#'
+#' @inheritParams step_scale
+#' @param type the return type for the recipe (dt = `data.table`, df = `data.frame`,
+#' tbl = `tibble`, list = `list`, m = `matrix`)
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#'
+#' dat <- data.frame(x = rnorm(10), y = rnorm(10))
+#'
+#' rec <- recipe(y~x, data = dat) |>
+#'        step_scale(x) |>
+#'        prep() |>
+#'        bake() |>
+#'        plate()
+#'
+#' rec <- recipe(y~x, data = dat) |>
+#'        step_scale(x) |>
+#'        plate()
+#'
+plate <- function(.rec, type = "dt") {
+  .rec$plate(type = type)
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
 
 
 

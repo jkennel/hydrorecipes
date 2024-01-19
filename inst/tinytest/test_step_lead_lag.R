@@ -6,9 +6,7 @@ dat <- data.frame(x = rnorm(rows),
                   z = rnorm(rows))
 frec = Recipe$new(formula = formula, data = dat)$
   add_step(StepLeadLag$new(y, lag = 1))$
-  prep()$
-  bake()$
-  data("tbl")
+  plate("tbl")
 
 rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::step_lag(y, lag = 1, keep_original_cols = TRUE) |>

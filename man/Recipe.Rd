@@ -79,7 +79,7 @@ R6 Class
 \item \href{#method-recipe-train_info}{\code{Recipe$train_info()}}
 \item \href{#method-recipe-update_term_info}{\code{Recipe$update_term_info()}}
 \item \href{#method-recipe-get_step_types}{\code{Recipe$get_step_types()}}
-\item \href{#method-recipe-data}{\code{Recipe$data()}}
+\item \href{#method-recipe-plate}{\code{Recipe$plate()}}
 \item \href{#method-recipe-clone}{\code{Recipe$clone()}}
 }
 }
@@ -145,7 +145,7 @@ An updated `Recipe` object.
 \subsection{Method \code{bake()}}{
 Create the dataset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Recipe$bake(new_data = NULL, type = "list")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Recipe$bake(data = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -194,11 +194,11 @@ features.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-recipe-data"></a>}}
-\if{latex}{\out{\hypertarget{method-recipe-data}{}}}
-\subsection{Method \code{data()}}{
+\if{html}{\out{<a id="method-recipe-plate"></a>}}
+\if{latex}{\out{\hypertarget{method-recipe-plate}{}}}
+\subsection{Method \code{plate()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Recipe$data(type = "df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Recipe$plate(type = "df")}\if{html}{\out{</div>}}
 }
 
 }

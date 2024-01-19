@@ -63,7 +63,7 @@ Recipe <- R6Class(
       # parse the formula
       vars_list <- get_formula_vars(formula = formula, data = data)
       self$vars <- unlist(vars_list, use.names = FALSE)
-      self$template <- unclass(data)[unique(self$vars)]
+      self$template <- unclass(data)#[unique(self$vars)]
 
       # variable info
       self$term_info  <- list(
@@ -118,14 +118,15 @@ Recipe <- R6Class(
     #' @param new_data The input data to the recipe.
     #' @return An updated `Recipe` object with a result that holds a list of
     #' features.
-    bake = function(new_data = NULL, type = "list") {
+    bake = function(data = NULL) {
       types <- self$get_step_types()
 
-      if (is.null(new_data)) {
-        self$result <- self$template
+      if (is.null(data)) {
+        self$result <- self$template[unique(self$vars)]
       } else {
-        self$result <- unclass(new_data)[unique(self$vars)]
+        self$result <- unclass(data)[unique(self$vars)]
       }
+
 
       for (i in seq_along(types)) {
         columns <- self$steps[[i]]$columns
@@ -150,7 +151,11 @@ Recipe <- R6Class(
         } else if (types[i] == "check") {
           self$checks <- append(self$checks,
                                 self$steps[[i]]$bake(unclass(self$result)[[columns]]))
+        } else if (types[i] == "add_from_template") {
+          self$result <- append(self$result,
+                                self$steps[[i]]$bake(unclass(self$template)[columns]))
         }
+
         self$update_term_info(step_name = self$steps[[i]]$step_name,
                               step_index = i)
       }
@@ -210,7 +215,14 @@ Recipe <- R6Class(
       vapply(self$steps, FUN = function(x) x$type, FUN.VALUE = character(1))
     },
 
-    data = function(type = "df") {
+    plate = function(type = "df") {
+
+      # prep and bake recipe if it hasn't been done
+      if(length(self$result) == 0) {
+        self$prep()$bake()
+      }
+
+      # return types
       if (type == "list") {
         return(self$result)
       }

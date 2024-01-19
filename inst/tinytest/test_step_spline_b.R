@@ -12,9 +12,7 @@ ik <- ik[-c(1, length(ik))]
 
 frec = Recipe$new(formula = formula, data = dat)$
   add_step(StepSplineB$new(x, df = 11L, intercept = FALSE))$
-  prep()$
-  bake()$
-  data("tbl")
+  plate("tbl")
 
 rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::step_spline_b(x, deg_free = 11L, complete_set = FALSE, keep_original_cols = TRUE) |>
@@ -25,9 +23,7 @@ tinytest::expect_equivalent(frec, rec)
 
 frec = Recipe$new(formula = formula, data = dat)$
   add_step(StepSplineB$new(x, df = 11L, intercept = TRUE))$
-  prep()$
-  bake()$
-  data("tbl")
+  plate("tbl")
 
 rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::step_spline_b(x, deg_free = 11L, complete_set = TRUE, keep_original_cols = TRUE) |>

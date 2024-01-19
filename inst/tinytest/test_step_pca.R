@@ -14,9 +14,7 @@ rows <- 1000
 
 frec = Recipe$new(formula = formula, data = dat)$
   add_step(StepPca$new(all_numeric(), n_comp = 6, scale = TRUE, center = TRUE))$
-  prep()$
-  bake()$
-  data("tbl")
+  plate("tbl")
 
 rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::step_scale(recipes::all_numeric()) |>
@@ -29,9 +27,7 @@ tinytest::expect_equivalent(abs(frec[, -(1:ncol(dat))]), abs(rec))
 
 frec = Recipe$new(formula = formula, data = dat)$
   add_step(StepPca$new(all_numeric(), n_comp = 6, scale = FALSE, center = FALSE))$
-  prep()$
-  bake()$
-  data("tbl")
+  plate("tbl")
 
 rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::step_pca(recipes::all_numeric(), num_comp = 6, keep_original_cols = FALSE) |>

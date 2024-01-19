@@ -10,9 +10,7 @@ dat <- data.frame(x = rep(1, rows),
 frec = Recipe$new(formula = formula, data = dat)$
     add_step(StepKernelFilter$new(z,
                                   kernel = list(rep(1, 1001)/1001), align = "center"))$
-    prep()$
-    bake()$
-    data("tbl")
+    plate("tbl")
 
 rec  = recipes::recipe(formula = formula, data = dat) |>
     recipes::step_window(z, size = 1001, statistic = "mean",) |>
