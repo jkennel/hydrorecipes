@@ -4,10 +4,10 @@ WARNING: This package is in early stages of development and is likely to change 
 
 This package is based on [recipes](https://recipes.tidymodels.org). The goals of the package are to increased the computational speed, decrease memory consumption, increase consistency between steps, and decrease some boiler plate code for step additions. The first three goals are likely to be achieved but the fourth might not. Part of this is due to providing both the *R6* and "standard" R ways to run the code.
 
-
 It diverges in a few ways:
 
 - based on [R6](https://r6.r-lib.org)
+- focus is on long datasets (millions of rows)
 - attention to memory usage
 - attention to speed
 - steps tailored to groundwater applications
@@ -19,7 +19,6 @@ It diverges in a few ways:
   - uses *terms* instead of *...* for variable selection and selections are wrapped
   in `c()` when more than one is required.
   - *R6* and standard R interfaces 
-  - additional functions for pulling 
 
 
 
