@@ -8,8 +8,8 @@ This package is based on [recipes](https://recipes.tidymodels.org). The goals of
 It diverges in a few ways:
 
 - based on [R6](https://r6.r-lib.org)
-- focus on decreasing memory usage
-- focus on speed
+- attention to memory usage
+- attention to speed
 - steps tailored to groundwater applications
 - decrease the number of dependencies and foreign functions
 - more flexible output options (list, matrix, data.frame, data.table, tibble)
