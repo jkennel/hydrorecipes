@@ -4,7 +4,7 @@
 \alias{StepTransferWelch}
 \title{R6 Class}
 \description{
-`StepTransferWelch` adds variable vectors.
+`StepTransferWelch` Transfer function using Welch's method.
 }
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_transfer_welch}
@@ -40,6 +40,13 @@
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{window}}{}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-step_transfer_welch-bake"></a>}}

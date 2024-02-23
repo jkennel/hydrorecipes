@@ -9,6 +9,17 @@
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_distributed_lag}
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{knots}}{the locations of the knots for the basis matrix.}
+
+\item{\code{n_lag}}{integer the number of lag terms.}
+
+\item{\code{n_lag}}{integer the maximum lag.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -33,13 +44,6 @@
 \if{html}{\out{<div class="r">}}\preformatted{StepDistributedLag$new(terms, knots, role = "predictor", ...)}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{knots}}{the locations of the knots for the basis matrix.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-step_distributed_lag-bake"></a>}}

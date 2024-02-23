@@ -12,6 +12,8 @@ Description: This package is an implementation of some common steps of the
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Depends:
+    Bessel
 Imports: 
     R6 (>= 2.3.0),
     Rcpp,
@@ -20,8 +22,7 @@ Imports:
     RcppEigen,
     earthtide,
     splines2,
-    specialfunctions,
-    Bessel
+    specialfunctions
 LinkingTo: Rcpp, RcppArmadillo, RcppThread, RcppEigen, splines2, specialfunctions, BH
 SystemRequirements: fftw3 (libfftw3-dev (deb), or fftw-devel (rpm)), C++17
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1

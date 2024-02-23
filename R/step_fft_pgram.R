@@ -1,15 +1,18 @@
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Calculate the Periodogram ----------------------------------------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' R6 Class
 #'
-#' `StepPgram` adds variable vectors.
-#' @param vars name of vars
+#' `StepPgram` calculates the periodogram (estimate of spectral density)
 #'
 #' @inheritParams Step
 #'
 #' @export
 StepPgram <- R6Class(
-  classname = 'step_fft_pgram',
+  classname = "step_fft_pgram",
   inherit = Step,
-
   public = list(
 
     # step specific variables
@@ -26,14 +29,15 @@ StepPgram <- R6Class(
                           taper = 0.1,
                           role = "predictor",
                           ...) {
-
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
-      env_list$step_name <- 'step_fft_pgram'
-      env_list$type <- 'add'
-      super$initialize(terms = terms,
-                       env_list[names(env_list) != "terms"])
+      env_list$step_name <- "step_fft_pgram"
+      env_list$type <- "add"
+      super$initialize(
+        terms = terms,
+        env_list[names(env_list) != "terms"]
+      )
 
       self$spans <- spans
       self$detrend <- detrend
@@ -44,23 +48,26 @@ StepPgram <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
-      if(self$lst) {
-
-        pspec <- collapse::mctl(spec_pgram(collapse::qM(new_data),
-                                           self$spans,
-                                           self$detrend,
-                                           self$demean,
-                                           self$taper))
+      if (self$lst) {
+        pspec <- collapse::mctl(spec_pgram(
+          collapse::qM(new_data),
+          self$spans,
+          self$detrend,
+          self$demean,
+          self$taper
+        ))
       } else {
-
-        pspec <- spec_pgram_list(new_data,
-                                 self$spans,
-                                 self$detrend,
-                                 self$demean,
-                                 self$taper)
+        pspec <- spec_pgram_list(
+          new_data,
+          self$spans,
+          self$detrend,
+          self$demean,
+          self$taper
+        )
       }
+      names(pspec) <- name_columns(self$id, "", n = length(pspec))
+
       return(pspec)
     }
-
   )
 )

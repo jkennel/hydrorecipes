@@ -11,11 +11,12 @@ rows <- 1000
                       e = rnorm(rows),
                       f = rnorm(rows),
                       g = rnorm(rows))
-
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# frecipes version
 frec = Recipe$new(formula = formula, data = dat)$
   add_step(StepPca$new(all_numeric(), n_comp = 6, scale = TRUE, center = TRUE))$
   plate("tbl")
-
+# recipes version
 rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::step_scale(recipes::all_numeric()) |>
   recipes::step_center(recipes::all_numeric()) |>
@@ -35,4 +36,16 @@ rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::bake(new_data = NULL)
 
 tinytest::expect_equivalent(abs(frec[, -(1:ncol(dat))]), abs(rec))
+
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# R6 version
+frec = Recipe$new(formula = formula, data = dat)$
+  add_step(StepPca$new(all_numeric()))$
+  plate("df")
+# standard version
+rec  = recipe(formula = formula, data = dat) |>
+  step_pca(all_numeric()) |>
+  plate()
+
+tinytest::expect_equivalent(frec, rec, info = "StepPca with recipes api")
 

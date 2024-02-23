@@ -14,58 +14,38 @@ R6 Class
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{the}}{model formula.}
+\item{\code{formula}}{the model formula.}
 
-\item{\code{information}}{about original and predicted variable.}
+\item{\code{term_info}}{information about original and predicted variable.}
 
-\item{\code{the}}{recipe steps.}
+\item{\code{steps}}{the recipe steps.}
 
-\item{\code{the}}{data.}
+\item{\code{template}}{the data.}
 
-\item{\code{variable}}{factor levels.}
+\item{\code{levels}}{variable factor levels.}
 
-\item{\code{variables}}{that are retained.}
+\item{\code{orig_lvls}}{original factor levels}
 
-\item{\code{packages}}{required}
+\item{\code{retained}}{variables that are retained.}
 
-\item{\code{training}}{info}
+\item{\code{requirements}}{packages required}
 
-\item{\code{original}}{factor levels}
+\item{\code{tr_info}}{training info}
 
 \item{\code{whether}}{the model is trained.}
 
-\item{\code{list}}{that holds the created model features.}
+\item{\code{result}}{list that holds the created model features.}
 
-\item{\code{list}}{that holds the checks.}
+\item{\code{checks}}{list that holds the checks.}
+
+\item{\code{vars}}{The variables available from the provided data set.}
 }
 \if{html}{\out{</div>}}
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{the}}{model formula.}
-
-\item{\code{information}}{about original and predicted variable.}
-
-\item{\code{the}}{recipe steps.}
-
-\item{\code{the}}{data.}
-
-\item{\code{variable}}{factor levels.}
-
-\item{\code{variables}}{that are retained.}
-
-\item{\code{packages}}{required}
-
-\item{\code{training}}{info}
-
-\item{\code{original}}{factor levels}
-
 \item{\code{whether}}{the model is trained.}
-
-\item{\code{list}}{that holds the created model features.}
-
-\item{\code{list}}{that holds the checks.}
 }
 \if{html}{\out{</div>}}
 }
@@ -123,7 +103,7 @@ Add a step to the recipe.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-An updated `Recipe` object.
+An updated `Recipe` object with a step addded.
 }
 }
 \if{html}{\out{<hr>}}
@@ -135,6 +115,13 @@ Do prep operations.
 \if{html}{\out{<div class="r">}}\preformatted{Recipe$prep(retain = TRUE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{retain}}{retain the step.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 An updated `Recipe` object.
 }
@@ -151,7 +138,8 @@ Create the dataset.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{new_data}}{The input data to the recipe.}
+\item{\code{data}}{The input data to the recipe. If it is not specified it uses
+the data initially provided to the Recipe.}
 }
 \if{html}{\out{</div>}}
 }
@@ -164,15 +152,20 @@ features.
 \if{html}{\out{<a id="method-recipe-train_info"></a>}}
 \if{latex}{\out{\hypertarget{method-recipe-train_info}{}}}
 \subsection{Method \code{train_info()}}{
+Get info about the training set.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Recipe$train_info(x)}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+data.frame with limited info on the training set
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-recipe-update_term_info"></a>}}
 \if{latex}{\out{\hypertarget{method-recipe-update_term_info}{}}}
 \subsection{Method \code{update_term_info()}}{
+Update the term info after baking a step.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Recipe$update_term_info(
   source = "derived",
@@ -183,24 +176,58 @@ features.
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{source}}{Where did the new terms come from: derived, original}
+
+\item{\code{roles}}{The step role.}
+
+\item{\code{type}}{The type of the step: add, modify, delete, etc.}
+
+\item{\code{step_name}}{The name of the step}
+
+\item{\code{step_index}}{The order the step was added}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+updated term_info
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-recipe-get_step_types"></a>}}
 \if{latex}{\out{\hypertarget{method-recipe-get_step_types}{}}}
 \subsection{Method \code{get_step_types()}}{
+Get the type of the step.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Recipe$get_step_types()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+character vector for the step types
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-recipe-plate"></a>}}
 \if{latex}{\out{\hypertarget{method-recipe-plate}{}}}
 \subsection{Method \code{plate()}}{
+Reduce the recipe to tabular form. Bake and coerce to the desired output
+type.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Recipe$plate(type = "df")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{type}}{The output data type: data.frame, data.table, matrix, tibble,}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+tabular output of baked Recipe.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-recipe-clone"></a>}}

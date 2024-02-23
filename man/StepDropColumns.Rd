@@ -6,6 +6,12 @@
 \description{
 `StepDropColumns` removes columns from output.
 }
+\seealso{
+Other common: 
+\code{\link{StepCenter}},
+\code{\link{StepDummy}}
+}
+\concept{common}
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_drop_columns}
 }

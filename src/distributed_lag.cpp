@@ -18,19 +18,19 @@
 // [[Rcpp::export]]
 Eigen::MatrixXd distributed_lag_thread(const Eigen::VectorXd& x,
                                        const Eigen::MatrixXd& bl,
-                                       int n_thread) {
+                                       unsigned int n_thread) {
 
   // result matrix
-  size_t n_row = x.size();
-  size_t n_col = bl.rows();
-  size_t n_rem = bl.cols();
+  unsigned int n_row = x.size();
+  unsigned int n_col = bl.rows();
+  unsigned int n_rem = bl.cols();
 
   Eigen::MatrixXd cb(n_row, n_col);
   cb.setConstant(NA_REAL);
 
   RcppThread::ThreadPool pool(n_thread);
 
-  pool.parallelFor(0, n_row-n_rem+1, [&] (size_t k) {
+  pool.parallelFor(0, n_row - n_rem + 1, [&] (unsigned int k) {
     cb.row(n_row - k - 1) =  bl * x.segment(k, n_rem);
   });
 
@@ -44,13 +44,13 @@ Eigen::MatrixXd distributed_lag_thread(const Eigen::VectorXd& x,
 Eigen::VectorXd convolve_eigen(const Eigen::VectorXd& x,
                                const Eigen::RowVectorXd& y) {
 
-  size_t n_row = x.size();
-  size_t n_rem = y.size();
+  unsigned int n_row = x.size();
+  unsigned int n_rem = y.size();
 
   Eigen::VectorXd out(n_row);
   out.setConstant(NA_REAL);
 
-  for (int k = 0; k < n_row - n_rem + 1; ++k) {
+  for (unsigned int k = 0; k < n_row - n_rem + 1; ++k) {
     out(n_row - k - 1) = y.dot(x.segment(k, n_rem));
   }
 
@@ -77,13 +77,13 @@ Rcpp::List distributed_lag_eigen(Eigen::Map<Eigen::VectorXd> x,
                                  Eigen::Map<Eigen::MatrixXd> bl) {
 
   // result matrix
-  size_t n_row = x.size();
-  size_t n_col = bl.rows();
-  size_t n_rem = bl.cols();
+  unsigned int n_row = x.size();
+  unsigned int n_col = bl.rows();
+  unsigned int n_rem = bl.cols();
 
   Rcpp::List cb(n_col);
 
-  for (int i = 0; i < n_col; ++i){
+  for (unsigned int i = 0; i < n_col; ++i){
     cb(i) = convolve_eigen(x, bl.row(i));
   };
 

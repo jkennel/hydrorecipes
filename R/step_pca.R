@@ -1,3 +1,8 @@
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Dimension Reduction Using Principle Component Analysis -----------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' R6 Class
 #'
 #' `StepPca` Does PCA for a set of columns. This currently is an in house function.
@@ -8,16 +13,14 @@
 #'
 #' @export
 StepPca <- R6Class(
-  classname = 'step_pca',
+  classname = "step_pca",
   inherit = Step,
-
   public = list(
     pca_results = list(),
     n_comp = NA_integer_,
     na_rm = NA,
     center = NA,
     scale = NA,
-
     center_values = NA,
     scale_values = NA,
 
@@ -29,14 +32,15 @@ StepPca <- R6Class(
                           scale = TRUE,
                           role = "predictor",
                           ...) {
-
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
-      env_list$step_name <- 'step_pca'
-      env_list$type <- 'modify'
-      super$initialize(terms = terms,
-                       env_list[names(env_list) != "terms"])
+      env_list$step_name <- "step_pca"
+      env_list$type <- "modify"
+      super$initialize(
+        terms = terms,
+        env_list[names(env_list) != "terms"]
+      )
 
       self$na_rm <- na_rm
       self$n_comp <- n_comp
@@ -49,34 +53,35 @@ StepPca <- R6Class(
       super$prep(new_data, info)
 
       if (self$center) {
-        self$center_values <- collapse::fmean(new_data,
-                                       na.rm = self$na_rm)
+        self$center_values <- collapse::fmean(new_data, na.rm = self$na_rm)
       } else {
         self$center_values <- rep(0.0, length(new_data))
       }
 
       if (self$scale) {
         self$scale_values <- collapse::fsd(new_data,
-                                          na.rm = self$na_rm)
+          na.rm = self$na_rm
+        )
       } else {
         self$scale_values <- rep(1.0, length(new_data))
       }
 
       self$pca_results <- pca_list_rotation_eigen(new_data,
-                                                  center = self$center_values,
-                                                  scale = self$scale_values,
-                                                  n_comp = self$n_comp)
+        center = self$center_values,
+        scale = self$scale_values,
+        n_comp = self$n_comp
+      )
     },
     # subtract the central value from a column
     bake = function(new_data) {
-
       for (i in seq_along(self$columns)) {
         if (self$center & self$scale) {
-          new_data[[i]] = (new_data[[i]] - self$center_values[i]) * (1.0 / self$scale_values[i])
+          new_data[[i]] <- (new_data[[i]] - self$center_values[i]) *
+            (1.0 / self$scale_values[i])
         } else if (self$center) {
-          new_data[[i]] = (new_data[[i]] - self$center_values[i])
+          new_data[[i]] <- (new_data[[i]] - self$center_values[i])
         } else if (self$scale) {
-          new_data[[i]] = (new_data[[i]]) * (1.0 / self$scale_values[i])
+          new_data[[i]] <- (new_data[[i]]) * (1.0 / self$scale_values[i])
         }
       }
 
@@ -86,8 +91,6 @@ StepPca <- R6Class(
       names(new_data) <- name_columns(self$id, NULL, self$n_comp)
 
       new_data
-
     }
   )
 )
-

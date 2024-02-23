@@ -104,7 +104,7 @@ Rcpp::NumericVector vadose_response2(const Rcpp::NumericVector time,
                                      double precision,
                                      bool inverse) {
 
-  int n = time.size();
+  unsigned int n = time.size();
 
   Rcpp::NumericVector output(n);
 

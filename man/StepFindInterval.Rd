@@ -9,7 +9,8 @@ R6 Class
 R6 Class
 }
 \details{
-`StepFindInterval` divides a series into intervals and then performs dummy encoding.
+`StepFindInterval` divides a series into intervals and then
+performs dummy encoding.
 }
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_find_interval}

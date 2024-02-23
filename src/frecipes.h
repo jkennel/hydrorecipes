@@ -14,11 +14,11 @@
 #include <unsupported/Eigen/FFT>
 #include <unsupported/Eigen/SpecialFunctions>
 
-#include <boost/math/special_functions/gamma.hpp>
-#include <boost/math/special_functions/expint.hpp>
-#include <boost/math/special_functions/erf.hpp>
-#include <boost/math/special_functions/factorials.hpp>
-#include <boost/math/special_functions/bessel.hpp>
+// #include <boost/math/special_functions/gamma.hpp>
+// #include <boost/math/special_functions/expint.hpp>
+// #include <boost/math/special_functions/erf.hpp>
+// #include <boost/math/special_functions/factorials.hpp>
+// #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 
 #include <Eigen/Eigenvalues>
@@ -26,26 +26,24 @@
 #include <splines2Armadillo.h>
 #include <specialfunctions.h>
 
-
 #include <RcppEigen.h>
 #include <RcppThread.h>
 
 using namespace Rcpp;
 using namespace Eigen;
-using Eigen::MatrixXd;
-using Eigen::MatrixXi;
-using Eigen::MatrixXcd;
-using Eigen::Vector2d;
-using Eigen::Vector3d;
-using Eigen::VectorXd;
-using Eigen::VectorXi;
-using Eigen::VectorXcd;
-using Eigen::RowVectorXd;
 using Eigen::ArrayXd;
 using Eigen::ArrayXi;
+using Eigen::MatrixXcd;
+using Eigen::MatrixXd;
+using Eigen::MatrixXi;
+using Eigen::RowVectorXd;
+using Eigen::Vector2d;
+using Eigen::Vector3d;
+using Eigen::VectorXcd;
+using Eigen::VectorXd;
+using Eigen::VectorXi;
 
 using Eigen::FFT;
-
 
 //==============================================================================
 // lags.cpp
@@ -61,16 +59,14 @@ int get_end(int n,
             int n_out,
             int lag,
             int n_subset);
-NumericVector shift_subset(const NumericVector& x,
+NumericVector shift_subset(const NumericVector &x,
                            size_t lag,
                            size_t n_subset,
                            size_t n_shift);
-List lag_list(const NumericVector& x,
-              const IntegerVector& lags,
+List lag_list(const NumericVector &x,
+              const IntegerVector &lags,
               size_t n_subset,
               size_t n_shift);
-
-
 
 //==============================================================================
 // fft_helpers.cpp
@@ -82,25 +78,23 @@ size_t get_column_number(size_t n);
 size_t next_n_eigen(size_t n);
 Eigen::VectorXd pad_vector(Eigen::VectorXd x, size_t n_old, size_t n_new);
 
-Eigen::MatrixXd detrend_matrix(const Eigen::MatrixXd& x);
-Eigen::MatrixXd demean_matrix(const Eigen::MatrixXd& x);
+Eigen::MatrixXd detrend_matrix(const Eigen::MatrixXd &x);
+Eigen::MatrixXd demean_matrix(const Eigen::MatrixXd &x);
 Eigen::VectorXd detrend_vector(Eigen::VectorXd x);
 Eigen::VectorXd demean_vector(Eigen::VectorXd x);
-Eigen::MatrixXd detrend_and_demean_matrix(const Eigen::MatrixXd& x,
+Eigen::MatrixXd detrend_and_demean_matrix(const Eigen::MatrixXd &x,
                                           bool detrend,
                                           bool demean);
-Rcpp::List detrend_and_demean_list( Rcpp::List& x,
-                                          bool detrend,
-                                          bool demean);
+Rcpp::List detrend_and_demean_list(Rcpp::List &x,
+                                   bool detrend,
+                                   bool demean);
 
 Eigen::VectorXd modified_daniell(Eigen::VectorXi spans);
-Eigen::MatrixXcd kernel_apply(Eigen::MatrixXcd& x,
-                              Eigen::VectorXd& y);
+Eigen::MatrixXcd kernel_apply(Eigen::MatrixXcd &x,
+                              Eigen::VectorXd &y);
 Rcpp::List kernel_apply_list(Rcpp::List x,
-                              Eigen::VectorXd& y);
+                             Eigen::VectorXd &y);
 Eigen::VectorXd spec_taper(size_t n_row, double p = 0.1);
-
-
 
 Eigen::VectorXi make_groups(size_t n_groups,
                             size_t n);
@@ -108,28 +102,27 @@ Eigen::ArrayXd power_spaced(size_t n, double min, double max, double power);
 Eigen::VectorXd group_frequency(Eigen::ArrayXd frequencies,
                                 size_t n_groups);
 Eigen::VectorXd determine_frequency(size_t n);
-Eigen::MatrixXcd check_ffts(Eigen::MatrixXcd& x,
+Eigen::MatrixXcd check_ffts(Eigen::MatrixXcd &x,
                             double cutoff);
-Eigen::VectorXi which_indices(const Eigen::VectorXd& x,
-                              const Eigen::VectorXd& knots);
+Eigen::VectorXi which_indices(const Eigen::VectorXd &x,
+                              const Eigen::VectorXd &knots);
 
 //==============================================================================
-//fft_windows.cpp
+// fft_windows.cpp
 Eigen::VectorXd window_hann(size_t n);
 Eigen::VectorXcd window_hann_cplx(size_t n);
 Eigen::VectorXd window_rectangle(size_t n);
 Eigen::VectorXd window_tukey(size_t n, double r);
 double window_scale(Eigen::VectorXd window, size_t n_new, size_t n_fft);
 
-
 //==============================================================================
-//fft.cpp
+// fft.cpp
 Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
                             size_t n_new);
 
-Eigen::MatrixXcd multiply_ffts(Eigen::MatrixXcd& x);
+Eigen::MatrixXcd multiply_ffts(Eigen::MatrixXcd &x);
 
-//convolve
+// convolve
 Eigen::VectorXd convolve_vec(Eigen::VectorXd x,
                              Eigen::VectorXd y);
 Eigen::VectorXd convolve_overlap_add(Eigen::VectorXd x,
@@ -137,29 +130,29 @@ Eigen::VectorXd convolve_overlap_add(Eigen::VectorXd x,
 Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd x,
                                       Eigen::VectorXd y,
                                       int align);
-Rcpp::List convolve_overlap_save_list(Eigen::VectorXd& x,
+Rcpp::List convolve_overlap_save_list(Eigen::VectorXd &x,
                                       Rcpp::List y,
                                       int align);
 Eigen::VectorXd convolve_tf(Eigen::VectorXd x,
                             Eigen::VectorXcd y);
-Eigen::MatrixXd convolve_matrix(const Eigen::VectorXd& x,
-                                const Eigen::MatrixXd& y,
+Eigen::MatrixXd convolve_matrix(const Eigen::VectorXd &x,
+                                const Eigen::MatrixXd &y,
                                 bool remove_partial = true,
                                 bool reverse = true);
-Eigen::VectorXd convolve_filter(const Eigen::VectorXd& x,
-                                const Eigen::VectorXd& y,
+Eigen::VectorXd convolve_filter(const Eigen::VectorXd &x,
+                                const Eigen::VectorXd &y,
                                 bool remove_partial,
                                 bool reverse);
-Rcpp::List convolve_list(const Eigen::VectorXd& x,
+Rcpp::List convolve_list(const Eigen::VectorXd &x,
                          const List y,
                          const bool remove_partial,
                          const bool reverse);
-std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
+std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd &x,
                                           const std::list<Eigen::VectorXd> y,
                                           const bool remove_partial,
                                           const bool reverse);
 // Spectrum
-Eigen::MatrixXcd spec_welch(Eigen::MatrixXd& x,
+Eigen::MatrixXcd spec_welch(Eigen::MatrixXd &x,
                             size_t length_subset,
                             double overlap,
                             Eigen::VectorXd window = Eigen::VectorXd::Zero(0));
@@ -172,45 +165,41 @@ Eigen::MatrixXcd spec_welch(Eigen::MatrixXd& x,
 //                                      double overlap,
 //                                      Eigen::VectorXd window = Eigen::VectorXd::Zero(0));
 
-
-Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd& x,
-                            const Eigen::VectorXi& spans,
+Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd &x,
+                            const Eigen::VectorXi &spans,
                             bool detrend,
                             bool demean,
                             double taper = 0.1);
 
-
 // Solve
 
-Eigen::MatrixXcd solve_cplx_parallel(const Eigen::MatrixXcd& x);
-Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
+Eigen::MatrixXcd solve_cplx_parallel(const Eigen::MatrixXcd &x);
+Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd &x,
                                 size_t n_groups);
 
-Eigen::MatrixXcd transfer_pgram_smooth(Eigen::MatrixXd& x,
-                                       const Eigen::VectorXi& spans,
+Eigen::MatrixXcd transfer_pgram_smooth(Eigen::MatrixXd &x,
+                                       const Eigen::VectorXi &spans,
                                        bool detrend,
                                        bool demean,
                                        double taper,
                                        double power,
                                        size_t n_groups);
-Eigen::MatrixXcd transfer_pgram(Eigen::MatrixXd& x,
-                                const Eigen::VectorXi& spans,
+Eigen::MatrixXcd transfer_pgram(Eigen::MatrixXd &x,
+                                const Eigen::VectorXi &spans,
                                 bool detrend,
                                 bool demean,
                                 double taper,
                                 double power,
                                 size_t n_groups);
 
-Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
+Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd &x,
                                 size_t length_subset,
                                 double overlap,
                                 Eigen::VectorXd window = Eigen::VectorXd::Zero(0));
 
-
-
 // Processing
-Eigen::MatrixXd ordinary_coherence_phase(const Eigen::MatrixXcd& x);
-Eigen::MatrixXd frequency_to_time_domain(Eigen::MatrixXcd& pgram,
+Eigen::MatrixXd ordinary_coherence_phase(const Eigen::MatrixXcd &x);
+Eigen::MatrixXd frequency_to_time_domain(Eigen::MatrixXcd &pgram,
                                          size_t n_groups);
 // Eigen::ArrayXd frf_to_brf(const Eigen::VectorXcd& x,
 //                           std::complex<double> dc1,
@@ -221,37 +210,36 @@ Eigen::MatrixXd frequency_to_time_domain(Eigen::MatrixXcd& pgram,
 //                                  Eigen::VectorXd& knots);
 // Eigen::MatrixXd predict_pgram_frf(Eigen::MatrixXd& x,
 //                                   Eigen::VectorXi span);
-Eigen::MatrixXd predict_pgram_frf(Eigen::MatrixXd& x,
-                                  Eigen::MatrixXd& x_out,
+Eigen::MatrixXd predict_pgram_frf(Eigen::MatrixXd &x,
+                                  Eigen::MatrixXd &x_out,
                                   Eigen::VectorXi spans, // spec_pgram
                                   size_t n_groups);
 
-
 //==============================================================================
 // b_spline_arma.cpp
-Rcpp::List b_spline_list(const arma::vec& x,
+Rcpp::List b_spline_list(const arma::vec &x,
                          const unsigned int df,
                          const unsigned int degree,
-                         const arma::vec& internal_knots,
-                         const arma::vec& boundary_knots,
+                         const arma::vec &internal_knots,
+                         const arma::vec &boundary_knots,
                          const bool complete_basis,
                          const bool periodic,
                          const unsigned int derivs,
                          const bool integral);
-Rcpp::List b_spline_list2(const arma::vec& x,
+Rcpp::List b_spline_list2(const arma::vec &x,
                           const unsigned int df,
                           const unsigned int degree,
-                          const arma::vec& internal_knots,
-                          const arma::vec& boundary_knots,
+                          const arma::vec &internal_knots,
+                          const arma::vec &boundary_knots,
                           const bool complete_basis,
                           const bool periodic,
                           const unsigned int derivs,
                           const bool integral);
-std::list<Eigen::VectorXd> b_spline_list3(const arma::vec& x,
+std::list<Eigen::VectorXd> b_spline_list3(const arma::vec &x,
                                           const unsigned int df,
                                           const unsigned int degree,
-                                          const arma::vec& internal_knots,
-                                          const arma::vec& boundary_knots,
+                                          const arma::vec &internal_knots,
+                                          const arma::vec &boundary_knots,
                                           const bool complete_basis,
                                           const bool periodic,
                                           const unsigned int derivs,
@@ -260,8 +248,8 @@ arma::vec log_lags_arma(arma::uword n, arma::uword max_lag);
 
 //==============================================================================
 // distributed_lag.cpp
-Eigen::MatrixXd distributed_lag_thread(const Eigen::VectorXd& x,
-                                       const Eigen::MatrixXd& bl,
+Eigen::MatrixXd distributed_lag_thread(const Eigen::VectorXd &x,
+                                       const Eigen::MatrixXd &bl,
                                        int n_thread);
 Rcpp::List distributed_lag_eigen(Eigen::Map<Eigen::VectorXd> x,
                                  Eigen::Map<Eigen::MatrixXd> bl);
@@ -271,24 +259,24 @@ List distributed_lag_thread_eigen(Eigen::Map<Eigen::VectorXd> x,
                                   int n_subset,
                                   int n_shift,
                                   int n_thread);
-Rcpp::List distributed_lag_list(Eigen::Map<Eigen::VectorXd>  x,
+Rcpp::List distributed_lag_list(Eigen::Map<Eigen::VectorXd> x,
                                 arma::uword n_lag,
                                 arma::uword max_lag,
                                 const unsigned int df,
                                 const unsigned int degree,
-                                const arma::vec& internal_knots,
-                                const arma::vec& boundary_knots,
+                                const arma::vec &internal_knots,
+                                const arma::vec &boundary_knots,
                                 const bool complete_basis = true,
                                 const bool periodic = false,
                                 const unsigned int derivs = 0,
                                 const bool integral = false);
-Rcpp::List distributed_lag_list3(Eigen::VectorXd  x,
+Rcpp::List distributed_lag_list3(Eigen::VectorXd x,
                                  arma::uword n_lag,
                                  arma::uword max_lag,
                                  const unsigned int df,
                                  const unsigned int degree,
-                                 const arma::vec& internal_knots,
-                                 const arma::vec& boundary_knots,
+                                 const arma::vec &internal_knots,
+                                 const arma::vec &boundary_knots,
                                  const bool complete_basis = true,
                                  const bool periodic = false,
                                  const unsigned int derivs = 0,

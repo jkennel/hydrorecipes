@@ -460,8 +460,8 @@ gwr_p <- function(time, n_gwr) {
     .Call(`_frecipes_gwr_p`, time, n_gwr)
 }
 
-barker_herbert_impulse2 <- function(p, radius, radius_patch, t_1, t_2, s_1, s_2) {
-    .Call(`_frecipes_barker_herbert_impulse2`, p, radius, radius_patch, t_1, t_2, s_1, s_2)
+barker_herbert_impulse <- function(p, radius, radius_patch, t_1, t_2, s_1, s_2) {
+    .Call(`_frecipes_barker_herbert_impulse`, p, radius, radius_patch, t_1, t_2, s_1, s_2)
 }
 
 gwr_barker_herbert <- function(time, flow_rate, radius, radius_patch, t_1, t_2, s_1, s_2, n_gwr) {
@@ -997,20 +997,75 @@ which_indices <- function(x, knots) {
     .Call(`_frecipes_which_indices`, x, knots)
 }
 
+#' @title
+#' bessel_k_cplx
+#'
+#' @description
+#' Modified Bessel function of first kind order 1
+#'
+#' @param x \code{numeric} value to evaluate
+#' @param nu \code{numeric} value to evaluate
+#' @param expon_scaled \code{boolean} value to evaluate
+#' @param n_seq \code{nseq} value to evaluate
+#'
+#' @return bessel function result
+#'
+#'
+#' @export
+bessel_k_cplx <- function(x, nu, expon_scaled, n_seq) {
+    .Call(`_frecipes_bessel_k_cplx`, x, nu, expon_scaled, n_seq)
+}
+
 stehfest_v <- function(n) {
     .Call(`_frecipes_stehfest_v`, n)
 }
 
-stehfest_p <- function(time, n_stehfest) {
-    .Call(`_frecipes_stehfest_p`, time, n_stehfest)
+stehfest_p <- function(time, n_terms) {
+    .Call(`_frecipes_stehfest_p`, time, n_terms)
 }
 
-hantush_jacob_laplace <- function(time, c, r, Tr, S, Q, prec, n_stehfest) {
-    .Call(`_frecipes_hantush_jacob_laplace`, time, c, r, Tr, S, Q, prec, n_stehfest)
+tth <- function(time) {
+    .Call(`_frecipes_tth`, time)
 }
 
-barker_herbert <- function(time, radius, radius_patch, t_1, t_2, s_1, s_2, Q, prec, n_stehfest) {
-    .Call(`_frecipes_barker_herbert`, time, radius, radius_patch, t_1, t_2, s_1, s_2, Q, prec, n_stehfest)
+cch <- function(time) {
+    .Call(`_frecipes_cch`, time)
+}
+
+bbl <- function(time, nu, expon_scaled, n_seq) {
+    .Call(`_frecipes_bbl`, time, nu, expon_scaled, n_seq)
+}
+
+cohen_p <- function(time, n_terms) {
+    .Call(`_frecipes_cohen_p`, time, n_terms)
+}
+
+cohen_c <- function(d, n_terms) {
+    .Call(`_frecipes_cohen_c`, d, n_terms)
+}
+
+papadopulos_cooper_laplace <- function(time, Q, r, r_c, r_w, Tr, S, prec, n_terms) {
+    .Call(`_frecipes_papadopulos_cooper_laplace`, time, Q, r, r_c, r_w, Tr, S, prec, n_terms)
+}
+
+jacob_lohman_laplace <- function(time, s, r, Tr, S, prec, n_terms) {
+    .Call(`_frecipes_jacob_lohman_laplace`, time, s, r, Tr, S, prec, n_terms)
+}
+
+hantush_jacob_laplace <- function(time, c, r, Tr, S, Q, prec, n_terms) {
+    .Call(`_frecipes_hantush_jacob_laplace`, time, c, r, Tr, S, Q, prec, n_terms)
+}
+
+barker_herbert <- function(time, radius, radius_patch, t_1, t_2, s_1, s_2, Q, prec, n_terms) {
+    .Call(`_frecipes_barker_herbert`, time, radius, radius_patch, t_1, t_2, s_1, s_2, Q, prec, n_terms)
+}
+
+parallel_fractures_solute <- function(time, z, x, concentration_influent, time_influent, c_0, b, B, v, alpha_l, D_star, k_f, k_m, t_half, rho_b, theta, tortuosity, n_terms) {
+    .Call(`_frecipes_parallel_fractures_solute`, time, z, x, concentration_influent, time_influent, c_0, b, B, v, alpha_l, D_star, k_f, k_m, t_half, rho_b, theta, tortuosity, n_terms)
+}
+
+parallel_fractures_heat <- function(time, z, x, temperature_influent, time_influent, t_0, b, B, v, lambda_fracture, lambda_matrix, spec_heat_w, spec_heat_s, rho_w, rho_s, theta, n_terms) {
+    .Call(`_frecipes_parallel_fractures_heat`, time, z, x, temperature_influent, time_influent, t_0, b, B, v, lambda_fracture, lambda_matrix, spec_heat_w, spec_heat_s, rho_w, rho_s, theta, n_terms)
 }
 
 #' @title
@@ -1064,17 +1119,37 @@ llt_fitted <- function(X, Y) {
 }
 
 #' @title
-NULL
-
-#' @title
-NULL
-
+#' Ogata-Banks solution for 1-D flow.
+#'
+#' @description
+#' Ogata, A., Banks, R.B., 1961. A solution of the differential equation of
+#' longitudinal dispersion in porous media. U. S. Geol. Surv. Prof. Pap. 411-A.
+#' 1-D, infinite source, uniform flow, constant parameters, no decay, no retardation
+#'
+#' @param D diffusion coefficient
+#' @param v double velocity
+#' @param C0 double concentration
+#' @param x double x position
+#' @param t double time
+#'
+#' @return ogata banks solution
+#'
+#' @export
+#'
 ogata_banks_ind <- function(D, v, C0, x, t) {
     .Call(`_frecipes_ogata_banks_ind`, D, v, C0, x, t)
 }
 
-ogata_banks_list <- function(time, distance, concentration_initial, velocity, diffusion, retardation, decay) {
-    .Call(`_frecipes_ogata_banks_list`, time, distance, concentration_initial, velocity, diffusion, retardation, decay)
+ogata_banks_vec <- function(D, v, C0, x, t) {
+    .Call(`_frecipes_ogata_banks_vec`, D, v, C0, x, t)
+}
+
+ogata_banks_decay_ind <- function(c0, v, D, R, k, x, t) {
+    .Call(`_frecipes_ogata_banks_decay_ind`, c0, v, D, R, k, x, t)
+}
+
+ogata_banks_decay_vec <- function(c0, v, D, R, k, x, t) {
+    .Call(`_frecipes_ogata_banks_decay_vec`, c0, v, D, R, k, x, t)
 }
 
 scale_list_param <- function(x, center, scale) {

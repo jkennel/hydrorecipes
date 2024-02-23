@@ -2,23 +2,56 @@
 % Please edit documentation in R/step_aquifer_leaky.R
 \name{StepAquiferLeaky}
 \alias{StepAquiferLeaky}
-\title{hantush_jacob}
+\title{hantush_jacob 1955 solution for a leaky aquifer}
 \description{
 Convolution of hantush well function and flow rates in the frequency domain.
-Time series needs to be regularily spaced.
+Time series needs to be regularly spaced.
 }
 \details{
 R6 Class
 }
+\references{
+J.H.A. Prodanoff; W.J. Mansur; F.C.B. Mascarenhas (2006).
+ Numerical evaluation of Theis and Hantush-Jacob well functions. , 318(1-4),
+ 0–183. doi:10.1016/j.jhydrol.2005.05.026 eq: 10, 11, 12
+
+Hantush, M.S. and C.E. Jacob, 1955. Non-steady radial flow in an infinite
+ leaky aquifer, Am. Geophys. Union Trans., vol. 36, no. 1, pp. 95-100.
+}
 \seealso{
 Other aquifer: 
+\code{\link{StepAquiferConstantDrawdown}},
 \code{\link{StepAquiferGRF}},
 \code{\link{StepAquiferPatch}},
-\code{\link{StepAquiferTheis}}
+\code{\link{StepAquiferTheis}},
+\code{\link{step_aquifer_grf}()},
+\code{\link{step_aquifer_leaky}()},
+\code{\link{step_aquifer_patch}()},
+\code{\link{step_aquifer_theis}()}
 }
 \concept{aquifer}
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_aquifer_leaky}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{time}}{prediction times}
+
+\item{\code{flow_rate}}{well flow rates}
+
+\item{\code{leakage}}{hantush leakage}
+
+\item{\code{radius}}{distance to monitoring interval}
+
+\item{\code{storativity}}{aquifer storativity}
+
+\item{\code{transmissivity}}{aquifer transmissivity}
+
+\item{\code{max_terms}}{number of terms to use in Hantush solution.  More is more
+precise but slower.}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -54,23 +87,6 @@ Other aquifer:
 )}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{time}}{prediction times}
-
-\item{\code{flow_rate}}{well flow rates}
-
-\item{\code{leakage}}{hantush leakage}
-
-\item{\code{radius}}{distance to monitoring interval}
-
-\item{\code{storativity}}{aquifer storativity}
-
-\item{\code{transmissivity}}{aquifer transmissivity}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-step_aquifer_leaky-bake"></a>}}

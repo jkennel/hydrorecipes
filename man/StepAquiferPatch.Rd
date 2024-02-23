@@ -4,13 +4,25 @@
 \alias{StepAquiferPatch}
 \title{R6 Class}
 \description{
-`StepAquiferPatch` barker_herbert.
+`StepAquiferPatch` barker_herbert 1982 solution for radial patches.
+}
+\references{
+Barker, J.A., and R. Herbert, 1982: Pumping tests in patchy
+ aquifers, Ground Water, vol. 20, No. 2, pp. 150-155.
+
+Butler, J.J., 1988: Pumping tests in nonuniform aquifers – The radially
+ symmetric case, Journal of Hydrology, Vol. 101, pp. 15-30.
 }
 \seealso{
 Other aquifer: 
+\code{\link{StepAquiferConstantDrawdown}},
 \code{\link{StepAquiferGRF}},
 \code{\link{StepAquiferLeaky}},
-\code{\link{StepAquiferTheis}}
+\code{\link{StepAquiferTheis}},
+\code{\link{step_aquifer_grf}()},
+\code{\link{step_aquifer_leaky}()},
+\code{\link{step_aquifer_patch}()},
+\code{\link{step_aquifer_theis}()}
 }
 \concept{aquifer}
 \section{Super class}{
@@ -47,7 +59,7 @@ Other aquifer:
   specific_storage_outer = 1e-05,
   hydraulic_conductivity_inner = 1e-04,
   hydraulic_conductivity_outer = 1e-06,
-  n_stehfest = 12L,
+  n_terms = 12L,
   role = "predictor",
   ...
 )}\if{html}{\out{</div>}}

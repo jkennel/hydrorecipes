@@ -2,6 +2,8 @@
 title: "Benchmarking frecipes"
 author: "Jonathan Kennel"
 format: html
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Timings *frecipes* vs *recipes*
@@ -809,6 +811,61 @@ results <- bench::press(
     )
   }
 )
+
+results
+```
+
+## step_transport_fractures_solute
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(~time+z+x)
+
+dat <- setDT(expand.grid(10^(3:8),
+                         seq(0.0, 10, 1),
+                         c(0.0)))
+
+names(dat) <- c("time", "z", "x")
+
+results <- 
+  bench::mark(
+    frec1 = (Recipe$new(formula = formula, data = dat)$
+               add_step(StepTransportFracturesSolute$new(time = time,
+                                                         distance_fracture = z,
+                                                         distance_matrix = x))$
+               plate("dt")),
+    check = FALSE,
+    min_iterations = 10
+  )
+
+results
+```
+
+## step_transport_fractures_heat
+
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(~time+z+x)
+
+dat <- setDT(expand.grid(10^(3:8),
+                         seq(0.0, 100, 1),
+                         c(0.0, 0.05)))
+
+names(dat) <- c("time", "z", "x")
+
+results <- 
+  bench::mark(
+    frec1 = (Recipe$new(formula = formula, data = dat)$
+               add_step(StepTransportFracturesHeat$new(time = time,
+                                                         distance_fracture = z,
+                                                         distance_matrix = x))$
+               plate("dt")),
+    check = FALSE,
+    min_iterations = 10
+  )
 
 results
 ```

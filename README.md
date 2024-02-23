@@ -22,7 +22,10 @@ It diverges in a few ways:
 
 
 
-steps to do:
-
-- step_temporary_deployment
-- step_be_*
+To do:
+- Explore convolution methods for Laplace solutions
+- Optimize laplace solutions
+- Fix selectors
+- Steps
+  - step_temporary_deployment
+  - step_be_*

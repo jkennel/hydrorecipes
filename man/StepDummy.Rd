@@ -11,6 +11,12 @@ R6 Class
 \details{
 `StepDummy` dummy encoding for factor or integer input.
 }
+\seealso{
+Other common: 
+\code{\link{StepCenter}},
+\code{\link{StepDropColumns}}
+}
+\concept{common}
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_dummy}
 }
@@ -38,6 +44,13 @@ R6 Class
 \if{html}{\out{<div class="r">}}\preformatted{StepDummy$new(terms, one_hot = FALSE, role = "predictor", ...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{one_hot}}{boolean use one-hot encoding}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 A new `Step`.
 }

@@ -1160,7 +1160,7 @@ std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
      VectorXcd y = sub_v.segment(1, sub_size).conjugate();
 
      MatrixXcd X(sub_size, sub_size);
-     const int p = sub_size;
+     // const int p = sub_size;
 
      for (size_t i = 0; i < sub_size; ++i) {
        for (size_t j = i; j < sub_size; ++j) {

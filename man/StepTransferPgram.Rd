@@ -4,7 +4,7 @@
 \alias{StepTransferPgram}
 \title{R6 Class}
 \description{
-`StepTransferPgram` adds variable vectors.
+`StepTransferPgram` Transfer function using pgram method.
 }
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_fft_transfer_pgram}

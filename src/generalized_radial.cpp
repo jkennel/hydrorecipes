@@ -55,7 +55,7 @@ double exp_int(double u) {
     } else if (u > 700.0){
       u = 0;
     } else {
-      u = -boost::math::expint(-u);
+      u = -std::expint(-u);
     }
 
   return(u);
@@ -442,14 +442,14 @@ double hantush_well(double u, double b, double precision){
   double out = 0.0;
   double en;
   double to_add;
-  int n_terms = 30;
+  unsigned int n_terms = 30;
 
   //eq 10
   if (b_div_u >= u){
     en = exp_int(b_div_u);
 
     for (unsigned int i = 0; i < n_terms; i++) {
-      to_add = en * (pow(-u, i) / boost::math::factorial<double>(i));
+      to_add = en * (pow(-u, i) / std::tgamma(i+1));
       out += to_add;
       if (std::abs(to_add) < precision){
         break;
@@ -457,14 +457,14 @@ double hantush_well(double u, double b, double precision){
       en = (1.0 / ((double)i + 1.0)) * (exp(-b_div_u) - b_div_u * en);
 
     }
-    out = 2.0 * boost::math::cyl_bessel_k(0, 2.0 * sqrt(b)) - out;
+    out = 2.0 * std::cyl_bessel_k(0, 2.0 * sqrt(b)) - out;
 
   } else { //eq 12
 
     en = exp_int(u);
 
     for (unsigned int i = 0; i < n_terms; i++) {
-      to_add = en * (pow(-b_div_u, i) / boost::math::factorial<double>(i));
+      to_add = en * (pow(-b_div_u, i) / std::tgamma(i + 1));
       out += to_add;
       if (std::abs(to_add) < precision){
         break;

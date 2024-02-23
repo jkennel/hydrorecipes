@@ -4,19 +4,50 @@
 \alias{StepAquiferGRF}
 \title{R6 Class}
 \description{
-`StepAquiferGRF` Generates the drawdown using the Generalized Radial Flow (GRF)
-model. This method defaults to a fast FFT convolution so many rates can be included,
-but requires a regular time series.
+`StepAquiferGRF` Generates the drawdown using the Generalized
+Radial Flow (GRF) model. This method defaults to a fast FFT
+convolution so many rates can be included, but requires a regular
+time series.
+}
+\references{
+Barker, J.A., A generalized radial flow model for hydraulic tests
+ in fractured rock. Water Resour. Res., 24 (1988), pp. 1796-1804,
+ 10.1029/WR024i010p01796
 }
 \seealso{
 Other aquifer: 
+\code{\link{StepAquiferConstantDrawdown}},
 \code{\link{StepAquiferLeaky}},
 \code{\link{StepAquiferPatch}},
-\code{\link{StepAquiferTheis}}
+\code{\link{StepAquiferTheis}},
+\code{\link{step_aquifer_grf}()},
+\code{\link{step_aquifer_leaky}()},
+\code{\link{step_aquifer_patch}()},
+\code{\link{step_aquifer_theis}()}
 }
 \concept{aquifer}
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_aquifer_grf}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{time}}{numeric vector of input times}
+
+\item{\code{flow_rate}}{numeric vector of flow rates for each input time}
+
+\item{\code{thickness}}{numeric thickness of aquifer}
+
+\item{\code{radius}}{numeric radial distance to monitoring well (> 0.0)}
+
+\item{\code{specific_storage}}{the specific storage}
+
+\item{\code{hydraulic_conductivity}}{the hydraulic conductivity}
+
+\item{\code{flow_dimension}}{numeric value for the flow dimension: 1 = linear,
+2 = radial (i.e. Theis), 3 = spherical.}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -52,26 +83,6 @@ Other aquifer:
 )}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{time}}{numeric vector of input times}
-
-\item{\code{flow_rate}}{numeric vector of flow rates for each input time}
-
-\item{\code{thickness}}{numeric thickness of aquifer}
-
-\item{\code{radius}}{numeric radial distance to monitoring well (> 0.0)}
-
-\item{\code{specific_storage}}{the specific storage}
-
-\item{\code{hydraulic_conductivity}}{the hydraulic conductivity}
-
-\item{\code{flow_dimension}}{numeric value for the flow dimension: 1 = linear,
-2 = radial (i.e. Theis), 3 = spherical.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-step_aquifer_grf-bake"></a>}}

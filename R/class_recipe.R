@@ -1,3 +1,8 @@
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# R6 class for a Recipe --------------------------------------------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' R6 Class
 #'
 #' `Recipe` holds the steps to create model features
@@ -5,40 +10,37 @@
 #'
 #' @export
 Recipe <- R6Class(
-
-  classname = 'recipe',
-
+  classname = "recipe",
   public = list(
 
-    #' @field the model formula.
-    formula   = NULL,
-    #' @field information about original and predicted variable.
+    #' @field formula the model formula.
+    formula = NULL,
+    #' @field term_info information about original and predicted variable.
     term_info = NULL,
-    #' @field the recipe steps.
-    steps     = list(),
-    #' @field the data.
-    template  = list(),
-    #' @field variable factor levels.
-    levels    = NULL,
-    #' @field variables that are retained.
-    retained  = NA,
-    #' @field packages required
-    requirements = NULL,
-    #' @field training info
-    tr_info = NULL,
-    #' @field original factor levels
+    #' @field steps the recipe steps.
+    steps = list(),
+    #' @field template the data.
+    template = list(),
+    #' @field levels variable factor levels.
+    levels = NULL,
+    #' @field orig_lvls original factor levels
     orig_lvls = NULL,
-
-
+    #' @field retained variables that are retained.
+    retained = NA,
+    #' @field requirements packages required
+    requirements = NULL,
+    #' @field tr_info training info
+    tr_info = NULL,
     #' @field whether the model is trained.
     trained = NULL,
 
-    #' @field list that holds the created model features.
+
+    #' @field result list that holds the created model features.
     result = list(),
 
-    #' @field list that holds the checks.
+    #' @field checks list that holds the checks.
     checks = list(),
-
+    #' @field vars The variables available from the provided data set.
     vars = NULL,
 
     #' @description
@@ -48,12 +50,11 @@ Recipe <- R6Class(
     #' be treated as lists.
     #' @return A new `Recipe` object.
     initialize = function(formula, data, ...) {
-
       # specify data used with formula notation
       # if (!is.formula(formula)) {
       #   stop("You must specify a valid formula")
       # }
-      if (!class(data) %in% c("list", "data.frame", "data.table", "tbl")) {
+      if (!any(class(data) %in% c("list", "data.frame", "data.table", "tbl"))) {
         stop("data must be a data.frame like object or list")
       }
 
@@ -63,18 +64,22 @@ Recipe <- R6Class(
       # parse the formula
       vars_list <- get_formula_vars(formula = formula, data = data)
       self$vars <- unlist(vars_list, use.names = FALSE)
-      self$template <- unclass(data)#[unique(self$vars)]
+      self$template <- unclass(data) # [unique(self$vars)]
+
 
       # variable info
-      self$term_info  <- list(
+      self$term_info <- list(
         variable = self$vars,
         type = get_types(self$template),
         sub_type = get_sub_types(self$template),
-        roles = rep.int(x = c('predictor', 'outcome'),
-                        times = vapply(vars_list,
-                                       FUN = length,
-                                       FUN.VALUE = numeric(1L))),
-        source = rep.int('original', times = length(self$vars)),
+        roles = rep.int(
+          x = c("predictor", "outcome"),
+          times = vapply(vars_list,
+            FUN = length,
+            FUN.VALUE = numeric(1L)
+          )
+        ),
+        source = rep.int("original", times = length(self$vars)),
         step_index = rep.int(0L, times = length(self$vars)),
         step_name = rep.int("initial", times = length(self$vars))
       )
@@ -85,22 +90,22 @@ Recipe <- R6Class(
       )
 
       invisible(self)
-
     },
+
 
     #' @description
     #' Add a step to the recipe.
     #' @param step The step to add.
-    #' @return An updated `Recipe` object.
+    #' @return An updated `Recipe` object with a step addded.
     add_step = function(step) {
-
       self$steps <- append(self$steps, step)
       invisible(self)
-
     },
+
 
     #' @description
     #' Do prep operations.
+    #' @param retain retain the step.
     #' @return An updated `Recipe` object.
     prep = function(retain = TRUE) {
       self$tr_info <- self$train_info()
@@ -113,9 +118,11 @@ Recipe <- R6Class(
       invisible(self)
     },
 
+
     #' @description
     #' Create the dataset.
-    #' @param new_data The input data to the recipe.
+    #' @param data The input data to the recipe. If it is not specified it uses
+    #' the data initially provided to the Recipe.
     #' @return An updated `Recipe` object with a result that holds a list of
     #' features.
     bake = function(data = NULL) {
@@ -135,43 +142,60 @@ Recipe <- R6Class(
         }
 
         # only one column allowed
-        if (types[i] == "add"){
-
-          self$result <- append(self$result,
-                                self$steps[[i]]$bake(unclass(self$result)[columns]))
-
+        if (types[i] == "add") {
+          self$result <- append(
+            self$result,
+            self$steps[[i]]$bake(unclass(self$result)[columns])
+          )
         } else if (types[i] == "modify") {
-          self$result <- modifyList(self$result,
-                                    self$steps[[i]]$bake(unclass(self$result)[columns]))
-
+          self$result <- modifyList(
+            self$result,
+            self$steps[[i]]$bake(unclass(self$result)[columns])
+          )
         } else if (types[i] == "supervised_add") {
-          self$result <- append(self$result,
-                                self$steps[[i]]$bake(unclass(self$result), self$term_info))
-
+          self$result <- append(
+            self$result,
+            self$steps[[i]]$bake(unclass(self$result), self$term_info)
+          )
         } else if (types[i] == "check") {
-          self$checks <- append(self$checks,
-                                self$steps[[i]]$bake(unclass(self$result)[[columns]]))
+          self$checks <- append(
+            self$checks,
+            self$steps[[i]]$bake(unclass(self$result)[columns])
+          )
         } else if (types[i] == "add_from_template") {
-          self$result <- append(self$result,
-                                self$steps[[i]]$bake(unclass(self$template)[columns]))
+          self$result <- append(
+            self$result,
+            self$steps[[i]]$bake(unclass(self$template)[columns])
+          )
         }
 
-        self$update_term_info(step_name = self$steps[[i]]$step_name,
-                              step_index = i)
+        self$update_term_info(
+          step_name = self$steps[[i]]$step_name,
+          step_index = i
+        )
       }
 
 
       invisible(self)
-
     },
     ## short summary of training set.
+    #' @description
+    #' Get info about the training set.
+    #' @return data.frame with limited info on the training set
     train_info = function(x) {
       data.frame(
         nrows = length(self$template[[1L]]),
         ncomplete = collapse::fsum(!collapse::missing_cases(self$template))
       )
     },
-
+    #' @description
+    #' Update the term info after baking a step.
+    #' @param source Where did the new terms come from: derived, original
+    #' @param roles The step role.
+    #' @param type The type of the step: add, modify, delete, etc.
+    #' @param step_name The name of the step
+    #' @param step_index The order the step was added
+    #' @return updated term_info
     update_term_info = function(source = "derived",
                                 roles = "predictor",
                                 type = "numeric",
@@ -186,20 +210,31 @@ Recipe <- R6Class(
       n <- length(variable)
 
       if (n > 0) {
-
         self$term_info$variable <- c(self$term_info$variable, variable)
-        self$term_info$roles <- c(self$term_info$roles,
-                                  rep.int("predictor", times = n))
-        self$term_info$source <- c(self$term_info$source,
-                                   rep.int(source, times = n))
-        self$term_info$type <- c(self$term_info$type,
-                                 rep.int(type, times = n))
-        self$term_info$sub_type <- c(self$term_info$sub_type,
-                                     rep.int(type, times = n))
-        self$term_info$step_index <- c(self$term_info$step_index,
-                                       rep.int(step_index, times = n))
-        self$term_info$step_name <- c(self$term_info$step_name,
-                                      rep.int(step_name, times = n))
+        self$term_info$roles <- c(
+          self$term_info$roles,
+          rep.int("predictor", times = n)
+        )
+        self$term_info$source <- c(
+          self$term_info$source,
+          rep.int(source, times = n)
+        )
+        self$term_info$type <- c(
+          self$term_info$type,
+          rep.int(type, times = n)
+        )
+        self$term_info$sub_type <- c(
+          self$term_info$sub_type,
+          rep.int(type, times = n)
+        )
+        self$term_info$step_index <- c(
+          self$term_info$step_index,
+          rep.int(step_index, times = n)
+        )
+        self$term_info$step_name <- c(
+          self$term_info$step_name,
+          rep.int(step_name, times = n)
+        )
       }
 
       if (n_rem > 0) {
@@ -211,14 +246,23 @@ Recipe <- R6Class(
       self
     },
 
+
+    #' @description
+    #' Get the type of the step.
+    #' @return character vector for the step types
     get_step_types = function() {
       vapply(self$steps, FUN = function(x) x$type, FUN.VALUE = character(1))
     },
 
-    plate = function(type = "df") {
 
+    #' @description
+    #' Reduce the recipe to tabular form. Bake and coerce to the desired output
+    #' type.
+    #' @param type The output data type: data.frame, data.table, matrix, tibble,
+    #' @return tabular output of baked Recipe.
+    plate = function(type = "df") {
       # prep and bake recipe if it hasn't been done
-      if(length(self$result) == 0) {
+      if (length(self$result) == 0) {
         self$prep()$bake()
       }
 
@@ -245,8 +289,6 @@ Recipe <- R6Class(
 
       return(self$result)
     }
-
-
   )
 )
 

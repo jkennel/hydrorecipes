@@ -37,6 +37,8 @@
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{kernel}}{the convolution kernel}
+
+\item{\code{align}}{character center, left or right align the convolution}
 }
 \if{html}{\out{</div>}}
 }

@@ -1,7 +1,7 @@
 #' pad_num
 #'
-#' This function creates a sequence of numbers with 0 padding based on the series
-#' length.
+#' This function creates a sequence of numbers with 0 padding based on the
+#' series length.
 #'
 #' @param n the number of columns
 #' @param pad the character to use for the padding.
@@ -10,29 +10,27 @@
 #' @export
 #'
 pad_num <- function(n, pad = "0") {
-
   width <- floor(log10(n)) + 1L
 
   formatC(seq_len(n),
-          width = width,
-          format = "d",
-          flag = "0")
-
+    width = width,
+    format = "d",
+    flag = "0"
+  )
 }
 
 name_columns <- function(id, column_name, n) {
   if (is.null(column_name)) {
     if (n < 2) {
-      return(file.path(id, fsep = '_'))
+      return(file.path(id, fsep = "_"))
     }
-    return(file.path(id, pad_num(n), fsep = '_'))
+    return(file.path(id, pad_num(n), fsep = "_"))
   }
   if (n < 2) {
-    return(file.path(id, column_name, fsep = '_'))
+    return(file.path(id, column_name, fsep = "_"))
   }
 
-  file.path(id, column_name, pad_num(n), fsep = '_')
-
+  file.path(id, column_name, pad_num(n), fsep = "_")
 }
 
 
@@ -53,8 +51,8 @@ name_columns <- function(id, column_name, n) {
 rand_id <- function(prefix = "step", len = 5L) {
   candidates <- c(letters, LETTERS, paste(0:9))
   paste(prefix,
-        paste0(sample(candidates, len, replace = TRUE), collapse = ""),
-        sep = "_"
+    paste0(sample(candidates, len, replace = TRUE), collapse = ""),
+    sep = "_"
   )
 }
 
@@ -70,4 +68,3 @@ rand_id <- function(prefix = "step", len = 5L) {
 #       )
 #
 # }
-

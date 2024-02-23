@@ -1,15 +1,23 @@
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Calculate the Transfer Function from Periodograms  ---------------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' R6 Class
 #'
-#' `StepTransferPgram` adds variable vectors.
-#' @param vars name of vars
+#' `StepTransferPgram` Transfer function using pgram method.
+#'
+#' @param spans
+#' @param detrend
+#' @param demean
+#' @param taoer
 #'
 #' @inheritParams Step
 #'
 #' @export
 StepTransferPgram <- R6Class(
-  classname = 'step_fft_transfer_pgram',
+  classname = "step_fft_transfer_pgram",
   inherit = Step,
-
   public = list(
 
     # step specific variables
@@ -24,14 +32,15 @@ StepTransferPgram <- R6Class(
                           taper = 0.1,
                           role = "predictor",
                           ...) {
-
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
-      env_list$step_name <- 'step_fft_transfer_pgram'
-      env_list$type <- 'add'
-      super$initialize(terms = terms,
-                       env_list[names(env_list) != "terms"])
+      env_list$step_name <- "step_fft_transfer_pgram"
+      env_list$type <- "add"
+      super$initialize(
+        terms = terms,
+        env_list[names(env_list) != "terms"]
+      )
 
       self$spans <- spans
       self$detrend <- detrend
@@ -42,12 +51,16 @@ StepTransferPgram <- R6Class(
     },
     bake = function(new_data) {
       tf <- collapse::mctl(
-        transfer_pgram(collapse::qM(new_data),
-                       self$spans,
-                       self$detrend,
-                       self$demean,
-                       self$taper))
+        transfer_pgram(
+          collapse::qM(new_data),
+          self$spans,
+          self$detrend,
+          self$demean,
+          self$taper
+        )
+      )
+      names(tf) <- name_columns(self$id, length(tf))
+      return(tf)
     }
-
   )
 )

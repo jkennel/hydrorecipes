@@ -1,3 +1,8 @@
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Predict Regression Terms -----------------------------------------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' R6 Class
 #'
 #' `StepOlsPredict` Uses the Eigen C++ library fast versions to generate
@@ -7,9 +12,8 @@
 #'
 #' @export
 StepOlsPredict <- R6Class(
-  classname = 'step_ols_predict',
+  classname = "step_ols_predict",
   inherit = Step,
-
   public = list(
 
     # step specific variables
@@ -26,19 +30,19 @@ StepOlsPredict <- R6Class(
     initialize = function(terms,
                           role = "predictor",
                           ...) {
-
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
-      env_list$step_name <- 'step_ols_predict'
-      env_list$type <- 'supervised_add'
-      super$initialize(terms = terms,
-                       env_list[names(env_list) != "terms"])
+      env_list$step_name <- "step_ols_predict"
+      env_list$type <- "supervised_add"
+      super$initialize(
+        terms = terms,
+        env_list[names(env_list) != "terms"]
+      )
 
       invisible(self)
     },
     bake = function(new_data, term_info) {
-
       nms <- names(new_data)
 
       # term info data
@@ -47,13 +51,15 @@ StepOlsPredict <- R6Class(
       ti <- ti[ti$variable %in% nms, ]
 
       # create regression matrices
-      outcomes   <- ti[ti$roles == "outcome", ]
+      outcomes <- ti[ti$roles == "outcome", ]
       predictors <- ti[ti$roles == "predictor", ]
-      predictors$inds <- 1:nrow(predictors)
+      predictors$inds <- seq_len(nrow(predictors))
 
       # subsets are the regressor groups
-      subsets <- split(predictors$inds,
-                       data.table::rleid(predictors$step_index))
+      subsets <- split(
+        predictors$inds,
+        data.table::rleid(predictors$step_index)
+      )
 
       # save predictor and outcome info
       self$predictors <- predictors
@@ -70,8 +76,10 @@ StepOlsPredict <- R6Class(
       m_outcomes <- collapse::qM(unclass(new_data)[outcome_ids])
 
       # solve
-      fit <- llt_solve(m_predictors[!to_rem, , drop = FALSE],
-                       m_outcomes[!to_rem, , drop = FALSE])
+      fit <- llt_solve(
+        m_predictors[!to_rem, , drop = FALSE],
+        m_outcomes[!to_rem, , drop = FALSE]
+      )
 
 
       self$coefficients <- fit
@@ -79,17 +87,15 @@ StepOlsPredict <- R6Class(
 
       lst <- list()
       for (i in seq_along(subsets)) {
-
-        lst[[i]] <- collapse::mctl(m_predictors[, subsets[[i]], drop = FALSE] %*%
-                                  fit[subsets[[i]], , drop = FALSE])
-
+        lst[[i]] <- collapse::mctl(
+          m_predictors[, subsets[[i]], drop = FALSE] %*%
+            fit[subsets[[i]], , drop = FALSE]
+        )
       }
 
       names(lst) <- name_columns(self$id, NULL, length(self$lst))
 
       lst
-
     }
   )
 )
-

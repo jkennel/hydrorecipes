@@ -4,7 +4,17 @@
 \alias{StepTransportOgataBanks}
 \title{R6 Class}
 \description{
-`StepTransportOgataBanks` Ogata-Banks solution.
+Ogata, A., Banks, R.B., 1961. A solution of the differential equation of
+longitudinal dispersion in porous media. U. S. Geol. Surv. Prof. Pap. 411-A.
+1-D, infinite source, uniform flow, constant parameters, decay, retardation
+}
+\details{
+`StepTransportOgataBanks`
+}
+\seealso{
+Other transport: 
+\code{\link{StepTransportFracturesHeat}},
+\code{\link{StepTransportFracturesSolute}}
 }
 \concept{transport}
 \section{Super class}{

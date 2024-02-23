@@ -5,6 +5,7 @@
 \title{step_dummy}
 \usage{
 step_dummy(
+  .rec,
   terms,
   one_hot = FALSE,
   role = "predictor",
@@ -14,6 +15,8 @@ step_dummy(
 )
 }
 \arguments{
+\item{.rec}{the R6 recipe object.}
+
 \item{terms}{the unquoted names of the variables to use or a selector
 function.  terms replaces the `...` of the recipes package but requires
 variables to be included within `c()`.  For example to include variables x

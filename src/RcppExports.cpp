@@ -117,14 +117,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // distributed_lag_thread
-Eigen::MatrixXd distributed_lag_thread(const Eigen::VectorXd& x, const Eigen::MatrixXd& bl, int n_thread);
+Eigen::MatrixXd distributed_lag_thread(const Eigen::VectorXd& x, const Eigen::MatrixXd& bl, unsigned int n_thread);
 RcppExport SEXP _frecipes_distributed_lag_thread(SEXP xSEXP, SEXP blSEXP, SEXP n_threadSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type bl(blSEXP);
-    Rcpp::traits::input_parameter< int >::type n_thread(n_threadSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type n_thread(n_threadSEXP);
     rcpp_result_gen = Rcpp::wrap(distributed_lag_thread(x, bl, n_thread));
     return rcpp_result_gen;
 END_RCPP
@@ -641,20 +641,20 @@ BEGIN_RCPP
 END_RCPP
 }
 // gwr_p
-Eigen::MatrixXd gwr_p(Eigen::VectorXd time, int n_gwr);
+Eigen::MatrixXd gwr_p(Eigen::VectorXd time, unsigned int n_gwr);
 RcppExport SEXP _frecipes_gwr_p(SEXP timeSEXP, SEXP n_gwrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< int >::type n_gwr(n_gwrSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type n_gwr(n_gwrSEXP);
     rcpp_result_gen = Rcpp::wrap(gwr_p(time, n_gwr));
     return rcpp_result_gen;
 END_RCPP
 }
-// barker_herbert_impulse2
-double barker_herbert_impulse2(double p, double radius, double radius_patch, double t_1, double t_2, double s_1, double s_2);
-RcppExport SEXP _frecipes_barker_herbert_impulse2(SEXP pSEXP, SEXP radiusSEXP, SEXP radius_patchSEXP, SEXP t_1SEXP, SEXP t_2SEXP, SEXP s_1SEXP, SEXP s_2SEXP) {
+// barker_herbert_impulse
+double barker_herbert_impulse(double p, double radius, double radius_patch, double t_1, double t_2, double s_1, double s_2);
+RcppExport SEXP _frecipes_barker_herbert_impulse(SEXP pSEXP, SEXP radiusSEXP, SEXP radius_patchSEXP, SEXP t_1SEXP, SEXP t_2SEXP, SEXP s_1SEXP, SEXP s_2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -665,7 +665,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type t_2(t_2SEXP);
     Rcpp::traits::input_parameter< double >::type s_1(s_1SEXP);
     Rcpp::traits::input_parameter< double >::type s_2(s_2SEXP);
-    rcpp_result_gen = Rcpp::wrap(barker_herbert_impulse2(p, radius, radius_patch, t_1, t_2, s_1, s_2));
+    rcpp_result_gen = Rcpp::wrap(barker_herbert_impulse(p, radius, radius_patch, t_1, t_2, s_1, s_2));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1308,6 +1308,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// bessel_k_cplx
+Rcpp::ComplexMatrix bessel_k_cplx(const Rcpp::ComplexMatrix& x, double nu, bool expon_scaled, size_t n_seq);
+RcppExport SEXP _frecipes_bessel_k_cplx(SEXP xSEXP, SEXP nuSEXP, SEXP expon_scaledSEXP, SEXP n_seqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::ComplexMatrix& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< bool >::type expon_scaled(expon_scaledSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_seq(n_seqSEXP);
+    rcpp_result_gen = Rcpp::wrap(bessel_k_cplx(x, nu, expon_scaled, n_seq));
+    return rcpp_result_gen;
+END_RCPP
+}
 // stehfest_v
 Eigen::RowVectorXd stehfest_v(int n);
 RcppExport SEXP _frecipes_stehfest_v(SEXP nSEXP) {
@@ -1320,20 +1334,116 @@ BEGIN_RCPP
 END_RCPP
 }
 // stehfest_p
-Eigen::MatrixXd stehfest_p(Eigen::VectorXd time, int n_stehfest);
-RcppExport SEXP _frecipes_stehfest_p(SEXP timeSEXP, SEXP n_stehfestSEXP) {
+Eigen::MatrixXd stehfest_p(Eigen::VectorXd time, int n_terms);
+RcppExport SEXP _frecipes_stehfest_p(SEXP timeSEXP, SEXP n_termsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< int >::type n_stehfest(n_stehfestSEXP);
-    rcpp_result_gen = Rcpp::wrap(stehfest_p(time, n_stehfest));
+    Rcpp::traits::input_parameter< int >::type n_terms(n_termsSEXP);
+    rcpp_result_gen = Rcpp::wrap(stehfest_p(time, n_terms));
+    return rcpp_result_gen;
+END_RCPP
+}
+// tth
+std::complex<double> tth(std::complex<double> time);
+RcppExport SEXP _frecipes_tth(SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::complex<double> >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(tth(time));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cch
+std::complex<double> cch(std::complex<double> time);
+RcppExport SEXP _frecipes_cch(SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::complex<double> >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(cch(time));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bbl
+Rcpp::ComplexVector bbl(Rcpp::ComplexVector time, double nu, bool expon_scaled, size_t n_seq);
+RcppExport SEXP _frecipes_bbl(SEXP timeSEXP, SEXP nuSEXP, SEXP expon_scaledSEXP, SEXP n_seqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::ComplexVector >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< bool >::type expon_scaled(expon_scaledSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_seq(n_seqSEXP);
+    rcpp_result_gen = Rcpp::wrap(bbl(time, nu, expon_scaled, n_seq));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cohen_p
+Eigen::MatrixXcd cohen_p(Eigen::VectorXd time, unsigned int n_terms);
+RcppExport SEXP _frecipes_cohen_p(SEXP timeSEXP, SEXP n_termsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type n_terms(n_termsSEXP);
+    rcpp_result_gen = Rcpp::wrap(cohen_p(time, n_terms));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cohen_c
+Eigen::VectorXd cohen_c(double d, unsigned int n_terms);
+RcppExport SEXP _frecipes_cohen_c(SEXP dSEXP, SEXP n_termsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type d(dSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type n_terms(n_termsSEXP);
+    rcpp_result_gen = Rcpp::wrap(cohen_c(d, n_terms));
+    return rcpp_result_gen;
+END_RCPP
+}
+// papadopulos_cooper_laplace
+Eigen::VectorXd papadopulos_cooper_laplace(Eigen::VectorXd time, double Q, double r, double r_c, double r_w, double Tr, double S, double prec, int n_terms);
+RcppExport SEXP _frecipes_papadopulos_cooper_laplace(SEXP timeSEXP, SEXP QSEXP, SEXP rSEXP, SEXP r_cSEXP, SEXP r_wSEXP, SEXP TrSEXP, SEXP SSEXP, SEXP precSEXP, SEXP n_termsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< double >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< double >::type r(rSEXP);
+    Rcpp::traits::input_parameter< double >::type r_c(r_cSEXP);
+    Rcpp::traits::input_parameter< double >::type r_w(r_wSEXP);
+    Rcpp::traits::input_parameter< double >::type Tr(TrSEXP);
+    Rcpp::traits::input_parameter< double >::type S(SSEXP);
+    Rcpp::traits::input_parameter< double >::type prec(precSEXP);
+    Rcpp::traits::input_parameter< int >::type n_terms(n_termsSEXP);
+    rcpp_result_gen = Rcpp::wrap(papadopulos_cooper_laplace(time, Q, r, r_c, r_w, Tr, S, prec, n_terms));
+    return rcpp_result_gen;
+END_RCPP
+}
+// jacob_lohman_laplace
+Eigen::VectorXd jacob_lohman_laplace(Eigen::VectorXd time, double s, double r, double Tr, double S, double prec, int n_terms);
+RcppExport SEXP _frecipes_jacob_lohman_laplace(SEXP timeSEXP, SEXP sSEXP, SEXP rSEXP, SEXP TrSEXP, SEXP SSEXP, SEXP precSEXP, SEXP n_termsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< double >::type s(sSEXP);
+    Rcpp::traits::input_parameter< double >::type r(rSEXP);
+    Rcpp::traits::input_parameter< double >::type Tr(TrSEXP);
+    Rcpp::traits::input_parameter< double >::type S(SSEXP);
+    Rcpp::traits::input_parameter< double >::type prec(precSEXP);
+    Rcpp::traits::input_parameter< int >::type n_terms(n_termsSEXP);
+    rcpp_result_gen = Rcpp::wrap(jacob_lohman_laplace(time, s, r, Tr, S, prec, n_terms));
     return rcpp_result_gen;
 END_RCPP
 }
 // hantush_jacob_laplace
-Rcpp::List hantush_jacob_laplace(Eigen::VectorXd time, double c, double r, double Tr, double S, double Q, double prec, int n_stehfest);
-RcppExport SEXP _frecipes_hantush_jacob_laplace(SEXP timeSEXP, SEXP cSEXP, SEXP rSEXP, SEXP TrSEXP, SEXP SSEXP, SEXP QSEXP, SEXP precSEXP, SEXP n_stehfestSEXP) {
+Eigen::VectorXd hantush_jacob_laplace(Eigen::VectorXd time, double c, double r, double Tr, double S, double Q, double prec, int n_terms);
+RcppExport SEXP _frecipes_hantush_jacob_laplace(SEXP timeSEXP, SEXP cSEXP, SEXP rSEXP, SEXP TrSEXP, SEXP SSEXP, SEXP QSEXP, SEXP precSEXP, SEXP n_termsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -1344,14 +1454,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type Q(QSEXP);
     Rcpp::traits::input_parameter< double >::type prec(precSEXP);
-    Rcpp::traits::input_parameter< int >::type n_stehfest(n_stehfestSEXP);
-    rcpp_result_gen = Rcpp::wrap(hantush_jacob_laplace(time, c, r, Tr, S, Q, prec, n_stehfest));
+    Rcpp::traits::input_parameter< int >::type n_terms(n_termsSEXP);
+    rcpp_result_gen = Rcpp::wrap(hantush_jacob_laplace(time, c, r, Tr, S, Q, prec, n_terms));
     return rcpp_result_gen;
 END_RCPP
 }
 // barker_herbert
-Rcpp::List barker_herbert(Eigen::VectorXd time, double radius, double radius_patch, double t_1, double t_2, double s_1, double s_2, double Q, double prec, int n_stehfest);
-RcppExport SEXP _frecipes_barker_herbert(SEXP timeSEXP, SEXP radiusSEXP, SEXP radius_patchSEXP, SEXP t_1SEXP, SEXP t_2SEXP, SEXP s_1SEXP, SEXP s_2SEXP, SEXP QSEXP, SEXP precSEXP, SEXP n_stehfestSEXP) {
+Eigen::VectorXd barker_herbert(Eigen::VectorXd time, double radius, double radius_patch, double t_1, double t_2, double s_1, double s_2, double Q, double prec, int n_terms);
+RcppExport SEXP _frecipes_barker_herbert(SEXP timeSEXP, SEXP radiusSEXP, SEXP radius_patchSEXP, SEXP t_1SEXP, SEXP t_2SEXP, SEXP s_1SEXP, SEXP s_2SEXP, SEXP QSEXP, SEXP precSEXP, SEXP n_termsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -1364,8 +1474,63 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type s_2(s_2SEXP);
     Rcpp::traits::input_parameter< double >::type Q(QSEXP);
     Rcpp::traits::input_parameter< double >::type prec(precSEXP);
-    Rcpp::traits::input_parameter< int >::type n_stehfest(n_stehfestSEXP);
-    rcpp_result_gen = Rcpp::wrap(barker_herbert(time, radius, radius_patch, t_1, t_2, s_1, s_2, Q, prec, n_stehfest));
+    Rcpp::traits::input_parameter< int >::type n_terms(n_termsSEXP);
+    rcpp_result_gen = Rcpp::wrap(barker_herbert(time, radius, radius_patch, t_1, t_2, s_1, s_2, Q, prec, n_terms));
+    return rcpp_result_gen;
+END_RCPP
+}
+// parallel_fractures_solute
+Eigen::VectorXd parallel_fractures_solute(Eigen::VectorXd time, Eigen::VectorXd z, Eigen::VectorXd x, Eigen::VectorXd concentration_influent, Eigen::VectorXd time_influent, double c_0, double b, double B, double v, double alpha_l, double D_star, double k_f, double k_m, double t_half, double rho_b, double theta, double tortuosity, unsigned int n_terms);
+RcppExport SEXP _frecipes_parallel_fractures_solute(SEXP timeSEXP, SEXP zSEXP, SEXP xSEXP, SEXP concentration_influentSEXP, SEXP time_influentSEXP, SEXP c_0SEXP, SEXP bSEXP, SEXP BSEXP, SEXP vSEXP, SEXP alpha_lSEXP, SEXP D_starSEXP, SEXP k_fSEXP, SEXP k_mSEXP, SEXP t_halfSEXP, SEXP rho_bSEXP, SEXP thetaSEXP, SEXP tortuositySEXP, SEXP n_termsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type z(zSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type concentration_influent(concentration_influentSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time_influent(time_influentSEXP);
+    Rcpp::traits::input_parameter< double >::type c_0(c_0SEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< double >::type B(BSEXP);
+    Rcpp::traits::input_parameter< double >::type v(vSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha_l(alpha_lSEXP);
+    Rcpp::traits::input_parameter< double >::type D_star(D_starSEXP);
+    Rcpp::traits::input_parameter< double >::type k_f(k_fSEXP);
+    Rcpp::traits::input_parameter< double >::type k_m(k_mSEXP);
+    Rcpp::traits::input_parameter< double >::type t_half(t_halfSEXP);
+    Rcpp::traits::input_parameter< double >::type rho_b(rho_bSEXP);
+    Rcpp::traits::input_parameter< double >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< double >::type tortuosity(tortuositySEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type n_terms(n_termsSEXP);
+    rcpp_result_gen = Rcpp::wrap(parallel_fractures_solute(time, z, x, concentration_influent, time_influent, c_0, b, B, v, alpha_l, D_star, k_f, k_m, t_half, rho_b, theta, tortuosity, n_terms));
+    return rcpp_result_gen;
+END_RCPP
+}
+// parallel_fractures_heat
+Eigen::VectorXd parallel_fractures_heat(Eigen::VectorXd time, Eigen::VectorXd z, Eigen::VectorXd x, Eigen::VectorXd temperature_influent, Eigen::VectorXd time_influent, double t_0, double b, double B, double v, double lambda_fracture, double lambda_matrix, double spec_heat_w, double spec_heat_s, double rho_w, double rho_s, double theta, unsigned int n_terms);
+RcppExport SEXP _frecipes_parallel_fractures_heat(SEXP timeSEXP, SEXP zSEXP, SEXP xSEXP, SEXP temperature_influentSEXP, SEXP time_influentSEXP, SEXP t_0SEXP, SEXP bSEXP, SEXP BSEXP, SEXP vSEXP, SEXP lambda_fractureSEXP, SEXP lambda_matrixSEXP, SEXP spec_heat_wSEXP, SEXP spec_heat_sSEXP, SEXP rho_wSEXP, SEXP rho_sSEXP, SEXP thetaSEXP, SEXP n_termsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type z(zSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type temperature_influent(temperature_influentSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time_influent(time_influentSEXP);
+    Rcpp::traits::input_parameter< double >::type t_0(t_0SEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< double >::type B(BSEXP);
+    Rcpp::traits::input_parameter< double >::type v(vSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda_fracture(lambda_fractureSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda_matrix(lambda_matrixSEXP);
+    Rcpp::traits::input_parameter< double >::type spec_heat_w(spec_heat_wSEXP);
+    Rcpp::traits::input_parameter< double >::type spec_heat_s(spec_heat_sSEXP);
+    Rcpp::traits::input_parameter< double >::type rho_w(rho_wSEXP);
+    Rcpp::traits::input_parameter< double >::type rho_s(rho_sSEXP);
+    Rcpp::traits::input_parameter< double >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type n_terms(n_termsSEXP);
+    rcpp_result_gen = Rcpp::wrap(parallel_fractures_heat(time, z, x, temperature_influent, time_influent, t_0, b, B, v, lambda_fracture, lambda_matrix, spec_heat_w, spec_heat_s, rho_w, rho_s, theta, n_terms));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1474,34 +1639,66 @@ BEGIN_RCPP
 END_RCPP
 }
 // ogata_banks_ind
-double ogata_banks_ind(double D, double v, double C0, double x, double t);
+double ogata_banks_ind(const double D, const double v, const double C0, const double x, double t);
 RcppExport SEXP _frecipes_ogata_banks_ind(SEXP DSEXP, SEXP vSEXP, SEXP C0SEXP, SEXP xSEXP, SEXP tSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type D(DSEXP);
-    Rcpp::traits::input_parameter< double >::type v(vSEXP);
-    Rcpp::traits::input_parameter< double >::type C0(C0SEXP);
-    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type D(DSEXP);
+    Rcpp::traits::input_parameter< const double >::type v(vSEXP);
+    Rcpp::traits::input_parameter< const double >::type C0(C0SEXP);
+    Rcpp::traits::input_parameter< const double >::type x(xSEXP);
     Rcpp::traits::input_parameter< double >::type t(tSEXP);
     rcpp_result_gen = Rcpp::wrap(ogata_banks_ind(D, v, C0, x, t));
     return rcpp_result_gen;
 END_RCPP
 }
-// ogata_banks_list
-Rcpp::List ogata_banks_list(Eigen::ArrayXd time, Eigen::ArrayXd distance, double concentration_initial, double velocity, double diffusion, double retardation, double decay);
-RcppExport SEXP _frecipes_ogata_banks_list(SEXP timeSEXP, SEXP distanceSEXP, SEXP concentration_initialSEXP, SEXP velocitySEXP, SEXP diffusionSEXP, SEXP retardationSEXP, SEXP decaySEXP) {
+// ogata_banks_vec
+std::vector<double> ogata_banks_vec(const double D, const double v, const double C0, const double x, std::vector<double> t);
+RcppExport SEXP _frecipes_ogata_banks_vec(SEXP DSEXP, SEXP vSEXP, SEXP C0SEXP, SEXP xSEXP, SEXP tSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::ArrayXd >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< Eigen::ArrayXd >::type distance(distanceSEXP);
-    Rcpp::traits::input_parameter< double >::type concentration_initial(concentration_initialSEXP);
-    Rcpp::traits::input_parameter< double >::type velocity(velocitySEXP);
-    Rcpp::traits::input_parameter< double >::type diffusion(diffusionSEXP);
-    Rcpp::traits::input_parameter< double >::type retardation(retardationSEXP);
-    Rcpp::traits::input_parameter< double >::type decay(decaySEXP);
-    rcpp_result_gen = Rcpp::wrap(ogata_banks_list(time, distance, concentration_initial, velocity, diffusion, retardation, decay));
+    Rcpp::traits::input_parameter< const double >::type D(DSEXP);
+    Rcpp::traits::input_parameter< const double >::type v(vSEXP);
+    Rcpp::traits::input_parameter< const double >::type C0(C0SEXP);
+    Rcpp::traits::input_parameter< const double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
+    rcpp_result_gen = Rcpp::wrap(ogata_banks_vec(D, v, C0, x, t));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ogata_banks_decay_ind
+double ogata_banks_decay_ind(const double c0, const double v, const double D, const double R, const double k, const double x, const double t);
+RcppExport SEXP _frecipes_ogata_banks_decay_ind(SEXP c0SEXP, SEXP vSEXP, SEXP DSEXP, SEXP RSEXP, SEXP kSEXP, SEXP xSEXP, SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type c0(c0SEXP);
+    Rcpp::traits::input_parameter< const double >::type v(vSEXP);
+    Rcpp::traits::input_parameter< const double >::type D(DSEXP);
+    Rcpp::traits::input_parameter< const double >::type R(RSEXP);
+    Rcpp::traits::input_parameter< const double >::type k(kSEXP);
+    Rcpp::traits::input_parameter< const double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type t(tSEXP);
+    rcpp_result_gen = Rcpp::wrap(ogata_banks_decay_ind(c0, v, D, R, k, x, t));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ogata_banks_decay_vec
+Rcpp::NumericVector ogata_banks_decay_vec(const double c0, const double v, const double D, const double R, const double k, Rcpp::NumericVector x, Rcpp::NumericVector t);
+RcppExport SEXP _frecipes_ogata_banks_decay_vec(SEXP c0SEXP, SEXP vSEXP, SEXP DSEXP, SEXP RSEXP, SEXP kSEXP, SEXP xSEXP, SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type c0(c0SEXP);
+    Rcpp::traits::input_parameter< const double >::type v(vSEXP);
+    Rcpp::traits::input_parameter< const double >::type D(DSEXP);
+    Rcpp::traits::input_parameter< const double >::type R(RSEXP);
+    Rcpp::traits::input_parameter< const double >::type k(kSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type t(tSEXP);
+    rcpp_result_gen = Rcpp::wrap(ogata_banks_decay_vec(c0, v, D, R, k, x, t));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1809,7 +2006,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_window_blackman_harris", (DL_FUNC) &_frecipes_window_blackman_harris, 1},
     {"_frecipes_window_scale", (DL_FUNC) &_frecipes_window_scale, 3},
     {"_frecipes_gwr_p", (DL_FUNC) &_frecipes_gwr_p, 2},
-    {"_frecipes_barker_herbert_impulse2", (DL_FUNC) &_frecipes_barker_herbert_impulse2, 7},
+    {"_frecipes_barker_herbert_impulse", (DL_FUNC) &_frecipes_barker_herbert_impulse, 7},
     {"_frecipes_gwr_barker_herbert", (DL_FUNC) &_frecipes_gwr_barker_herbert, 9},
     {"_frecipes_impulse_function", (DL_FUNC) &_frecipes_impulse_function, 1},
     {"_frecipes_impulse_function_rcpp", (DL_FUNC) &_frecipes_impulse_function_rcpp, 1},
@@ -1861,10 +2058,20 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_determine_frequency", (DL_FUNC) &_frecipes_determine_frequency, 1},
     {"_frecipes_check_ffts", (DL_FUNC) &_frecipes_check_ffts, 2},
     {"_frecipes_which_indices", (DL_FUNC) &_frecipes_which_indices, 2},
+    {"_frecipes_bessel_k_cplx", (DL_FUNC) &_frecipes_bessel_k_cplx, 4},
     {"_frecipes_stehfest_v", (DL_FUNC) &_frecipes_stehfest_v, 1},
     {"_frecipes_stehfest_p", (DL_FUNC) &_frecipes_stehfest_p, 2},
+    {"_frecipes_tth", (DL_FUNC) &_frecipes_tth, 1},
+    {"_frecipes_cch", (DL_FUNC) &_frecipes_cch, 1},
+    {"_frecipes_bbl", (DL_FUNC) &_frecipes_bbl, 4},
+    {"_frecipes_cohen_p", (DL_FUNC) &_frecipes_cohen_p, 2},
+    {"_frecipes_cohen_c", (DL_FUNC) &_frecipes_cohen_c, 2},
+    {"_frecipes_papadopulos_cooper_laplace", (DL_FUNC) &_frecipes_papadopulos_cooper_laplace, 9},
+    {"_frecipes_jacob_lohman_laplace", (DL_FUNC) &_frecipes_jacob_lohman_laplace, 7},
     {"_frecipes_hantush_jacob_laplace", (DL_FUNC) &_frecipes_hantush_jacob_laplace, 8},
     {"_frecipes_barker_herbert", (DL_FUNC) &_frecipes_barker_herbert, 10},
+    {"_frecipes_parallel_fractures_solute", (DL_FUNC) &_frecipes_parallel_fractures_solute, 18},
+    {"_frecipes_parallel_fractures_heat", (DL_FUNC) &_frecipes_parallel_fractures_heat, 17},
     {"_frecipes_check_lag", (DL_FUNC) &_frecipes_check_lag, 3},
     {"_frecipes_get_length", (DL_FUNC) &_frecipes_get_length, 2},
     {"_frecipes_get_start", (DL_FUNC) &_frecipes_get_start, 3},
@@ -1874,7 +2081,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_llt_solve", (DL_FUNC) &_frecipes_llt_solve, 2},
     {"_frecipes_llt_fitted", (DL_FUNC) &_frecipes_llt_fitted, 2},
     {"_frecipes_ogata_banks_ind", (DL_FUNC) &_frecipes_ogata_banks_ind, 5},
-    {"_frecipes_ogata_banks_list", (DL_FUNC) &_frecipes_ogata_banks_list, 7},
+    {"_frecipes_ogata_banks_vec", (DL_FUNC) &_frecipes_ogata_banks_vec, 5},
+    {"_frecipes_ogata_banks_decay_ind", (DL_FUNC) &_frecipes_ogata_banks_decay_ind, 7},
+    {"_frecipes_ogata_banks_decay_vec", (DL_FUNC) &_frecipes_ogata_banks_decay_vec, 7},
     {"_frecipes_scale_list_param", (DL_FUNC) &_frecipes_scale_list_param, 3},
     {"_frecipes_scale_list_param_std", (DL_FUNC) &_frecipes_scale_list_param_std, 3},
     {"_frecipes_scale_list_param_eigen", (DL_FUNC) &_frecipes_scale_list_param_eigen, 3},

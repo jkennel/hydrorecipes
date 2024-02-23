@@ -1,6 +1,12 @@
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Divide a Term into Intervals and do Dummy Encoding ---------------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' R6 Class
 #'
-#' `StepFindInterval` divides a series into intervals and then performs dummy encoding.
+#' `StepFindInterval` divides a series into intervals and then
+#' performs dummy encoding.
 #'
 #' @param vec a vector of break points
 #'
@@ -8,9 +14,8 @@
 #'
 #' @export
 StepFindInterval <- R6Class(
-  classname = 'step_find_interval',
+  classname = "step_find_interval",
   inherit = Step,
-
   public = list(
 
     # step specific variables
@@ -24,36 +29,36 @@ StepFindInterval <- R6Class(
                           vec,
                           role = "predictor",
                           ...) {
-
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
-      env_list$step_name <- 'step_find_interval'
-      env_list$type <- 'add'
-      super$initialize(terms = terms,
-                       env_list[names(env_list) != "terms"])
+      env_list$step_name <- "step_find_interval"
+      env_list$type <- "add"
+      super$initialize(
+        terms = terms,
+        env_list[names(env_list) != "terms"]
+      )
 
 
 
       # step specific values
-      self$vec     <- sort(vec)
-      self$n_vec   <- length(vec)
+      self$vec <- sort(vec)
+      self$n_vec <- length(vec)
 
       invisible(self)
     },
-
     bake = function(new_data) {
-
       column_name <- self$columns
 
       dum <- list()
       for (i in seq_along(column_name)) {
-
         dum[[i]] <- to_dummy_list(unclass(new_data)[[i]], self$vec)
 
-        names(dum[[i]]) <- name_columns(self$id, column_name[i], length(dum[[i]]))
-
-
+        names(dum[[i]]) <- name_columns(
+          self$id,
+          column_name[i],
+          length(dum[[i]])
+        )
       }
       unlist(dum, recursive = FALSE)
     }
@@ -228,4 +233,3 @@ StepFindInterval <- R6Class(
 #   q <- bind_cols(a, b,b, .name_repair = 'minimal'),
 #   r <- bind_cols(a,d, d, .name_repair = 'minimal'),
 # )
-

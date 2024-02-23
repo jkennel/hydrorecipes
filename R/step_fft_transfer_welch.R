@@ -1,15 +1,22 @@
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Calculate the Transfer Function from Periodograms  ---------------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' R6 Class
 #'
-#' `StepTransferWelch` adds variable vectors.
-#' @param vars name of vars
+#' `StepTransferWelch` Transfer function using Welch's method.
 #'
-#' @inheritParams Step
+#' @param length_subset
+#' @param overlap
+#' @param window
+#'
+#' @inheritParams Step StepWelch
 #'
 #' @export
 StepTransferWelch <- R6Class(
-  classname = 'step_transfer_welch',
+  classname = "step_transfer_welch",
   inherit = Step,
-
   public = list(
 
     # step specific variables
@@ -22,14 +29,15 @@ StepTransferWelch <- R6Class(
                           window,
                           role = "predictor",
                           ...) {
-
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
-      env_list$step_name <- 'step_transfer_welch'
-      env_list$type <- 'add'
-      super$initialize(terms = terms,
-                       env_list[names(env_list) != "terms"])
+      env_list$step_name <- "step_transfer_welch"
+      env_list$type <- "add"
+      super$initialize(
+        terms = terms,
+        env_list[names(env_list) != "terms"]
+      )
 
       self$length_subset <- length_subset
       self$overlap <- overlap
@@ -38,13 +46,14 @@ StepTransferWelch <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
-
       tf <- collapse::mctl(
-        transfer_welch(collapse::qM(new_data),
-                       self$length_subset,
-                       self$overlap,
-                       self$window))
+        transfer_welch(
+          collapse::qM(new_data),
+          self$length_subset,
+          self$overlap,
+          self$window
+        )
+      )
     }
-
   )
 )

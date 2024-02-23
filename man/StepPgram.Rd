@@ -4,7 +4,7 @@
 \alias{StepPgram}
 \title{R6 Class}
 \description{
-`StepPgram` adds variable vectors.
+`StepPgram` calculates the periodogram (estimate of spectral density)
 }
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_fft_pgram}

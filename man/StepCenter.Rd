@@ -6,6 +6,12 @@
 \description{
 `StepCenter` adjust the central value to zero.
 }
+\seealso{
+Other common: 
+\code{\link{StepDropColumns}},
+\code{\link{StepDummy}}
+}
+\concept{common}
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_center}
 }

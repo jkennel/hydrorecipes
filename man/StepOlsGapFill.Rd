@@ -6,6 +6,11 @@
 \description{
 `StepOlsGapFill`
 }
+\seealso{
+Other gap_fill: 
+\code{\link{step_ols_gap_fill}()},
+\code{\link{step_ols_predict}()}
+}
 \concept{gap_fill}
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_ols_gap_fill}
@@ -37,7 +42,7 @@
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{recipe}}{}
+\item{\code{recipe}}{Recipe to use for filling gaps}
 }
 \if{html}{\out{</div>}}
 }

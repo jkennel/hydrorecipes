@@ -1,7 +1,12 @@
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Adjust the dispersion and central value --------------------------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' R6 Class
 #'
-#' `StepNormalize` adjust the dispersion by the standard deviation and the central
-#' value by the mean.
+#' `StepNormalize` adjust the dispersion by the standard deviation
+#' and the central value by the mean.
 #'
 #' @inheritParams Step
 #' @inheritParams recipes::step_normalize
@@ -9,9 +14,8 @@
 #'
 #' @export
 StepNormalize <- R6Class(
-  classname = 'step_normalize',
+  classname = "step_normalize",
   inherit = Step,
-
   public = list(
     center = c(),
     scale = c(),
@@ -21,14 +25,15 @@ StepNormalize <- R6Class(
                           role = "predictor",
                           na_rm = TRUE,
                           ...) {
-
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
-      env_list$step_name <- 'step_normalize'
-      env_list$type <- 'modify'
-      super$initialize(terms = terms,
-                       env_list[names(env_list) != "terms"])
+      env_list$step_name <- "step_normalize"
+      env_list$type <- "modify"
+      super$initialize(
+        terms = terms,
+        env_list[names(env_list) != "terms"]
+      )
 
 
       self$na_rm <- na_rm
@@ -39,17 +44,19 @@ StepNormalize <- R6Class(
       super$prep(new_data, info)
 
       self$center <- collapse::fmean(unclass(new_data)[self$columns],
-                                     na.rm = self$na_rm,
-                                     drop = TRUE)
+        na.rm = self$na_rm,
+        drop = TRUE
+      )
       self$scale <- collapse::fsd(unclass(new_data)[self$columns],
-                                  na.rm = self$na_rm,
-                                     drop = TRUE)
+        na.rm = self$na_rm,
+        drop = TRUE
+      )
     },
     # subtract the central value from a column
     bake = function(new_data) {
-
       for (i in seq_along(self$columns)) {
-        new_data[[i]] = (new_data[[i]] - self$center[i]) * (1.0 / self$scale[i])
+        new_data[[i]] <- (new_data[[i]] - self$center[i]) *
+          (1.0 / self$scale[i])
       }
 
       # fscale(new_data, self$center, self$scale)
@@ -61,4 +68,3 @@ StepNormalize <- R6Class(
     }
   )
 )
-

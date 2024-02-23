@@ -1,3 +1,8 @@
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Create lagged or leaded terms ------------------------------------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' R6 Class
 #'
 #' `StepLeadLag` generates lagged (or leading) vectors.
@@ -12,42 +17,39 @@
 #'
 #' @export
 StepLeadLag <- R6Class(
-  classname = 'step_lead_lag',
+  classname = "step_lead_lag",
   inherit = Step,
-
   public = list(
 
     # step specific variables
     lag = NULL,
     n_shift = NULL,
     n_subset = NULL,
-
     initialize = function(terms,
                           lag,
                           n_shift = 0L,
                           n_subset = 1L,
                           role = "predictor",
                           ...) {
-
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
-      env_list$step_name <- 'step_lead_lag'
-      env_list$type <- 'add'
-      super$initialize(terms = terms,
-                       env_list[names(env_list) != "terms"])
+      env_list$step_name <- "step_lead_lag"
+      env_list$type <- "add"
+      super$initialize(
+        terms = terms,
+        env_list[names(env_list) != "terms"]
+      )
 
 
       # step specific values
-      self$lag      <- as.integer(sort(lag))
-      self$n_shift  <- as.integer(n_shift)
+      self$lag <- as.integer(sort(lag))
+      self$n_shift <- as.integer(n_shift)
       self$n_subset <- as.integer(n_subset)
 
       invisible(self)
     },
-
     bake = function(new_data) {
-
       column_name <- self$columns
 
       ll <- list()
@@ -56,20 +58,21 @@ StepLeadLag <- R6Class(
           ll[[i]] <- collapse::flag(new_data[i], self$lag)
         } else {
           ll[[i]] <- lag_list(unclass(new_data)[[i]],
-                              self$lag,
-                              n_subset = self$n_subset,
-                              n_shift = self$n_shift)
+            self$lag,
+            n_subset = self$n_subset,
+            n_shift = self$n_shift
+          )
         }
 
-        names(ll[[i]]) <- name_columns(self$id, column_name[i], length(self$lag))
+        names(ll[[i]]) <- name_columns(
+          self$id,
+          column_name[i],
+          length(self$lag)
+        )
       }
 
 
       unlist(ll, recursive = FALSE)
-
     }
-
   )
 )
-
-

@@ -1,7 +1,14 @@
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Remove Regressors Step -------------------------------------------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' R6 Class
 #'
 #' `StepDropColumns` removes columns from output.
 #' @inheritParams Step
+#'
+#' @family common
 #'
 #' @export
 StepDropColumns <- R6Class(

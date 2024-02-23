@@ -4,7 +4,8 @@
 \alias{StepWelch}
 \title{R6 Class}
 \description{
-`StepWelch` adds variable vectors.
+`StepWelch` calculates the periodogram (estimate of spectral density) using
+ Welch's method.
 }
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_fft_welch}
@@ -40,6 +41,13 @@
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{window}}{}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-step_fft_welch-bake"></a>}}

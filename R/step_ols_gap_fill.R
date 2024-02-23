@@ -1,9 +1,14 @@
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Fill in Gaps using Regression ------------------------------------------------
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' R6 Class
 #'
 #' `StepOlsGapFill`
 #'
 #' @param terms
-#' @param recipe
+#' @param recipe Recipe to use for filling gaps
 #'
 #' @inheritParams Step
 #'
@@ -11,38 +16,34 @@
 #'
 #' @export
 StepOlsGapFill <- R6Class(
-
-  classname = 'step_ols_gap_fill',
+  classname = "step_ols_gap_fill",
   inherit = Step,
-
   public = list(
 
     # step specific variables
     recipe = NULL,
     coefficients = NULL,
-
     initialize = function(terms,
                           recipe,
                           role = "predictor",
                           ...) {
-
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
-      env_list$step_name <- 'step_ols_gap_fill'
-      env_list$type <- 'add'
-      super$initialize(terms = terms,
-                       env_list[names(env_list) != "terms"])
+      env_list$step_name <- "step_ols_gap_fill"
+      env_list$type <- "add"
+      super$initialize(
+        terms = terms,
+        env_list[names(env_list) != "terms"]
+      )
 
 
       # step specific values
-      self$recipe = recipe
+      self$recipe <- recipe
 
       invisible(self)
     },
-
     bake = function(new_data) {
-
       rec <- self$recipe
       rec <- rec$prep()$bake(data = new_data)
       ti <- collapse::qDF(rec$term_info)
@@ -50,7 +51,7 @@ StepOlsGapFill <- R6Class(
       dat <- rec$plate(type = "list")
       nms <- names(dat)
 
-      outcomes   <- ti[ti$roles == "outcome", ]
+      outcomes <- ti[ti$roles == "outcome", ]
       predictors <- ti[ti$roles == "predictor", ]
 
       outcome_ids <- which(nms %in% outcomes$variable)
@@ -65,8 +66,10 @@ StepOlsGapFill <- R6Class(
       wh <- which(!is.na(m_outcomes))
 
       # solve
-      fit <- llt_solve(m_predictors[wh, , drop = FALSE],
-                       m_outcomes[wh, , drop = FALSE])
+      fit <- llt_solve(
+        m_predictors[wh, , drop = FALSE],
+        m_outcomes[wh, , drop = FALSE]
+      )
       self$coefficients <- fit
 
       lst <- collapse::mctl(m_predictors[, , drop = FALSE] %*% fit[, , drop = FALSE])
@@ -75,7 +78,6 @@ StepOlsGapFill <- R6Class(
 
       lst
     }
-
   )
 )
 
@@ -107,4 +109,3 @@ StepOlsGapFill <- R6Class(
 # tmp <- frec$prep()$bake()$plate()
 # points(dat$x, type = 'p', pch = 20)
 # points(tmp$update, type = 'l', col = 'red')
-

@@ -4,7 +4,7 @@
 // [[Rcpp::export]]
 Eigen::MatrixXd gwr_p(
     Eigen::VectorXd time,
-    int n_gwr
+    unsigned int n_gwr
 ) {
 
   Eigen::RowVectorXd v = Eigen::RowVectorXd::LinSpaced(n_gwr * 2, 1.0, (double)n_gwr * 2.0);
@@ -17,7 +17,7 @@ Eigen::MatrixXd gwr_p(
 
 
 // [[Rcpp::export]]
-double barker_herbert_impulse2(double p,
+double barker_herbert_impulse(double p,
                               double radius,
                               double radius_patch,
                               double t_1,
@@ -30,12 +30,12 @@ double barker_herbert_impulse2(double p,
 
   double ct = (t_2 / t_1) * (A / N);
 
-  double bi_n0 = boost::math::cyl_bessel_i(0.0, N * radius_patch);
-  double bk_a0 = boost::math::cyl_bessel_k(0.0, A * radius_patch);
-  double bk_n0 = boost::math::cyl_bessel_k(0.0, N * radius_patch);
-  double bi_n1 = boost::math::cyl_bessel_i(1.0, N * radius_patch);
-  double bk_a1 = boost::math::cyl_bessel_k(1.0, A * radius_patch);
-  double bk_n1 = boost::math::cyl_bessel_k(1.0, N * radius_patch);
+  double bi_n0 = std::cyl_bessel_i(0.0, N * radius_patch);
+  double bk_a0 = std::cyl_bessel_k(0.0, A * radius_patch);
+  double bk_n0 = std::cyl_bessel_k(0.0, N * radius_patch);
+  double bi_n1 = std::cyl_bessel_i(1.0, N * radius_patch);
+  double bk_a1 = std::cyl_bessel_k(1.0, A * radius_patch);
+  double bk_n1 = std::cyl_bessel_k(1.0, N * radius_patch);
 
   double denom = (ct * bi_n0 * bk_a1 + bi_n1 * bk_a0) * p;
 
@@ -48,14 +48,14 @@ double barker_herbert_impulse2(double p,
   // if radius is inside the patch
   if (radius <= radius_patch) {
 
-    drawdown = boost::math::cyl_bessel_k(0.0, N * radius) / p  +
-     (term_1 * boost::math::cyl_bessel_i(0.0, N * radius)) / denom;
+    drawdown = std::cyl_bessel_k(0.0, N * radius) / p  +
+     (term_1 * std::cyl_bessel_i(0.0, N * radius)) / denom;
 
     return(drawdown);
 
   }
 
-  drawdown = term_2 * boost::math::cyl_bessel_k(0.0, A * radius) / denom;
+  drawdown = term_2 * std::cyl_bessel_k(0.0, A * radius) / denom;
 
   return(drawdown);
 
@@ -84,8 +84,9 @@ Rcpp::List gwr_barker_herbert(
   std::vector<double> p_vec(p.data(), p.data() + p.size());
   double sm;
 
+
   for (auto &out : p_vec)
-    out = barker_herbert_impulse2(out, radius, radius_patch, t_1, t_2, s_1, s_2);
+    out = barker_herbert_impulse(out, radius, radius_patch, t_1, t_2, s_1, s_2);
 
   p = Eigen::Map<Eigen::MatrixXd>(p_vec.data(), p.rows(), p.cols());
   p.array() *= flow_rate / (2.0 * M_PI * t_1);
@@ -94,23 +95,23 @@ Rcpp::List gwr_barker_herbert(
 
 
   Eigen::VectorXd g0 = Eigen::VectorXd::Zero(m1 + 1);
-  for (int kk = 0; kk < time.size(); ++kk) {
+  for (unsigned int kk = 0; kk < time.size(); ++kk) {
     double tau = time[kk];
-    for (int n = 1; n <= n_gwr; ++n) {
+    for (unsigned int n = 1; n <= n_gwr; ++n) {
       sm = 0.0;
-      for (int i = 0; i <= n; ++i) {
+      for (unsigned int i = 0; i <= n; ++i) {
         sm = R::choose(n, i) * pow(-1.0, i) * p(kk, n+i);  // can we do this convolution faster with fft (overlap add/save)? or matrix multiply?
       }
-      g0[n] = tau * boost::math::factorial<double>(2 * n) /
-        (boost::math::factorial<double>(n) * boost::math::factorial<double>(n - 1)) * sm;
+      g0[n] = tau * std::tgamma(2 * n + 1) /
+        (std::tgamma(n + 1) * std::tgamma(n)) * sm;
     }
   Eigen::VectorXd gm = Eigen::VectorXd::Zero(m1 + 1);
 
   Eigen::VectorXd gp = Eigen::VectorXd::Zero(m1 + 1);
   double best = g0[m1];
   double expr;
-  for (int k = 0; k < m1 - 2; ++k) {
-    for (int n = m1 -2 -k; n > 0; --n) {
+  for (unsigned int k = 0; k < m1 - 2; ++k) {
+    for (unsigned int n = m1 -2 -k; n > 0; --n) {
       expr = g0[n + 2] - g0[n + 1];
       if (expr == 0){
         broken = true;
@@ -125,7 +126,7 @@ Rcpp::List gwr_barker_herbert(
     if (broken) {
       break;
     }
-    for (int n = 0; n > m1-k; ++n) {
+    for (unsigned int n = 0; n > m1-k; ++n) {
       gm[n + 1] = g0[n + 1];
       g0[n + 1] = gp[n + 1];
     }

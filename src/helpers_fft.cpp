@@ -532,8 +532,8 @@ Eigen::MatrixXcd kernel_apply(Eigen::MatrixXcd& x,
   size_t n_x = x.rows();
   size_t n_col = x.cols();
   size_t n_y = y.size();
-  size_t n_out = n_y * 2 + n_x;
-  size_t y_half = n_y / 2;
+  // size_t n_out = n_y * 2 + n_x;
+  // size_t y_half = n_y / 2;
 
   VectorXcd wrap(n_y * 2 + n_x);
   MatrixXcd out(n_x, n_col);

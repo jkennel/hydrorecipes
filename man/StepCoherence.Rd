@@ -4,7 +4,7 @@
 \alias{StepCoherence}
 \title{R6 Class}
 \description{
-`StepCoherence` adds variable vectors.
+`StepCoherence` estimates the coherence between terms.
 }
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_fft_coherence}
