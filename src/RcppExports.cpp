@@ -82,6 +82,64 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// be_clark_cpp
+double be_clark_cpp(arma::vec dep, arma::vec ind, int lag_space, bool inverse);
+RcppExport SEXP _frecipes_be_clark_cpp(SEXP depSEXP, SEXP indSEXP, SEXP lag_spaceSEXP, SEXP inverseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type dep(depSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type ind(indSEXP);
+    Rcpp::traits::input_parameter< int >::type lag_space(lag_spaceSEXP);
+    Rcpp::traits::input_parameter< bool >::type inverse(inverseSEXP);
+    rcpp_result_gen = Rcpp::wrap(be_clark_cpp(dep, ind, lag_space, inverse));
+    return rcpp_result_gen;
+END_RCPP
+}
+// be_least_squares_diff_cpp
+double be_least_squares_diff_cpp(arma::vec dep, arma::vec ind, int lag_space, bool inverse);
+RcppExport SEXP _frecipes_be_least_squares_diff_cpp(SEXP depSEXP, SEXP indSEXP, SEXP lag_spaceSEXP, SEXP inverseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type dep(depSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type ind(indSEXP);
+    Rcpp::traits::input_parameter< int >::type lag_space(lag_spaceSEXP);
+    Rcpp::traits::input_parameter< bool >::type inverse(inverseSEXP);
+    rcpp_result_gen = Rcpp::wrap(be_least_squares_diff_cpp(dep, ind, lag_space, inverse));
+    return rcpp_result_gen;
+END_RCPP
+}
+// be_least_squares_cpp
+double be_least_squares_cpp(arma::vec dep, arma::vec ind, bool inverse);
+RcppExport SEXP _frecipes_be_least_squares_cpp(SEXP depSEXP, SEXP indSEXP, SEXP inverseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type dep(depSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type ind(indSEXP);
+    Rcpp::traits::input_parameter< bool >::type inverse(inverseSEXP);
+    rcpp_result_gen = Rcpp::wrap(be_least_squares_cpp(dep, ind, inverse));
+    return rcpp_result_gen;
+END_RCPP
+}
+// be_acworth_cpp
+double be_acworth_cpp(const double s2_gw, const double s2_et, const double s2_at, const double m2_gw, const double m2_et, const double d_phase, const bool inverse);
+RcppExport SEXP _frecipes_be_acworth_cpp(SEXP s2_gwSEXP, SEXP s2_etSEXP, SEXP s2_atSEXP, SEXP m2_gwSEXP, SEXP m2_etSEXP, SEXP d_phaseSEXP, SEXP inverseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type s2_gw(s2_gwSEXP);
+    Rcpp::traits::input_parameter< const double >::type s2_et(s2_etSEXP);
+    Rcpp::traits::input_parameter< const double >::type s2_at(s2_atSEXP);
+    Rcpp::traits::input_parameter< const double >::type m2_gw(m2_gwSEXP);
+    Rcpp::traits::input_parameter< const double >::type m2_et(m2_etSEXP);
+    Rcpp::traits::input_parameter< const double >::type d_phase(d_phaseSEXP);
+    Rcpp::traits::input_parameter< const bool >::type inverse(inverseSEXP);
+    rcpp_result_gen = Rcpp::wrap(be_acworth_cpp(s2_gw, s2_et, s2_at, m2_gw, m2_et, d_phase, inverse));
+    return rcpp_result_gen;
+END_RCPP
+}
 // hantush_jacob_gauss_kronrod
 double hantush_jacob_gauss_kronrod(double t, double lab, double r, double T, double S, double Q, double prec);
 RcppExport SEXP _frecipes_hantush_jacob_gauss_kronrod(SEXP tSEXP, SEXP labSEXP, SEXP rSEXP, SEXP TSEXP, SEXP SSEXP, SEXP QSEXP, SEXP precSEXP) {
@@ -1405,6 +1463,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cooper_bredehoeft_papadopulos_laplace
+Eigen::VectorXd cooper_bredehoeft_papadopulos_laplace(Eigen::VectorXd time, double r, double r_c, double r_w, double Tr, double S, double h_0, int n_terms);
+RcppExport SEXP _frecipes_cooper_bredehoeft_papadopulos_laplace(SEXP timeSEXP, SEXP rSEXP, SEXP r_cSEXP, SEXP r_wSEXP, SEXP TrSEXP, SEXP SSEXP, SEXP h_0SEXP, SEXP n_termsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< double >::type r(rSEXP);
+    Rcpp::traits::input_parameter< double >::type r_c(r_cSEXP);
+    Rcpp::traits::input_parameter< double >::type r_w(r_wSEXP);
+    Rcpp::traits::input_parameter< double >::type Tr(TrSEXP);
+    Rcpp::traits::input_parameter< double >::type S(SSEXP);
+    Rcpp::traits::input_parameter< double >::type h_0(h_0SEXP);
+    Rcpp::traits::input_parameter< int >::type n_terms(n_termsSEXP);
+    rcpp_result_gen = Rcpp::wrap(cooper_bredehoeft_papadopulos_laplace(time, r, r_c, r_w, Tr, S, h_0, n_terms));
+    return rcpp_result_gen;
+END_RCPP
+}
 // papadopulos_cooper_laplace
 Eigen::VectorXd papadopulos_cooper_laplace(Eigen::VectorXd time, double Q, double r, double r_c, double r_w, double Tr, double S, double prec, int n_terms);
 RcppExport SEXP _frecipes_papadopulos_cooper_laplace(SEXP timeSEXP, SEXP QSEXP, SEXP rSEXP, SEXP r_cSEXP, SEXP r_wSEXP, SEXP TrSEXP, SEXP SSEXP, SEXP precSEXP, SEXP n_termsSEXP) {
@@ -1964,6 +2040,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_b_spline_list2", (DL_FUNC) &_frecipes_b_spline_list2, 9},
     {"_frecipes_b_spline_list3", (DL_FUNC) &_frecipes_b_spline_list3, 9},
     {"_frecipes_log_lags_arma", (DL_FUNC) &_frecipes_log_lags_arma, 2},
+    {"_frecipes_be_clark_cpp", (DL_FUNC) &_frecipes_be_clark_cpp, 4},
+    {"_frecipes_be_least_squares_diff_cpp", (DL_FUNC) &_frecipes_be_least_squares_diff_cpp, 4},
+    {"_frecipes_be_least_squares_cpp", (DL_FUNC) &_frecipes_be_least_squares_cpp, 3},
+    {"_frecipes_be_acworth_cpp", (DL_FUNC) &_frecipes_be_acworth_cpp, 7},
     {"_frecipes_hantush_jacob_gauss_kronrod", (DL_FUNC) &_frecipes_hantush_jacob_gauss_kronrod, 7},
     {"_frecipes_hantush_jacob_quad", (DL_FUNC) &_frecipes_hantush_jacob_quad, 7},
     {"_frecipes_distributed_lag_thread", (DL_FUNC) &_frecipes_distributed_lag_thread, 3},
@@ -2066,6 +2146,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_bbl", (DL_FUNC) &_frecipes_bbl, 4},
     {"_frecipes_cohen_p", (DL_FUNC) &_frecipes_cohen_p, 2},
     {"_frecipes_cohen_c", (DL_FUNC) &_frecipes_cohen_c, 2},
+    {"_frecipes_cooper_bredehoeft_papadopulos_laplace", (DL_FUNC) &_frecipes_cooper_bredehoeft_papadopulos_laplace, 8},
     {"_frecipes_papadopulos_cooper_laplace", (DL_FUNC) &_frecipes_papadopulos_cooper_laplace, 9},
     {"_frecipes_jacob_lohman_laplace", (DL_FUNC) &_frecipes_jacob_lohman_laplace, 7},
     {"_frecipes_hantush_jacob_laplace", (DL_FUNC) &_frecipes_hantush_jacob_laplace, 8},

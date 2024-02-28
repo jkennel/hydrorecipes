@@ -4,7 +4,9 @@
 \alias{StepAddVars}
 \title{R6 Class}
 \description{
-`StepAddVars` adds variable vectors.
+R6 Class
+
+R6 Class
 }
 \section{Super class}{
 \code{\link[frecipes:step]{frecipes::step}} -> \code{step_add_vars}

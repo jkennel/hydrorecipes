@@ -38,8 +38,22 @@ step_transport_ogata_banks(
 
 \item{...}{additional arguments}
 }
+\value{
+Ogata-Banks solution for time and distance pairs
+}
 \description{
 Ogata, A., Banks, R.B., 1961. A solution of the differential equation of
 longitudinal dispersion in porous media. U. S. Geol. Surv. Prof. Pap. 411-A.
 1-D, infinite source, uniform flow, constant parameters, decay, retardation
+
+To have values match the excel sheet
+https://www.civil.uwaterloo.ca/jrcraig/pdf/OgataBanks.xlsm the decay
+coefficient needs to be scaled by the retardation coefficient.
+
+1-D
+infinite source
+uniform flow
+constant parameters
+no decay
+no retardation
 }

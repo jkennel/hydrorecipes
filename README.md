@@ -26,6 +26,7 @@ To do:
 - Explore convolution methods for Laplace solutions
 - Optimize laplace solutions
 - Fix selectors
+- Feature naming 
 - Steps
   - step_temporary_deployment
   - step_be_*

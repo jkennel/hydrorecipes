@@ -56,6 +56,56 @@ Rcpp::ComplexMatrix bessel_k_cplx(const Rcpp::ComplexMatrix &x,
 }
 
 
+struct CooperBredehoeftPapadopulos
+{
+  Eigen::VectorXd tau;
+  double r;
+  double r_c;
+  double r_w;
+  double Tr;
+  double S;
+  double h_0;
+  double alpha;
+  CooperBredehoeftPapadopulos(
+    Eigen::VectorXd time,
+    double r,
+    double r_c,
+    double r_w,
+    double Tr,
+    double S,
+    double h_0) : r(r), r_w(r_w), r_c(r_c), Tr(Tr), S(S), h_0(h_0)
+  {
+    alpha = (r_w * r_w * S) / (r_c * r_c);
+    tau = std::log(2.0) / time.array();
+  };
+  double lp(double p)
+  {
+    // Rcpp::Rcout << "The value is p " << p << std::endl;
+
+    if (std::isinf(p)) {
+      return(p);
+    }
+
+    double q = sqrt(p * S / Tr);
+
+    double bk_rw = std::cyl_bessel_k(0.0, r_w * q);
+    double bk_r = bk_rw;
+    double bk_rw_1 = std::cyl_bessel_k(1.0, r_w * q);
+
+    if (r > r_w) {
+      bk_r = std::cyl_bessel_k(0.0, r * q);
+    }
+
+    double f_p = (r_c * S * h_0 * bk_r) /
+      ((Tr * q) * ((r_w * q * bk_rw) + (2.0 * alpha * bk_rw_1)));
+
+    return(f_p);
+
+  };
+};
+
+
+
 struct ParallelFracturesHeat
 {
   Eigen::VectorXd time;
@@ -930,6 +980,27 @@ Eigen::VectorXd cohen_xy(T &well, unsigned int n_terms)
 
 
 // [[Rcpp::export]]
+Eigen::VectorXd cooper_bredehoeft_papadopulos_laplace(
+    Eigen::VectorXd time,
+    double r,
+    double r_c,
+    double r_w,
+    double Tr,
+    double S,
+    double h_0,
+    int n_terms)
+{
+
+  CooperBredehoeftPapadopulos well(time, r, r_c, r_w, Tr, S, h_0);
+  Eigen::VectorXd out = stehfest(well, n_terms);
+
+  // time equal to zero replace with h_0
+  out = out.unaryExpr([h_0](double v) { return std::isfinite(v)? v : h_0; });
+  return (out);// / (2.0 * M_PI * Tr));
+}
+
+
+// [[Rcpp::export]]
 Eigen::VectorXd papadopulos_cooper_laplace(
     Eigen::VectorXd time,
     double Q,
@@ -1151,6 +1222,18 @@ Eigen::VectorXd parallel_fractures_heat(
 
 /*** R
 n <- 10000
+time = c(1e-6, 1:86400)
+# CooperBredehoeftPapadopulos well(time, r, r_c, r_w, Tr, S, h_0);
+
+kern_slug <- frecipes:::cooper_bredehoeft_papadopulos_laplace(time,
+                        r = 0.10,
+                        r_c = 0.10,
+                        r_w = 0.10,
+                        S = 1e-5,
+                        Tr = 5e-4,
+                        h_0 = 1,
+                        n = 14L)
+
 
 Tr = 200 # transmissivity of aquifer, m^2/d
 S = 0.0005 # storage coefficient of aquifer, -

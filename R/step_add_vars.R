@@ -5,7 +5,7 @@
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' R6 Class
 #'
-#' `StepAddVars` adds variable vectors.
+# `StepAddVars` adds variable vectors.
 #'
 #' @param vars name of vars
 #'

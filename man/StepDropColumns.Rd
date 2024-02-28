@@ -8,6 +8,7 @@
 }
 \seealso{
 Other common: 
+\code{\link{StepAddNoise}},
 \code{\link{StepCenter}},
 \code{\link{StepDummy}}
 }

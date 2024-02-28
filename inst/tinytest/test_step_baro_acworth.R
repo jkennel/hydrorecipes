@@ -1,0 +1,26 @@
+
+ac_1 <-  be_acworth_cpp(s2_at = 7.461,
+                        s2_et = 224.640,
+                        s2_gw = 4.086,
+                        m2_gw = 0.471,
+                        m2_et = 492.526,
+                        d_phase = -56.709 * pi / 180,
+                        inverse = TRUE)
+ac_2 <- be_acworth_cpp(s2_at = 6.164,
+               s2_et = 270.463,
+               s2_gw = 0.329,
+               m2_gw = 0.225,
+               m2_et = 551.572,
+               d_phase = -71.726 * pi / 180,
+               inverse = TRUE)
+ac_3 <- be_acworth_cpp(s2_at = 5.897,
+               s2_et = 234.478,
+               s2_gw = 5.536,
+               m2_gw = 0.773,
+               m2_et = 558.075,
+               d_phase = -70.393 * pi / 180,
+               inverse = TRUE)
+tinytest::expect_equivalent(ac_1, 0.563,  tolerance = 1e-3,
+                            info = "be_acworth_cpp works")
+tinytest::expect_equivalent(ac_2, 0.059,  tolerance = 1e-3,
+                            info = "be_acworth_cpp works")

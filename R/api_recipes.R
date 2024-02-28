@@ -21,8 +21,6 @@
 recipe <- function(formula, data, ...) {
   Recipe$new(formula, data, ...)
 }
-
-
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # steps ------------------------------------------------------------------------
@@ -55,6 +53,31 @@ step_add_vars <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepAddVars$new,
+                        env_list))
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' step_add_noise
+#'
+#' @description
+#'   Add noise.
+#'
+#' @inheritParams step_scale
+#'
+#' @return
+#' @export
+#'
+#' @examples
+step_add_noise <- function(.rec,
+                          terms,
+                          role = "predictor",
+                          skip = FALSE,
+                          keep_original_cols = FALSE,
+                          ...) {
+  terms <- substitute(terms)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepAddNoise$new,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -958,6 +981,39 @@ step_scale <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepScale$new,
+                        env_list))
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_slug_cbp
+#'
+#' @description
+#'   Cooper, Bredehoeft and Papadopulos, 1967 Slug test solution
+#'
+#' @inheritParams step_scale
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#'
+#'
+step_slug_cbp <- function(.rec,
+                          times,
+                          radius = 1.0,
+                          radius_casing = 1.0,
+                          radius_well = 0.15,
+                          specific_storage = 1.0e-6,
+                          hydraulic_conductivity = 1.0e-4,
+                          head_0 = 1.0,
+                          thickness = 1.0,
+                          n_terms = 16,
+                          role = "predictor",
+                          ...) {
+  times <- substitute(times)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepSlugCbp$new,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -8,6 +8,7 @@
 }
 \seealso{
 Other common: 
+\code{\link{StepAddNoise}},
 \code{\link{StepDropColumns}},
 \code{\link{StepDummy}}
 }
