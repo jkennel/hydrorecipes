@@ -13,6 +13,7 @@ The `Step` class hold common info for each step.
 \item \href{#method-step-prep}{\code{Step$prep()}}
 \item \href{#method-step-bake}{\code{Step$bake()}}
 \item \href{#method-step-tidy}{\code{Step$tidy()}}
+\item \href{#method-step-response}{\code{Step$response()}}
 \item \href{#method-step-clone}{\code{Step$clone()}}
 }
 }
@@ -49,6 +50,15 @@ The `Step` class hold common info for each step.
 \subsection{Method \code{tidy()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Step$tidy()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-step-response"></a>}}
+\if{latex}{\out{\hypertarget{method-step-response}{}}}
+\subsection{Method \code{response()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Step$response(co)}\if{html}{\out{</div>}}
 }
 
 }

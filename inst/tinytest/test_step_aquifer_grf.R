@@ -1,5 +1,5 @@
-dat <- data.frame(x = as.numeric(1:200),
-                  y = rep(0.01, 200))
+dat <- data.frame(x = as.numeric(1:20),
+                  y = rep(0.01, 20))
 formula <- as.formula(y~x)
 
 

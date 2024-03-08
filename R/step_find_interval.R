@@ -36,7 +36,8 @@ StepFindInterval <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
 
@@ -50,15 +51,20 @@ StepFindInterval <- R6Class(
     bake = function(new_data) {
       column_name <- self$columns
 
+      self$new_columns <- c()
+
       dum <- list()
       for (i in seq_along(column_name)) {
         dum[[i]] <- to_dummy_list(unclass(new_data)[[i]], self$vec)
 
-        names(dum[[i]]) <- name_columns(
-          self$id,
+        nn <- name_columns(
+          self$prefix,
           column_name[i],
           length(dum[[i]])
         )
+
+        names(dum[[i]]) <- nn
+        self$new_columns <- c(self$new_columns, nn)
       }
       unlist(dum, recursive = FALSE)
     }

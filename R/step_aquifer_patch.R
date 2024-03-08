@@ -70,7 +70,8 @@ StepAquiferPatch <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = c(as.symbol(time), as.symbol(flow_rate)),
-        env_list
+        env_list,
+        ...
       )
 
       # step specific values
@@ -99,52 +100,29 @@ StepAquiferPatch <- R6Class(
 
       invisible(self)
     },
-    # (frecipes:::stehfest_barker_herbert(as.numeric(1:n),1.0, 100.0, 200.0, 1e-3, 1e-3, 1e-5, 1e-5, 12L)[[1]])
 
     bake = function(new_data) {
 
+      self$new_columns <- self$prefix
 
-      # Eigen::VectorXd time,
-      # double radius,
-      # double radius_patch,
-      # double t_1,
-      # double t_2,
-      # double s_1,
-      # double s_2,
-      # double Q,
-      # double prec,
-      # int n_terms
-
-      bh <- setNames(list(barker_herbert(
-        time = new_data[[1]],
-        radius = self$radius,
-        radius_patch = self$radius_patch,
-        t_1 = self$transmissivity_inner,
-        t_2 = self$transmissivity_outer,
-        s_1 = self$storativity_inner,
-        s_2 = self$storativity_outer,
-        Q = self$flow_rate,
-        1e-8,
-        n_terms = self$n_terms
-        )), self$id)
-
-      return(bh)
+      setNames(
+        list(
+          barker_herbert(
+            time = new_data[[1]],
+            radius = self$radius,
+            radius_patch = self$radius_patch,
+            t_1 = self$transmissivity_inner,
+            t_2 = self$transmissivity_outer,
+            s_1 = self$storativity_inner,
+            s_2 = self$storativity_outer,
+            Q = self$flow_rate,
+            1e-8,
+            n_terms = self$n_terms
+          )
+        ),
+        self$new_columns)
 
 
-      # setNames(
-      #   gwr_barker_herbert(
-      #     new_data[[1]],
-      #     self$flow_rate,
-      #     self$radius,
-      #     self$radius_patch,
-      #     self$transmissivity_inner,
-      #     self$transmissivity_outer,
-      #     self$storativity_inner,
-      #     self$storativity_outer,
-      #     self$n_terms
-      #   ),
-      #   self$id
-      # )
     }
   )
 )

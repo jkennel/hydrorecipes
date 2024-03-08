@@ -19,7 +19,7 @@ Other common:
 }
 \concept{common}
 \section{Super class}{
-\code{\link[frecipes:step]{frecipes::step}} -> \code{step_dummy}
+\code{frecipes::step} -> \code{step_dummy}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -33,6 +33,7 @@ Other common:
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
+<li><span class="pkg-link" data-pkg="frecipes" data-topic="step" data-id="response"><a href='../../frecipes/html/step.html#method-step-response'><code>frecipes::step$response()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="frecipes" data-topic="step" data-id="tidy"><a href='../../frecipes/html/step.html#method-step-tidy'><code>frecipes::step$tidy()</code></a></span></li>
 </ul>
 </details>

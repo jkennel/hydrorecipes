@@ -19,7 +19,7 @@ StepAddNoise <- R6Class(
   classname = "step_add_noise",
   inherit = Step,
   public = list(
-    column_values = c(),
+
     sd = NULL,
     mean = NULL,
     fun = NULL,
@@ -38,7 +38,8 @@ StepAddNoise <- R6Class(
       env_list$type <- "modify"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
       self$mean <- mean
@@ -50,8 +51,9 @@ StepAddNoise <- R6Class(
 
     # subtract the central value from a column
     bake = function(new_data) {
+
       for (i in seq_along(self$columns)) {
-        noise <- fun(mean ,sd)
+        noise <- fun(mean, sd)
         new_data[[i]] <- new_data[[i]] + noise
       }
 

@@ -74,6 +74,8 @@ StepSplineB <- R6Class(
     bake = function(new_data) {
       column_name <- self$columns
 
+      self$new_columns <- c()
+
       basis <- list()
       for (i in seq_along(column_name)) {
         basis[[i]] <- b_spline_list(
@@ -85,11 +87,13 @@ StepSplineB <- R6Class(
           complete_basis = self$intercept
         )
 
-        names(basis[[i]]) <- name_columns(
-          self$id,
+        nn <- name_columns(
+          self$prefix,
           column_name,
           length(basis[[i]])
         )
+        names(basis[[i]]) <- nn
+        self$new_columns <- c(self$new_columns, nn)
       }
 
       unlist(basis, recursive = FALSE)

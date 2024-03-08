@@ -36,7 +36,8 @@ StepTransferWelch <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
       self$length_subset <- length_subset
@@ -54,6 +55,9 @@ StepTransferWelch <- R6Class(
           self$window
         )
       )
+      self$new_columns <- name_columns(self$prefix, length(tf))
+
+      names(tf) <- self$new_columns
     }
   )
 )

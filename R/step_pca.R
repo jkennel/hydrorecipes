@@ -39,7 +39,8 @@ StepPca <- R6Class(
       env_list$type <- "modify"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
       self$na_rm <- na_rm
@@ -74,6 +75,7 @@ StepPca <- R6Class(
     },
     # subtract the central value from a column
     bake = function(new_data) {
+
       for (i in seq_along(self$columns)) {
         if (self$center & self$scale) {
           new_data[[i]] <- (new_data[[i]] - self$center_values[i]) *
@@ -87,8 +89,8 @@ StepPca <- R6Class(
 
       new_data <- collapse::qM(new_data)
       new_data <- collapse::mctl(new_data %*% self$pca_results)
-
-      names(new_data) <- name_columns(self$id, NULL, self$n_comp)
+      self$new_columns <- name_columns(self$prefix, NULL, self$n_comp)
+      names(new_data) <- self$new_columns
 
       new_data
     }

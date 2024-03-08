@@ -14,6 +14,7 @@ It diverges in a few ways:
 - decrease the number of dependencies and foreign functions
 - more flexible output options (list, matrix, data.frame, data.table, tibble)
 - statistically less robust 
+- mixes modelling and feature engineering
 
 - API changes
   - uses *terms* instead of *...* for variable selection and selections are wrapped
@@ -24,9 +25,11 @@ It diverges in a few ways:
 
 To do:
 - Explore convolution methods for Laplace solutions
-- Optimize laplace solutions
+- Optimize Laplace solutions
 - Fix selectors
 - Feature naming 
+- Gracefully handle multiple outcomes
+- Increase test coverage
 - Steps
   - step_temporary_deployment
-  - step_be_*
+  - step_baro_*

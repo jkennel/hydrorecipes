@@ -271,6 +271,103 @@ step_aquifer_leaky <- function(.rec,
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' step_baro_acworth
+#'
+#' @description
+#' Acworth 2016 frequency based method for calculating barometric efficiency
+#' in the presence of Earth tides
+#'
+#' @inheritParams step_fft_pgram
+#'
+#' @param water_level \code{variable} unquoted water level column name
+#' @param barometric_pressure \code{variable} unquoted barometric pressure
+#'   column name
+#' @param earth_tides \code{variable} unquoted Earth tide column name
+#' @param frequency_a \code{double} Earth tide frequency
+#' @param frequency_b \code{double} Related barometric frequency
+#' @param inverse \code{logical} whether the barometric relationship is inverse
+#'
+#' @return \code{double} barometric efficiency using Acworth's method
+#'
+#' @family barometric
+#'
+#' @references
+#' Acworth, R.I., Halloran, L.J., Rau, G.C., Cuthbert, M.O. and Bernardi, T.L.,
+#'  2016. An objective frequency domain method for quantifying confined aquifer
+#'  compressible storage using Earth and atmospheric tides. Geophysical Research
+#'  Letters, 43(22), pp.11-671.
+#'
+#' @examples
+#'
+#' @export
+step_baro_acworth <- function(.rec,
+                              water_level,
+                              barometric_pressure,
+                              earth_tides,
+                              frequency_a = 1.9324, # m2
+                              frequency_b = 2.0,    # s2
+                              inverse = FALSE,
+                              spans = 5,
+                              detrend = TRUE,
+                              demean = TRUE,
+                              taper = 0.1,
+                              role = "augment",
+                              ...) {
+  water_level <- substitute(water_level)
+  barometric_pressure <- substitute(barometric_pressure)
+  earth_tides <- substitute(earth_tides)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepBaroAcworth$new,
+                        env_list))
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' step_baro_clark
+#'
+#' @description
+#' Clark 1967 solution for calculating barometric efficiency (Algorithm from Batu 1998, pg 76)
+#'
+#' @inheritParams step_scale
+#'
+#' @param dep \code{numeric vector} of the dependent variable (ie:water level)
+#' @param ind \code{numeric vector} of the independent variable (ie:barometric pressure)
+#' @param lag_space \code{integer} spacing for lags, useful for higher frequency monitoring
+#' @param inverse \code{logical} whether the barometric relationship is inverse
+#'
+#' @return barometric efficiency using Clark's method
+#'
+#' @family barometric
+#'
+#' @references
+#' Clark, W.E., 1967. Computing the barometric efficiency of a well. Journal
+#' of the Hydraulics Division, 93(4), pp.93-98.
+#'
+#' Batu, V., 1998. Aquifer hydraulics: a comprehensive guide to hydrogeologic
+#' data analysis. John Wiley & Sons.
+#'
+#' @examples
+#' dat <- data.frame(x = as.numeric(1:rows),
+#'                   y = rep(0.01, rows))
+#' formula <- as.formula(y~x)
+#'
+#' @export
+step_baro_clark <- function(.rec,
+                            water_level,
+                            barometric_pressure,
+                            lag_space = 1L,
+                            inverse = FALSE,
+                            role = "augment",
+                            ...) {
+  water_level <- substitute(water_level)
+  barometric_pressure <- substitute(barometric_pressure)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepBaroClark$new,
+                        env_list))
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_patch
 #'
 #' @description

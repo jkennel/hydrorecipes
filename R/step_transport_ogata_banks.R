@@ -54,7 +54,8 @@ StepTransportOgataBanks <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = c(as.symbol(time), as.symbol(distance)),
-        env_list
+        env_list,
+        ...
       )
 
       # step specific values
@@ -71,7 +72,7 @@ StepTransportOgataBanks <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
-      mctl(ogata_banks_decay_vec(
+      ob <- mctl(ogata_banks_decay_vec(
         self$concentration_initial,
         self$velocity,
         self$diffusion,
@@ -80,6 +81,8 @@ StepTransportOgataBanks <- R6Class(
         new_data[[2]],
         new_data[[1]]
       ))
+      self$new_columns <- self$prefix
+      setnames(ob, self$new_columns)
 
     }
   )

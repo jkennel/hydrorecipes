@@ -24,15 +24,15 @@ StepCheckNA <- R6Class(
       env_list$type <- "check"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
       invisible(self)
     },
     bake = function(new_data) {
-      chck <- anyNA(new_data)
-      names(chck) <- file.path(self$id, self$columns, fsep = "_")
-      return(chck)
+      self$check <- anyNA(new_data)
+      return(NULL)
     }
   )
 )

@@ -7,7 +7,7 @@
 `StepDistributedLag` generates distributed lag vectors.
 }
 \section{Super class}{
-\code{\link[frecipes:step]{frecipes::step}} -> \code{step_distributed_lag}
+\code{frecipes::step} -> \code{step_distributed_lag}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -15,6 +15,8 @@
 \item{\code{knots}}{the locations of the knots for the basis matrix.}
 
 \item{\code{n_lag}}{integer the number of lag terms.}
+
+\item{\code{n_lag}}{integer the maximum lag.}
 
 \item{\code{n_lag}}{integer the maximum lag.}
 }
@@ -25,6 +27,7 @@
 \itemize{
 \item \href{#method-step_distributed_lag-new}{\code{StepDistributedLag$new()}}
 \item \href{#method-step_distributed_lag-bake}{\code{StepDistributedLag$bake()}}
+\item \href{#method-step_distributed_lag-response}{\code{StepDistributedLag$response()}}
 \item \href{#method-step_distributed_lag-clone}{\code{StepDistributedLag$clone()}}
 }
 }
@@ -41,7 +44,15 @@
 \if{latex}{\out{\hypertarget{method-step_distributed_lag-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepDistributedLag$new(terms, knots, role = "predictor", ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepDistributedLag$new(
+  terms,
+  n_lag = 12L,
+  max_lag = 86400L,
+  knots = NA_real_,
+  basis_matrix = NA_real_,
+  role = "predictor",
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 }
@@ -51,6 +62,15 @@
 \subsection{Method \code{bake()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StepDistributedLag$bake(new_data)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-step_distributed_lag-response"></a>}}
+\if{latex}{\out{\hypertarget{method-step_distributed_lag-response}{}}}
+\subsection{Method \code{response()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{StepDistributedLag$response(co)}\if{html}{\out{</div>}}
 }
 
 }

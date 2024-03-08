@@ -21,6 +21,7 @@ StepOlsPredict <- R6Class(
     outcomes = NULL,
     predictors = NULL,
     coefficients = NULL,
+    response = NULL,
     # residuals = NULL,
     # s = NULL,
     # df_residual = NULL,
@@ -37,65 +38,77 @@ StepOlsPredict <- R6Class(
       env_list$type <- "supervised_add"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
       invisible(self)
     },
     bake = function(new_data, term_info) {
-      nms <- names(new_data)
 
-      # term info data
-      ti <- collapse::qDF(term_info)
-      ti <- ti[ti$source != "removed", ]
-      ti <- ti[ti$variable %in% nms, ]
+      x <- get_regression_data(new_data, term_info, id_type = "predictor")
+      y <- get_regression_data(new_data, term_info, id_type = "outcome")
+      print(str(x))
+      print(str(y))
+      print(self$coefficients)
+      self$coefficients <- determine_coefficients(x, y)
 
-      # create regression matrices
-      outcomes <- ti[ti$roles == "outcome", ]
-      predictors <- ti[ti$roles == "predictor", ]
-      predictors$inds <- seq_len(nrow(predictors))
-
-      # subsets are the regressor groups
-      subsets <- split(
-        predictors$inds,
-        data.table::rleid(predictors$step_index)
-      )
-
-      # save predictor and outcome info
-      self$predictors <- predictors
-      self$outcomes <- outcomes
-
-      # id data
-      outcome_ids <- which(nms %in% outcomes$variable)
-      predictor_ids <- which(nms %in% predictors$variable)
-
-      # outcome and predictor data
-      to_rem <- collapse::missing_cases(new_data)
-
-      m_predictors <- collapse::qM(unclass(new_data)[predictor_ids])
-      m_outcomes <- collapse::qM(unclass(new_data)[outcome_ids])
-
-      # solve
-      fit <- llt_solve(
-        m_predictors[!to_rem, , drop = FALSE],
-        m_outcomes[!to_rem, , drop = FALSE]
-      )
+      lst <- predict_groups(x, self$coefficients)
+      self$new_columns <- name_columns(self$prefix, NULL, length(self$lst))
+      names(lst) <- self$new_columns
 
 
-      self$coefficients <- fit
-
-
-      lst <- list()
-      for (i in seq_along(subsets)) {
-        lst[[i]] <- collapse::mctl(
-          m_predictors[, subsets[[i]], drop = FALSE] %*%
-            fit[subsets[[i]], , drop = FALSE]
-        )
-      }
-
-      names(lst) <- name_columns(self$id, NULL, length(self$lst))
-
-      lst
+      # nms <- names(new_data)
+      #
+      # # term info data
+      # ti <- collapse::qDF(term_info)
+      # ti <- ti[ti$source != "removed", ]
+      # ti <- ti[ti$variable %in% nms, ]
+      #
+      # # create regression matrices
+      # outcomes <- ti[ti$roles == "outcome", ]
+      # predictors <- ti[ti$roles == "predictor", ]
+      # predictors$inds <- seq_len(nrow(predictors))
+      #
+      # # save predictor and outcome info
+      # self$predictors <- predictors
+      # self$outcomes <- outcomes
+      #
+      # # id data
+      # outcome_ids <- which(nms %in% outcomes$variable)
+      # predictor_ids <- which(nms %in% predictors$variable)
+      #
+      # # outcome and predictor data
+      # to_rem <- collapse::missing_cases(new_data)
+      #
+      # m_predictors <- collapse::qM(unclass(new_data)[predictor_ids])
+      # m_outcomes <- collapse::qM(unclass(new_data)[outcome_ids])
+      #
+      # # solve
+      # fit <- llt_solve(
+      #   m_predictors[!to_rem, , drop = FALSE],
+      #   m_outcomes[!to_rem, , drop = FALSE]
+      # )
+      #
+      # self$coefficients <- fit
+      #
+      # # subsets are the regressor groups
+      # subsets <- split(
+      #   predictors$inds,
+      #   data.table::rleid(predictors$step_index)
+      # )
+      #
+      # lst <- list()
+      # for (i in seq_along(subsets)) {
+      #   lst[[i]] <- collapse::mctl(
+      #     m_predictors[, subsets[[i]], drop = FALSE] %*%
+      #       fit[subsets[[i]], , drop = FALSE]
+      #   )
+      # }
+      #
+      # names(lst) <- name_columns(self$id, NULL, length(self$lst))
+      #
+      # lst
     }
   )
 )

@@ -34,7 +34,8 @@ StepOlsGapFill <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
 
@@ -74,7 +75,8 @@ StepOlsGapFill <- R6Class(
 
       lst <- collapse::mctl(m_predictors[, , drop = FALSE] %*% fit[, , drop = FALSE])
 
-      names(lst) <- name_columns(self$id, outcomes$variable, length(outcome_ids))
+      self$new_columns <- name_columns(self$prefix, outcomes$variable, length(outcome_ids))
+      names(lst) <- self$new_columns
 
       lst
     }

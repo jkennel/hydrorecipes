@@ -7,13 +7,14 @@
 `StepEarthtide` generates sin and cosine wavegroups.
 }
 \section{Super class}{
-\code{\link[frecipes:step]{frecipes::step}} -> \code{step_earthtide}
+\code{frecipes::step} -> \code{step_earthtide}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-step_earthtide-new}{\code{StepEarthtide$new()}}
 \item \href{#method-step_earthtide-bake}{\code{StepEarthtide$bake()}}
+\item \href{#method-step_earthtide-response}{\code{StepEarthtide$response()}}
 \item \href{#method-step_earthtide-clone}{\code{StepEarthtide$clone()}}
 }
 }
@@ -42,6 +43,7 @@
   earth_radius = 6378136.3,
   earth_eccentricity = 0.0066943979514,
   cutoff = 1e-06,
+  wave_groups = data.frame(start = 0, end = 8),
   catalog = "ksm04",
   eop = NULL,
   scale = TRUE,
@@ -58,6 +60,15 @@
 \subsection{Method \code{bake()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StepEarthtide$bake(new_data)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-step_earthtide-response"></a>}}
+\if{latex}{\out{\hypertarget{method-step_earthtide-response}{}}}
+\subsection{Method \code{response()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{StepEarthtide$response(co)}\if{html}{\out{</div>}}
 }
 
 }

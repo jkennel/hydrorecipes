@@ -7,13 +7,14 @@
 `StepHarmonic` generates sin and cosine curves at specified frequencies.
 }
 \section{Super class}{
-\code{\link[frecipes:step]{frecipes::step}} -> \code{step_harmonic}
+\code{frecipes::step} -> \code{step_harmonic}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-step_harmonic-new}{\code{StepHarmonic$new()}}
 \item \href{#method-step_harmonic-bake}{\code{StepHarmonic$bake()}}
+\item \href{#method-step_harmonic-response}{\code{StepHarmonic$response()}}
 \item \href{#method-step_harmonic-clone}{\code{StepHarmonic$clone()}}
 }
 }
@@ -47,6 +48,15 @@
 \subsection{Method \code{bake()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StepHarmonic$bake(new_data)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-step_harmonic-response"></a>}}
+\if{latex}{\out{\hypertarget{method-step_harmonic-response}{}}}
+\subsection{Method \code{response()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{StepHarmonic$response(co)}\if{html}{\out{</div>}}
 }
 
 }

@@ -25,14 +25,17 @@ StepIntercept <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = NULL,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
 
       invisible(self)
     },
     bake = function(new_data) {
-      return(setNames(list(rep(1.0, length(new_data[[1]]))), self$id))
+      self$new_columns <- self$prefix
+
+      setNames(list(rep(1.0, length(new_data[[1]]))), self$new_columns)
     }
   )
 )

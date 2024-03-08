@@ -50,7 +50,8 @@ StepSlugCbp <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = as.symbol(times),
-        env_list
+        env_list,
+        ...
       )
 
 
@@ -73,15 +74,15 @@ StepSlugCbp <- R6Class(
       Tr  <- self$hydraulic_conductivity * self$thickness
       S  <- self$specific_storage * self$thickness
 
-      # print(self$radius)
-      # print(self$radius_casing)
-      # print(self$radius_well)
-      # print(self$hydraulic_conductivity)
-      # print(self$specific_storage)
-      # print(self$thickness)
-      # print(self$head_0)
-      # print(self$n_terms)
-      cbp <- list(cbp = cooper_bredehoeft_papadopulos_laplace(
+      print(self$radius)
+      print(self$radius_casing)
+      print(self$radius_well)
+      print(self$hydraulic_conductivity)
+      print(self$specific_storage)
+      print(self$thickness)
+      print(self$head_0)
+      print(self$n_terms)
+      cbp <- list(cooper_bredehoeft_papadopulos_laplace(
         time = new_data[[self$columns]],
         r = self$radius,
         r_c = self$radius_casing,
@@ -92,7 +93,9 @@ StepSlugCbp <- R6Class(
         # prec = 1e-8,
         n_terms = self$n_terms))
 
-      return(cbp)
+      self$new_columns <- self$prefix
+
+      setNames(cbp, self$new_columns)
 
     }
   )

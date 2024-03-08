@@ -63,7 +63,8 @@ StepAquiferLeaky <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = c(as.symbol(time), as.symbol(flow_rate)),
-        env_list
+        env_list,
+        ...
       )
 
 
@@ -84,7 +85,10 @@ StepAquiferLeaky <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
-      hantush_jacob(
+
+      self$new_columns <- self$prefix
+
+      hj <- hantush_jacob(
         new_data[[1]],
         new_data[[2]],
         self$radius,
@@ -93,6 +97,8 @@ StepAquiferLeaky <- R6Class(
         self$leakage,
         self$max_terms
       )
+
+      setnames(hj, self$prefix)
     }
   )
 )

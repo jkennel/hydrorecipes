@@ -57,7 +57,8 @@ StepAquiferGRF <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = c(as.symbol(time), as.symbol(flow_rate)),
-        env_list
+        env_list,
+        ...
       )
 
 
@@ -75,6 +76,9 @@ StepAquiferGRF <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
+
+      self$new_columns <- self$prefix
+
       setNames(grf_time(
         radius = self$radius,
         specific_storage = self$specific_storage,
@@ -83,7 +87,8 @@ StepAquiferGRF <- R6Class(
         time = new_data[[self$time]],
         flow_rate = new_data[[self$flow_rate]],
         flow_dimension = self$flow_dimension
-      ), self$id)
+      ), self$new_columns)
     }
+
   )
 )

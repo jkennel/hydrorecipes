@@ -9,7 +9,7 @@ R6 Class
 R6 Class
 }
 \section{Super class}{
-\code{\link[frecipes:step]{frecipes::step}} -> \code{step_add_vars}
+\code{frecipes::step} -> \code{step_add_vars}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -23,6 +23,7 @@ R6 Class
 <details open><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="frecipes" data-topic="step" data-id="prep"><a href='../../frecipes/html/step.html#method-step-prep'><code>frecipes::step$prep()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="frecipes" data-topic="step" data-id="response"><a href='../../frecipes/html/step.html#method-step-response'><code>frecipes::step$response()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="frecipes" data-topic="step" data-id="tidy"><a href='../../frecipes/html/step.html#method-step-tidy'><code>frecipes::step$tidy()</code></a></span></li>
 </ul>
 </details>
@@ -35,6 +36,13 @@ R6 Class
 \if{html}{\out{<div class="r">}}\preformatted{StepAddVars$new(terms, role = "predictor", ...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{terms}}{name of vars}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-step_add_vars-bake"></a>}}

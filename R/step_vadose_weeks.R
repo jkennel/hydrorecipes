@@ -38,7 +38,8 @@ StepVadoseWeeks <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = c(as.symbol(time)),
-        env_list
+        env_list,
+        ...
       )
 
       # step specific values
@@ -52,13 +53,15 @@ StepVadoseWeeks <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
-      vadose_response(
+      vr <- vadose_response(
         new_data[[1]],
         self$air_diffusivity,
         self$thickness,
         self$precision,
         self$inverse
       )
+      self$new_columns <- self$prefix
+      setnames(vr, self$new_columns)
     }
   )
 )

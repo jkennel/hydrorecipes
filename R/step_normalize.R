@@ -19,7 +19,7 @@ StepNormalize <- R6Class(
   public = list(
     center = c(),
     scale = c(),
-    na_rm = NA,
+    na_rm = TRUE,
     # step specific variables
     initialize = function(terms,
                           role = "predictor",
@@ -32,9 +32,9 @@ StepNormalize <- R6Class(
       env_list$type <- "modify"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
-
 
       self$na_rm <- na_rm
 

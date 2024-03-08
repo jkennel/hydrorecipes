@@ -49,7 +49,8 @@ StepAquiferConstantDrawdown <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = as.symbol(time),
-        env_list
+        env_list,
+        ...
       )
 
 
@@ -68,20 +69,22 @@ StepAquiferConstantDrawdown <- R6Class(
     },
     bake = function(new_data) {
 
+      self$new_columns <- self$prefix
+
       Tr  <- self$hydraulic_conductivity * self$thickness
       S  <- self$specific_storage * self$thickness
 
-      jl <- setNames(list(jacob_lohman_laplace(
+
+      setNames(list(jacob_lohman_laplace(
         time = new_data[[self$columns]],
         s = self$drawdown,
         r = self$radius_well,
         Tr = Tr,
         S = S,
-        prec = 1e-8,
+        prec = 1e-8, # not currently used
         n_terms = self$n_terms
-      )), self$id)
+      )), self$new_columns)
 
-      return(jl)
 
     }
   )

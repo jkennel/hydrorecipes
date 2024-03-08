@@ -33,7 +33,8 @@ StepHarmonic <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
 
@@ -49,6 +50,7 @@ StepHarmonic <- R6Class(
 
       column_name <- self$columns
 
+      self$new_columns <- c()
       hals <- list()
       for (i in seq_along(column_name)) {
         hals[[i]] <- harmonic_list(unclass(new_data)[[i]],
@@ -56,14 +58,39 @@ StepHarmonic <- R6Class(
           start = self$starting_value,
           cycle_size = self$cycle_size
         )
-        nms <- name_columns(self$id, column_name, n_frequency)
-        names(hals[[i]]) <- paste(rep(nms, each = 2L),
+
+        nn <- paste(
+          rep(name_columns(self$prefix, column_name, n_frequency), each = 2L),
           rep(c("sin", "cos"), n_frequency),
           sep = "_"
         )
+
+        names(hals[[i]]) <- nn
+        self$new_columns <- c(self$new_columns, nn)
+
       }
 
       unlist(hals, recursive = FALSE)
+    },
+    response = function(co) {
+
+      f <- self$frequency
+      n <- length(f)
+      x <- rep(f, 2)
+
+      sin_coefficient <- seq(1, n, 2)
+      cos_coefficient <- seq(2, n, 2)
+      amp_phase <- c(
+        sqrt(cos_coefficient^2 + sin_coefficient^2), # amplitude
+        atan2(cos_coefficient, sin_coefficient)      # phase
+      )
+      variable <- c(
+        rep("amplitude", n),
+        rep("phase", n)
+      )
+
+      list(x, variable, value = amp_phase, step_id = self$id)
     }
+
   )
 )

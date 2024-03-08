@@ -36,8 +36,6 @@ R6 Class
 
 \item{\code{result}}{list that holds the created model features.}
 
-\item{\code{checks}}{list that holds the checks.}
-
 \item{\code{vars}}{The variables available from the provided data set.}
 }
 \if{html}{\out{</div>}}

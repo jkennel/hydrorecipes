@@ -38,7 +38,8 @@ StepLeadLag <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
 
@@ -52,6 +53,8 @@ StepLeadLag <- R6Class(
     bake = function(new_data) {
       column_name <- self$columns
 
+      self$new_columns <- c()
+
       ll <- list()
       for (i in seq_along(column_name)) {
         if (self$n_subset == 1) {
@@ -64,15 +67,31 @@ StepLeadLag <- R6Class(
           )
         }
 
-        names(ll[[i]]) <- name_columns(
-          self$id,
+        nn <- name_columns(
+          self$prefix,
           column_name[i],
           length(self$lag)
         )
+
+        names(ll[[i]]) <- nn
+        self$new_columns <- c(self$new_columns, nn)
       }
 
-
+      print(str(ll))
       unlist(ll, recursive = FALSE)
+    },
+    response = function(co) {
+
+      variable <- c(
+        rep("coefficient", n),
+        rep("cumulative", n)
+      )
+      value <- c(
+        co,
+        cumsum(co)
+      )
+
+      list(x = self$lag, variable, value, step_id = self$id)
     }
   )
 )

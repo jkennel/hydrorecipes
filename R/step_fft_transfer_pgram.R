@@ -39,7 +39,8 @@ StepTransferPgram <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
       self$spans <- spans
@@ -59,7 +60,10 @@ StepTransferPgram <- R6Class(
           self$taper
         )
       )
-      names(tf) <- name_columns(self$id, length(tf))
+      self$new_columns <- name_columns(self$prefix, length(tf))
+
+      names(tf) <- self$new_columns
+
       return(tf)
     }
   )

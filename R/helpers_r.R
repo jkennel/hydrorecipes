@@ -68,3 +68,80 @@ rand_id <- function(prefix = "step", len = 5L) {
 #       )
 #
 # }
+
+
+
+# regression helpers ------------------------------------------------------
+# predictors outcomes
+get_regression_data <- function(new_data, term_info, id_type = "predictor") {
+
+  nms <- names(new_data)
+
+  # term info data
+  ti <- collapse::qDF(term_info)
+  ti <- ti[ti$source != "removed", ]
+  ti <- ti[ti$variable %in% nms, ]
+
+  x <- list()
+
+  # create regression matrices
+  x$term_info <- ti[ti$roles == id_type, ]
+  x$term_info$inds <- seq_len(nrow(x$term_info))
+  x$term_info$ids <- which(nms %in% x$term_info$variable)
+
+  x$to_rem <- collapse::missing_cases(new_data)
+  x$data <- collapse::qM(unclass(new_data)[x$term_info$ids])
+
+  x
+
+}
+
+# y = outcomes
+# x = predictors
+determine_coefficients <- function(x, y) {
+
+  # solve
+  fit <- llt_solve(
+    x$data[!x$to_rem, , drop = FALSE],
+    y$data[!y$to_rem, , drop = FALSE]
+  )
+
+  fit
+
+}
+
+subset_groups <- function(x) {
+  split(
+    x$inds,
+    data.table::rleid(x$step_index)
+  )
+}
+
+response_groups <- function(steps, x, fit) {
+  # subsets are the regressor groups
+  subsets <- subset_groups(x$term_info)
+
+  lst <- list()
+  for (i in seq_along(subsets)) {
+    lst[[i]] <- steps[[i]]$response(fit[subsets[[i]], , drop = FALSE])
+  }
+
+  lst
+}
+
+# x = predictors
+predict_groups <- function(x, fit) {
+
+  # subsets are the regressor groups
+  subsets <- subset_groups(x$term_info)
+
+  lst <- list()
+  for (i in seq_along(subsets)) {
+    lst[[i]] <- collapse::mctl(
+      x$data[, subsets[[i]], drop = FALSE] %*%
+        fit[subsets[[i]], , drop = FALSE]
+    )
+  }
+
+  lst
+}

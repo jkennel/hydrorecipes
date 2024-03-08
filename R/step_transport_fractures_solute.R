@@ -95,7 +95,8 @@ StepTransportFracturesSolute <- R6Class(
       super$initialize(terms = c(as.symbol(time),
                                  as.symbol(distance_fracture),
                                  as.symbol(distance_matrix)),
-                       env_list)
+                       env_list,
+                       ...)
 
       # step specific values
       self$time = time
@@ -124,7 +125,7 @@ StepTransportFracturesSolute <- R6Class(
 
     bake = function(new_data) {
 
-      parallel_fractures_solute(
+      pfs <- parallel_fractures_solute(
         new_data[[1]], # time
         new_data[[2]], # z
         new_data[[3]], # x
@@ -143,6 +144,8 @@ StepTransportFracturesSolute <- R6Class(
         self$porosity,
         self$tortuosity,
         self$n_terms)
+      self$new_columns <- self$prefix
+      setnames(pfs, self$new_columns)
     }
   )
 )

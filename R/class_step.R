@@ -38,6 +38,9 @@ Step <- R6Class(
     id = NULL,
     prefix = NULL,
 
+    check = NULL,
+    new_columns = NULL,
+
     initialize = function(terms, ...) {
       if (!missing(terms)) {
         if (length(terms) == 1) {
@@ -53,9 +56,12 @@ Step <- R6Class(
       self$keep_original_cols <- dots$keep_original_cols
       self$step_name <- dots$step_name
       self$type <- dots$type
+      self$prefix <- dots$prefix
 
       # super specific values
-      self$prefix <- gsub("step_", "", self$step_name)
+      if (is.null(self$prefix)) {
+        self$prefix <- gsub("step_", "", self$step_name)
+      }
       self$id <- rand_id(self$prefix)
 
       invisible(self)
@@ -85,6 +91,12 @@ Step <- R6Class(
       } else {
 
       }
+    },
+    response = function(co) {
+      list(x = NA_real_,
+           variable = "coefficient",
+           value = co,
+           step_id = self$id)
     }
   )
 )

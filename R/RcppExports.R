@@ -80,7 +80,7 @@ be_least_squares_cpp <- function(dep, ind, inverse) {
 }
 
 #' @title
-#' be_acworth_cpp need to work on this
+#' be_acworth_calc_cpp
 #'
 #' @description
 #' Acworth, R. I., Halloran, L. J. S., Rau, G. C., Cuthbert, M. O.,
@@ -123,16 +123,58 @@ be_least_squares_cpp <- function(dep, ind, inverse) {
 #'            m2_et = 558.075,
 #'            d_phase=-70.393,
 #'            inverse = TRUE)
-be_acworth_cpp <- function(s2_gw, s2_et, s2_at, m2_gw, m2_et, d_phase, inverse) {
-    .Call(`_frecipes_be_acworth_cpp`, s2_gw, s2_et, s2_at, m2_gw, m2_et, d_phase, inverse)
+be_acworth_calc_cpp <- function(s2_gw, s2_et, s2_at, m2_gw, m2_et, d_phase, inverse) {
+    .Call(`_frecipes_be_acworth_calc_cpp`, s2_gw, s2_et, s2_at, m2_gw, m2_et, d_phase, inverse)
 }
 
-hantush_jacob_gauss_kronrod <- function(t, lab, r, T, S, Q, prec) {
-    .Call(`_frecipes_hantush_jacob_gauss_kronrod`, t, lab, r, T, S, Q, prec)
+get_peaks <- function(freqs, f1, f2) {
+    .Call(`_frecipes_get_peaks`, freqs, f1, f2)
 }
 
-hantush_jacob_quad <- function(t, lab, r, T, S, Q, prec) {
-    .Call(`_frecipes_hantush_jacob_quad`, t, lab, r, T, S, Q, prec)
+be_acworth_cpp <- function(x, spans, detrend, demean, taper, inverse, f1, f2, frequency_scale) {
+    .Call(`_frecipes_be_acworth_cpp`, x, spans, detrend, demean, taper, inverse, f1, f2, frequency_scale)
+}
+
+a_cpp <- function(x) {
+    .Call(`_frecipes_a_cpp`, x)
+}
+
+b_cpp <- function(x) {
+    .Call(`_frecipes_b_cpp`, x)
+}
+
+c_cpp <- function(x) {
+    .Call(`_frecipes_c_cpp`, x)
+}
+
+#' Calculate equations 4 and 5 from bouwer, 1989
+#'
+#' @param rw
+#' @param Le
+#' @param Lw
+#' @param H
+#'
+#' @return ln(Re/rw)
+#'
+bouwer_rice_abc <- function(rw, Le, Lw, H) {
+    .Call(`_frecipes_bouwer_rice_abc`, rw, Le, Lw, H)
+}
+
+#' Calculate transmissivity with Bouwer-Rice solution
+#'
+#' @param time the elapsed time
+#' @param drawdown the drawdown
+#' @param radius_screen radius of the screen
+#' @param radius_casing radius of the casing where the water level is
+#' @param Le
+#' @param Lw
+#' @param H
+#'
+#' @return transmissivity from bouwer_rice
+#'
+#' @export
+bouwer_rice <- function(time, drawdown, radius_screen, radius_casing, Le, Lw, H) {
+    .Call(`_frecipes_bouwer_rice`, time, drawdown, radius_screen, radius_casing, Le, Lw, H)
 }
 
 #' @title
@@ -229,8 +271,9 @@ distributed_lag_list3 <- function(x, n_lag, max_lag, df, degree, internal_knots,
     .Call(`_frecipes_distributed_lag_list3`, x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 
-#' @title
-NULL
+distributed_lag_list4 <- function(x, s, max_lag) {
+    .Call(`_frecipes_distributed_lag_list4`, x, s, max_lag)
+}
 
 #' @title
 NULL
@@ -286,6 +329,21 @@ NULL
 #' @title
 NULL
 
+#' @title
+#' fft_matrix
+#'
+#' @description
+#' Do an FFT for each matrix column
+#'
+#' @param x the matrix that holds the series (numeric matrix)
+#' @param detrend remove the linear trend of the columns (boolean)
+#' @param demean remove the mean for each column (boolean)
+#' @param n_new the padded size (integer)
+#'
+#' @return A matrix with FFT results.
+#'
+#' @noRd
+#'
 fft_matrix <- function(x, n_new) {
     .Call(`_frecipes_fft_matrix`, x, n_new)
 }
@@ -1092,6 +1150,10 @@ which_indices <- function(x, knots) {
     .Call(`_frecipes_which_indices`, x, knots)
 }
 
+gamma_inc <- function(u, a) {
+    .Call(`_frecipes_gamma_inc`, u, a)
+}
+
 #' @title
 #' bessel_k_cplx
 #'
@@ -1117,18 +1179,6 @@ stehfest_v <- function(n) {
 
 stehfest_p <- function(time, n_terms) {
     .Call(`_frecipes_stehfest_p`, time, n_terms)
-}
-
-tth <- function(time) {
-    .Call(`_frecipes_tth`, time)
-}
-
-cch <- function(time) {
-    .Call(`_frecipes_cch`, time)
-}
-
-bbl <- function(time, nu, expon_scaled, n_seq) {
-    .Call(`_frecipes_bbl`, time, nu, expon_scaled, n_seq)
 }
 
 cohen_p <- function(time, n_terms) {

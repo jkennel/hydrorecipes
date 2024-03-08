@@ -259,8 +259,8 @@ results <- bench::press(
                       z = rnorm(rows))
     bench::mark(
       frec = unname(Recipe$new(formula = formula, data = dat)$
-                      add_step(StepLeadLag$new(x, lag = 1:30))$
-                      plate("tbl")),
+                      add_step(StepLeadLag$new(x, lag = 1:30, prefix = "test"))$
+                      plate("df")),
       rec  = unname(recipes::recipe(formula = formula, data = dat) |>
                       recipes::step_lag(x, lag = 1:30) |> 
                       recipes::prep() |> 
@@ -273,6 +273,14 @@ results <- bench::press(
 )
 
 results
+
+
+frec = (Recipe$new(formula = formula, data = dat)$
+                      add_step(StepLeadLag$new(x, lag = 1:30, prefix = "test"))$
+                      plate("tbl"))
+frec = (Recipe$new(formula = formula, data = dat)$
+                      add_step(StepLeadLag$new(x, lag = 1:30))$
+                      plate("tbl"))
 ```
 
 ## step_distributed_lag
@@ -293,9 +301,9 @@ results <- bench::press(
       frec = Recipe$new(formula = formula, data = dat)$
         add_step(StepDistributedLag$new(x,
                                         knots = frecipes:::log_lags_arma(5, 86401)))$plate(),
-      rec  = recipes::recipe(formula = formula, data = dat) |>
-        hydrorecipes::step_distributed_lag(x, 
-                                           knots = frecipes:::log_lags_arma(5, 86401)) |> recipes::prep() |> recipes::bake(new_data = NULL),
+      # rec  = recipes::recipe(formula = formula, data = dat) |>
+      #   hydrorecipes::step_distributed_lag(x, 
+      #                                      knots = frecipes:::log_lags_arma(5, 86401)) |> recipes::prep() |> recipes::bake(new_data = NULL),
       check = FALSE,
       relative = relative,
       min_iterations = 2
@@ -979,6 +987,65 @@ results <- bench::press(
 results
 ```
 
+## step_ols_coefficients
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x+z)
+
+
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(x = rnorm(rows), 
+                      y = rnorm(rows),
+                      z = rnorm(rows))
+    bench::mark(
+      frec = Recipe$new(formula = formula, data = dat)$
+        add_step(StepCenter$new(x))$
+        add_step(StepScale$new(z))$
+        add_step(StepOlsCoefficients$new())$
+        plate(),
+      check = FALSE,
+      relative = relative
+    )
+  }
+)
+
+results
+```
+
+## step_ols_response
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x+z)
+
+
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(x = rnorm(rows), 
+                      y = rnorm(rows),
+                      z = rnorm(rows))
+    bench::mark(
+      frec = Recipe$new(formula = formula, data = dat)$
+        add_step(StepCenter$new(x))$
+        add_step(StepScale$new(z))$
+        add_step(StepOlsResponse$new())$
+        prep()$
+        bake(),
+      check = FALSE,
+      relative = relative
+    )
+  }
+)
+
+results
+```
+
 ## step_ols_gap_fill
 
 ```{r}
@@ -1059,6 +1126,7 @@ results <- bench::press(
 )
 
 results
+
 
 
 ```

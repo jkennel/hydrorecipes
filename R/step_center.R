@@ -36,7 +36,8 @@ StepCenter <- R6Class(
       env_list$type <- "modify"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
       self$na_rm <- na_rm
@@ -53,6 +54,7 @@ StepCenter <- R6Class(
 
     # subtract the central value from a column
     bake = function(new_data) {
+
       for (i in seq_along(self$columns)) {
         new_data[[i]] <- new_data[[i]] - self$column_values[i]
       }

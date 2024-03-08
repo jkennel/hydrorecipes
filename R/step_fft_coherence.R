@@ -28,14 +28,19 @@ StepCoherence <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
       invisible(self)
     },
     bake = function(new_data) {
-      print(new_data)
-      collapse::mctl(ordinary_coherence_phase(collapse::qM(new_data)))
+      cohere <- collapse::mctl(ordinary_coherence_phase(collapse::qM(new_data)))
+      n <- length(new_data)
+      comb <- expand.grid(x = 1:n, y = 1:n)
+      comb <- comb[comb$y > comb$x]
+      self$new_columns <- paste(self$prefix, comb$x, comb$y, sep = "_")
+      setnames(cohere, self$new_columns)
     }
   )
 )

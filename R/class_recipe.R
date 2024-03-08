@@ -38,8 +38,7 @@ Recipe <- R6Class(
     #' @field result list that holds the created model features.
     result = list(),
 
-    #' @field checks list that holds the checks.
-    checks = list(),
+
     #' @field vars The variables available from the provided data set.
     vars = NULL,
 
@@ -141,33 +140,72 @@ Recipe <- R6Class(
           columns <- names(self$result)[1]
         }
 
-        # only one column allowed
-        if (types[i] == "add") {
-          self$result <- append(
+        # modify results
+        self$result <- switch(
+          types[i],
+
+          "add" = append(
             self$result,
-            self$steps[[i]]$bake(unclass(self$result)[columns])
-          )
-        } else if (types[i] == "modify") {
-          self$result <- modifyList(
+            self$steps[[i]]$bake(unclass(self$result)[columns])),
+
+          "modify" = modifyList(
             self$result,
-            self$steps[[i]]$bake(unclass(self$result)[columns])
-          )
-        } else if (types[i] == "supervised_add") {
-          self$result <- append(
+            self$steps[[i]]$bake(unclass(self$result)[columns])),
+
+          "supervise_add" = append(
             self$result,
-            self$steps[[i]]$bake(unclass(self$result), self$term_info)
-          )
-        } else if (types[i] == "check") {
-          self$checks <- append(
-            self$checks,
-            self$steps[[i]]$bake(unclass(self$result)[columns])
-          )
-        } else if (types[i] == "add_from_template") {
-          self$result <- append(
+            self$steps[[i]]$bake(unclass(self$result), self$term_info)),
+
+          "add_from_template" = append(
             self$result,
-            self$steps[[i]]$bake(unclass(self$template)[columns])
-          )
-        }
+            self$steps[[i]]$bake(unclass(self$template)[columns])),
+
+          "supervise_augment" = {self$steps[[i]]$bake(unclass(self$result),
+                                                      self$term_info,
+                                                      self$steps);
+            self$result},
+
+          # default
+          {self$steps[[i]]$bake(unclass(self$result)[columns]);
+            self$result}
+        )
+        print(str(self$result))
+        # modify step
+
+
+
+        # if (types[i] == "add") {
+        #   self$result <- append(
+        #     self$result,
+        #     self$steps[[i]]$bake(unclass(self$result)[columns])
+        #   )
+        # } else if (types[i] == "modify") {
+        #   self$result <- modifyList(
+        #     self$result,
+        #     self$steps[[i]]$bake(unclass(self$result)[columns])
+        #   )
+        # } else if (types[i] == "supervised_add") {
+        #   self$result <- append(
+        #     self$result,
+        #     self$steps[[i]]$bake(unclass(self$result), self$term_info)
+        #   )
+        # } else if (types[i] == "check") {
+        #   self$checks <- append(
+        #     self$checks,
+        #     self$steps[[i]]$bake(unclass(self$result)[columns])
+        #   )
+        # } else if (types[i] == "add_from_template") {
+        #   self$result <- append(
+        #     self$result,
+        #     self$steps[[i]]$bake(unclass(self$template)[columns])
+        #   )
+        # } else if (types[i] == "augment") {
+        #   self$steps[[i]]$bake(unclass(self$template)[columns])
+        # } else if (types[i] == "supervise_augment") {
+        #   self$steps[[i]]$bake(unclass(self$result),
+        #                        self$term_info,
+        #                        self$steps)
+        # }
 
         self$update_term_info(
           step_name = self$steps[[i]]$step_name,
@@ -201,6 +239,8 @@ Recipe <- R6Class(
                                 type = "numeric",
                                 step_name,
                                 step_index) {
+
+
       nms <- names(self$result)
       variable <- setdiff(nms, self$term_info$variable)
       variable_rem <- setdiff(self$term_info$variable, nms)

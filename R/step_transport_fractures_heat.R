@@ -87,7 +87,8 @@ StepTransportFracturesHeat <- R6Class(
       super$initialize(terms = c(as.symbol(time),
                                  as.symbol(distance_fracture),
                                  as.symbol(distance_matrix)),
-                       env_list)
+                       env_list,
+                       ...)
 
       # step specific values
       self$time = time
@@ -115,7 +116,7 @@ StepTransportFracturesHeat <- R6Class(
 
     bake = function(new_data) {
 
-      parallel_fractures_heat(
+      pfh <- parallel_fractures_heat(
         new_data[[1]], # time
         new_data[[2]], # z
         new_data[[3]], # x
@@ -133,6 +134,9 @@ StepTransportFracturesHeat <- R6Class(
         self$density_solids,
         self$porosity,
         self$n_terms)
+
+      self$new_columns <- self$prefix
+      setnames(pfh, self$new_columns)
     }
   )
 )

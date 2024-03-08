@@ -33,7 +33,8 @@ StepKernelFilter <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
 
@@ -51,6 +52,7 @@ StepKernelFilter <- R6Class(
     bake = function(new_data) {
       column_name <- self$columns
 
+      self$new_columns <- c()
       filt <- list()
       for (i in seq_along(column_name)) {
         if (self$align == "center") {
@@ -72,11 +74,15 @@ StepKernelFilter <- R6Class(
           )
         }
 
-        names(filt[[i]]) <- name_columns(
-          self$id,
+        nn <-  name_columns(
+          self$prefix,
           column_name,
           length(self$kernel)
         )
+
+        names(filt[[i]]) <- nn
+        self$new_columns <- c(self$new_columns, nn)
+
       }
 
       unlist(filt, recursive = FALSE)

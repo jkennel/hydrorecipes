@@ -37,7 +37,8 @@ StepWelch <- R6Class(
       env_list$type <- "add"
       super$initialize(
         terms = terms,
-        env_list[names(env_list) != "terms"]
+        env_list[names(env_list) != "terms"],
+        ...
       )
 
       self$length_subset <- length_subset
@@ -54,7 +55,9 @@ StepWelch <- R6Class(
         self$window
       ))
 
-      names(pspec) <- name_columns(self$id, "", n = length(pspec))
+      self$new_columns <- name_columns(self$prefix, "", n = length(pspec))
+
+      names(pspec) <- self$new_columns
 
       return(pspec)
     }
