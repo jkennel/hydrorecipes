@@ -1002,5 +1002,138 @@ Eigen::VectorXi which_indices(const Eigen::VectorXd& x,
 //==============================================================================
 
 
+// // Full-Range Approximation for the Theis Well Function Using Ramanujan’s Series and
+// // Bounds for the Exponential Integral
+// // Manotosh Kumbhakar1, * and Vijay P. Singh1
+// // I'm not sure there is a benefit to using this. boost is just as fast and more
+// // accurate
+//
+// // [[Rcpp::export]]
+// double lg4(double x) {
+//   if(x < 1) {
+//     return(-0.5772156649 - log(abs(x)) * std::exp(x/2.0) *
+//       (x + x*x/4.0 + x*x*x/18.0 + x*x*x*x/144.0 + 23*x*x*x*x*x/28800));
+//   } else {
+//     return(0.7042 * exp(-0.99994*x) * pow((log(1.0 + 1.39/pow(x, 0.8346))), 1.21));
+//   }
+//
+//   return(0);
+// }
+
+
+// [[Rcpp::export]]
+Eigen::ArrayXd gamma_inc(Eigen::ArrayXd u, double a)
+{
+
+  unsigned int n = u.size();
+  double tg = std::tgamma(a);
+
+  if (a < -1.0)
+  {
+    Rcpp::stop("a must be larger than -1.0");
+  }
+  else if (a > 0)
+  {
+    Eigen::ArrayXd v(n);
+    v.setConstant(a);
+
+    u = Eigen::igammac(v, u) * tg;
+    u = (u == 0.0).select(tg, u);
+  }
+  else if (a == 0.0)
+  {
+    // currently this is slower than the expint package
+    for (auto &out : u)
+      out = -boost::math::expint(-out);
+
+    u = (u == 0.0).select(tg, u);
+
+  }
+  else if (a < 0.0 && a >= -1.0)
+  {
+     return(-1.0 * u.pow(a) * (-u).exp() / a + gamma_inc(u, a + 1.0) / a);
+  }
+
+  u = (u == 0.0).select(tg, u);
+
+  return(u);
+}
+
 /*** R
+n <- 1000000
+x <- abs(rnorm(n))
+
+
+bench::mark(
+  (frecipes:::lg4(100.0)),
+  (frecipes:::lg4(0.01)),
+  (frecipes:::lg3(0.0, 100.0)),
+  (frecipes:::lg2(100.0, 0.0)),
+  (frecipes:::lg2(0.0, 100.0)),
+  (frecipes:::lg2(0.0, 0.01)),
+  expint:::expint(100.0),
+  expint:::expint(0.01),
+  check = FALSE
+)
+
+
+bench::mark(
+(frecipes:::gamma_inc(x, 0.0)),
+(expint::gammainc(0.0, x))
+)
+
+bench::mark(
+  (frecipes:::gamma_inc(x, -0.5)),
+  (expint::gammainc(-0.5, x))
+)
+
+bench::mark(
+  (frecipes:::gamma_inc(x, 1.0)),
+  (expint::gammainc(1.0, x))
+)
+
+bench::mark(
+  (frecipes:::gamma_inc(x, 2.2)),
+  (expint::gammainc(2.2, x))
+)
+
+bench::mark(
+  (frecipes:::gamma_inc(x, 3.0)),
+  (expint::gammainc(3.0, x)),
+)
+
+head((frecipes:::gamma_inc(x, 1.2)))
+head((expint::gammainc(1.2, x)))
+
+bench::mark(
+
+# head(frecipes:::lg2(2.0, x)),
+head(expint::gammainc(2.0,x)),
+head(frecipes:::lg(a, x)),
+check=TRUE
+
+)
+head(expint::gammainc(0.0,x))
+head(expint::gammainc(1.0,x))
+head(expint::gammainc(2.0,x))
+head(expint::gammainc(3.0,x))
+head(expint_Ei(-x))
+head(frecipes:::ei(x))
+head(frecipes:::exp_int(x[1]))
+
+a <- rep(1.0, 5)
+x <- c(0.2, 2.5, 5, 8, 10)
+gammainc(a[1], x)
+gammainc(-a[1], x)
+head((frecipes:::lg2(a, x)) * abs(a))
+head((frecipes:::lg(a, x)) * abs(a))
+
+gammainc(a[1], c(0.2, 2.5, 5, 8, 10))
+gammainc(c(0.2, 2.5, 5, 8, 10), a[1])
+
+head(frecipes:::lg(a, c(0.2,2.5, 5, 8, 10)) * 1.0 / abs(a))
+
+
+head(frecipes:::lg2(a, -c(0.2,2.5, 5, 8, 10)))
+gammainc(-a[1], c(0.2, 2.5, 5, 8, 10))
 */

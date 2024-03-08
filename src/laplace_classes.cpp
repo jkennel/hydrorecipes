@@ -86,7 +86,7 @@ struct CooperBredehoeftPapadopulos
       return(p);
     }
 
-    double q = sqrt(p * S / Tr);
+    double q = sqrt((p * S) / Tr);
 
     double bk_rw = std::cyl_bessel_k(0.0, r_w * q);
     double bk_r = bk_rw;
@@ -776,29 +776,29 @@ Eigen::MatrixXd stehfest_p(
 }
 
 
-// [[Rcpp::export]]
-std::complex<double> tth(
-    std::complex<double> time)
-{
-  return(std::tanh(time));
-}
+// // [[Rcpp::export]]
+// std::complex<double> tth(
+//     std::complex<double> time)
+// {
+//   return(std::tanh(time));
+// }
+//
+// // [[Rcpp::export]]
+// std::complex<double> cch(
+//     std::complex<double> time)
+// {
+//   return(std::cosh(time));
+// }
 
-// [[Rcpp::export]]
-std::complex<double> cch(
-    std::complex<double> time)
-{
-  return(std::cosh(time));
-}
-
-// [[Rcpp::export]]
-Rcpp::ComplexVector bbl(
-    Rcpp::ComplexVector time,
-    double nu,
-    bool expon_scaled,
-    size_t n_seq)
-{
-  return(specialfunctions::bessel_k_cplx(time, 0, false, 1));
-}
+// // [[Rcpp::export]]
+// Rcpp::ComplexVector bbl(
+//     Rcpp::ComplexVector time,
+//     double nu,
+//     bool expon_scaled,
+//     size_t n_seq)
+// {
+//   return(specialfunctions::bessel_k_cplx(time, 0, false, 1));
+// }
 
 
 template <typename T>
@@ -990,6 +990,14 @@ Eigen::VectorXd cooper_bredehoeft_papadopulos_laplace(
     double h_0,
     int n_terms)
 {
+
+  Rcpp::Rcout << "The value is r " << r << std::endl;
+  Rcpp::Rcout << "The value is r_c " << r_c << std::endl;
+  Rcpp::Rcout << "The value is r_w " << r_w << std::endl;
+  Rcpp::Rcout << "The value is Tr " << Tr << std::endl;
+  Rcpp::Rcout << "The value is S " << S << std::endl;
+  Rcpp::Rcout << "The value is h_0 " << h_0 << std::endl;
+
 
   CooperBredehoeftPapadopulos well(time, r, r_c, r_w, Tr, S, h_0);
   Eigen::VectorXd out = stehfest(well, n_terms);
@@ -1222,7 +1230,7 @@ Eigen::VectorXd parallel_fractures_heat(
 
 /*** R
 n <- 10000
-time = c(1e-6, 1:86400)
+time = c(0, 1:86400)
 # CooperBredehoeftPapadopulos well(time, r, r_c, r_w, Tr, S, h_0);
 
 kern_slug <- frecipes:::cooper_bredehoeft_papadopulos_laplace(time,

@@ -2,42 +2,42 @@
 
 //==============================================================================
 //' @title
- //' fft_matrix
- //'
- //' @description
- //' Do an FFT for each matrix column
- //'
- //' @param x the matrix that holds the series (numeric matrix)
- //' @param detrend remove the linear trend of the columns (boolean)
- //' @param demean remove the mean for each column (boolean)
- //' @param n_new the padded size (integer)
- //'
- //' @return A matrix with FFT results.
- //'
- //' @noRd
- //'
- // [[Rcpp::export]]
- Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
-                             size_t n_new) {
+//' fft_matrix
+//'
+//' @description
+//' Do an FFT for each matrix column
+//'
+//' @param x the matrix that holds the series (numeric matrix)
+//' @param detrend remove the linear trend of the columns (boolean)
+//' @param demean remove the mean for each column (boolean)
+//' @param n_new the padded size (integer)
+//'
+//' @return A matrix with FFT results.
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
+                            size_t n_new) {
 
-   size_t n_row = x.rows();
-   size_t n_col = x.cols();
+  size_t n_row = x.rows();
+  size_t n_col = x.cols();
 
-   VectorXcd x_fft(n_new);
-   VectorXd  x_padded(n_new);
-   MatrixXcd out(n_new, n_col);
+  VectorXcd x_fft(n_new);
+  VectorXd  x_padded(n_new);
+  MatrixXcd out(n_new, n_col);
 
-   Eigen::FFT<double> fft;
+  Eigen::FFT<double> fft;
 
-   for (size_t i = 0; i < n_col; ++i) {
-     x_padded = pad_vector(x.col(i), n_row, n_new);
-     fft.fwd(x_fft, x_padded, 0);
-     out.col(i) = x_fft;
-   }
+  for (size_t i = 0; i < n_col; ++i) {
+    x_padded = pad_vector(x.col(i), n_row, n_new);
+    fft.fwd(x_fft, x_padded, 0);
+    out.col(i) = x_fft;
+  }
 
 
-   return(out);
- }
+  return(out);
+}
 //==============================================================================
 
 
@@ -1045,7 +1045,7 @@ std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
 
    // pgram_mat = fill_lower_left(pgram_mat, n_col, start);
 
-   pgram_mat.row(0) = 0.5 * (pgram_mat.row(1).array() + pgram_mat.row(n_new-1).array());
+   pgram_mat.row(0) = 0.5 * (pgram_mat.row(1).array() + pgram_mat.row(n_new - 1).array());
    pgram_mat *= scale;
 
    // MatrixXd m =  pgram_mat.cwiseAbs2();
@@ -1416,7 +1416,7 @@ Eigen::MatrixXd list_to_matrix(Rcpp::List& x, int sub_start, int sub_end) {
 
    diag(0) = 0;
    for (size_t k = 0; k < sub_size; ++k) {
-     diag(k+1) = diag(k) + n_col - k;
+     diag(k + 1) = diag(k) + n_col - k;
    }
 
    for (size_t i = 0; i < sub_size; ++i) {
@@ -1779,8 +1779,6 @@ Eigen::MatrixXcd transfer_pgram(Eigen::MatrixXd& x,
   return(out);
 }
 //==============================================================================
-
-
 
 
 //==============================================================================

@@ -8,7 +8,7 @@
 predictions from different steps.
 }
 \section{Super class}{
-\code{\link[frecipes:step]{frecipes::step}} -> \code{step_ols_predict}
+\code{frecipes::step} -> \code{step_ols_predict}
 }
 \section{Methods}{
 \subsection{Public methods}{

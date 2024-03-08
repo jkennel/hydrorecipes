@@ -7,13 +7,14 @@
 `StepLeadLag` generates lagged (or leading) vectors.
 }
 \section{Super class}{
-\code{\link[frecipes:step]{frecipes::step}} -> \code{step_lead_lag}
+\code{frecipes::step} -> \code{step_lead_lag}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-step_lead_lag-new}{\code{StepLeadLag$new()}}
 \item \href{#method-step_lead_lag-bake}{\code{StepLeadLag$bake()}}
+\item \href{#method-step_lead_lag-response}{\code{StepLeadLag$response()}}
 \item \href{#method-step_lead_lag-clone}{\code{StepLeadLag$clone()}}
 }
 }
@@ -60,6 +61,15 @@ of the series. Default is 0.}
 \subsection{Method \code{bake()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StepLeadLag$bake(new_data)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-step_lead_lag-response"></a>}}
+\if{latex}{\out{\hypertarget{method-step_lead_lag-response}{}}}
+\subsection{Method \code{response()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{StepLeadLag$response(co)}\if{html}{\out{</div>}}
 }
 
 }

@@ -345,8 +345,26 @@ Rcpp::List distributed_lag_list3(Eigen::VectorXd x,
   if (n_x < max_lag * 10) {
     return(convolve_list(x, s, true, true));
   }
+
   return(convolve_overlap_save_list(x, s, 0));
 }
+
+// [[Rcpp::export]]
+Rcpp::List distributed_lag_list4(Eigen::VectorXd x,
+                                 Rcpp::List s,
+                                 unsigned int max_lag
+) {
+
+  unsigned int n_x = x.size();
+
+  if (n_x < max_lag * 10) {
+    return(convolve_list(x, s, true, true));
+  }
+
+  return(convolve_overlap_save_list(x, s, 0));
+}
+
+
 
 /*** R
 

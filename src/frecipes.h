@@ -1,4 +1,5 @@
 // [[Rcpp::depends(BH)]]
+
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(RcppThread)]]
@@ -15,16 +16,16 @@
 #include <unsupported/Eigen/SpecialFunctions>
 
 // #include <boost/math/special_functions/gamma.hpp>
-// #include <boost/math/special_functions/expint.hpp>
+#include <boost/math/special_functions/expint.hpp>
 // #include <boost/math/special_functions/erf.hpp>
 // #include <boost/math/special_functions/factorials.hpp>
 // #include <boost/math/special_functions/bessel.hpp>
-#include <boost/math/quadrature/gauss_kronrod.hpp>
+// #include <boost/math/quadrature/gauss_kronrod.hpp>
 
 #include <Eigen/Eigenvalues>
 #include <fftw3.h>
 #include <splines2Armadillo.h>
-#include <specialfunctions.h>
+// #include <specialfunctions.h>
 
 #include <RcppEigen.h>
 #include <RcppThread.h>
@@ -44,6 +45,14 @@ using Eigen::VectorXd;
 using Eigen::VectorXi;
 
 using Eigen::FFT;
+
+
+//==============================================================================
+// lm_eigen.cpp
+Eigen::MatrixXd llt_solve(Eigen::Map<Eigen::MatrixXd> &X,
+                          Eigen::Map<Eigen::MatrixXd> &Y);
+Eigen::MatrixXd llt_fitted(Eigen::Map<Eigen::MatrixXd> &X,
+                           Eigen::Map<Eigen::MatrixXd> &Y);
 
 //==============================================================================
 // lags.cpp
@@ -106,7 +115,7 @@ Eigen::MatrixXcd check_ffts(Eigen::MatrixXcd &x,
                             double cutoff);
 Eigen::VectorXi which_indices(const Eigen::VectorXd &x,
                               const Eigen::VectorXd &knots);
-
+Eigen::ArrayXd gamma_inc(Eigen::ArrayXd u, double a);
 //==============================================================================
 // fft_windows.cpp
 Eigen::VectorXd window_hann(size_t n);

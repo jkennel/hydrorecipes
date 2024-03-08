@@ -8,7 +8,7 @@
 and the central value by the mean.
 }
 \section{Super class}{
-\code{\link[frecipes:step]{frecipes::step}} -> \code{step_normalize}
+\code{frecipes::step} -> \code{step_normalize}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -22,6 +22,7 @@ and the central value by the mean.
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
+<li><span class="pkg-link" data-pkg="frecipes" data-topic="step" data-id="response"><a href='../../frecipes/html/step.html#method-step-response'><code>frecipes::step$response()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="frecipes" data-topic="step" data-id="tidy"><a href='../../frecipes/html/step.html#method-step-tidy'><code>frecipes::step$tidy()</code></a></span></li>
 </ul>
 </details>

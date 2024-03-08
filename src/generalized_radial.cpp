@@ -264,8 +264,8 @@ Rcpp::List grf_time(const double radius,
                     const double specific_storage,
                     const double hydraulic_conductivity,
                     const double thickness,
-                    const Rcpp::NumericVector time,
-                    const Rcpp::NumericVector flow_rate,
+                    Eigen::VectorXd time,
+                    Eigen::VectorXd flow_rate,
                     const double flow_dimension)
 {
 
@@ -278,7 +278,9 @@ Rcpp::List grf_time(const double radius,
     Rcpp::stop("The number of times and flow_rate should be the same");
   }
 
-  const double v = (flow_dimension / 2.0) - 1.0;
+  // const double v = (flow_dimension / 2.0) - 1.0;
+  Eigen::VectorXd v(n_time);
+  v.setConstant((flow_dimension / 2.0) - 1.0);
 
   // calculate the constant part
   double u_const = grf_u(radius, specific_storage, hydraulic_conductivity);
@@ -287,17 +289,27 @@ Rcpp::List grf_time(const double radius,
                                       thickness,
                                       flow_dimension);
 
-  Rcpp::NumericVector coef = coef_const * flow_rate;
-  Rcpp::NumericVector u = u_const / time;
+  Eigen::VectorXd coef = coef_const * flow_rate.array();
+  Eigen::VectorXd u = u_const / time.array();
+  Rcpp::Rcout << "u: " << u << std::endl;
 
-  u = specialfunctions::gamma_inc_rcpp(u, v);
-  u = impulse_function_rcpp(u);
+  u = Eigen::igammac(v.array(), u.array());
+  Rcpp::Rcout << "u: " << u << std::endl;
+  u = impulse_function_eigen(u);
 
-  Eigen::VectorXd u_eig(Rcpp::as<Eigen::VectorXd>(u));
-  Eigen::VectorXd coef_eig(Rcpp::as<Eigen::VectorXd>(coef));;
+  Rcpp::Rcout << "v: " << v << std::endl;
 
+  // u = specialfunctions::gamma_inc_rcpp(u, v);
+  // u = impulse_function_rcpp(u);
+
+  // Eigen::VectorXd u_eig(Rcpp::as<Eigen::VectorXd>(u));
+  // Eigen::VectorXd coef_eig(Rcpp::as<Eigen::VectorXd>(coef));;
+
+  // return Rcpp::List::create(
+  //   Rcpp::Named("generalized_radial") = convolve_filter(u_eig, coef_eig, false, true)
+  // );
   return Rcpp::List::create(
-    Rcpp::Named("generalized_radial") = convolve_filter(u_eig, coef_eig, false, true)
+    Rcpp::Named("generalized_radial") = convolve_filter(u, coef, false, true)
   );
 
 }
@@ -365,7 +377,9 @@ Rcpp::List grf_time(const double radius,
    Eigen::VectorXd coef(n_time);
    Eigen::VectorXd wf(n_time);
    // std::vector<double> impulse(n_time);
-   std::vector<double> u(n_time);
+   // std::vector<double> u(n_time);
+   Eigen::VectorXd u(n_time);
+
    double distance;
    double u_const;
    double coef_const;
@@ -385,12 +399,14 @@ Rcpp::List grf_time(const double radius,
                                     flow_dimension);
        coef = coef_const * flow_rate.col(j);
        wf = u_const / time.array();
-       VectorXd::Map(&u[0], n_time) = wf;
 
-       u = specialfunctions::gamma_inc_vec(u, v);
-       u = impulse_function(u);
+       u = gamma_inc(u.array(), v);
+       // VectorXd::Map(&u[0], n_time) = wf;
 
-       wf = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(u.data(), n_time);
+       // u = specialfunctions::gamma_inc_vec(u, v);
+       u = impulse_function_eigen(u);
+
+       // wf = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(u.data(), n_time);
 
        output.row(i) += convolve_filter(wf, coef, false, true);
 
@@ -577,7 +593,7 @@ check = FALSE
 )
 
 x <- abs(rnorm(1000000))
-bench::mark(frecipes:::ei_bh_vec(x),
+bench::mark(
             frecipes:::ei_sp_vec(x),
             frecipes:::ei_vec(x),
             frecipes:::ei_eigen(x),
