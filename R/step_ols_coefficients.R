@@ -17,16 +17,11 @@ StepOlsCoefficients <- R6Class(
   public = list(
 
     # step specific variables
-    # ols_results = list(),
     outcomes = NULL,
     predictors = NULL,
     coefficients = NULL,
     response = NULL,
-    # residuals = NULL,
-    # s = NULL,
-    # df_residual = NULL,
-    # rank = NULL,
-    # std_error = NULL,
+
 
     initialize = function(terms,
                           role = "augment",

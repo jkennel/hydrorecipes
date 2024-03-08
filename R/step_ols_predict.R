@@ -48,9 +48,7 @@ StepOlsPredict <- R6Class(
 
       x <- get_regression_data(new_data, term_info, id_type = "predictor")
       y <- get_regression_data(new_data, term_info, id_type = "outcome")
-      print(str(x))
-      print(str(y))
-      print(self$coefficients)
+
       self$coefficients <- determine_coefficients(x, y)
 
       lst <- predict_groups(x, self$coefficients)

@@ -45,40 +45,78 @@ StepOlsGapFill <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
+
       rec <- self$recipe
       rec <- rec$prep()$bake(data = new_data)
-      ti <- collapse::qDF(rec$term_info)
-      ti <- ti[ti$source != "removed", ]
       dat <- rec$plate(type = "list")
-      nms <- names(dat)
 
-      outcomes <- ti[ti$roles == "outcome", ]
-      predictors <- ti[ti$roles == "predictor", ]
+      x <- get_regression_data(dat, rec$term_info, id_type = "predictor")
+      y <- get_regression_data(dat, rec$term_info, id_type = "outcome")
 
-      outcome_ids <- which(nms %in% outcomes$variable)
-      predictor_ids <- which(nms %in% predictors$variable)
+      mode(x$data) <- "double"
+      mode(y$data) <- "double"
 
-      m_predictors <- collapse::qM(unclass(dat)[predictor_ids])
-      m_outcomes <- collapse::qM(unclass(dat)[outcome_ids])
-      mode(m_predictors) <- "double"
-      mode(m_outcomes) <- "double"
+      # ti <- collapse::qDF(rec$term_info)
+      # ti <- ti[ti$source != "removed", ]
+
+
+
+      # outcomes <- ti[ti$roles == "outcome", ]
+      # predictors <- ti[ti$roles == "predictor", ]
+      #
+      # outcome_ids <- which(nms %in% outcomes$variable)
+      # predictor_ids <- which(nms %in% predictors$variable)
+      #
+      # m_predictors <- collapse::qM(unclass(dat)[predictor_ids])
+      # m_outcomes <- collapse::qM(unclass(dat)[outcome_ids])
 
       # remove na values in the outcomes
-      wh <- which(!is.na(m_outcomes))
+      self$coefficients <- determine_coefficients(x, y)
 
-      # solve
-      fit <- llt_solve(
-        m_predictors[wh, , drop = FALSE],
-        m_outcomes[wh, , drop = FALSE]
-      )
-      self$coefficients <- fit
 
-      lst <- collapse::mctl(m_predictors[, , drop = FALSE] %*% fit[, , drop = FALSE])
+      lst <- collapse::mctl(x$data[, , drop = FALSE] %*% self$coefficients[, , drop = FALSE])
 
-      self$new_columns <- name_columns(self$prefix, outcomes$variable, length(outcome_ids))
+      self$new_columns <- name_columns(self$prefix, colnames(y$data), ncol(y$data))
       names(lst) <- self$new_columns
 
       lst
+
+      # rec <- self$recipe
+      # rec <- rec$prep()$bake(data = new_data)
+      # ti <- collapse::qDF(rec$term_info)
+      # ti <- ti[ti$source != "removed", ]
+      # dat <- rec$plate(type = "list")
+      # nms <- names(dat)
+      #
+      #
+      #
+      # outcomes <- ti[ti$roles == "outcome", ]
+      # predictors <- ti[ti$roles == "predictor", ]
+      #
+      # outcome_ids <- which(nms %in% outcomes$variable)
+      # predictor_ids <- which(nms %in% predictors$variable)
+      #
+      # m_predictors <- collapse::qM(unclass(dat)[predictor_ids])
+      # m_outcomes <- collapse::qM(unclass(dat)[outcome_ids])
+      # mode(m_predictors) <- "double"
+      # mode(m_outcomes) <- "double"
+      #
+      # # remove na values in the outcomes
+      # wh <- which(!is.na(m_outcomes))
+      #
+      # # solve
+      # fit <- llt_solve(
+      #   m_predictors[wh, , drop = FALSE],
+      #   m_outcomes[wh, , drop = FALSE]
+      # )
+      # self$coefficients <- fit
+      #
+      # lst <- collapse::mctl(m_predictors[, , drop = FALSE] %*% fit[, , drop = FALSE])
+      #
+      # self$new_columns <- name_columns(self$prefix, outcomes$variable, length(outcome_ids))
+      # names(lst) <- self$new_columns
+      #
+      # lst
     }
   )
 )

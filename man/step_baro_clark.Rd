@@ -41,6 +41,13 @@ dat <- data.frame(x = as.numeric(1:rows),
 formula <- as.formula(y~x)
 
 }
+\references{
+Clark, W.E., 1967. Computing the barometric efficiency of a well. Journal
+of the Hydraulics Division, 93(4), pp.93-98.
+
+Batu, V., 1998. Aquifer hydraulics: a comprehensive guide to hydrogeologic
+data analysis. John Wiley & Sons.
+}
 \seealso{
 Other barometric: 
 \code{\link{StepBaroAcworth}},

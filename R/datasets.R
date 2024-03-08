@@ -5,6 +5,28 @@
 # tf <- fread('/media/kennel/Data/tmp/stockdale_mountain.csv')
 
 
+# Kennel 2020 -------------------------------------------------------------
+#' @title
+#' kennel_2020
+#'
+#' @description SSFL 2016-08-18 00:00:00 to 2016-10-13 12:00:00 barometric
+#' pressure and water pressure data from the same hole.
+#' 1 minute interval, pressures in dbar, RBRsoloD 20dbar
+#'
+#' @docType data
+#'
+#' @usage data(kennel_2020)
+#'
+#' @format data.table
+#'
+#' @keywords datasets
+#'
+#'
+#' @examples
+#' data(kennel_2020)
+"kennel_2020"
+
+
 # Bouwer & Rice 1976 ------------------------------------------------------
 #' @title
 #' bouwer
@@ -24,6 +46,7 @@
 #' @examples
 #' data(bouwer)
 "bouwer"
+
 
 #' @title
 #' bouwer_1976_abc
@@ -65,7 +88,6 @@
 #' @examples
 #' data(bouwer_1976_water_level)
 "bouwer_1976_water_level"
-
 
 
 # Rojstaczer & Riley 1990 -------------------------------------------------

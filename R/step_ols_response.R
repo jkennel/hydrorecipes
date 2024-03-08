@@ -17,16 +17,10 @@ StepOlsResponse <- R6Class(
   public = list(
 
     # step specific variables
-    # ols_results = list(),
     outcomes = NULL,
     predictors = NULL,
     coefficients = NULL,
     response_data = NULL,
-    # residuals = NULL,
-    # s = NULL,
-    # df_residual = NULL,
-    # rank = NULL,
-    # std_error = NULL,
 
     initialize = function(terms,
                           role = "augment",
@@ -47,8 +41,6 @@ StepOlsResponse <- R6Class(
     bake = function(new_data, term_info, steps) {
       x <- get_regression_data(new_data, term_info, id_type = "predictor")
       y <- get_regression_data(new_data, term_info, id_type = "outcome")
-      print(str(x))
-      print(str(y))
 
       self$coefficients <- determine_coefficients(x, y)
 

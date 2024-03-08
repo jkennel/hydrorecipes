@@ -24,6 +24,12 @@ It diverges in a few ways:
 
 
 To do:
+- Change modelling steps to recipe function?
+  - response
+  - predict
+  - coefficients
+  - fft
+  - baro
 - Explore convolution methods for Laplace solutions
 - Optimize Laplace solutions
 - Fix selectors
