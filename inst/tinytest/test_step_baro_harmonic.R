@@ -1,6 +1,13 @@
 
 # no earth tides all methods should be equivalent
 data("kennel_2020")
+library(data.table)
+library(collapse)
+
+f <- (transfer_pgram(qM(kennel_2020[, .(wl, baro, et)]), c(3,7),
+                                        TRUE, FALSE, taper = 0.4))
+b <- brf_from_frf(f[, 1])
+plot(b[seq(1, length(b), length.out = 10000)], type = 'l', log = 'x')
 
 kennel_2020[, et := 0.0]
 kennel_2020[, wl := 0.3 * baro]

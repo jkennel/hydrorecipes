@@ -917,7 +917,7 @@ step_ols_response <- function(.rec,
 
   terms <- NULL
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepOlsGapFill$new,
+  .rec$add_step(do.call(StepOlsResponse$new,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

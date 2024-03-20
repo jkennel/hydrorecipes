@@ -77,7 +77,6 @@ StepDistributedLag <- R6Class(
     bake = function(new_data) {
 
       column_name <- self$columns
-      print('here')
       dl <- list()
       for (i in seq_along(column_name)) {
 

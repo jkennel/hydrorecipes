@@ -107,7 +107,9 @@ Recipe <- R6Class(
     prep = function(retain = TRUE) {
       # currently this is run twice for the first step
       self$tr_info <- self$train_info()
-      print(self$term_info)
+
+      # print(self$term_info)
+
       for (i in seq_along(self$steps)) {
         self$steps[[i]]$prep(unclass(self$template), self$term_info)
       }
@@ -131,12 +133,11 @@ Recipe <- R6Class(
       types_loop <- seq_along(types)
 
 
-      print('here')
       if (is.null(data)) {
         # remove any previously baked
         if (any(baked)) {
           types_loop <- types_loop[-baked]
-          print(types_loop)
+          # print(types_loop)
         }
 
       } else {

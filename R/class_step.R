@@ -80,10 +80,10 @@ Step <- R6Class(
     },
     tidy = function(i) {
 
-      print(i)
-      print(self$columns)
-      print(self$new_columns)
-      print(self$role)
+      # print(i)
+      # print(self$columns)
+      # print(self$new_columns)
+      # print(self$role)
 
       if (is.null(self$new_columns)) {
         self$new_columns <- self$columns
