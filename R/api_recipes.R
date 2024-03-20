@@ -911,11 +911,10 @@ step_normalize <- function(.rec,
 #'
 step_ols_response <- function(.rec,
                               formula,
-                              recipe,
-                              role = "predictor",
+                              role = "augment",
                               ...){
 
-  terms <- NULL
+  # terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepOlsResponse$new,
                         env_list))
