@@ -4,6 +4,16 @@ data("kennel_2020")
 library(data.table)
 library(collapse)
 
+formula <- as.formula(wl~.)
+frec = frecipes::recipe(formula, kennel_2020) |>
+  step_distributed_lag(baro, knots = log_lags_arma(20, 1440)) |>
+  step_ols_response(formula) |>
+  prep() |>
+  bake()
+frec$get_response_data('dt')[variable == "cumulative"]
+
+
+
 f <- (transfer_pgram(qM(kennel_2020[, .(wl, baro, et)]), c(3,7),
                                         TRUE, FALSE, taper = 0.4))
 b <- brf_from_frf(f[, 1])

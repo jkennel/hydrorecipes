@@ -52,7 +52,7 @@ StepOlsResponse <- R6Class(
       # column names in term info
       co_names <- x$term_info$variable
 
-      print(x$term_info)
+      # print(x$term_info)
       resp <- list()
       for (i in seq_along(steps)) {
         wh  <- collapse::whichv(x$term_info$step_index, i)

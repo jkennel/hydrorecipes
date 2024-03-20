@@ -320,7 +320,8 @@ Recipe <- R6Class(
     #' @return integer vector of indices
     get_response_data = function(type = "df") {
 
-      resp <- get_step_data("response")
+      resp <- self$get_step_data("response_data")
+      print(resp)
       resp <- collapse::rowbind(resp)
       return_type(resp, type = type)
 
