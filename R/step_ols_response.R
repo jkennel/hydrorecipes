@@ -21,30 +21,56 @@ StepOlsResponse <- R6Class(
     predictors = NULL,
     coefficients = NULL,
     response_data = NULL,
+    formula = NULL,
 
-    initialize = function(terms,
+    initialize = function(formula,
                           role = "augment",
                           ...) {
       # get function parameters to pass to parent
-      terms <- substitute(terms)
+      # terms <- substitute(terms)
       env_list <- get_function_arguments()
       env_list$step_name <- "step_ols_response"
       env_list$type <- "supervise_augment"
       super$initialize(
-        terms = terms,
+        terms = NULL,
         env_list[names(env_list) != "terms"],
         ...
       )
 
+      self$formula <- formula
+
       invisible(self)
     },
     bake = function(new_data, term_info, steps) {
+
       x <- get_regression_data(new_data, term_info, id_type = "predictor")
       y <- get_regression_data(new_data, term_info, id_type = "outcome")
 
+
       self$coefficients <- determine_coefficients(x, y)
 
-      self$response_data <- response_groups(steps, x, self$coefficients)
+      # column names in term info
+      co_names <- x$term_info$variable
+
+      print(x$term_info)
+      resp <- list()
+      for (i in seq_along(steps)) {
+        wh  <- collapse::whichv(x$term_info$step_index, i)
+        co_name <- co_names[wh]
+
+        if(length(co_name) > 0) {
+          co <- self$coefficients[wh, , drop = TRUE]
+          resp[[i]] <- steps[[i]]$response(co)
+          if (!"term" %in% names(resp[[i]])) {
+            resp[[i]]$term <- co_name
+          }
+        }
+      }
+      resp <- collapse::rowbind(resp)
+
+      # save the response
+      self$response_data <-
+        append(resp, list(ols = rep.int(self$id, length(resp[[1]]))))
 
       return(NULL)
     }

@@ -291,13 +291,13 @@ Rcpp::List grf_time(const double radius,
 
   Eigen::VectorXd coef = coef_const * flow_rate.array();
   Eigen::VectorXd u = u_const / time.array();
-  Rcpp::Rcout << "u: " << u << std::endl;
+  // Rcpp::Rcout << "u: " << u << std::endl;
 
   u = Eigen::igammac(v.array(), u.array());
-  Rcpp::Rcout << "u: " << u << std::endl;
+  // Rcpp::Rcout << "u: " << u << std::endl;
   u = impulse_function_eigen(u);
 
-  Rcpp::Rcout << "v: " << v << std::endl;
+  // Rcpp::Rcout << "v: " << v << std::endl;
 
   // u = specialfunctions::gamma_inc_rcpp(u, v);
   // u = impulse_function_rcpp(u);

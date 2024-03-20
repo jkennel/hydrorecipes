@@ -21,7 +21,7 @@ StepCheckSpacing <- R6Class(
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
-      print(env_list)
+      # print(env_list)
       env_list$step_name <- "step_check_spacing"
       env_list$type <- "check"
       super$initialize(

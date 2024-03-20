@@ -74,14 +74,14 @@ StepSlugCbp <- R6Class(
       Tr  <- self$hydraulic_conductivity * self$thickness
       S  <- self$specific_storage * self$thickness
 
-      print(self$radius)
-      print(self$radius_casing)
-      print(self$radius_well)
-      print(self$hydraulic_conductivity)
-      print(self$specific_storage)
-      print(self$thickness)
-      print(self$head_0)
-      print(self$n_terms)
+      # print(self$radius)
+      # print(self$radius_casing)
+      # print(self$radius_well)
+      # print(self$hydraulic_conductivity)
+      # print(self$specific_storage)
+      # print(self$thickness)
+      # print(self$head_0)
+      # print(self$n_terms)
       cbp <- list(cooper_bredehoeft_papadopulos_laplace(
         time = new_data[[self$columns]],
         r = self$radius,

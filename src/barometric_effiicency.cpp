@@ -40,7 +40,7 @@ double be_clark_cpp(arma::vec dep,
     dep = -dep;
   }
 
-  dep = cumsum((arma::sign(dep) % arma::sign(ind)) % abs(dep));
+  dep = arma::cumsum((arma::sign(dep) % arma::sign(ind)) % abs(dep));
   ind = arma::cumsum(abs(ind));
 
   ret = arma::solve(ind, dep);
@@ -141,78 +141,105 @@ double be_least_squares_cpp(arma::vec dep,
   return ret(0);
 }
 
-//' @title
-//' be_acworth_calc_cpp
-//'
-//' @description
-//' Acworth, R. I., Halloran, L. J. S., Rau, G. C., Cuthbert, M. O.,
-//'  & Bernardi, T. L. (2016). An objective frequency-domain method for
-//'   quantifying confined aquifer compressible storage using Earth and
-//'   atmospheric tides. Geophysical Research Letters, 43(November).
-//'   https://doi.org/10.1002/2016GL071328
-//'
-//' @param s2_gw \code{numeric} s2 component in the groundwater levels
-//' @param s2_et \code{numeric} s2 component in the earth tides
-//' @param s2_at \code{numeric} s2 component for atmospheric pressure
-//' @param m2_gw \code{numeric} m2 component in the groundwater levels
-//' @param m2_et \code{numeric} m2 component in the earth tides
-//' @param d_phase \code{numeric} phase difference between Earth tide and atmospheric drivers s2_et and s2_at
-//' @param inverse \code{logical} whether the barometric relationship is inverse (TRUE means that when the barometric pressure goes up the measured water level goes down (vented transducer, depth to water), FALSE means that when the barometric pressure goes up so does the measured pressure (non-vented transducer))
-//'
-//' @return barometric efficiency
-//' @export
-//'
-//' @examples
-//'
-//' be_acworth_cpp(s2_at = 7.461,
-//'            s2_et=224.640,
-//'            s2_gw=4.086,
-//'            m2_gw = 0.471,
-//'            m2_et = 492.526,
-//'            d_phase=-56.709,
-//'            inverse = TRUE)
-//' be_acworth_cpp(s2_at = 6.164,
-//'            s2_et=270.463,
-//'            s2_gw=0.329,
-//'            m2_gw = 0.225,
-//'            m2_et = 551.572,
-//'            d_phase=-71.726,
-//'            inverse = TRUE)
-//' be_acworth_cpp(s2_at = 5.897,
-//'            s2_et=234.478,
-//'            s2_gw=5.536,
-//'            m2_gw = 0.773,
-//'            m2_et = 558.075,
-//'            d_phase=-70.393,
-//'            inverse = TRUE)
-// [[Rcpp::export]]
-double be_acworth_calc_cpp(const double s2_gw,
-                           const double s2_et,
-                           const double s2_at,
-                           const double m2_gw,
-                           const double m2_et,
-                           const double d_phase,
-                           const bool inverse) {
-
-
-  double term = 0.0;
-
-  // check if earthtides are present
-  if ((m2_et != 0) & (s2_et != 0)) {
-    term = s2_et * (cos(d_phase) * m2_gw / m2_et);
-  }
-
-  Rcpp::Rcout << "term: " << term << std::endl;
-
-  // inverse equal to TRUE suggests barometric efficiency
-  if (inverse) {
-    return ((s2_gw + term) / s2_at);
-  }
-
-  // inverse equal to FALSE suggests loading efficiency therefore need to
-  // correct
-  return (1.0 - (s2_gw - term) / s2_at);
-}
+// //' @title
+// //' be_acworth_calc_cpp
+// //'
+// //' @description
+// //' Acworth, R. I., Halloran, L. J. S., Rau, G. C., Cuthbert, M. O.,
+// //'  & Bernardi, T. L. (2016). An objective frequency-domain method for
+// //'   quantifying confined aquifer compressible storage using Earth and
+// //'   atmospheric tides. Geophysical Research Letters, 43(November).
+// //'   https://doi.org/10.1002/2016GL071328
+// //'
+// //' @param s2_gw \code{numeric} s2 component in the groundwater levels
+// //' @param s2_et \code{numeric} s2 component in the earth tides
+// //' @param s2_at \code{numeric} s2 component for atmospheric pressure
+// //' @param m2_gw \code{numeric} m2 component in the groundwater levels
+// //' @param m2_et \code{numeric} m2 component in the earth tides
+// //' @param d_phase \code{numeric} phase difference between Earth tide and atmospheric drivers s2_et and s2_at
+// //' @param inverse \code{logical} whether the barometric relationship is inverse (TRUE means that when the barometric pressure goes up the measured water level goes down (vented transducer, depth to water), FALSE means that when the barometric pressure goes up so does the measured pressure (non-vented transducer))
+// //'
+// //' @return barometric efficiency
+// //' @export
+// //'
+// //' @examples
+// //'
+// //' be_acworth_calc_cpp(s2_at = 7.461,
+// //'            s2_et=224.640,
+// //'            s2_gw=4.086,
+// //'            m2_gw = 0.471,
+// //'            m2_et = 492.526,
+// //'            d_phase=-56.709)
+// //' be_acworth_calc_cpp(s2_at = 6.164,
+// //'            s2_et=270.463,
+// //'            s2_gw=0.329,
+// //'            m2_gw = 0.225,
+// //'            m2_et = 551.572,
+// //'            d_phase=-71.726)
+// //' be_acworth_calc_cpp(s2_at = 5.897,
+// //'            s2_et=234.478,
+// //'            s2_gw=5.536,
+// //'            m2_gw = 0.773,
+// //'            m2_et = 558.075,
+// //'            d_phase=-70.393)
+// // [[Rcpp::export]]
+// double be_acworth_calc_cpp(const std::complex<double> s2_gw,
+//                            const std::complex<double> s2_et,
+//                            const std::complex<double> s2_at,
+//                            const std::complex<double> m2_gw,
+//                            const std::complex<double> m2_et,
+//                            double d_phase) {
+//
+//
+//   double term = 0.0;
+//
+//   // check if earthtides are present
+//   if ((std::abs(m2_et) != 0) & (std::abs(s2_et) != 0)) {
+//     term = std::abs(s2_et) * (std::cos(d_phase) * std::abs(m2_gw) / std::abs(m2_et));
+//   }
+//
+//   return ((std::abs(s2_gw) - term) / std::abs(s2_at));
+//
+// }
+//
+//
+// //' @title
+// //' be_rau_calc_cpp
+// //'
+// //' @description
+// //' Rau, G.C., Cuthbert, M.O., Acworth, R.I. and Blum, P., 2020.
+// //' Disentangling the groundwater response to Earth and atmospheric tides
+// //' to improve subsurface characterisation. Hydrology and earth system
+// //' sciences, 24(12), pp.6033-6046.
+// //'
+// //' @param s2_gw \code{numeric} s2 component in the groundwater levels
+// //' @param s2_et \code{numeric} s2 component in the earth tides
+// //' @param s2_at \code{numeric} s2 component for atmospheric pressure
+// //' @param m2_gw \code{numeric} m2 component in the groundwater levels
+// //' @param m2_et \code{numeric} m2 component in the earth tides
+// //' @param amp_ratio \code{numeric} amplitude ratio to account for damping
+// //'
+// //' @return barometric efficiency
+// //' @export
+// //'
+// //' @examples
+// //'
+// // [[Rcpp::export]]
+// double be_rau_calc_cpp(const std::complex<double> s2_gw,
+//                        const std::complex<double> s2_et,
+//                        const std::complex<double> s2_at,
+//                        const std::complex<double> m2_gw,
+//                        const std::complex<double> m2_et,
+//                        const double amp_ratio) {
+//
+//
+//   double term = 0.0;
+//
+//   // equation 9
+//   return(1.0 / amp_ratio * std::abs((s2_gw - (m2_gw / m2_et) * s2_et) / s2_at));
+//
+//
+// }
 
 
 
@@ -230,7 +257,7 @@ Eigen::Vector2i get_peaks(Eigen::VectorXd freqs, double f1, double f2) {
   unsigned int done = 0;
   Eigen::Vector2i r = Eigen::Vector2i::Zero();
 
-  for (unsigned int j = 0; j < (n-1); ++j) {
+  for (unsigned int j = 0; j < (n - 1); ++j) {
     if (done == 2) {
       break;
     }
@@ -259,79 +286,278 @@ Eigen::Vector2i get_peaks(Eigen::VectorXd freqs, double f1, double f2) {
 }
 
 
+
+
 // // [[Rcpp::export]]
-// double complex_mod(std::complex<double> x) {
-//   double x_r = (double)x.real();
-//   double x_i = (double)x.imag();
-//   return sqrt(x_r * x_r + x_i * x_i);
+// double be_acworth_cpp(Eigen::MatrixXd& x,
+//                       const Eigen::VectorXi& spans,
+//                       bool detrend,
+//                       bool demean,
+//                       double taper,
+//                       double f1,
+//                       double f2,
+//                       double frequency_scale) {
+//
+//
+//
+//   if (spans.size() < 1) {
+//     Rcpp::stop("spec_pgram: spans must be length 1 or larger.");
+//   }
+//
+//   // detrend or demean
+//   x = detrend_and_demean_matrix(x, detrend, demean);
+//
+//   size_t n_row = x.rows();
+//   size_t n_new = next_n_eigen(n_row);
+//   Rcpp::Rcout << "n_new: " << n_new << std::endl;
+//
+//   std::complex<double> scale = 1.0 / n_row; // or n_new
+//
+//   // taper vector
+//   ArrayXd taper_array = spec_taper(n_row, taper).array();
+//
+//
+//   // Do FFTs
+//   MatrixXcd pgram = fft_matrix(x.array().colwise() * taper_array,
+//                                n_row);
+//
+//
+//   unsigned int n = pgram.rows();
+//   Eigen::VectorXd freqs = determine_frequency(n) * frequency_scale;
+//   Eigen::Vector2i r = get_peaks(freqs, f1, f2);
+//
+//   Rcpp::Rcout << "r: " << r << std::endl;
+//
+//   // get order of frequencies
+//   unsigned int s = 1;
+//   unsigned int m = 0;
+//   if (r[0] > r[1]) {
+//     s = 0;
+//     m = 1;
+//   }
+//
+//   std::complex<double> s2_gw, m2_gw, s2_at, m2_at, s2_et, m2_et;
+//
+//   s2_gw = pgram(r[s], 0);
+//   m2_gw = pgram(r[m], 0);
+//
+//   s2_at = pgram(r[s], 1);
+//   m2_at = pgram(r[m], 1);
+//
+//   s2_et = pgram(r[s], 2);
+//   m2_et = pgram(r[m], 2);
+//
+//
+//   double d_phase = std::arg(s2_at) - std::arg(s2_et);
+//
+//
+//   double be = be_acworth_calc_cpp(s2_gw,
+//                                   s2_et,
+//                                   s2_at,
+//                                   m2_gw,
+//                                   m2_et,
+//                                   d_phase);
+//
+//
+//   // Rcpp::Rcout << "s2_at: " << std::arg(s2_at) << std::endl;
+//   // Rcpp::Rcout << "s2_et: " << std::arg(s2_et) << std::endl;
+//   // Rcpp::Rcout << "s2_gw: " << std::arg(s2_gw) << std::endl;
+//   // Rcpp::Rcout << "m2_gw: " << std::arg(m2_gw) << std::endl;
+//   //
+//   // Rcpp::Rcout << "rows: " << pgram.rows() << std::endl;
+//   // Rcpp::Rcout << "cols: " << pgram.cols() << std::endl;
+//   //
+//   // Rcpp::Rcout << "s2_gw: " << 2*std::abs(s2_gw)/n << std::endl;
+//   // Rcpp::Rcout << "m2_gw: " << 2*std::abs(m2_gw)/n << std::endl;
+//   // Rcpp::Rcout << "s2_at: " << 2*std::abs(s2_at)/n << std::endl;
+//   // Rcpp::Rcout << "m2_at: " << 2*std::abs(m2_at)/n << std::endl;
+//   // Rcpp::Rcout << "s2_et: " << 2*std::abs(s2_et)/n << std::endl;
+//   // Rcpp::Rcout << "m2_et: " << 2*std::abs(m2_et)/n << std::endl;
+//   //
+//   //
+//   // Rcpp::Rcout << "s2_gw: " << s2_gw << std::endl;
+//   // Rcpp::Rcout << "m2_gw: " << m2_gw << std::endl;
+//   // Rcpp::Rcout << "s2_at: " << s2_at << std::endl;
+//   // Rcpp::Rcout << "m2_at: " << m2_at << std::endl;
+//   // Rcpp::Rcout << "s2_et: " << s2_et << std::endl;
+//   // Rcpp::Rcout << "m2_et: " << m2_et << std::endl;
+//
+//   return(be);
+//
+// }
+//
+//
+// // [[Rcpp::export]]
+// double be_rau_cpp(Eigen::MatrixXd& x,
+//                       const Eigen::VectorXi& spans,
+//                       bool detrend,
+//                       bool demean,
+//                       double taper,
+//                       double f1,
+//                       double f2,
+//                       double frequency_scale) {
+//
+//
+//   if (spans.size() < 1) {
+//     Rcpp::stop("spec_pgram: spans must be length 1 or larger.");
+//   }
+//
+//   // detrend or demean
+//   x = detrend_and_demean_matrix(x, detrend, demean);
+//
+//   size_t n_row = x.rows();
+//   size_t n_new = next_n_eigen(n_row);
+//
+//   std::complex<double> scale = 1.0 / n_row; // or n_new
+//
+//   // taper vector
+//   ArrayXd taper_array = spec_taper(n_row, taper).array();
+//
+//
+//   // Do FFTs
+//   MatrixXcd pgram = fft_matrix(x.array().colwise() * taper_array,
+//                                    n_row);
+//
+//   unsigned int n = pgram.rows();
+//   Eigen::VectorXd freqs = determine_frequency(n) * frequency_scale;
+//   Eigen::Vector2i r = get_peaks(freqs, f1, f2);
+//
+//   // get order of frequencies
+//   unsigned int s = 1;
+//   unsigned int m = 0;
+//   if (r[0] > r[1]) {
+//     s = 0;
+//     m = 1;
+//   }
+//
+//   std::complex<double> s2_gw, m2_gw, s2_at, m2_at, s2_et, m2_et, d_phase;
+//
+//   s2_gw = pgram(r[s], 0);
+//   m2_gw = pgram(r[m], 0);
+//
+//   s2_at = pgram(r[s], 1);
+//   m2_at = pgram(r[m], 1);
+//
+//   s2_et = pgram(r[s], 2);
+//   m2_et = pgram(r[m], 2);
+//
+//
+//   double be = be_rau_calc_cpp(s2_gw,
+//                               s2_et,
+//                               s2_at,
+//                               m2_gw,
+//                               m2_et,
+//                               1.0);
+//
+//
+//   // Rcpp::Rcout << "s2_gw: " << s2_gw << std::endl;
+//   // Rcpp::Rcout << "m2_gw: " << m2_gw << std::endl;
+//   // Rcpp::Rcout << "s2_at: " << s2_at << std::endl;
+//   // Rcpp::Rcout << "m2_at: " << m2_at << std::endl;
+//   // Rcpp::Rcout << "s2_et: " << s2_et << std::endl;
+//   // Rcpp::Rcout << "m2_et: " << m2_et << std::endl;
+//
+//   return(be);
+//
 // }
 
+
+
+
 // [[Rcpp::export]]
-double be_acworth_cpp(Eigen::MatrixXd& x,
-                      const Eigen::VectorXi& spans,
-                      bool detrend,
-                      bool demean,
-                      double taper,
-                      bool inverse,
-                      double f1,
-                      double f2,
-                      double frequency_scale) {
+Rcpp::List be_harmonic_cpp(Eigen::VectorXcd x,
+                           bool inverse) {
+
+  // groundwater
+  std::complex<double> m2_gw = x[0];
+  std::complex<double> s2_gw = x[3];
+
+  // atmospheric pressure
+  std::complex<double> m2_at = x[1];
+  std::complex<double> s2_at = x[4];
+
+  // earth tides
+  std::complex<double> m2_et = x[2];
+  std::complex<double> s2_et = x[5];
 
 
+  double d_phase = std::arg(s2_at) - std::arg(s2_et);
+  double term_acworth = 0.0;
+  std::complex<double> term_rau(0.0, 0.0);
+  double ratio, acworth, rau;
 
-  Eigen::MatrixXcd pgram = spec_pgram(x,
-                                      spans,
-                                      detrend,
-                                      demean,
-                                      taper);
+  // Rcpp::Rcout << "phase: " << std::arg(s2_at)-std::arg(s2_gw) << std::endl;
+  // Rcpp::Rcout << "dphase: " << d_phase << std::endl;
 
-  unsigned int n = x.rows();
-  Eigen::VectorXd freqs = determine_frequency(n) * frequency_scale;
-  Eigen::Vector2i r = get_peaks(freqs, f1, f2);
 
-  // get order of frequencies
-  unsigned int s = 1;
-  unsigned int m = 0;
-  if (r[0] > r[1]) {
-    s = 0;
-    m = 1;
+  //----------------------------------------------------------------------------
+  // ratio
+  ratio = std::abs(s2_gw) / std::abs(s2_at);
+
+
+  //----------------------------------------------------------------------------
+  // acworth
+
+  if ((std::abs(m2_et) != 0.0) & (std::abs(s2_et) != 0.0)) {
+
+    term_acworth = std::abs(s2_et) * (std::cos(d_phase) * std::abs(m2_gw) / std::abs(m2_et));
+
+    if(inverse) {
+      term_acworth = - term_acworth;
+    }
   }
-
-  double s2_gw, m2_gw, s2_at, m2_at, s2_et, m2_et, d_phase;
-
-  s2_gw = std::sqrt(pgram(r[s], 0).real());
-  m2_gw = std::sqrt(pgram(r[m], 0).real());
-
-  s2_at = std::sqrt(pgram(r[s], 3).real());
-  m2_at = std::sqrt(pgram(r[m], 3).real());
-
-  s2_et = std::sqrt(pgram(r[s], 5).real());
-  m2_et = std::sqrt(pgram(r[m], 5).real());
-
-  d_phase = std::arg(pgram(r[s], 5)) - std::arg(pgram(r[s], 3));
+  acworth = (std::abs(s2_gw) - term_acworth) / std::abs(s2_at);
 
 
-  double be = be_acworth_calc_cpp(s2_gw,
-                                  s2_et,
-                                  s2_at,
-                                  m2_gw,
-                                  m2_et,
-                                  d_phase,
-                                  inverse);
+  //----------------------------------------------------------------------------
+  // rau
+  if ((std::abs(m2_et) != 0.0) & (std::abs(s2_et) != 0.0)) {
+    term_rau = (m2_gw / m2_et);
+  }
+  rau = std::abs((s2_gw - term_rau * s2_et) / s2_at);
 
-  Rcpp::Rcout << "rows: " << pgram.rows() << std::endl;
-  Rcpp::Rcout << "cols: " << pgram.cols() << std::endl;
+  //----------------------------------------------------------------------------
+  // tf
 
-  Rcpp::Rcout << "s2_gw: " << s2_gw << std::endl;
-  Rcpp::Rcout << "m2_gw: " << m2_gw << std::endl;
-  Rcpp::Rcout << "s2_at: " << s2_at << std::endl;
-  Rcpp::Rcout << "m2_at: " << m2_at << std::endl;
-  Rcpp::Rcout << "s2_et: " << s2_et << std::endl;
-  Rcpp::Rcout << "m2_et: " << m2_et << std::endl;
+  Eigen::MatrixXcd tf(1,3);
+  tf(0, 0) = s2_gw;
+  tf(0, 1) = s2_at;
+  tf(0, 2) = s2_et;
+  Eigen::MatrixXcd dft_mat = multiply_ffts(tf);
 
-  return(be);
+  double tf_out = std::abs(solve_cplx_parallel(dft_mat)(0,0));
+  // double tf = std::abs(std::sqrt((p_et * p_at_gw - p_at_et * p_et_gw) / denominator));
+
+
+  return(Rcpp::List::create(Named("ratio") = ratio,
+                            _["acworth"] = acworth,
+                            _["rau"] = rau));
+                            // _["tf"] = tf_out));
+
 
 }
 
 
+//==============================================================================
+// [[Rcpp::export]]
+Eigen::MatrixXcd be_transfer(Eigen::MatrixXd& x,
+                             const Eigen::VectorXi& spans,
+                             bool detrend,
+                             bool demean,
+                             double taper,
+                             double frequency,
+                             double cycle_size) {
+
+  Eigen::MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper);
+
+  unsigned int n = pgram.rows();
+  unsigned int frequency_index = std::round(frequency * (n / cycle_size));
+  Rcpp::Rcout << "n: " << n << std::endl;
+  Rcpp::Rcout << "cycle_size: " << cycle_size << std::endl;
+  Rcpp::Rcout << "frequency_index: " << frequency_index << std::endl;
+
+  Eigen::MatrixXcd out = solve_cplx_parallel(pgram.row(frequency_index));
+  return(out);
+}
+//==============================================================================
 

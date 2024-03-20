@@ -32,6 +32,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// n_spline_list
+Rcpp::List n_spline_list(const arma::vec& x, const unsigned int df, const unsigned int degree, const arma::vec& internal_knots, const arma::vec& boundary_knots, const bool complete_basis, const bool periodic, const unsigned int derivs, const bool integral);
+RcppExport SEXP _frecipes_n_spline_list(SEXP xSEXP, SEXP dfSEXP, SEXP degreeSEXP, SEXP internal_knotsSEXP, SEXP boundary_knotsSEXP, SEXP complete_basisSEXP, SEXP periodicSEXP, SEXP derivsSEXP, SEXP integralSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type degree(degreeSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type internal_knots(internal_knotsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type boundary_knots(boundary_knotsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type complete_basis(complete_basisSEXP);
+    Rcpp::traits::input_parameter< const bool >::type periodic(periodicSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type derivs(derivsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type integral(integralSEXP);
+    rcpp_result_gen = Rcpp::wrap(n_spline_list(x, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral));
+    return rcpp_result_gen;
+END_RCPP
+}
 // b_spline_list2
 Rcpp::List b_spline_list2(const arma::vec& x, const unsigned int df, const unsigned int degree, const arma::vec& internal_knots, const arma::vec& boundary_knots, const bool complete_basis, const bool periodic, const unsigned int derivs, const bool integral);
 RcppExport SEXP _frecipes_b_spline_list2(SEXP xSEXP, SEXP dfSEXP, SEXP degreeSEXP, SEXP internal_knotsSEXP, SEXP boundary_knotsSEXP, SEXP complete_basisSEXP, SEXP periodicSEXP, SEXP derivsSEXP, SEXP integralSEXP) {
@@ -123,23 +142,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// be_acworth_calc_cpp
-double be_acworth_calc_cpp(const double s2_gw, const double s2_et, const double s2_at, const double m2_gw, const double m2_et, const double d_phase, const bool inverse);
-RcppExport SEXP _frecipes_be_acworth_calc_cpp(SEXP s2_gwSEXP, SEXP s2_etSEXP, SEXP s2_atSEXP, SEXP m2_gwSEXP, SEXP m2_etSEXP, SEXP d_phaseSEXP, SEXP inverseSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const double >::type s2_gw(s2_gwSEXP);
-    Rcpp::traits::input_parameter< const double >::type s2_et(s2_etSEXP);
-    Rcpp::traits::input_parameter< const double >::type s2_at(s2_atSEXP);
-    Rcpp::traits::input_parameter< const double >::type m2_gw(m2_gwSEXP);
-    Rcpp::traits::input_parameter< const double >::type m2_et(m2_etSEXP);
-    Rcpp::traits::input_parameter< const double >::type d_phase(d_phaseSEXP);
-    Rcpp::traits::input_parameter< const bool >::type inverse(inverseSEXP);
-    rcpp_result_gen = Rcpp::wrap(be_acworth_calc_cpp(s2_gw, s2_et, s2_at, m2_gw, m2_et, d_phase, inverse));
-    return rcpp_result_gen;
-END_RCPP
-}
 // get_peaks
 Eigen::Vector2i get_peaks(Eigen::VectorXd freqs, double f1, double f2);
 RcppExport SEXP _frecipes_get_peaks(SEXP freqsSEXP, SEXP f1SEXP, SEXP f2SEXP) {
@@ -153,9 +155,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// be_acworth_cpp
-double be_acworth_cpp(Eigen::MatrixXd& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper, bool inverse, double f1, double f2, double frequency_scale);
-RcppExport SEXP _frecipes_be_acworth_cpp(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP, SEXP inverseSEXP, SEXP f1SEXP, SEXP f2SEXP, SEXP frequency_scaleSEXP) {
+// be_harmonic_cpp
+Rcpp::List be_harmonic_cpp(Eigen::VectorXcd x, bool inverse);
+RcppExport SEXP _frecipes_be_harmonic_cpp(SEXP xSEXP, SEXP inverseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXcd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< bool >::type inverse(inverseSEXP);
+    rcpp_result_gen = Rcpp::wrap(be_harmonic_cpp(x, inverse));
+    return rcpp_result_gen;
+END_RCPP
+}
+// be_transfer
+Eigen::MatrixXcd be_transfer(Eigen::MatrixXd& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper, double frequency, double cycle_size);
+RcppExport SEXP _frecipes_be_transfer(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP, SEXP frequencySEXP, SEXP cycle_sizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -164,11 +178,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type detrend(detrendSEXP);
     Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
     Rcpp::traits::input_parameter< double >::type taper(taperSEXP);
-    Rcpp::traits::input_parameter< bool >::type inverse(inverseSEXP);
-    Rcpp::traits::input_parameter< double >::type f1(f1SEXP);
-    Rcpp::traits::input_parameter< double >::type f2(f2SEXP);
-    Rcpp::traits::input_parameter< double >::type frequency_scale(frequency_scaleSEXP);
-    rcpp_result_gen = Rcpp::wrap(be_acworth_cpp(x, spans, detrend, demean, taper, inverse, f1, f2, frequency_scale));
+    Rcpp::traits::input_parameter< double >::type frequency(frequencySEXP);
+    Rcpp::traits::input_parameter< double >::type cycle_size(cycle_sizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(be_transfer(x, spans, detrend, demean, taper, frequency, cycle_size));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -233,6 +245,54 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type Lw(LwSEXP);
     Rcpp::traits::input_parameter< double >::type H(HSEXP);
     rcpp_result_gen = Rcpp::wrap(bouwer_rice(time, drawdown, radius_screen, radius_casing, Le, Lw, H));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dft
+std::complex<double> dft(Eigen::VectorXd x, double frequency);
+RcppExport SEXP _frecipes_dft(SEXP xSEXP, SEXP frequencySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type frequency(frequencySEXP);
+    rcpp_result_gen = Rcpp::wrap(dft(x, frequency));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dft_with_window
+std::complex<double> dft_with_window(Eigen::VectorXd x, double frequency);
+RcppExport SEXP _frecipes_dft_with_window(SEXP xSEXP, SEXP frequencySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type frequency(frequencySEXP);
+    rcpp_result_gen = Rcpp::wrap(dft_with_window(x, frequency));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dft_goertzel
+std::complex<double> dft_goertzel(Eigen::VectorXd x, double frequency);
+RcppExport SEXP _frecipes_dft_goertzel(SEXP xSEXP, SEXP frequencySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type frequency(frequencySEXP);
+    rcpp_result_gen = Rcpp::wrap(dft_goertzel(x, frequency));
+    return rcpp_result_gen;
+END_RCPP
+}
+// be_dft
+Eigen::MatrixXcd be_dft(Eigen::MatrixXd x, double frequency);
+RcppExport SEXP _frecipes_be_dft(SEXP xSEXP, SEXP frequencySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type frequency(frequencySEXP);
+    rcpp_result_gen = Rcpp::wrap(be_dft(x, frequency));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -441,12 +501,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // convolve_overlap_save_list
-List convolve_overlap_save_list(Eigen::VectorXd& x, List y, int align);
+List convolve_overlap_save_list(Eigen::VectorXd x, List y, int align);
 RcppExport SEXP _frecipes_convolve_overlap_save_list(SEXP xSEXP, SEXP ySEXP, SEXP alignSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::VectorXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
     Rcpp::traits::input_parameter< List >::type y(ySEXP);
     Rcpp::traits::input_parameter< int >::type align(alignSEXP);
     rcpp_result_gen = Rcpp::wrap(convolve_overlap_save_list(x, y, align));
@@ -480,13 +540,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // convolve_list
-Rcpp::List convolve_list(const Eigen::VectorXd& x, const List y, const bool remove_partial, const bool reverse);
+Rcpp::List convolve_list(const Eigen::VectorXd& x, const Rcpp::List y, const bool remove_partial, const bool reverse);
 RcppExport SEXP _frecipes_convolve_list(SEXP xSEXP, SEXP ySEXP, SEXP remove_partialSEXP, SEXP reverseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const List >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List >::type y(ySEXP);
     Rcpp::traits::input_parameter< const bool >::type remove_partial(remove_partialSEXP);
     Rcpp::traits::input_parameter< const bool >::type reverse(reverseSEXP);
     rcpp_result_gen = Rcpp::wrap(convolve_list(x, y, remove_partial, reverse));
@@ -1144,13 +1204,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // harmonic_list
-List harmonic_list(const NumericVector& time, const NumericVector& frequency, const double start, const double cycle_size);
+Rcpp::List harmonic_list(const Rcpp::NumericVector& time, const Rcpp::NumericVector& frequency, const double start, const double cycle_size);
 RcppExport SEXP _frecipes_harmonic_list(SEXP timeSEXP, SEXP frequencySEXP, SEXP startSEXP, SEXP cycle_sizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericVector& >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type frequency(frequencySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type frequency(frequencySEXP);
     Rcpp::traits::input_parameter< const double >::type start(startSEXP);
     Rcpp::traits::input_parameter< const double >::type cycle_size(cycle_sizeSEXP);
     rcpp_result_gen = Rcpp::wrap(harmonic_list(time, frequency, start, cycle_size));
@@ -2088,20 +2148,25 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_b_spline_list", (DL_FUNC) &_frecipes_b_spline_list, 9},
+    {"_frecipes_n_spline_list", (DL_FUNC) &_frecipes_n_spline_list, 9},
     {"_frecipes_b_spline_list2", (DL_FUNC) &_frecipes_b_spline_list2, 9},
     {"_frecipes_b_spline_list3", (DL_FUNC) &_frecipes_b_spline_list3, 9},
     {"_frecipes_log_lags_arma", (DL_FUNC) &_frecipes_log_lags_arma, 2},
     {"_frecipes_be_clark_cpp", (DL_FUNC) &_frecipes_be_clark_cpp, 4},
     {"_frecipes_be_least_squares_diff_cpp", (DL_FUNC) &_frecipes_be_least_squares_diff_cpp, 4},
     {"_frecipes_be_least_squares_cpp", (DL_FUNC) &_frecipes_be_least_squares_cpp, 3},
-    {"_frecipes_be_acworth_calc_cpp", (DL_FUNC) &_frecipes_be_acworth_calc_cpp, 7},
     {"_frecipes_get_peaks", (DL_FUNC) &_frecipes_get_peaks, 3},
-    {"_frecipes_be_acworth_cpp", (DL_FUNC) &_frecipes_be_acworth_cpp, 9},
+    {"_frecipes_be_harmonic_cpp", (DL_FUNC) &_frecipes_be_harmonic_cpp, 2},
+    {"_frecipes_be_transfer", (DL_FUNC) &_frecipes_be_transfer, 7},
     {"_frecipes_a_cpp", (DL_FUNC) &_frecipes_a_cpp, 1},
     {"_frecipes_b_cpp", (DL_FUNC) &_frecipes_b_cpp, 1},
     {"_frecipes_c_cpp", (DL_FUNC) &_frecipes_c_cpp, 1},
     {"_frecipes_bouwer_rice_abc", (DL_FUNC) &_frecipes_bouwer_rice_abc, 4},
     {"_frecipes_bouwer_rice", (DL_FUNC) &_frecipes_bouwer_rice, 7},
+    {"_frecipes_dft", (DL_FUNC) &_frecipes_dft, 2},
+    {"_frecipes_dft_with_window", (DL_FUNC) &_frecipes_dft_with_window, 2},
+    {"_frecipes_dft_goertzel", (DL_FUNC) &_frecipes_dft_goertzel, 2},
+    {"_frecipes_be_dft", (DL_FUNC) &_frecipes_be_dft, 2},
     {"_frecipes_distributed_lag_thread", (DL_FUNC) &_frecipes_distributed_lag_thread, 3},
     {"_frecipes_convolve_eigen", (DL_FUNC) &_frecipes_convolve_eigen, 2},
     {"_frecipes_distributed_lag_eigen", (DL_FUNC) &_frecipes_distributed_lag_eigen, 2},

@@ -16,9 +16,9 @@
 
 \item{\code{n_lag}}{integer the number of lag terms.}
 
-\item{\code{n_lag}}{integer the maximum lag.}
+\item{\code{max_lag}}{integer the maximum lag.}
 
-\item{\code{n_lag}}{integer the maximum lag.}
+\item{\code{basis_matrix}}{matrix the basis matrix.}
 }
 \if{html}{\out{</div>}}
 }

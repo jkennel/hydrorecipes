@@ -81,7 +81,8 @@ get_regression_data <- function(new_data, term_info, id_type = "predictor") {
   ti <- collapse::qDF(term_info)
   ti <- ti[ti$source != "removed", ]
   ti <- ti[ti$variable %in% nms, ]
-
+  # print('---------------------')
+  # print(ti)
   x <- list()
 
   # create regression matrices
@@ -120,9 +121,11 @@ subset_groups <- function(x) {
 response_groups <- function(steps, x, fit) {
   # subsets are the regressor groups
   subsets <- subset_groups(x$term_info)
-
+  # print(subsets)
+  # print(fit)
   lst <- list()
   for (i in seq_along(subsets)) {
+    # print(steps[[i]])
     lst[[i]] <- steps[[i]]$response(fit[subsets[[i]], , drop = FALSE])
   }
 
@@ -144,4 +147,18 @@ predict_groups <- function(x, fit) {
   }
 
   lst
+}
+
+return_type <- function(x, type = "df") {
+
+  # return types
+  switch(
+    type,
+    "df" = collapse::qDF(x),
+    "dt" = collapse::qDT(x),
+    "tbl" = collapse::qTBL(x),
+    "m" = collapse::qM(x),
+    x
+  )
+
 }

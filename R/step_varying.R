@@ -36,7 +36,7 @@ StepVarying <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
-      self$to_remove <- !varying(new_data)
+      self$to_remove <- !collapse::varying(new_data)
       new_data[self$to_remove] <- list(NULL)
 
       new_data

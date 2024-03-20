@@ -10,7 +10,7 @@ b_spline_list(
   degree,
   internal_knots,
   boundary_knots,
-  complete_basis = TRUE,
+  complete_basis = FALSE,
   periodic = FALSE,
   derivs = 0L,
   integral = FALSE

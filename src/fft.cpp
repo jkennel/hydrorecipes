@@ -1,5 +1,6 @@
 #include "frecipes.h"
 
+
 //==============================================================================
 //' @title
 //' fft_matrix
@@ -48,84 +49,86 @@ Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
 //******************************************************************************
 //==============================================================================
 //' @title
- //' convolve_vec
- //'
- //' @description
- //' Circular convolution of two vectors having the same length
- //'
- //' @param x the vector that holds the series (numeric vector)
- //' @param y the vector to convolve with x (numeric vector)
- //'
- //'
- //' @return numeric vector that is the circular convolution of two vectors
- //'
- //'
- //' @noRd
- //'
- // [[Rcpp::export]]
- Eigen::VectorXd convolve_vec(Eigen::VectorXd x,
-                              Eigen::VectorXd y) {
+//' convolve_vec
+//'
+//' @description
+//' Circular convolution of two vectors having the same length
+//'
+//' @param x the vector that holds the series (numeric vector)
+//' @param y the vector to convolve with x (numeric vector)
+//'
+//'
+//' @return numeric vector that is the circular convolution of two vectors
+//'
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::VectorXd convolve_vec(Eigen::VectorXd x,
+                             Eigen::VectorXd y) {
 
-   Eigen::FFT<double> fft;
-   size_t n_x = x.size();
-   size_t n_y = y.size();
+  Eigen::FFT<double> fft;
+  size_t n_x = x.size();
+  size_t n_y = y.size();
 
-   if (n_y != n_x) {
-     Rcpp::stop("convolve_vec: the lengths of x and y should be the same");
-   }
+  if (n_y != n_x) {
+    Rcpp::stop("convolve_vec: the lengths of x and y should be the same");
+  }
 
-   VectorXcd fft_x(n_x);
-   VectorXcd fft_y(n_x);
-   VectorXd z(n_x);
+  VectorXcd fft_x(n_x);
+  VectorXcd fft_y(n_x);
+  VectorXd z(n_x);
 
-   fft.fwd(fft_x, x);
-   fft.fwd(fft_y, y);
+  fft.fwd(fft_x, x);
+  fft.fwd(fft_y, y);
 
-   fft_x = fft_x.array() * fft_y.array();
-   fft.inv(z, fft_x);
+  fft_x = fft_x.array() * fft_y.array();
+  fft.inv(z, fft_x);
 
-   return(z);
- }
+  return(z);
+}
 //==============================================================================
 
 //==============================================================================
 //' @title
- //' convolve_filter
- //'
- //' @description
- //' convolution of vector with matrix
- //'
- //' @param x vector to convolve with y (numeric vector)
- //' @param y numeric matrix to convolve with x (column by column convolution)
- //'  (numeric matrix)
- //' @param remove_partial keep the end values or fill with NA (boolean)
- //' @param reverse should x be reversed before convolution (boolean)
- //'
- //' @return numeric matrix of convolved values
- //'
- //' @export
- //'
- //' @importFrom Rcpp sourceCpp
- //' @importFrom stats nextn
- //' @importFrom stats convolve
- //' @importFrom stats spec.pgram
- //'
- //' @examples
- //' a <- convolve_filter(x = 1:100,
- //'                      y = c(1:10, rep(0, 90)),
- //'                      remove_partial = FALSE,
- //'                      reverse = TRUE)
- //'
- //' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
- //'
- // [[Rcpp::export]]
- Eigen::VectorXd convolve_filter(const Eigen::VectorXd& x,
+//' convolve_filter
+//'
+//' @description
+//' convolution of vector with matrix
+//'
+//' @param x vector to convolve with y (numeric vector)
+//' @param y numeric matrix to convolve with x (column by column convolution)
+//'  (numeric matrix)
+//' @param remove_partial keep the end values or fill with NA (boolean)
+//' @param reverse should x be reversed before convolution (boolean)
+//'
+//' @return numeric matrix of convolved values
+//'
+//' @export
+//'
+//' @importFrom Rcpp sourceCpp
+//' @importFrom stats nextn
+//' @importFrom stats convolve
+//' @importFrom stats spec.pgram
+//'
+//' @examples
+//' a <- convolve_filter(x = 1:100,
+//'                      y = c(1:10, rep(0, 90)),
+//'                      remove_partial = FALSE,
+//'                      reverse = TRUE)
+//'
+//' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
+//'
+// [[Rcpp::export]]
+Eigen::VectorXd convolve_filter(const Eigen::VectorXd& x,
                                  const Eigen::VectorXd& y,
                                  const bool remove_partial,
                                  const bool reverse) {
 
    size_t n_x = x.size();
    size_t n_y = y.size();
+
+   if (n_y > n_x) Rcpp::stop("n_y cannot be larger than n_x");
 
    Eigen::FFT<double> fft;
    size_t n_new = next_n_eigen(n_x + n_y - 1);
@@ -270,7 +273,7 @@ Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
 
 
    Eigen::VectorXd x_sub = Eigen::VectorXd::Zero(n_pad);
-   Eigen::VectorXd y_sub = pad_vector(y.reverse(), n_y, n_pad);
+   Eigen::VectorXd y_sub = pad_vector(y, n_y, n_pad);
 
    VectorXcd fft_y(n_pad);
    fft.fwd(fft_y, y_sub);
@@ -278,8 +281,6 @@ Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
    VectorXd z(n_pad);
    VectorXd out = VectorXd::Zero(n_x);
 
-
-   size_t i = n_x - n_pad;
    size_t x_len = n_pad;
    size_t fin_size = x_len - n_y;
    size_t n_align = n_y; // right alignment
@@ -290,24 +291,28 @@ Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
    if (align == 2) {
      n_align = 1;
    }
+   size_t i = n_x - n_pad;
 
    while (i >= 0) {
+     if (x.segment(i, x_len).isZero()) {
 
-     fft.fwd(fft_x, x.segment(i, x_len));
-     fft_x = fft_x.array() * fft_y.array();
-     fft.inv(z, fft_x);
-
-     out.segment(i + n_align, fin_size + 1) = z.tail(fin_size + 1);
-
-
-     if (i == 0) {
-       break;
-     } else if (fin_size > i) {
-       i = 0;
      } else {
-       i -= fin_size;
-     }
 
+       fft.fwd(fft_x, x.segment(i, x_len));
+       fft_x = fft_x.array() * fft_y.array();
+       fft.inv(z, fft_x);
+
+       out.segment(i + n_align - 1, fin_size + 1) = z.tail(fin_size + 1);
+
+       if (i == 0) {
+         break;
+       } else if (fin_size > i) {
+         i = 0;
+       } else {
+         i -= fin_size;
+       }
+
+     }
 
    }
 
@@ -322,11 +327,12 @@ Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
      out.tail(n_y - 1).setConstant(NA_REAL);
    }
 
-   // out.conservativeResize(n_x);
 
    return(out);
  }
 //==============================================================================
+
+
 
 // [[Rcpp::export]]
 Eigen::VectorXd shift_eigen(Eigen::VectorXd x, int n)
@@ -360,7 +366,7 @@ Eigen::VectorXd shift_eigen(Eigen::VectorXd x, int n)
  //' @noRd
  //'
  // [[Rcpp::export]]
- List convolve_overlap_save_list(Eigen::VectorXd& x,
+ List convolve_overlap_save_list(Eigen::VectorXd x,
                                  List y,
                                  int align) {
 
@@ -547,12 +553,14 @@ Eigen::VectorXd shift_eigen(Eigen::VectorXd x, int n)
  //'
  // [[Rcpp::export]]
  Rcpp::List convolve_list(const Eigen::VectorXd& x,
-                          const List y,
+                          const Rcpp::List y,
                           const bool remove_partial,
                           const bool reverse) {
 
    size_t n = y.length();
    size_t n_x = x.size();
+
+   // Rcpp::Rcout << "The value n " << n << std::endl;
 
    Eigen::VectorXd yy = Rcpp::as<Eigen::Map<Eigen::VectorXd>>(y[0]);
    size_t n_y = yy.size();
@@ -583,8 +591,9 @@ Eigen::VectorXd shift_eigen(Eigen::VectorXd x, int n)
 
    for (size_t i = 0; i < n; ++i) {
      yy = Rcpp::as<Eigen::Map<Eigen::VectorXd>>(y[i]);
-
+     out_dbl.setZero();
      out_dbl.head(n_y) = yy;
+     // Rcpp::Rcout << "The value yy " << out_dbl << std::endl;
 
      fft.fwd(fft_y, out_dbl);
 
@@ -2386,15 +2395,15 @@ y <- rnorm(1e6)
 # points(frecipes:::convolve_filter(x, y, TRUE, TRUE), type = 'l', col = 'red')
 y1 <- rev(y)
 tmp <-bench::press(
-  y_len = c(1e2, 3e5),
+  y_len = c(1e2+1, 3e5),
   {
-    x <- rnorm(1e7)
+    x <- rnorm(1e7+1)
     y <- rnorm(y_len)
     y1 <- rev(y)
     bench::mark(
-      frecipes:::convolve_filter(x, y, TRUE, TRUE),
-      frecipes:::convolve_overlap_add(x, y1),
-      frecipes:::convolve_overlap_save(x, y1, 0),
+      a <- frecipes:::convolve_filter(x, y, TRUE, TRUE),
+      b <- frecipes:::convolve_overlap_add(x, y1),
+      c <- frecipes:::convolve_overlap_save(x, y1, 0),
       # frecipes:::convolve_overlap_save(x, y1, 1),
       # frecipes:::convolve_overlap_save(x, y1, 2),
       # frecipes:::convolve_vec(x, frecipes:::pad_vector(y1, y_len, 1e7)),

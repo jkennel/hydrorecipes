@@ -8,8 +8,7 @@
 }
 \seealso{
 Other gap_fill: 
-\code{\link{step_ols_gap_fill}()},
-\code{\link{step_ols_predict}()}
+\code{\link{step_ols_gap_fill}()}
 }
 \concept{gap_fill}
 \section{Super class}{

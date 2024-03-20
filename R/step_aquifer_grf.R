@@ -78,6 +78,7 @@ StepAquiferGRF <- R6Class(
     bake = function(new_data) {
 
       self$new_columns <- self$prefix
+      self$columns <- paste(self$columns, collapse = ",")
 
       setNames(grf_time(
         radius = self$radius,
@@ -88,6 +89,7 @@ StepAquiferGRF <- R6Class(
         flow_rate = new_data[[self$flow_rate]],
         flow_dimension = self$flow_dimension
       ), self$new_columns)
+
     }
 
   )

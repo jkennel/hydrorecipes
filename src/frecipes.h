@@ -139,7 +139,7 @@ Eigen::VectorXd convolve_overlap_add(Eigen::VectorXd x,
 Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd x,
                                       Eigen::VectorXd y,
                                       int align);
-Rcpp::List convolve_overlap_save_list(Eigen::VectorXd &x,
+Rcpp::List convolve_overlap_save_list(Eigen::VectorXd x,
                                       Rcpp::List y,
                                       int align);
 Eigen::VectorXd convolve_tf(Eigen::VectorXd x,
@@ -227,6 +227,15 @@ Eigen::MatrixXd predict_pgram_frf(Eigen::MatrixXd &x,
 //==============================================================================
 // b_spline_arma.cpp
 Rcpp::List b_spline_list(const arma::vec &x,
+                         const unsigned int df,
+                         const unsigned int degree,
+                         const arma::vec &internal_knots,
+                         const arma::vec &boundary_knots,
+                         const bool complete_basis,
+                         const bool periodic,
+                         const unsigned int derivs,
+                         const bool integral);
+Rcpp::List n_spline_list(const arma::vec &x,
                          const unsigned int df,
                          const unsigned int degree,
                          const arma::vec &internal_knots,

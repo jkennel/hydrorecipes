@@ -17,23 +17,19 @@
 //' @export
 //'
 // [[Rcpp::export]]
-List harmonic_list(const NumericVector& time,
-                   const NumericVector& frequency,
-                   const double start,
-                   const double cycle_size) {
+Rcpp::List harmonic_list(const Rcpp::NumericVector& time,
+                         const Rcpp::NumericVector& frequency,
+                         const double start,
+                         const double cycle_size) {
 
 
-  const NumericVector m = (M_2PI / cycle_size) * (time - start);
-  unsigned int n = frequency.size();
+  const Rcpp::NumericVector m = (M_2PI / cycle_size) * (time - start);
 
-  List out(n * 2);
-  unsigned int j = 0;
+  Rcpp::List out;
 
-  for (unsigned int i = 0; i < n; ++i) {
-    out[j] = sin(m * frequency(i));
-    j += 1;
-    out[j] = cos(m * frequency(i));
-    j += 1;
+  for (auto &f : frequency) {
+    out.push_back(sin(m * f));
+    out.push_back(cos(m * f));
   }
 
   return(out);
@@ -199,15 +195,28 @@ List harmonic_list(const NumericVector& time,
 
 /*** R
 
-n <- 1e7L
-t <- sort(rnorm(n))
-vec <- c(1,2,3,4,5,6,7)
+n <- 1e6L
+time <- sort(rnorm(n))
+frequency <- c(1,2,3,4,5,6,7)
+cycle_size <- 86400
+start <- 0
+
+sincos <- function(time, frequency, start, cycle_size) {
+
+  l <- list(time)
+  for (i in seq_along(frequency)) {
+    m <- (2.0 * pi / cycle_size) * (time - start) * frequency[i]
+    add_vars(l, list(sin(m), cos(m)))
+  }
+
+}
+
 
 bench::mark(
-  h0 <- frecipes:::harmonic_list(t, vec, 0, 86400),
+  h0 <- frecipes:::harmonic_list(time, frequency, 0, 86400),
+  # h1 <- sincos(time, frequency, 0, 86400),
   # h1 <- frecipes:::harmonic_list_2(t, vec, 0, 86400),
   # h1 <- frecipes:::harmonic_std_list(t, vec, 0, 86400),
-  iterations = 3,
   check = FALSE
 )
 

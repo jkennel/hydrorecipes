@@ -49,7 +49,7 @@ The `Step` class hold common info for each step.
 \if{latex}{\out{\hypertarget{method-step-tidy}{}}}
 \subsection{Method \code{tidy()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Step$tidy()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Step$tidy(i)}\if{html}{\out{</div>}}
 }
 
 }

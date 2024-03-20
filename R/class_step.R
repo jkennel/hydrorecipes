@@ -13,9 +13,8 @@
 #' @param step_name the name of the step
 #'
 #'
-#' @importFrom rlang quos enquos env_get_list
 #' @importFrom collapse fmean fsd fscale fsum fquantile fndistinct flag
-#' @importFrom collapse missing_cases
+#' @importFrom collapse missing_cases varying rowbind
 #' @importFrom collapse qDF qM qF qTBL mctl
 #' @importFrom earthtide calc_earthtide
 #' @importFrom R6 R6Class
@@ -39,7 +38,7 @@ Step <- R6Class(
     prefix = NULL,
 
     check = NULL,
-    new_columns = NULL,
+    new_columns = c(),
 
     initialize = function(terms, ...) {
       if (!missing(terms)) {
@@ -57,6 +56,7 @@ Step <- R6Class(
       self$step_name <- dots$step_name
       self$type <- dots$type
       self$prefix <- dots$prefix
+
 
       # super specific values
       if (is.null(self$prefix)) {
@@ -78,26 +78,37 @@ Step <- R6Class(
     bake = function() {
       invisible(self)
     },
-    tidy = function() {
-      if (self$type == "add") {
-        data.frame(
-          step_name     = self$step_name,
-          id            = self$id,
-          columns       = rep(self$columns, each = sapply(self$result, ncol)),
-          columns_added = self$new_columns,
-          type          = self$type,
-          role          = self$role
-        )
-      } else {
+    tidy = function(i) {
 
+      print(i)
+      print(self$columns)
+      print(self$new_columns)
+      print(self$role)
+
+      if (is.null(self$new_columns)) {
+        self$new_columns <- self$columns
       }
+
+      data.frame(
+        index       = i,
+        variable    = self$columns,
+        columns     = self$new_columns,
+        role        = self$role,
+        step_name   = self$step_name,
+        id          = self$id,
+        type        = self$type
+      )
     },
     response = function(co) {
-      list(x = NA_real_,
-           variable = "coefficient",
-           value = co,
-           step_id = self$id)
+      n <- length(co)
+      list(
+        x = rep(NA_real_, n),
+        variable = rep("coefficient", n),
+        value = co,
+        step_id = rep(self$id, n)
+      )
     }
+
   )
 )
 

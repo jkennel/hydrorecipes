@@ -39,3 +39,4 @@ To do:
 - Steps
   - step_temporary_deployment
   - step_baro_*
+- Tests for selectors

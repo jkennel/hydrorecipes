@@ -16,8 +16,27 @@
 #'
 #' @export
 #'
-b_spline_list <- function(x, df, degree, internal_knots, boundary_knots, complete_basis = TRUE, periodic = FALSE, derivs = 0L, integral = FALSE) {
+b_spline_list <- function(x, df, degree, internal_knots, boundary_knots, complete_basis = FALSE, periodic = FALSE, derivs = 0L, integral = FALSE) {
     .Call(`_frecipes_b_spline_list`, x, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
+}
+
+#' @title
+#' n_spline_list
+#'
+#' @description
+#' Create spline terms
+#'
+#' @inheritParams splines2::naturalSpline
+#' @param internal_knots locations where parameters can change
+#' @param boundary_knots end points of the spline
+#' @param complete_basis intercept argument
+#'
+#' @return List of distributed lags
+#'
+#' @export
+#'
+n_spline_list <- function(x, df, degree, internal_knots, boundary_knots, complete_basis = FALSE, periodic = FALSE, derivs = 0L, integral = FALSE) {
+    .Call(`_frecipes_n_spline_list`, x, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 
 b_spline_list2 <- function(x, df, degree, internal_knots, boundary_knots, complete_basis = TRUE, periodic = FALSE, derivs = 0L, integral = FALSE) {
@@ -79,60 +98,16 @@ be_least_squares_cpp <- function(dep, ind, inverse) {
     .Call(`_frecipes_be_least_squares_cpp`, dep, ind, inverse)
 }
 
-#' @title
-#' be_acworth_calc_cpp
-#'
-#' @description
-#' Acworth, R. I., Halloran, L. J. S., Rau, G. C., Cuthbert, M. O.,
-#'  & Bernardi, T. L. (2016). An objective frequency-domain method for
-#'   quantifying confined aquifer compressible storage using Earth and
-#'   atmospheric tides. Geophysical Research Letters, 43(November).
-#'   https://doi.org/10.1002/2016GL071328
-#'
-#' @param s2_gw \code{numeric} s2 component in the groundwater levels
-#' @param s2_et \code{numeric} s2 component in the earth tides
-#' @param s2_at \code{numeric} s2 component for atmospheric pressure
-#' @param m2_gw \code{numeric} m2 component in the groundwater levels
-#' @param m2_et \code{numeric} m2 component in the earth tides
-#' @param d_phase \code{numeric} phase difference between Earth tide and atmospheric drivers s2_et and s2_at
-#' @param inverse \code{logical} whether the barometric relationship is inverse (TRUE means that when the barometric pressure goes up the measured water level goes down (vented transducer, depth to water), FALSE means that when the barometric pressure goes up so does the measured pressure (non-vented transducer))
-#'
-#' @return barometric efficiency
-#' @export
-#'
-#' @examples
-#'
-#' be_acworth_cpp(s2_at = 7.461,
-#'            s2_et=224.640,
-#'            s2_gw=4.086,
-#'            m2_gw = 0.471,
-#'            m2_et = 492.526,
-#'            d_phase=-56.709,
-#'            inverse = TRUE)
-#' be_acworth_cpp(s2_at = 6.164,
-#'            s2_et=270.463,
-#'            s2_gw=0.329,
-#'            m2_gw = 0.225,
-#'            m2_et = 551.572,
-#'            d_phase=-71.726,
-#'            inverse = TRUE)
-#' be_acworth_cpp(s2_at = 5.897,
-#'            s2_et=234.478,
-#'            s2_gw=5.536,
-#'            m2_gw = 0.773,
-#'            m2_et = 558.075,
-#'            d_phase=-70.393,
-#'            inverse = TRUE)
-be_acworth_calc_cpp <- function(s2_gw, s2_et, s2_at, m2_gw, m2_et, d_phase, inverse) {
-    .Call(`_frecipes_be_acworth_calc_cpp`, s2_gw, s2_et, s2_at, m2_gw, m2_et, d_phase, inverse)
-}
-
 get_peaks <- function(freqs, f1, f2) {
     .Call(`_frecipes_get_peaks`, freqs, f1, f2)
 }
 
-be_acworth_cpp <- function(x, spans, detrend, demean, taper, inverse, f1, f2, frequency_scale) {
-    .Call(`_frecipes_be_acworth_cpp`, x, spans, detrend, demean, taper, inverse, f1, f2, frequency_scale)
+be_harmonic_cpp <- function(x, inverse) {
+    .Call(`_frecipes_be_harmonic_cpp`, x, inverse)
+}
+
+be_transfer <- function(x, spans, detrend, demean, taper, frequency, cycle_size) {
+    .Call(`_frecipes_be_transfer`, x, spans, detrend, demean, taper, frequency, cycle_size)
 }
 
 a_cpp <- function(x) {
@@ -175,6 +150,22 @@ bouwer_rice_abc <- function(rw, Le, Lw, H) {
 #' @export
 bouwer_rice <- function(time, drawdown, radius_screen, radius_casing, Le, Lw, H) {
     .Call(`_frecipes_bouwer_rice`, time, drawdown, radius_screen, radius_casing, Le, Lw, H)
+}
+
+dft <- function(x, frequency) {
+    .Call(`_frecipes_dft`, x, frequency)
+}
+
+dft_with_window <- function(x, frequency) {
+    .Call(`_frecipes_dft_with_window`, x, frequency)
+}
+
+dft_goertzel <- function(x, frequency) {
+    .Call(`_frecipes_dft_goertzel`, x, frequency)
+}
+
+be_dft <- function(x, frequency) {
+    .Call(`_frecipes_be_dft`, x, frequency)
 }
 
 #' @title
@@ -324,12 +315,6 @@ NULL
 NULL
 
 #' @title
-NULL
-
-#' @title
-NULL
-
-#' @title
 #' fft_matrix
 #'
 #' @description
@@ -348,10 +333,54 @@ fft_matrix <- function(x, n_new) {
     .Call(`_frecipes_fft_matrix`, x, n_new)
 }
 
+#' @title
+#' convolve_vec
+#'
+#' @description
+#' Circular convolution of two vectors having the same length
+#'
+#' @param x the vector that holds the series (numeric vector)
+#' @param y the vector to convolve with x (numeric vector)
+#'
+#'
+#' @return numeric vector that is the circular convolution of two vectors
+#'
+#'
+#' @noRd
+#'
 convolve_vec <- function(x, y) {
     .Call(`_frecipes_convolve_vec`, x, y)
 }
 
+#' @title
+#' convolve_filter
+#'
+#' @description
+#' convolution of vector with matrix
+#'
+#' @param x vector to convolve with y (numeric vector)
+#' @param y numeric matrix to convolve with x (column by column convolution)
+#'  (numeric matrix)
+#' @param remove_partial keep the end values or fill with NA (boolean)
+#' @param reverse should x be reversed before convolution (boolean)
+#'
+#' @return numeric matrix of convolved values
+#'
+#' @export
+#'
+#' @importFrom Rcpp sourceCpp
+#' @importFrom stats nextn
+#' @importFrom stats convolve
+#' @importFrom stats spec.pgram
+#'
+#' @examples
+#' a <- convolve_filter(x = 1:100,
+#'                      y = c(1:10, rep(0, 90)),
+#'                      remove_partial = FALSE,
+#'                      reverse = TRUE)
+#'
+#' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
+#'
 convolve_filter <- function(x, y, remove_partial, reverse) {
     .Call(`_frecipes_convolve_filter`, x, y, remove_partial, reverse)
 }

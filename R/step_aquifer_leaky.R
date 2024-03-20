@@ -87,6 +87,7 @@ StepAquiferLeaky <- R6Class(
     bake = function(new_data) {
 
       self$new_columns <- self$prefix
+      self$columns <- paste(self$columns, collapse = ",")
 
       hj <- hantush_jacob(
         new_data[[1]],
@@ -98,7 +99,7 @@ StepAquiferLeaky <- R6Class(
         self$max_terms
       )
 
-      setnames(hj, self$prefix)
+      setNames(hj, self$new_columns)
     }
   )
 )

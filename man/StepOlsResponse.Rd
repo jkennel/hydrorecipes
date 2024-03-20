@@ -32,7 +32,7 @@ predictions from different steps.
 \if{latex}{\out{\hypertarget{method-step_ols_response-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepOlsResponse$new(terms, role = "augment", ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepOlsResponse$new(formula, role = "augment", ...)}\if{html}{\out{</div>}}
 }
 
 }

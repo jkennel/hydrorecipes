@@ -55,8 +55,8 @@ Acworth, R.I., Halloran, L.J., Rau, G.C., Cuthbert, M.O. and Bernardi, T.L.,
 }
 \seealso{
 Other barometric: 
-\code{\link{StepBaroAcworth}},
 \code{\link{StepBaroClark}},
+\code{\link{StepBaroHarmonic}},
 \code{\link{step_baro_clark}()}
 }
 \concept{barometric}

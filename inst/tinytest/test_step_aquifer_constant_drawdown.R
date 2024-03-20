@@ -48,6 +48,19 @@ formula <- formula(times~.)
 dat <- data.frame(times = m[,1])
 
 
+frec = Recipe$new(formula = formula, data = dat)$
+  add_step(StepAquiferConstantDrawdown$new(time = times,
+                                           drawdown = 10,
+                                           thickness = 10,
+                                           radius_well = 0.15,
+                                           specific_storage = 1e-6,
+                                           hydraulic_conductivity = 1,
+                                           n_terms = 12L))$
+  prep()$
+  bake()
+
+
+
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 frec = Recipe$new(formula = formula, data = dat)$
   add_step(StepAquiferConstantDrawdown$new(time = times,

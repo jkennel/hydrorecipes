@@ -894,6 +894,33 @@ step_normalize <- function(.rec,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_ols_response
+#'
+#' @param recipe Recipe to use getting responses from a regression model
+#' @inheritParams step_scale
+#'
+#' @return
+#'
+#' @family ols
+#'
+#' @export
+#'
+#' @examples
+#' dat <- data.frame(x = rnorm(10), y = rnorm(10))
+#'
+#'
+step_ols_response <- function(.rec,
+                              formula,
+                              recipe,
+                              role = "predictor",
+                              ...){
+
+  terms <- NULL
+  env_list <- get_function_arguments()
+  .rec$add_step(do.call(StepOlsGapFill$new,
+                        env_list))
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_ols_gap_fill
 #'
 #' @param recipe Recipe to use for filling gaps
@@ -932,7 +959,7 @@ step_ols_gap_fill <- function(.rec,
 #'
 #' @return
 #'
-#' @family gap_fill
+#' @family ols
 #'
 #' @export
 #'

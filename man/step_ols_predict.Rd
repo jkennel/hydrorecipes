@@ -30,8 +30,7 @@ dat <- data.frame(x = rnorm(10), y = rnorm(10))
 
 }
 \seealso{
-Other gap_fill: 
-\code{\link{StepOlsGapFill}},
-\code{\link{step_ols_gap_fill}()}
+Other ols: 
+\code{\link{step_ols_response}()}
 }
-\concept{gap_fill}
+\concept{ols}

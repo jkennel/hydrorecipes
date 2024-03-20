@@ -38,6 +38,7 @@ StepAquiferTheis <- R6Class(
                           hydraulic_conductivity = 1.0e-4,
                           role = "predictor",
                           ...) {
+
       # get function parameters to pass to parent
       inputs <- list(
         time = substitute(time),
@@ -47,6 +48,7 @@ StepAquiferTheis <- R6Class(
         specific_storage = specific_storage,
         hydraulic_conductivity = hydraulic_conductivity,
         role = role,
+        step_name = "step_aquifer_theis",
         ...
       )
 
@@ -56,3 +58,5 @@ StepAquiferTheis <- R6Class(
     }
   )
 )
+
+

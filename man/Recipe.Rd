@@ -54,10 +54,14 @@ R6 Class
 \item \href{#method-recipe-add_step}{\code{Recipe$add_step()}}
 \item \href{#method-recipe-prep}{\code{Recipe$prep()}}
 \item \href{#method-recipe-bake}{\code{Recipe$bake()}}
+\item \href{#method-recipe-plate}{\code{Recipe$plate()}}
+\item \href{#method-recipe-tidy}{\code{Recipe$tidy()}}
 \item \href{#method-recipe-train_info}{\code{Recipe$train_info()}}
 \item \href{#method-recipe-update_term_info}{\code{Recipe$update_term_info()}}
 \item \href{#method-recipe-get_step_types}{\code{Recipe$get_step_types()}}
-\item \href{#method-recipe-plate}{\code{Recipe$plate()}}
+\item \href{#method-recipe-is_baked}{\code{Recipe$is_baked()}}
+\item \href{#method-recipe-get_response_data}{\code{Recipe$get_response_data()}}
+\item \href{#method-recipe-get_step_data}{\code{Recipe$get_step_data()}}
 \item \href{#method-recipe-clone}{\code{Recipe$clone()}}
 }
 }
@@ -67,7 +71,7 @@ R6 Class
 \subsection{Method \code{new()}}{
 Create a new recipe object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Recipe$new(formula, data, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Recipe$new(formula = NULL, data = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -147,6 +151,47 @@ features.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-recipe-plate"></a>}}
+\if{latex}{\out{\hypertarget{method-recipe-plate}{}}}
+\subsection{Method \code{plate()}}{
+Reduce the recipe to tabular form. Bake and coerce to the desired output
+type.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Recipe$plate(type = "df")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{type}}{The output data type: data.frame, data.table, matrix, tibble,}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+tabular output of baked Recipe.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-recipe-tidy"></a>}}
+\if{latex}{\out{\hypertarget{method-recipe-tidy}{}}}
+\subsection{Method \code{tidy()}}{
+get info about steps
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Recipe$tidy(type = "df")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{type}}{The output data type: data.frame, data.table, matrix, tibble,}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+tabular output of baked Recipe.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-recipe-train_info"></a>}}
 \if{latex}{\out{\hypertarget{method-recipe-train_info}{}}}
 \subsection{Method \code{train_info()}}{
@@ -207,24 +252,42 @@ character vector for the step types
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-recipe-plate"></a>}}
-\if{latex}{\out{\hypertarget{method-recipe-plate}{}}}
-\subsection{Method \code{plate()}}{
-Reduce the recipe to tabular form. Bake and coerce to the desired output
-type.
+\if{html}{\out{<a id="method-recipe-is_baked"></a>}}
+\if{latex}{\out{\hypertarget{method-recipe-is_baked}{}}}
+\subsection{Method \code{is_baked()}}{
+Get the indices of previously baked steps.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Recipe$plate(type = "df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Recipe$is_baked()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{type}}{The output data type: data.frame, data.table, matrix, tibble,}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Returns}{
-tabular output of baked Recipe.
+integer vector of indices
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-recipe-get_response_data"></a>}}
+\if{latex}{\out{\hypertarget{method-recipe-get_response_data}{}}}
+\subsection{Method \code{get_response_data()}}{
+Get the indices of previously baked steps.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Recipe$get_response_data(type = "df")}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+integer vector of indices
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-recipe-get_step_data"></a>}}
+\if{latex}{\out{\hypertarget{method-recipe-get_step_data}{}}}
+\subsection{Method \code{get_step_data()}}{
+Get the indices of previously baked steps.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Recipe$get_step_data(field_name)}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+integer vector of indices
 }
 }
 \if{html}{\out{<hr>}}

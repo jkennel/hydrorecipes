@@ -357,7 +357,7 @@ Rcpp::List distributed_lag_list4(Eigen::VectorXd x,
 
   unsigned int n_x = x.size();
 
-  if (n_x < max_lag * 10) {
+  if (n_x < max_lag * 30) {
     return(convolve_list(x, s, true, true));
   }
 

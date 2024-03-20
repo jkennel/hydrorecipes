@@ -8,7 +8,7 @@
 }
 \seealso{
 Other barometric: 
-\code{\link{StepBaroAcworth}},
+\code{\link{StepBaroHarmonic}},
 \code{\link{step_baro_acworth}()},
 \code{\link{step_baro_clark}()}
 }

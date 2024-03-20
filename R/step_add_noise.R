@@ -53,7 +53,7 @@ StepAddNoise <- R6Class(
     bake = function(new_data) {
 
       for (i in seq_along(self$columns)) {
-        noise <- fun(mean, sd)
+        noise <- self$fun(self$mean, self$sd)
         new_data[[i]] <- new_data[[i]] + noise
       }
 

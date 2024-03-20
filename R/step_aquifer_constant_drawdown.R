@@ -65,6 +65,7 @@ StepAquiferConstantDrawdown <- R6Class(
       self$n_terms <- n_terms
       self$columns <- time
 
+
       invisible(self)
     },
     bake = function(new_data) {

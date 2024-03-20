@@ -21,7 +21,7 @@ Rcpp::List b_spline_list(const arma::vec& x,
                          const unsigned int degree,
                          const arma::vec& internal_knots,
                          const arma::vec& boundary_knots,
-                         const bool complete_basis = true,
+                         const bool complete_basis = false,
                          const bool periodic = false,
                          const unsigned int derivs = 0,
                          const bool integral = false
@@ -50,6 +50,59 @@ Rcpp::List b_spline_list(const arma::vec& x,
 
   return out;
 }
+
+
+//' @title
+//' n_spline_list
+//'
+//' @description
+//' Create spline terms
+//'
+//' @inheritParams splines2::naturalSpline
+//' @param internal_knots locations where parameters can change
+//' @param boundary_knots end points of the spline
+//' @param complete_basis intercept argument
+//'
+//' @return List of distributed lags
+//'
+//' @export
+//'
+// [[Rcpp::export]]
+Rcpp::List n_spline_list(const arma::vec& x,
+                         const unsigned int df,
+                         const unsigned int degree,
+                         const arma::vec& internal_knots,
+                         const arma::vec& boundary_knots,
+                         const bool complete_basis = false,
+                         const bool periodic = false,
+                         const unsigned int derivs = 0,
+                         const bool integral = false
+)
+{
+
+  // BSpline object
+  splines2::NaturalSpline bs_obj;
+
+  // let splines2 figure out the logic of empty boundary knots
+  if (internal_knots.size() > 0) {
+    bs_obj = splines2::NaturalSpline(x, internal_knots, boundary_knots);
+  } else if (df != 0) {
+    bs_obj = splines2::NaturalSpline(x, df, boundary_knots);
+  }
+
+  // get natural-spline basis functions
+  const arma::mat bs_mat = bs_obj.basis(complete_basis);
+
+  size_t n = bs_mat.n_cols;
+  Rcpp::List out(n);
+
+  for (size_t i = 0; i < n; ++i) {
+    out[i] = bs_mat.col(i);
+  }
+
+  return out;
+}
+
 
 
 // [[Rcpp::export]]

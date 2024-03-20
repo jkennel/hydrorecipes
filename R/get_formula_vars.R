@@ -242,10 +242,11 @@ get_terms_from_info <- function(terms, nms, info) {
       include[[i]] <- as.character(terms[[i]])
     }
   }
+
   # find matches for the data columns
-  intersect(nms,
-            setdiff(unique(unlist(include)),
-                    unique(unlist(exclude))))
+  intersect(setdiff(unique(unlist(include)),
+                    unique(unlist(exclude))),
+            nms)
 
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

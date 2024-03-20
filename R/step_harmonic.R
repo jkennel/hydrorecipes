@@ -50,7 +50,6 @@ StepHarmonic <- R6Class(
 
       column_name <- self$columns
 
-      self$new_columns <- c()
       hals <- list()
       for (i in seq_along(column_name)) {
         hals[[i]] <- harmonic_list(unclass(new_data)[[i]],
@@ -76,20 +75,22 @@ StepHarmonic <- R6Class(
 
       f <- self$frequency
       n <- length(f)
-      x <- rep(f, 2)
+      x <- rep(f, 2L)
 
-      sin_coefficient <- seq(1, n, 2)
-      cos_coefficient <- seq(2, n, 2)
+      sin_coefficient <- seq.int(1L, n * 2L, 2L)
+      cos_coefficient <- seq.int(2L, n * 2L, 2L)
+
       amp_phase <- c(
         sqrt(cos_coefficient^2 + sin_coefficient^2), # amplitude
         atan2(cos_coefficient, sin_coefficient)      # phase
       )
+
       variable <- c(
         rep("amplitude", n),
         rep("phase", n)
       )
 
-      list(x, variable, value = amp_phase, step_id = self$id)
+      list(x = x, variable = variable, value = amp_phase, step_id = self$id)
     }
 
   )

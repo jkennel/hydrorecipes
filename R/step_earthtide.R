@@ -32,6 +32,7 @@ StepEarthtide <- R6Class(
     do_predict = NA,
     method = NA_character_,
     frequency = NA_real_,
+    return_matrix = TRUE,
 
     initialize = function(terms,
                           do_predict = TRUE,
@@ -94,7 +95,7 @@ StepEarthtide <- R6Class(
     },
     bake = function(new_data) {
       column_name <- self$columns
-      et <- calc_earthtide(
+      et <- mctl(calc_earthtide(
         new_data[[column_name]],
         do_predict = self$do_predict,
         method = self$method,
@@ -110,13 +111,18 @@ StepEarthtide <- R6Class(
         catalog = self$catalog,
         eop = self$eop,
         scale = self$scale,
+        return_matrix = self$return_matrix,
         n_thread = self$n_thread
-      )
+      ))
 
-      self$new_columns <- file.path(self$prefix,
-                                  names(et),
-                                  fsep = "_"
-      )
+      if (self$do_predict) {
+        self$new_columns <- paste0(self$prefix)
+      } else {
+        self$new_columns <- paste(rep(self$prefix, length(self$frequency) * 2L),
+               rep(c("cos", "sin"), length(self$frequency)),
+               rep(1:length(self$frequency), each = 2L), sep = "_")
+      }
+
       names(et) <- self$new_columns
 
       et
@@ -131,8 +137,8 @@ StepEarthtide <- R6Class(
       n <- length(f)
       x <- rep(f, 2)
 
-      sin_coefficient <- seq(1, n, 2)
-      cos_coefficient <- seq(2, n, 2)
+      cos_coefficient <- seq(1, n, 2)
+      sin_coefficient <- seq(2, n, 2)
       amp_phase <- c(
         sqrt(cos_coefficient^2 + sin_coefficient^2), # amplitude
         atan2(cos_coefficient, sin_coefficient)      # phase
