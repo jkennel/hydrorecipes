@@ -18,7 +18,31 @@ frec = Recipe$new(formula = formula, data = unclass(kennel_2020))$
   bake()
 
 resp <- frec$get_response_data('dt')[variable == "cumulative"]
+
+
+
 tinytest::expect_equivalent(resp[.N]$value, 0.879, tolerance = 1e-2)
+
+data("kennel_2020")
+kennel_2020[, datetime := as.numeric(datetime)]
+
+formula <- as.formula(wl~.)
+n_knots <- 100
+deg_free <- 27
+max_lag <- 1 + 720
+
+frec = Recipe$new(formula = formula, data = unclass(kennel_2020))$
+  add_step(StepLeadLag$new(baro, lag = frecipes:::log_lags_arma(n_knots, max_lag), n_shift = 0, n_subset = 1))$
+  add_step(StepSplineB$new(datetime, df = deg_free, intercept = FALSE))$
+  add_step(StepIntercept$new())$
+  add_step(StepDropColumns$new(baro))$
+  add_step(StepDropColumns$new(datetime))$
+  add_step(StepOlsResponse$new(formula))$
+  prep()$
+  bake()
+
+resp <- frec$get_response_data('dt')[variable == "cumulative"]
+resp
 
 
 

@@ -82,16 +82,27 @@ StepLeadLag <- R6Class(
     },
     response = function(co) {
 
+      n <- length(co)
+
       variable <- c(
         rep("coefficient", n),
         rep("cumulative", n)
       )
-      value <- collapse::rowbind(
+
+      value <- c(
         co,
         collapse::fcumsum(co)
       )
-
-      list(x = self$lag, variable, value, step_id = self$id)
+      # list(x = rep(0:(n-1), 2L),
+      #      variable = variable,
+      #      value = value,
+      #      step_id = rep(self$id, 2L * n),
+      #      term = "distributed_lag_interpolated")
+      list(x = rep(self$lag, 2L),
+           variable = variable,
+           value = value,
+           step_id = rep(self$id, 2L * n),
+           term = "lead_lag")
     }
   )
 )

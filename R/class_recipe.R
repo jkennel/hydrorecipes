@@ -326,7 +326,6 @@ Recipe <- R6Class(
       return_type(resp, type = type)
 
     },
-
     #' @description
     #' Get the indices of previously baked steps.
     #' @return integer vector of indices
