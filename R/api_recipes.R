@@ -492,7 +492,11 @@ step_check_spacing <- function(.rec,
 #' @examples
 step_distributed_lag <- function(.rec,
                                  terms,
-                                 knots,
+                                 n_lag = 12L,
+                                 max_lag = 86400L,
+                                 knots = NA_real_,
+                                 basis_matrix = NA_real_,
+                                 intercept = FALSE,
                                  role = "predictor",
                                  ...) {
   terms <- substitute(terms)
