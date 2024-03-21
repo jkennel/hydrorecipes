@@ -23,6 +23,7 @@ StepDistributedLag <- R6Class(
     n_lag = NULL,
     #' @field max_lag integer the maximum lag.
     max_lag = NULL,
+    intercept = NULL,
     #' @field basis_matrix matrix the basis matrix.
     basis_matrix = NULL,
 
@@ -32,6 +33,7 @@ StepDistributedLag <- R6Class(
                           max_lag = 86400L,
                           knots = NA_real_,
                           basis_matrix = NA_real_,
+                          intercept = FALSE,
                           role = "predictor",
                           ...) {
       # get function parameters to pass to parent
@@ -50,27 +52,26 @@ StepDistributedLag <- R6Class(
         # step specific values
         if (!all(is.na(knots))) {
           self$knots <- knots
-          self$n_lag <- length(knots)
-          self$max_lag <- max(knots)
         } else {
           self$knots <- log_lags_arma(self$n_lag, self$max_lag)
-          self$n_lag <- length(knots)
-          self$max_lag <- max(knots)
         }
+
+        self$n_lag <- length(knots)
+        self$max_lag <- max(knots)
+        self$intercept <- intercept
 
         rng = 0:self$max_lag
         one_n = c(1L, self$n_lag)
 
         self$basis_matrix <- n_spline_list(rng, 0L, 3L, self$knots[-one_n],
-                                           self$knots[one_n], FALSE, FALSE,
-                                           0L, FALSE)
+                                           self$knots[one_n], self$intercept,
+                                           FALSE, 0L, FALSE)
 
       } else {
         self$max_lag <- nrow(basis_matrix)
         self$n_lag <- ncol(basis_matrix)
         self$basis_matrix <- collapse::mctl(basis_matrix)
       }
-
 
       invisible(self)
     },

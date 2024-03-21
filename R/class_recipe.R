@@ -321,7 +321,7 @@ Recipe <- R6Class(
     get_response_data = function(type = "df") {
 
       resp <- self$get_step_data("response_data")
-      print(resp)
+      # print(resp)
       resp <- collapse::rowbind(resp)
       return_type(resp, type = type)
 
