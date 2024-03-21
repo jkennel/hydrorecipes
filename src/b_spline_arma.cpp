@@ -73,7 +73,7 @@ Rcpp::List n_spline_list(const arma::vec& x,
                          const unsigned int degree,
                          const arma::vec& internal_knots,
                          const arma::vec& boundary_knots,
-                         const bool complete_basis = false,
+                         const bool complete_basis,
                          const bool periodic = false,
                          const unsigned int derivs = 0,
                          const bool integral = false

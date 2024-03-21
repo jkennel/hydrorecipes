@@ -35,7 +35,7 @@ b_spline_list <- function(x, df, degree, internal_knots, boundary_knots, complet
 #'
 #' @export
 #'
-n_spline_list <- function(x, df, degree, internal_knots, boundary_knots, complete_basis = FALSE, periodic = FALSE, derivs = 0L, integral = FALSE) {
+n_spline_list <- function(x, df, degree, internal_knots, boundary_knots, complete_basis, periodic = FALSE, derivs = 0L, integral = FALSE) {
     .Call(`_frecipes_n_spline_list`, x, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 

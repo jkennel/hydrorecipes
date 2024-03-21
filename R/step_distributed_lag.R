@@ -23,6 +23,7 @@ StepDistributedLag <- R6Class(
     n_lag = NULL,
     #' @field max_lag integer the maximum lag.
     max_lag = NULL,
+    #' @field intercept boolean use an intercept for the basis matrix
     intercept = NULL,
     #' @field basis_matrix matrix the basis matrix.
     basis_matrix = NULL,

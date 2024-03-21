@@ -93,11 +93,7 @@ StepLeadLag <- R6Class(
         co,
         collapse::fcumsum(co)
       )
-      # list(x = rep(0:(n-1), 2L),
-      #      variable = variable,
-      #      value = value,
-      #      step_id = rep(self$id, 2L * n),
-      #      term = "distributed_lag_interpolated")
+
       list(x = rep(self$lag, 2L),
            variable = variable,
            value = value,
