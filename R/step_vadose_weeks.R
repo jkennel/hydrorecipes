@@ -53,6 +53,7 @@ StepVadoseWeeks <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
+
       vr <- vadose_response(
         new_data[[1]],
         self$air_diffusivity,
@@ -60,8 +61,9 @@ StepVadoseWeeks <- R6Class(
         self$precision,
         self$inverse
       )
+
       self$new_columns <- self$prefix
-      setnames(vr, self$new_columns)
+      setNames(vr, self$new_columns)
     }
   )
 )
