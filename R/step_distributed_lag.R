@@ -107,17 +107,12 @@ StepDistributedLag <- R6Class(
       # check for multiple outcomes!!
       resp <- basis_matrix %*% co
 
-      variable <- c(rep("coefficient", nr * nc),
-                    rep("cumulative", nr * nc))
-
-      value <- c(as.vector(resp), as.vector(collapse::fcumsum(resp)))
-
 
       list(x = rep(0:(nr - 1L), nc * 2L),
-           variable = variable,
-           value = value,
+           variable = rep(c("coefficient", "cumulative"), each = nr * nc),
+           value = c(resp, collapse::fcumsum(resp)),
            step_id = rep(self$id, 2L * nr * nc),
-           outcome = rep(colnames(co), each = 2L * nr),
+           outcome = rep(rep(colnames(co), each = nr), 2L),
            term = rep("distributed_lag_interpolated", 2L * nr * nc))
     }
   )
