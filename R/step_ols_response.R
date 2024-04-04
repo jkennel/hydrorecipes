@@ -70,7 +70,6 @@ StepOlsResponse <- R6Class(
           }
         }
       }
-      print(str(resp))
       resp <- collapse::rowbind(resp)
 
       # save the response

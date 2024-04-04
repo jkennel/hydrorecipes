@@ -107,9 +107,6 @@ determine_coefficients <- function(x, y) {
     y$data[!y$to_rem, , drop = FALSE]
   )
 
-  print(head(x$data))
-  print(str(x$data[!x$to_rem, , drop = FALSE]))
-  print(str(y$data[!y$to_rem, , drop = FALSE]))
   colnames(fit) <- y$term_info$variable
   fit
 
@@ -125,11 +122,9 @@ subset_groups <- function(x) {
 response_groups <- function(steps, x, fit) {
   # subsets are the regressor groups
   subsets <- subset_groups(x$term_info)
-  # print(subsets)
-  # print(fit)
+
   lst <- list()
   for (i in seq_along(subsets)) {
-    # print(steps[[i]])
     lst[[i]] <- steps[[i]]$response(fit[subsets[[i]], , drop = FALSE])
   }
 

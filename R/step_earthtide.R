@@ -133,8 +133,6 @@ StepEarthtide <- R6Class(
         super$response()
       }
 
-      print(str(co))
-
       f  <- self$frequency
       x  <- rep(f, 2L)
 

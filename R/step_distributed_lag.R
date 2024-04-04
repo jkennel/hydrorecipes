@@ -107,7 +107,6 @@ StepDistributedLag <- R6Class(
       # check for multiple outcomes!!
       resp <- basis_matrix %*% co
 
-
       list(x = rep(0:(nr - 1L), nc * 2L),
            variable = rep(c("coefficient", "cumulative"), each = nr * nc),
            value = c(resp, collapse::fcumsum(resp)),
