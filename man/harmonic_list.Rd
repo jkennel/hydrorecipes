@@ -16,7 +16,7 @@ harmonic_list(time, frequency, start, cycle_size)
 \item{cycle_size}{size of the cycle in number of measurements}
 }
 \value{
-List of sines and cosines
+List of cosines and sines
 }
 \description{
 Create sin and cosine terms for harmonic analysis

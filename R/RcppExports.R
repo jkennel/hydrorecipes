@@ -810,7 +810,7 @@ hantush_jacob <- function(time, flow_rate, radius, storativity, transmissivity, 
 #' @param start time the cycle starts
 #' @param cycle_size size of the cycle in number of measurements
 #'
-#' @return List of sines and cosines
+#' @return List of cosines and sines
 #'
 #' @export
 #'

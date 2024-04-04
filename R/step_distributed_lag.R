@@ -92,7 +92,7 @@ StepDistributedLag <- R6Class(
         self$new_columns <- c(self$new_columns, names(dl[[i]]))
       }
 
-      self$columns <- rep(self$columns, each = length(self$basis_matrix))
+      # self$columns <- rep(self$columns, each = length(self$basis_matrix))
 
       unlist(dl, recursive = FALSE)
 
@@ -100,28 +100,25 @@ StepDistributedLag <- R6Class(
     response = function(co) {
 
       basis_matrix <- collapse::qM(self$basis_matrix)
-      n <- nrow(basis_matrix)
 
-      # print(str(basis_matrix))
-      # print(co)
+      nr <- nrow(basis_matrix)
+      nc <- ncol(co)
+
       # check for multiple outcomes!!
       resp <- basis_matrix %*% co
 
-      variable <- c(
-        rep("coefficient", n),
-        rep("cumulative", n)
-      )
+      variable <- c(rep("coefficient", nr * nc),
+                    rep("cumulative", nr * nc))
 
-      value <- c(
-        resp,
-        cumsum(resp)
-      )
+      value <- c(as.vector(resp), as.vector(collapse::fcumsum(resp)))
 
-      list(x = rep(0:(n-1), 2L),
+
+      list(x = rep(0:(nr - 1L), nc * 2L),
            variable = variable,
            value = value,
-           step_id = rep(self$id, 2L * n),
-           term = "distributed_lag_interpolated")
+           step_id = rep(self$id, 2L * nr * nc),
+           outcome = rep(colnames(co), each = 2L * nr),
+           term = rep("distributed_lag_interpolated", 2L * nr * nc))
     }
   )
 )

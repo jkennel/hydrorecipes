@@ -4,7 +4,17 @@
 \alias{step_distributed_lag}
 \title{step_distributed_lag}
 \usage{
-step_distributed_lag(.rec, terms, knots, role = "predictor", ...)
+step_distributed_lag(
+  .rec,
+  terms,
+  n_lag = 12L,
+  max_lag = 86400L,
+  knots = NA_real_,
+  basis_matrix = NA_real_,
+  intercept = FALSE,
+  role = "predictor",
+  ...
+)
 }
 \arguments{
 \item{.rec}{the R6 recipe object.}

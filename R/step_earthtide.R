@@ -133,22 +133,29 @@ StepEarthtide <- R6Class(
         super$response()
       }
 
-      f <- self$frequency
-      n <- length(f)
-      x <- rep(f, 2)
+      print(str(co))
 
-      cos_coefficient <- seq(1, n, 2)
-      sin_coefficient <- seq(2, n, 2)
+      f  <- self$frequency
+      x  <- rep(f, 2L)
+
+      nr <- length(f)
+      nc <- ncol(co)
+
+      cos_coefficient <- co[seq.int(1L, nr * 2L, 2L), , drop = FALSE]
+      sin_coefficient <- co[seq.int(2L, nr * 2L, 2L), , drop = FALSE]
+
       amp_phase <- c(
-        sqrt(cos_coefficient^2 + sin_coefficient^2), # amplitude
-        atan2(cos_coefficient, sin_coefficient)      # phase
-      )
-      variable <- c(
-        rep("amplitude", n),
-        rep("phase", n)
+        as.vector(sqrt(cos_coefficient^2 + sin_coefficient^2)), # amplitude
+        as.vector(atan2(cos_coefficient, sin_coefficient))      # phase
       )
 
-      list(x, variable, value = amp_phase, step_id = self$id)
+      variable <- c(
+        rep("amplitude", nr * nc),
+        rep("phase", nr * nc)
+      )
+
+      list(x = x, variable = variable, value = amp_phase, step_id = self$id)
+
     }
   )
 )

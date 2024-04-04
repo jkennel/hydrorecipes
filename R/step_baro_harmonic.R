@@ -115,7 +115,6 @@ StepBaroHarmonic <- R6Class(
 
       self$barometric_efficiency <- be_harmonic_cpp(soln_cplx, self$inverse)
 
-      print(self$barometric_efficiency)
 
     return(NULL)
 

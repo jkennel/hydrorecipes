@@ -77,28 +77,48 @@ StepLeadLag <- R6Class(
         self$new_columns <- c(self$new_columns, nn)
       }
 
-      # print(str(ll))
       unlist(ll, recursive = FALSE)
     },
     response = function(co) {
 
-      n <- length(co)
 
-      variable <- c(
-        rep("coefficient", n),
-        rep("cumulative", n)
-      )
+      nr <- nrow(co)
+      nc <- ncol(co)
 
-      value <- c(
-        co,
-        collapse::fcumsum(co)
-      )
+      variable <- c(rep("coefficient", nr * nc),
+                    rep("cumulative", nr * nc))
 
-      list(x = rep(self$lag, 2L),
+      value <- c(as.vector(co), as.vector(collapse::fcumsum(co)))
+
+
+      list(x = rep(self$lag, 2L * nc),
            variable = variable,
            value = value,
-           step_id = rep(self$id, 2L * n),
-           term = "lead_lag")
+           step_id = rep(self$id, 2L * nr * nc),
+           outcome = rep(colnames(co), each = 2L * nr),
+           term = rep("lead_lag", 2L * nr * nc))
+
+
+
+
+
+      # n <- length(co)
+      #
+      # variable <- c(
+      #   rep("coefficient", n),
+      #   rep("cumulative", n)
+      # )
+      #
+      # value <- c(
+      #   co,
+      #   collapse::fcumsum(co)
+      # )
+      #
+      # list(x = rep(self$lag, 2L),
+      #      variable = variable,
+      #      value = value,
+      #      step_id = rep(self$id, 2L * n),
+      #      term = "lead_lag")
     }
   )
 )

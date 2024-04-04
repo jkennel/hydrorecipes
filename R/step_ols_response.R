@@ -54,18 +54,23 @@ StepOlsResponse <- R6Class(
 
       # print(x$term_info)
       resp <- list()
+
       for (i in seq_along(steps)) {
         wh  <- collapse::whichv(x$term_info$step_index, i)
         co_name <- co_names[wh]
 
-        if(length(co_name) > 0) {
-          co <- self$coefficients[wh, , drop = TRUE]
+        if (length(co_name) > 0) {
+          co <- self$coefficients[wh, , drop = FALSE]
           resp[[i]] <- steps[[i]]$response(co)
+          if (!"outcome" %in% names(resp[[i]])) {
+            resp[[i]]$outcome <- rep(colnames(co), times = nrow(co))
+          }
           if (!"term" %in% names(resp[[i]])) {
-            resp[[i]]$term <- co_name
+            resp[[i]]$term <- rep(co_name, times = ncol(co))
           }
         }
       }
+      print(str(resp))
       resp <- collapse::rowbind(resp)
 
       # save the response

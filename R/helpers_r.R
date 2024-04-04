@@ -107,6 +107,10 @@ determine_coefficients <- function(x, y) {
     y$data[!y$to_rem, , drop = FALSE]
   )
 
+  print(head(x$data))
+  print(str(x$data[!x$to_rem, , drop = FALSE]))
+  print(str(y$data[!y$to_rem, , drop = FALSE]))
+  colnames(fit) <- y$term_info$variable
   fit
 
 }

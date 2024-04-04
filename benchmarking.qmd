@@ -676,6 +676,16 @@ results <- bench::press(
 results
 
 
+start <- as.POSIXct("2016-08-18", tz = "UTC")
+end <- as.POSIXct("2016-10-13", tz = "UTC")
+
+dates <- data.table(datetime = seq.POSIXt(start, end, 1))
+
+aa <- recipe(datetime~., dates) |> 
+  step_spline_b(datetime, df = 13) |>
+  prep() |> 
+  bake()
+
 ```
 
 ## step_aquifer_grf & step_aquifer_theis
@@ -1050,7 +1060,7 @@ results <- bench::press(
       frec = Recipe$new(formula = formula, data = dat)$
         add_step(StepCenter$new(x))$
         add_step(StepScale$new(z))$
-        add_step(StepOlsResponse$new())$
+        add_step(StepOlsResponse$new(formula = formula))$
         prep()$
         bake(),
       check = FALSE,
@@ -1058,7 +1068,27 @@ results <- bench::press(
     )
   }
 )
+results
 
+formula <- as.formula(y+x~z)
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(x = rnorm(rows), 
+                      y = rnorm(rows),
+                      z = rnorm(rows))
+    bench::mark(
+      frec = Recipe$new(formula = formula, data = dat)$
+        add_step(StepSplineB$new(x, df = 5L))$
+        add_step(StepScale$new(z))$
+        add_step(StepOlsResponse$new(formula = formula))$
+        prep()$
+        bake(),
+      check = FALSE,
+      relative = relative
+    )
+  }
+)
 results
 ```
 

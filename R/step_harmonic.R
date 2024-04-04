@@ -23,7 +23,7 @@ StepHarmonic <- R6Class(
     initialize = function(terms,
                           frequency = NA_real_,
                           cycle_size = NA_real_,
-                          starting_value = NA_real_,
+                          starting_value = 0.0,
                           role = "predictor",
                           ...) {
       # get function parameters to pass to parent
@@ -52,6 +52,8 @@ StepHarmonic <- R6Class(
 
       hals <- list()
       for (i in seq_along(column_name)) {
+
+
         hals[[i]] <- harmonic_list(unclass(new_data)[[i]],
           frequency = self$frequency,
           start = self$starting_value,
@@ -73,21 +75,23 @@ StepHarmonic <- R6Class(
     },
     response = function(co) {
 
-      f <- self$frequency
-      n <- length(f)
-      x <- rep(f, 2L)
+      f  <- self$frequency
+      x  <- rep(f, 2L)
 
-      sin_coefficient <- seq.int(1L, n * 2L, 2L)
-      cos_coefficient <- seq.int(2L, n * 2L, 2L)
+      nr <- length(f)
+      nc <- ncol(co)
+
+      cos_coefficient <- co[seq.int(1L, nr * 2L, 2L), , drop = FALSE]
+      sin_coefficient <- co[seq.int(2L, nr * 2L, 2L), , drop = FALSE]
 
       amp_phase <- c(
-        sqrt(cos_coefficient^2 + sin_coefficient^2), # amplitude
-        atan2(cos_coefficient, sin_coefficient)      # phase
+        as.vector(sqrt(cos_coefficient^2 + sin_coefficient^2)), # amplitude
+        as.vector(atan2(cos_coefficient, sin_coefficient))      # phase
       )
 
       variable <- c(
-        rep("amplitude", n),
-        rep("phase", n)
+        rep("amplitude", nr * nc),
+        rep("phase", nr * nc)
       )
 
       list(x = x, variable = variable, value = amp_phase, step_id = self$id)

@@ -12,7 +12,7 @@
 //' @param start time the cycle starts
 //' @param cycle_size size of the cycle in number of measurements
 //'
-//' @return List of sines and cosines
+//' @return List of cosines and sines
 //'
 //' @export
 //'
@@ -28,8 +28,8 @@ Rcpp::List harmonic_list(const Rcpp::NumericVector& time,
   Rcpp::List out;
 
   for (auto &f : frequency) {
-    out.push_back(sin(m * f));
     out.push_back(cos(m * f));
+    out.push_back(sin(m * f));
   }
 
   return(out);

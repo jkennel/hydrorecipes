@@ -100,12 +100,14 @@ Step <- R6Class(
       )
     },
     response = function(co) {
+      n_each = nrow(co)
       n <- length(co)
       list(
         x = rep(NA_real_, n),
         variable = rep("coefficient", n),
-        value = co,
-        step_id = rep(self$id, n)
+        value = as.vector(co),
+        step_id = rep(self$id, n),
+        outcome = rep(colnames(co), each = n_each)
       )
     }
 

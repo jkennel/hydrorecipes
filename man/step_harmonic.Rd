@@ -9,7 +9,7 @@ step_harmonic(
   terms,
   frequency = NA_real_,
   cycle_size = NA_real_,
-  starting_value = NA_real_,
+  starting_value = 0,
   role = "predictor",
   skip = FALSE,
   keep_original_cols = FALSE,

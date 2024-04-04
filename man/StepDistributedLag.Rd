@@ -18,6 +18,8 @@
 
 \item{\code{max_lag}}{integer the maximum lag.}
 
+\item{\code{intercept}}{boolean use an intercept for the basis matrix}
+
 \item{\code{basis_matrix}}{matrix the basis matrix.}
 }
 \if{html}{\out{</div>}}
@@ -50,6 +52,7 @@
   max_lag = 86400L,
   knots = NA_real_,
   basis_matrix = NA_real_,
+  intercept = FALSE,
   role = "predictor",
   ...
 )}\if{html}{\out{</div>}}

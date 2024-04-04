@@ -4,16 +4,16 @@
 \alias{step_ols_response}
 \title{step_ols_response}
 \usage{
-step_ols_response(.rec, formula, recipe, role = "predictor", ...)
+step_ols_response(.rec, formula, role = "augment", ...)
 }
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
-\item{recipe}{Recipe to use getting responses from a regression model}
-
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
+
+\item{recipe}{Recipe to use getting responses from a regression model}
 }
 \description{
 step_ols_response
