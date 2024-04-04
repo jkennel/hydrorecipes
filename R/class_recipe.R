@@ -146,11 +146,11 @@ Recipe <- R6Class(
 
 
       for (i in types_loop) {
+
         columns <- self$steps[[i]]$columns
         if (is.null(columns)) {
           columns <- names(self$result)[1]
         }
-
 
         # modify results
         self$result <- switch(

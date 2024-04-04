@@ -81,12 +81,12 @@ get_regression_data <- function(new_data, term_info, id_type = "predictor") {
   ti <- collapse::qDF(term_info)
   ti <- ti[ti$source != "removed", ]
   ti <- ti[ti$variable %in% nms, ]
-  # print('---------------------')
-  # print(ti)
+
   x <- list()
 
   # create regression matrices
   x$term_info <- ti[ti$roles == id_type, ]
+
   x$term_info$inds <- seq_len(nrow(x$term_info))
   x$term_info$ids <- which(nms %in% x$term_info$variable)
 
@@ -107,10 +107,13 @@ determine_coefficients <- function(x, y) {
     y$data[!y$to_rem, , drop = FALSE]
   )
 
+
   colnames(fit) <- y$term_info$variable
   fit
 
 }
+
+
 
 subset_groups <- function(x) {
   split(
@@ -136,13 +139,19 @@ predict_groups <- function(x, fit) {
 
   # subsets are the regressor groups
   subsets <- subset_groups(x$term_info)
-
   lst <- list()
+
   for (i in seq_along(subsets)) {
+
+    nms <- paste(colnames(fit), unique(x$term_info[subsets[[i]], "step_name"]), sep = "_")
+
     lst[[i]] <- collapse::mctl(
       x$data[, subsets[[i]], drop = FALSE] %*%
         fit[subsets[[i]], , drop = FALSE]
     )
+
+    names(lst[[i]]) <- nms
+
   }
 
   lst
