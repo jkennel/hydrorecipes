@@ -947,37 +947,40 @@ step_ols_gap_fill <- function(.rec,
 step_ols_predict <- function(.rec,
                              formula,
                              role = "predictor",
+                             do_response = TRUE,
+                             do_predict = TRUE,
                              ...){
 
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepOlsPredict$new,
                         env_list))
 }
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' @title step_ols_response
+#' #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' #' @title step_ols_response
+#' #'
+#' #' @param recipe Recipe to use getting responses from a regression model
+#' #' @inheritParams step_scale
+#' #'
+#' #' @return
+#' #'
+#' #' @family ols
+#' #'
+#' #' @export
+#' #'
+#' #' @examples
+#' #' dat <- data.frame(x = rnorm(10), y = rnorm(10))
+#' #'
+#' #'
+#' step_ols_response <- function(.rec,
+#'                               formula,
+#'                               role = "augment",
+#'                               ...){
 #'
-#' @param recipe Recipe to use getting responses from a regression model
-#' @inheritParams step_scale
-#'
-#' @return
-#'
-#' @family ols
-#'
-#' @export
-#'
-#' @examples
-#' dat <- data.frame(x = rnorm(10), y = rnorm(10))
-#'
-#'
-step_ols_response <- function(.rec,
-                              formula,
-                              role = "augment",
-                              ...){
-
-  env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepOlsResponse$new,
-                        env_list))
-}
+#'   env_list <- get_function_arguments()
+#'   .rec$add_step(do.call(StepOlsResponse$new,
+#'                         env_list))
+#' }
+#
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_pca
 #'

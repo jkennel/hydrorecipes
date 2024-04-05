@@ -61,6 +61,7 @@ R6 Class
 \item \href{#method-recipe-get_step_types}{\code{Recipe$get_step_types()}}
 \item \href{#method-recipe-is_baked}{\code{Recipe$is_baked()}}
 \item \href{#method-recipe-get_response_data}{\code{Recipe$get_response_data()}}
+\item \href{#method-recipe-get_predict_data}{\code{Recipe$get_predict_data()}}
 \item \href{#method-recipe-get_step_data}{\code{Recipe$get_step_data()}}
 \item \href{#method-recipe-clone}{\code{Recipe$clone()}}
 }
@@ -271,6 +272,19 @@ integer vector of indices
 Get the indices of previously baked steps.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Recipe$get_response_data(type = "df")}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+integer vector of indices
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-recipe-get_predict_data"></a>}}
+\if{latex}{\out{\hypertarget{method-recipe-get_predict_data}{}}}
+\subsection{Method \code{get_predict_data()}}{
+Get the indices of previously baked steps.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Recipe$get_predict_data(type = "df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

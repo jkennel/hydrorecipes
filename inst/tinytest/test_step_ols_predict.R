@@ -16,3 +16,5 @@ frec = Recipe$new(formula = formula, data = unclass(kennel_2020))$
   add_step(StepOlsPredict$new(formula))$
   prep()$
   bake()
+
+

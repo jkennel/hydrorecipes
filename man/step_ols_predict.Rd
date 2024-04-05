@@ -4,15 +4,10 @@
 \alias{step_ols_predict}
 \title{step_ols_predict}
 \usage{
-step_ols_predict(.rec, terms, role = "predictor", ...)
+step_ols_predict(.rec, formula, role = "predictor", ...)
 }
 \arguments{
 \item{.rec}{the R6 recipe object.}
-
-\item{terms}{the unquoted names of the variables to use or a selector
-function.  terms replaces the `...` of the recipes package but requires
-variables to be included within `c()`.  For example to include variables x
-and y you would write `c(x,y)` in the frecipes package.}
 
 \item{role}{character - the name of the role}
 
@@ -28,9 +23,5 @@ predictions from different steps.
 dat <- data.frame(x = rnorm(10), y = rnorm(10))
 
 
-}
-\seealso{
-Other ols: 
-\code{\link{step_ols_response}()}
 }
 \concept{ols}

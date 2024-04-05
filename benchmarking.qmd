@@ -1047,49 +1047,49 @@ results
 #| echo: true
 #| warning: false
 
-formula <- as.formula(y~x+z)
-
-
-results <- bench::press(
-  rows = n,
-  {
-    dat <- data.frame(x = rnorm(rows), 
-                      y = rnorm(rows),
-                      z = rnorm(rows))
-    bench::mark(
-      frec = Recipe$new(formula = formula, data = dat)$
-        add_step(StepCenter$new(x))$
-        add_step(StepScale$new(z))$
-        add_step(StepOlsResponse$new(formula = formula))$
-        prep()$
-        bake(),
-      check = FALSE,
-      relative = relative
-    )
-  }
-)
-results
-
-formula <- as.formula(y+x~z)
-results <- bench::press(
-  rows = n,
-  {
-    dat <- data.frame(x = rnorm(rows), 
-                      y = rnorm(rows),
-                      z = rnorm(rows))
-    bench::mark(
-      frec = Recipe$new(formula = formula, data = dat)$
-        add_step(StepSplineB$new(x, df = 5L))$
-        add_step(StepScale$new(z))$
-        add_step(StepOlsResponse$new(formula = formula))$
-        prep()$
-        bake(),
-      check = FALSE,
-      relative = relative
-    )
-  }
-)
-results
+# formula <- as.formula(y~x+z)
+# 
+# 
+# results <- bench::press(
+#   rows = n,
+#   {
+#     dat <- data.frame(x = rnorm(rows), 
+#                       y = rnorm(rows),
+#                       z = rnorm(rows))
+#     bench::mark(
+#       frec = Recipe$new(formula = formula, data = dat)$
+#         add_step(StepCenter$new(x))$
+#         add_step(StepScale$new(z))$
+#         add_step(StepOlsResponse$new(formula = formula))$
+#         prep()$
+#         bake(),
+#       check = FALSE,
+#       relative = relative
+#     )
+#   }
+# )
+# results
+# 
+# formula <- as.formula(y+x~z)
+# results <- bench::press(
+#   rows = n,
+#   {
+#     dat <- data.frame(x = rnorm(rows), 
+#                       y = rnorm(rows),
+#                       z = rnorm(rows))
+#     bench::mark(
+#       frec = Recipe$new(formula = formula, data = dat)$
+#         add_step(StepSplineB$new(x, df = 5L))$
+#         add_step(StepScale$new(z))$
+#         add_step(StepOlsResponse$new(formula = formula))$
+#         prep()$
+#         bake(),
+#       check = FALSE,
+#       relative = relative
+#     )
+#   }
+# )
+# results
 ```
 
 ## step_ols_gap_fill

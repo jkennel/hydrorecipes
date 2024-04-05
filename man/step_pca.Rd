@@ -27,3 +27,30 @@ for this step. See \code{\link[recipes:selections]{selections()}} for more detai
 `StepPca` Does PCA for a set of columns. This currently is an
 in house function. Use at your own risk!
 }
+\details{
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_ols_response
+#'
+#' @param recipe Recipe to use getting responses from a regression model
+#' @inheritParams step_scale
+#'
+#' @return
+#'
+#' @family ols
+#'
+#' @export
+#'
+#' @examples
+#' dat <- data.frame(x = rnorm(10), y = rnorm(10))
+#'
+#'
+step_ols_response <- function(.rec,
+                              formula,
+                              role = "augment",
+                              ...){
+
+  env_list <- get_function_arguments()
+  .rec$add_step(do.call(StepOlsResponse$new,
+                        env_list))
+}
+}

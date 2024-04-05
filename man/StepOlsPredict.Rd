@@ -31,7 +31,13 @@ predictions from different steps.
 \if{latex}{\out{\hypertarget{method-step_ols_predict-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepOlsPredict$new(terms, role = "predictor", ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepOlsPredict$new(
+  formula,
+  role = "predictor",
+  response = TRUE,
+  predict = TRUE,
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 }
@@ -40,7 +46,7 @@ predictions from different steps.
 \if{latex}{\out{\hypertarget{method-step_ols_predict-bake}{}}}
 \subsection{Method \code{bake()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StepOlsPredict$bake(new_data, term_info)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StepOlsPredict$bake(new_data, term_info, steps)}\if{html}{\out{</div>}}
 }
 
 }

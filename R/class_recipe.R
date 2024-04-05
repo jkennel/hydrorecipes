@@ -328,12 +328,22 @@ Recipe <- R6Class(
     #' @description
     #' Get the indices of previously baked steps.
     #' @return integer vector of indices
+    get_predict_data = function(type = "df") {
+
+      # at the moment we don't handle multiple ols runs
+      pred <- self$get_step_data("decomposition")
+      # pred <- collapse::rowbind(pred)
+      # return_type(pred, type = type)
+
+    },
+    #' @description
+    #' Get the indices of previously baked steps.
+    #' @return integer vector of indices
     get_step_data = function(field_name) {
 
       data <- lapply(self$steps, function(x) {
         x[[field_name]]
       })
-
 
       data[!sapply(data, is.null)]
 

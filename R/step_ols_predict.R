@@ -17,12 +17,15 @@ StepOlsPredict <- R6Class(
   public = list(
 
     # step specific variables
-    # ols_results = list(),
     outcomes = NULL,
     predictors = NULL,
     coefficients = NULL,
     formula = NULL,
-    # residuals = NULL,
+    decomposition = NULL,
+    response_data = NULL,
+
+    do_response = NULL,
+    do_predict = NULL,
     # s = NULL,
     # df_residual = NULL,
     # rank = NULL,
@@ -30,12 +33,14 @@ StepOlsPredict <- R6Class(
 
     initialize = function(formula,
                           role = "predictor",
+                          do_response = TRUE,
+                          do_predict = TRUE,
                           ...) {
       # get function parameters to pass to parent
       # terms <- substitute(terms)
       env_list <- get_function_arguments()
       env_list$step_name <- "step_ols_predict"
-      env_list$type <- "supervise_add"
+      env_list$type <- "supervise_augment"
       super$initialize(
         terms = NULL,
         env_list[names(env_list) != "terms"],
@@ -43,25 +48,59 @@ StepOlsPredict <- R6Class(
       )
 
       self$formula <- formula
+      self$do_response <- do_response
+      self$do_predict <- do_predict
 
       invisible(self)
     },
-    bake = function(new_data, term_info) {
+    bake = function(new_data, term_info, steps) {
 
 
-      x <- get_regression_data(new_data, term_info, id_type = "predictor")
-      y <- get_regression_data(new_data, term_info, id_type = "outcome")
+      self$predictors <- get_regression_data(new_data, term_info, id_type = "predictor")
+      self$outcomes <- get_regression_data(new_data, term_info, id_type = "outcome")
+
+      self$coefficients <- determine_coefficients(self$predictors, self$outcomes)
 
 
-      self$coefficients <- determine_coefficients(x, y)
+      if (self$do_predict) {
+        # predict for each group
+        self$decomposition <- predict_groups(self$predictors, self$coefficients)
+        self$decomposition <- unlist(self$decomposition, recursive = FALSE)
+        self$decomposition <- append(self$decomposition, list(id = rep(self$id, length(self$decomposition[[1]]))))
+      }
 
-      # does this work for multiple outcomes?
-      lst <- predict_groups(x, self$coefficients)
-      lst <- unlist(lst, recursive = FALSE)
-      self$new_columns <- paste(names(lst),
-                                rep(self$id, length(lst)), sep = "_")
-      names(lst) <- self$new_columns
-      lst
+      if (self$do_response) {
+        # response for each group
+        # column names in term info
+        co_names <- self$predictors$term_info$variable
+
+        # print(x$term_info)
+        resp <- list()
+
+        for (i in seq_along(steps)) {
+          wh  <- collapse::whichv(self$predictors$term_info$step_index, i)
+          co_name <- co_names[wh]
+
+          if (length(co_name) > 0) {
+            co <- self$coefficients[wh, , drop = FALSE]
+            resp[[i]] <- steps[[i]]$response(co)
+            if (!"outcome" %in% names(resp[[i]])) {
+              resp[[i]]$outcome <- rep(colnames(co), times = nrow(co))
+            }
+            if (!"term" %in% names(resp[[i]])) {
+              resp[[i]]$term <- rep(co_name, times = ncol(co))
+            }
+          }
+        }
+
+
+        # save the response
+        self$response_data <- collapse::rowbind(resp)
+        self$response_data <- append(self$response_data, list(id = rep(self$id, length(self$response_data[[1]]))))
+      }
+
+      return(NULL)
+
 
     }
   )
