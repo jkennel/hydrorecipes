@@ -925,7 +925,7 @@ step_ols_gap_fill <- function(.rec,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' @title step_ols_predict
+#' @title step_ols
 #'
 #' @description Uses the Eigen C++ library fast versions to generate
 #' predictions from different steps.
@@ -944,7 +944,7 @@ step_ols_gap_fill <- function(.rec,
 #' dat <- data.frame(x = rnorm(10), y = rnorm(10))
 #'
 #'
-step_ols_predict <- function(.rec,
+step_ols <- function(.rec,
                              formula,
                              role = "predictor",
                              do_response = TRUE,
@@ -952,7 +952,7 @@ step_ols_predict <- function(.rec,
                              ...){
 
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepOlsPredict$new,
+  .rec$add_step(do.call(StepOls$new,
                         env_list))
 }
 #' #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

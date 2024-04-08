@@ -13,7 +13,7 @@ frec = Recipe$new(formula = formula, data = unclass(kennel_2020))$
   add_step(StepIntercept$new())$
   add_step(StepDropColumns$new(baro))$
   add_step(StepDropColumns$new(datetime))$
-  add_step(StepOlsPredict$new(formula))$
+  add_step(StepOls$new(formula))$
   prep()$
   bake()
 

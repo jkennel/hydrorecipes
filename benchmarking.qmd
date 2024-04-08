@@ -984,7 +984,7 @@ results
 ```
 
 
-## step_ols_predict
+## step_ols
 ```{r}
 #| echo: true
 #| warning: false
@@ -1002,7 +1002,7 @@ results <- bench::press(
       frec = Recipe$new(formula = formula, data = dat)$
         add_step(StepCenter$new(x))$
         add_step(StepScale$new(z))$
-        add_step(StepOlsPredict$new())$
+        add_step(StepOls$new())$
         plate(),
       check = FALSE,
       relative = relative

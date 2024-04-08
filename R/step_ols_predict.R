@@ -5,14 +5,14 @@
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' R6 Class
 #'
-#' `StepOlsPredict` Uses the Eigen C++ library fast versions to generate
+#' `StepOls` Uses the Eigen C++ library fast versions to generate
 #' predictions from different steps.
 #'
 #' @inheritParams Step
 #'
 #' @export
-StepOlsPredict <- R6Class(
-  classname = "step_ols_predict",
+StepOls <- R6Class(
+  classname = "step_ols",
   inherit = Step,
   public = list(
 
@@ -39,7 +39,7 @@ StepOlsPredict <- R6Class(
       # get function parameters to pass to parent
       # terms <- substitute(terms)
       env_list <- get_function_arguments()
-      env_list$step_name <- "step_ols_predict"
+      env_list$step_name <- "step_ols"
       env_list$type <- "supervise_augment"
       super$initialize(
         terms = NULL,
