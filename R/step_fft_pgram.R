@@ -67,7 +67,7 @@ StepPgram <- R6Class(
           self$taper
         )
       }
-      self$new_columns <- name_columns(self$prefix, "", n = length(pspec))
+      self$new_columns <- name_columns(self$prefix, NULL, n = length(pspec))
       names(pspec) <- self$new_columns
 
       return(pspec)
