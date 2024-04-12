@@ -8,7 +8,7 @@ step_baro_acworth(
   .rec,
   water_level,
   barometric_pressure,
-  earth_tides,
+  earth_tide,
   frequency_a = 1.9324,
   frequency_b = 2,
   inverse = FALSE,
@@ -28,7 +28,7 @@ step_baro_acworth(
 \item{barometric_pressure}{\code{variable} unquoted barometric pressure
 column name}
 
-\item{earth_tides}{\code{variable} unquoted Earth tide column name}
+\item{earth_tide}{\code{variable} unquoted Earth tide column name}
 
 \item{frequency_a}{\code{double} Earth tide frequency}
 

@@ -270,7 +270,7 @@ step_aquifer_leaky <- function(.rec,
 #' @param water_level \code{variable} unquoted water level column name
 #' @param barometric_pressure \code{variable} unquoted barometric pressure
 #'   column name
-#' @param earth_tides \code{variable} unquoted Earth tide column name
+#' @param earth_tide \code{variable} unquoted Earth tide column name
 #' @param frequency_a \code{double} Earth tide frequency
 #' @param frequency_b \code{double} Related barometric frequency
 #' @param inverse \code{logical} whether the barometric relationship is inverse
@@ -291,7 +291,7 @@ step_aquifer_leaky <- function(.rec,
 step_baro_acworth <- function(.rec,
                               water_level,
                               barometric_pressure,
-                              earth_tides,
+                              earth_tide,
                               frequency_a = 1.9324, # m2
                               frequency_b = 2.0,    # s2
                               inverse = FALSE,
@@ -303,7 +303,7 @@ step_baro_acworth <- function(.rec,
                               ...) {
   water_level <- substitute(water_level)
   barometric_pressure <- substitute(barometric_pressure)
-  earth_tides <- substitute(earth_tides)
+  earth_tide <- substitute(earth_tide)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepBaroAcworth$new,
                         env_list))
@@ -363,7 +363,7 @@ step_baro_clark <- function(.rec,
 #' @param water_level \code{variable} unquoted water level column name
 #' @param barometric_pressure \code{variable} unquoted barometric pressure
 #'   column name
-#' @param earth_tides \code{variable} unquoted Earth tide column name
+#' @param earth_tide \code{variable} unquoted Earth tide column name
 #' @param inverse \code{logical} whether the barometric relationship is inverse
 #'
 #' @return \code{double} barometric efficiency using Acworth's method
@@ -393,7 +393,7 @@ step_baro_harmonic <- function(.rec,
   time <- substitute(time)
   water_level <- substitute(water_level)
   barometric_pressure <- substitute(barometric_pressure)
-  earth_tides <- substitute(earth_tides)
+  earth_tide <- substitute(earth_tide)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepBaroHarmonic$new,
                         env_list))

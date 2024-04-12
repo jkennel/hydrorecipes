@@ -26,6 +26,8 @@ step_baro_harmonic(
 \item{barometric_pressure}{\code{variable} unquoted barometric pressure
 column name}
 
+\item{earth_tide}{\code{variable} unquoted Earth tide column name}
+
 \item{frequency}{numeric vector - the frequencies of the sin and cos curves}
 
 \item{cycle_size}{numeric - the period of the sin and cos curves}
@@ -35,8 +37,6 @@ column name}
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
-
-\item{earth_tides}{\code{variable} unquoted Earth tide column name}
 }
 \value{
 \code{double} barometric efficiency using Acworth's method
