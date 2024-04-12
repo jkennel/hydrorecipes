@@ -178,7 +178,8 @@ Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd &x,
                             const Eigen::VectorXi &spans,
                             bool detrend,
                             bool demean,
-                            double taper = 0.1);
+                            double taper = 0.1,
+                            bool pad_fft = true);
 
 // Solve
 

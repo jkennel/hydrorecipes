@@ -991,12 +991,12 @@ Eigen::VectorXd cooper_bredehoeft_papadopulos_laplace(
     int n_terms)
 {
 
-  Rcpp::Rcout << "The value is r " << r << std::endl;
-  Rcpp::Rcout << "The value is r_c " << r_c << std::endl;
-  Rcpp::Rcout << "The value is r_w " << r_w << std::endl;
-  Rcpp::Rcout << "The value is Tr " << Tr << std::endl;
-  Rcpp::Rcout << "The value is S " << S << std::endl;
-  Rcpp::Rcout << "The value is h_0 " << h_0 << std::endl;
+  // Rcpp::Rcout << "The value is r " << r << std::endl;
+  // Rcpp::Rcout << "The value is r_c " << r_c << std::endl;
+  // Rcpp::Rcout << "The value is r_w " << r_w << std::endl;
+  // Rcpp::Rcout << "The value is Tr " << Tr << std::endl;
+  // Rcpp::Rcout << "The value is S " << S << std::endl;
+  // Rcpp::Rcout << "The value is h_0 " << h_0 << std::endl;
 
 
   CooperBredehoeftPapadopulos well(time, r, r_c, r_w, Tr, S, h_0);

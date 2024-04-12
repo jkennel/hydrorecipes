@@ -591,8 +591,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // spec_pgram
-Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper);
-RcppExport SEXP _frecipes_spec_pgram(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP) {
+Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper, bool pad_fft);
+RcppExport SEXP _frecipes_spec_pgram(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP, SEXP pad_fftSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -601,13 +601,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type detrend(detrendSEXP);
     Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
     Rcpp::traits::input_parameter< double >::type taper(taperSEXP);
-    rcpp_result_gen = Rcpp::wrap(spec_pgram(x, spans, detrend, demean, taper));
+    Rcpp::traits::input_parameter< bool >::type pad_fft(pad_fftSEXP);
+    rcpp_result_gen = Rcpp::wrap(spec_pgram(x, spans, detrend, demean, taper, pad_fft));
     return rcpp_result_gen;
 END_RCPP
 }
 // spec_pgram_list
-Rcpp::List spec_pgram_list(Rcpp::List& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper);
-RcppExport SEXP _frecipes_spec_pgram_list(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP) {
+Rcpp::List spec_pgram_list(Rcpp::List& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper, bool pad_fft);
+RcppExport SEXP _frecipes_spec_pgram_list(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP, SEXP pad_fftSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -616,7 +617,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type detrend(detrendSEXP);
     Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
     Rcpp::traits::input_parameter< double >::type taper(taperSEXP);
-    rcpp_result_gen = Rcpp::wrap(spec_pgram_list(x, spans, detrend, demean, taper));
+    Rcpp::traits::input_parameter< bool >::type pad_fft(pad_fftSEXP);
+    rcpp_result_gen = Rcpp::wrap(spec_pgram_list(x, spans, detrend, demean, taper, pad_fft));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -2188,8 +2190,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_convolve_list2", (DL_FUNC) &_frecipes_convolve_list2, 4},
     {"_frecipes_multiply_ffts", (DL_FUNC) &_frecipes_multiply_ffts, 1},
     {"_frecipes_fill_lower_left", (DL_FUNC) &_frecipes_fill_lower_left, 2},
-    {"_frecipes_spec_pgram", (DL_FUNC) &_frecipes_spec_pgram, 5},
-    {"_frecipes_spec_pgram_list", (DL_FUNC) &_frecipes_spec_pgram_list, 5},
+    {"_frecipes_spec_pgram", (DL_FUNC) &_frecipes_spec_pgram, 6},
+    {"_frecipes_spec_pgram_list", (DL_FUNC) &_frecipes_spec_pgram_list, 6},
     {"_frecipes_spec_welch", (DL_FUNC) &_frecipes_spec_welch, 4},
     {"_frecipes_solve_cplx_parallel", (DL_FUNC) &_frecipes_solve_cplx_parallel, 1},
     {"_frecipes_list_to_matrix", (DL_FUNC) &_frecipes_list_to_matrix, 3},

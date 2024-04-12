@@ -809,23 +809,27 @@ std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
                              const Eigen::VectorXi& spans,
                              bool detrend,
                              bool demean,
-                             double taper) {
+                             double taper,
+                             bool pad_fft) {
 
    if (spans.size() < 1) {
      Rcpp::stop("spec_pgram: spans must be length 1 or larger.");
    }
 
-   // detrend or demean
-   x = detrend_and_demean_matrix(x, detrend, demean);
-
    size_t n_row = x.rows();
-   size_t n_new = next_n_eigen(n_row);
+   size_t n_new = n_row;
+
+   if (pad_fft) {
+     n_new = next_n_eigen(n_row);
+   }
 
    std::complex<double> scale = 1.0 / n_row; // or n_new
 
    // taper vector
    ArrayXd taper_array = spec_taper(n_row, taper).array();
 
+   // detrend or demean
+   x = detrend_and_demean_matrix(x, detrend, demean);
 
    // Do FFTs
    MatrixXcd x_fft_mat = fft_matrix(x.array().colwise() * taper_array,
@@ -857,7 +861,7 @@ std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
 
 //==============================================================================
 //' @title
- //' spec_pgram
+ //' spec_pgram_list
  //'
  //' @description
  //' Calculate the periodogram.  This method only keeps the columns necessary for
@@ -876,7 +880,8 @@ std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
                             const Eigen::VectorXi& spans,
                             bool detrend,
                             bool demean,
-                            double taper) {
+                            double taper,
+                            bool pad_fft) {
 
    if (spans.size() < 1) {
      Rcpp::stop("spec_pgram: spans must be length 1 or larger.");
@@ -885,7 +890,12 @@ std::list<Eigen::VectorXd> convolve_list2(const Eigen::VectorXd& x,
    Eigen::VectorXd tmp = x[0];
    size_t ind = 0;
    size_t n_row = tmp.size();
-   size_t n_new = next_n_eigen(n_row);
+
+   size_t n_new = n_row;
+   if (pad_fft) {
+     n_new = next_n_eigen(n_row);
+   }
+
    size_t n = x.size();
    size_t n_col_pgram = double(n / 2.0) * (n + 1);
    Rcpp::List pgram(n_col_pgram);

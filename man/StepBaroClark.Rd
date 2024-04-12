@@ -10,7 +10,8 @@
 Other barometric: 
 \code{\link{StepBaroHarmonic}},
 \code{\link{step_baro_acworth}()},
-\code{\link{step_baro_clark}()}
+\code{\link{step_baro_clark}()},
+\code{\link{step_baro_harmonic}()}
 }
 \concept{barometric}
 \section{Super class}{

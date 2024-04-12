@@ -425,12 +425,12 @@ fill_lower_left <- function(x, start) {
     .Call(`_frecipes_fill_lower_left`, x, start)
 }
 
-spec_pgram <- function(x, spans, detrend, demean, taper) {
-    .Call(`_frecipes_spec_pgram`, x, spans, detrend, demean, taper)
+spec_pgram <- function(x, spans, detrend, demean, taper, pad_fft) {
+    .Call(`_frecipes_spec_pgram`, x, spans, detrend, demean, taper, pad_fft)
 }
 
-spec_pgram_list <- function(x, spans, detrend, demean, taper) {
-    .Call(`_frecipes_spec_pgram_list`, x, spans, detrend, demean, taper)
+spec_pgram_list <- function(x, spans, detrend, demean, taper, pad_fft) {
+    .Call(`_frecipes_spec_pgram_list`, x, spans, detrend, demean, taper, pad_fft)
 }
 
 spec_welch <- function(x, length_subset, overlap, window) {

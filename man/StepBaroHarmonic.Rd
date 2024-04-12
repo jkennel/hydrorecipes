@@ -22,7 +22,8 @@ Acworth, R. I., Halloran, L. J. S., Rau, G. C., Cuthbert, M. O.,
 Other barometric: 
 \code{\link{StepBaroClark}},
 \code{\link{step_baro_acworth}()},
-\code{\link{step_baro_clark}()}
+\code{\link{step_baro_clark}()},
+\code{\link{step_baro_harmonic}()}
 }
 \concept{barometric}
 \section{Super class}{

@@ -20,15 +20,18 @@ pad_num <- function(n, pad = "0") {
 }
 
 name_columns <- function(id, column_name, n) {
+
   if (is.null(column_name)) {
     if (n < 2) {
       return(file.path(id, fsep = "_"))
     }
     return(file.path(id, pad_num(n), fsep = "_"))
   }
+
   if (n < 2) {
     return(file.path(id, column_name, fsep = "_"))
   }
+
 
   file.path(id, column_name, pad_num(n), fsep = "_")
 }

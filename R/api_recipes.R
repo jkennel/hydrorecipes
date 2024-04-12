@@ -351,6 +351,54 @@ step_baro_clark <- function(.rec,
   .rec$add_step(do.call(StepBaroClark$new,
                         env_list))
 }
+
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' step_baro_harmonic
+#'
+#' @description
+#'
+#' @inheritParams step_fft_pgram
+#' @inheritParams step_harmonic
+#'
+#' @param water_level \code{variable} unquoted water level column name
+#' @param barometric_pressure \code{variable} unquoted barometric pressure
+#'   column name
+#' @param earth_tides \code{variable} unquoted Earth tide column name
+#' @param inverse \code{logical} whether the barometric relationship is inverse
+#'
+#' @return \code{double} barometric efficiency using Acworth's method
+#'
+#' @family barometric
+#'
+#' @references
+#' Acworth, R.I., Halloran, L.J., Rau, G.C., Cuthbert, M.O. and Bernardi, T.L.,
+#'  2016. An objective frequency domain method for quantifying confined aquifer
+#'  compressible storage using Earth and atmospheric tides. Geophysical Research
+#'  Letters, 43(22), pp.11-671.
+#'
+#' @examples
+#'
+#' @export
+step_baro_harmonic <- function(.rec,
+                               time,
+                               water_level,
+                               barometric_pressure,
+                               earth_tide,
+                               frequency = c(1.9324, 2.0),
+                               cycle_size = 86400,
+                               start = 0.0,
+                               inverse = TRUE,
+                               role = "augment",
+                               ...) {
+  time <- substitute(time)
+  water_level <- substitute(water_level)
+  barometric_pressure <- substitute(barometric_pressure)
+  earth_tides <- substitute(earth_tides)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepBaroHarmonic$new,
+                        env_list))
+}
+
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_patch
 #'
