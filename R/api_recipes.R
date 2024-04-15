@@ -682,6 +682,7 @@ step_fft_pgram <- function(.rec,
                            demean = TRUE,
                            lst = TRUE,
                            taper = 0.1,
+                           pad_fft = TRUE,
                            role = "predictor",
                            ...) {
   terms <- substitute(terms)

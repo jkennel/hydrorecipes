@@ -332,8 +332,8 @@ Recipe <- R6Class(
 
       # at the moment we don't handle multiple ols runs
       pred <- self$get_step_data("decomposition")
-      # pred <- collapse::rowbind(pred)
-      # return_type(pred, type = type)
+      pred <- collapse::rowbind(pred)
+      return_type(pred, type = type)
 
     },
     #' @description

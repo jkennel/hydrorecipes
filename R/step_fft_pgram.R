@@ -21,12 +21,14 @@ StepPgram <- R6Class(
     demean = NA,
     taper = NA_real_,
     lst = NA,
+    pad_fft = NA,
     initialize = function(terms,
                           spans = 3,
                           detrend = TRUE,
                           demean = TRUE,
                           lst = TRUE,
                           taper = 0.1,
+                          pad_fft = TRUE,
                           role = "predictor",
                           ...) {
       # get function parameters to pass to parent
@@ -45,6 +47,7 @@ StepPgram <- R6Class(
       self$demean <- demean
       self$taper <- taper
       self$lst <- lst
+      self$pad_fft <- pad_fft
 
       invisible(self)
     },
@@ -56,7 +59,8 @@ StepPgram <- R6Class(
           self$spans,
           self$detrend,
           self$demean,
-          self$taper
+          self$taper,
+          self$pad_fft
         ))
       } else {
         pspec <- spec_pgram_list(
@@ -64,7 +68,8 @@ StepPgram <- R6Class(
           self$spans,
           self$detrend,
           self$demean,
-          self$taper
+          self$taper,
+          self$pad_fft
         )
       }
       self$new_columns <- name_columns(self$prefix, NULL, n = length(pspec))

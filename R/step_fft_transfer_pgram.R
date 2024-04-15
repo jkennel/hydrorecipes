@@ -48,6 +48,7 @@ StepTransferPgram <- R6Class(
       self$demean <- demean
       self$taper <- taper
 
+
       invisible(self)
     },
     bake = function(new_data) {
