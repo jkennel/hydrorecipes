@@ -25,5 +25,7 @@ Imports:
     splines2,
     collapse
 LinkingTo: Rcpp, RcppArmadillo, RcppThread, RcppEigen, splines2, BH
+Suggests:
+    tinytest
 SystemRequirements: fftw3 (libfftw3-dev (deb), or fftw-devel (rpm)), C++17
 RoxygenNote: 7.3.1
