@@ -3,34 +3,6 @@
 # Sudicky and Frind 1982 Parallel Fractures Adapted for Heat Step --------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepTransportFracturesHeat` Sudicky and Frind 1982 solution adapted for
-#' heat. Two parallel fractures.
-#'
-#' @param time vector elapsed time (t)
-#' @param distance_fracture vector distance along fracture (z)
-#' @param distance_matrix vector distance into matrix (x)
-#' @param temperature_influent vector temperature history (t_in)
-#' @param time_influent vector time of influent values (t_in)
-#' @param temperature_initial double temperature  (t_0)
-#' @param fracture_aperture double fracture aperture (2b)
-#' @param fracture_spacing double fracture aperture (2B)
-#' @param velocity double water velocity in fracture (v)
-#' @param thermal_conductivity_water double water thermal conductivity (λ_f)
-#' @param thermal_conductivity_solids double solids thermal conductivity (λ_s)
-#' @param specific_heat_water double specific heat of water
-#' @param specific_heat_solids double specific heat of solid particles
-#' @param density_water double density of the water (ρ_w)
-#' @param density_solids double density of the solid particles (ρ_s)
-#' @param porosity double matrix porosity (θ)
-#' @param n_terms integer the number of laplace terms
-#'
-#' @inheritParams Step
-#'
-#' @family transport
-#'
-#' @export
 StepTransportFracturesHeat <- R6Class(
 
   classname = 'step_transport_fractures_heat',
@@ -116,7 +88,7 @@ StepTransportFracturesHeat <- R6Class(
 
     bake = function(new_data) {
 
-      pfh <- parallel_fractures_heat(
+      pfh <- list(parallel_fractures_heat(
         new_data[[1]], # time
         new_data[[2]], # z
         new_data[[3]], # x
@@ -133,10 +105,13 @@ StepTransportFracturesHeat <- R6Class(
         self$density_water,
         self$density_solids,
         self$porosity,
-        self$n_terms)
+        self$n_terms))
 
       self$new_columns <- self$prefix
-      setnames(pfh, self$new_columns)
+
+      names(pfh) <- self$new_columns
+
+      pfh
     }
   )
 )

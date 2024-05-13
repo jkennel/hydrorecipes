@@ -16,41 +16,42 @@ step_pca(
 )
 }
 \arguments{
-\item{role}{For model terms created by this step, what analysis role should
-they be assigned? By default, the new columns created by this step from
-the original variables will be used as \emph{predictors} in a model.}
+\item{.rec}{the R6 recipe object.}
 
-\item{...}{One or more selector functions to choose variables
-for this step. See \code{\link[recipes:selections]{selections()}} for more details.}
+\item{terms}{the unquoted names of the variables to use or a selector
+function.  terms replaces the `...` of the recipes package but requires
+variables to be included within `c()`.  For example to include variables x
+and y you would write `c(x,y)` in the frecipes package.}
+
+\item{na_rm}{logical - should NA values be removed from calculations}
+
+\item{role}{character - the name of the role}
+
+\item{...}{additional arguments}
+}
+\value{
+an updated recipe
 }
 \description{
 `StepPca` Does PCA for a set of columns. This currently is an
 in house function. Use at your own risk!
 }
-\details{
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' @title step_ols_response
-#'
-#' @param recipe Recipe to use getting responses from a regression model
-#' @inheritParams step_scale
-#'
-#' @return
-#'
-#' @family ols
-#'
-#' @export
-#'
-#' @examples
-#' dat <- data.frame(x = rnorm(10), y = rnorm(10))
-#'
-#'
-step_ols_response <- function(.rec,
-                              formula,
-                              role = "augment",
-                              ...){
+\examples{
 
-  env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepOlsResponse$new,
-                        env_list))
-}
+set.seed(1)
+
+formula <- as.formula(x~a+b+d+e+f+g)
+rows <- 1000
+
+dat <- data.frame(x = rnorm(rows),
+                  a = rnorm(rows),
+                  b = rnorm(rows),
+                  d = rnorm(rows),
+                  e = rnorm(rows),
+                  f = rnorm(rows),
+                  g = rnorm(rows))
+
+rec  = recipe(formula = formula, data = dat) |>
+  step_pca(all_numeric()) |>
+  plate()
 }

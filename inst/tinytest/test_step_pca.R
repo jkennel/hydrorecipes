@@ -1,12 +1,11 @@
 set.seed(1)
 
-formula <- as.formula(x~a+b+c+d+e+f+g)
+formula <- as.formula(x~a+b+d+e+f+g)
 rows <- 1000
 
     dat <- data.frame(x = rnorm(rows),
                       a = rnorm(rows),
                       b = rnorm(rows),
-                      c = rnorm(rows),
                       d = rnorm(rows),
                       e = rnorm(rows),
                       f = rnorm(rows),
@@ -44,7 +43,7 @@ frec = Recipe$new(formula = formula, data = dat)$
   plate("df")
 # standard version
 rec  = recipe(formula = formula, data = dat) |>
-  step_pca(all_numeric()) |>
+  step_pca(c(a,b,d)) |>
   plate()
 
 tinytest::expect_equivalent(frec, rec, info = "StepPca with recipes api")

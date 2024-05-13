@@ -16,6 +16,8 @@
 //'
 //' @export
 //'
+//' @noRd
+//'
 // [[Rcpp::export]]
 Rcpp::List harmonic_list(const Rcpp::NumericVector& time,
                          const Rcpp::NumericVector& frequency,

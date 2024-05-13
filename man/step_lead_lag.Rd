@@ -41,6 +41,9 @@ n_subset is not equal to 0. The value of n_shift has to be less than
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 Lag or lead a column or columns.  This requires a sorted and regular time
   series.

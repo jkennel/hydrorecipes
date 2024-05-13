@@ -23,10 +23,35 @@ function.  terms replaces the `...` of the recipes package but requires
 variables to be included within `c()`.  For example to include variables x
 and y you would write `c(x,y)` in the frecipes package.}
 
+\item{spans}{vector of odd integers giving the widths of modified
+    Daniell smoothers to be used to smooth the periodogram.}
+
+\item{detrend}{logical. If \code{TRUE}, remove a linear trend from
+    the series. This will also remove the mean.}
+
+\item{demean}{logical. If \code{TRUE}, subtract the mean of the
+    series.}
+
+\item{taper}{specifies the proportion of data to taper.  A split
+    cosine bell taper is applied to this proportion of the data at the
+    beginning and end of the series.}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
-calculates the transfer function using pgram method.
+Calculates the transfer function with pgram results.
+}
+\examples{
+data(kennel_2020)
+
+form <- as.formula("wl~.")
+
+rec <- recipe(form, kennel_2020) |>
+       step_fft_transfer_pgram(c(wl, baro, et), spans = 3) |>
+
 }

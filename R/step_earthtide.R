@@ -3,13 +3,6 @@
 # Generate Synthetic Earth Tides Step ------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepEarthtide` generates sin and cosine wavegroups.
-#'
-#' @inheritParams Step, earthtide::calc_earthtide
-#'
-#' @export
 StepEarthtide <- R6Class(
   classname = "step_earthtide",
   inherit = Step,

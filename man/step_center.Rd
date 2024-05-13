@@ -36,6 +36,9 @@ data.frame like object.}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 Adds a step to center a data column(s)
 }
@@ -43,6 +46,8 @@ Adds a step to center a data column(s)
 dat <- data.frame(x = rnorm(10), y = rnorm(10))
 
 rec <- recipe(y~x, data = dat) |>
-       step_center(x)
+       step_center(x) |>
+       prep() |>
+       bake()
 
 }

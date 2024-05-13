@@ -10,7 +10,7 @@
 #   plate("df")
 #
 # frec2 = recipe(formula = formula, data = dat) |>
-#   step_fft_pgram(c(x, y))
+#   step_fft_pgram(c(x, y)) |>
 #   step_fft_coherence() |>
 #   plate("df")
 #

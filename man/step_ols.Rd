@@ -16,19 +16,40 @@ step_ols(
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
+\item{formula}{formula for the regression}
+
 \item{role}{character - the name of the role}
 
-\item{...}{additional arguments}
+\item{do_response}{\code{logical} calculate and return the responses?}
 
-\item{recipe}{Recipe to use for filling gaps}
+\item{do_predict}{calculate and return the predictions?}
+
+\item{...}{additional arguments}
+}
+\value{
+an updated recipe
 }
 \description{
 Uses the Eigen C++ library fast versions to generate
-predictions from different steps.
+predictions and coefficients from a recipe.
 }
 \examples{
-dat <- data.frame(x = rnorm(10), y = rnorm(10))
+data("kennel_2020")
+kennel_2020[, datetime := as.numeric(datetime)]
+formula <- as.formula(wl~.)
+n_knots <- 12
+deg_free <- 27
+max_lag <- 1 + 720
 
-
+frec = Recipe$new(formula = formula, data = unclass(kennel_2020))$
+  add_step(StepDistributedLag$new(baro,
+                                  knots = frecipes:::log_lags_arma(n_knots, max_lag)))$
+  add_step(StepSplineB$new(datetime, df = deg_free, intercept = FALSE))$
+  add_step(StepIntercept$new())$
+  add_step(StepDropColumns$new(baro))$
+  add_step(StepDropColumns$new(datetime))$
+  add_step(StepOls$new(formula))$
+  prep()$
+  bake()
 }
 \concept{ols}

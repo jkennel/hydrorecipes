@@ -3,32 +3,6 @@
 # Barker and Herbert Two Radial Patches Step -----------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepAquiferPatch` barker_herbert 1982 solution for radial patches.
-#'
-#' @param time
-#' @param flow_rate
-#' @param thickness
-#' @param radius
-#' @param radius_patch
-#' @param hydraulic_conductivity_inner
-#' @param hydraulic_conductivity_outer
-#' @param specific_storage_inner
-#' @param specific_storage_outer
-#'
-#' @inheritParams Step
-#'
-#' @references
-#' Barker, J.A., and R. Herbert, 1982: Pumping tests in patchy
-#'  aquifers, Ground Water, vol. 20, No. 2, pp. 150-155.
-#'
-#' Butler, J.J., 1988: Pumping tests in nonuniform aquifers – The radially
-#'  symmetric case, Journal of Hydrology, Vol. 101, pp. 15-30.
-#'
-#' @family aquifer
-#'
-#' @export
 StepAquiferPatch <- R6Class(
   classname = "step_aquifer_patch",
   inherit = Step,

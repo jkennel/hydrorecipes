@@ -3,15 +3,6 @@
 # Add variables to Recipe Step -------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-# `StepAddVars` adds variable vectors.
-#'
-#' @param terms name of vars
-#'
-#' @inheritParams Step
-#'
-#' @export
 StepAddVars <- R6Class(
 
   classname = "step_add_vars",
@@ -24,12 +15,13 @@ StepAddVars <- R6Class(
                           role = "predictor",
                           ...) {
 
-      # get function parameters to pass to parent
-      if (is.character(terms)) {
-        unlist(deparse(terms))
-      } else {
+      # get function parameters to pass to parent - strings can be passed
+      is_string <- tryCatch(as.character(terms),
+                            error = function(terms) (terms))
+      if ("error" %in% class(is_string)) {
         terms <- substitute(terms)
       }
+
       env_list <- get_function_arguments()
       env_list$step_name <- "step_add_vars"
       env_list$type <- "add_from_template"
@@ -53,3 +45,4 @@ StepAddVars <- R6Class(
 
   )
 )
+

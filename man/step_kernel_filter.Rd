@@ -29,6 +29,23 @@ and y you would write `c(x,y)` in the frecipes package.}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 linearly convolve a kernel with a data series.
+}
+\examples{
+
+formula <- as.formula(x~y+z)
+rows <- 1e4
+
+dat <- data.frame(x = rep(1, rows),
+                  y = 1:rows,
+                  z = cumsum(rnorm(rows)))
+
+frec = recipe(formula = formula, data = dat) |>
+  step_kernel_filter(z, kernel = list(rep(1, 1001)/1001), align = "center") |>
+  plate("tbl")
+
 }

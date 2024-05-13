@@ -39,6 +39,9 @@ data.frame like object.}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 Adds a step to scale a data column(s)
 }

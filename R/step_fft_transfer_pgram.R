@@ -3,18 +3,6 @@
 # Calculate the Transfer Function from Periodograms  ---------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepTransferPgram` Transfer function using pgram method.
-#'
-#' @param spans
-#' @param detrend
-#' @param demean
-#' @param taoer
-#'
-#' @inheritParams Step
-#'
-#' @export
 StepTransferPgram <- R6Class(
   classname = "step_fft_transfer_pgram",
   inherit = Step,
@@ -61,7 +49,7 @@ StepTransferPgram <- R6Class(
           self$taper
         )
       )
-      self$new_columns <- name_columns(self$prefix, length(tf))
+      self$new_columns <- name_columns(self$prefix, NULL, n = length(tf))
 
       names(tf) <- self$new_columns
 

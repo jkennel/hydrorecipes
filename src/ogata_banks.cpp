@@ -28,6 +28,8 @@
 //'
 //' @export
 //'
+//' @noRd
+//'
 // [[Rcpp::export]]
 double ogata_banks_ind(const double D,
                        const double v,

@@ -20,6 +20,9 @@ and y you would write `c(x,y)` in the frecipes package.}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 step_ols_gap_fill
 }
@@ -27,9 +30,5 @@ step_ols_gap_fill
 dat <- data.frame(x = rnorm(10), y = rnorm(10))
 
 
-}
-\seealso{
-Other gap_fill: 
-\code{\link{StepOlsGapFill}}
 }
 \concept{gap_fill}

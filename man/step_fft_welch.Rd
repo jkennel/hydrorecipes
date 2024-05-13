@@ -22,11 +22,29 @@ function.  terms replaces the `...` of the recipes package but requires
 variables to be included within `c()`.  For example to include variables x
 and y you would write `c(x,y)` in the frecipes package.}
 
+\item{length_subset}{length of fft section}
+
+\item{overlap}{amount of overlap}
+
+\item{window}{window weights}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 calculates the periodogram (estimate of spectral density) using
  Welch's method.
+}
+\examples{
+formula <- as.formula(y~.)
+
+dat <- data.frame(x = rnorm(200),
+                  y = rnorm(200))
+
+frec = recipe(formula = formula, data = dat) |>
+  step_fft_welch(c(x,y), length_subset = 10, window = window_rectangle(10))
 }

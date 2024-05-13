@@ -14,12 +14,29 @@ function.  terms replaces the `...` of the recipes package but requires
 variables to be included within `c()`.  For example to include variables x
 and y you would write `c(x,y)` in the frecipes package.}
 
-\item{vec}{a vector of break points#'}
+\item{vec}{a vector of break points}
 
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 divides a series into intervals and then performs dummy encoding.
+}
+\examples{
+
+formula <- as.formula(y~x)
+
+rows = 200
+dat <- data.frame(x = rnorm(rows),
+                  y = 1:rows,
+                  z = rnorm(rows))
+
+frec1 = recipe(formula = formula, data = dat) |>
+  step_find_interval(x, vec = c(-0.1, 0.0, 0.1)) |>
+  plate("tbl")
+
 }

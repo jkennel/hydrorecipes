@@ -4,14 +4,7 @@
 \alias{step_add_vars}
 \title{step_add_vars}
 \usage{
-step_add_vars(
-  .rec,
-  terms,
-  role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE,
-  ...
-)
+step_add_vars(.rec, terms, role = "predictor", ...)
 }
 \arguments{
 \item{.rec}{the R6 recipe object.}
@@ -23,11 +16,10 @@ and y you would write `c(x,y)` in the frecipes package.}
 
 \item{role}{character - the name of the role}
 
-\item{skip}{logical - should the step be skipped}
-
-\item{keep_original_cols}{logical - keep the original columns or replace them}
-
 \item{...}{additional arguments}
+}
+\value{
+recipe with added variables
 }
 \description{
 Add a variable from the initial data set after recipe creation.
@@ -38,6 +30,4 @@ dat <- data.frame(x = rnorm(10), y = rnorm(10), z = rnorm(10))
 rec <- recipe(y~x, data = dat) |>
        step_add_vars(z) |> plate()
 
-rec <- recipe(y~x, data = dat) |>
-       plate()
 }

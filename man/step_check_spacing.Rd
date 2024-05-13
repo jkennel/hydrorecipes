@@ -18,14 +18,19 @@ and y you would write `c(x,y)` in the frecipes package.}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
-Check columns for NA
+Check the spacing of a variable
 }
 \examples{
 
 dat <- data.frame(x = rnorm(10), y = rnorm(10))
 
 rec <- recipe(y~x, data = dat) |>
-       step_scale(x)
+       step_check_spacing(x) |>
+       prep() |>
+       bake()
 
 }

@@ -3,16 +3,6 @@
 # B-Spline Step ----------------------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepSplineB` generates basis splines.
-#'
-#' @param internal_knots equivalent to knots from `splines2::bSplines`
-#' @param boundary_knots equivalent to Boundary.knots from `splines2::bSplines`
-#' @inheritParams splines2::bsp
-#' @inheritParams Step
-#'
-#' @export
 StepSplineB <- R6Class(
   classname = "step_spline_b",
   inherit = Step,
@@ -90,7 +80,7 @@ StepSplineB <- R6Class(
         nn <- name_columns(
           self$prefix,
           column_name,
-          length(basis[[i]])
+          n = length(basis[[i]])
         )
         names(basis[[i]]) <- nn
         self$new_columns <- c(self$new_columns, nn)

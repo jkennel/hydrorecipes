@@ -68,6 +68,33 @@ step_transport_fractures_heat(
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 Sudicky and Frind 1982 solution adapted for heat. Two parallel fractures.
 }
+\examples{
+
+formula <- as.formula(~time+z+x)
+
+dat <- setDT(expand.grid(10^(3:8),
+                         seq(0.0, 100, 1),
+                         c(0.0, 0.05)))
+
+names(dat) <- c("time", "z", "x")
+
+
+frec1 = recipe(formula = formula, data = dat) |>
+  step_transport_fractures_heat(time = time,
+                                distance_fracture = z,
+                                distance_matrix = x) |>
+  plate("dt")
+
+}
+\seealso{
+Other transport: 
+\code{\link{step_transport_fractures_solute}()},
+\code{\link{step_transport_ogata_banks}()}
+}
+\concept{transport}

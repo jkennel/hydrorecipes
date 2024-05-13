@@ -3,15 +3,6 @@
 # Dimension Reduction Using Principle Component Analysis -----------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepPca` Does PCA for a set of columns. This currently is an in house function.
-#' Use at your own risk!
-#'
-#' @inheritParams Step
-#' @inheritParams recipes::step_pca
-#'
-#' @export
 StepPca <- R6Class(
   classname = "step_pca",
   inherit = Step,
@@ -81,8 +72,6 @@ StepPca <- R6Class(
     # subtract the central value from a column
     bake = function(new_data) {
 
-
-
       for (i in seq_along(self$columns)) {
         if (self$center & self$scale) {
           new_data[[i]] <- (new_data[[i]] - self$center_values[i]) *
@@ -96,7 +85,7 @@ StepPca <- R6Class(
 
       new_data <- collapse::qM(new_data)
       new_data <- collapse::mctl(new_data %*% self$pca_results)
-      self$new_columns <- name_columns(self$prefix, NULL, self$n_comp)
+      self$new_columns <- name_columns(self$prefix, NULL, n = self$n_comp)
       names(new_data) <- self$new_columns
 
       new_data

@@ -3,18 +3,6 @@
 # Remove the Central Value (mean) from a Regressor Step ------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepCenter` adjust the central value to zero.
-#'
-#' @inheritParams Step
-#' @inheritParams recipes::step_center
-#'
-#' @param fun the central function to use. Defaults to `collapse::fmean`.
-#'
-#' @family common
-#'
-#' @export
 StepCenter <- R6Class(
   classname = "step_center",
   inherit = Step,

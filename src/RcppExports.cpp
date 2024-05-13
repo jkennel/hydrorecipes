@@ -916,14 +916,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// exp_int
-double exp_int(double u);
-RcppExport SEXP _frecipes_exp_int(SEXP uSEXP) {
+// std_expint
+double std_expint(double u);
+RcppExport SEXP _frecipes_std_expint(SEXP uSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type u(uSEXP);
-    rcpp_result_gen = Rcpp::wrap(exp_int(u));
+    rcpp_result_gen = Rcpp::wrap(std_expint(u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// std_tgamma
+double std_tgamma(double u, double a);
+RcppExport SEXP _frecipes_std_tgamma(SEXP uSEXP, SEXP aSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type u(uSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    rcpp_result_gen = Rcpp::wrap(std_tgamma(u, a));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1202,6 +1214,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type leakage(leakageSEXP);
     Rcpp::traits::input_parameter< const double >::type precision(precisionSEXP);
     rcpp_result_gen = Rcpp::wrap(hantush_jacob(time, flow_rate, radius, storativity, transmissivity, leakage, precision));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ig
+Eigen::VectorXd ig(Eigen::ArrayXd a, Eigen::ArrayXd u);
+RcppExport SEXP _frecipes_ig(SEXP aSEXP, SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::ArrayXd >::type a(aSEXP);
+    Rcpp::traits::input_parameter< Eigen::ArrayXd >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(ig(a, u));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -2215,7 +2239,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_impulse_function", (DL_FUNC) &_frecipes_impulse_function, 1},
     {"_frecipes_impulse_function_rcpp", (DL_FUNC) &_frecipes_impulse_function_rcpp, 1},
     {"_frecipes_impulse_function_eigen", (DL_FUNC) &_frecipes_impulse_function_eigen, 1},
-    {"_frecipes_exp_int", (DL_FUNC) &_frecipes_exp_int, 1},
+    {"_frecipes_std_expint", (DL_FUNC) &_frecipes_std_expint, 1},
+    {"_frecipes_std_tgamma", (DL_FUNC) &_frecipes_std_tgamma, 2},
     {"_frecipes_binary_search", (DL_FUNC) &_frecipes_binary_search, 2},
     {"_frecipes_std_to_eigen", (DL_FUNC) &_frecipes_std_to_eigen, 1},
     {"_frecipes_eigen_to_std", (DL_FUNC) &_frecipes_eigen_to_std, 1},
@@ -2237,6 +2262,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_frecipes_hantush_well_vec", (DL_FUNC) &_frecipes_hantush_well_vec, 3},
     {"_frecipes_hantush_well_rcpp", (DL_FUNC) &_frecipes_hantush_well_rcpp, 3},
     {"_frecipes_hantush_jacob", (DL_FUNC) &_frecipes_hantush_jacob, 7},
+    {"_frecipes_ig", (DL_FUNC) &_frecipes_ig, 2},
     {"_frecipes_harmonic_list", (DL_FUNC) &_frecipes_harmonic_list, 4},
     {"_frecipes_any_decimal", (DL_FUNC) &_frecipes_any_decimal, 1},
     {"_frecipes_decimal_to_scaled_integer", (DL_FUNC) &_frecipes_decimal_to_scaled_integer, 1},

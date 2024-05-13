@@ -3,14 +3,6 @@
 # Predict Regression Terms -----------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepOls` Uses the Eigen C++ library fast versions to generate
-#' predictions from different steps.
-#'
-#' @inheritParams Step
-#'
-#' @export
 StepOls <- R6Class(
   classname = "step_ols",
   inherit = Step,

@@ -28,6 +28,26 @@ and y you would write `c(x,y)` in the frecipes package.}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
-generates distributed lag vectors.
+Generates distributed lag vectors. For regular spaced lags this uses an FFT
+  based method which is faster and more memory efficient.
+}
+\examples{
+formula <- as.formula(y~x)
+rows <- 1e4
+
+dat <- data.frame(x = rnorm(rows),
+                  y = as.numeric(1:rows),
+                  z = rnorm(rows))
+
+frec = recipe(formula = formula, data = dat) |>
+ step_distributed_lag(x, knots = frecipes:::log_lags_arma(6, 800))
+
+}
+\references{
+Gasparrini, A., 2011. Distributed Lag Linear and Non-Linear Models in R:
+  The Package dlnm. Journal of statistical software 465 43, 1–20.
 }

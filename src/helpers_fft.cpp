@@ -1032,7 +1032,7 @@ Eigen::ArrayXd gamma_inc(Eigen::ArrayXd u, double a)
   {
     Rcpp::stop("a must be larger than -1.0");
   }
-  else if (a > 0)
+  else if (a > 0.0)
   {
     Eigen::ArrayXd v(n);
     v.setConstant(a);
@@ -1043,8 +1043,15 @@ Eigen::ArrayXd gamma_inc(Eigen::ArrayXd u, double a)
   else if (a == 0.0)
   {
     // currently this is slower than the expint package
-    for (auto &out : u)
-      out = -boost::math::expint(-out);
+    for (auto &out : u) {
+      if (out == 0){
+        out = R_PosInf;
+      } else if (out > 700.0){
+        out = 0.0;
+      } else {
+        out = -std::expint(-out);
+      }
+    }
 
     u = (u == 0.0).select(tg, u);
 

@@ -3,21 +3,6 @@
 # Jacob-Lohman Constant Drawdown Test ------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepAquiferConstantDrawdown` Estimates the flows of a constant drawdown
-#' test using Jacob-Lohman 1952.
-#'
-#' @inheritParams StepAquiferGRF
-#'
-#' @family aquifer
-#'
-#' @references
-#' Jacob, C.E. and S.W. Lohman, 1952. Nonsteady flow to a well of constant
-#'  drawdown in an extensive aquifer, Trans. Am. Geophys. Union, vol. 33,
-#'  pp. 559-569.
-#'
-#' @export
 StepAquiferConstantDrawdown <- R6Class(
   classname = "step_aquifer_constant_drawdown",
   inherit = Step,
@@ -38,7 +23,7 @@ StepAquiferConstantDrawdown <- R6Class(
                           radius_well = 0.15,
                           specific_storage = 1.0e-6,
                           hydraulic_conductivity = 1.0e-4,
-                          n_terms = 16,
+                          n_terms = 16L,
                           role = "predictor",
                           ...) {
 
@@ -72,7 +57,7 @@ StepAquiferConstantDrawdown <- R6Class(
 
       self$new_columns <- self$prefix
 
-      Tr  <- self$hydraulic_conductivity * self$thickness
+      Tr <- self$hydraulic_conductivity * self$thickness
       S  <- self$specific_storage * self$thickness
 
 

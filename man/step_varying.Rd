@@ -18,6 +18,21 @@ and y you would write `c(x,y)` in the frecipes package.}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 remove columns that only contain a single value.
+}
+\examples{
+
+formula <- as.formula(y~x+z)
+rows <- 1000
+dat <- data.frame(x = rep(1, rows),
+                  y = 1:rows,
+                  z = rnorm(rows))
+
+frec = recipe(formula = formula, data = dat) |>
+  step_varying(c(x, y, z)) |>
+  plate("tbl")
 }

@@ -991,13 +991,6 @@ Eigen::VectorXd cooper_bredehoeft_papadopulos_laplace(
     int n_terms)
 {
 
-  // Rcpp::Rcout << "The value is r " << r << std::endl;
-  // Rcpp::Rcout << "The value is r_c " << r_c << std::endl;
-  // Rcpp::Rcout << "The value is r_w " << r_w << std::endl;
-  // Rcpp::Rcout << "The value is Tr " << Tr << std::endl;
-  // Rcpp::Rcout << "The value is S " << S << std::endl;
-  // Rcpp::Rcout << "The value is h_0 " << h_0 << std::endl;
-
 
   CooperBredehoeftPapadopulos well(time, r, r_c, r_w, Tr, S, h_0);
   Eigen::VectorXd out = stehfest(well, n_terms);
@@ -1076,7 +1069,7 @@ Eigen::VectorXd barker_herbert(
   BarkerHerbert well(time, radius, radius_patch,
                      t_1, t_2, s_1, s_2, Q, prec);
 
-  return (stehfest(well, n_terms));
+return (stehfest(well, n_terms) * (Q / (2.0 * M_PI * t_1)));
 }
 
 

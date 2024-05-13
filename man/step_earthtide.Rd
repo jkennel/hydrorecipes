@@ -25,6 +25,81 @@ step_earthtide(
   ...
 )
 }
+\arguments{
+\item{.rec}{the R6 recipe object.}
+
+\item{terms}{the unquoted names of the variables to use or a selector
+function.  terms replaces the `...` of the recipes package but requires
+variables to be included within `c()`.  For example to include variables x
+and y you would write `c(x,y)` in the frecipes package.}
+
+\item{do_predict}{run in predict or analyze mode}
+
+\item{method}{One or more of "gravity",
+"tidal_potential", "tidal_tilt", "vertical_displacement",
+"horizontal_displacement", "n_s_displacement", "e_w_displacement",
+"vertical_strain", "areal_strain", "volume_strain", "horizontal_strain",
+or "ocean_tides", "pole_tide", "lod_tide". The pole tide and lod_tide
+are used in predict mode even if do_predict is FALSE. More than one value
+can only be used if do_predict == TRUE.}
+
+\item{latitude}{The station latitude (numeric) defaults to 0.}
+
+\item{longitude}{The station longitude (numeric) defaults to 0.}
+
+\item{elevation}{The station elevation (m) (numeric) defaults to 0.}
+
+\item{azimuth}{Earth azimuth (numeric) defaults to 0.}
+
+\item{gravity}{Gravity at the station (m/s^2) (numeric) 0 to
+estimate gravity from elevation and latitude.}
+
+\item{earth_radius}{Radius of earth (m) (numeric) defaults to 6378136.3}
+
+\item{cutoff}{Cutoff amplitude for constituents (numeric)
+defaults to 1e-6.}
+
+\item{catalog}{Use the "hw95s" catalog or "ksm04" catalog (character).}
+
+\item{eop}{User defined Earth Orientation Parameter (EOP) data.frame with the
+following columns: datetime, ddt, ut1_utc, lod, x, y, dx, dy}
+
+\item{scale}{Scale results when do_predict is FALSE}
+
+\item{n_thread}{Number of threads to use for parallel processing (integer).}
+
+\item{role}{character - the name of the role}
+
+\item{...}{additional arguments}
+}
+\value{
+an updated recipe
+}
 \description{
 Generate synthetic Earth tide waves and wave groups.
+}
+\examples{
+data(kennel_2020)
+latitude     <- 34.23411                           # latitude
+longitude    <- -118.678                           # longitude
+elevation    <- 500                                # elevation
+cutoff       <- 1e-5                               # cutoff
+catalog      <- 'ksm04'                            # hartmann wenzel catalog
+astro_update <- 300                                # how often to update astro parameters
+method       <- 'volume_strain'                    # which potential to calculate
+
+wave_groups_dl <- as.data.table(earthtide::eterna_wavegroups)
+wave_groups_dl <- na.omit(wave_groups_dl[time == '1 month'])
+wave_groups_dl <- wave_groups_dl[wave_groups_dl$start > 0.5,]
+wave_groups_dl <- wave_groups_dl[, list(start, end)]
+ngr <- nrow(wave_groups_dl)
+
+rec <- recipe(wl~baro+datetime, data = kennel_2020) |>
+  step_earthtide(datetime,
+                 wave_groups = wave_groups_dl,
+                 latitude = latitude,
+                 longitude = longitude,
+                 elevation = elevation,
+                 cutoff = cutoff,
+                 catalog = catalog)
 }

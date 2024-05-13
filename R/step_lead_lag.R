@@ -3,19 +3,6 @@
 # Create lagged or leaded terms ------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepLeadLag` generates lagged (or leading) vectors.
-#'
-#' @param lag integer vector for the amount to lag or lead.  A negative value indicates leading.
-#' @param n_shift the amount to shift the starting point. When `n_subset` is not
-#' equal to 1 it may be useful to start the lagging at an offset from the beginning
-#' of the series. Default is 0.
-#' @param n_subset the spacing in rows between values.
-#'
-#' @inheritParams Step
-#'
-#' @export
 StepLeadLag <- R6Class(
   classname = "step_lead_lag",
   inherit = Step,
@@ -70,7 +57,7 @@ StepLeadLag <- R6Class(
         nn <- name_columns(
           self$prefix,
           column_name[i],
-          length(self$lag)
+          n = length(self$lag)
         )
 
         names(ll[[i]]) <- nn

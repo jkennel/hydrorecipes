@@ -20,6 +20,16 @@ step_aquifer_leaky(
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
+\item{time}{the time for evaluation (t)}
+
+\item{flow_rate}{the flow rate from the well (L^3/t)}
+
+\item{leakage}{the leakage defined by hantush}
+
+\item{radius}{the distance to the observation well (L)}
+
+\item{max_terms}{the number of terms for solution}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
@@ -31,12 +41,14 @@ The drawdown using the Hantush and Jacob 1955 model
 hantush_jacob 1955 solution for a leaky aquifer
 }
 \examples{
-dat <- data.frame(x = as.numeric(1:rows),
-                  y = rep(0.01, rows))
+dat <- data.frame(x = as.numeric(1:100),
+                  y = rep(0.01, 100))
 formula <- as.formula(y~x)
 
 frec = recipe(formula = formula, data = dat) |>
-  step_aquifer_leaky(time = x, flow_rate = y)
+  step_aquifer_leaky(time = x, flow_rate = y) |>
+  prep() |>
+  bake()
 
 }
 \references{
@@ -49,11 +61,7 @@ Hantush, M.S. and C.E. Jacob, 1955. Non-steady radial flow in an infinite
 }
 \seealso{
 Other aquifer: 
-\code{\link{StepAquiferConstantDrawdown}},
-\code{\link{StepAquiferGRF}},
-\code{\link{StepAquiferLeaky}},
-\code{\link{StepAquiferPatch}},
-\code{\link{StepAquiferTheis}},
+\code{\link{step_aquifer_constant_drawdown}()},
 \code{\link{step_aquifer_grf}()},
 \code{\link{step_aquifer_patch}()},
 \code{\link{step_aquifer_theis}()}

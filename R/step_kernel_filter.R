@@ -3,16 +3,6 @@
 # FFT Convolution of a Term with a Kernel --------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepKernelFilter` linearly convolve a kernel with a data series.
-#'
-#' @param kernel the convolution kernel
-#' @param align character center, left or right align the convolution
-#'
-#' @inheritParams Step
-#'
-#' @export
 StepKernelFilter <- R6Class(
   classname = "step_kernel_filter",
   inherit = Step,
@@ -77,7 +67,7 @@ StepKernelFilter <- R6Class(
         nn <-  name_columns(
           self$prefix,
           column_name,
-          length(self$kernel)
+          n = length(self$kernel)
         )
 
         names(filt[[i]]) <- nn

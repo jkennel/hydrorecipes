@@ -12,6 +12,9 @@ plate(.rec, type = "dt")
 \item{type}{the return type for the recipe (dt = `data.table`, df = `data.frame`,
 tbl = `tibble`, list = `list`, m = `matrix`)}
 }
+\value{
+an updated recipe
+}
 \description{
 Get the results from the recipe. If the recipe hasn't been prepped and
   baked, this will do those steps and return the result.

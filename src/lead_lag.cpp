@@ -92,56 +92,56 @@ int get_end(int n,
 }
 
 //' @title
- //' shift_subset
- //'
- //' @description
- //' lag data and subset the results
- //'
- //' @inheritParams step_lead_lag
- //' @param x to lag (numeric vector)
- //' @param lag amount to lag or lead if negative (integer)
- //'
- //' @return vector with lagged values
- //'
- //' @noRd
- //'
- // [[Rcpp::export]]
- Rcpp::NumericVector shift_subset(const Rcpp::NumericVector& x,
-                            size_t lag,
-                            size_t n_subset,
-                            size_t n_shift) {
+//' shift_subset
+//'
+//' @description
+//' lag data and subset the results
+//'
+//' @inheritParams step_lead_lag
+//' @param x to lag (numeric vector)
+//' @param lag amount to lag or lead if negative (integer)
+//'
+//' @return vector with lagged values
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Rcpp::NumericVector shift_subset(const Rcpp::NumericVector& x,
+                                 size_t lag,
+                                 size_t n_subset,
+                                 size_t n_shift) {
 
-   if (n_shift >= n_subset) {
-     throw std::range_error("shift_subset: n_shift must be less than n_subset");
-   }
+  if (n_shift >= n_subset) {
+    throw std::range_error("shift_subset: n_shift must be less than n_subset");
+  }
 
-   int n = x.size();
-   int n_out;
-   int start, end;
-   int wh;
+  int n = x.size();
+  int n_out;
+  int start, end;
+  int wh;
 
 
-   lag   = check_lag(n, lag, n_shift);
-   n_out = get_length(n, n_subset);
+  lag   = check_lag(n, lag, n_shift);
+  n_out = get_length(n, n_subset);
 
-   start = get_start(n_out, lag, n_subset);
-   end   = get_end(n, n_out, lag, n_subset);
+  start = get_start(n_out, lag, n_subset);
+  end   = get_end(n, n_out, lag, n_subset);
 
-   Rcpp::NumericVector out(n_out, NA_REAL);
+  Rcpp::NumericVector out(n_out, NA_REAL);
 
-   if (start >= end) {
-     throw std::range_error("shift_subset: the number of lags, n_subset or n_shift is too large");
-   }
+  if (start >= end) {
+    throw std::range_error("shift_subset: the number of lags, n_subset or n_shift is too large");
+  }
 
-   for (int i = start; i < end; ++i) {
-     wh = (i * n_subset) - lag;
+  for (int i = start; i < end; ++i) {
+    wh = (i * n_subset) - lag;
 
-     out[i] = x[wh];
+    out[i] = x[wh];
 
-   }
+  }
 
-   return(out);
- }
+  return(out);
+}
 
 
 //==============================================================================
@@ -151,14 +151,17 @@ int get_end(int n,
 //' @description
 //' Create lagged terms
 //'
-//' @param x
-//' @param lags
-//' @param n_subset
-//' @param n_shift
+//' @param x numeric vector - variable to lag
+//' @param lags integer vector - amount to lag
+//' @param n_subset take every n_subset rows
+//' @param n_shift shift values from starting on first row.  Should be less than
+//'  n_subset
 //'
 //' @return List of lagged terms
 //'
 //' @export
+//'
+//' @noRd
 //'
 // [[Rcpp::export]]
 Rcpp::List lag_list(const Rcpp::NumericVector& x,

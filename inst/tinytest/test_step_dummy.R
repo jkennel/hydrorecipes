@@ -30,8 +30,6 @@ rec  = recipes::recipe(formula = formula, data = dat) |>
 tinytest::expect_equivalent(frec, rec)
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # one hot
 frec = Recipe$new(formula = formula, data = dat)$

@@ -11,6 +11,9 @@ prep(.rec, retain = TRUE)
 
 \item{retain}{logical - currently not implemented}
 }
+\value{
+an updated recipe
+}
 \description{
 prep a recipe
 }

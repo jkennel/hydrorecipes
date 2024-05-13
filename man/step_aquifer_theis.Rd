@@ -20,6 +20,21 @@ step_aquifer_theis(
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
+\item{time}{the time for evaluation (t)}
+
+\item{flow_rate}{the flow rate from the well (L^3/t)}
+
+\item{thickness}{the aquifer thickness (L)}
+
+\item{radius}{the distance to the observation well (L)}
+
+\item{specific_storage}{specific storage of aquifer (L/L)}
+
+\item{hydraulic_conductivity}{the hydraulic conductivity (L/t)}
+
+\item{flow_dimension}{aquifer flow dimension (1 = linear, 2 = radial,
+3 = spherical)}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
@@ -33,12 +48,14 @@ to a fast FFT convolution so many rates can be included, but requires a
 regular time series.
 }
 \examples{
-dat <- data.frame(x = as.numeric(1:rows),
-                  y = rep(0.01, rows))
+dat <- data.frame(x = as.numeric(1:100),
+                  y = rep(0.01, 100))
 formula <- as.formula(y~x)
 
 frec = recipe(formula = formula, data = dat) |>
-  step_aquifer_theis(time = x, flow_rate = y)
+  step_aquifer_theis(time = x, flow_rate = y) |>
+  prep() |>
+  bake()
 
 }
 \references{
@@ -53,11 +70,7 @@ Theis, C.V., 1935: The relation between the lowering of the piezometric
 }
 \seealso{
 Other aquifer: 
-\code{\link{StepAquiferConstantDrawdown}},
-\code{\link{StepAquiferGRF}},
-\code{\link{StepAquiferLeaky}},
-\code{\link{StepAquiferPatch}},
-\code{\link{StepAquiferTheis}},
+\code{\link{step_aquifer_constant_drawdown}()},
 \code{\link{step_aquifer_grf}()},
 \code{\link{step_aquifer_leaky}()},
 \code{\link{step_aquifer_patch}()}

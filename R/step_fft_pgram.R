@@ -3,13 +3,6 @@
 # Calculate the Periodogram ----------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepPgram` calculates the periodogram (estimate of spectral density)
-#'
-#' @inheritParams Step
-#'
-#' @export
 StepPgram <- R6Class(
   classname = "step_fft_pgram",
   inherit = Step,

@@ -23,6 +23,14 @@ step_aquifer_patch(
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
+\item{time}{the time for evaluation (t)}
+
+\item{flow_rate}{the flow rate from the well (L^3/t)}
+
+\item{thickness}{the aquifer thickness (L)}
+
+\item{radius}{the distance to the observation well (L)}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
@@ -34,9 +42,14 @@ The drawdown using the Theis model
 barker_herbert 1982 solution for radial patches.
 }
 \examples{
-dat <- data.frame(x = as.numeric(1:rows),
-                  y = rep(0.01, rows))
+dat <- data.frame(x = as.numeric(1:100),
+                  y = rep(0.01, 100))
 formula <- as.formula(y~x)
+
+frec = recipe(formula = formula, data = dat) |>
+  step_aquifer_patch(time = x, flow_rate = y) |>
+  prep() |>
+  bake()
 
 }
 \references{
@@ -48,11 +61,7 @@ Butler, J.J., 1988: Pumping tests in nonuniform aquifers – The radially
 }
 \seealso{
 Other aquifer: 
-\code{\link{StepAquiferConstantDrawdown}},
-\code{\link{StepAquiferGRF}},
-\code{\link{StepAquiferLeaky}},
-\code{\link{StepAquiferPatch}},
-\code{\link{StepAquiferTheis}},
+\code{\link{step_aquifer_constant_drawdown}()},
 \code{\link{step_aquifer_grf}()},
 \code{\link{step_aquifer_leaky}()},
 \code{\link{step_aquifer_theis}()}

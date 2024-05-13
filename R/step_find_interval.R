@@ -3,16 +3,6 @@
 # Divide a Term into Intervals and do Dummy Encoding ---------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepFindInterval` divides a series into intervals and then
-#' performs dummy encoding.
-#'
-#' @param vec a vector of break points
-#'
-#' @inheritParams Step
-#'
-#' @export
 StepFindInterval <- R6Class(
   classname = "step_find_interval",
   inherit = Step,
@@ -22,9 +12,6 @@ StepFindInterval <- R6Class(
     vec = NULL,
     n_vec = NULL,
 
-    #' @description
-    #' @inheritParams StepAddVars
-    #' @return A new `Step`.
     initialize = function(terms,
                           vec,
                           role = "predictor",

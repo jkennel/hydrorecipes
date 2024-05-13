@@ -3,14 +3,6 @@
 # Remove Columns with a Single Value -------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepVarying` remove columns that only contain a single value.
-#'
-#' @inheritParams Step
-#' @inheritParams recipes::step_zv
-#'
-#' @export
 StepVarying <- R6Class(
   classname = "step_varying",
   inherit = Step,

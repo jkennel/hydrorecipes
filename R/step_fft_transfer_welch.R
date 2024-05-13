@@ -3,17 +3,6 @@
 # Calculate the Transfer Function from Periodograms  ---------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepTransferWelch` Transfer function using Welch's method.
-#'
-#' @param length_subset
-#' @param overlap
-#' @param window
-#'
-#' @inheritParams Step StepWelch
-#'
-#' @export
 StepTransferWelch <- R6Class(
   classname = "step_transfer_welch",
   inherit = Step,
@@ -55,7 +44,7 @@ StepTransferWelch <- R6Class(
           self$window
         )
       )
-      self$new_columns <- name_columns(self$prefix, length(tf))
+      self$new_columns <- name_columns(self$prefix, NULL, n = length(tf))
 
       names(tf) <- self$new_columns
     }

@@ -23,6 +23,8 @@
 //' wl <- -0.4 * baro + rnorm(1000, sd = 0.02)
 //' be_clark_cpp(wl, baro, lag_space=1, inverse=TRUE)
 //'
+//' @noRd
+//'
 // [[Rcpp::export]]
 double be_clark_cpp(arma::vec dep,
                     arma::vec ind,
@@ -519,20 +521,26 @@ Rcpp::List be_harmonic_cpp(Eigen::VectorXcd x,
   //----------------------------------------------------------------------------
   // tf
 
-  Eigen::MatrixXcd tf(1,3);
+  Eigen::MatrixXcd tf(1, 3);
   tf(0, 0) = s2_gw;
   tf(0, 1) = s2_at;
   tf(0, 2) = s2_et;
   Eigen::MatrixXcd dft_mat = multiply_ffts(tf);
 
   double tf_out = std::abs(solve_cplx_parallel(dft_mat)(0,0));
-  // double tf = std::abs(std::sqrt((p_et * p_at_gw - p_at_et * p_et_gw) / denominator));
 
+
+  if (inverse) {
+    ratio = 1.0 - ratio;
+    acworth = 1.0 - acworth;
+    rau = 1.0 - rau;
+    tf_out = 1.0 - tf_out;
+  }
 
   return(Rcpp::List::create(Named("ratio") = ratio,
                             _["acworth"] = acworth,
-                            _["rau"] = rau));
-                            // _["tf"] = tf_out));
+                            _["rau"] = rau,
+                            _["tf"] = tf_out));
 
 
 }
@@ -552,9 +560,9 @@ Eigen::MatrixXcd be_transfer(Eigen::MatrixXd& x,
 
   unsigned int n = pgram.rows();
   unsigned int frequency_index = std::round(frequency * (n / cycle_size));
-  Rcpp::Rcout << "n: " << n << std::endl;
-  Rcpp::Rcout << "cycle_size: " << cycle_size << std::endl;
-  Rcpp::Rcout << "frequency_index: " << frequency_index << std::endl;
+  // Rcpp::Rcout << "n: " << n << std::endl;
+  // Rcpp::Rcout << "cycle_size: " << cycle_size << std::endl;
+  // Rcpp::Rcout << "frequency_index: " << frequency_index << std::endl;
 
   Eigen::MatrixXcd out = solve_cplx_parallel(pgram.row(frequency_index));
   return(out);

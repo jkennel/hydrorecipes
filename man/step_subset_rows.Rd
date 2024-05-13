@@ -20,6 +20,20 @@ and y you would write `c(x,y)` in the frecipes package.}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 selects rows from output.
+}
+\examples{
+
+dat <- data.frame(x = as.numeric(1:200),
+y = rnorm(200))
+formula <- as.formula(y~x)
+
+frec1 = recipe(formula = formula, data = dat) |>
+  step_subset_rows(y, row_numbers = c(1, 5, 10)) |>
+  plate("dt")
+
 }

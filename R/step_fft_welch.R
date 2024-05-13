@@ -3,18 +3,6 @@
 # Calculate Welch's Periodogram  -----------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepWelch` calculates the periodogram (estimate of spectral density) using
-#'  Welch's method.
-#'
-#' @param length_subset
-#' @param overlap
-#' @param window
-#'
-#' @inheritParams Step
-#'
-#' @export
 StepWelch <- R6Class(
   classname = "step_fft_welch",
   inherit = Step,

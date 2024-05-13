@@ -7,14 +7,15 @@
 //' @description
 //' Create distributed lag terms
 //'
-//' @param x
-//' @param bl
-//' @param n_thread
+//' @param x numeric vector to lag
+//' @param bl numeric matrix basis lag
+//' @param n_thread integer number of threads to use
 //'
 //' @return List of distributed lags
 //'
 //' @export
 //'
+//' @noRd
 // [[Rcpp::export]]
 Eigen::MatrixXd distributed_lag_thread(const Eigen::VectorXd& x,
                                        const Eigen::MatrixXd& bl,
@@ -65,12 +66,14 @@ Eigen::VectorXd convolve_eigen(const Eigen::VectorXd& x,
 //' @description
 //' Create distributed lag terms
 //'
-//' @param x
-//' @param bl
+//' @param x numeric vector to lag
+//' @param bl numeric matrix basis lag
 //'
 //' @return List of distributed lags
 //'
 //' @export
+//'
+//' @noRd
 //'
 // [[Rcpp::export]]
 Rcpp::List distributed_lag_eigen(Eigen::Map<Eigen::VectorXd> x,
@@ -137,16 +140,19 @@ Rcpp::List distributed_lag_eigen(Eigen::Map<Eigen::VectorXd> x,
 //' @description
 //' Create distributed lag terms
 //'
-//' @param x
-//' @param bl
-//' @param lag_max
-//' @param n_subset
-//' @param n_shift
-//' @param n_thread
+//' @param x numeric vector to lag
+//' @param bl numeric matrix basis lag
+//' @param lag_max integer maximum lag
+//' @param n_subset take every n_subset rows
+//' @param n_shift shift values from starting on first row.  Should be less than
+//'  n_subset
+//' @param n_thread integer number of threads to use
 //'
 //' @return List of distributed lags
 //'
 //' @export
+//'
+//' @noRd
 //'
 // [[Rcpp::export]]
 List distributed_lag_thread_eigen(Eigen::Map<Eigen::VectorXd> x,
@@ -230,22 +236,20 @@ List distributed_lag_thread_eigen(Eigen::Map<Eigen::VectorXd> x,
 //'
 //' @description
 //' Create distributed lag terms
+//' @inheritParams splines2::bSpline
 //'
-//' @param x
-//' @param n_lag
-//' @param max_lag
-//' @param df
-//' @param degree
-//' @param internal_knots
-//' @param boundary_knots
-//' @param complete_basis
-//' @param periodic
-//' @param derivs
-//' @param integral
+//' @param x numeric vector to lag
+//' @param n_lag number of lag terms
+//' @param max_lag integer the maximum lag
+//' @param internal_knots location of internal knots
+//' @param boundary_knots location of boundary knots
+//' @param complete_basis logical intercept?
 //'
 //' @return List of distributed lags
 //'
 //' @export
+//'
+//' @noRd
 //'
 // [[Rcpp::export]]
 Rcpp::List distributed_lag_list(Eigen::Map<Eigen::VectorXd> x,

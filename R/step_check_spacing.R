@@ -3,12 +3,6 @@
 # Check if the spacing of a regressor is constant ------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepCheckSpacing`
-#' @inheritParams Step
-#'
-#' @export
 StepCheckSpacing <- R6Class(
   classname = "step_check_spacing",
   inherit = Step,

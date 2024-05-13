@@ -8,7 +8,7 @@ step_slug_cbp(
   .rec,
   times,
   radius = 1,
-  radius_casing = 1,
+  radius_casing = 0.15,
   radius_well = 0.15,
   specific_storage = 1e-06,
   hydraulic_conductivity = 1e-04,
@@ -22,10 +22,56 @@ step_slug_cbp(
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
+\item{radius}{distance from line source or center of well}
+
+\item{radius_casing}{radius of casing}
+
+\item{radius_well}{radius of well screen}
+
+\item{specific_storage}{specific storage of aquifer (L/L)}
+
+\item{hydraulic_conductivity}{the hydraulic conductivity (L/t)}
+
+\item{head_0}{initial displacement}
+
+\item{thickness}{the aquifer thickness (L)}
+
+\item{n_terms}{number of terms for laplace solution inversion}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 Cooper, Bredehoeft and Papadopulos, 1967 Slug test solution
 }
+\examples{
+# check vs. CBP 1967 table 1
+times    <- rep(c(1.0, 2.15, 4.64), 4) * 10^(rep(c(-3, -2, -1, 0), each = 3))
+dat <- list(x = times)
+
+formula = formula(x~.)
+
+frec1 = recipe(formula = formula, data = dat) |>
+  step_slug_cbp(
+    times = x,
+    radius = 1.0,
+    radius_casing = 1.0,
+    radius_well = 1.0,
+    specific_storage = 1e-1,
+    hydraulic_conductivity = 1.0,
+    thickness = 1.0,
+    head_0 = 1.0,
+    n_terms = 12L
+  ) |>
+  plate("dt")
+}
+\references{
+Cooper, H.H., J.D. Bredehoeft and S.S. Papadopulos, 1967. Response of a
+ finite-diameter well to an instantaneous charge of water, Water Resources
+ Research, vol. 3, no. 1, pp. 263-269.
+}
+\concept{slug}

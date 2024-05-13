@@ -3,14 +3,6 @@
 # Subset dataset rows ----------------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepSubsetRows` selects rows from output.
-#'
-#' @inheritParams Step
-#' @param row_numbers integer vector of row numbers to keep.
-#'
-#' @export
 StepSubsetRows <- R6Class(
   classname = "step_subset_rows",
   inherit = Step,
@@ -38,7 +30,9 @@ StepSubsetRows <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
-      unclass(collapse::qDF(new_data)[self$row_numbers, ])
+      print(str(new_data))
+      print(str(unclass(collapse::qDF(new_data)[self$row_numbers, ])))
+      unclass(collapse::qDF(new_data)[self$row_numbers, , drop = FALSE])
     }
   )
 )

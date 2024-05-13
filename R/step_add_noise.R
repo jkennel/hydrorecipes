@@ -1,20 +1,8 @@
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# Remove the Central Value (mean) from a Regressor Step ------------------------
+# Add noise to variable --------------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepAddNoise` add noise to data.
-#'
-#' @inheritParams Step
-#' @inheritParams recipes::step_center
-#'
-#' @param fun the function to use. Defaults to `rnorm`.
-#'
-#' @family common
-#'
-#' @export
 StepAddNoise <- R6Class(
   classname = "step_add_noise",
   inherit = Step,
@@ -31,6 +19,7 @@ StepAddNoise <- R6Class(
                           fun = rnorm,
                           role = "predictor",
                           ...) {
+
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
@@ -52,8 +41,10 @@ StepAddNoise <- R6Class(
     # subtract the central value from a column
     bake = function(new_data) {
 
+      n <- length(new_data[[1]])
+
       for (i in seq_along(self$columns)) {
-        noise <- self$fun(self$mean, self$sd)
+        noise <- self$fun(n, self$mean, self$sd)
         new_data[[i]] <- new_data[[i]] + noise
       }
 

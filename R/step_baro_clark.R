@@ -3,17 +3,6 @@
 # Calculate Barometric Efficiency using Clarks Method --------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepBaroClark` adjust the central value to zero.
-#'
-#' @inheritParams Step
-#' @inheritParams recipes::step_center
-#'
-#'
-#' @family barometric
-#'
-#' @export
 StepBaroClark <- R6Class(
   classname = "step_baro_clark",
   inherit = Step,

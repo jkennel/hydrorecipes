@@ -3,29 +3,21 @@
 # Distributed Lag Step ---------------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepDistributedLag` generates distributed lag vectors.
-#'
-#'
-#' @inheritParams Step
-#'
-#' @export
 StepDistributedLag <- R6Class(
   classname = "step_distributed_lag",
   inherit = Step,
   public = list(
 
     # step specific variables
-    #' @field knots the locations of the knots for the basis matrix.
+    # knots the locations of the knots for the basis matrix.
     knots = NULL,
-    #' @field n_lag integer the number of lag terms.
+    # n_lag integer the number of lag terms.
     n_lag = NULL,
-    #' @field max_lag integer the maximum lag.
+    # max_lag integer the maximum lag.
     max_lag = NULL,
-    #' @field intercept boolean use an intercept for the basis matrix
+    # intercept boolean use an intercept for the basis matrix
     intercept = NULL,
-    #' @field basis_matrix matrix the basis matrix.
+    # basis_matrix matrix the basis matrix.
     basis_matrix = NULL,
 
 

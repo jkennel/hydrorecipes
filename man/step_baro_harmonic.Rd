@@ -39,10 +39,24 @@ column name}
 \item{...}{additional arguments}
 }
 \value{
-\code{double} barometric efficiency using Acworth's method
+\code{double} barometric efficiency using different methods
 }
 \description{
-step_baro_harmonic
+Estimate the static barometric efficiency using harmonic methods
+  (Ratio, Acworth, Rau, Transfer)
+}
+\examples{
+data("kennel_2020")
+library(data.table)
+library(collapse)
+
+formula <- as.formula(wl~.)
+frec = recipe(formula = formula, data = kennel_2020) |>
+ step_baro_harmonic(datetime,
+                    wl,
+                    baro,
+                    et,
+                    inverse = FALSE)
 }
 \references{
 Acworth, R.I., Halloran, L.J., Rau, G.C., Cuthbert, M.O. and Bernardi, T.L.,
@@ -52,9 +66,6 @@ Acworth, R.I., Halloran, L.J., Rau, G.C., Cuthbert, M.O. and Bernardi, T.L.,
 }
 \seealso{
 Other barometric: 
-\code{\link{StepBaroClark}},
-\code{\link{StepBaroHarmonic}},
-\code{\link{step_baro_acworth}()},
 \code{\link{step_baro_clark}()}
 }
 \concept{barometric}

@@ -3,40 +3,6 @@
 # Sudicky and Frind 1982 Parallel Fractures Step -------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepTransportFracturesSolute` Sudicky and Frind 1982 solution. Two parallel
-#' fractures
-#'
-#' @param time vector elapsed time (t)
-#' @param distance_fracture vector distance along fracture (z)
-#' @param distance_matrix vector distance into matrix (x)
-#' @param concentration_influent vector concentration history (c_in)
-#' @param time_influent vector concentration history (t_in)
-#' @param concentration_initial double concentration  (c_0)
-#' @param fracture_aperture double fracture aperture (2b)
-#' @param fracture_spacing double fracture aperture (2B)
-#' @param velocity double water velocity in fracture (v)
-#' @param dispersivity_longitudinal double longitudinal dispersivity (α_l)
-#' @param diffusion double free-water diffusion coefficient (D*)
-#' @param sorption_fracture double fracture distribution coefficient (K_f)
-#' @param sorption_matrix double matrix distribution coefficient (K_m)
-#' @param decay double radioactive half-life for solute (λ)
-#' @param density_bulk double dry bulk density (ρ_b)
-#' @param porosity double porosity (θ)
-#' @param tortuosity double tortuosity (τ)
-#' @param n_terms integer number of terms for laplace inversion
-#'
-#' @inheritParams Step
-#'
-#' @references
-#' Sudicky, E.A., Frind, E.O., Contaminant transport in fractured porous media:
-#'  Analytical solutions for a system of parallel fractures, December 1982
-#'  https://doi.org/10.1029/WR018i006p01634
-#'
-#' @family transport
-#'
-#' @export
 StepTransportFracturesSolute <- R6Class(
 
   classname = 'step_transport_fractures_solute',
@@ -125,7 +91,7 @@ StepTransportFracturesSolute <- R6Class(
 
     bake = function(new_data) {
 
-      pfs <- parallel_fractures_solute(
+      pfs <- list(parallel_fractures_solute(
         new_data[[1]], # time
         new_data[[2]], # z
         new_data[[3]], # x
@@ -143,9 +109,15 @@ StepTransportFracturesSolute <- R6Class(
         self$density_bulk,
         self$porosity,
         self$tortuosity,
-        self$n_terms)
+        self$n_terms))
+
+
       self$new_columns <- self$prefix
-      setnames(pfs, self$new_columns)
+
+      names(pfs) <- self$new_columns
+
+      pfs
+
     }
   )
 )

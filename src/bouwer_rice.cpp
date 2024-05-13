@@ -50,13 +50,14 @@ double c_cpp(double x) {
 //==============================================================================
 //' Calculate equations 4 and 5 from bouwer, 1989
 //'
-//' @param rw
-//' @param Le
-//' @param Lw
-//' @param H
+//' @param rw radius of well
+//' @param Le Effecive screen length
+//' @param Lw height of water from bottom of well
+//' @param H height from bottom of aquifer
 //'
 //' @return ln(Re/rw)
 //'
+//' @noRd
 // [[Rcpp::export]]
 double bouwer_rice_abc(double rw, double Le, double Lw, double H) {
 
@@ -95,13 +96,15 @@ double bouwer_rice_abc(double rw, double Le, double Lw, double H) {
 //' @param drawdown the drawdown
 //' @param radius_screen radius of the screen
 //' @param radius_casing radius of the casing where the water level is
-//' @param Le
-//' @param Lw
-//' @param H
+//' @param Le Effecive screen length
+//' @param Lw height of water from bottom of well
+//' @param H height from bottom of aquifer
 //'
 //' @return transmissivity from bouwer_rice
 //'
 //' @export
+//'
+//' @noRd
 // [[Rcpp::export]]
 double bouwer_rice(arma::vec time,
                    arma::vec drawdown,

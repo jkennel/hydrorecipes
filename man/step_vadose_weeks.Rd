@@ -18,20 +18,42 @@ step_vadose_weeks(
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
-\item{time}{vector time}
+\item{time}{vector time elapsed time from start of pressure change}
 
-\item{air_diffusivity}{double}
+\item{air_diffusivity}{double vadose zone air diffusivity}
 
-\item{thickness}{double}
+\item{thickness}{double vadose zone thickness}
 
-\item{precision}{double}
+\item{precision}{double stop the sum when precision is reached}
 
-\item{inverse}{double}
+\item{inverse}{double whether the response is invers}
 
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
 }
-\description{
-Weeks solution
+\value{
+an updated recipe
 }
+\description{
+Weeks 1979 solution
+}
+\examples{
+formula <- as.formula(y~x)
+
+n <- 100
+dat <- data.frame(x = as.numeric(1:rows),
+                  y = as.numeric(1:rows))
+
+frec1 = recipe(formula = formula, data = dat) |>
+  step_vadose_weeks(time = x,
+                    air_diffusivity = 0.8,
+                    thickness = 5,
+                    precision = 1e-12) |>
+  plate("dt")
+}
+\references{
+Weeks, E.P., 1979. Barometric fluctuations in wells tapping deep unconfined
+  aquifers. Water Resources Research, 15(5), pp.1167-1176.
+}
+\concept{vadose}

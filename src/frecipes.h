@@ -30,6 +30,7 @@
 #include <RcppEigen.h>
 #include <RcppThread.h>
 
+
 using namespace Rcpp;
 using namespace Eigen;
 using Eigen::ArrayXd;

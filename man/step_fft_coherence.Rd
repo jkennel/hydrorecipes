@@ -18,6 +18,22 @@ and y you would write `c(x,y)` in the frecipes package.}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 estimates the coherence between terms.
+}
+\examples{
+
+dat <- data.frame(x = rnorm(200),
+                  y = rnorm(200),
+                  z = rnorm(200))
+
+formula <- as.formula(.~x+y)
+frec = recipe(formula = formula, data = dat) |>
+  step_fft_pgram(c(x, y,z)) |>
+  step_fft_coherence() |>
+  plate("df")
+
 }

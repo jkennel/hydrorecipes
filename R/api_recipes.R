@@ -6,12 +6,32 @@
 #' Create a new R6 recipe. This is analogous to the the list structure that the
 #' *recipes* package uses.
 #'
-#' @inheritParams stats::lm
-#' @param ... additional arguments to pass to Recipe$new().  This is currently
+#' @description
+#' Create a new recipe object.
+#' @param formula The model formula. It cannot contain operations.
+#' @param data list, data.frame, data.table, tibble of data. They will all
+#' be treated as lists.
+#'
+#' @param ... additional arguments to pass to Recipe$new(). This is currently
 #' not used.
 #'
-#' @return R6 recipe object
+#' @return A new R6 `Recipe` object.
 #' @export
+#'
+#' @importFrom collapse fmean fsd fscale fsum fquantile fndistinct flag
+#' @importFrom collapse missing_cases varying rowbind
+#' @importFrom collapse qDF qM qF qTBL mctl
+#' @importFrom earthtide calc_earthtide
+#' @importFrom R6 R6Class
+#' @importFrom Bessel BesselK BesselJ BesselI
+#'
+#' @importFrom Rcpp sourceCpp
+#' @importFrom stats nextn
+#' @importFrom stats convolve
+#' @importFrom stats spec.pgram
+#' @importFrom R6 R6Class
+#'
+#' @useDynLib frecipes, .registration = TRUE
 #'
 #' @examples
 #' dat <- data.frame(x = rnorm(10), y = rnorm(10))
@@ -26,6 +46,37 @@ recipe <- function(formula, data, ...) {
 # steps ------------------------------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' step_add_noise
+#'
+#' @description
+#'   Add noise.
+#'
+#' @inheritParams step_scale
+#'
+#' @param sd the standard deviation of the noise to add
+#' @param mean the mean of the noise to add
+#' @param fun the random noise generating function
+#'
+#' @return add noise to a variable
+#' @export
+#'
+#' @examples
+#' rec <- recipe(y~x, data = dat) |>
+#'        step_add_noise(x) |> plate()
+#'
+step_add_noise <- function(.rec,
+                           terms,
+                           sd = 1.0,
+                           mean = 0.0,
+                           fun = rnorm,
+                           role = "predictor",
+                           ...) {
+  terms <- substitute(terms)
+  env_list <- get_function_arguments()
+  .rec$add_step(do.call(StepAddNoise$new,
+                        env_list))
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_add_vars
 #'
 #' @description
@@ -33,7 +84,7 @@ recipe <- function(formula, data, ...) {
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return recipe with added variables
 #' @export
 #'
 #' @examples
@@ -42,65 +93,37 @@ recipe <- function(formula, data, ...) {
 #' rec <- recipe(y~x, data = dat) |>
 #'        step_add_vars(z) |> plate()
 #'
-#' rec <- recipe(y~x, data = dat) |>
-#'        plate()
 step_add_vars <- function(.rec,
                           terms,
                           role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE,
                           ...) {
+
   terms <- substitute(terms)
-  env_list <- get_function_arguments_no_rec()
+  env_list <- get_function_arguments()
   .rec$add_step(do.call(StepAddVars$new,
-                        env_list))
-}
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' step_add_noise
-#'
-#' @description
-#'   Add noise.
-#'
-#' @inheritParams step_scale
-#'
-#' @return
-#' @export
-#'
-#' @examples
-step_add_noise <- function(.rec,
-                          terms,
-                          role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE,
-                          ...) {
-  terms <- substitute(terms)
-  env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepAddNoise$new,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_constant_drawdown
 #'
 #' @description
-#'   Jacob and Lohman solution for constant drawdown test.
+#'   Estimates the flows of a constant drawdown test using Jacob-Lohman 1952.
 #'
 #' @inheritParams step_scale
+#' @inheritParams step_aquifer_grf
+#' @param radius_well the radius of the well (L)
+#' @param n_terms number of terms for laplace solution inversion
 #'
-#' @return
+#' @return an updated recipe
+#'
+#' @family aquifer
+#'
+#' @references
+#' Jacob, C.E. and S.W. Lohman, 1952. Nonsteady flow to a well of constant
+#'  drawdown in an extensive aquifer, Trans. Am. Geophys. Union, vol. 33,
+#'  pp. 559-569.
+#'
 #' @export
-#'
-#' @examples
-#' dat <- data.frame(x = rnorm(10), y = rnorm(10), z = rnorm(10))
-#'
-#' frec = recipe(formula = formula, data = dat) |>
-#'   step_aquifer_constant_drawdown(time = times,
-#'                                  drawdown = 10,
-#'                                  thickness = 10,
-#'                                  radius_well = 0.15,
-#'                                  specific_storage = 1e-6,
-#'                                  hydraulic_conductivity = 1,
-#'                                  n_terms = 12L)
-#'
 step_aquifer_constant_drawdown <- function(.rec,
                                            time,
                                            drawdown = 1.0,
@@ -108,7 +131,7 @@ step_aquifer_constant_drawdown <- function(.rec,
                                            radius_well = 0.15,
                                            specific_storage = 1.0e-6,
                                            hydraulic_conductivity = 1.0e-4,
-                                           n_terms = 16,
+                                           n_terms = 16L,
                                            role = "predictor",
                                            ...) {
   time <- substitute(time)
@@ -126,6 +149,15 @@ step_aquifer_constant_drawdown <- function(.rec,
 #' time series.
 #'
 #' @inheritParams step_scale
+#' @inheritParams step_aquifer_constant_drawdown
+#' @param time the time for evaluation (t)
+#' @param thickness the aquifer thickness (L)
+#' @param radius the distance to the observation well (L)
+#' @param specific_storage specific storage of aquifer (L/L)
+#' @param hydraulic_conductivity the hydraulic conductivity (L/t)
+#' @param flow_rate the flow rate from the well (L^3/t)
+#' @param flow_dimension aquifer flow dimension (1 = linear, 2 = radial,
+#'  3 = spherical)
 #'
 #' @return The drawdown using the GRF model
 #'
@@ -137,12 +169,21 @@ step_aquifer_constant_drawdown <- function(.rec,
 #' @family aquifer
 #'
 #' @examples
-#' dat <- data.frame(x = as.numeric(1:rows),
-#'                   y = rep(0.01, rows))
+#' dat <- data.frame(x = as.numeric(1:100),
+#'                   y = rep(0.01, 100))
 #' formula <- as.formula(y~x)
 #'
+#' # Spherical
 #' frec = recipe(formula = formula, data = dat) |>
-#'   step_aquifer_grf(time = x, flow_rate = y)
+#'   step_aquifer_grf(time = x, flow_rate = y, flow_dimension = 3.0) |>
+#'   prep() |>
+#'   bake()
+#'
+#' # Theis
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_aquifer_grf(time = x, flow_rate = y, flow_dimension = 2.0) |>
+#'   prep() |>
+#'   bake()
 #'
 #' @export
 step_aquifer_grf <- function(.rec,
@@ -188,12 +229,14 @@ step_aquifer_grf <- function(.rec,
 #' @family aquifer
 #'
 #' @examples
-#' dat <- data.frame(x = as.numeric(1:rows),
-#'                   y = rep(0.01, rows))
+#' dat <- data.frame(x = as.numeric(1:100),
+#'                   y = rep(0.01, 100))
 #' formula <- as.formula(y~x)
 #'
 #' frec = recipe(formula = formula, data = dat) |>
-#'   step_aquifer_theis(time = x, flow_rate = y)
+#'   step_aquifer_theis(time = x, flow_rate = y) |>
+#'   prep() |>
+#'   bake()
 #'
 #' @export
 step_aquifer_theis <- function(.rec,
@@ -220,6 +263,8 @@ step_aquifer_theis <- function(.rec,
 #'
 #' @inheritParams step_scale
 #' @inheritParams step_aquifer_grf
+#' @param leakage the leakage defined by hantush
+#' @param max_terms the number of terms for solution
 #'
 #' @return The drawdown using the Hantush and Jacob 1955 model
 #'
@@ -234,12 +279,14 @@ step_aquifer_theis <- function(.rec,
 #' @family aquifer
 #'
 #' @examples
-#' dat <- data.frame(x = as.numeric(1:rows),
-#'                   y = rep(0.01, rows))
+#' dat <- data.frame(x = as.numeric(1:100),
+#'                   y = rep(0.01, 100))
 #' formula <- as.formula(y~x)
 #'
 #' frec = recipe(formula = formula, data = dat) |>
-#'   step_aquifer_leaky(time = x, flow_rate = y)
+#'   step_aquifer_leaky(time = x, flow_rate = y) |>
+#'   prep() |>
+#'   bake()
 #'
 #' @export
 step_aquifer_leaky <- function(.rec,
@@ -259,53 +306,52 @@ step_aquifer_leaky <- function(.rec,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' step_baro_acworth
+#' step_aquifer_patch
 #'
 #' @description
-#' Acworth 2016 frequency based method for calculating barometric efficiency
-#' in the presence of Earth tides
+#' barker_herbert 1982 solution for radial patches.
 #'
-#' @inheritParams step_fft_pgram
+#' @inheritParams step_scale
+#' @inheritParams step_aquifer_grf
 #'
-#' @param water_level \code{variable} unquoted water level column name
-#' @param barometric_pressure \code{variable} unquoted barometric pressure
-#'   column name
-#' @param earth_tide \code{variable} unquoted Earth tide column name
-#' @param frequency_a \code{double} Earth tide frequency
-#' @param frequency_b \code{double} Related barometric frequency
-#' @param inverse \code{logical} whether the barometric relationship is inverse
-#'
-#' @return \code{double} barometric efficiency using Acworth's method
-#'
-#' @family barometric
+#' @return The drawdown using the Theis model
 #'
 #' @references
-#' Acworth, R.I., Halloran, L.J., Rau, G.C., Cuthbert, M.O. and Bernardi, T.L.,
-#'  2016. An objective frequency domain method for quantifying confined aquifer
-#'  compressible storage using Earth and atmospheric tides. Geophysical Research
-#'  Letters, 43(22), pp.11-671.
+#' Barker, J.A., and R. Herbert, 1982: Pumping tests in patchy
+#'  aquifers, Ground Water, vol. 20, No. 2, pp. 150-155.
+#'
+#' Butler, J.J., 1988: Pumping tests in nonuniform aquifers – The radially
+#'  symmetric case, Journal of Hydrology, Vol. 101, pp. 15-30.
+#'
+#' @family aquifer
 #'
 #' @examples
+#' dat <- data.frame(x = as.numeric(1:100),
+#'                   y = rep(0.01, 100))
+#' formula <- as.formula(y~x)
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_aquifer_patch(time = x, flow_rate = y) |>
+#'   prep() |>
+#'   bake()
 #'
 #' @export
-step_baro_acworth <- function(.rec,
-                              water_level,
-                              barometric_pressure,
-                              earth_tide,
-                              frequency_a = 1.9324, # m2
-                              frequency_b = 2.0,    # s2
-                              inverse = FALSE,
-                              spans = 5,
-                              detrend = TRUE,
-                              demean = TRUE,
-                              taper = 0.1,
-                              role = "augment",
-                              ...) {
-  water_level <- substitute(water_level)
-  barometric_pressure <- substitute(barometric_pressure)
-  earth_tide <- substitute(earth_tide)
+step_aquifer_patch <- function(.rec,
+                               time,
+                               flow_rate = 0.01,
+                               thickness = 1.0,
+                               radius = 200.0,
+                               radius_patch = 100.0,
+                               specific_storage_inner = 1.0e-6,
+                               specific_storage_outer = 1.0e-5,
+                               hydraulic_conductivity_inner = 1.0e-4,
+                               hydraulic_conductivity_outer = 1.0e-6,
+                               n_stehfest = 12L,
+                               role = "predictor",
+                               ...) {
+  time <- substitute(time)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepBaroAcworth$new,
+  .rec$add_step(do.call(StepAquiferPatch$new,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -356,6 +402,8 @@ step_baro_clark <- function(.rec,
 #' step_baro_harmonic
 #'
 #' @description
+#' Estimate the static barometric efficiency using harmonic methods
+#'   (Ratio, Acworth, Rau, Transfer)
 #'
 #' @inheritParams step_fft_pgram
 #' @inheritParams step_harmonic
@@ -366,7 +414,7 @@ step_baro_clark <- function(.rec,
 #' @param earth_tide \code{variable} unquoted Earth tide column name
 #' @param inverse \code{logical} whether the barometric relationship is inverse
 #'
-#' @return \code{double} barometric efficiency using Acworth's method
+#' @return \code{double} barometric efficiency using different methods
 #'
 #' @family barometric
 #'
@@ -377,7 +425,17 @@ step_baro_clark <- function(.rec,
 #'  Letters, 43(22), pp.11-671.
 #'
 #' @examples
+#' data("kennel_2020")
+#' library(data.table)
+#' library(collapse)
 #'
+#' formula <- as.formula(wl~.)
+#' frec = recipe(formula = formula, data = kennel_2020) |>
+#'  step_baro_harmonic(datetime,
+#'                     wl,
+#'                     baro,
+#'                     et,
+#'                     inverse = FALSE)
 #' @export
 step_baro_harmonic <- function(.rec,
                                time,
@@ -398,51 +456,6 @@ step_baro_harmonic <- function(.rec,
   .rec$add_step(do.call(StepBaroHarmonic$new,
                         env_list))
 }
-
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' step_aquifer_patch
-#'
-#' @description
-#' barker_herbert 1982 solution for radial patches.
-#'
-#' @inheritParams step_scale
-#' @inheritParams step_aquifer_grf
-#'
-#' @return The drawdown using the Theis model
-#'
-#' @references
-#' Barker, J.A., and R. Herbert, 1982: Pumping tests in patchy
-#'  aquifers, Ground Water, vol. 20, No. 2, pp. 150-155.
-#'
-#' Butler, J.J., 1988: Pumping tests in nonuniform aquifers – The radially
-#'  symmetric case, Journal of Hydrology, Vol. 101, pp. 15-30.
-#'
-#' @family aquifer
-#'
-#' @examples
-#' dat <- data.frame(x = as.numeric(1:rows),
-#'                   y = rep(0.01, rows))
-#' formula <- as.formula(y~x)
-#'
-#' @export
-step_aquifer_patch <- function(.rec,
-                               time,
-                               flow_rate = 0.01,
-                               thickness = 1.0,
-                               radius = 200.0,
-                               radius_patch = 100.0,
-                               specific_storage_inner = 1.0e-6,
-                               specific_storage_outer = 1.0e-5,
-                               hydraulic_conductivity_inner = 1.0e-4,
-                               hydraulic_conductivity_outer = 1.0e-6,
-                               n_stehfest = 12L,
-                               role = "predictor",
-                               ...) {
-  time <- substitute(time)
-  env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepAquiferPatch$new,
-                        env_list))
-}
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_center
 #' @description
@@ -450,14 +463,17 @@ step_aquifer_patch <- function(.rec,
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
+#'
 #' @export
 #'
 #' @examples
 #' dat <- data.frame(x = rnorm(10), y = rnorm(10))
 #'
 #' rec <- recipe(y~x, data = dat) |>
-#'        step_center(x)
+#'        step_center(x) |>
+#'        prep() |>
+#'        bake()
 #'
 step_center <- function(.rec,
                         terms,
@@ -480,7 +496,7 @@ step_center <- function(.rec,
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
@@ -488,7 +504,9 @@ step_center <- function(.rec,
 #' dat <- data.frame(x = rnorm(10), y = rnorm(10))
 #'
 #' rec <- recipe(y~x, data = dat) |>
-#'        step_scale(x)
+#'        step_check_na(x) |>
+#'        prep() |>
+#'        bake()
 #'
 step_check_na <- function(.rec,
                           terms,
@@ -503,11 +521,11 @@ step_check_na <- function(.rec,
 #' @title step_check_spacing
 #'
 #' @description
-#'   Check columns for NA
+#'   Check the spacing of a variable
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
@@ -515,7 +533,9 @@ step_check_na <- function(.rec,
 #' dat <- data.frame(x = rnorm(10), y = rnorm(10))
 #'
 #' rec <- recipe(y~x, data = dat) |>
-#'        step_scale(x)
+#'        step_check_spacing(x) |>
+#'        prep() |>
+#'        bake()
 #'
 step_check_spacing <- function(.rec,
                                terms,
@@ -527,17 +547,66 @@ step_check_spacing <- function(.rec,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' @title step_distributed_lag
+#' @title step_check_spacing
 #'
 #' @description
-#'   generates distributed lag vectors.
+#'   Check the spacing of a variable
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
+#'
+#' data("kennel_2020")
+#'
+#' kennel_2020[1e4, wl := 13.36]
+#' frec1 = recipe(wl~baro, data = kennel_2020)$
+#'  add_step(frecipes:::StepCompareColumns$new(data = wl, compare = baro, n_sd = 15))$
+#'  prep()$
+#'  bake()
+#'
+step_compare_columns <- function(.rec,
+                                 data,
+                                 compare,
+                                 role = "add",
+                                 n_sd = 4,
+                                 na_rm = TRUE,
+                                 ...) {
+  data <- substitute(data)
+  compare <- substitute(compare)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepCompareColumns$new,
+                        env_list))
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_distributed_lag
+#'
+#' @description
+#'   Generates distributed lag vectors. For regular spaced lags this uses an FFT
+#'   based method which is faster and more memory efficient.
+#'
+#' @inheritParams step_scale
+#'
+#' @references
+#' Gasparrini, A., 2011. Distributed Lag Linear and Non-Linear Models in R:
+#'   The Package dlnm. Journal of statistical software 465 43, 1–20.
+#'
+#' @return an updated recipe
+#' @export
+#'
+#' @examples
+#' formula <- as.formula(y~x)
+#' rows <- 1e4
+#'
+#' dat <- data.frame(x = rnorm(rows),
+#'                   y = as.numeric(1:rows),
+#'                   z = rnorm(rows))
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'  step_distributed_lag(x, knots = frecipes:::log_lags_arma(6, 800))
+#'
 step_distributed_lag <- function(.rec,
                                  terms,
                                  n_lag = 12L,
@@ -556,14 +625,24 @@ step_distributed_lag <- function(.rec,
 #' @title step_drop_columns
 #'
 #' @description
-#'   generates distributed lag vectors.
+#'   Removes regressors from recipe.
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
+#' rows <- 20
+#' formula <- as.formula(y~x)
+#'
+#' dat <- data.frame(x = rnorm(rows),
+#'                   y = as.numeric(1:rows),
+#'                   z = rnorm(rows))
+#'
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_drop_columns(x)
 step_drop_columns <- function(.rec,
                               terms,
                               role = "modify",
@@ -583,7 +662,7 @@ step_drop_columns <- function(.rec,
 #' @inheritParams step_scale
 #' @param one_hot logical - use one hot encoding.
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
@@ -613,12 +692,36 @@ step_dummy <- function(.rec,
 #' @description
 #'   Generate synthetic Earth tide waves and wave groups.
 #'
-#' @inheritParams step_scale, earthtide::calc_earthtide
+#' @inheritParams step_scale
+#' @inheritParams earthtide::calc_earthtide
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
+#' data(kennel_2020)
+#' latitude     <- 34.23411                           # latitude
+#' longitude    <- -118.678                           # longitude
+#' elevation    <- 500                                # elevation
+#' cutoff       <- 1e-5                               # cutoff
+#' catalog      <- 'ksm04'                            # hartmann wenzel catalog
+#' astro_update <- 300                                # how often to update astro parameters
+#' method       <- 'volume_strain'                    # which potential to calculate
+#'
+#' wave_groups_dl <- as.data.table(earthtide::eterna_wavegroups)
+#' wave_groups_dl <- na.omit(wave_groups_dl[time == '1 month'])
+#' wave_groups_dl <- wave_groups_dl[wave_groups_dl$start > 0.5,]
+#' wave_groups_dl <- wave_groups_dl[, list(start, end)]
+#' ngr <- nrow(wave_groups_dl)
+#'
+#' rec <- recipe(wl~baro+datetime, data = kennel_2020) |>
+#'   step_earthtide(datetime,
+#'                  wave_groups = wave_groups_dl,
+#'                  latitude = latitude,
+#'                  longitude = longitude,
+#'                  elevation = elevation,
+#'                  cutoff = cutoff,
+#'                  catalog = catalog)
 step_earthtide <- function(.rec,
                            terms,
                            do_predict = TRUE,
@@ -650,10 +753,21 @@ step_earthtide <- function(.rec,
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
+#'
+#' dat <- data.frame(x = rnorm(200),
+#'                   y = rnorm(200),
+#'                   z = rnorm(200))
+#'
+#' formula <- as.formula(.~x+y)
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_fft_pgram(c(x, y,z)) |>
+#'   step_fft_coherence() |>
+#'   plate("df")
+#'
 step_fft_coherence <- function(.rec,
                                terms,
                                role = "predictor",
@@ -667,14 +781,26 @@ step_fft_coherence <- function(.rec,
 #' @title step_fft_pgram
 #'
 #' @description
-#'   Transfer function using pgram method.
+#'   Periodgrams and cross-periodograms using a method similar to
+#'   \code{stats::spec.pgram}.
 #'
 #' @inheritParams step_scale
+#' @inheritParams stats::spec.pgram
+#' @param lst \code{logical} return a list?
+#' @param pad_fft \code{logical} Zero pad the list for faster FFT calculation?
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
+#' formula <- as.formula(y~.)
+#'
+#' dat <- data.frame(x = rnorm(200),
+#'                   y = rnorm(200))
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_fft_pgram(c(x,y))
+#'
 step_fft_pgram <- function(.rec,
                            terms,
                            spans = 3,
@@ -698,11 +824,21 @@ step_fft_pgram <- function(.rec,
 #'  Welch's method.
 #'
 #' @inheritParams step_scale
+#' @param length_subset length of fft section
+#' @param overlap amount of overlap
+#' @param window window weights
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
+#' formula <- as.formula(y~.)
+#'
+#' dat <- data.frame(x = rnorm(200),
+#'                   y = rnorm(200))
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_fft_welch(c(x,y), length_subset = 10, window = window_rectangle(10))
 step_fft_welch <- function(.rec,
                            terms,
                            length_subset,
@@ -719,14 +855,22 @@ step_fft_welch <- function(.rec,
 #' @title step_fft_transfer_pgram
 #'
 #' @description
-#'  calculates the transfer function using pgram method.
+#'  Calculates the transfer function with pgram results.
 #'
 #' @inheritParams step_scale
+#' @inheritParams step_fft_pgram
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
+#' data(kennel_2020)
+#'
+#' form <- as.formula("wl~.")
+#'
+#' rec <- recipe(form, kennel_2020) |>
+#'        step_fft_transfer_pgram(c(wl, baro, et), spans = 3) |>
+#'
 step_fft_transfer_pgram <- function(.rec,
                                     terms,
                                     spans = 3,
@@ -744,14 +888,21 @@ step_fft_transfer_pgram <- function(.rec,
 #' @title step_fft_transfer_welch
 #'
 #' @description
-#'  calculates the transfer function using Welch's method.
+#'  calculates the transfer function with Welch's results.
 #'
 #' @inheritParams step_scale
+#' @inheritParams step_fft_welch
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
+#' data(kennel_2020)
+#' form <- as.formula("wl~.")
+#'
+#'   rec <- recipe(form, kennel_2020) |>
+#'   step_fft_transfer_welch(c(wl, baro, et), spans = 3) |>
+#'
 step_fft_transfer_welch <- function(.rec,
                                     terms,
                                     length_subset,
@@ -770,13 +921,25 @@ step_fft_transfer_welch <- function(.rec,
 #' @description
 #' divides a series into intervals and then performs dummy encoding.
 #'
-#' @param vec a vector of break points#'
+#' @param vec a vector of break points
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
+#'
+#' formula <- as.formula(y~x)
+#'
+#' rows = 200
+#' dat <- data.frame(x = rnorm(rows),
+#'                   y = 1:rows,
+#'                   z = rnorm(rows))
+#'
+#' frec1 = recipe(formula = formula, data = dat) |>
+#'   step_find_interval(x, vec = c(-0.1, 0.0, 0.1)) |>
+#'   plate("tbl")
+#'
 step_find_interval <- function(.rec,
                                terms,
                                vec,
@@ -799,7 +962,7 @@ step_find_interval <- function(.rec,
 #' @param starting_value numeric - the starting position of the sin and cos
 #'   curves. This may be specified to have more control over the signal phase.
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
@@ -832,7 +995,7 @@ step_harmonic <- function(.rec,
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
@@ -860,20 +1023,34 @@ step_intercept <- function(.rec,
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
+#'
+#' formula <- as.formula(x~y+z)
+#' rows <- 1e4
+#'
+#' dat <- data.frame(x = rep(1, rows),
+#'                   y = 1:rows,
+#'                   z = cumsum(rnorm(rows)))
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_kernel_filter(z, kernel = list(rep(1, 1001)/1001), align = "center") |>
+#'   plate("tbl")
+#'
 step_kernel_filter <- function(.rec,
                                terms,
                                kernel,
                                align = "center",
                                role = "predictor",
                                ...) {
+
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepIntercept$new,
+  .rec$add_step(do.call(StepKernelFilter$new,
                         env_list))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_lead_lag
@@ -890,7 +1067,7 @@ step_kernel_filter <- function(.rec,
 #'   `n_subset`.
 #' @param n_subset integer - spacing between adjacent samples in the result.
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
@@ -924,7 +1101,7 @@ step_lead_lag <- function(.rec,
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
@@ -952,7 +1129,7 @@ step_normalize <- function(.rec,
 #' @param recipe Recipe to use for filling gaps
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
 #'
 #' @family gap_fill
 #'
@@ -977,72 +1154,79 @@ step_ols_gap_fill <- function(.rec,
 #' @title step_ols
 #'
 #' @description Uses the Eigen C++ library fast versions to generate
-#' predictions from different steps.
+#' predictions and coefficients from a recipe.
 #'
 #'
-#' @param recipe Recipe to use for filling gaps
 #' @inheritParams step_scale
+#' @param do_response \code{logical} calculate and return the responses?
+#' @param do_predict calculate and return the predictions?
+#' @param formula formula for the regression
 #'
-#' @return
+#' @return an updated recipe
 #'
 #' @family ols
 #'
 #' @export
 #'
 #' @examples
-#' dat <- data.frame(x = rnorm(10), y = rnorm(10))
+#' data("kennel_2020")
+#' kennel_2020[, datetime := as.numeric(datetime)]
+#' formula <- as.formula(wl~.)
+#' n_knots <- 12
+#' deg_free <- 27
+#' max_lag <- 1 + 720
 #'
-#'
+#' frec = Recipe$new(formula = formula, data = unclass(kennel_2020))$
+#'   add_step(StepDistributedLag$new(baro,
+#'                                   knots = frecipes:::log_lags_arma(n_knots, max_lag)))$
+#'   add_step(StepSplineB$new(datetime, df = deg_free, intercept = FALSE))$
+#'   add_step(StepIntercept$new())$
+#'   add_step(StepDropColumns$new(baro))$
+#'   add_step(StepDropColumns$new(datetime))$
+#'   add_step(StepOls$new(formula))$
+#'   prep()$
+#'   bake()
 step_ols <- function(.rec,
-                             formula,
-                             role = "predictor",
-                             do_response = TRUE,
-                             do_predict = TRUE,
-                             ...){
+                     formula,
+                     role = "predictor",
+                     do_response = TRUE,
+                     do_predict = TRUE,
+                     ...){
 
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepOls$new,
                         env_list))
 }
-#' #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' #' @title step_ols_response
-#' #'
-#' #' @param recipe Recipe to use getting responses from a regression model
-#' #' @inheritParams step_scale
-#' #'
-#' #' @return
-#' #'
-#' #' @family ols
-#' #'
-#' #' @export
-#' #'
-#' #' @examples
-#' #' dat <- data.frame(x = rnorm(10), y = rnorm(10))
-#' #'
-#' #'
-#' step_ols_response <- function(.rec,
-#'                               formula,
-#'                               role = "augment",
-#'                               ...){
-#'
-#'   env_list <- get_function_arguments()
-#'   .rec$add_step(do.call(StepOlsResponse$new,
-#'                         env_list))
-#' }
-#
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_pca
 #'
 #' @description `StepPca` Does PCA for a set of columns. This currently is an
 #' in house function. Use at your own risk!
 #'
-#' @inheritParams Step
+#' @inheritParams step_scale
 #' @inheritParams recipes::step_pca
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
+#'
+#' set.seed(1)
+#'
+#' formula <- as.formula(x~a+b+d+e+f+g)
+#' rows <- 1000
+#'
+#' dat <- data.frame(x = rnorm(rows),
+#'                   a = rnorm(rows),
+#'                   b = rnorm(rows),
+#'                   d = rnorm(rows),
+#'                   e = rnorm(rows),
+#'                   f = rnorm(rows),
+#'                   g = rnorm(rows))
+#'
+#' rec  = recipe(formula = formula, data = dat) |>
+#'   step_pca(all_numeric()) |>
+#'   plate()
 step_pca <- function(.rec,
                      terms,
                      na_rm = TRUE,
@@ -1076,7 +1260,7 @@ step_pca <- function(.rec,
 #' @param keep_original_cols logical - keep the original columns or replace them
 #' @param ... additional arguments
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
@@ -1107,17 +1291,48 @@ step_scale <- function(.rec,
 #'   Cooper, Bredehoeft and Papadopulos, 1967 Slug test solution
 #'
 #' @inheritParams step_scale
+#' @inheritParams step_aquifer_constant_drawdown
 #'
-#' @return
+#' @param radius distance from line source or center of well
+#' @param radius_casing radius of casing
+#' @param radius_well radius of well screen
+#' @param head_0 initial displacement
+#'
+#' @return an updated recipe
+#'
+#' @family slug
+#'
+#' @references
+#' Cooper, H.H., J.D. Bredehoeft and S.S. Papadopulos, 1967. Response of a
+#'  finite-diameter well to an instantaneous charge of water, Water Resources
+#'  Research, vol. 3, no. 1, pp. 263-269.
+#'
 #' @export
 #'
 #' @examples
+#' # check vs. CBP 1967 table 1
+#' times    <- rep(c(1.0, 2.15, 4.64), 4) * 10^(rep(c(-3, -2, -1, 0), each = 3))
+#' dat <- list(x = times)
 #'
+#' formula = formula(x~.)
 #'
+#' frec1 = recipe(formula = formula, data = dat) |>
+#'   step_slug_cbp(
+#'     times = x,
+#'     radius = 1.0,
+#'     radius_casing = 1.0,
+#'     radius_well = 1.0,
+#'     specific_storage = 1e-1,
+#'     hydraulic_conductivity = 1.0,
+#'     thickness = 1.0,
+#'     head_0 = 1.0,
+#'     n_terms = 12L
+#'   ) |>
+#'   plate("dt")
 step_slug_cbp <- function(.rec,
                           times,
                           radius = 1.0,
-                          radius_casing = 1.0,
+                          radius_casing = 0.15,
                           radius_well = 0.15,
                           specific_storage = 1.0e-6,
                           hydraulic_conductivity = 1.0e-4,
@@ -1142,11 +1357,24 @@ step_slug_cbp <- function(.rec,
 #' @inheritParams splines2::bsp
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
 #'
+#' formula <- as.formula(x~y+z)
+#' rows <- 1e5
+#'
+#' dat <- data.frame(x = rnorm(rows),
+#'                   y = 1:rows,
+#'                   z = cumsum(rnorm(rows)))
+#' ik <- fquantile(dat$x, probs = seq(0, 1, 0.1))
+#' bk <- ik[c(1, length(ik))]
+#' ik <- ik[-c(1, length(ik))]
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_spline_b(x, df = 11L, intercept = FALSE)  |>
+#'  plate("tbl")
 #'
 step_spline_b <- function(.rec,
                           terms,
@@ -1172,11 +1400,18 @@ step_spline_b <- function(.rec,
 #' @param row_numbers integer vector of row numbers to keep.
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
 #'
+#' dat <- data.frame(x = as.numeric(1:200),
+#' y = rnorm(200))
+#' formula <- as.formula(y~x)
+#'
+#' frec1 = recipe(formula = formula, data = dat) |>
+#'   step_subset_rows(y, row_numbers = c(1, 5, 10)) |>
+#'   plate("dt")
 #'
 step_subset_rows <- function(.rec,
                              terms,
@@ -1214,11 +1449,27 @@ step_subset_rows <- function(.rec,
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @family transport
+#'
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
 #'
+#' formula <- as.formula(~time+z+x)
+#'
+#' dat <- setDT(expand.grid(10^(3:8),
+#'                          seq(0.0, 100, 1),
+#'                          c(0.0, 0.05)))
+#'
+#' names(dat) <- c("time", "z", "x")
+#'
+#'
+#' frec1 = recipe(formula = formula, data = dat) |>
+#'   step_transport_fractures_heat(time = time,
+#'                                 distance_fracture = z,
+#'                                 distance_matrix = x) |>
+#'   plate("dt")
 #'
 step_transport_fractures_heat <- function(.rec,
                                           time,
@@ -1275,11 +1526,30 @@ step_transport_fractures_heat <- function(.rec,
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @family transport
+#'
+#' @references
+#' Sudicky, E.A., Frind, E.O., Contaminant transport in fractured porous media:
+#'  Analytical solutions for a system of parallel fractures, December 1982
+#'  https://doi.org/10.1029/WR018i006p01634
+#'
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
+#' formula <- as.formula(~time+z+x)
 #'
+#' dat <- setDT(expand.grid(10^(3:8),
+#'                          seq(0.0, 10, 1),
+#'                          c(0.0)))
+#'
+#' names(dat) <- c("time", "z", "x")
+#'
+#' frec1 = recipe(formula = formula, data = dat) |>
+#'   step_transport_fractures_solute(time = time,
+#'                                   distance_fracture = z,
+#'                                   distance_matrix = x) |>
+#'   plate("dt")
 #'
 step_transport_fractures_solute <- function(.rec,
                                             time,
@@ -1338,11 +1608,26 @@ step_transport_fractures_solute <- function(.rec,
 #'
 #' @inheritParams step_scale
 #'
+#' @family transport
+#'
+#' @references
+#' Ogata, A., Banks, R.B., 1961. A solution of the differential equation of
+#'   longitudinal dispersion in porous media. U. S. Geol. Surv. Prof. Pap. 411-A.
+#'   1-D, infinite source, uniform flow, constant parameters, decay, retardation
+#'
 #' @return Ogata-Banks solution for time and distance pairs
 #' @export
 #'
 #' @examples
 #'
+#' formula <- as.formula(y~x)
+#' rows <- 100
+#'
+#' dat <- data.frame(expand.grid(as.numeric(1:rows), as.numeric(1:10)))
+#' names(dat) <- c('x', 'y')
+#' frec1 = recipe(formula = formula, data = dat) |>
+#'   step_transport_ogata_banks(time = x, distance = y) |>
+#'   plate("dt")
 #'
 step_transport_ogata_banks <- function(.rec,
                                        time,
@@ -1364,22 +1649,39 @@ step_transport_ogata_banks <- function(.rec,
 #' @title step_vadose_weeks
 #'
 #' @description
-#' Weeks solution
+#' Weeks 1979 solution
 #'
-#' @param time vector time
-#' @param air_diffusivity double
-#' @param thickness double
-#' @param precision double
-#' @param inverse double
+#' @param time vector time elapsed time from start of pressure change
+#' @param air_diffusivity double vadose zone air diffusivity
+#' @param thickness double vadose zone thickness
+#' @param precision double stop the sum when precision is reached
+#' @param inverse double whether the response is invers
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
+#' @family vadose
+#'
+#' @references
+#' Weeks, E.P., 1979. Barometric fluctuations in wells tapping deep unconfined
+#'   aquifers. Water Resources Research, 15(5), pp.1167-1176.
+#'
 #' @export
 #'
+#'
 #' @examples
+#' formula <- as.formula(y~x)
 #'
+#' n <- 100
+#' dat <- data.frame(x = as.numeric(1:rows),
+#'                   y = as.numeric(1:rows))
 #'
+#' frec1 = recipe(formula = formula, data = dat) |>
+#'   step_vadose_weeks(time = x,
+#'                     air_diffusivity = 0.8,
+#'                     thickness = 5,
+#'                     precision = 1e-12) |>
+#'   plate("dt")
 step_vadose_weeks <- function(.rec,
                               time,
                               air_diffusivity = 0.2,
@@ -1402,12 +1704,20 @@ step_vadose_weeks <- function(.rec,
 #'
 #' @inheritParams step_scale
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
 #'
+#' formula <- as.formula(y~x+z)
+#' rows <- 1000
+#' dat <- data.frame(x = rep(1, rows),
+#'                   y = 1:rows,
+#'                   z = rnorm(rows))
 #'
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_varying(c(x, y, z)) |>
+#'   plate("tbl")
 step_varying <- function(.rec,
                          terms,
                          role = "predictor",
@@ -1430,7 +1740,7 @@ step_varying <- function(.rec,
 #' @inheritParams step_scale
 #' @param retain logical - currently not implemented
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
@@ -1454,7 +1764,7 @@ prep <- function(.rec, retain = TRUE) {
 #' @inheritParams stats::lm
 #' @param type
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples
@@ -1481,7 +1791,7 @@ bake <- function(.rec, data = NULL) {
 #' @param type the return type for the recipe (dt = `data.table`, df = `data.frame`,
 #' tbl = `tibble`, list = `list`, m = `matrix`)
 #'
-#' @return
+#' @return an updated recipe
 #' @export
 #'
 #' @examples

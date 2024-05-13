@@ -75,6 +75,9 @@ double weeks_1979(const double lag,
 //'                        thickness = 40,
 //'                        precision = 1e-10,
 //'                        inverse = FALSE)
+//'
+//' @noRd
+//'
 // [[Rcpp::export]]
 Rcpp::List vadose_response(std::vector<double> time,
                                      const double air_diffusivity,

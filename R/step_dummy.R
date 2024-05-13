@@ -3,17 +3,6 @@
 # Convert a Column to Dummy Encoding Step --------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepDummy` dummy encoding for factor or integer input.
-#'
-#' @param one_hot boolean use one-hot encoding
-#'
-#' @inheritParams Step
-#'
-#' @family common
-#'
-#' @export
 StepDummy <- R6Class(
   classname = "step_dummy",
   inherit = Step,
@@ -23,9 +12,6 @@ StepDummy <- R6Class(
     levels = NULL,
     one_hot = NULL,
 
-    #' @description
-    #' @inheritParams StepAddVars
-    #' @return A new `Step`.
     initialize = function(terms,
                           one_hot = FALSE,
                           role = "predictor",
@@ -69,7 +55,7 @@ StepDummy <- R6Class(
         names(dum[[i]]) <- name_columns(
           self$id,
           column_name[i],
-          length(dum[[i]])
+          n = length(dum[[i]])
         )
       }
 

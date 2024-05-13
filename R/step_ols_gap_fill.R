@@ -3,18 +3,6 @@
 # Fill in Gaps using Regression ------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepOlsGapFill`
-#'
-#' @param terms
-#' @param recipe Recipe to use for filling gaps
-#'
-#' @inheritParams Step
-#'
-#' @family gap_fill
-#'
-#' @export
 StepOlsGapFill <- R6Class(
   classname = "step_ols_gap_fill",
   inherit = Step,
@@ -46,10 +34,13 @@ StepOlsGapFill <- R6Class(
     },
     bake = function(new_data) {
 
+      print(str(new_data))
       rec <- self$recipe
       rec <- rec$prep()$bake(data = new_data)
-      dat <- rec$plate(type = "list")
+      print(str(rec$result))
+      dat <- rec$result
 
+      print(str(dat))
       x <- get_regression_data(dat, rec$term_info, id_type = "predictor")
       y <- get_regression_data(dat, rec$term_info, id_type = "outcome")
 
@@ -73,10 +64,10 @@ StepOlsGapFill <- R6Class(
       # remove na values in the outcomes
       self$coefficients <- determine_coefficients(x, y)
 
-
+      print(str(x$data))
       lst <- collapse::mctl(x$data[, , drop = FALSE] %*% self$coefficients[, , drop = FALSE])
 
-      self$new_columns <- name_columns(self$prefix, colnames(y$data), ncol(y$data))
+      self$new_columns <- name_columns(self$prefix, colnames(y$data), n = ncol(y$data))
       names(lst) <- self$new_columns
 
       lst

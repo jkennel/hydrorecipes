@@ -12,7 +12,7 @@ step_aquifer_constant_drawdown(
   radius_well = 0.15,
   specific_storage = 1e-06,
   hydraulic_conductivity = 1e-04,
-  n_terms = 16,
+  n_terms = 16L,
   role = "predictor",
   ...
 )
@@ -20,23 +20,38 @@ step_aquifer_constant_drawdown(
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
+\item{time}{the time for evaluation (t)}
+
+\item{thickness}{the aquifer thickness (L)}
+
+\item{radius_well}{the radius of the well (L)}
+
+\item{specific_storage}{specific storage of aquifer (L/L)}
+
+\item{hydraulic_conductivity}{the hydraulic conductivity (L/t)}
+
+\item{n_terms}{number of terms for laplace solution inversion}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
-Jacob and Lohman solution for constant drawdown test.
+Estimates the flows of a constant drawdown test using Jacob-Lohman 1952.
 }
-\examples{
-dat <- data.frame(x = rnorm(10), y = rnorm(10), z = rnorm(10))
-
-frec = recipe(formula = formula, data = dat) |>
-  step_aquifer_constant_drawdown(time = times,
-                                 drawdown = 10,
-                                 thickness = 10,
-                                 radius_well = 0.15,
-                                 specific_storage = 1e-6,
-                                 hydraulic_conductivity = 1,
-                                 n_terms = 12L)
-
+\references{
+Jacob, C.E. and S.W. Lohman, 1952. Nonsteady flow to a well of constant
+ drawdown in an extensive aquifer, Trans. Am. Geophys. Union, vol. 33,
+ pp. 559-569.
 }
+\seealso{
+Other aquifer: 
+\code{\link{step_aquifer_grf}()},
+\code{\link{step_aquifer_leaky}()},
+\code{\link{step_aquifer_patch}()},
+\code{\link{step_aquifer_theis}()}
+}
+\concept{aquifer}

@@ -3,16 +3,6 @@
 # Adjust the dispersion (e.g. scale by standard deviation) ---------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepScale` adjust the dispersion by the standard deviation.
-#'
-#' @inheritParams Step
-#' @inheritParams recipes::step_scale
-#' @param fun the function to use for calculating the distpersion. The default is
-#' `collapse::fsd`
-#'
-#' @export
 StepScale <- R6Class(
   classname = "step_scale",
   inherit = Step,
@@ -29,6 +19,7 @@ StepScale <- R6Class(
                           n_sd = 1L,
                           role = "predictor",
                           ...) {
+
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
@@ -39,7 +30,6 @@ StepScale <- R6Class(
         env_list[names(env_list) != "terms"],
         ...
       )
-
 
       self$na_rm <- na_rm
       self$fun <- fun
@@ -59,6 +49,7 @@ StepScale <- R6Class(
 
     # subtract the central value from a column
     bake = function(new_data) {
+
       for (i in seq_along(self$columns)) {
         new_data[[i]] <- new_data[[i]] * self$column_values[i]
       }

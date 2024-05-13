@@ -17,6 +17,9 @@ bake(.rec, data = NULL)
 
 \item{type}{}
 }
+\value{
+an updated recipe
+}
 \description{
 Evaluate the steps and store the recipe results
 }

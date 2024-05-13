@@ -3,12 +3,6 @@
 # Check a regressor for NA values ----------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepCheckNA`
-#' @inheritParams Step
-#'
-#' @export
 StepCheckNA <- R6Class(
   classname = "step_check_na",
   inherit = Step,
@@ -31,7 +25,8 @@ StepCheckNA <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
-      self$check <- anyNA(new_data)
+      self$check <- lapply(new_data, anyNA)
+
       return(NULL)
     }
   )

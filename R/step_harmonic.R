@@ -3,14 +3,6 @@
 # Generate Sine and Cosine Terms for Harmonic Analysis -------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepHarmonic` generates sin and cosine curves at specified frequencies.
-#'
-#' @inheritParams Step
-#' @inheritParams recipes::step_harmonic
-#'
-#' @export
 StepHarmonic <- R6Class(
   classname = "step_harmonic",
   inherit = Step,

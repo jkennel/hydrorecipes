@@ -3,16 +3,6 @@
 # Weeks 1979 Vadose Zone Model -------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepVadoseWeeks` Weeks solution
-#'
-#'
-#' @inheritParams Step
-#'
-#' @family vadose
-#'
-#' @export
 StepVadoseWeeks <- R6Class(
   classname = "step_vadose_weeks",
   inherit = Step,

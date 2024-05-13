@@ -3,29 +3,6 @@
 # Calculate Barometric Efficiency using Harmonic tide methods ------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepBaroHarmonic`
-#'
-#' @inheritParams Step
-#' @inheritParams recipes::step_center
-#'
-#'
-#' @references
-#' Rau, G.C., Cuthbert, M.O., Acworth, R.I. and Blum, P., 2020.
-#'   Disentangling the groundwater response to Earth and atmospheric tides
-#'   to improve subsurface characterisation. Hydrology and earth system
-#'   sciences, 24(12), pp.6033-6046.
-#'
-#' Acworth, R. I., Halloran, L. J. S., Rau, G. C., Cuthbert, M. O.,
-#'   & Bernardi, T. L. (2016). An objective frequency-domain method for
-#'   quantifying confined aquifer compressible storage using Earth and
-#'   atmospheric tides. Geophysical Research Letters, 43(November).
-#'   https://doi.org/10.1002/2016GL071328
-#'
-#' @family barometric
-#'
-#' @export
 StepBaroHarmonic <- R6Class(
   classname = "step_baro_rau",
   inherit = Step,
@@ -48,7 +25,7 @@ StepBaroHarmonic <- R6Class(
                           water_level,
                           barometric_pressure,
                           earth_tide,
-                          frequency = c(1.9324, 2.0),
+                          frequency = c(1.9324, 2.0), # M2 and S2
                           cycle_size = 86400,
                           start = 0.0,
                           inverse = TRUE,
@@ -87,6 +64,9 @@ StepBaroHarmonic <- R6Class(
     },
     bake = function(new_data) {
 
+      # this is a hack to deal with NSE issues
+      names(new_data)[1] <- "time_col"
+
       nms <- names(new_data)
 
       # create regression formula
@@ -95,7 +75,7 @@ StepBaroHarmonic <- R6Class(
       # include linear trend and intercept
       harmonics <- frecipes::Recipe$new(formula = as.formula(formula_txt), new_data)$
         add_step(StepIntercept$new())$
-        add_step(StepHarmonic$new(datetime,
+        add_step(StepHarmonic$new(time_col,
                                   frequency = self$frequency,
                                   cycle_size = self$cycle_size,
                                   starting_value = self$start))$
@@ -111,6 +91,8 @@ StepBaroHarmonic <- R6Class(
       co_names <- colnames(X)
       wh_s <- grep("sin", co_names)
       wh_c <- grep("cos", co_names)
+
+
       soln_cplx <- sin_cos_to_complex(c = soln[wh_c,], s = -soln[wh_s,])
 
       self$barometric_efficiency <- be_harmonic_cpp(soln_cplx, self$inverse)

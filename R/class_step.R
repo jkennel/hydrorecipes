@@ -3,24 +3,6 @@
 # Building Block for a Recipe --------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class representing a step
-#'
-#' The `Step` class hold common info for each step.
-#'
-#' @inheritParams recipes::step_center
-#' @inheritParams recipes::step_pca
-#'
-#' @param step_name the name of the step
-#'
-#'
-#' @importFrom collapse fmean fsd fscale fsum fquantile fndistinct flag
-#' @importFrom collapse missing_cases varying rowbind
-#' @importFrom collapse qDF qM qF qTBL mctl
-#' @importFrom earthtide calc_earthtide
-#' @importFrom R6 R6Class
-#' @importFrom Bessel BesselK BesselJ BesselI
-#'
-#' @export
 Step <- R6Class(
   classname = "step",
   public = list(
@@ -41,6 +23,7 @@ Step <- R6Class(
     new_columns = c(),
 
     initialize = function(terms, ...) {
+
       if (!missing(terms)) {
         if (length(terms) == 1) {
           self$terms <- get_terms_and_symbols(c(terms))

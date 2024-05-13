@@ -6,6 +6,21 @@
 \usage{
 get_formula_vars(formula, data)
 }
+\arguments{
+\item{formula}{an object of class \code{"\link[stats]{formula}"} (or one that
+    can be coerced to that class): a symbolic description of the
+    model to be fitted.  The details of model specification are given
+    under \sQuote{Details}.}
+
+\item{data}{an optional data frame, list or environment (or object
+    coercible by \code{\link{as.data.frame}} to a data frame) containing
+    the variables in the model.  If not found in \code{data}, the
+    variables are taken from \code{environment(formula)},
+    typically the environment from which \code{lm} is called.}
+}
+\value{
+character vector of variable names
+}
 \description{
 get_formula_vars
 }

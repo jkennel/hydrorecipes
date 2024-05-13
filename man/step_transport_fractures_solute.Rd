@@ -71,7 +71,37 @@ step_transport_fractures_solute(
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 Sudicky and Frind 1982 solution. Two parallel
 fractures
 }
+\examples{
+formula <- as.formula(~time+z+x)
+
+dat <- setDT(expand.grid(10^(3:8),
+                         seq(0.0, 10, 1),
+                         c(0.0)))
+
+names(dat) <- c("time", "z", "x")
+
+frec1 = recipe(formula = formula, data = dat) |>
+  step_transport_fractures_solute(time = time,
+                                  distance_fracture = z,
+                                  distance_matrix = x) |>
+  plate("dt")
+
+}
+\references{
+Sudicky, E.A., Frind, E.O., Contaminant transport in fractured porous media:
+ Analytical solutions for a system of parallel fractures, December 1982
+ https://doi.org/10.1029/WR018i006p01634
+}
+\seealso{
+Other transport: 
+\code{\link{step_transport_fractures_heat}()},
+\code{\link{step_transport_ogata_banks}()}
+}
+\concept{transport}

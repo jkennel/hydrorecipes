@@ -18,6 +18,21 @@ and y you would write `c(x,y)` in the frecipes package.}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
-generates distributed lag vectors.
+Removes regressors from recipe.
+}
+\examples{
+rows <- 20
+formula <- as.formula(y~x)
+
+dat <- data.frame(x = rnorm(rows),
+                  y = as.numeric(1:rows),
+                  z = rnorm(rows))
+
+
+frec = recipe(formula = formula, data = dat) |>
+  step_drop_columns(x)
 }

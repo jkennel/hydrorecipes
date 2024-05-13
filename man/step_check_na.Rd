@@ -18,6 +18,9 @@ and y you would write `c(x,y)` in the frecipes package.}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 Check columns for NA
 }
@@ -26,6 +29,8 @@ Check columns for NA
 dat <- data.frame(x = rnorm(10), y = rnorm(10))
 
 rec <- recipe(y~x, data = dat) |>
-       step_scale(x)
+       step_check_na(x) |>
+       prep() |>
+       bake()
 
 }

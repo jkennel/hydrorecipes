@@ -1,17 +1,10 @@
-# NEED TO FIX SELECTORS
+# NEED TO FIX SELECTORS TO MAKE EASIER
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Estimate the Coherence Step --------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepCoherence` estimates the coherence between terms.
-#'
-#' @inheritParams Step
-#'
-#' @export
 StepCoherence <- R6Class(
   classname = "step_fft_coherence",
   inherit = Step,
@@ -35,12 +28,14 @@ StepCoherence <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
+
       cohere <- collapse::mctl(ordinary_coherence_phase(collapse::qM(new_data)))
       n <- length(new_data)
       comb <- expand.grid(x = 1:n, y = 1:n)
       comb <- comb[comb$y > comb$x]
       self$new_columns <- paste(self$prefix, comb$x, comb$y, sep = "_")
       setnames(cohere, self$new_columns)
+
     }
   )
 )

@@ -15,6 +15,7 @@
 //'
 //' @export
 //'
+//' @noRd
 // [[Rcpp::export]]
 Rcpp::List b_spline_list(const arma::vec& x,
                          const unsigned int df,
@@ -66,6 +67,8 @@ Rcpp::List b_spline_list(const arma::vec& x,
 //' @return List of distributed lags
 //'
 //' @export
+//'
+//' @noRd
 //'
 // [[Rcpp::export]]
 Rcpp::List n_spline_list(const arma::vec& x,
@@ -200,6 +203,8 @@ std::list<Eigen::VectorXd> b_spline_list3(const arma::vec& x,
 //' @return vector of logarithmically spaced lags
 //'
 //' @export
+//'
+//' @noRd
 //'
 // [[Rcpp::export]]
 arma::vec log_lags_arma(arma::uword n, arma::uword max_lag) {

@@ -39,6 +39,9 @@ curves. This may be specified to have more control over the signal phase.}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
 Add sin and cos terms for harmonic analysis
 }

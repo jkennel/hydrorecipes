@@ -19,6 +19,7 @@ frec = Recipe$new(formula = formula, data = dat)$
                              x,
                              1L,
                              TRUE))$
+  prep()$
   bake()
 
 
@@ -31,6 +32,7 @@ frec2 = Recipe$new(formula = formula, data = dat2)$
                              x,
                              1L,
                              FALSE))$
+  prep()$
   bake()
 
 tinytest::expect_equivalent(frec$steps[[1]]$barometric_efficiency,
@@ -41,6 +43,7 @@ tinytest::expect_equivalent(frec$steps[[1]]$barometric_efficiency,
 
 frec2 = recipe(formula = formula, data = dat) |>
   step_baro_clark(y, x, 1L, TRUE) |>
+  prep() |>
   bake()
 
 tinytest::expect_equivalent(frec$steps[[1]]$barometric_efficiency,
@@ -65,9 +68,10 @@ frec = Recipe$new(formula = formula, data = dat)$
                              x,
                              1:5,
                              TRUE))$
+  prep()$
   bake()
 
-tinytest::expect_equivalent(frec$steps[[1]]$barometric_efficiency,
+tinytest::expect_equivalent(frec$steps[[2]]$barometric_efficiency,
                             rep(0.4, 5),
                             tolerance = 1e-2,
                             info = "step_baro_clark multiple lag_space works")

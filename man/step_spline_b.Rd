@@ -54,6 +54,26 @@ is allowed for piecewise constant basis functions.}
 
 \item{...}{Optional arguments that are not used.}
 }
+\value{
+an updated recipe
+}
 \description{
 generates basis splines.
+}
+\examples{
+
+formula <- as.formula(x~y+z)
+rows <- 1e5
+
+dat <- data.frame(x = rnorm(rows),
+                  y = 1:rows,
+                  z = cumsum(rnorm(rows)))
+ik <- fquantile(dat$x, probs = seq(0, 1, 0.1))
+bk <- ik[c(1, length(ik))]
+ik <- ik[-c(1, length(ik))]
+
+frec = recipe(formula = formula, data = dat) |>
+  step_spline_b(x, df = 11L, intercept = FALSE)  |>
+ plate("tbl")
+
 }

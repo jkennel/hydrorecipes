@@ -48,7 +48,7 @@ Eigen::VectorXd impulse_function_eigen(Eigen::VectorXd u)
 //==============================================================================
 
 // [[Rcpp::export]]
-double exp_int(double u) {
+double std_expint(double u) {
 
     if (u == 0){
       u = R_PosInf;
@@ -60,6 +60,78 @@ double exp_int(double u) {
 
   return(u);
 }
+
+
+
+
+// [[Rcpp::export]]
+double std_tgamma(double u, double a) {
+
+  double ret;
+
+  if (std::isfinite(u)) {
+    ret = std::tgamma(u);
+  }
+  else {
+    ret = 0.0;
+  }
+  return(ret);
+}
+
+//
+//
+// // [[Rcpp::export]]
+// double bh_gamma_neg(double u, double a) {
+//
+//   double ret;
+//
+//   if (std::isfinite(u)) {
+//     ret = ((1.0 - boost::math::gamma_p(a + 1.0, u)) * std::tgamma(a + 1.0) -
+//       std::pow(u, a) * std::exp(-u)) / a;
+//   }
+//   else {
+//     ret = 0.0;
+//   }
+//
+//   return(ret);
+//
+// }
+//
+// // [[Rcpp::export]]
+// double gamma_der(double u, double a) {
+//   double ret;
+//
+//   if (std::isfinite(u)) {
+//     ret = std::pow(u, a - 1) / std::exp(u);
+//   }
+//   else {
+//     ret = 0.0;
+//   }
+//   return(ret);
+// }
+//
+//
+// // [[Rcpp::export]]
+// double gamma_inc(double u, double a) {
+//   double ret;
+//
+//   if(a==0){
+//     ret = std_exp_int(u);
+//   } else if(a>0){
+//     ret = std_tgamma(u, a);
+//   } else {
+//     ret = std_gamma_neg(u, a);
+//   }
+//
+//
+//   return(ret);
+// }
+
+
+
+
+
+
 
 // [[Rcpp::export]]
 int binary_search(Eigen::VectorXd x, Eigen::VectorXd y)
@@ -238,27 +310,28 @@ double grf_u(const double radius,
 //==============================================================================
 //' @title
 //' grf_time
- //'
- //' @description
- //' Parallel convolution of GRF well function and flow rates in the time domain.
- //' Time series needs to be regularily spaced and so are the flow rates.  Some
- //' performance gains can be achieved if the number of flow rate does not change
- //' for each time.
- //'
- //' @param radius distance to monitoring interval
- //' @param specific_storage aquifer storativity
- //' @param hydraulic_conductivity aquifer hydraulic conductivity
- //' @param thickness aquifer thickness
- //' @param time prediction times
- //' @param flow_rate well flow rates
- //' @param flow_time_interval time between flow rate measurements in samples
- //' @param flow_dimension flow dimension
- //'
- //' @return theis solution for multiple pumping scenario
- //'
- //'
- //' @export
- //'
+//'
+//' @description
+//' Parallel convolution of GRF well function and flow rates in the time domain.
+//' Time series needs to be regularily spaced and so are the flow rates.  Some
+//' performance gains can be achieved if the number of flow rate does not change
+//' for each time.
+//'
+//' @param radius distance to monitoring interval
+//' @param specific_storage aquifer storativity
+//' @param hydraulic_conductivity aquifer hydraulic conductivity
+//' @param thickness aquifer thickness
+//' @param time prediction times
+//' @param flow_rate well flow rates
+//' @param flow_time_interval time between flow rate measurements in samples
+//' @param flow_dimension flow dimension
+//'
+//' @return theis solution for multiple pumping scenario
+//'
+//'
+//' @export
+//'
+//' @noRd
 // [[Rcpp::export]]
 Rcpp::List grf_time(const double radius,
                     const double specific_storage,
@@ -278,9 +351,7 @@ Rcpp::List grf_time(const double radius,
     Rcpp::stop("The number of times and flow_rate should be the same");
   }
 
-  // const double v = (flow_dimension / 2.0) - 1.0;
-  Eigen::VectorXd v(n_time);
-  v.setConstant((flow_dimension / 2.0) - 1.0);
+  double a = (flow_dimension / 2.0) - 1.0;
 
   // calculate the constant part
   double u_const = grf_u(radius, specific_storage, hydraulic_conductivity);
@@ -291,23 +362,10 @@ Rcpp::List grf_time(const double radius,
 
   Eigen::VectorXd coef = coef_const * flow_rate.array();
   Eigen::VectorXd u = u_const / time.array();
-  // Rcpp::Rcout << "u: " << u << std::endl;
 
-  u = Eigen::igammac(v.array(), u.array());
-  // Rcpp::Rcout << "u: " << u << std::endl;
+  u = gamma_inc(u.array(), a);
   u = impulse_function_eigen(u);
 
-  // Rcpp::Rcout << "v: " << v << std::endl;
-
-  // u = specialfunctions::gamma_inc_rcpp(u, v);
-  // u = impulse_function_rcpp(u);
-
-  // Eigen::VectorXd u_eig(Rcpp::as<Eigen::VectorXd>(u));
-  // Eigen::VectorXd coef_eig(Rcpp::as<Eigen::VectorXd>(coef));;
-
-  // return Rcpp::List::create(
-  //   Rcpp::Named("generalized_radial") = convolve_filter(u_eig, coef_eig, false, true)
-  // );
   return Rcpp::List::create(
     Rcpp::Named("generalized_radial") = convolve_filter(u, coef, false, true)
   );
@@ -317,104 +375,104 @@ Rcpp::List grf_time(const double radius,
 
 //==============================================================================
 //' @title
- //' grf_grid
- //'
- //' @description
- //' Parallel convolution of GRF well function and flow rates in the time domain.
- //' Time series needs to be regularily spaced and so are the flow rates.  Some
- //' performance gains can be achieved if the number of flow rate does not change
- //' for each time.
- //'
- //' @param radius distance to monitoring interval
- //' @param specific_storage aquifer storativity
- //' @param hydraulic_conductivity aquifer hydraulic conductivity
- //' @param thickness aquifer thickness
- //' @param time prediction times
- //' @param flow_rate well flow rates
- //' @param flow_time_interval time between flow rate measurements in samples
- //' @param flow_dimension flow dimension
- //'
- //' @return theis solution for multiple pumping scenario
- //'
- //'
- //' @export
- //'
- // [[Rcpp::export]]
- Eigen::MatrixXd grf_grid(const Eigen::MatrixXd &grid,
-                          const Eigen::MatrixXd &well_locations,
-                          const Eigen::MatrixXd &flow_rate,
-                          const Eigen::VectorXd &time,
-                          const double specific_storage,
-                          const double hydraulic_conductivity,
-                          const double thickness,
-                          const double flow_dimension)
- {
+//' grf_grid
+//'
+//' @description
+//' Parallel convolution of GRF well function and flow rates in the time domain.
+//' Time series needs to be regularily spaced and so are the flow rates.  Some
+//' performance gains can be achieved if the number of flow rate does not change
+//' for each time.
+//'
+//' @param radius distance to monitoring interval
+//' @param specific_storage aquifer storativity
+//' @param hydraulic_conductivity aquifer hydraulic conductivity
+//' @param thickness aquifer thickness
+//' @param time prediction times
+//' @param flow_rate well flow rates
+//' @param flow_time_interval time between flow rate measurements in samples
+//' @param flow_dimension flow dimension
+//'
+//' @return theis solution for multiple pumping scenario
+//'
+//'
+//' @export
+//' @noRd
+// [[Rcpp::export]]
+Eigen::MatrixXd grf_grid(const Eigen::MatrixXd &grid,
+                         const Eigen::MatrixXd &well_locations,
+                         const Eigen::MatrixXd &flow_rate,
+                         const Eigen::VectorXd &time,
+                         const double specific_storage,
+                         const double hydraulic_conductivity,
+                         const double thickness,
+                         const double flow_dimension)
+{
 
-   size_t n_grid = grid.rows();
-   size_t n_well = well_locations.rows();
+  size_t n_grid = grid.rows();
+  size_t n_well = well_locations.rows();
 
-   size_t n_flow_rate = flow_rate.rows();
-   size_t n_flow_rate_well = flow_rate.cols();
-   size_t n_time = time.size();
+  size_t n_flow_rate = flow_rate.rows();
+  size_t n_flow_rate_well = flow_rate.cols();
+  size_t n_time = time.size();
 
-   // check that the number of times and flow rates are equal
-   if (n_flow_rate != n_time)
-   {
-     Rcpp::stop("The number of times and flow_rate should be the same");
-   }
-   if (n_well != n_flow_rate_well)
-   {
-     Rcpp::stop("Dimensions of flow_rate and well_locations should be consistent");
-   }
-   const double v = (flow_dimension / 2.0) - 1.0;
+  // check that the number of times and flow rates are equal
+  if (n_flow_rate != n_time)
+  {
+    Rcpp::stop("The number of times and flow_rate should be the same");
+  }
+  if (n_well != n_flow_rate_well)
+  {
+    Rcpp::stop("Dimensions of flow_rate and well_locations should be consistent");
+  }
+  const double v = (flow_dimension / 2.0) - 1.0;
 
-   // calculate distances
+  // calculate distances
 
-   Eigen::MatrixXd output = Eigen::MatrixXd::Zero(n_grid, n_time);
+  Eigen::MatrixXd output = Eigen::MatrixXd::Zero(n_grid, n_time);
 
-   // RcppThread::parallelFor (0, n_grid, [&] (size_t i) {
+  // RcppThread::parallelFor (0, n_grid, [&] (size_t i) {
 
-   Eigen::VectorXd coef(n_time);
-   Eigen::VectorXd wf(n_time);
-   // std::vector<double> impulse(n_time);
-   // std::vector<double> u(n_time);
-   Eigen::VectorXd u(n_time);
+  Eigen::VectorXd coef(n_time);
+  Eigen::VectorXd wf(n_time);
+  // std::vector<double> impulse(n_time);
+  // std::vector<double> u(n_time);
+  Eigen::VectorXd u(n_time);
 
-   double distance;
-   double u_const;
-   double coef_const;
+  double distance;
+  double u_const;
+  double coef_const;
 
-   for (size_t i = 0; i < n_grid; ++i) {
-     for (size_t j = 0; j < n_well; ++j) {
+  for (size_t i = 0; i < n_grid; ++i) {
+    for (size_t j = 0; j < n_well; ++j) {
 
-       distance = calculate_distance(
-         grid(i, 0),
-         grid(i, 1),
-         well_locations(j, 0),
-         well_locations(j, 1));
-       u_const = grf_u(distance, specific_storage, hydraulic_conductivity);
-       coef_const = grf_coefficient(distance,
-                                    hydraulic_conductivity,
-                                    thickness,
-                                    flow_dimension);
-       coef = coef_const * flow_rate.col(j);
-       wf = u_const / time.array();
+      distance = calculate_distance(
+        grid(i, 0),
+        grid(i, 1),
+        well_locations(j, 0),
+        well_locations(j, 1));
+      u_const = grf_u(distance, specific_storage, hydraulic_conductivity);
+      coef_const = grf_coefficient(distance,
+                                   hydraulic_conductivity,
+                                   thickness,
+                                   flow_dimension);
+      coef = coef_const * flow_rate.col(j);
+      wf = u_const / time.array();
 
-       u = gamma_inc(u.array(), v);
-       // VectorXd::Map(&u[0], n_time) = wf;
+      u = gamma_inc(u.array(), v);
+      // VectorXd::Map(&u[0], n_time) = wf;
 
-       // u = specialfunctions::gamma_inc_vec(u, v);
-       u = impulse_function_eigen(u);
+      // u = specialfunctions::gamma_inc_vec(u, v);
+      u = impulse_function_eigen(u);
 
-       // wf = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(u.data(), n_time);
+      // wf = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(u.data(), n_time);
 
-       output.row(i) += convolve_filter(wf, coef, false, true);
+      output.row(i) += convolve_filter(wf, coef, false, true);
 
-     }
-   }
+    }
+  }
 
-   return (output);
- }
+  return (output);
+}
 
 
 
@@ -451,6 +509,8 @@ double hantush_epsilon(const double radius,
 //'
 //' @export
 //'
+//' @noRd
+//'
 // [[Rcpp::export]]
 double hantush_well(double u, double b, double precision){
 
@@ -462,12 +522,13 @@ double hantush_well(double u, double b, double precision){
 
   //eq 10
   if (b_div_u >= u){
-    en = exp_int(b_div_u);
+    // Rcpp::Rcout << "here: " << b_div_u << std::endl;
+    en = std_expint(b_div_u);
 
     for (unsigned int i = 0; i < n_terms; i++) {
       to_add = en * (pow(-u, i) / std::tgamma(i+1));
       out += to_add;
-      if (std::abs(to_add) < precision){
+      if (std::fabs(to_add) < precision){
         break;
       }
       en = (1.0 / ((double)i + 1.0)) * (exp(-b_div_u) - b_div_u * en);
@@ -476,13 +537,14 @@ double hantush_well(double u, double b, double precision){
     out = 2.0 * std::cyl_bessel_k(0, 2.0 * sqrt(b)) - out;
 
   } else { //eq 12
+    // Rcpp::Rcout << "there: " << b_div_u << std::endl;
 
-    en = exp_int(u);
+    en = std_expint(u);
 
     for (unsigned int i = 0; i < n_terms; i++) {
-      to_add = en * (pow(-b_div_u, i) / std::tgamma(i + 1));
+      to_add = en * (pow(-b_div_u, i) / std::tgamma(i + 1)); // tgamma(i+1) = factorial(i)
       out += to_add;
-      if (std::abs(to_add) < precision){
+      if (std::fabs(to_add) < precision){
         break;
       }
       en = (1.0 / ((double)i + 1.0)) * (exp(-u) - u * en);
@@ -544,6 +606,8 @@ Rcpp::NumericVector hantush_well_rcpp(Rcpp::NumericVector u, double b, double pr
 //'
 //' @export
 //'
+//' @noRd
+//'
 // [[Rcpp::export]]
 Rcpp::List hantush_jacob(
     const Rcpp::NumericVector time,
@@ -574,10 +638,18 @@ Rcpp::List hantush_jacob(
 
 }
 
-
+// [[Rcpp::export]]
+Eigen::VectorXd ig(Eigen::ArrayXd a, Eigen::ArrayXd u) {
+  return(Eigen::igammac(a, u));
+}
 
 
 /*** R
+x <- 1.0
+
+ig(rep(3.0, 1), 1.0)
+
+
 y <- rev(sort(abs(rnorm(1000000))))
 x <- 1/y
 bench::mark(
@@ -587,7 +659,7 @@ frecipes:::binary_search(x, y)
 x <- rnorm(1e6)
 y <- 1.2
 bench::mark(
-frecipes:::well_function_coefficient_vec_rcpp(x,y),
+frecipes:::well_function_coefficient_rcpp(x,y),
 frecipes:::well_function_coefficient_vec(x,y),
 check = FALSE
 )
@@ -636,7 +708,7 @@ bench::mark(
 plot(tmp2[1:1000], col = 'red', type = 'l', log = 'xy')
 points(tmp[1:1000], type = 'l', log = 'xy')
 
-x <- sort(abs(rnorm(10000)))
+x <- sort(abs(rnorm(500)))
 bench::mark(
   # frecipes:::hantush_well_vec(x, 0.01, 10),
   # frecipes:::hantush_well_e(x, 0.01, 10),
@@ -667,7 +739,7 @@ bench::mark(frecipes:::gis(x, 0.0),
             frecipes:::gis2(x),
             check = FALSE)
 
-n <- 1000000
+n <- 100
 time <- seq(1, n, 1)
 flow_rate <- rep(0.001, n)
 thickness <- 10
@@ -715,5 +787,12 @@ dat[, pred_2 := predict(fit_2, dat)]
 
 points(pred_1~time, dat, type = 'l', col = 'red', lty = 2)
 points(pred_2~time, dat, type = 'l', lty = 2)
+
+frecipes:::eig(1,1)
+library(expint)
+gammainc(1,1)
+gammainc(-1,1)
+frecipes:::eig(1,1)
+frecipes:::eig(1,0)
 
 */

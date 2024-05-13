@@ -93,7 +93,8 @@
 # Rojstaczer & Riley 1990 -------------------------------------------------
 
 
-#' @title Rojstaczer and Riley (1990) Figure 2 Digitized
+#' @title
+#' Rojstaczer and Riley (1990) Figure 2 Digitized
 #'
 #' @description Amplitude of water table response to Earth tides as a function
 #' of \eqn{\Omega'}

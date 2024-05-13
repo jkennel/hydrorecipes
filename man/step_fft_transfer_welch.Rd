@@ -22,10 +22,27 @@ function.  terms replaces the `...` of the recipes package but requires
 variables to be included within `c()`.  For example to include variables x
 and y you would write `c(x,y)` in the frecipes package.}
 
+\item{length_subset}{length of fft section}
+
+\item{overlap}{amount of overlap}
+
+\item{window}{window weights}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
 }
+\value{
+an updated recipe
+}
 \description{
-calculates the transfer function using Welch's method.
+calculates the transfer function with Welch's results.
+}
+\examples{
+data(kennel_2020)
+form <- as.formula("wl~.")
+
+  rec <- recipe(form, kennel_2020) |>
+  step_fft_transfer_welch(c(wl, baro, et), spans = 3) |>
+
 }

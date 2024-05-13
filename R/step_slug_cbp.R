@@ -1,20 +1,8 @@
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# Jacob-Lohman Constant Drawdown Test ------------------------------------------
+# Cooper-Bredehoeft-Papadopulos Slug Test --------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepSlugCbp` Cooper, Bredehoeft and Papadopulos slug test solution
-#'
-#' @family slug
-#'
-#' @references
-#' Cooper, H.H., J.D. Bredehoeft and S.S. Papadopulos, 1967. Response of a
-#'  finite-diameter well to an instantaneous charge of water, Water Resources
-#'  Research, vol. 3, no. 1, pp. 263-269.
-#'
-#' @export
 StepSlugCbp <- R6Class(
   classname = "step_aquifer_constant_drawdown",
   inherit = Step,

@@ -86,9 +86,9 @@
 
 #' get_formula_vars
 #'
-#' @inheritParams lm
+#' @inheritParams stats::lm
 #'
-#' @return
+#' @return character vector of variable names
 #' @export
 #'
 get_formula_vars <- function(formula, data) {
@@ -202,9 +202,14 @@ get_function_arguments_no_rec <- function() {
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 get_terms_and_symbols <- function(terms) {
-  # print(is.call(terms))
-  # get function parameters to pass to parent
-  lapply(terms, function(x) if (x != as.symbol("c")) x else NULL)
+
+  if(length(terms) > 1) {
+    if(terms[[1]] == as.symbol("c")) {
+      terms[[1]] <- NULL
+    }
+  }
+
+  terms
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

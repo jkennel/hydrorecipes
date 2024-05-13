@@ -20,6 +20,21 @@ step_aquifer_grf(
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
+\item{time}{the time for evaluation (t)}
+
+\item{flow_rate}{the flow rate from the well (L^3/t)}
+
+\item{thickness}{the aquifer thickness (L)}
+
+\item{radius}{the distance to the observation well (L)}
+
+\item{specific_storage}{specific storage of aquifer (L/L)}
+
+\item{hydraulic_conductivity}{the hydraulic conductivity (L/t)}
+
+\item{flow_dimension}{aquifer flow dimension (1 = linear, 2 = radial,
+3 = spherical)}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
@@ -34,12 +49,21 @@ convolution so many rates can be included, but requires a regular
 time series.
 }
 \examples{
-dat <- data.frame(x = as.numeric(1:rows),
-                  y = rep(0.01, rows))
+dat <- data.frame(x = as.numeric(1:100),
+                  y = rep(0.01, 100))
 formula <- as.formula(y~x)
 
+# Spherical
 frec = recipe(formula = formula, data = dat) |>
-  step_aquifer_grf(time = x, flow_rate = y)
+  step_aquifer_grf(time = x, flow_rate = y, flow_dimension = 3.0) |>
+  prep() |>
+  bake()
+
+# Theis
+frec = recipe(formula = formula, data = dat) |>
+  step_aquifer_grf(time = x, flow_rate = y, flow_dimension = 2.0) |>
+  prep() |>
+  bake()
 
 }
 \references{
@@ -49,11 +73,7 @@ Barker, J.A., A generalized radial flow model for hydraulic tests
 }
 \seealso{
 Other aquifer: 
-\code{\link{StepAquiferConstantDrawdown}},
-\code{\link{StepAquiferGRF}},
-\code{\link{StepAquiferLeaky}},
-\code{\link{StepAquiferPatch}},
-\code{\link{StepAquiferTheis}},
+\code{\link{step_aquifer_constant_drawdown}()},
 \code{\link{step_aquifer_leaky}()},
 \code{\link{step_aquifer_patch}()},
 \code{\link{step_aquifer_theis}()}

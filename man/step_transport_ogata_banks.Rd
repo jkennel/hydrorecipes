@@ -57,3 +57,26 @@ constant parameters
 no decay
 no retardation
 }
+\examples{
+
+formula <- as.formula(y~x)
+rows <- 100
+
+dat <- data.frame(expand.grid(as.numeric(1:rows), as.numeric(1:10)))
+names(dat) <- c('x', 'y')
+frec1 = recipe(formula = formula, data = dat) |>
+  step_transport_ogata_banks(time = x, distance = y) |>
+  plate("dt")
+
+}
+\references{
+Ogata, A., Banks, R.B., 1961. A solution of the differential equation of
+  longitudinal dispersion in porous media. U. S. Geol. Surv. Prof. Pap. 411-A.
+  1-D, infinite source, uniform flow, constant parameters, decay, retardation
+}
+\seealso{
+Other transport: 
+\code{\link{step_transport_fractures_heat}()},
+\code{\link{step_transport_fractures_solute}()}
+}
+\concept{transport}

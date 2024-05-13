@@ -6,7 +6,7 @@
 #' @param n the number of columns
 #' @param pad the character to use for the padding.
 #'
-#' @return
+#' @return a character string padded by "0"
 #' @export
 #'
 pad_num <- function(n, pad = "0") {
@@ -47,9 +47,6 @@ name_columns <- function(id, column_name, n) {
 #' @return A character string with the prefix and random letters separated by
 #'  and underscore.
 #'
-#' @useDynLib frecipes, .registration = TRUE
-#' @importFrom R6 R6Class
-#' @importFrom Rcpp sourceCpp
 #' @keywords internal
 rand_id <- function(prefix = "step", len = 5L) {
   candidates <- c(letters, LETTERS, paste(0:9))
@@ -78,7 +75,7 @@ rand_id <- function(prefix = "step", len = 5L) {
 # predictors outcomes
 get_regression_data <- function(new_data, term_info, id_type = "predictor") {
 
-  nms <- names(new_data)
+  nms <- unique(names(new_data))
 
   # term info data
   ti <- collapse::qDF(term_info)
@@ -86,11 +83,11 @@ get_regression_data <- function(new_data, term_info, id_type = "predictor") {
   ti <- ti[ti$variable %in% nms, ]
 
   x <- list()
-
   # create regression matrices
   x$term_info <- ti[ti$roles == id_type, ]
 
   x$term_info$inds <- seq_len(nrow(x$term_info))
+
   x$term_info$ids <- which(nms %in% x$term_info$variable)
 
   x$to_rem <- collapse::missing_cases(new_data)

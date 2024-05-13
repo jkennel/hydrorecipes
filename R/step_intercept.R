@@ -3,13 +3,6 @@
 # Add an Intercept Term --------------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepIntercept` adds variable vectors.
-#'
-#' @inheritParams Step
-#'
-#' @export
 StepIntercept <- R6Class(
   classname = "step_intercept",
   inherit = Step,

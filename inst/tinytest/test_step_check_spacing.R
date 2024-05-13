@@ -12,7 +12,7 @@ frec_irr = Recipe$new(formula = formula, data = dat)$
   add_step(StepCheckSpacing$new(x))$
   prep()$
   bake()$
-  checks
+  get_step_data("check")
 tinytest::expect_equivalent(frec_irr[[1]], FALSE,
                             info = "irregular spacing")
 
@@ -21,7 +21,7 @@ frec_reg = Recipe$new(formula = formula, data = dat)$
   add_step(StepCheckSpacing$new(y))$
   prep()$
   bake()$
-  checks
+  get_step_data("check")
 tinytest::expect_equivalent(frec_reg[[1]], TRUE,
                             info = "regular spacing")
 
@@ -29,12 +29,14 @@ tinytest::expect_equivalent(frec_reg[[1]], TRUE,
 
 frec1 = recipe(formula = formula, data = dat) |>
   step_check_spacing(x) |>
+  prep() |>
   bake()
 
 frec2 = Recipe$new(formula = formula, data = dat)$
-  add_step(StepCheckSpacing$new(x))$bake()$checks
+  add_step(StepCheckSpacing$new(x))$prep()$bake()
 
 
-tinytest::expect_equivalent(frec1$checks, frec2,
+tinytest::expect_equivalent(frec1$get_step_data("check"),
+                            frec2$get_step_data("check"),
                             info = "R6 and frecipes api are equivalent")
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

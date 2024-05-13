@@ -10,7 +10,7 @@ frec1 = Recipe$new(formula = formula, data = dat)$
   plate("df")
 
 frec2 = recipe(formula = formula, data = dat) |>
-  step_drop_columns(x, knots = frecipes:::log_lags_arma(5, 86401)) |>
+  step_drop_columns(x) |>
   plate("df")
 
 tinytest::expect_equivalent(frec1, frec2,

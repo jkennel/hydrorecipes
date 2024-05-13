@@ -50,9 +50,6 @@ data analysis. John Wiley & Sons.
 }
 \seealso{
 Other barometric: 
-\code{\link{StepBaroClark}},
-\code{\link{StepBaroHarmonic}},
-\code{\link{step_baro_acworth}()},
 \code{\link{step_baro_harmonic}()}
 }
 \concept{barometric}

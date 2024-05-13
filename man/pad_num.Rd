@@ -11,6 +11,9 @@ pad_num(n, pad = "0")
 
 \item{pad}{the character to use for the padding.}
 }
+\value{
+a character string padded by "0"
+}
 \description{
 This function creates a sequence of numbers with 0 padding based on the
 series length.

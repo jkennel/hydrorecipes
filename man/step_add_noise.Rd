@@ -7,9 +7,10 @@
 step_add_noise(
   .rec,
   terms,
+  sd = 1,
+  mean = 0,
+  fun = rnorm,
   role = "predictor",
-  skip = FALSE,
-  keep_original_cols = FALSE,
   ...
 )
 }
@@ -21,14 +22,24 @@ function.  terms replaces the `...` of the recipes package but requires
 variables to be included within `c()`.  For example to include variables x
 and y you would write `c(x,y)` in the frecipes package.}
 
+\item{sd}{the standard deviation of the noise to add}
+
+\item{mean}{the mean of the noise to add}
+
+\item{fun}{the random noise generating function}
+
 \item{role}{character - the name of the role}
-
-\item{skip}{logical - should the step be skipped}
-
-\item{keep_original_cols}{logical - keep the original columns or replace them}
 
 \item{...}{additional arguments}
 }
+\value{
+add noise to a variable
+}
 \description{
 Add noise.
+}
+\examples{
+rec <- recipe(y~x, data = dat) |>
+       step_add_noise(x) |> plate()
+
 }

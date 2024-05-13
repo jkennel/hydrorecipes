@@ -3,27 +3,6 @@
 # Ogata and Banks 1961 Porous Media Flow with Retardation, Diffusion, and Decay
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' R6 Class
-#'
-#' `StepTransportOgataBanks`
-#'
-#' @description
-#' Ogata, A., Banks, R.B., 1961. A solution of the differential equation of
-#' longitudinal dispersion in porous media. U. S. Geol. Surv. Prof. Pap. 411-A.
-#' 1-D, infinite source, uniform flow, constant parameters, decay, retardation
-#'
-#' @param time vector time
-#' @param distance vector x position
-#' @param concentration_initial double concentration
-#' @param velocity double velocity
-#' @param diffusion double diffusion coefficient
-#' @param retardation double retardation coefficient
-#' @param decay double decay coefficient
-#' @inheritParams Step
-#'
-#' @family transport
-#'
-#' @export
 StepTransportOgataBanks <- R6Class(
   classname = "step_transport_ogata_banks",
   inherit = Step,
@@ -72,7 +51,7 @@ StepTransportOgataBanks <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
-      ob <- mctl(ogata_banks_decay_vec(
+      ob <- list(ogata_banks_decay_vec(
         self$concentration_initial,
         self$velocity,
         self$diffusion,
@@ -82,7 +61,7 @@ StepTransportOgataBanks <- R6Class(
         new_data[[1]]
       ))
       self$new_columns <- self$prefix
-      setnames(ob, self$new_columns)
+      setNames(ob, self$new_columns)
 
     }
   )
