@@ -38,9 +38,8 @@ library(hydrorecipes)
 
 data(kennel_2020)
 
-# kennel_2020$datetime <- as.numeric(kennel_2020$datetime)
 form     <- as.formula(wl~.)
-ba_knots <- log_lags_arma(15, 1440 * 1.5) # knots for distributed lag baro terms
+ba_knots <- log_lags_arma(15, 1440) # knots for distributed lag baro terms
 df       <- 5                            # degrees of freedom for spline background trend
 
 rec <- recipe(form, kennel_2020) |>
