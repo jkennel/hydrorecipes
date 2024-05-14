@@ -684,17 +684,6 @@ results <- bench::press(
 
 results
 
-
-start <- as.POSIXct("2016-08-18", tz = "UTC")
-end <- as.POSIXct("2016-10-13", tz = "UTC")
-
-dates <- data.table(datetime = seq.POSIXt(start, end, 1))
-
-aa <- recipe(datetime~., dates) |> 
-  step_spline_b(datetime, df = 13) |>
-  prep() |> 
-  bake()
-
 ```
 
 ## step_aquifer_grf & step_aquifer_theis
@@ -1053,7 +1042,7 @@ frec = hydrorecipes:::Recipe$new(formula = frm, data = dat)$
 
 
 tmp2 <- frec$plate()
-points(dat$x, type = 'p', pch = 20, cex = 0.2, col = "yellow")
+points(dat$x, type = 'p', pch = 20, cex = 0.2, col = "blue")
 points(tmp2$ols_gap_fill_x, type = 'l', col = 'red')
 
 

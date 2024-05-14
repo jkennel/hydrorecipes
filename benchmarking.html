@@ -129,15 +129,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 9 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100 359.91µs 441.35µs     2183.    2.05MB     6.14
-2 frec2          100  359.9µs 433.53µs     2239.      544B     6.13
-3 rec            100   1.73ms   1.94ms      491.    1.46MB     6.19
-4 frec1        10000 353.16µs 444.25µs     2204.      544B     8.23
-5 frec2        10000 356.32µs 435.15µs     2236.      544B     6.15
-6 rec          10000   1.73ms   2.01ms      492.   42.63KB     6.39
-7 frec1      1000000 359.32µs 443.01µs     2186.      544B     6.14
-8 frec2      1000000 367.49µs 449.77µs     2174.      544B     8.26
-9 rec        1000000   1.74ms   2.18ms      438.    3.82MB     4.10</code></pre>
+1 frec1          100 355.25µs 442.78µs     2205.    2.05MB     6.15
+2 frec2          100  354.6µs  438.1µs     2210.      544B     6.14
+3 rec            100   1.75ms   2.04ms      489.    1.46MB     6.17
+4 frec1        10000 360.53µs 451.23µs     2219.      544B     8.26
+5 frec2        10000 357.39µs 445.52µs     2248.      544B     6.15
+6 rec          10000   1.75ms   2.03ms      485.   42.63KB     6.35
+7 frec1      1000000 357.45µs  440.1µs     2234.      544B     6.14
+8 frec2      1000000 355.73µs 435.17µs     2247.      544B     8.26
+9 rec        1000000   1.74ms   2.07ms      489.    3.82MB     6.16</code></pre>
 </div>
 </div>
 </section>
@@ -167,15 +167,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 9 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100 492.55µs 595.98µs     1584.  547.91KB     6.17
-2 frec2          100 511.19µs 639.83µs     1544.    1.06KB     6.17
-3 rec            100   1.84ms   2.26ms      432.   73.66KB     6.23
-4 frec1        10000 499.51µs 605.13µs     1560.    1.06KB     5.17
-5 frec2        10000 506.38µs 630.76µs     1562.    1.06KB     8.25
-6 rec          10000   1.82ms   2.11ms      470.   43.16KB     4.08
-7 frec1      1000000 482.61µs 607.88µs     1641.    1.06KB     8.25
-8 frec2      1000000 494.39µs 584.35µs     1654.    1.06KB     6.13
-9 rec        1000000   1.79ms   2.12ms      475.    3.82MB     6.19</code></pre>
+1 frec1          100  479.6µs 610.74µs     1637.  547.91KB     8.26
+2 frec2          100 500.42µs  604.5µs     1630.    1.06KB     6.15
+3 rec            100   1.83ms   2.16ms      464.   73.66KB     6.22
+4 frec1        10000 480.58µs 587.81µs     1693.    1.06KB     7.62
+5 frec2        10000 494.21µs 594.72µs     1658.    1.06KB     6.13
+6 rec          10000   1.81ms   2.01ms      487.   43.16KB     6.19
+7 frec1      1000000 478.03µs 568.22µs     1722.    1.06KB     6.14
+8 frec2      1000000 498.52µs 599.86µs     1651.    1.06KB     8.25
+9 rec        1000000   1.82ms   1.99ms      487.    3.82MB     6.19</code></pre>
 </div>
 </div>
 </section>
@@ -209,15 +209,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 9 × 7
   expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec$prep()                 1e2  71.58µs  87.01µs   10711.    70.84KB    10.6 
-2 hydrorecipes:::prep(frec…   1e2  72.75µs  91.96µs   10296.         0B    10.4 
-3 recipes::prep(rec)          1e2   8.96ms   9.98ms      99.3    3.92MB     6.48
-4 frec$prep()                 1e4  78.87µs  97.95µs    9726.         0B    10.3 
-5 hydrorecipes:::prep(frec…   1e4  82.47µs 105.02µs    8409.         0B     8.25
-6 recipes::prep(rec)          1e4   8.88ms   10.7ms      88.9  224.78KB     4.23
-7 frec$prep()                 1e6 662.55µs 814.71µs    1213.         0B     2.02
-8 hydrorecipes:::prep(frec…   1e6 659.34µs 806.81µs    1243.         0B     0   
-9 recipes::prep(rec)          1e6   22.8ms   25.1ms      40.9    19.1MB    98.0 </code></pre>
+1 frec$prep()                 1e2  72.42µs  89.76µs   10689.    70.84KB    10.6 
+2 hydrorecipes:::prep(frec…   1e2  73.18µs  91.47µs   10766.         0B    10.3 
+3 recipes::prep(rec)          1e2   8.37ms    9.5ms     106.     3.92MB     6.48
+4 frec$prep()                 1e4  78.64µs  94.83µs    8695.         0B     8.28
+5 hydrorecipes:::prep(frec…   1e4  79.17µs  94.42µs   10212.         0B    10.3 
+6 recipes::prep(rec)          1e4   8.57ms   9.88ms     101.   224.78KB     6.46
+7 frec$prep()                 1e6 660.51µs 799.05µs    1265.         0B     2.01
+8 hydrorecipes:::prep(frec…   1e6 661.07µs 798.12µs    1280.         0B     0   
+9 recipes::prep(rec)          1e6  19.68ms   23.4ms      44.1    19.1MB   115.  </code></pre>
 </div>
 </div>
 </section>
@@ -251,15 +251,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 9 × 7
   expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1$prep()$bake()         1e2 114.79µs 145.45µs    6592.   383.91KB     8.21
-2 hydrorecipes::bake(hydro…   1e2 114.47µs 151.31µs    6400.       848B    10.3 
-3 recipes::bake(recipes::p…   1e2   8.93ms  10.62ms      94.1  161.56KB     6.41
-4 frec1$prep()$bake()         1e4 128.77µs 170.82µs    5571.    78.17KB     8.24
-5 hydrorecipes::bake(hydro…   1e4 132.14µs 165.88µs    5686.    78.17KB     8.21
-6 recipes::bake(recipes::p…   1e4      9ms  11.06ms      91.0  229.11KB     4.14
-7 frec1$prep()$bake()         1e6   1.45ms   1.69ms     515.     7.63MB   155.  
-8 hydrorecipes::bake(hydro…   1e6   1.41ms   1.61ms     544.     7.63MB   111.  
-9 recipes::bake(recipes::p…   1e6  22.88ms   24.8ms      40.9   19.11MB    31.8 </code></pre>
+1 frec1$prep()$bake()         1e2 113.87µs 144.66µs    6770.   383.91KB    10.4 
+2 hydrorecipes::bake(hydro…   1e2 114.77µs 137.08µs    6993.       848B    10.4 
+3 recipes::bake(recipes::p…   1e2   8.73ms   9.78ms     101.   161.56KB     6.43
+4 frec1$prep()$bake()         1e4 130.93µs    165µs    5931.    78.17KB     8.23
+5 hydrorecipes::bake(hydro…   1e4 132.25µs    165µs    5997.    78.17KB    10.4 
+6 recipes::bake(recipes::p…   1e4   8.95ms  10.38ms      96.7  229.11KB     4.20
+7 frec1$prep()$bake()         1e6   1.42ms   1.58ms     567.     7.63MB   137.  
+8 hydrorecipes::bake(hydro…   1e6   1.42ms   1.59ms     592.     7.63MB   114.  
+9 recipes::bake(recipes::p…   1e6  20.73ms   22.8ms      43.8   19.11MB    39.9 </code></pre>
 </div>
 </div>
 </section>
@@ -295,12 +295,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100 725.02µs 924.39µs    1076.    94.48KB     6.11
-2 rec            100  11.56ms  13.26ms      74.2   40.24KB     6.54
-3 frec         10000 727.09µs 911.82µs    1061.    79.23KB     6.16
-4 rec          10000   11.3ms  12.77ms      78.6  272.27KB     6.55
-5 frec       1000000   1.92ms   2.74ms     366.     7.63MB    92.5 
-6 rec        1000000  25.36ms  28.94ms      35.4   22.93MB    17.7 </code></pre>
+1 frec           100 713.91µs 861.05µs    1136.    94.48KB     6.15
+2 rec            100  10.83ms  12.94ms      78.8   40.24KB     6.57
+3 frec         10000 729.71µs 854.58µs    1136.    79.23KB     6.15
+4 rec          10000  11.02ms  12.88ms      79.2  272.27KB     6.60
+5 frec       1000000   1.89ms   2.64ms     392.     7.63MB    87.6 
+6 rec        1000000  25.37ms  26.38ms      36.8   22.93MB    23.4 </code></pre>
 </div>
 </div>
 </section>
@@ -335,12 +335,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100 733.63µs 916.65µs    1085.   595.94KB     6.21
-2 rec            100  10.78ms  12.33ms      80.4  125.46KB     6.52
-3 frec         10000 761.61µs  941.2µs    1058.    79.23KB     6.15
-4 rec          10000  10.91ms  12.57ms      79.3  233.21KB     6.61
-5 frec       1000000   3.83ms   4.49ms     220.     7.63MB    34.1 
-6 rec        1000000  26.75ms  29.62ms      34.2   19.11MB    10.5 </code></pre>
+1 frec           100 723.09µs 867.17µs    1111.   595.94KB     6.15
+2 rec            100  10.85ms  12.21ms      80.4  125.46KB     6.52
+3 frec         10000 752.32µs 903.41µs    1082.    79.23KB     6.15
+4 rec          10000  10.77ms  12.49ms      79.5  233.21KB     6.62
+5 frec       1000000   3.47ms   4.11ms     242.     7.63MB    36.3 
+6 rec        1000000  25.31ms  27.65ms      36.4   19.11MB    14.0 </code></pre>
 </div>
 </div>
 </section>
@@ -374,12 +374,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100 714.27µs 888.73µs    1092.   532.43KB     6.17
-2 rec            100  10.99ms  12.64ms      79.7  105.87KB     6.46
-3 frec         10000 718.83µs 883.43µs    1085.    79.23KB     6.16
-4 rec          10000  10.98ms   13.5ms      74.9  112.12KB     6.61
-5 frec       1000000   1.36ms   2.03ms     486.     7.63MB    90.2 
-6 rec        1000000  14.82ms   16.8ms      59.9    7.66MB     4.28</code></pre>
+1 frec           100 702.79µs 868.12µs    1144.   532.43KB     6.15
+2 rec            100  10.16ms   11.6ms      84.9  105.87KB     6.53
+3 frec         10000 715.88µs    877µs    1141.    79.23KB     8.22
+4 rec          10000   10.4ms  11.41ms      86.1  112.12KB     4.20
+5 frec       1000000   1.35ms   2.04ms     501.     7.63MB    85.7 
+6 rec        1000000  14.11ms  16.49ms      61.5    7.66MB     9.10</code></pre>
 </div>
 </div>
 </section>
@@ -421,15 +421,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 9 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100 774.92µs 926.75µs    1061.   556.04KB     6.17
-2 frec2          100 960.17µs   1.22ms     823.     6.56KB     6.17
-3 rec            100  11.44ms  13.07ms      74.9   80.51KB     6.61
-4 frec1        10000 886.56µs   1.09ms     915.   235.58KB     6.17
-5 frec2        10000   1.08ms   1.28ms     768.   470.62KB     6.18
-6 rec          10000  11.89ms  13.72ms      71.7  663.09KB     6.72
-7 frec1      1000000  14.88ms  16.89ms      57.7   22.89MB    28.9 
-8 frec2      1000000  14.25ms   16.6ms      62.3   45.78MB   199.  
-9 rec        1000000  43.23ms  43.88ms      22.7   61.07MB    60.5 </code></pre>
+1 frec1          100 762.41µs 862.87µs    1107.   556.04KB     8.28
+2 frec2          100 955.08µs   1.15ms     872.     6.56KB     6.16
+3 rec            100  11.32ms  12.64ms      78.1   80.51KB     6.51
+4 frec1        10000 875.16µs   1.04ms     960.   235.58KB     6.22
+5 frec2        10000   1.08ms   1.27ms     781.   470.62KB     6.17
+6 rec          10000   11.6ms  13.33ms      75.7  663.09KB     6.49
+7 frec1      1000000  12.81ms  14.86ms      69.1   22.89MB    34.5 
+8 frec2      1000000  13.71ms  13.98ms      64.0   45.78MB   155.  
+9 rec        1000000  39.39ms  42.16ms      23.6   61.07MB    23.6 </code></pre>
 </div>
 </div>
 </section>
@@ -464,12 +464,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100    823µs  981.8µs    982.     678.8KB     6.21
-2 rec            100   14.8ms  17.04ms     55.8      272KB     6.70
-3 frec1        10000    966µs   1.19ms    799.       2.3MB    24.5 
-4 rec          10000   13.9ms  16.77ms     60.2      5.9MB     6.69
-5 frec1      1000000   17.5ms  32.26ms     15.1    228.9MB    13.6 
-6 rec        1000000  115.3ms 123.57ms      6.42   579.9MB    11.6 </code></pre>
+1 frec1          100  815.1µs 969.99µs   1013.     678.8KB     6.18
+2 rec            100     13ms  16.89ms     61.1      272KB     6.79
+3 frec1        10000  972.4µs   1.12ms    863.       2.3MB    17.5 
+4 rec          10000   13.6ms  15.71ms     64.3      5.9MB     6.65
+5 frec1      1000000     17ms  31.25ms     15.4    228.9MB    13.8 
+6 rec        1000000  109.1ms 135.57ms      6.38   579.9MB    10.8 </code></pre>
 </div>
 </div>
 </section>
@@ -503,9 +503,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 3 × 7
   expression     rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;    &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec         100000     14ms   15.9ms     61.9     7.04MB     0   
-2 frec        1000000   81.3ms   82.6ms     12.0    33.82MB     0   
-3 frec       10000000  841.7ms  841.7ms      1.19  308.47MB     1.19</code></pre>
+1 frec         100000   13.3ms   14.8ms     66.5     7.04MB     0   
+2 frec        1000000   78.5ms   79.6ms     12.3    33.82MB     0   
+3 frec       10000000  875.3ms  875.3ms      1.14  308.47MB     1.14</code></pre>
 </div>
 </div>
 </section>
@@ -548,12 +548,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100 819.13µs   1.01ms    989.    594.95KB     6.17
-2 rec            100  11.49ms  12.87ms     76.3   154.05KB     6.54
-3 frec         10000   1.65ms   2.03ms    489.    548.27KB     4.06
-4 rec          10000  14.14ms  14.89ms     64.1     1.91MB     4.28
-5 frec       1000000  90.65ms  94.19ms     10.6    53.41MB     1.17
-6 rec        1000000 137.16ms 139.44ms      7.18  186.96MB    16.8 </code></pre>
+1 frec           100 811.84µs 992.61µs   1012.    594.95KB    6.17 
+2 rec            100  11.74ms  13.58ms     72.2   154.05KB    6.57 
+3 frec         10000   1.63ms   1.98ms    512.    548.27KB    4.08 
+4 rec          10000   12.7ms  14.26ms     69.5     1.91MB    4.35 
+5 frec       1000000  93.22ms  94.51ms     10.4    53.41MB    2.60 
+6 rec        1000000 134.47ms 136.68ms      7.33  186.96MB    0.814</code></pre>
 </div>
 </div>
 </section>
@@ -636,30 +636,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 24 × 14
    expression    rows      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc
    &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
- 1 frec1          100 941.63µs   1.11ms    865.    742.87KB     6.28   413     3
- 2 frec2          100 946.78µs   1.18ms    857.     32.77KB     6.18   416     3
- 3 frec3          100 888.73µs   1.11ms    904.     31.77KB     6.19   438     3
- 4 frec4          100 892.52µs   1.06ms    927.     22.83KB     6.18   450     3
- 5 rec1           100  13.21ms  15.41ms     65.3   653.42KB     6.75    29     3
- 6 rec2           100  13.41ms  15.15ms     66.0   282.34KB     6.60    30     3
- 7 rec3           100  12.94ms  15.07ms     67.4   157.93KB     9.30    29     4
- 8 rec4           100  13.22ms  14.71ms     67.5   141.39KB     5.40    25     2
- 9 frec1        10000   2.02ms   2.38ms    421.      3.36MB     2.02   208     1
-10 frec2        10000   1.87ms   2.15ms    464.       2.6MB     4.09   227     2
-11 frec3        10000   1.54ms   1.84ms    531.      2.45MB     4.09   260     2
-12 frec4        10000   1.41ms   1.67ms    601.      1.68MB     4.09   294     2
-13 rec1         10000  19.48ms  21.66ms     46.1    21.24MB     4.39    21     2
-14 rec2         10000  19.43ms  21.38ms     47.4    20.09MB     4.31    22     2
-15 rec3         10000  16.19ms  18.02ms     55.5     7.96MB     6.94    24     3
-16 rec4         10000  16.02ms   18.2ms     55.6     6.81MB     4.28    26     2
-17 frec1      1000000  136.8ms 140.08ms      7.02   335.7MB     7.02     4     4
-18 frec2      1000000  120.7ms 125.09ms      6.75   259.4MB     6.75     4     4
-19 frec3      1000000  83.11ms  85.97ms     11.6   244.15MB     7.74     6     4
-20 frec4      1000000  66.68ms  68.82ms     14.4   167.85MB     9.03     8     5
-21 rec1       1000000 940.02ms 943.92ms      1.06    2.07GB    10.1      2    19
-22 rec2       1000000 900.05ms 923.61ms      1.08    1.96GB     9.20     2    17
-23 rec3       1000000 460.32ms 461.55ms      2.17  789.71MB     8.67     2     8
-24 rec4       1000000 436.56ms  441.3ms      2.27  675.26MB     7.93     2     7
+ 1 frec1          100  922.4µs   1.09ms    874.    742.87KB     6.17   425     3
+ 2 frec2          100 930.65µs   1.12ms    891.     32.77KB     6.17   433     3
+ 3 frec3          100 897.13µs   1.06ms    943.     31.77KB     6.19   457     3
+ 4 frec4          100  874.9µs   1.06ms    939.     22.83KB     8.31   452     4
+ 5 rec1           100  13.21ms  14.72ms     67.1   653.42KB     6.71    30     3
+ 6 rec2           100  13.33ms  15.37ms     66.2   282.34KB     6.62    30     3
+ 7 rec3           100  12.96ms  15.37ms     66.4   157.93KB     6.64    30     3
+ 8 rec4           100  12.72ms  14.89ms     68.7   141.39KB     6.64    31     3
+ 9 frec1        10000   2.04ms   2.39ms    424.      3.36MB     2.03   209     1
+10 frec2        10000   1.89ms   2.22ms    455.       2.6MB     4.10   222     2
+11 frec3        10000   1.56ms   1.85ms    546.      2.45MB     4.11   266     2
+12 frec4        10000   1.41ms   1.69ms    596.      1.68MB     4.10   291     2
+13 rec1         10000  19.48ms  21.72ms     46.3    21.24MB     4.41    21     2
+14 rec2         10000  19.18ms  20.42ms     48.6    20.09MB     4.42    22     2
+15 rec3         10000  16.14ms  18.18ms     55.3     7.96MB     6.91    24     3
+16 rec4         10000  15.95ms  17.88ms     56.3     6.81MB     6.75    25     3
+17 frec1      1000000 137.48ms 139.72ms      7.02   335.7MB     5.26     4     3
+18 frec2      1000000 118.41ms 119.42ms      8.32   259.4MB     3.33     5     2
+19 frec3      1000000  82.49ms  84.32ms     11.8   244.15MB     7.86     6     4
+20 frec4      1000000  66.09ms   68.2ms     12.3   167.85MB     3.53     7     2
+21 rec1       1000000 733.05ms 740.31ms      1.35    2.07GB     7.43     2    11
+22 rec2       1000000 815.38ms 819.36ms      1.22    1.96GB     9.15     2    15
+23 rec3       1000000 355.22ms 402.52ms      2.48  789.71MB     7.45     2     6
+24 rec4       1000000 333.58ms 386.52ms      2.59  675.26MB     7.76     2     6
 # ℹ 5 more variables: total_time &lt;bch:tm&gt;, result &lt;list&gt;, memory &lt;list&gt;,
 #   time &lt;list&gt;, gc &lt;list&gt;</code></pre>
 </div>
@@ -695,12 +695,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100 802.29µs 987.61µs   996.     584.41KB     6.16
-2 rec            100   12.5ms  14.37ms    69.7    475.38KB     6.54
-3 frec         10000 856.72µs   1.08ms   932.     353.05KB     6.17
-4 rec          10000  22.24ms  25.46ms    39.3      6.09MB     4.36
-5 frec       1000000   5.91ms   6.65ms   140.      42.33MB    12.0 
-6 rec        1000000    1.55s    1.55s     0.645  606.33MB     1.29</code></pre>
+1 frec           100 797.22µs 965.68µs  1039.     584.41KB     6.17
+2 rec            100  12.29ms  13.73ms    73.0    475.38KB     6.64
+3 frec         10000 853.44µs 998.26µs   997.     353.05KB     8.27
+4 rec          10000  23.55ms  25.61ms    39.2      6.09MB     2.06
+5 frec       1000000   5.86ms   6.48ms   109.      42.33MB     7.92
+6 rec        1000000     1.4s     1.4s     0.714  606.33MB     2.14</code></pre>
 </div>
 </div>
 </section>
@@ -738,12 +738,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100  804.4µs    973µs    1008.    582.6KB    15.1 
-2 rec            100   11.4ms   13.3ms      75.9   174.2KB    13.6 
-3 frec         10000  907.5µs    1.1ms     885.    157.5KB    12.9 
-4 rec          10000     12ms   14.2ms      71.7   585.1KB    13.8 
-5 frec       1000000   10.1ms   11.6ms      86.4    15.3MB     4.32
-6 rec        1000000   70.2ms   71.7ms      14.0    53.4MB     2.33</code></pre>
+1 frec           100  803.1µs  993.2µs    1006.    582.6KB     9.13
+2 rec            100   11.3ms  13.75ms      74.1   174.2KB     6.95
+3 frec         10000  898.1µs   1.11ms     908.    157.5KB     6.41
+4 rec          10000   11.7ms  13.91ms      72.2   585.1KB     9.63
+5 frec       1000000   10.6ms  11.71ms      86.2    15.3MB     2.10
+6 rec        1000000   68.5ms  72.24ms      13.8    53.4MB     2.30</code></pre>
 </div>
 </div>
 </section>
@@ -778,12 +778,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100  719.8µs 892.49µs    1081.   589.44KB    14.5 
-2 rec            100   11.1ms  13.42ms      73.3   93.13KB    13.1 
-3 frec         10000 732.04µs 911.34µs    1090.    40.17KB    14.7 
-4 rec          10000  11.75ms  13.88ms      73.2    1.33MB    14.1 
-5 frec       1000000   1.61ms   1.91ms     529.     3.82MB     2.80
-6 rec        1000000  71.76ms  75.78ms      13.1  115.59MB     5.24</code></pre>
+1 frec           100 712.88µs 830.59µs    1158.   589.44KB     8.76
+2 rec            100  10.97ms  13.19ms      77.5   93.13KB     9.68
+3 frec         10000 729.59µs 884.85µs    1120.    40.17KB     8.75
+4 rec          10000  11.31ms  12.98ms      77.3    1.33MB     9.66
+5 frec       1000000   1.61ms   1.79ms     555.     3.82MB     4.20
+6 rec        1000000  71.41ms   74.2ms      13.5  115.59MB     2.26</code></pre>
 </div>
 </div>
 </section>
@@ -821,10 +821,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 4 × 7
   expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec                        2e4   1.33ms   1.59ms   624.     781.08KB     4.13
-2 { rec = recipes::bake(re…   2e4 154.25ms  159.1ms     6.31   507.77KB     0   
-3 frec                        2e5   2.78ms   3.45ms   286.       1.56MB     2.04
-4 { rec = recipes::bake(re…   2e5    1.85s    1.85s     0.540    3.11MB     0   </code></pre>
+1 frec                        2e4   1.33ms   1.58ms   640.     781.08KB     6.49
+2 { rec = recipes::bake(re…   2e4  153.4ms 155.53ms     6.42   507.77KB     0   
+3 frec                        2e5    2.8ms   3.35ms   304.       1.56MB     4.22
+4 { rec = recipes::bake(re…   2e5    1.83s    1.83s     0.546    3.11MB     0   </code></pre>
 </div>
 </div>
 </section>
@@ -868,12 +868,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 "frec$plate(\"tbl\")"       1e2 158.69µs 200.82µs   4775.     23.94KB     8.47
-2 "recipes::bake(recipes::…   1e2  19.32ms  22.65ms     43.3   186.12KB     7.22
-3 "frec$plate(\"tbl\")"       1e4 174.66µs 217.88µs   4112.      1.69MB     8.48
-4 "recipes::bake(recipes::…   1e4   20.8ms  23.43ms     42.6     5.09MB     7.09
-5 "frec$plate(\"tbl\")"       1e6   1.48ms   1.69ms    379.    167.85MB    25.9 
-6 "recipes::bake(recipes::…   1e6 258.07ms  307.4ms      3.25  496.04MB     8.13</code></pre>
+1 "frec$plate(\"tbl\")"       1e2 161.92µs 204.41µs   4684.     23.94KB    13.8 
+2 "recipes::bake(recipes::…   1e2  18.69ms  22.66ms     45.6   186.12KB    10.7 
+3 "frec$plate(\"tbl\")"       1e4 180.75µs 217.71µs   4394.      1.69MB    11.2 
+4 "recipes::bake(recipes::…   1e4  20.62ms  22.88ms     43.6     5.09MB    10.9 
+5 "frec$plate(\"tbl\")"       1e6   1.47ms   1.64ms    423.    167.85MB    12.0 
+6 "recipes::bake(recipes::…   1e6 359.69ms 362.17ms      2.76  496.04MB     9.66</code></pre>
 </div>
 </div>
 </section>
@@ -907,432 +907,423 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100 863.28µs   1.09ms    913.    617.05KB     5.19
-2 rec            100  12.57ms  14.73ms     69.1   355.27KB     6.69
-3 frec         10000   1.53ms   1.78ms    562.      1.07MB     4.13
-4 rec          10000  14.25ms  16.55ms     60.3     4.55MB     6.70
-5 frec       1000000  75.47ms  81.69ms     12.1   106.81MB     4.85
-6 rec        1000000 219.11ms 318.89ms      3.42  450.18MB     5.13</code></pre>
+1 frec           100 862.91µs   1.08ms    937.    617.05KB     6.28
+2 rec            100  12.37ms  14.48ms     70.5   355.27KB     6.61
+3 frec         10000   1.51ms    1.7ms    575.      1.07MB     4.14
+4 rec          10000   14.4ms  15.75ms     63.3     4.55MB     6.79
+5 frec       1000000  75.24ms  77.31ms     12.7   106.81MB     3.81
+6 rec        1000000 214.52ms 313.88ms      3.52  450.18MB     5.63</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(<span class="st">"2016-08-18"</span>, <span class="at">tz =</span> <span class="st">"UTC"</span>)</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>end <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(<span class="st">"2016-10-13"</span>, <span class="at">tz =</span> <span class="st">"UTC"</span>)</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>dates <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">datetime =</span> <span class="fu">seq.POSIXt</span>(start, end, <span class="dv">1</span>))</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>aa <span class="ot">&lt;-</span> <span class="fu">recipe</span>(datetime<span class="sc">~</span>., dates) <span class="sc">|&gt;</span> </span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_spline_b</span>(datetime, <span class="at">df =</span> <span class="dv">13</span>) <span class="sc">|&gt;</span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prep</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bake</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="step_aquifer_grf-step_aquifer_theis" class="level2">
 <h2 class="anchored" data-anchor-id="step_aquifer_grf-step_aquifer_theis">step_aquifer_grf &amp; step_aquifer_theis</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows),</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">rep</span>(<span class="fl">0.01</span>, rows))</span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepAquiferGRF<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>                                                        <span class="at">flow_rate =</span> y))<span class="sc">$</span></span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec2 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepAquiferTheis<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
-<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">flow_rate =</span> y))<span class="sc">$</span></span>
-<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
-<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative)</span>
-<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows),</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">rep</span>(<span class="fl">0.01</span>, rows))</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepAquiferGRF<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>                                                        <span class="at">flow_rate =</span> y))<span class="sc">$</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec2 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepAquiferTheis<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">flow_rate =</span> y))<span class="sc">$</span></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative)</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100 826.96µs      1ms     980.   587.26KB     6.28
-2 frec2          100 899.37µs   1.11ms     895.   533.12KB     6.27
-3 frec1        10000   1.39ms   1.68ms     593.   160.19KB     4.13
-4 frec2        10000   1.45ms   1.88ms     510.    83.09KB     2.03
-5 frec1      1000000  86.76ms  88.11ms      11.3   15.26MB     0   
-6 frec2      1000000  88.65ms  89.97ms      11.1    7.63MB     0   </code></pre>
+1 frec1          100 825.56µs 970.64µs    1002.   587.26KB     6.28
+2 frec2          100 874.09µs   1.06ms     925.   533.12KB     6.31
+3 frec1        10000   1.37ms   1.67ms     610.   160.19KB     4.14
+4 frec2        10000   1.44ms   1.74ms     568.    83.09KB     4.13
+5 frec1      1000000  83.36ms  85.45ms      11.7   15.26MB     0   
+6 frec2      1000000  80.59ms  84.84ms      11.8    7.63MB     0   </code></pre>
 </div>
 </div>
 </section>
 <section id="step_aquifer_leaky" class="level2">
 <h2 class="anchored" data-anchor-id="step_aquifer_leaky">step_aquifer_leaky</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows),</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">rep</span>(<span class="fl">0.01</span>, rows))</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> <span class="fu">unname</span>(hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepAquiferLeaky<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">flow_rate =</span> y,</span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">leakage =</span> <span class="dv">100000000</span>))<span class="sc">$</span></span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec2 =</span> <span class="fu">unname</span>(hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepAquiferTheis<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
-<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">flow_rate =</span> y))<span class="sc">$</span></span>
-<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
-<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative)</span>
-<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows),</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">rep</span>(<span class="fl">0.01</span>, rows))</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> <span class="fu">unname</span>(hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepAquiferLeaky<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">flow_rate =</span> y,</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">leakage =</span> <span class="dv">100000000</span>))<span class="sc">$</span></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec2 =</span> <span class="fu">unname</span>(hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepAquiferTheis<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">flow_rate =</span> y))<span class="sc">$</span></span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative)</span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100  905.7µs    1.1ms    886.    636.77KB     6.30
-2 frec2          100 957.38µs   1.16ms    848.      7.45KB     6.41
-3 frec1        10000   1.62ms      2ms    500.    396.41KB     2.03
-4 frec2        10000   1.51ms   1.86ms    531.      84.8KB     4.15
-5 frec1      1000000 104.29ms  105.7ms      9.46   38.15MB     2.37
-6 frec2      1000000  84.91ms  89.64ms     11.3     7.64MB     0   </code></pre>
+1 frec1          100 907.82µs   1.08ms    920.    636.77KB     6.30
+2 frec2          100 962.01µs    1.2ms    830.      7.45KB     6.32
+3 frec1        10000    1.6ms   1.95ms    525.    396.41KB     4.15
+4 frec2        10000   1.51ms   1.84ms    547.      84.8KB     4.14
+5 frec1      1000000 102.44ms 102.86ms      9.67   38.15MB     0   
+6 frec2      1000000  81.97ms  85.56ms     11.8     7.64MB     0   </code></pre>
 </div>
 </div>
 </section>
 <section id="step_aquifer_patch" class="level2">
 <h2 class="anchored" data-anchor-id="step_aquifer_patch">step_aquifer_patch</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> <span class="fu">c</span>(<span class="fl">1e5</span>),</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows),</span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">rep</span>(<span class="fl">0.01</span>, rows))</span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepAquiferGRF<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>                                                        <span class="at">flow_rate =</span> y))<span class="sc">$</span></span>
-<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
-<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec3 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepAquiferPatch<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
-<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">flow_rate =</span> <span class="fl">0.01</span>,</span>
-<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">thickness =</span> <span class="fl">1.0</span>,</span>
-<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">radius =</span> <span class="fl">100.0</span>,</span>
-<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">radius_patch =</span> <span class="fl">200.0</span>,</span>
-<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">specific_storage_inner =</span> <span class="fl">1e-6</span>,</span>
-<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">specific_storage_outer =</span> <span class="fl">1e-6</span>,</span>
-<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">hydraulic_conductivity_inner =</span> <span class="fl">1e-4</span>,</span>
-<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">hydraulic_conductivity_outer =</span> <span class="fl">1e-4</span>,</span>
-<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">n_stehfest =</span> 8L</span>
-<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>                 ))<span class="sc">$</span></span>
-<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
-<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative)</span>
-<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> <span class="fu">c</span>(<span class="fl">1e5</span>),</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows),</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">rep</span>(<span class="fl">0.01</span>, rows))</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepAquiferGRF<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>                                                        <span class="at">flow_rate =</span> y))<span class="sc">$</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec3 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepAquiferPatch<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">flow_rate =</span> <span class="fl">0.01</span>,</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">thickness =</span> <span class="fl">1.0</span>,</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">radius =</span> <span class="fl">100.0</span>,</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">radius_patch =</span> <span class="fl">200.0</span>,</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">specific_storage_inner =</span> <span class="fl">1e-6</span>,</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">specific_storage_outer =</span> <span class="fl">1e-6</span>,</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">hydraulic_conductivity_inner =</span> <span class="fl">1e-4</span>,</span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">hydraulic_conductivity_outer =</span> <span class="fl">1e-4</span>,</span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">n_stehfest =</span> 8L</span>
+<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a>                 ))<span class="sc">$</span></span>
+<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative)</span>
+<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 7
   expression   rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;  &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1      100000   6.86ms   7.88ms    127.      1.53MB        0
-2 frec3      100000 556.61ms 556.61ms      1.80    1.33MB        0</code></pre>
+1 frec1      100000   6.48ms   7.59ms    133.      1.53MB     2.05
+2 frec3      100000 551.15ms 551.15ms      1.81    1.33MB     0   </code></pre>
 </div>
 </div>
 </section>
 <section id="step_vadose_weeks" class="level2">
 <h2 class="anchored" data-anchor-id="step_vadose_weeks">step_vadose_weeks</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows), </span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows))</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepVadoseWeeks<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x, </span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">air_diffusivity =</span> <span class="fl">0.8</span>, </span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">thickness =</span> <span class="dv">5</span>, </span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">precision =</span> <span class="fl">1e-12</span>))<span class="sc">$</span></span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
-<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span></span>
-<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows), </span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows))</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepVadoseWeeks<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x, </span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">air_diffusivity =</span> <span class="fl">0.8</span>, </span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">thickness =</span> <span class="dv">5</span>, </span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">precision =</span> <span class="fl">1e-12</span>))<span class="sc">$</span></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100    747µs 903.43µs    1092.    559.4KB     8.55
-2 frec1        10000    838µs   1.04ms     966.    160.1KB     6.30
-3 frec1      1000000   13.9ms  15.79ms      62.8    15.3MB     2.09</code></pre>
+1 frec1          100    723µs  871.9µs    1140.    559.4KB     6.30
+2 frec1        10000  821.1µs  999.5µs     937.    160.1KB     6.40
+3 frec1      1000000   13.2ms   15.8ms      61.2    15.3MB     2.04</code></pre>
 </div>
 </div>
 </section>
 <section id="step_transport_ogata_banks" class="level2">
 <h2 class="anchored" data-anchor-id="step_transport_ogata_banks">step_transport_ogata_banks</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">expand.grid</span>(<span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows), <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)))</span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">names</span>(dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'x'</span>, <span class="st">'y'</span>)</span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepTransportOgataBanks<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
-<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>                                                                 <span class="at">distance =</span> y))<span class="sc">$</span></span>
-<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
-<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span></span>
-<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">expand.grid</span>(<span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>rows), <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)))</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">names</span>(dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'x'</span>, <span class="st">'y'</span>)</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepTransportOgataBanks<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> x,</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>                                                                 <span class="at">distance =</span> y))<span class="sc">$</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span></span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100  793.8µs  933.2µs   1042.     579.2KB     6.38
-2 frec1        10000   2.62ms    3.2ms    318.     785.1KB     2.04
-3 frec1      1000000 187.46ms  194.7ms      4.95    76.3MB     1.24</code></pre>
+1 frec1          100 775.69µs  925.6µs   1066.     579.2KB     6.31
+2 frec1        10000   2.62ms   3.18ms    319.     785.1KB     2.03
+3 frec1      1000000 183.24ms 188.12ms      5.32    76.3MB     1.33</code></pre>
 </div>
 </div>
 </section>
 <section id="step_transport_fractures_solute" class="level2">
 <h2 class="anchored" data-anchor-id="step_transport_fractures_solute">step_transport_fractures_solute</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="sc">~</span>time<span class="sc">+</span>z<span class="sc">+</span>x)</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">setDT</span>(<span class="fu">expand.grid</span>(<span class="dv">10</span><span class="sc">^</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>),</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">seq</span>(<span class="fl">0.0</span>, <span class="dv">10</span>, <span class="dv">1</span>),</span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">c</span>(<span class="fl">0.0</span>)))</span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"z"</span>, <span class="st">"x"</span>)</span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> </span>
-<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>  bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">frec1 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>               <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepTransportFracturesSolute<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> time,</span>
-<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">distance_fracture =</span> z,</span>
-<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">distance_matrix =</span> x))<span class="sc">$</span></span>
-<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>               <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
-<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_iterations =</span> <span class="dv">10</span></span>
-<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="sc">~</span>time<span class="sc">+</span>z<span class="sc">+</span>x)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">setDT</span>(<span class="fu">expand.grid</span>(<span class="dv">10</span><span class="sc">^</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>),</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">seq</span>(<span class="fl">0.0</span>, <span class="dv">10</span>, <span class="dv">1</span>),</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">c</span>(<span class="fl">0.0</span>)))</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"z"</span>, <span class="st">"x"</span>)</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> </span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>  bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">frec1 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>               <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepTransportFracturesSolute<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> time,</span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">distance_fracture =</span> z,</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">distance_matrix =</span> x))<span class="sc">$</span></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>               <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_iterations =</span> <span class="dv">10</span></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 6
   expression      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1        1.05ms   1.26ms      787.     611KB     2.05</code></pre>
+1 frec1        1.06ms   1.29ms      785.     611KB     2.11</code></pre>
 </div>
 </div>
 </section>
 <section id="step_transport_fractures_heat" class="level2">
 <h2 class="anchored" data-anchor-id="step_transport_fractures_heat">step_transport_fractures_heat</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="sc">~</span>time<span class="sc">+</span>z<span class="sc">+</span>x)</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">setDT</span>(<span class="fu">expand.grid</span>(<span class="dv">10</span><span class="sc">^</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>),</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">seq</span>(<span class="fl">0.0</span>, <span class="dv">100</span>, <span class="dv">1</span>),</span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">c</span>(<span class="fl">0.0</span>, <span class="fl">0.05</span>)))</span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"z"</span>, <span class="st">"x"</span>)</span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> </span>
-<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>  bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">frec1 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>               <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepTransportFracturesHeat<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> time,</span>
-<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">distance_fracture =</span> z,</span>
-<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">distance_matrix =</span> x))<span class="sc">$</span></span>
-<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>               <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
-<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_iterations =</span> <span class="dv">10</span></span>
-<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="sc">~</span>time<span class="sc">+</span>z<span class="sc">+</span>x)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">setDT</span>(<span class="fu">expand.grid</span>(<span class="dv">10</span><span class="sc">^</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>),</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">seq</span>(<span class="fl">0.0</span>, <span class="dv">100</span>, <span class="dv">1</span>),</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">c</span>(<span class="fl">0.0</span>, <span class="fl">0.05</span>)))</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"z"</span>, <span class="st">"x"</span>)</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> </span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>  bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">frec1 =</span> (hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>               <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepTransportFracturesHeat<span class="sc">$</span><span class="fu">new</span>(<span class="at">time =</span> time,</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">distance_fracture =</span> z,</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">distance_matrix =</span> x))<span class="sc">$</span></span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>               <span class="fu">plate</span>(<span class="st">"dt"</span>)),</span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_iterations =</span> <span class="dv">10</span></span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 6
   expression      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1         5.9ms   6.75ms      148.     617KB        0</code></pre>
+1 frec1        5.91ms      7ms      145.     617KB        0</code></pre>
 </div>
 </div>
 </section>
 <section id="step_pgram-and-step_welch" class="level2">
 <h2 class="anchored" data-anchor-id="step_pgram-and-step_welch">step_pgram and step_welch</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x <span class="sc">+</span> z)</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), <span class="at">y =</span> <span class="fu">rnorm</span>(rows), <span class="at">z =</span> <span class="fu">rnorm</span>(rows),</span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">q =</span> <span class="fu">rnorm</span>(rows), <span class="at">r =</span> <span class="fu">rnorm</span>(rows), <span class="at">s =</span> <span class="fu">rnorm</span>(rows))</span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    frec1 <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepPgram<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y), </span>
-<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>                             <span class="dv">3</span>,</span>
-<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
-<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
-<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">FALSE</span>,</span>
-<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>                             <span class="fl">0.1</span>))</span>
-<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>    frec3 <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepPgram<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y), </span>
-<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>                             <span class="dv">3</span>,</span>
-<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
-<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
-<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
-<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a>                             <span class="fl">0.1</span>))</span>
-<span id="cb52-22"><a href="#cb52-22" aria-hidden="true" tabindex="-1"></a>    frec2 <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb52-23"><a href="#cb52-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepWelch<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y),</span>
-<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a>                             <span class="at">length_subset =</span>  <span class="fu">nrow</span>(dat) <span class="sc">/</span> <span class="dv">10</span>,</span>
-<span id="cb52-25"><a href="#cb52-25" aria-hidden="true" tabindex="-1"></a>                             <span class="at">overlap =</span> <span class="fl">0.60</span>,</span>
-<span id="cb52-26"><a href="#cb52-26" aria-hidden="true" tabindex="-1"></a>                             <span class="at">window =</span> <span class="fu">window_nuttall</span>(<span class="fu">nrow</span>(dat) <span class="sc">/</span> <span class="dv">10</span>)))</span>
-<span id="cb52-27"><a href="#cb52-27" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb52-28"><a href="#cb52-28" aria-hidden="true" tabindex="-1"></a>      frec3<span class="sc">$</span><span class="fu">plate</span>(<span class="st">"dt"</span>),</span>
-<span id="cb52-29"><a href="#cb52-29" aria-hidden="true" tabindex="-1"></a>      frec1<span class="sc">$</span><span class="fu">plate</span>(<span class="st">"dt"</span>),</span>
-<span id="cb52-30"><a href="#cb52-30" aria-hidden="true" tabindex="-1"></a>      frec2<span class="sc">$</span><span class="fu">plate</span>(<span class="st">"dt"</span>),</span>
-<span id="cb52-31"><a href="#cb52-31" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb52-32"><a href="#cb52-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">3</span></span>
-<span id="cb52-33"><a href="#cb52-33" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb52-34"><a href="#cb52-34" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb52-35"><a href="#cb52-35" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb52-36"><a href="#cb52-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-37"><a href="#cb52-37" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x <span class="sc">+</span> z)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), <span class="at">y =</span> <span class="fu">rnorm</span>(rows), <span class="at">z =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">q =</span> <span class="fu">rnorm</span>(rows), <span class="at">r =</span> <span class="fu">rnorm</span>(rows), <span class="at">s =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>    frec1 <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepPgram<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y), </span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>                             <span class="dv">3</span>,</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">FALSE</span>,</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>                             <span class="fl">0.1</span>))</span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>    frec3 <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepPgram<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y), </span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>                             <span class="dv">3</span>,</span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span>,</span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>                             <span class="fl">0.1</span>))</span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>    frec2 <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepWelch<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y),</span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>                             <span class="at">length_subset =</span>  <span class="fu">nrow</span>(dat) <span class="sc">/</span> <span class="dv">10</span>,</span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>                             <span class="at">overlap =</span> <span class="fl">0.60</span>,</span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>                             <span class="at">window =</span> <span class="fu">window_nuttall</span>(<span class="fu">nrow</span>(dat) <span class="sc">/</span> <span class="dv">10</span>)))</span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>      frec3<span class="sc">$</span><span class="fu">plate</span>(<span class="st">"dt"</span>),</span>
+<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a>      frec1<span class="sc">$</span><span class="fu">plate</span>(<span class="st">"dt"</span>),</span>
+<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a>      frec2<span class="sc">$</span><span class="fu">plate</span>(<span class="st">"dt"</span>),</span>
+<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">3</span></span>
+<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb51-36"><a href="#cb51-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-37"><a href="#cb51-37" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 7
   expression               rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;              &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 "frec3$plate(\"dt\")"     100   85.8µs    108µs     9016.    17.8KB     4.18
-2 "frec1$plate(\"dt\")"     100   85.9µs    108µs     8943.   21.16KB     4.35
-3 "frec2$plate(\"dt\")"     100   86.1µs    115µs     8128.    8.87KB     2.04
-4 "frec3$plate(\"dt\")"   10000   86.8µs    111µs     8668.    1.07MB     4.17
-5 "frec1$plate(\"dt\")"   10000   86.4µs    109µs     8716.    1.38MB     4.20
-6 "frec2$plate(\"dt\")"   10000   86.5µs    108µs     8780.  251.98KB     4.18
-7 "frec3$plate(\"dt\")" 1000000   86.7µs    110µs     8841.  106.81MB     4.18
-8 "frec1$plate(\"dt\")" 1000000   86.5µs    108µs     8979.  137.33MB     4.18
-9 "frec2$plate(\"dt\")" 1000000   86.5µs    110µs     8821.   24.42MB     2.05</code></pre>
+1 "frec3$plate(\"dt\")"     100   86.2µs    112µs     8945.    17.8KB     4.44
+2 "frec1$plate(\"dt\")"     100   86.1µs    109µs     9071.   21.16KB     4.39
+3 "frec2$plate(\"dt\")"     100   85.3µs    102µs     9359.    8.87KB     4.23
+4 "frec3$plate(\"dt\")"   10000   86.3µs    112µs     8684.    1.07MB     2.10
+5 "frec1$plate(\"dt\")"   10000   86.4µs    111µs     8998.    1.38MB     4.42
+6 "frec2$plate(\"dt\")"   10000   86.1µs    114µs     8504.  251.98KB     4.55
+7 "frec3$plate(\"dt\")" 1000000     86µs    109µs     8691.  106.81MB     4.45
+8 "frec1$plate(\"dt\")" 1000000   85.8µs    112µs     8627.  137.33MB     4.35
+9 "frec2$plate(\"dt\")" 1000000   86.2µs    109µs     8799.   24.42MB     2.11</code></pre>
 </div>
 </div>
 </section>
 <section id="step_transfer_welch-and-step_transfer_pgram" class="level2">
 <h2 class="anchored" data-anchor-id="step_transfer_welch-and-step_transfer_pgram">step_transfer_welch and step_transfer_pgram</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
-<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), <span class="at">y =</span> <span class="fu">rnorm</span>(rows))</span>
-<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>    frec1 <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepTransferPgram<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y), </span>
-<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>                                     <span class="dv">3</span>,</span>
-<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>                                     <span class="cn">TRUE</span>,</span>
-<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>                                     <span class="cn">TRUE</span>,</span>
-<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a>                                     <span class="fl">0.1</span>))</span>
-<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a>    frec2 <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepTransferWelch<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y),</span>
-<span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">length_subset =</span>  <span class="fu">nrow</span>(dat) <span class="sc">/</span> <span class="dv">10</span>,</span>
-<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">overlap =</span> <span class="fl">0.60</span>,</span>
-<span id="cb54-17"><a href="#cb54-17" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">window =</span> <span class="fu">window_nuttall</span>(<span class="fu">nrow</span>(dat) <span class="sc">/</span> <span class="dv">10</span>)))</span>
-<span id="cb54-18"><a href="#cb54-18" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(frec1<span class="sc">$</span><span class="fu">plate</span>(<span class="st">"dt"</span>),</span>
-<span id="cb54-19"><a href="#cb54-19" aria-hidden="true" tabindex="-1"></a>                frec2<span class="sc">$</span><span class="fu">plate</span>(<span class="st">"dt"</span>),</span>
-<span id="cb54-20"><a href="#cb54-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb54-21"><a href="#cb54-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">min_iterations =</span> <span class="dv">2</span></span>
-<span id="cb54-22"><a href="#cb54-22" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb54-23"><a href="#cb54-23" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb54-24"><a href="#cb54-24" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb54-25"><a href="#cb54-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-26"><a href="#cb54-26" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), <span class="at">y =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    frec1 <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepTransferPgram<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y), </span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>                                     <span class="dv">3</span>,</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>                                     <span class="cn">TRUE</span>,</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>                                     <span class="cn">TRUE</span>,</span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>                                     <span class="fl">0.1</span>))</span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>    frec2 <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepTransferWelch<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y),</span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">length_subset =</span>  <span class="fu">nrow</span>(dat) <span class="sc">/</span> <span class="dv">10</span>,</span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">overlap =</span> <span class="fl">0.60</span>,</span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">window =</span> <span class="fu">window_nuttall</span>(<span class="fu">nrow</span>(dat) <span class="sc">/</span> <span class="dv">10</span>)))</span>
+<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(frec1<span class="sc">$</span><span class="fu">plate</span>(<span class="st">"dt"</span>),</span>
+<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>                frec2<span class="sc">$</span><span class="fu">plate</span>(<span class="st">"dt"</span>),</span>
+<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">min_iterations =</span> <span class="dv">2</span></span>
+<span id="cb53-22"><a href="#cb53-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb53-23"><a href="#cb53-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb53-24"><a href="#cb53-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-25"><a href="#cb53-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-26"><a href="#cb53-26" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
   expression               rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;              &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 "frec1$plate(\"dt\")"     100   85.8µs    106µs     8986.   11.25KB     2.05
-2 "frec2$plate(\"dt\")"     100   85.7µs    107µs     8980.    8.12KB     4.17
-3 "frec1$plate(\"dt\")"   10000   85.5µs    107µs     9031.  470.59KB     4.17
-4 "frec2$plate(\"dt\")"   10000   85.1µs    106µs     9062.  189.34KB     4.16
-5 "frec1$plate(\"dt\")" 1000000   88.6µs    115µs     8157.   45.78MB     4.38
-6 "frec2$plate(\"dt\")" 1000000   86.7µs    112µs     8411.   18.31MB     4.16</code></pre>
+1 "frec1$plate(\"dt\")"     100   85.3µs    113µs     8530.   11.25KB     4.45
+2 "frec2$plate(\"dt\")"     100     85µs    108µs     8822.    8.12KB     4.45
+3 "frec1$plate(\"dt\")"   10000   85.2µs    110µs     8949.  470.59KB     4.44
+4 "frec2$plate(\"dt\")"   10000   85.2µs    108µs     8832.  189.34KB     4.43
+5 "frec1$plate(\"dt\")" 1000000   85.3µs    109µs     8790.   45.78MB     4.44
+6 "frec2$plate(\"dt\")" 1000000   84.9µs    112µs     8816.   18.31MB     4.21</code></pre>
 </div>
 </div>
 </section>
 <section id="step_ols" class="level2">
 <h2 class="anchored" data-anchor-id="step_ols">step_ols</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x<span class="sc">+</span>z)</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
-<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">rnorm</span>(rows),</span>
-<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">z =</span> <span class="fu">rnorm</span>(rows))</span>
-<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec =</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepCenter<span class="sc">$</span><span class="fu">new</span>(x))<span class="sc">$</span></span>
-<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepScale<span class="sc">$</span><span class="fu">new</span>(z))<span class="sc">$</span></span>
-<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepOls<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula))<span class="sc">$</span></span>
-<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">plate</span>(),</span>
-<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative</span>
-<span id="cb56-18"><a href="#cb56-18" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb56-19"><a href="#cb56-19" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb56-20"><a href="#cb56-20" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb56-21"><a href="#cb56-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-22"><a href="#cb56-22" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x<span class="sc">+</span>z)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows), </span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">z =</span> <span class="fu">rnorm</span>(rows))</span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec =</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepCenter<span class="sc">$</span><span class="fu">new</span>(x))<span class="sc">$</span></span>
+<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepScale<span class="sc">$</span><span class="fu">new</span>(z))<span class="sc">$</span></span>
+<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepOls<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula))<span class="sc">$</span></span>
+<span id="cb55-15"><a href="#cb55-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">plate</span>(),</span>
+<span id="cb55-16"><a href="#cb55-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb55-17"><a href="#cb55-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative</span>
+<span id="cb55-18"><a href="#cb55-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb55-19"><a href="#cb55-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb55-20"><a href="#cb55-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb55-21"><a href="#cb55-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-22"><a href="#cb55-22" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100   1.47ms   1.85ms     535.   791.78KB     2.04
-2 frec         10000   1.72ms    2.1ms     470.     1.34MB     2.05
-3 frec       1000000   31.1ms  32.08ms      28.9  133.52MB    24.8 </code></pre>
+1 frec           100   1.48ms   1.76ms     559.   791.78KB     2.10
+2 frec         10000   1.73ms    2.1ms     471.     1.34MB     2.10
+3 frec       1000000  30.77ms  31.11ms      31.6  133.52MB    39.5 </code></pre>
 </div>
 </div>
 </section>
 <section id="step_ols_gap_fill" class="level2">
 <h2 class="anchored" data-anchor-id="step_ols_gap_fill">step_ols_gap_fill</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>frm <span class="ot">&lt;-</span> <span class="fu">formula</span>(x <span class="sc">~</span> y <span class="sc">+</span> z)</span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(n))</span>
-<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">x =</span> x, <span class="at">y =</span> x, <span class="at">z =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>n))</span>
-<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>dat[, x <span class="sc">:</span><span class="er">=</span> x <span class="sc">+</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">20</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>))]</span>
-<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>dat[, x <span class="sc">:</span><span class="er">=</span> x <span class="sc">+</span> <span class="fl">3.0</span> <span class="sc">*</span> <span class="fu">sin</span>(z <span class="sc">*</span> <span class="dv">1</span><span class="sc">/</span>n)]</span>
-<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="fu">copy</span>(dat<span class="sc">$</span>x)</span>
-<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tmp, <span class="at">type =</span> <span class="st">'l'</span>)</span>
-<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>dat[<span class="dv">60000</span><span class="sc">:</span><span class="dv">70000</span>, x <span class="sc">:</span><span class="er">=</span> <span class="cn">NA_real_</span>]</span>
-<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">unclass</span>(dat)</span>
-<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a>f <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> frm, <span class="at">data =</span> (dat))<span class="sc">$</span></span>
-<span id="cb58-14"><a href="#cb58-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepFindInterval<span class="sc">$</span><span class="fu">new</span>(z, <span class="at">vec =</span> <span class="fu">c</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>, n)))<span class="sc">$</span></span>
-<span id="cb58-15"><a href="#cb58-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepIntercept<span class="sc">$</span><span class="fu">new</span>())<span class="sc">$</span></span>
-<span id="cb58-16"><a href="#cb58-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepSplineB<span class="sc">$</span><span class="fu">new</span>(z, <span class="at">df =</span> <span class="dv">4</span>))<span class="sc">$</span></span>
-<span id="cb58-17"><a href="#cb58-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepDropColumns<span class="sc">$</span><span class="fu">new</span>(z))</span>
-<span id="cb58-18"><a href="#cb58-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-19"><a href="#cb58-19" aria-hidden="true" tabindex="-1"></a>frec <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> frm, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb58-20"><a href="#cb58-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepOlsGapFill<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y, z), <span class="at">recipe =</span> f))</span>
-<span id="cb58-21"><a href="#cb58-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-22"><a href="#cb58-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-23"><a href="#cb58-23" aria-hidden="true" tabindex="-1"></a>tmp2 <span class="ot">&lt;-</span> frec<span class="sc">$</span><span class="fu">plate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>frm <span class="ot">&lt;-</span> <span class="fu">formula</span>(x <span class="sc">~</span> y <span class="sc">+</span> z)</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(n))</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">x =</span> x, <span class="at">y =</span> x, <span class="at">z =</span> <span class="fu">as.numeric</span>(<span class="dv">1</span><span class="sc">:</span>n))</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>dat[, x <span class="sc">:</span><span class="er">=</span> x <span class="sc">+</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">20</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>))]</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>dat[, x <span class="sc">:</span><span class="er">=</span> x <span class="sc">+</span> <span class="fl">3.0</span> <span class="sc">*</span> <span class="fu">sin</span>(z <span class="sc">*</span> <span class="dv">1</span><span class="sc">/</span>n)]</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="fu">copy</span>(dat<span class="sc">$</span>x)</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tmp, <span class="at">type =</span> <span class="st">'l'</span>)</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>dat[<span class="dv">60000</span><span class="sc">:</span><span class="dv">70000</span>, x <span class="sc">:</span><span class="er">=</span> <span class="cn">NA_real_</span>]</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">unclass</span>(dat)</span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>f <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> frm, <span class="at">data =</span> (dat))<span class="sc">$</span></span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepFindInterval<span class="sc">$</span><span class="fu">new</span>(z, <span class="at">vec =</span> <span class="fu">c</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>, n)))<span class="sc">$</span></span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepIntercept<span class="sc">$</span><span class="fu">new</span>())<span class="sc">$</span></span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepSplineB<span class="sc">$</span><span class="fu">new</span>(z, <span class="at">df =</span> <span class="dv">4</span>))<span class="sc">$</span></span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepDropColumns<span class="sc">$</span><span class="fu">new</span>(z))</span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a>frec <span class="ot">=</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> frm, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb57-20"><a href="#cb57-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepOlsGapFill<span class="sc">$</span><span class="fu">new</span>(<span class="fu">c</span>(x, y, z), <span class="at">recipe =</span> f))</span>
+<span id="cb57-21"><a href="#cb57-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-22"><a href="#cb57-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-23"><a href="#cb57-23" aria-hidden="true" tabindex="-1"></a>tmp2 <span class="ot">&lt;-</span> frec<span class="sc">$</span><span class="fu">plate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>List of 3
  $ x: num [1:100000] 19.4 19.2 20.8 20.8 21 ...
@@ -1367,8 +1358,8 @@ NULL
   ..$ : chr [1:8] "y" "find_interval_z_1" "find_interval_z_2" "intercept" ...
 NULL</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(dat<span class="sc">$</span>x, <span class="at">type =</span> <span class="st">'p'</span>, <span class="at">pch =</span> <span class="dv">20</span>, <span class="at">cex =</span> <span class="fl">0.2</span>, <span class="at">col =</span> <span class="st">"yellow"</span>)</span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(tmp2<span class="sc">$</span>ols_gap_fill_x, <span class="at">type =</span> <span class="st">'l'</span>, <span class="at">col =</span> <span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(dat<span class="sc">$</span>x, <span class="at">type =</span> <span class="st">'p'</span>, <span class="at">pch =</span> <span class="dv">20</span>, <span class="at">cex =</span> <span class="fl">0.2</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(tmp2<span class="sc">$</span>ols_gap_fill_x, <span class="at">type =</span> <span class="st">'l'</span>, <span class="at">col =</span> <span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="benchmarking_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -1380,41 +1371,41 @@ NULL</code></pre>
 <section id="step_check_spacing" class="level2">
 <h2 class="anchored" data-anchor-id="step_check_spacing">step_check_spacing</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
-<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
-<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
-<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows),</span>
-<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows)</span>
-<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>    dat[<span class="dv">9</span>, <span class="st">"x"</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>    dat[<span class="dv">9</span>, <span class="st">"y"</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepCheckSpacing<span class="sc">$</span><span class="fu">new</span>(y))<span class="sc">$</span></span>
-<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepCheckNA<span class="sc">$</span><span class="fu">new</span>(y))<span class="sc">$</span></span>
-<span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">prep</span>()<span class="sc">$</span></span>
-<span id="cb61-16"><a href="#cb61-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bake</span>(),</span>
-<span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec2 =</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
-<span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepCheckSpacing<span class="sc">$</span><span class="fu">new</span>(x))<span class="sc">$</span></span>
-<span id="cb61-19"><a href="#cb61-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepCheckNA<span class="sc">$</span><span class="fu">new</span>(x))<span class="sc">$</span></span>
-<span id="cb61-20"><a href="#cb61-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">prep</span>()<span class="sc">$</span></span>
-<span id="cb61-21"><a href="#cb61-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bake</span>(),</span>
-<span id="cb61-22"><a href="#cb61-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb61-23"><a href="#cb61-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
-<span id="cb61-24"><a href="#cb61-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span></span>
-<span id="cb61-25"><a href="#cb61-25" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb61-26"><a href="#cb61-26" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb61-27"><a href="#cb61-27" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb61-28"><a href="#cb61-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-29"><a href="#cb61-29" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(y<span class="sc">~</span>x)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> n,</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(rows),</span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows)</span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a>    dat[<span class="dv">9</span>, <span class="st">"x"</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a>    dat[<span class="dv">9</span>, <span class="st">"y"</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb60-11"><a href="#cb60-11" aria-hidden="true" tabindex="-1"></a>    bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb60-12"><a href="#cb60-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec1 =</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb60-13"><a href="#cb60-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepCheckSpacing<span class="sc">$</span><span class="fu">new</span>(y))<span class="sc">$</span></span>
+<span id="cb60-14"><a href="#cb60-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepCheckNA<span class="sc">$</span><span class="fu">new</span>(y))<span class="sc">$</span></span>
+<span id="cb60-15"><a href="#cb60-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb60-16"><a href="#cb60-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bake</span>(),</span>
+<span id="cb60-17"><a href="#cb60-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">frec2 =</span> hydrorecipes<span class="sc">:::</span>Recipe<span class="sc">$</span><span class="fu">new</span>(<span class="at">formula =</span> formula, <span class="at">data =</span> dat)<span class="sc">$</span></span>
+<span id="cb60-18"><a href="#cb60-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepCheckSpacing<span class="sc">$</span><span class="fu">new</span>(x))<span class="sc">$</span></span>
+<span id="cb60-19"><a href="#cb60-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">add_step</span>(hydrorecipes<span class="sc">:::</span>StepCheckNA<span class="sc">$</span><span class="fu">new</span>(x))<span class="sc">$</span></span>
+<span id="cb60-20"><a href="#cb60-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">prep</span>()<span class="sc">$</span></span>
+<span id="cb60-21"><a href="#cb60-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bake</span>(),</span>
+<span id="cb60-22"><a href="#cb60-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb60-23"><a href="#cb60-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">relative =</span> relative,</span>
+<span id="cb60-24"><a href="#cb60-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">min_iterations =</span> <span class="dv">10</span></span>
+<span id="cb60-25"><a href="#cb60-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb60-26"><a href="#cb60-26" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb60-27"><a href="#cb60-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb60-28"><a href="#cb60-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-29"><a href="#cb60-29" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 7
   expression   rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;  &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1      100000   1.24ms   1.47ms      650.     2.6MB     4.24
-2 frec2      100000   1.49ms   1.89ms      507.   782.9KB     0   </code></pre>
+1 frec1      100000   1.21ms   1.48ms      665.     2.6MB     2.05
+2 frec2      100000   1.48ms   1.83ms      549.   782.9KB     2.03</code></pre>
 </div>
 </div>
 <!-- ```{r} -->

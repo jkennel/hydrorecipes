@@ -34,13 +34,10 @@ StepOlsGapFill <- R6Class(
     },
     bake = function(new_data) {
 
-      print(str(new_data))
       rec <- self$recipe
       rec <- rec$prep()$bake(data = new_data)
-      print(str(rec$result))
       dat <- rec$result
 
-      print(str(dat))
       x <- get_regression_data(dat, rec$term_info, id_type = "predictor")
       y <- get_regression_data(dat, rec$term_info, id_type = "outcome")
 
