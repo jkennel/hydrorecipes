@@ -1,8 +1,8 @@
 # hydrorecipes (name will likely change to hydrorecipes as it is designed to replace it)
 
-WARNING: This package is in early stages of development and is likely to change dramatically. Names of steps and thier implementations are likely to change.
+WARNING: This package is in early stages of development and is likely to change.
 
-This package is based on [recipes](https://recipes.tidymodels.org). The goals of the package are to increased the computational speed, decrease memory consumption, increase consistency between steps, and decrease some boiler plate code for step additions. The first three goals are likely to be achieved but the fourth might not. Part of this is due to providing both the *R6* and "standard" R ways to run the code.
+This package is based on [recipes](https://recipes.tidymodels.org) framework consisting of a recipe and a set of steps to apply. The goals of the package are to increased the computational speed, decrease memory consumption, increase consistency between steps, and decrease some boiler plate code for step additions. The first three goals are likely to be achieved but the fourth might not given that the package implements two APIs (one for R6 and one for S3).
 
 It diverges in a few ways:
 
@@ -22,7 +22,6 @@ It diverges in a few ways:
   - *R6* and standard R interfaces 
 
 
-
 To do:
 - Change modelling steps to recipe function?
   - response
@@ -38,5 +37,6 @@ To do:
 - Increase test coverage
 - Steps
   - step_temporary_deployment
-  - step_baro_*
 - Tests for selectors
+- Increase speed
+- Decrease memory consumption
