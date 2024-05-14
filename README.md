@@ -43,6 +43,8 @@ It diverges in a few ways:
 Example usage:
 
 ``` r
+#|warning: false
+
 library(hydrorecipes)
 ```
 
