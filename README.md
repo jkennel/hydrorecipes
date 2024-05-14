@@ -44,8 +44,10 @@ Example usage:
 
 ``` r
 #|warning: false
+#|message: false
 
-library(hydrorecipes)
+
+suppressWarnings(library(hydrorecipes))
 ```
 
     Loading required package: Bessel
