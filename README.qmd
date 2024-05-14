@@ -1,4 +1,10 @@
-# hydrorecipes
+---
+title: "hydrorecipes"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
 
 WARNING: This package is in early stages of development and is likely to change.
 
@@ -22,7 +28,58 @@ It diverges in a few ways:
   - *R6* and standard R interfaces 
 
 
-To do:
+Example usage:
+
+```{r}
+
+library(hydrorecipes)
+library(ggplot2)
+
+data(kennel_2020)
+
+# kennel_2020$datetime <- as.numeric(kennel_2020$datetime)
+form     <- as.formula(wl~.)
+ba_knots <- log_lags_arma(15, 1440 * 1.5) # knots for distributed lag baro terms
+df       <- 5                            # degrees of freedom for spline background trend
+
+rec <- recipe(form, kennel_2020) |>
+  step_distributed_lag(baro, knots = ba_knots) |>
+  step_spline_b(datetime, df = df) |>
+  step_lead_lag(et, lag = seq(-120, 120, 60)) |>
+  step_intercept() |>
+  step_drop_columns(c(baro, et, datetime)) |>
+  step_ols(formula = form) |>
+  prep() |>
+  bake()
+
+
+# responses
+resp <- rec$get_response_data(type = "dt")
+
+# barometric response function
+plot(value~x, data = resp[term == "distributed_lag_interpolated" & variable == "cumulative"], 
+     log = "x")
+
+
+# decomposition
+pred <- cbind(kennel_2020, rec$get_predict_data())
+
+# initial
+plot(wl~datetime, pred, type = "l")
+
+# predicted sum of components
+points(wl_step_distributed_lag + 
+       wl_step_spline_b + 
+       wl_step_lead_lag + 
+       wl_step_intercept~datetime, pred, type = 'l', col = 'red')
+
+
+
+```
+
+
+
+## To do:
 - Change modelling steps to recipe function?
   - response
   - predict
