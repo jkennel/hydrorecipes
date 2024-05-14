@@ -9,26 +9,26 @@ frec1 = recipe(formula = formula, data = dat) |>
                      flow_rate = y) |>
   plate("dt")
 
-frec2 = Recipe$new(formula = formula, data = dat)$
-  add_step(StepAquiferLeaky$new(time = x,
-                                flow_rate = y))$
+frec2 = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepAquiferLeaky$new(time = x,
+                                           flow_rate = y))$
   plate("dt")
 
 
-tinytest::expect_equivalent(frec1, frec2,
-                            info = "R6 and frecipes api are equivalent")
+expect_equivalent(frec1, frec2,
+                            info = "R6 and hydrorecipes api are equivalent")
 
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-frec1 = Recipe$new(formula = formula, data = dat)$
-                 add_step(StepAquiferLeaky$new(time = x,
-                                               flow_rate = y,
-                                               leakage = 10000000))$
-                 plate("dt")
-frec2 = Recipe$new(formula = formula, data = dat)$
-                 add_step(StepAquiferTheis$new(time = x,
-                                               flow_rate = y))$
-                 plate("dt")
+frec1 = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepAquiferLeaky$new(time = x,
+                                           flow_rate = y,
+                                           leakage = 10000000))$
+  plate("dt")
+frec2 = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepAquiferTheis$new(time = x,
+                                           flow_rate = y))$
+  plate("dt")
 
-tinytest::expect_equivalent(frec1, frec2,
+expect_equivalent(frec1, frec2,
                             info = "StepAquiferLeaky is equivalent to StepAquiferTheis when leakage is large")

@@ -8,26 +8,33 @@ dat <- data.frame(x = rnorm(rows),
 
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# frecipes version
-frec = Recipe$new(formula = formula, data = dat)$
-  add_step(StepAddVars$new(x))$
+# hydrorecipes version
+frec = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepAddVars$new(c(x)))$
   plate("tbl")
 
-tinytest::expect_equivalent(ncol(frec),3)
+expect_equivalent(ncol(frec), 3)
 
-frec = Recipe$new(formula = formula, data = dat)$
-  add_step(StepAddVars$new(c(x, w)))$
+frec = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepAddVars$new("x"))$
   plate("tbl")
 
-tinytest::expect_equivalent(ncol(frec), 4)
+expect_equivalent(ncol(frec), 3)
+
+
+frec = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepAddVars$new(c(x, w)))$
+  plate("tbl")
+
+expect_equivalent(ncol(frec), 4)
 
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 frec = recipe(formula = formula, data = dat) |>
-  step_add_vars(x) |>
+  step_add_vars(c(x, w)) |>
   plate("tbl")
 
-tinytest::expect_equivalent(ncol(frec), 3)
+expect_equivalent(ncol(frec), 4)
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

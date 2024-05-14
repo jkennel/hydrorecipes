@@ -18,7 +18,7 @@
 #'
 #' @noRd
 b_spline_list <- function(x, df, degree, internal_knots, boundary_knots, complete_basis = FALSE, periodic = FALSE, derivs = 0L, integral = FALSE) {
-    .Call(`_frecipes_b_spline_list`, x, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
+    .Call(`_hydrorecipes_b_spline_list`, x, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 
 #' @title
@@ -39,15 +39,15 @@ b_spline_list <- function(x, df, degree, internal_knots, boundary_knots, complet
 #' @noRd
 #'
 n_spline_list <- function(x, df, degree, internal_knots, boundary_knots, complete_basis, periodic = FALSE, derivs = 0L, integral = FALSE) {
-    .Call(`_frecipes_n_spline_list`, x, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
+    .Call(`_hydrorecipes_n_spline_list`, x, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 
 b_spline_list2 <- function(x, df, degree, internal_knots, boundary_knots, complete_basis = TRUE, periodic = FALSE, derivs = 0L, integral = FALSE) {
-    .Call(`_frecipes_b_spline_list2`, x, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
+    .Call(`_hydrorecipes_b_spline_list2`, x, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 
 b_spline_list3 <- function(x, df, degree, internal_knots, boundary_knots, complete_basis = TRUE, periodic = FALSE, derivs = 0L, integral = FALSE) {
-    .Call(`_frecipes_b_spline_list3`, x, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
+    .Call(`_hydrorecipes_b_spline_list3`, x, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 
 #' @title
@@ -66,7 +66,7 @@ b_spline_list3 <- function(x, df, degree, internal_knots, boundary_knots, comple
 #' @noRd
 #'
 log_lags_arma <- function(n, max_lag) {
-    .Call(`_frecipes_log_lags_arma`, n, max_lag)
+    .Call(`_hydrorecipes_log_lags_arma`, n, max_lag)
 }
 
 #' @title
@@ -94,39 +94,39 @@ log_lags_arma <- function(n, max_lag) {
 #' @noRd
 #'
 be_clark_cpp <- function(dep, ind, lag_space, inverse) {
-    .Call(`_frecipes_be_clark_cpp`, dep, ind, lag_space, inverse)
+    .Call(`_hydrorecipes_be_clark_cpp`, dep, ind, lag_space, inverse)
 }
 
 be_least_squares_diff_cpp <- function(dep, ind, lag_space, inverse) {
-    .Call(`_frecipes_be_least_squares_diff_cpp`, dep, ind, lag_space, inverse)
+    .Call(`_hydrorecipes_be_least_squares_diff_cpp`, dep, ind, lag_space, inverse)
 }
 
 be_least_squares_cpp <- function(dep, ind, inverse) {
-    .Call(`_frecipes_be_least_squares_cpp`, dep, ind, inverse)
+    .Call(`_hydrorecipes_be_least_squares_cpp`, dep, ind, inverse)
 }
 
 get_peaks <- function(freqs, f1, f2) {
-    .Call(`_frecipes_get_peaks`, freqs, f1, f2)
+    .Call(`_hydrorecipes_get_peaks`, freqs, f1, f2)
 }
 
 be_harmonic_cpp <- function(x, inverse) {
-    .Call(`_frecipes_be_harmonic_cpp`, x, inverse)
+    .Call(`_hydrorecipes_be_harmonic_cpp`, x, inverse)
 }
 
 be_transfer <- function(x, spans, detrend, demean, taper, frequency, cycle_size) {
-    .Call(`_frecipes_be_transfer`, x, spans, detrend, demean, taper, frequency, cycle_size)
+    .Call(`_hydrorecipes_be_transfer`, x, spans, detrend, demean, taper, frequency, cycle_size)
 }
 
 a_cpp <- function(x) {
-    .Call(`_frecipes_a_cpp`, x)
+    .Call(`_hydrorecipes_a_cpp`, x)
 }
 
 b_cpp <- function(x) {
-    .Call(`_frecipes_b_cpp`, x)
+    .Call(`_hydrorecipes_b_cpp`, x)
 }
 
 c_cpp <- function(x) {
-    .Call(`_frecipes_c_cpp`, x)
+    .Call(`_hydrorecipes_c_cpp`, x)
 }
 
 #' Calculate equations 4 and 5 from bouwer, 1989
@@ -140,7 +140,7 @@ c_cpp <- function(x) {
 #'
 #' @noRd
 bouwer_rice_abc <- function(rw, Le, Lw, H) {
-    .Call(`_frecipes_bouwer_rice_abc`, rw, Le, Lw, H)
+    .Call(`_hydrorecipes_bouwer_rice_abc`, rw, Le, Lw, H)
 }
 
 #' Calculate transmissivity with Bouwer-Rice solution
@@ -159,23 +159,23 @@ bouwer_rice_abc <- function(rw, Le, Lw, H) {
 #'
 #' @noRd
 bouwer_rice <- function(time, drawdown, radius_screen, radius_casing, Le, Lw, H) {
-    .Call(`_frecipes_bouwer_rice`, time, drawdown, radius_screen, radius_casing, Le, Lw, H)
+    .Call(`_hydrorecipes_bouwer_rice`, time, drawdown, radius_screen, radius_casing, Le, Lw, H)
 }
 
 dft <- function(x, frequency) {
-    .Call(`_frecipes_dft`, x, frequency)
+    .Call(`_hydrorecipes_dft`, x, frequency)
 }
 
 dft_with_window <- function(x, frequency) {
-    .Call(`_frecipes_dft_with_window`, x, frequency)
+    .Call(`_hydrorecipes_dft_with_window`, x, frequency)
 }
 
 dft_goertzel <- function(x, frequency) {
-    .Call(`_frecipes_dft_goertzel`, x, frequency)
+    .Call(`_hydrorecipes_dft_goertzel`, x, frequency)
 }
 
 be_dft <- function(x, frequency) {
-    .Call(`_frecipes_be_dft`, x, frequency)
+    .Call(`_hydrorecipes_be_dft`, x, frequency)
 }
 
 #' @title
@@ -194,11 +194,11 @@ be_dft <- function(x, frequency) {
 #'
 #' @noRd
 distributed_lag_thread <- function(x, bl, n_thread) {
-    .Call(`_frecipes_distributed_lag_thread`, x, bl, n_thread)
+    .Call(`_hydrorecipes_distributed_lag_thread`, x, bl, n_thread)
 }
 
 convolve_eigen <- function(x, y) {
-    .Call(`_frecipes_convolve_eigen`, x, y)
+    .Call(`_hydrorecipes_convolve_eigen`, x, y)
 }
 
 #' @title
@@ -217,7 +217,7 @@ convolve_eigen <- function(x, y) {
 #' @noRd
 #'
 distributed_lag_eigen <- function(x, bl) {
-    .Call(`_frecipes_distributed_lag_eigen`, x, bl)
+    .Call(`_hydrorecipes_distributed_lag_eigen`, x, bl)
 }
 
 #' @title
@@ -241,7 +241,7 @@ distributed_lag_eigen <- function(x, bl) {
 #' @noRd
 #'
 distributed_lag_thread_eigen <- function(x, bl, lag_max, n_subset, n_shift, n_thread) {
-    .Call(`_frecipes_distributed_lag_thread_eigen`, x, bl, lag_max, n_subset, n_shift, n_thread)
+    .Call(`_hydrorecipes_distributed_lag_thread_eigen`, x, bl, lag_max, n_subset, n_shift, n_thread)
 }
 
 #' @title
@@ -265,19 +265,19 @@ distributed_lag_thread_eigen <- function(x, bl, lag_max, n_subset, n_shift, n_th
 #' @noRd
 #'
 distributed_lag_list <- function(x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral) {
-    .Call(`_frecipes_distributed_lag_list`, x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
+    .Call(`_hydrorecipes_distributed_lag_list`, x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 
 distributed_lag_list2 <- function(x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral) {
-    .Call(`_frecipes_distributed_lag_list2`, x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
+    .Call(`_hydrorecipes_distributed_lag_list2`, x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 
 distributed_lag_list3 <- function(x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral) {
-    .Call(`_frecipes_distributed_lag_list3`, x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
+    .Call(`_hydrorecipes_distributed_lag_list3`, x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 
 distributed_lag_list4 <- function(x, s, max_lag) {
-    .Call(`_frecipes_distributed_lag_list4`, x, s, max_lag)
+    .Call(`_hydrorecipes_distributed_lag_list4`, x, s, max_lag)
 }
 
 #' @title
@@ -296,7 +296,7 @@ distributed_lag_list4 <- function(x, s, max_lag) {
 #' @noRd
 #'
 fft_matrix <- function(x, n_new) {
-    .Call(`_frecipes_fft_matrix`, x, n_new)
+    .Call(`_hydrorecipes_fft_matrix`, x, n_new)
 }
 
 #' @title
@@ -315,7 +315,7 @@ fft_matrix <- function(x, n_new) {
 #' @noRd
 #'
 convolve_vec <- function(x, y) {
-    .Call(`_frecipes_convolve_vec`, x, y)
+    .Call(`_hydrorecipes_convolve_vec`, x, y)
 }
 
 #' @title
@@ -346,7 +346,7 @@ convolve_vec <- function(x, y) {
 #' @noRd
 #'
 convolve_filter <- function(x, y, remove_partial, reverse) {
-    .Call(`_frecipes_convolve_filter`, x, y, remove_partial, reverse)
+    .Call(`_hydrorecipes_convolve_filter`, x, y, remove_partial, reverse)
 }
 
 #' @title
@@ -363,7 +363,7 @@ convolve_filter <- function(x, y, remove_partial, reverse) {
 #' @noRd
 #'
 convolve_overlap_add <- function(x, y) {
-    .Call(`_frecipes_convolve_overlap_add`, x, y)
+    .Call(`_hydrorecipes_convolve_overlap_add`, x, y)
 }
 
 #' @title
@@ -382,11 +382,11 @@ convolve_overlap_add <- function(x, y) {
 #' @noRd
 #'
 convolve_overlap_save <- function(x, y, align) {
-    .Call(`_frecipes_convolve_overlap_save`, x, y, align)
+    .Call(`_hydrorecipes_convolve_overlap_save`, x, y, align)
 }
 
 shift_eigen <- function(x, n) {
-    .Call(`_frecipes_shift_eigen`, x, n)
+    .Call(`_hydrorecipes_shift_eigen`, x, n)
 }
 
 #' @title
@@ -404,7 +404,7 @@ shift_eigen <- function(x, n) {
 #' @noRd
 #'
 convolve_overlap_save_list <- function(x, y, align) {
-    .Call(`_frecipes_convolve_overlap_save_list`, x, y, align)
+    .Call(`_hydrorecipes_convolve_overlap_save_list`, x, y, align)
 }
 
 #' @title
@@ -422,7 +422,7 @@ convolve_overlap_save_list <- function(x, y, align) {
 #' @noRd
 #'
 convolve_tf <- function(x, y) {
-    .Call(`_frecipes_convolve_tf`, x, y)
+    .Call(`_hydrorecipes_convolve_tf`, x, y)
 }
 
 #' @title
@@ -453,7 +453,7 @@ convolve_tf <- function(x, y) {
 #' @noRd
 #'
 convolve_matrix <- function(x, y, remove_partial, reverse) {
-    .Call(`_frecipes_convolve_matrix`, x, y, remove_partial, reverse)
+    .Call(`_hydrorecipes_convolve_matrix`, x, y, remove_partial, reverse)
 }
 
 #' @title
@@ -484,11 +484,11 @@ convolve_matrix <- function(x, y, remove_partial, reverse) {
 #' @noRd
 #'
 convolve_list <- function(x, y, remove_partial, reverse) {
-    .Call(`_frecipes_convolve_list`, x, y, remove_partial, reverse)
+    .Call(`_hydrorecipes_convolve_list`, x, y, remove_partial, reverse)
 }
 
 convolve_list2 <- function(x, y, remove_partial, reverse) {
-    .Call(`_frecipes_convolve_list2`, x, y, remove_partial, reverse)
+    .Call(`_hydrorecipes_convolve_list2`, x, y, remove_partial, reverse)
 }
 
 #' @title
@@ -507,7 +507,7 @@ convolve_list2 <- function(x, y, remove_partial, reverse) {
 #' @noRd
 #'
 multiply_ffts <- function(x) {
-    .Call(`_frecipes_multiply_ffts`, x)
+    .Call(`_hydrorecipes_multiply_ffts`, x)
 }
 
 #' @title
@@ -526,7 +526,7 @@ multiply_ffts <- function(x) {
 #' @noRd
 #'
 fill_lower_left <- function(x, start) {
-    .Call(`_frecipes_fill_lower_left`, x, start)
+    .Call(`_hydrorecipes_fill_lower_left`, x, start)
 }
 
 #' @title
@@ -545,7 +545,7 @@ fill_lower_left <- function(x, start) {
 #' @noRd
 #'
 spec_pgram <- function(x, spans, detrend, demean, taper, pad_fft) {
-    .Call(`_frecipes_spec_pgram`, x, spans, detrend, demean, taper, pad_fft)
+    .Call(`_hydrorecipes_spec_pgram`, x, spans, detrend, demean, taper, pad_fft)
 }
 
 #' @title
@@ -564,7 +564,7 @@ spec_pgram <- function(x, spans, detrend, demean, taper, pad_fft) {
 #' @noRd
 #'
 spec_pgram_list <- function(x, spans, detrend, demean, taper, pad_fft) {
-    .Call(`_frecipes_spec_pgram_list`, x, spans, detrend, demean, taper, pad_fft)
+    .Call(`_hydrorecipes_spec_pgram_list`, x, spans, detrend, demean, taper, pad_fft)
 }
 
 #' @title
@@ -587,7 +587,7 @@ spec_pgram_list <- function(x, spans, detrend, demean, taper, pad_fft) {
 #' @noRd
 #'
 spec_welch <- function(x, length_subset, overlap, window) {
-    .Call(`_frecipes_spec_welch`, x, length_subset, overlap, window)
+    .Call(`_hydrorecipes_spec_welch`, x, length_subset, overlap, window)
 }
 
 #' @title
@@ -604,11 +604,11 @@ spec_welch <- function(x, length_subset, overlap, window) {
 #' @noRd
 #'
 solve_cplx_parallel <- function(x) {
-    .Call(`_frecipes_solve_cplx_parallel`, x)
+    .Call(`_hydrorecipes_solve_cplx_parallel`, x)
 }
 
 list_to_matrix <- function(x, sub_start, sub_end) {
-    .Call(`_frecipes_list_to_matrix`, x, sub_start, sub_end)
+    .Call(`_hydrorecipes_list_to_matrix`, x, sub_start, sub_end)
 }
 
 #' @title
@@ -631,7 +631,7 @@ list_to_matrix <- function(x, sub_start, sub_end) {
 #' @noRd
 #'
 solve_cplx_irr <- function(x, n_groups) {
-    .Call(`_frecipes_solve_cplx_irr`, x, n_groups)
+    .Call(`_hydrorecipes_solve_cplx_irr`, x, n_groups)
 }
 
 #' @title
@@ -648,7 +648,7 @@ solve_cplx_irr <- function(x, n_groups) {
 #' @noRd
 #'
 ordinary_coherence_phase <- function(x) {
-    .Call(`_frecipes_ordinary_coherence_phase`, x)
+    .Call(`_hydrorecipes_ordinary_coherence_phase`, x)
 }
 
 #' @title
@@ -673,11 +673,11 @@ ordinary_coherence_phase <- function(x) {
 #' @noRd
 #'
 transfer_pgram_smooth <- function(x, spans, detrend, demean, taper, power, n_groups) {
-    .Call(`_frecipes_transfer_pgram_smooth`, x, spans, detrend, demean, taper, power, n_groups)
+    .Call(`_hydrorecipes_transfer_pgram_smooth`, x, spans, detrend, demean, taper, power, n_groups)
 }
 
 transfer_pgram <- function(x, spans, detrend, demean, taper) {
-    .Call(`_frecipes_transfer_pgram`, x, spans, detrend, demean, taper)
+    .Call(`_hydrorecipes_transfer_pgram`, x, spans, detrend, demean, taper)
 }
 
 #' @title
@@ -702,7 +702,7 @@ transfer_pgram <- function(x, spans, detrend, demean, taper) {
 #' @noRd
 #'
 transfer_welch <- function(x, length_subset, overlap, window) {
-    .Call(`_frecipes_transfer_welch`, x, length_subset, overlap, window)
+    .Call(`_hydrorecipes_transfer_welch`, x, length_subset, overlap, window)
 }
 
 #' @title
@@ -718,7 +718,7 @@ transfer_welch <- function(x, length_subset, overlap, window) {
 #' @noRd
 #'
 window_hann <- function(n) {
-    .Call(`_frecipes_window_hann`, n)
+    .Call(`_hydrorecipes_window_hann`, n)
 }
 
 #' @title
@@ -735,7 +735,7 @@ window_hann <- function(n) {
 #' @noRd
 #'
 window_tukey <- function(n, r) {
-    .Call(`_frecipes_window_tukey`, n, r)
+    .Call(`_hydrorecipes_window_tukey`, n, r)
 }
 
 #' @title
@@ -751,7 +751,7 @@ window_tukey <- function(n, r) {
 #' @noRd
 #'
 window_hann_cplx <- function(n) {
-    .Call(`_frecipes_window_hann_cplx`, n)
+    .Call(`_hydrorecipes_window_hann_cplx`, n)
 }
 
 #' @title
@@ -767,7 +767,7 @@ window_hann_cplx <- function(n) {
 #' @noRd
 #'
 window_rectangle <- function(n) {
-    .Call(`_frecipes_window_rectangle`, n)
+    .Call(`_hydrorecipes_window_rectangle`, n)
 }
 
 #' @title
@@ -794,7 +794,7 @@ window_rectangle <- function(n) {
 #' @noRd
 #'
 window_first_deriv <- function(n, a0, a1, a2, a3) {
-    .Call(`_frecipes_window_first_deriv`, n, a0, a1, a2, a3)
+    .Call(`_hydrorecipes_window_first_deriv`, n, a0, a1, a2, a3)
 }
 
 #' @title
@@ -815,7 +815,7 @@ window_first_deriv <- function(n, a0, a1, a2, a3) {
 #' @noRd
 #'
 window_nuttall <- function(n) {
-    .Call(`_frecipes_window_nuttall`, n)
+    .Call(`_hydrorecipes_window_nuttall`, n)
 }
 
 #' @title
@@ -836,7 +836,7 @@ window_nuttall <- function(n) {
 #' @noRd
 #'
 window_blackman_nuttall <- function(n) {
-    .Call(`_frecipes_window_blackman_nuttall`, n)
+    .Call(`_hydrorecipes_window_blackman_nuttall`, n)
 }
 
 #' @title
@@ -857,7 +857,7 @@ window_blackman_nuttall <- function(n) {
 #' @noRd
 #'
 window_blackman_harris <- function(n) {
-    .Call(`_frecipes_window_blackman_harris`, n)
+    .Call(`_hydrorecipes_window_blackman_harris`, n)
 }
 
 #' @title
@@ -875,95 +875,95 @@ window_blackman_harris <- function(n) {
 #' @noRd
 #'
 window_scale <- function(window, n_new, n_fft) {
-    .Call(`_frecipes_window_scale`, window, n_new, n_fft)
+    .Call(`_hydrorecipes_window_scale`, window, n_new, n_fft)
 }
 
 gwr_p <- function(time, n_gwr) {
-    .Call(`_frecipes_gwr_p`, time, n_gwr)
+    .Call(`_hydrorecipes_gwr_p`, time, n_gwr)
 }
 
 barker_herbert_impulse <- function(p, radius, radius_patch, t_1, t_2, s_1, s_2) {
-    .Call(`_frecipes_barker_herbert_impulse`, p, radius, radius_patch, t_1, t_2, s_1, s_2)
+    .Call(`_hydrorecipes_barker_herbert_impulse`, p, radius, radius_patch, t_1, t_2, s_1, s_2)
 }
 
 gwr_barker_herbert <- function(time, flow_rate, radius, radius_patch, t_1, t_2, s_1, s_2, n_gwr) {
-    .Call(`_frecipes_gwr_barker_herbert`, time, flow_rate, radius, radius_patch, t_1, t_2, s_1, s_2, n_gwr)
+    .Call(`_hydrorecipes_gwr_barker_herbert`, time, flow_rate, radius, radius_patch, t_1, t_2, s_1, s_2, n_gwr)
 }
 
 impulse_function <- function(u) {
-    .Call(`_frecipes_impulse_function`, u)
+    .Call(`_hydrorecipes_impulse_function`, u)
 }
 
 impulse_function_rcpp <- function(u) {
-    .Call(`_frecipes_impulse_function_rcpp`, u)
+    .Call(`_hydrorecipes_impulse_function_rcpp`, u)
 }
 
 impulse_function_eigen <- function(u) {
-    .Call(`_frecipes_impulse_function_eigen`, u)
+    .Call(`_hydrorecipes_impulse_function_eigen`, u)
 }
 
 std_expint <- function(u) {
-    .Call(`_frecipes_std_expint`, u)
+    .Call(`_hydrorecipes_std_expint`, u)
 }
 
 std_tgamma <- function(u, a) {
-    .Call(`_frecipes_std_tgamma`, u, a)
+    .Call(`_hydrorecipes_std_tgamma`, u, a)
 }
 
 binary_search <- function(x, y) {
-    .Call(`_frecipes_binary_search`, x, y)
+    .Call(`_hydrorecipes_binary_search`, x, y)
 }
 
 std_to_eigen <- function(u) {
-    .Call(`_frecipes_std_to_eigen`, u)
+    .Call(`_hydrorecipes_std_to_eigen`, u)
 }
 
 eigen_to_std <- function(u) {
-    .Call(`_frecipes_eigen_to_std`, u)
+    .Call(`_hydrorecipes_eigen_to_std`, u)
 }
 
 std_to_rcpp <- function(u) {
-    .Call(`_frecipes_std_to_rcpp`, u)
+    .Call(`_hydrorecipes_std_to_rcpp`, u)
 }
 
 rcpp_to_std <- function(u) {
-    .Call(`_frecipes_rcpp_to_std`, u)
+    .Call(`_hydrorecipes_rcpp_to_std`, u)
 }
 
 calculate_distance <- function(x_well, y_well, x_loc, y_loc) {
-    .Call(`_frecipes_calculate_distance`, x_well, y_well, x_loc, y_loc)
+    .Call(`_hydrorecipes_calculate_distance`, x_well, y_well, x_loc, y_loc)
 }
 
 well_function_coefficient <- function(flow_rate, transmissivity) {
-    .Call(`_frecipes_well_function_coefficient`, flow_rate, transmissivity)
+    .Call(`_hydrorecipes_well_function_coefficient`, flow_rate, transmissivity)
 }
 
 well_function_coefficient_vec <- function(flow_rate, transmissivity) {
-    .Call(`_frecipes_well_function_coefficient_vec`, flow_rate, transmissivity)
+    .Call(`_hydrorecipes_well_function_coefficient_vec`, flow_rate, transmissivity)
 }
 
 well_function_coefficient_rcpp <- function(flow_rate, transmissivity) {
-    .Call(`_frecipes_well_function_coefficient_rcpp`, flow_rate, transmissivity)
+    .Call(`_hydrorecipes_well_function_coefficient_rcpp`, flow_rate, transmissivity)
 }
 
 theis_u <- function(radius, storativity, transmissivity, time) {
-    .Call(`_frecipes_theis_u`, radius, storativity, transmissivity, time)
+    .Call(`_hydrorecipes_theis_u`, radius, storativity, transmissivity, time)
 }
 
 theis_u_time_vec <- function(radius, storativity, transmissivity, time) {
-    .Call(`_frecipes_theis_u_time_vec`, radius, storativity, transmissivity, time)
+    .Call(`_hydrorecipes_theis_u_time_vec`, radius, storativity, transmissivity, time)
 }
 
 theis_u_time_rcpp <- function(radius, storativity, transmissivity, time) {
-    .Call(`_frecipes_theis_u_time_rcpp`, radius, storativity, transmissivity, time)
+    .Call(`_hydrorecipes_theis_u_time_rcpp`, radius, storativity, transmissivity, time)
 }
 
 grf_coefficient <- function(radius, hydraulic_conductivity, thickness, flow_dimension) {
-    .Call(`_frecipes_grf_coefficient`, radius, hydraulic_conductivity, thickness, flow_dimension)
+    .Call(`_hydrorecipes_grf_coefficient`, radius, hydraulic_conductivity, thickness, flow_dimension)
 }
 
 grf_u <- function(radius, specific_storage, hydraulic_conductivity) {
-    .Call(`_frecipes_grf_u`, radius, specific_storage, hydraulic_conductivity)
+    .Call(`_hydrorecipes_grf_u`, radius, specific_storage, hydraulic_conductivity)
 }
 
 #' @title
@@ -991,7 +991,7 @@ grf_u <- function(radius, specific_storage, hydraulic_conductivity) {
 #'
 #' @noRd
 grf_time <- function(radius, specific_storage, hydraulic_conductivity, thickness, time, flow_rate, flow_dimension) {
-    .Call(`_frecipes_grf_time`, radius, specific_storage, hydraulic_conductivity, thickness, time, flow_rate, flow_dimension)
+    .Call(`_hydrorecipes_grf_time`, radius, specific_storage, hydraulic_conductivity, thickness, time, flow_rate, flow_dimension)
 }
 
 #' @title
@@ -1018,11 +1018,11 @@ grf_time <- function(radius, specific_storage, hydraulic_conductivity, thickness
 #' @export
 #' @noRd
 grf_grid <- function(grid, well_locations, flow_rate, time, specific_storage, hydraulic_conductivity, thickness, flow_dimension) {
-    .Call(`_frecipes_grf_grid`, grid, well_locations, flow_rate, time, specific_storage, hydraulic_conductivity, thickness, flow_dimension)
+    .Call(`_hydrorecipes_grf_grid`, grid, well_locations, flow_rate, time, specific_storage, hydraulic_conductivity, thickness, flow_dimension)
 }
 
 hantush_epsilon <- function(radius, leakage) {
-    .Call(`_frecipes_hantush_epsilon`, radius, leakage)
+    .Call(`_hydrorecipes_hantush_epsilon`, radius, leakage)
 }
 
 #' @title
@@ -1049,15 +1049,15 @@ hantush_epsilon <- function(radius, leakage) {
 #' @noRd
 #'
 hantush_well <- function(u, b, precision) {
-    .Call(`_frecipes_hantush_well`, u, b, precision)
+    .Call(`_hydrorecipes_hantush_well`, u, b, precision)
 }
 
 hantush_well_vec <- function(u, b, n_terms) {
-    .Call(`_frecipes_hantush_well_vec`, u, b, n_terms)
+    .Call(`_hydrorecipes_hantush_well_vec`, u, b, n_terms)
 }
 
 hantush_well_rcpp <- function(u, b, precision) {
-    .Call(`_frecipes_hantush_well_rcpp`, u, b, precision)
+    .Call(`_hydrorecipes_hantush_well_rcpp`, u, b, precision)
 }
 
 #' @title
@@ -1084,11 +1084,11 @@ hantush_well_rcpp <- function(u, b, precision) {
 #' @noRd
 #'
 hantush_jacob <- function(time, flow_rate, radius, storativity, transmissivity, leakage, precision) {
-    .Call(`_frecipes_hantush_jacob`, time, flow_rate, radius, storativity, transmissivity, leakage, precision)
+    .Call(`_hydrorecipes_hantush_jacob`, time, flow_rate, radius, storativity, transmissivity, leakage, precision)
 }
 
 ig <- function(a, u) {
-    .Call(`_frecipes_ig`, a, u)
+    .Call(`_hydrorecipes_ig`, a, u)
 }
 
 #' @title
@@ -1109,19 +1109,19 @@ ig <- function(a, u) {
 #' @noRd
 #'
 harmonic_list <- function(time, frequency, start, cycle_size) {
-    .Call(`_frecipes_harmonic_list`, time, frequency, start, cycle_size)
+    .Call(`_hydrorecipes_harmonic_list`, time, frequency, start, cycle_size)
 }
 
 any_decimal <- function(x) {
-    .Call(`_frecipes_any_decimal`, x)
+    .Call(`_hydrorecipes_any_decimal`, x)
 }
 
 decimal_to_scaled_integer <- function(x) {
-    .Call(`_frecipes_decimal_to_scaled_integer`, x)
+    .Call(`_hydrorecipes_decimal_to_scaled_integer`, x)
 }
 
 gcd <- function(x) {
-    .Call(`_frecipes_gcd`, x)
+    .Call(`_hydrorecipes_gcd`, x)
 }
 
 #' @title
@@ -1139,11 +1139,11 @@ gcd <- function(x) {
 #' @noRd
 #'
 index_from_i_j <- function(i, j, n_col) {
-    .Call(`_frecipes_index_from_i_j`, i, j, n_col)
+    .Call(`_hydrorecipes_index_from_i_j`, i, j, n_col)
 }
 
 get_column_number <- function(n) {
-    .Call(`_frecipes_get_column_number`, n)
+    .Call(`_hydrorecipes_get_column_number`, n)
 }
 
 #' @title
@@ -1160,7 +1160,7 @@ get_column_number <- function(n) {
 #' @noRd
 #'
 index_from_j_i <- function(i, j, n_col) {
-    .Call(`_frecipes_index_from_j_i`, i, j, n_col)
+    .Call(`_hydrorecipes_index_from_j_i`, i, j, n_col)
 }
 
 #' @title
@@ -1177,7 +1177,7 @@ index_from_j_i <- function(i, j, n_col) {
 #' @noRd
 #'
 next_n_eigen <- function(n) {
-    .Call(`_frecipes_next_n_eigen`, n)
+    .Call(`_hydrorecipes_next_n_eigen`, n)
 }
 
 #' @title
@@ -1195,7 +1195,7 @@ next_n_eigen <- function(n) {
 #' @noRd
 #'
 pad_vector <- function(x, n_old, n_new) {
-    .Call(`_frecipes_pad_vector`, x, n_old, n_new)
+    .Call(`_hydrorecipes_pad_vector`, x, n_old, n_new)
 }
 
 #' @title
@@ -1211,7 +1211,7 @@ pad_vector <- function(x, n_old, n_new) {
 #' @noRd
 #'
 detrend_matrix <- function(x) {
-    .Call(`_frecipes_detrend_matrix`, x)
+    .Call(`_hydrorecipes_detrend_matrix`, x)
 }
 
 #' @title
@@ -1227,7 +1227,7 @@ detrend_matrix <- function(x) {
 #' @noRd
 #'
 detrend_vector <- function(x) {
-    .Call(`_frecipes_detrend_vector`, x)
+    .Call(`_hydrorecipes_detrend_vector`, x)
 }
 
 #' @title
@@ -1243,7 +1243,7 @@ detrend_vector <- function(x) {
 #' @noRd
 #'
 demean_matrix <- function(x) {
-    .Call(`_frecipes_demean_matrix`, x)
+    .Call(`_hydrorecipes_demean_matrix`, x)
 }
 
 #' @title
@@ -1259,7 +1259,7 @@ demean_matrix <- function(x) {
 #' @noRd
 #'
 demean_vector <- function(x) {
-    .Call(`_frecipes_demean_vector`, x)
+    .Call(`_hydrorecipes_demean_vector`, x)
 }
 
 #' @title
@@ -1277,7 +1277,7 @@ demean_vector <- function(x) {
 #' @noRd
 #'
 detrend_and_demean_matrix <- function(x, detrend, demean) {
-    .Call(`_frecipes_detrend_and_demean_matrix`, x, detrend, demean)
+    .Call(`_hydrorecipes_detrend_and_demean_matrix`, x, detrend, demean)
 }
 
 #' @title
@@ -1295,7 +1295,7 @@ detrend_and_demean_matrix <- function(x, detrend, demean) {
 #' @noRd
 #'
 detrend_and_demean_list <- function(x, detrend, demean) {
-    .Call(`_frecipes_detrend_and_demean_list`, x, detrend, demean)
+    .Call(`_hydrorecipes_detrend_and_demean_list`, x, detrend, demean)
 }
 
 #' @title
@@ -1313,7 +1313,7 @@ detrend_and_demean_list <- function(x, detrend, demean) {
 #' @noRd
 #'
 modified_daniell <- function(spans) {
-    .Call(`_frecipes_modified_daniell`, spans)
+    .Call(`_hydrorecipes_modified_daniell`, spans)
 }
 
 #' @title
@@ -1332,7 +1332,7 @@ modified_daniell <- function(spans) {
 #' @noRd
 #'
 kernel_apply <- function(x, y) {
-    .Call(`_frecipes_kernel_apply`, x, y)
+    .Call(`_hydrorecipes_kernel_apply`, x, y)
 }
 
 #' @title
@@ -1351,7 +1351,7 @@ kernel_apply <- function(x, y) {
 #' @noRd
 #'
 kernel_apply_list <- function(x, y) {
-    .Call(`_frecipes_kernel_apply_list`, x, y)
+    .Call(`_hydrorecipes_kernel_apply_list`, x, y)
 }
 
 #' @title
@@ -1368,7 +1368,7 @@ kernel_apply_list <- function(x, y) {
 #' @noRd
 #'
 spec_taper <- function(n_row, p) {
-    .Call(`_frecipes_spec_taper`, n_row, p)
+    .Call(`_hydrorecipes_spec_taper`, n_row, p)
 }
 
 #' @title
@@ -1390,7 +1390,7 @@ spec_taper <- function(n_row, p) {
 #' @noRd
 #'
 make_groups <- function(n_groups, n) {
-    .Call(`_frecipes_make_groups`, n_groups, n)
+    .Call(`_hydrorecipes_make_groups`, n_groups, n)
 }
 
 #' @title
@@ -1410,7 +1410,7 @@ make_groups <- function(n_groups, n) {
 #' @noRd
 #'
 power_spaced <- function(n, min, max, power) {
-    .Call(`_frecipes_power_spaced`, n, min, max, power)
+    .Call(`_hydrorecipes_power_spaced`, n, min, max, power)
 }
 
 #' @title
@@ -1429,7 +1429,7 @@ power_spaced <- function(n, min, max, power) {
 #' @noRd
 #'
 group_frequency <- function(frequencies, n_groups) {
-    .Call(`_frecipes_group_frequency`, frequencies, n_groups)
+    .Call(`_hydrorecipes_group_frequency`, frequencies, n_groups)
 }
 
 #' @title
@@ -1447,11 +1447,11 @@ group_frequency <- function(frequencies, n_groups) {
 #' @noRd
 #'
 determine_frequency <- function(n) {
-    .Call(`_frecipes_determine_frequency`, n)
+    .Call(`_hydrorecipes_determine_frequency`, n)
 }
 
 check_ffts <- function(x, cutoff) {
-    .Call(`_frecipes_check_ffts`, x, cutoff)
+    .Call(`_hydrorecipes_check_ffts`, x, cutoff)
 }
 
 #' @title
@@ -1470,11 +1470,11 @@ check_ffts <- function(x, cutoff) {
 #' @noRd
 #'
 which_indices <- function(x, knots) {
-    .Call(`_frecipes_which_indices`, x, knots)
+    .Call(`_hydrorecipes_which_indices`, x, knots)
 }
 
 gamma_inc <- function(u, a) {
-    .Call(`_frecipes_gamma_inc`, u, a)
+    .Call(`_hydrorecipes_gamma_inc`, u, a)
 }
 
 #' @title
@@ -1493,67 +1493,67 @@ gamma_inc <- function(u, a) {
 #'
 #' @export
 bessel_k_cplx <- function(x, nu, expon_scaled, n_seq) {
-    .Call(`_frecipes_bessel_k_cplx`, x, nu, expon_scaled, n_seq)
+    .Call(`_hydrorecipes_bessel_k_cplx`, x, nu, expon_scaled, n_seq)
 }
 
 stehfest_v <- function(n) {
-    .Call(`_frecipes_stehfest_v`, n)
+    .Call(`_hydrorecipes_stehfest_v`, n)
 }
 
 stehfest_p <- function(time, n_terms) {
-    .Call(`_frecipes_stehfest_p`, time, n_terms)
+    .Call(`_hydrorecipes_stehfest_p`, time, n_terms)
 }
 
 cohen_p <- function(time, n_terms) {
-    .Call(`_frecipes_cohen_p`, time, n_terms)
+    .Call(`_hydrorecipes_cohen_p`, time, n_terms)
 }
 
 cohen_c <- function(d, n_terms) {
-    .Call(`_frecipes_cohen_c`, d, n_terms)
+    .Call(`_hydrorecipes_cohen_c`, d, n_terms)
 }
 
 cooper_bredehoeft_papadopulos_laplace <- function(time, r, r_c, r_w, Tr, S, h_0, n_terms) {
-    .Call(`_frecipes_cooper_bredehoeft_papadopulos_laplace`, time, r, r_c, r_w, Tr, S, h_0, n_terms)
+    .Call(`_hydrorecipes_cooper_bredehoeft_papadopulos_laplace`, time, r, r_c, r_w, Tr, S, h_0, n_terms)
 }
 
 papadopulos_cooper_laplace <- function(time, Q, r, r_c, r_w, Tr, S, prec, n_terms) {
-    .Call(`_frecipes_papadopulos_cooper_laplace`, time, Q, r, r_c, r_w, Tr, S, prec, n_terms)
+    .Call(`_hydrorecipes_papadopulos_cooper_laplace`, time, Q, r, r_c, r_w, Tr, S, prec, n_terms)
 }
 
 jacob_lohman_laplace <- function(time, s, r, Tr, S, prec, n_terms) {
-    .Call(`_frecipes_jacob_lohman_laplace`, time, s, r, Tr, S, prec, n_terms)
+    .Call(`_hydrorecipes_jacob_lohman_laplace`, time, s, r, Tr, S, prec, n_terms)
 }
 
 hantush_jacob_laplace <- function(time, c, r, Tr, S, Q, prec, n_terms) {
-    .Call(`_frecipes_hantush_jacob_laplace`, time, c, r, Tr, S, Q, prec, n_terms)
+    .Call(`_hydrorecipes_hantush_jacob_laplace`, time, c, r, Tr, S, Q, prec, n_terms)
 }
 
 barker_herbert <- function(time, radius, radius_patch, t_1, t_2, s_1, s_2, Q, prec, n_terms) {
-    .Call(`_frecipes_barker_herbert`, time, radius, radius_patch, t_1, t_2, s_1, s_2, Q, prec, n_terms)
+    .Call(`_hydrorecipes_barker_herbert`, time, radius, radius_patch, t_1, t_2, s_1, s_2, Q, prec, n_terms)
 }
 
 parallel_fractures_solute <- function(time, z, x, concentration_influent, time_influent, c_0, b, B, v, alpha_l, D_star, k_f, k_m, t_half, rho_b, theta, tortuosity, n_terms) {
-    .Call(`_frecipes_parallel_fractures_solute`, time, z, x, concentration_influent, time_influent, c_0, b, B, v, alpha_l, D_star, k_f, k_m, t_half, rho_b, theta, tortuosity, n_terms)
+    .Call(`_hydrorecipes_parallel_fractures_solute`, time, z, x, concentration_influent, time_influent, c_0, b, B, v, alpha_l, D_star, k_f, k_m, t_half, rho_b, theta, tortuosity, n_terms)
 }
 
 parallel_fractures_heat <- function(time, z, x, temperature_influent, time_influent, t_0, b, B, v, lambda_fracture, lambda_matrix, spec_heat_w, spec_heat_s, rho_w, rho_s, theta, n_terms) {
-    .Call(`_frecipes_parallel_fractures_heat`, time, z, x, temperature_influent, time_influent, t_0, b, B, v, lambda_fracture, lambda_matrix, spec_heat_w, spec_heat_s, rho_w, rho_s, theta, n_terms)
+    .Call(`_hydrorecipes_parallel_fractures_heat`, time, z, x, temperature_influent, time_influent, t_0, b, B, v, lambda_fracture, lambda_matrix, spec_heat_w, spec_heat_s, rho_w, rho_s, theta, n_terms)
 }
 
 check_lag <- function(n, lag, n_shift) {
-    .Call(`_frecipes_check_lag`, n, lag, n_shift)
+    .Call(`_hydrorecipes_check_lag`, n, lag, n_shift)
 }
 
 get_length <- function(n, n_subset) {
-    .Call(`_frecipes_get_length`, n, n_subset)
+    .Call(`_hydrorecipes_get_length`, n, n_subset)
 }
 
 get_start <- function(n_out, lag, n_subset) {
-    .Call(`_frecipes_get_start`, n_out, lag, n_subset)
+    .Call(`_hydrorecipes_get_start`, n_out, lag, n_subset)
 }
 
 get_end <- function(n, n_out, lag, n_subset) {
-    .Call(`_frecipes_get_end`, n, n_out, lag, n_subset)
+    .Call(`_hydrorecipes_get_end`, n, n_out, lag, n_subset)
 }
 
 #' @title
@@ -1571,7 +1571,7 @@ get_end <- function(n, n_out, lag, n_subset) {
 #' @noRd
 #'
 shift_subset <- function(x, lag, n_subset, n_shift) {
-    .Call(`_frecipes_shift_subset`, x, lag, n_subset, n_shift)
+    .Call(`_hydrorecipes_shift_subset`, x, lag, n_subset, n_shift)
 }
 
 #' @title
@@ -1593,15 +1593,15 @@ shift_subset <- function(x, lag, n_subset, n_shift) {
 #' @noRd
 #'
 lag_list <- function(x, lags, n_subset, n_shift) {
-    .Call(`_frecipes_lag_list`, x, lags, n_subset, n_shift)
+    .Call(`_hydrorecipes_lag_list`, x, lags, n_subset, n_shift)
 }
 
 llt_solve <- function(X, Y) {
-    .Call(`_frecipes_llt_solve`, X, Y)
+    .Call(`_hydrorecipes_llt_solve`, X, Y)
 }
 
 llt_fitted <- function(X, Y) {
-    .Call(`_frecipes_llt_fitted`, X, Y)
+    .Call(`_hydrorecipes_llt_fitted`, X, Y)
 }
 
 #' @title
@@ -1625,75 +1625,75 @@ llt_fitted <- function(X, Y) {
 #' @noRd
 #'
 ogata_banks_ind <- function(D, v, C0, x, t) {
-    .Call(`_frecipes_ogata_banks_ind`, D, v, C0, x, t)
+    .Call(`_hydrorecipes_ogata_banks_ind`, D, v, C0, x, t)
 }
 
 ogata_banks_vec <- function(D, v, C0, x, t) {
-    .Call(`_frecipes_ogata_banks_vec`, D, v, C0, x, t)
+    .Call(`_hydrorecipes_ogata_banks_vec`, D, v, C0, x, t)
 }
 
 ogata_banks_decay_ind <- function(c0, v, D, R, k, x, t) {
-    .Call(`_frecipes_ogata_banks_decay_ind`, c0, v, D, R, k, x, t)
+    .Call(`_hydrorecipes_ogata_banks_decay_ind`, c0, v, D, R, k, x, t)
 }
 
 ogata_banks_decay_vec <- function(c0, v, D, R, k, x, t) {
-    .Call(`_frecipes_ogata_banks_decay_vec`, c0, v, D, R, k, x, t)
+    .Call(`_hydrorecipes_ogata_banks_decay_vec`, c0, v, D, R, k, x, t)
 }
 
 scale_list_param <- function(x, center, scale) {
-    .Call(`_frecipes_scale_list_param`, x, center, scale)
+    .Call(`_hydrorecipes_scale_list_param`, x, center, scale)
 }
 
 scale_list_param_std <- function(x, center, scale) {
-    .Call(`_frecipes_scale_list_param_std`, x, center, scale)
+    .Call(`_hydrorecipes_scale_list_param_std`, x, center, scale)
 }
 
 scale_list_param_eigen <- function(x, center, scale) {
-    .Call(`_frecipes_scale_list_param_eigen`, x, center, scale)
+    .Call(`_hydrorecipes_scale_list_param_eigen`, x, center, scale)
 }
 
 cor_list_eigen <- function(x, center, scale) {
-    .Call(`_frecipes_cor_list_eigen`, x, center, scale)
+    .Call(`_hydrorecipes_cor_list_eigen`, x, center, scale)
 }
 
 pca_list_eigen <- function(x, center, scale, prep = TRUE) {
-    .Call(`_frecipes_pca_list_eigen`, x, center, scale, prep)
+    .Call(`_hydrorecipes_pca_list_eigen`, x, center, scale, prep)
 }
 
 scale_list_matrix_eigen <- function(x, center = TRUE, scale = TRUE) {
-    .Call(`_frecipes_scale_list_matrix_eigen`, x, center, scale)
+    .Call(`_hydrorecipes_scale_list_matrix_eigen`, x, center, scale)
 }
 
 pca_list_rotation_eigen <- function(x, center, scale, n_comp) {
-    .Call(`_frecipes_pca_list_rotation_eigen`, x, center, scale, n_comp)
+    .Call(`_hydrorecipes_pca_list_rotation_eigen`, x, center, scale, n_comp)
 }
 
 pca_eigen <- function(x, center = TRUE, scale = TRUE) {
-    .Call(`_frecipes_pca_eigen`, x, center, scale)
+    .Call(`_hydrorecipes_pca_eigen`, x, center, scale)
 }
 
 cor_eigen <- function(X) {
-    .Call(`_frecipes_cor_eigen`, X)
+    .Call(`_hydrorecipes_cor_eigen`, X)
 }
 
 pca <- function(x, center = TRUE, scale = TRUE) {
-    .Call(`_frecipes_pca`, x, center, scale)
+    .Call(`_hydrorecipes_pca`, x, center, scale)
 }
 
 pca_with_params <- function(x, center, scale) {
-    .Call(`_frecipes_pca_with_params`, x, center, scale)
+    .Call(`_hydrorecipes_pca_with_params`, x, center, scale)
 }
 
 pca_list_with_params <- function(x, center, scale) {
-    .Call(`_frecipes_pca_list_with_params`, x, center, scale)
+    .Call(`_hydrorecipes_pca_list_with_params`, x, center, scale)
 }
 
 fi <- function(x, vec, rightmost_closed, all_inside, left_open) {
-    .Call(`_frecipes_fi`, x, vec, rightmost_closed, all_inside, left_open)
+    .Call(`_hydrorecipes_fi`, x, vec, rightmost_closed, all_inside, left_open)
 }
 
 to_dummy_list_base <- function(x, n_fact) {
-    .Call(`_frecipes_to_dummy_list_base`, x, n_fact)
+    .Call(`_hydrorecipes_to_dummy_list_base`, x, n_fact)
 }
 
 #' @title
@@ -1711,7 +1711,7 @@ to_dummy_list_base <- function(x, n_fact) {
 #' @noRd
 #'
 to_dummy <- function(ind, one_hot) {
-    .Call(`_frecipes_to_dummy`, ind, one_hot)
+    .Call(`_hydrorecipes_to_dummy`, ind, one_hot)
 }
 
 #' @title
@@ -1730,11 +1730,11 @@ to_dummy <- function(ind, one_hot) {
 #' @noRd
 #'
 to_dummy_list <- function(x, vec, one_hot = FALSE, rightmost_closed = FALSE, all_inside = FALSE, left_open = FALSE) {
-    .Call(`_frecipes_to_dummy_list`, x, vec, one_hot, rightmost_closed, all_inside, left_open)
+    .Call(`_hydrorecipes_to_dummy_list`, x, vec, one_hot, rightmost_closed, all_inside, left_open)
 }
 
 weeks_1979 <- function(lag, D, L, precision, inverse) {
-    .Call(`_frecipes_weeks_1979`, lag, D, L, precision, inverse)
+    .Call(`_hydrorecipes_weeks_1979`, lag, D, L, precision, inverse)
 }
 
 #' @title
@@ -1764,10 +1764,10 @@ weeks_1979 <- function(lag, D, L, precision, inverse) {
 #' @noRd
 #'
 vadose_response <- function(time, air_diffusivity, thickness, precision, inverse) {
-    .Call(`_frecipes_vadose_response`, time, air_diffusivity, thickness, precision, inverse)
+    .Call(`_hydrorecipes_vadose_response`, time, air_diffusivity, thickness, precision, inverse)
 }
 
 vadose_response2 <- function(time, air_diffusivity, thickness, precision, inverse) {
-    .Call(`_frecipes_vadose_response2`, time, air_diffusivity, thickness, precision, inverse)
+    .Call(`_hydrorecipes_vadose_response2`, time, air_diffusivity, thickness, precision, inverse)
 }
 

@@ -12,7 +12,7 @@ step_find_interval(.rec, terms, vec, role = "predictor", ...)
 \item{terms}{the unquoted names of the variables to use or a selector
 function.  terms replaces the `...` of the recipes package but requires
 variables to be included within `c()`.  For example to include variables x
-and y you would write `c(x,y)` in the frecipes package.}
+and y you would write `c(x,y)` in the hydrorecipes package.}
 
 \item{vec}{a vector of break points}
 

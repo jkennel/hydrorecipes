@@ -1,4 +1,4 @@
-// #include "frecipes.h"
+// #include "hydrorecipes.h"
 //
 // using namespace boost::math;
 //
@@ -234,24 +234,24 @@
 // y <- rnorm(10)
 // x2 <- log(2.0) / x
 //
-// frecipes:::stehfest_v(12L)
-// frecipes:::stehfest_p(as.numeric(1:n), 12L)
+// hydrorecipes:::stehfest_v(12L)
+// hydrorecipes:::stehfest_p(as.numeric(1:n), 12L)
 //
 // barker_herbert(as.numeric(1:n), 100.0, 200.0, 1.0, 1e-3, 1e-3, 1e-5, 1e-5)
 //
-// (frecipes:::stehfest_barker_herbert(as.numeric(1:n),1.0, 100.0, 200.0, 1.0, 1e-3, 1e-3, 1e-5, 1e-5, 12L))
+// (hydrorecipes:::stehfest_barker_herbert(as.numeric(1:n),1.0, 100.0, 200.0, 1.0, 1e-3, 1e-3, 1e-5, 1e-5, 12L))
 //
 //
 // n <- 1000000
 // bench::mark(
-// (frecipes:::stehfest_barker_herbert(as.numeric(1:n), 1.0,
+// (hydrorecipes:::stehfest_barker_herbert(as.numeric(1:n), 1.0,
 //                                     100.0, 200.0,  1e-3, 1e-3, 1e-5, 1e-5, 12L)[[1]])
 // )
 //
 //
 // n <- 100000
 // bench::mark(
-//   x <- (frecipes:::stehfest_theis_large_diameter(
+//   x <- (hydrorecipes:::stehfest_theis_large_diameter(
 //     as.numeric(1:n)/1,
 //     0.1,
 //     100.0,
@@ -261,7 +261,7 @@
 //     12L)[[1]])
 // )
 // plot(x, type = 'l', log = 'xy')
-// points(frecipes:::grf_time(radius = 100.0,
+// points(hydrorecipes:::grf_time(radius = 100.0,
 //                            1e-5,
 //                            1e-4,
 //                            1.0,
@@ -270,11 +270,11 @@
 //                            2.0)[[1]], type = 'l',
 //        col = 'red')
 // abline(a = 0, b = 1)
-// frecipes:::grf_time()
+// hydrorecipes:::grf_time()
 // n <- 100
 // bench::mark(
 // barker_herbert(as.numeric(1:n), 100.0, 200.0, 1.0, 1e-3, 1e-3, 1e-5, 1e-5),
-// (frecipes:::stehfest_barker_herbert(as.numeric(1:n),
+// (hydrorecipes:::stehfest_barker_herbert(as.numeric(1:n),
 //                                     1.0,
 //                                     100.0, 200.0,
 //                                     1e-3, 1e-3, 1e-5, 1e-5, 12L)[[1]])

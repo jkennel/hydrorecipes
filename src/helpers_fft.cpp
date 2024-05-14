@@ -1,4 +1,4 @@
-#include "frecipes.h"
+#include "hydrorecipes.h"
 
 //==============================================================================
 //' @title
@@ -1072,12 +1072,12 @@ x <- abs(rnorm(n))
 
 
 bench::mark(
-  (frecipes:::lg4(100.0)),
-  (frecipes:::lg4(0.01)),
-  (frecipes:::lg3(0.0, 100.0)),
-  (frecipes:::lg2(100.0, 0.0)),
-  (frecipes:::lg2(0.0, 100.0)),
-  (frecipes:::lg2(0.0, 0.01)),
+  (hydrorecipes:::lg4(100.0)),
+  (hydrorecipes:::lg4(0.01)),
+  (hydrorecipes:::lg3(0.0, 100.0)),
+  (hydrorecipes:::lg2(100.0, 0.0)),
+  (hydrorecipes:::lg2(0.0, 100.0)),
+  (hydrorecipes:::lg2(0.0, 0.01)),
   expint:::expint(100.0),
   expint:::expint(0.01),
   check = FALSE
@@ -1085,38 +1085,38 @@ bench::mark(
 
 
 bench::mark(
-(frecipes:::gamma_inc(x, 0.0)),
+(hydrorecipes:::gamma_inc(x, 0.0)),
 (expint::gammainc(0.0, x))
 )
 
 bench::mark(
-  (frecipes:::gamma_inc(x, -0.5)),
+  (hydrorecipes:::gamma_inc(x, -0.5)),
   (expint::gammainc(-0.5, x))
 )
 
 bench::mark(
-  (frecipes:::gamma_inc(x, 1.0)),
+  (hydrorecipes:::gamma_inc(x, 1.0)),
   (expint::gammainc(1.0, x))
 )
 
 bench::mark(
-  (frecipes:::gamma_inc(x, 2.2)),
+  (hydrorecipes:::gamma_inc(x, 2.2)),
   (expint::gammainc(2.2, x))
 )
 
 bench::mark(
-  (frecipes:::gamma_inc(x, 3.0)),
+  (hydrorecipes:::gamma_inc(x, 3.0)),
   (expint::gammainc(3.0, x)),
 )
 
-head((frecipes:::gamma_inc(x, 1.2)))
+head((hydrorecipes:::gamma_inc(x, 1.2)))
 head((expint::gammainc(1.2, x)))
 
 bench::mark(
 
-# head(frecipes:::lg2(2.0, x)),
+# head(hydrorecipes:::lg2(2.0, x)),
 head(expint::gammainc(2.0,x)),
-head(frecipes:::lg(a, x)),
+head(hydrorecipes:::lg(a, x)),
 check=TRUE
 
 )
@@ -1125,22 +1125,22 @@ head(expint::gammainc(1.0,x))
 head(expint::gammainc(2.0,x))
 head(expint::gammainc(3.0,x))
 head(expint_Ei(-x))
-head(frecipes:::ei(x))
-head(frecipes:::exp_int(x[1]))
+head(hydrorecipes:::ei(x))
+head(hydrorecipes:::exp_int(x[1]))
 
 a <- rep(1.0, 5)
 x <- c(0.2, 2.5, 5, 8, 10)
 gammainc(a[1], x)
 gammainc(-a[1], x)
-head((frecipes:::lg2(a, x)) * abs(a))
-head((frecipes:::lg(a, x)) * abs(a))
+head((hydrorecipes:::lg2(a, x)) * abs(a))
+head((hydrorecipes:::lg(a, x)) * abs(a))
 
 gammainc(a[1], c(0.2, 2.5, 5, 8, 10))
 gammainc(c(0.2, 2.5, 5, 8, 10), a[1])
 
-head(frecipes:::lg(a, c(0.2,2.5, 5, 8, 10)) * 1.0 / abs(a))
+head(hydrorecipes:::lg(a, c(0.2,2.5, 5, 8, 10)) * 1.0 / abs(a))
 
 
-head(frecipes:::lg2(a, -c(0.2,2.5, 5, 8, 10)))
+head(hydrorecipes:::lg2(a, -c(0.2,2.5, 5, 8, 10)))
 gammainc(-a[1], c(0.2, 2.5, 5, 8, 10))
 */

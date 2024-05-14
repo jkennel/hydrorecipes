@@ -1,4 +1,4 @@
-#include "frecipes.h"
+#include "hydrorecipes.h"
 
 //==============================================================================
 //' @title
@@ -215,10 +215,10 @@ sincos <- function(time, frequency, start, cycle_size) {
 
 
 bench::mark(
-  h0 <- frecipes:::harmonic_list(time, frequency, 0, 86400),
+  h0 <- hydrorecipes:::harmonic_list(time, frequency, 0, 86400),
   # h1 <- sincos(time, frequency, 0, 86400),
-  # h1 <- frecipes:::harmonic_list_2(t, vec, 0, 86400),
-  # h1 <- frecipes:::harmonic_std_list(t, vec, 0, 86400),
+  # h1 <- hydrorecipes:::harmonic_list_2(t, vec, 0, 86400),
+  # h1 <- hydrorecipes:::harmonic_std_list(t, vec, 0, 86400),
   check = FALSE
 )
 

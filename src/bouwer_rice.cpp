@@ -1,4 +1,4 @@
-#include "frecipes.h"
+#include "hydrorecipes.h"
 
 // http://hydrotools.sourceforge.net/
 // [[Rcpp::export]]
@@ -131,23 +131,23 @@ double bouwer_rice(arma::vec time,
 
 
 /***R
-library(data.table)
-data(bouwer)
-bw <- as.data.table(bouwer)
-
-rc <- 4/2/12        # radius of 2 inches
-rw <- 8.25/2/12     # radius of screen
-Le <- 10            # screen length
-y0 <- 1.44          # initial drawdown
-Lw <- 17.92         # height of water above screen bottom
-wl <- 6.08          # static wl
-H  <- 18.92         # height of water level above base
-t  <- as.numeric(bouwer$datetime - bouwer$datetime[1])    # elapsed time
-y  <- wl - bouwer$val                                     # change in wl
-
-
-a <- bouwer_rice(t, y, rw, rc, Le, Lw, H)
-
-a * 86400
+# library(data.table)
+# data(bouwer)
+# bw <- as.data.table(bouwer)
+#
+# rc <- 4/2/12        # radius of 2 inches
+# rw <- 8.25/2/12     # radius of screen
+# Le <- 10            # screen length
+# y0 <- 1.44          # initial drawdown
+# Lw <- 17.92         # height of water above screen bottom
+# wl <- 6.08          # static wl
+# H  <- 18.92         # height of water level above base
+# t  <- as.numeric(bouwer$datetime - bouwer$datetime[1])    # elapsed time
+# y  <- wl - bouwer$val                                     # change in wl
+#
+#
+# a <- bouwer_rice(t, y, rw, rc, Le, Lw, H)
+#
+# a * 86400
 
 */

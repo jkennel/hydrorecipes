@@ -1,4 +1,4 @@
-#include "frecipes.h"
+#include "hydrorecipes.h"
 
 //==============================================================================
 //' @title
@@ -396,21 +396,21 @@ l <- list(y,y,y,y,y,y,
 
 n_lags <- 20
 max_lag <- 86400
-ll <- as.numeric(frecipes:::log_lags_arma(n_lags, max_lag))
+ll <- as.numeric(hydrorecipes:::log_lags_arma(n_lags, max_lag))
 
-sp <- frecipes:::b_spline_list3(y, df = 0L, degree = 3L,internal_knots = ll[2:19], boundary_knots = c(ll[1], ll[length(ll)]))
+sp <- hydrorecipes:::b_spline_list3(y, df = 0L, degree = 3L,internal_knots = ll[2:19], boundary_knots = c(ll[1], ll[length(ll)]))
 bench::mark(
-  a <- frecipes:::convolve_list(x, sp, TRUE, TRUE),
-  b <- frecipes:::convolve_list2(x, sp, TRUE, TRUE),
+  a <- hydrorecipes:::convolve_list(x, sp, TRUE, TRUE),
+  b <- hydrorecipes:::convolve_list2(x, sp, TRUE, TRUE),
   check = FALSE
 )
 
 
 bench::mark(
-  # frecipes:::b_spline_list(y, df = 0L, degree = 3L,internal_knots = ll[2:19], boundary_knots = c(ll[1], ll[length(ll)])),
-  # frecipes:::b_spline_list2(y, df = 0L, degree = 3L,internal_knots = ll[2:19], boundary_knots = c(ll[1], ll[length(ll)])),
-# ((frecipes:::distributed_lag_list(x, 20, 1e5, 0, 3, ll[2:19], c(ll[1], ll[length(ll)]), TRUE, FALSE, 0, FALSE))[[1]]),
-((frecipes:::distributed_lag_list3(x,
+  # hydrorecipes:::b_spline_list(y, df = 0L, degree = 3L,internal_knots = ll[2:19], boundary_knots = c(ll[1], ll[length(ll)])),
+  # hydrorecipes:::b_spline_list2(y, df = 0L, degree = 3L,internal_knots = ll[2:19], boundary_knots = c(ll[1], ll[length(ll)])),
+# ((hydrorecipes:::distributed_lag_list(x, 20, 1e5, 0, 3, ll[2:19], c(ll[1], ll[length(ll)]), TRUE, FALSE, 0, FALSE))[[1]]),
+((hydrorecipes:::distributed_lag_list3(x,
                                    n_lags,
                                    max_lag,
                                    0,
@@ -418,9 +418,9 @@ bench::mark(
                                    ll[2:(n_lags-1)],
                                    c(ll[1], ll[length(ll)]),
                                    TRUE, FALSE, 0, FALSE))[[1]]),
-#a <- frecipes:::convolve_list(x, l, TRUE, TRUE),
-# a <- frecipes:::convolve_list(x, l, FALSE, FALSE),
-# a <- frecipes:::convolve_matrix(x, m, TRUE, TRUE),
+#a <- hydrorecipes:::convolve_list(x, l, TRUE, TRUE),
+# a <- hydrorecipes:::convolve_list(x, l, FALSE, FALSE),
+# a <- hydrorecipes:::convolve_matrix(x, m, TRUE, TRUE),
 # test(x,y,ll),
 check = FALSE,
 min_iterations = 1
@@ -431,8 +431,8 @@ b <- rnorm(nextn(1e7))
 bench::mark(fftw::FFT(a), fftw::FFT(b), check = FALSE)
 
 
-# bench::mark(frecipes:::convolve_overlap_save_list(x, k, TRUE),
-#             frecipes:::convolve_overlap_save_list(x, k, FALSE),
+# bench::mark(hydrorecipes:::convolve_overlap_save_list(x, k, TRUE),
+#             hydrorecipes:::convolve_overlap_save_list(x, k, FALSE),
 #             check = FALSE)
 
 */

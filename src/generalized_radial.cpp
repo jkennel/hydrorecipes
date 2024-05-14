@@ -1,4 +1,4 @@
-#include "frecipes.h"
+#include "hydrorecipes.h"
 
 
 //==============================================================================
@@ -645,154 +645,154 @@ Eigen::VectorXd ig(Eigen::ArrayXd a, Eigen::ArrayXd u) {
 
 
 /*** R
-x <- 1.0
-
-ig(rep(3.0, 1), 1.0)
-
-
-y <- rev(sort(abs(rnorm(1000000))))
-x <- 1/y
-bench::mark(
-frecipes:::binary_search(x, y)
-)
-
-x <- rnorm(1e6)
-y <- 1.2
-bench::mark(
-frecipes:::well_function_coefficient_rcpp(x,y),
-frecipes:::well_function_coefficient_vec(x,y),
-check = FALSE
-)
-
-x <- abs(rnorm(1000000))
-bench::mark(
-            frecipes:::ei_sp_vec(x),
-            frecipes:::ei_vec(x),
-            frecipes:::ei_eigen(x),
-            iterations = 1)
-
-n <- 1e5
-storativity = 1e-5
-radius = 50
-transmissivity = 1e-3
-leakage <- 100
-times <- as.numeric(1:n)
-flow_rates <- rep(1, n)#abs(rnorm(n))
-n_terms <- 12L
-
-bench::mark(
-
-  tmp <- frecipes:::hantush_jacob(
-    times,
-    flow_rates,
-    radius,
-    storativity,
-    transmissivity,
-    leakage,
-    n_terms)[[1]],
-
-  tmp2 <- aquifer:::hantush_convolve(radius,
-                                     storativity,
-                                     transmissivity,
-                                     leakage,
-                                     times,
-                                     flow_rates,
-                                     n_terms),
-  check = FALSE
-)
-
-# x <- rnorm(100000)
-# bench::mark(frecipes:::convolve_overlap_add(x,x),
-#             frecipes:::convolve_filter(x,x,TRUE, TRUE), check = FALSE)
-
-plot(tmp2[1:1000], col = 'red', type = 'l', log = 'xy')
-points(tmp[1:1000], type = 'l', log = 'xy')
-
-x <- sort(abs(rnorm(500)))
-bench::mark(
-  # frecipes:::hantush_well_vec(x, 0.01, 10),
-  # frecipes:::hantush_well_e(x, 0.01, 10),
-  frecipes:::hantush_well_rcpp(x, 0.01, 10),
-  aquifer:::hantush_well_parallel(x, 0.01, 10),
-  check = FALSE
-)
-
-
-bench::mark(
-  frecipes:::hantush_jacob(x, rep(0.01, length(x)),
-                           radius = 10, 1e-6, 1e-3, 1, 20),
-  sapply(1:100, function(x) aquifer:::hantush_well_single(0.1, 0.01, 10)),
-  check = FALSE
-)
-
-x <- abs(rnorm(10000))
-bench::mark(
-  frecipes:::bessel_eigen(x),
-  frecipes:::bessel_rcpp(x),
-  besselK(x, 1),
-  Bessel::BesselK(x, 1)
-)
-
-library(expint)
-x <- abs(rnorm(10000))
-bench::mark(frecipes:::gis(x, 0.0),
-            frecipes:::gis2(x),
-            check = FALSE)
-
-n <- 100
-time <- seq(1, n, 1)
-flow_rate <- rep(0.001, n)
-thickness <- 10
-radius <- 5
-specific_storage_1 <- 1e-5
-hydraulic_conductivity_1 <- 1e-5
-specific_storage_2 <- 5e-6
-hydraulic_conductivity_2 <- 5e-6
-diffusivity_1 <- hydraulic_conductivity_1 / specific_storage_1
-diffusivity_2 <- hydraulic_conductivity_2 / specific_storage_2
-bench::mark(
-
-grf_1 <- frecipes:::grf_time(radius,
-                             specific_storage_1,
-                             hydraulic_conductivity_1,
-                             thickness,
-                             time,
-                             flow_rate,
-                             flow_dimension = 2)
-)
-plot(grf_1[[1]], type = 'l', log = 'xy')
-points(grf_1[[1]], type = 'l', col = 'red')
-points(grf_1[[1]], type = 'l', col = 'blue')
-specific_storage <- 0.5e-5
-hydraulic_conductivity <- 0.5e-5
-grf_2 <- grf_time(radius,
-                  specific_storage_2,
-                  hydraulic_conductivity_2,
-                  thickness,
-                  time,
-                  flow_rate,
-                  flow_dimension = 2)
-
-dat <- data.table(time, grf_1, grf_2)
-fit_1 <- lm(grf_1~log(time), tail(dat, 4000))
-fit_2 <- lm(grf_2~log(time), tail(dat, 4000))
-summary(fit_1)
-summary(fit_2)
-plot(grf_2, log = 'x', type = 'l', xlab = "Elapsed time", ylab = "drawdown")
-abline(h = 0, col = 'grey')
-points(grf_1, type = 'l', col = 'red')
-
-dat[, pred_1 := predict(fit_1, dat)]
-dat[, pred_2 := predict(fit_2, dat)]
-
-points(pred_1~time, dat, type = 'l', col = 'red', lty = 2)
-points(pred_2~time, dat, type = 'l', lty = 2)
-
-frecipes:::eig(1,1)
-library(expint)
-gammainc(1,1)
-gammainc(-1,1)
-frecipes:::eig(1,1)
-frecipes:::eig(1,0)
+# x <- 1.0
+#
+# ig(rep(3.0, 1), 1.0)
+#
+#
+# y <- rev(sort(abs(rnorm(1000000))))
+# x <- 1/y
+# bench::mark(
+# hydrorecipes:::binary_search(x, y)
+# )
+#
+# x <- rnorm(1e6)
+# y <- 1.2
+# bench::mark(
+# hydrorecipes:::well_function_coefficient_rcpp(x,y),
+# hydrorecipes:::well_function_coefficient_vec(x,y),
+# check = FALSE
+# )
+#
+# x <- abs(rnorm(1000000))
+# bench::mark(
+#             hydrorecipes:::ei_sp_vec(x),
+#             hydrorecipes:::ei_vec(x),
+#             hydrorecipes:::ei_eigen(x),
+#             iterations = 1)
+#
+# n <- 1e5
+# storativity = 1e-5
+# radius = 50
+# transmissivity = 1e-3
+# leakage <- 100
+# times <- as.numeric(1:n)
+# flow_rates <- rep(1, n)#abs(rnorm(n))
+# n_terms <- 12L
+#
+# bench::mark(
+#
+#   tmp <- hydrorecipes:::hantush_jacob(
+#     times,
+#     flow_rates,
+#     radius,
+#     storativity,
+#     transmissivity,
+#     leakage,
+#     n_terms)[[1]],
+#
+#   tmp2 <- aquifer:::hantush_convolve(radius,
+#                                      storativity,
+#                                      transmissivity,
+#                                      leakage,
+#                                      times,
+#                                      flow_rates,
+#                                      n_terms),
+#   check = FALSE
+# )
+#
+# # x <- rnorm(100000)
+# # bench::mark(hydrorecipes:::convolve_overlap_add(x,x),
+# #             hydrorecipes:::convolve_filter(x,x,TRUE, TRUE), check = FALSE)
+#
+# plot(tmp2[1:1000], col = 'red', type = 'l', log = 'xy')
+# points(tmp[1:1000], type = 'l', log = 'xy')
+#
+# x <- sort(abs(rnorm(500)))
+# bench::mark(
+#   # hydrorecipes:::hantush_well_vec(x, 0.01, 10),
+#   # hydrorecipes:::hantush_well_e(x, 0.01, 10),
+#   hydrorecipes:::hantush_well_rcpp(x, 0.01, 10),
+#   aquifer:::hantush_well_parallel(x, 0.01, 10),
+#   check = FALSE
+# )
+#
+#
+# bench::mark(
+#   hydrorecipes:::hantush_jacob(x, rep(0.01, length(x)),
+#                            radius = 10, 1e-6, 1e-3, 1, 20),
+#   sapply(1:100, function(x) aquifer:::hantush_well_single(0.1, 0.01, 10)),
+#   check = FALSE
+# )
+#
+# x <- abs(rnorm(10000))
+# bench::mark(
+#   hydrorecipes:::bessel_eigen(x),
+#   hydrorecipes:::bessel_rcpp(x),
+#   besselK(x, 1),
+#   Bessel::BesselK(x, 1)
+# )
+#
+# library(expint)
+# x <- abs(rnorm(10000))
+# bench::mark(hydrorecipes:::gis(x, 0.0),
+#             hydrorecipes:::gis2(x),
+#             check = FALSE)
+#
+# n <- 100
+# time <- seq(1, n, 1)
+# flow_rate <- rep(0.001, n)
+# thickness <- 10
+# radius <- 5
+# specific_storage_1 <- 1e-5
+# hydraulic_conductivity_1 <- 1e-5
+# specific_storage_2 <- 5e-6
+# hydraulic_conductivity_2 <- 5e-6
+# diffusivity_1 <- hydraulic_conductivity_1 / specific_storage_1
+# diffusivity_2 <- hydraulic_conductivity_2 / specific_storage_2
+# bench::mark(
+#
+# grf_1 <- hydrorecipes:::grf_time(radius,
+#                              specific_storage_1,
+#                              hydraulic_conductivity_1,
+#                              thickness,
+#                              time,
+#                              flow_rate,
+#                              flow_dimension = 2)
+# )
+# plot(grf_1[[1]], type = 'l', log = 'xy')
+# points(grf_1[[1]], type = 'l', col = 'red')
+# points(grf_1[[1]], type = 'l', col = 'blue')
+# specific_storage <- 0.5e-5
+# hydraulic_conductivity <- 0.5e-5
+# grf_2 <- grf_time(radius,
+#                   specific_storage_2,
+#                   hydraulic_conductivity_2,
+#                   thickness,
+#                   time,
+#                   flow_rate,
+#                   flow_dimension = 2)
+#
+# dat <- data.table(time, grf_1, grf_2)
+# fit_1 <- lm(grf_1~log(time), tail(dat, 4000))
+# fit_2 <- lm(grf_2~log(time), tail(dat, 4000))
+# summary(fit_1)
+# summary(fit_2)
+# plot(grf_2, log = 'x', type = 'l', xlab = "Elapsed time", ylab = "drawdown")
+# abline(h = 0, col = 'grey')
+# points(grf_1, type = 'l', col = 'red')
+#
+# dat[, pred_1 := predict(fit_1, dat)]
+# dat[, pred_2 := predict(fit_2, dat)]
+#
+# points(pred_1~time, dat, type = 'l', col = 'red', lty = 2)
+# points(pred_2~time, dat, type = 'l', lty = 2)
+#
+# hydrorecipes:::eig(1,1)
+# library(expint)
+# gammainc(1,1)
+# gammainc(-1,1)
+# hydrorecipes:::eig(1,1)
+# hydrorecipes:::eig(1,0)
 
 */

@@ -73,7 +73,7 @@ StepBaroHarmonic <- R6Class(
       formula_txt <- paste0(paste(nms[-1], collapse = '+'), "~", nms[1])
 
       # include linear trend and intercept
-      harmonics <- frecipes::Recipe$new(formula = as.formula(formula_txt), new_data)$
+      harmonics <- Recipe$new(formula = as.formula(formula_txt), new_data)$
         add_step(StepIntercept$new())$
         add_step(StepHarmonic$new(time_col,
                                   frequency = self$frequency,

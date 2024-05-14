@@ -1,4 +1,4 @@
-#include "frecipes.h"
+#include "hydrorecipes.h"
 
 // [[Rcpp::export]]
 double any_decimal(std::vector<double> x)
@@ -67,8 +67,8 @@ unsigned int gcd(std::vector<unsigned int> x)
 /*** R
 
 bench::mark(
-  frecipes:::gcd(sample(seq(0, 1000000, 10), 20, replace = TRUE)),
-  frecipes:::any_decimal(c(sample(seq(0, 1000000, 10)), 1.1, 2.02)),
+  hydrorecipes:::gcd(sample(seq(0, 1000000, 10), 20, replace = TRUE)),
+  hydrorecipes:::any_decimal(c(sample(seq(0, 1000000, 10)), 1.1, 2.02)),
   check = FALSE
 )
 

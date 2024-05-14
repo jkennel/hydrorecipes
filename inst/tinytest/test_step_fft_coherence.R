@@ -14,6 +14,6 @@
 #   step_fft_coherence() |>
 #   plate("df")
 #
-# tinytest::expect_equivalent(frec1, frec2,
-#                             info = "R6 and frecipes api are equivalent")
+# expect_equivalent(frec1, frec2,
+#                             info = "R6 and hydrorecipes api are equivalent")
 

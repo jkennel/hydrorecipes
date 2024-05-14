@@ -37,9 +37,9 @@ Tr <- 10 # transmissivity of aquifer, m^2/d
 S <- 1e-5 # storage coefficient of aquifer, -
 rw <- 0.15 # radius of well, m
 prec <- 1e-8
-jl <- frecipes:::jacob_lohman_laplace(times, s, rw, Tr, S, prec, 12L)
+jl <- hydrorecipes:::jacob_lohman_laplace(times, s, rw, Tr, S, prec, 12L)
 
-tinytest::expect_equivalent(jl, m[, 2], tolerance = 1e-4, "c++ version")
+expect_equivalent(jl, m[, 2], tolerance = 1e-4, "c++ version")
 
 
 
@@ -48,31 +48,31 @@ formula <- formula(times~.)
 dat <- data.frame(times = m[,1])
 
 
-frec = Recipe$new(formula = formula, data = dat)$
-  add_step(StepAquiferConstantDrawdown$new(time = times,
-                                           drawdown = 10,
-                                           thickness = 10,
-                                           radius_well = 0.15,
-                                           specific_storage = 1e-6,
-                                           hydraulic_conductivity = 1,
-                                           n_terms = 12L))$
+frec = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepAquiferConstantDrawdown$new(time = times,
+                                                      drawdown = 10,
+                                                      thickness = 10,
+                                                      radius_well = 0.15,
+                                                      specific_storage = 1e-6,
+                                                      hydraulic_conductivity = 1,
+                                                      n_terms = 12L))$
   prep()$
   bake()
 
 
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-frec = Recipe$new(formula = formula, data = dat)$
-  add_step(StepAquiferConstantDrawdown$new(time = times,
-                                           drawdown = 10,
-                                           thickness = 10,
-                                           radius_well = 0.15,
-                                           specific_storage = 1e-6,
-                                           hydraulic_conductivity = 1,
-                                           n_terms = 12L))$
+frec = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepAquiferConstantDrawdown$new(time = times,
+                                                      drawdown = 10,
+                                                      thickness = 10,
+                                                      radius_well = 0.15,
+                                                      specific_storage = 1e-6,
+                                                      hydraulic_conductivity = 1,
+                                                      n_terms = 12L))$
   plate("tbl")
 
-tinytest::expect_equivalent(frec[[2]], m[, 2],
+expect_equivalent(frec[[2]], m[, 2],
                             tolerance = 1e-4,
                             info = "R6 api")
 
@@ -89,7 +89,7 @@ frec = recipe(formula = formula, data = dat) |>
   plate("tbl")
 
 
-tinytest::expect_equivalent(frec[[2]], m[, 2],
+expect_equivalent(frec[[2]], m[, 2],
                             tolerance = 1e-4,
-                            info = "frecipes api")
+                            info = "hydrorecipes api")
 

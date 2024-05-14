@@ -7,23 +7,23 @@ dat <- data.frame(x = rnorm(rows),
 
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# frecipes version
-frec_false = Recipe$new(formula = formula, data = dat)$
-  add_step(StepCheckNA$new(x))$
+# hydrorecipes version
+frec_false = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepCheckNA$new(x))$
   prep()$
   bake()$
   get_step_data("check")
-tinytest::expect_equivalent(frec_false[[1]], FALSE,
+expect_equivalent(unlist(frec_false[[1]][["x"]]), FALSE,
                             info = "No NAs present")
 
 
 dat[10,1:3] <- NA_real_
-frec_true = Recipe$new(formula = formula, data = dat)$
-  add_step(StepCheckNA$new(y))$
+frec_true = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepCheckNA$new(y))$
   prep()$
   bake()$
   get_step_data("check")
-tinytest::expect_equivalent(frec_true, TRUE,
+expect_equivalent(unlist(frec_true[[1]][["y"]]), TRUE,
                             info = "NAs present")
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -33,10 +33,10 @@ frec1 = recipe(formula = formula, data = dat) |>
   prep() |>
   bake()
 
-frec2 = Recipe$new(formula = formula, data = dat)$
-  add_step(StepCheckNA$new(x))$bake()
+frec2 = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepCheckNA$new(x))$bake()
 
 
-tinytest::expect_equivalent(frec1$get_step_data("check"), frec2$get_step_data("check"),
-                            info = "R6 and frecipes api are equivalent")
+expect_equivalent(frec1$get_step_data("check"), frec2$get_step_data("check"),
+                            info = "R6 and hydrorecipes api are equivalent")
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

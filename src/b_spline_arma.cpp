@@ -1,4 +1,4 @@
-#include "frecipes.h"
+#include "hydrorecipes.h"
 
 //' @title
 //' b_spline_list
@@ -242,9 +242,9 @@ m <- sort(rnorm(n))
 bk <- range(m)
 knots <- quantile(bk, probs = seq(0.05, 0.95, 0.3))
 bench::mark(
-  tmp <- frecipes:::b_spline_list(m, 0L, 3L, knots, bk),
-  tmp <- frecipes:::b_spline_list2(m, 0L, 3L, knots, bk),
-  tmp <- frecipes:::b_spline_list3(m, 0L, 3L, knots, bk),
+  tmp <- hydrorecipes:::b_spline_list(m, 0L, 3L, knots, bk),
+  tmp <- hydrorecipes:::b_spline_list2(m, 0L, 3L, knots, bk),
+  tmp <- hydrorecipes:::b_spline_list3(m, 0L, 3L, knots, bk),
   check = FALSE,
   min_iterations = 5
 )

@@ -9,26 +9,26 @@ frec1 = recipe(formula = formula, data = dat) |>
                    flow_rate = y) |>
   plate("dt")
 
-frec2 = Recipe$new(formula = formula, data = dat)$
-                 add_step(StepAquiferGRF$new(time = x,
+frec2 = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+                 add_step(hydrorecipes:::StepAquiferGRF$new(time = x,
                                              flow_rate = y))$
                  plate("dt")
 
 
-tinytest::expect_equivalent(frec1, frec2,
-                            info = "R6 and frecipes api are equivalent")
+expect_equivalent(frec1, frec2,
+                            info = "R6 and hydrorecipes api are equivalent")
 
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-frec1 = Recipe$new(formula = formula, data = dat)$
-  add_step(StepAquiferTheis$new(time = x,
+frec1 = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepAquiferTheis$new(time = x,
                               flow_rate = y))$
   plate("dt")
 
-frec2 = Recipe$new(formula = formula, data = dat)$
-  add_step(StepAquiferGRF$new(time = x,
+frec2 = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepAquiferGRF$new(time = x,
                               flow_rate = y))$
   plate("dt")
 
-tinytest::expect_equivalent(frec1[[2]], frec2[, 2],
+expect_equivalent(frec1[[2]], frec2[, 2],
                             info = "Theis and GRF (radial) are equivalent")

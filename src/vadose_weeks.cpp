@@ -1,4 +1,4 @@
-#include "frecipes.h"
+#include "hydrorecipes.h"
 
 //==============================================================================
 // [[Rcpp::export]]
@@ -131,11 +131,11 @@ Rcpp::NumericVector vadose_response2(const Rcpp::NumericVector time,
 /***R
 
 bench::mark(
-tmp <- frecipes:::vadose_response(time = as.numeric(0:(43200*100)),
+tmp <- hydrorecipes:::vadose_response(time = as.numeric(0:(43200*100)),
                        air_diffusivity = 0.20, thickness = 40,
                        precision = 1e-12,
                        inverse = FALSE),
-# tmp2 <- frecipes:::vadose_response2(time = as.numeric(0:(43200*100)),
+# tmp2 <- hydrorecipes:::vadose_response2(time = as.numeric(0:(43200*100)),
 #                        air_diffusivity = 0.20, thickness = 40,
 #                        precision = 1e-12,
 #                        inverse = FALSE),

@@ -1,4 +1,4 @@
-#include "frecipes.h"
+#include "hydrorecipes.h"
 
 // Ogata, A., Banks, R.B., 1961. A solution of the differential equation of
 // longitudinal dispersion in porous media. U. S. Geol. Surv. Prof. Pap. 411-A.
@@ -359,18 +359,18 @@ Rcpp::NumericVector ogata_banks_decay_vec(
 x <- abs(rnorm(2000000))
 bench::mark(
   pracma::erfc(x),
-  frecipes:::eer(x),
-  frecipes:::er(x),
-  (frecipes:::aer(x)),
-  frecipes:::pp(x),
+  hydrorecipes:::eer(x),
+  hydrorecipes:::er(x),
+  (hydrorecipes:::aer(x)),
+  hydrorecipes:::pp(x),
   check = FALSE
 )
 
 a <- rnorm(10000000)
 
 bench::mark(
-  frecipes:::pp(a),
-  frecipes:::eer(a),
+  hydrorecipes:::pp(a),
+  hydrorecipes:::eer(a),
   check = FALSE
 
 )
@@ -384,16 +384,16 @@ x <- 1:50000
 t <- 1:50
 
 bench::mark(
-  # frecipes:::ogata_banks(D = D, R = R, decay = decay,
+  # hydrorecipes:::ogata_banks(D = D, R = R, decay = decay,
   #                        v = v, C0 = C0, x = x,
   #                        t = t),
-  # frecipes:::ogata_banks2(D = D, R = R, decay = decay,
+  # hydrorecipes:::ogata_banks2(D = D, R = R, decay = decay,
   #                         v = v, C0 = C0, x = x,
   #                         t = t),
-  # frecipes:::ogata_banks3(D = D, R = R, decay = decay,
+  # hydrorecipes:::ogata_banks3(D = D, R = R, decay = decay,
   #                         v = v, C0 = C0, x = x,
   #                         t = t),
-  frecipes:::ogata_banks_list(D = D, R = R, decay = decay,
+  hydrorecipes:::ogata_banks_list(D = D, R = R, decay = decay,
                               v = v, C0 = C0, x = x,
                               t = t),
   check = FALSE

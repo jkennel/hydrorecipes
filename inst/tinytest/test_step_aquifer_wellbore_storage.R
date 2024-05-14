@@ -41,7 +41,7 @@ rc = 0.15
 r = 0.15
 Q = 10
 prec <- 1e-8
-pc <- frecipes:::papadopulos_cooper_laplace(times,
+pc <- hydrorecipes:::papadopulos_cooper_laplace(times,
                                            Q,
                                            r,
                                            rc,
@@ -51,7 +51,7 @@ pc <- frecipes:::papadopulos_cooper_laplace(times,
                                            prec, 12L)
 # plot(x=times, y=pc, log= 'x', type = 'l')
 
-tinytest::expect_equivalent(pc, m[, 3], tolerance = 5e-4)
+expect_equivalent(pc, m[, 3], tolerance = 5e-4)
 
 
 
@@ -59,7 +59,7 @@ tinytest::expect_equivalent(pc, m[, 3], tolerance = 5e-4)
 # bench::mark(
 #
 # times1 <-  10^seq(-6, 3, 0.001),#seq(1, 86400*1, length.out = 1000000)/86400
-# pc1 <- frecipes:::papadopulos_cooper_laplace(times1,
+# pc1 <- hydrorecipes:::papadopulos_cooper_laplace(times1,
 #                                             Q,
 #                                             r,
 #                                             rc,
@@ -68,7 +68,7 @@ tinytest::expect_equivalent(pc, m[, 3], tolerance = 5e-4)
 #                                             S,
 #                                             prec, 8L),
 # times2 <-  seq(0.1, 86400*1, length.out = 1000000)/86400,
-# pc2 <- frecipes:::papadopulos_cooper_laplace(times2,
+# pc2 <- hydrorecipes:::papadopulos_cooper_laplace(times2,
 #                                              Q,
 #                                              r,
 #                                              rc,

@@ -1,5 +1,5 @@
 data(bouwer)
-bw <- as.data.table(bouwer)
+bw <- as.data.frame(bouwer)
 
 rc <- 4/2/12        # radius of 2 inches
 rw <- 8.25/2/12     # radius of screen
@@ -14,7 +14,7 @@ y  <- wl - bouwer$val                                     # change in wl
 
 a <- bouwer_rice(t, y, rw, rc, Le, Lw, H)
 
-tinytest::expect_equivalent(a * 86400, 4.5, tolerance = 1e-2)
+expect_equivalent(a * 86400, 4.5, tolerance = 1e-2)
 
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -27,8 +27,8 @@ tinytest::expect_equivalent(a * 86400, 4.5, tolerance = 1e-2)
 #   plate("dt")
 #
 #
-# tinytest::expect_equivalent(frec1, frec2,
-#                             info = "R6 and frecipes api are equivalent")
+# expect_equivalent(frec1, frec2,
+#                             info = "R6 and hydrorecipes api are equivalent")
 
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

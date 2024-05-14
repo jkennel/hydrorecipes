@@ -1,4 +1,4 @@
-#include "frecipes.h"
+#include "hydrorecipes.h"
 
 
 // [[Rcpp::export]]
@@ -489,7 +489,7 @@ x <- sort(rnorm(2e7))
 vec = -7:7
 
 bench::mark(
-  frecipes:::to_dummy_list(x, vec),
+  hydrorecipes:::to_dummy_list(x, vec),
   iterations = 10
 )
 

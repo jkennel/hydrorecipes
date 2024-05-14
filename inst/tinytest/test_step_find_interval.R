@@ -5,12 +5,12 @@ dat <- data.frame(x = rnorm(rows),
                   y = 1:rows,
                   z = rnorm(rows))
 
-frec = Recipe$new(formula = formula, data = dat)$
-  add_step(StepFindInterval$new(x, vec = c(-0.1, 0.0, 0.1)))$
+frec = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepFindInterval$new(x, vec = c(-0.1, 0.0, 0.1)))$
   plate("tbl")
 
 frec1 = recipe(formula = formula, data = dat) |>
   step_find_interval(x, vec = c(-0.1, 0.0, 0.1)) |>
   plate("tbl")
 
-tinytest::expect_equivalent(frec, frec1, info = "StepFindInterval with R6 api")
+expect_equivalent(frec, frec1, info = "StepFindInterval with R6 api")

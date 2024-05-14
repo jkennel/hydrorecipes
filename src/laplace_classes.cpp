@@ -13,7 +13,7 @@
 //
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-#include "frecipes.h"
+#include "hydrorecipes.h"
 
 
 //' @title
@@ -1226,7 +1226,7 @@ n <- 10000
 time = c(0, 1:86400)
 # CooperBredehoeftPapadopulos well(time, r, r_c, r_w, Tr, S, h_0);
 
-kern_slug <- frecipes:::cooper_bredehoeft_papadopulos_laplace(time,
+kern_slug <- hydrorecipes:::cooper_bredehoeft_papadopulos_laplace(time,
                         r = 0.10,
                         r_c = 0.10,
                         r_w = 0.10,
@@ -1250,18 +1250,18 @@ times <- round(2*c(seq(0, 3000000, by = 60), 60), 0)
 flow_rate <- rep(Q, n)
 
 bench::mark(
-  a <- frecipes:::jacob_lohman_laplace(times, rw, Tr, s, S, prec, n_terms),
-  b <- frecipes:::hantush_jacob(times, flow_rate, rw,S,Tr, lab, prec),
-  # c <- frecipes:::hantush_jacob_quad(times, lab, rw, Tr, S, Q, 1e-16),
-  # c <- frecipes:::barker_herbert(times, c, rw, Tr, S, Q, prec, 12L),
+  a <- hydrorecipes:::jacob_lohman_laplace(times, rw, Tr, s, S, prec, n_terms),
+  b <- hydrorecipes:::hantush_jacob(times, flow_rate, rw,S,Tr, lab, prec),
+  # c <- hydrorecipes:::hantush_jacob_quad(times, lab, rw, Tr, S, Q, 1e-16),
+  # c <- hydrorecipes:::barker_herbert(times, c, rw, Tr, S, Q, prec, 12L),
   check = FALSE
 )
 
 bench::mark(
-  a <- frecipes:::hantush_jacob_laplace(times, cc, rw, Tr, S, Q, prec, n_terms),
-  b <- frecipes:::hantush_jacob(times, flow_rate, rw,S,Tr, lab, prec),
-  # c <- frecipes:::hantush_jacob_quad(times, lab, rw, Tr, S, Q, 1e-16),
-  # c <- frecipes:::barker_herbert(times, c, rw, Tr, S, Q, prec, 12L),
+  a <- hydrorecipes:::hantush_jacob_laplace(times, cc, rw, Tr, S, Q, prec, n_terms),
+  b <- hydrorecipes:::hantush_jacob(times, flow_rate, rw,S,Tr, lab, prec),
+  # c <- hydrorecipes:::hantush_jacob_quad(times, lab, rw, Tr, S, Q, 1e-16),
+  # c <- hydrorecipes:::barker_herbert(times, c, rw, Tr, S, Q, prec, 12L),
   check = FALSE
 )
 
@@ -1272,7 +1272,7 @@ s <- 10
 Tr = 10 # transmissivity of aquifer, m^2/d
 S = 1e-5 # storage coefficient of aquifer, -
 rw = 0.15 # radius of well, m
-a <- frecipes:::jacob_lohman_laplace(times, rw, Tr, s, S, prec, 16L)[[1]]
+a <- hydrorecipes:::jacob_lohman_laplace(times, rw, Tr, s, S, prec, 16L)[[1]]
 a <- (2.0 * pi * rw * Tr) * a
 plot(y = abs(a), x=times, type = "l", log = "xy")
 
@@ -1285,7 +1285,7 @@ rw = 0.15 # radius of well, m
 rc = 0.15
 r = 0.15
 Q = 10
-a <- frecipes:::papadopulos_cooper_laplace(times,
+a <- hydrorecipes:::papadopulos_cooper_laplace(times,
                                            Q,
                                            r,
                                            rc,
@@ -1319,7 +1319,7 @@ int n_terms
 #                                  rho_b,
 #                                  theta);
 
-lap <- frecipes:::parallel_fractures_chem(
+lap <- hydrorecipes:::parallel_fractures_chem(
   seq(1, 20000, length.out = 1000), # time
   5.86/4, # z
   0.0, # x
@@ -1344,7 +1344,7 @@ lap <- frecipes:::parallel_fractures_chem(
 plot(lap, type = "l", ylim = c(0,1))
 
 
-lap <- frecipes:::parallel_fractures_chem(
+lap <- hydrorecipes:::parallel_fractures_chem(
   seq(1, 10000, length.out = 10000), # time
   0.5, # z
   0.1, # x

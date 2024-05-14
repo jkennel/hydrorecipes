@@ -5,19 +5,19 @@ dat <- data.frame(x = rnorm(rows),
                   y = as.numeric(1:rows),
                   z = rnorm(rows))
 
-frec1 = Recipe$new(formula = formula, data = dat)$
-  add_step(StepDistributedLag$new(x,
-                                  knots = frecipes:::log_lags_arma(6, 86401)))$
+frec1 = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepDistributedLag$new(x,
+                                             knots = hydrorecipes:::log_lags_arma(6, 86401)))$
   prep()$
   bake()
 
 frec2 = recipe(formula = formula, data = dat) |>
-  step_distributed_lag(x, knots = frecipes:::log_lags_arma(6, 86401)) |>
+  step_distributed_lag(x, knots = hydrorecipes:::log_lags_arma(6, 86401)) |>
   prep() |>
   bake()
 
-tinytest::expect_equivalent(frec1, frec2,
-                            info = "R6 and frecipes api are equivalent")
+expect_equivalent(frec1$result, frec2$result,
+                  info = "R6 and hydrorecipes api are equivalent")
 
 
 
@@ -26,26 +26,26 @@ tinytest::expect_equivalent(frec1, frec2,
 n <- 2e4
 m <- sort(rnorm(n))
 bk <- range(m)
-knots <- quantile(bk, probs = seq(0.05, 0.95, 0.3))
+knots <- collapse::fquantile(bk, probs = seq(0.05, 0.95, 0.3))
 
-fr <- (qM(frecipes:::b_spline_list(x = m,
-                                   df = 0L,
-                                   degree = 3L,
-                                   internal_knots = knots,
-                                   boundary_knots = bk,
-                                   complete_basis = TRUE,
-                                   periodic = FALSE,
-                                   derivs = 0,
-                                   integral = FALSE)))
+fr <- (collapse::qM(hydrorecipes:::b_spline_list(x = m,
+                                             df = 0L,
+                                             degree = 3L,
+                                             internal_knots = knots,
+                                             boundary_knots = bk,
+                                             complete_basis = TRUE,
+                                             periodic = FALSE,
+                                             derivs = 0,
+                                             integral = FALSE)))
 bs <- unclass(splines2::bSpline(m,
-               knots = knots,
-               Boundary.knots = bk,
-               intercept = TRUE))
+                                knots = knots,
+                                Boundary.knots = bk,
+                                intercept = TRUE))
 
-tinytest::expect_equivalent(fr, bs,
-                            info = "splines2 and frecipes are equivalent (intercept)")
+expect_equivalent(fr, bs,
+                  info = "splines2 and hydrorecipes are equivalent (intercept)")
 
-fr <- (qM(frecipes:::b_spline_list(x = m,
+fr <- (collapse::qM(hydrorecipes:::b_spline_list(x = m,
                                    df = 0L,
                                    degree = 3L,
                                    internal_knots = knots,
@@ -55,17 +55,17 @@ fr <- (qM(frecipes:::b_spline_list(x = m,
                                    derivs = 0,
                                    integral = FALSE)))
 bs <- unclass(splines2::bSpline(m,
-               knots = knots,
-               Boundary.knots = bk,
-               intercept = FALSE))
+                                knots = knots,
+                                Boundary.knots = bk,
+                                intercept = FALSE))
 
-tinytest::expect_equivalent(fr, bs,
-                            info = "splines2 and frecipes are equivalent (no intercept)")
-
-
+expect_equivalent(fr, bs,
+                  info = "splines2 and hydrorecipes are equivalent (no intercept)")
 
 
-fr <- (qM(frecipes:::n_spline_list(x = m,
+
+
+fr <- (collapse::qM(hydrorecipes:::n_spline_list(x = m,
                                    df = 0L,
                                    degree = 3L,
                                    internal_knots = knots,
@@ -75,16 +75,16 @@ fr <- (qM(frecipes:::n_spline_list(x = m,
                                    derivs = 0,
                                    integral = FALSE)))
 ns <- unclass(splines2::naturalSpline(m,
-                      knots = knots,
-                      Boundary.knots = bk,
-                      intercept = FALSE))
+                                      knots = knots,
+                                      Boundary.knots = bk,
+                                      intercept = FALSE))
 sns <- splines::ns(m,knots = knots, Boundary.knots = bk, intercept = FALSE)
 
-tinytest::expect_equivalent(fr, ns,
-                            info = "splines2 and frecipes are equivalent (no intercept)")
+expect_equivalent(fr, ns,
+                  info = "splines2 and hydrorecipes are equivalent (no intercept)")
 
 
-fr <- (qM(frecipes:::n_spline_list(x = m,
+fr <- (collapse::qM(hydrorecipes:::n_spline_list(x = m,
                                    df = 0L,
                                    degree = 3L,
                                    internal_knots = knots,
@@ -94,13 +94,13 @@ fr <- (qM(frecipes:::n_spline_list(x = m,
                                    derivs = 0,
                                    integral = FALSE)))
 ns <- unclass(splines2::naturalSpline(m,
-                            knots = knots,
-                            Boundary.knots = bk,
-                            intercept = TRUE))
+                                      knots = knots,
+                                      Boundary.knots = bk,
+                                      intercept = TRUE))
 sns <- splines::ns(m,knots = knots, Boundary.knots = bk, intercept = TRUE)
 
-tinytest::expect_equivalent(fr, ns,
-                            info = "splines2 and frecipes are equivalent (no intercept)")
+expect_equivalent(fr, ns,
+                  info = "splines2 and hydrorecipes are equivalent (no intercept)")
 
 
 
@@ -137,7 +137,7 @@ tinytest::expect_equivalent(fr, ns,
 # bk <- c(0,6)
 # knots <- c(3,4,5)
 #
-# fr <- qM((frecipes:::n_spline_list(x = m,
+# fr <- qM((hydrorecipes:::n_spline_list(x = m,
 #                                  df = 0L,
 #                                  degree = 3L,
 #                                  internal_knots = knots,
@@ -149,7 +149,7 @@ tinytest::expect_equivalent(fr, ns,
 #
 #
 # n <- sort(rnorm(n * 5))
-# mm <- qM(frecipes::lag_list(n, 0:6, n_shift = 0, n_subset = 1))
+# mm <- qM(hydrorecipes::lag_list(n, 0:6, n_shift = 0, n_subset = 1))
 #
 # mm %*% (fr)
 #
@@ -176,5 +176,5 @@ tinytest::expect_equivalent(fr, ns,
 #               bk, TRUE, FALSE,
 #               0L, FALSE)
 #
-# frecipes:::convolve_list(n, fr, TRUE, TRUE)
+# hydrorecipes:::convolve_list(n, fr, TRUE, TRUE)
 #

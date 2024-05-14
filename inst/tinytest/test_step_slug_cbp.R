@@ -30,8 +30,8 @@ frec1 = recipe(formula = formula, data = dat) |>
 
 
 
-tinytest::expect_equivalent(frec1[[2]], a_01, tolerance = 1e-3,
-                            info = "R6 and frecipes api are equivalent")
+expect_equivalent(frec1[[2]], a_01, tolerance = 1e-3,
+                            info = "R6 and hydrorecipes api are equivalent")
 
 frec1 = recipe(formula = formula, data = dat) |>
   step_slug_cbp(
@@ -47,8 +47,8 @@ frec1 = recipe(formula = formula, data = dat) |>
   ) |>
   plate("dt")
 
-tinytest::expect_equivalent(frec1[[2]], a_0001, tolerance = 1e-3,
-                            info = "R6 and frecipes api are equivalent")
+expect_equivalent(frec1[[2]], a_0001, tolerance = 1e-3,
+                            info = "R6 and hydrorecipes api are equivalent")
 
 frec1 = recipe(formula = formula, data = dat) |>
   step_slug_cbp(
@@ -64,8 +64,8 @@ frec1 = recipe(formula = formula, data = dat) |>
   ) |>
   plate("dt")
 
-tinytest::expect_equivalent(frec1[[2]], a_000001, tolerance = 1e-3,
-                            info = "R6 and frecipes api are equivalent")
+expect_equivalent(frec1[[2]], a_000001, tolerance = 1e-3,
+                            info = "R6 and hydrorecipes api are equivalent")
 
 dat <- list(x = 0.0)
 h_0 <- 20
@@ -83,34 +83,34 @@ frec1 = recipe(formula = formula, data = dat) |>
   ) |>
   plate("dt")
 
-tinytest::expect_equivalent(frec1[[2]], h_0,
-                            info = "R6 and frecipes api are equivalent")
+expect_equivalent(frec1[[2]], h_0,
+                            info = "R6 and hydrorecipes api are equivalent")
 
 
 
-time = c(0, 1:86400)
-
-kern_slug <- frecipes:::cooper_bredehoeft_papadopulos_laplace(time,
-                                                              r = 0.10,
-                                                              r_c = 0.10,
-                                                              r_w = 0.10,
-                                                              S = 1e-5,
-                                                              Tr = 5e-4,
-                                                              h_0 = 1,
-                                                              n = 14L)
-
-dat <- data.table(x = time)
-frec1 = recipe(formula = formula, data = dat) |>
-  step_slug_cbp(
-    times = x,
-    radius = 0.1,
-    radius_casing = 0.1,
-    radius_well = 0.1,
-    specific_storage = 1e-5,
-    hydraulic_conductivity = 5e-4,
-    thickness = 1.0,
-    head_0 = 1.0,
-    n_terms = 14L
-  ) |>
-  plate("dt")
+# time = c(0, 1:86400)
+#
+# kern_slug <- hydrorecipes:::cooper_bredehoeft_papadopulos_laplace(time,
+#                                                               r = 0.10,
+#                                                               r_c = 0.10,
+#                                                               r_w = 0.10,
+#                                                               S = 1e-5,
+#                                                               Tr = 5e-4,
+#                                                               h_0 = 1,
+#                                                               n = 14L)
+#
+# dat <- data.table(x = time)
+# frec1 = recipe(formula = formula, data = dat) |>
+#   step_slug_cbp(
+#     times = x,
+#     radius = 0.1,
+#     radius_casing = 0.1,
+#     radius_well = 0.1,
+#     specific_storage = 1e-5,
+#     hydraulic_conductivity = 5e-4,
+#     thickness = 1.0,
+#     head_0 = 1.0,
+#     n_terms = 14L
+#   ) |>
+#   plate("dt")
 

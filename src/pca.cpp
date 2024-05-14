@@ -1,4 +1,4 @@
-#include "frecipes.h"
+#include "hydrorecipes.h"
 
 // cite https://github.com/AEBilgrau/correlateR/
 
@@ -599,162 +599,162 @@ Rcpp::List pca_list_with_params(Rcpp::List x,
 // }
 
 /*** R
-library(frecipes)
-library(collapse)
-nc <- 100
-m <- matrix(rnorm(1e7), ncol = nc)
-l <- unclass(qDF(m))
-center <- fmean(l)
-scale <- fsd(l)
-bench::mark(frecipes:::scale_list_param_eigen(l, center, scale),
-            frecipes:::scale_list_param(l, center, scale),
-            frecipes:::scale_list_param_std(l, center, scale)
-            )
-
-nc <- 100
-m <- matrix(rnorm(2e6), ncol = nc)
-l <- unclass(qDF(m))
-center <- fmean(m)
-scale <- fsd(m)
-
-bench::mark(
-a <- svd(m)$u,
-aa <- corpcor::fast.svd(m),
-b <- frecipes:::svd_eigen_jac(m),
-d <- frecipes:::svd_eigen_bdc(m),
-aaaa <- frecipes:::pca_list_eigen(l, rep(0, nc), rep(1, nc), FALSE),
-check = FALSE
-)
-
-
-library(frecipes)
-library(collapse)
-m <- as.matrix(USArrests)
-m <- matrix(rnorm(2e6), ncol = 10)
-l <- unclass(qDF(m))
-center <- fmean(m)
-scale <- fsd(m)
-bench::mark(
-  a <- frecipes:::pca(m),
-  aa <- frecipes:::pca_list(l),
-  aaaa <- frecipes:::pca_list_rotation(l, center, scale),
-  d <- frecipes:::pca_with_params(m, center, scale),
-  dd <- frecipes:::pca_list_with_params(l, center, scale),
-  # ddd <- frecipes:::pca_list_with_params(l, fmean(l), fsd(l)),
-  b <- prcomp(m,
-              retx = FALSE,
-              center = TRUE,
-              scale = TRUE,
-              tol = NULL,
-              rank = 2),
-  # e <- prcomp(m,
-  #             retx = TRUE,
-  #             center = TRUE,
-  #             scale = TRUE,
-  #             tol = NULL),
-  # f <- prcomp(m,
-  #             retx = TRUE,
-  #             center = TRUE,
-  #             scale = TRUE,
-  #             tol = NULL),
-  # g <- princomp(m,
-  #               cor = TRUE,
-  #               fix_sign = FALSE),
-  check = FALSE)
-head(a[[1]])
-head(as.matrix(b$rotation))
-(a[[2]])
-(b$sdev)
-
-fmean(m)
-a[[3]]
-
-(fsd(m))
-(a[[4]])
-
-rec <- recipe(~., data = as.data.frame(m))
-pca_trans <- rec %>%
-  step_normalize(all_numeric()) %>%
-  step_pca(all_numeric(), num_comp = 3)
-pca_estimates <- prep(pca_trans, training = USArrests)
-pca_data <- bake(pca_estimates, USArrests)
-
-mdf <- as.data.frame(m)
-bench::mark(
-  # {rec <- recipe(~., data = mdf)  |>
-  #   step_pca(all_numeric(), num_comp = 3) |>
-  #   prep() |>
-  #   bake(new_data = NULL)},
-  a <- frecipes:::pca(m, center = FALSE, scale = FALSE),
-  b <- prcomp(m,
-              retx = TRUE,
-              center = FALSE,
-              scale = FALSE,
-              tol = NULL),
-  check = FALSE
-
-)
-m <- collapse::qM(dat)
-
-
-m <- matrix(rnorm(2e6), ncol = 100)
-l <- unclass(qDF(m))
-c <- fmean(l)
-s <- fsd(l)
-bench::mark(
-
-  a <- fscale(m),
-  qM(fscale(l)),
-  # fsd(l,stable.algo=FALSE),
-  # fmean(l,stable.algo=FALSE),
-  scale(m, TRUE, TRUE),
-  d <- frecipes:::scale_list_to_matrix_2(l, fmean(l), fsd(l)),
-  b <- frecipes:::scale_list_to_matrix(l),
-  check = FALSE
-
-)
-
-
-{rec <- recipe(~., data = mdf)  |>
-    step_pca(all_numeric(), num_comp = 3) |>
-    prep()}
-
-
-library(correlateR)
-n <- 50
-m <- matrix(rnorm(2e6), ncol = n)
-l <- unclass(qDF(m))
-bench::mark(
-  # a <- fscale(m),
-  # corEigen(m),
-  # e <- frecipes:::cor_eigen(m),
-  # ee <- frecipes:::pca_eigen(l),
-  b <- fscale(l),
-  d <- frecipes:::scale_list_eigen(l),
-  d2 <- frecipes:::scale_list_param_eigen(l, d$center, d$scale),
-  dd <- frecipes:::scale_list_matrix_eigen(l),
-  ddd <- qM(frecipes:::scale_list_eigen(l)[[1]]),
-  e <- frecipes:::cor_list_eigen(l),
-  f <- frecipes:::pca_list_eigen(l, scale = TRUE, center = TRUE, prep = FALSE),
-  ff <- frecipes:::pca_list_eigen(l, scale = TRUE, center = TRUE, prep = TRUE),
-  fff <- qM(l),
-  # eeee <- frecipes:::pca(m),
-  # b <- frecipes:::scale_eigen(m),
-  # f <- frecipes:::scale_list_matrix_eigen(l),
-  g <- prcomp(m, center = TRUE, scale = TRUE),
-  h <- cor(m),
-  check = FALSE,
-  relative = FALSE
-)
-
-bench::mark(
-  a <- frecipes:::scale_param(l),
-  b <- frecipes:::scale_list_eigen(l),
-  d <- collapse::fsd(l),
-  d <- collapse::fmean(l),
-  e <- lapply(l,sd),
-  f <- lapply(l,mean),
-  check = FALSE
-)
+# library(hydrorecipes)
+# library(collapse)
+# nc <- 100
+# m <- matrix(rnorm(1e7), ncol = nc)
+# l <- unclass(qDF(m))
+# center <- fmean(l)
+# scale <- fsd(l)
+# bench::mark(hydrorecipes:::scale_list_param_eigen(l, center, scale),
+#             hydrorecipes:::scale_list_param(l, center, scale),
+#             hydrorecipes:::scale_list_param_std(l, center, scale)
+#             )
+#
+# nc <- 100
+# m <- matrix(rnorm(2e6), ncol = nc)
+# l <- unclass(qDF(m))
+# center <- fmean(m)
+# scale <- fsd(m)
+#
+# bench::mark(
+# a <- svd(m)$u,
+# aa <- corpcor::fast.svd(m),
+# b <- hydrorecipes:::svd_eigen_jac(m),
+# d <- hydrorecipes:::svd_eigen_bdc(m),
+# aaaa <- hydrorecipes:::pca_list_eigen(l, rep(0, nc), rep(1, nc), FALSE),
+# check = FALSE
+# )
+#
+#
+# library(hydrorecipes)
+# library(collapse)
+# m <- as.matrix(USArrests)
+# m <- matrix(rnorm(2e6), ncol = 10)
+# l <- unclass(qDF(m))
+# center <- fmean(m)
+# scale <- fsd(m)
+# bench::mark(
+#   a <- hydrorecipes:::pca(m),
+#   aa <- hydrorecipes:::pca_list(l),
+#   aaaa <- hydrorecipes:::pca_list_rotation(l, center, scale),
+#   d <- hydrorecipes:::pca_with_params(m, center, scale),
+#   dd <- hydrorecipes:::pca_list_with_params(l, center, scale),
+#   # ddd <- hydrorecipes:::pca_list_with_params(l, fmean(l), fsd(l)),
+#   b <- prcomp(m,
+#               retx = FALSE,
+#               center = TRUE,
+#               scale = TRUE,
+#               tol = NULL,
+#               rank = 2),
+#   # e <- prcomp(m,
+#   #             retx = TRUE,
+#   #             center = TRUE,
+#   #             scale = TRUE,
+#   #             tol = NULL),
+#   # f <- prcomp(m,
+#   #             retx = TRUE,
+#   #             center = TRUE,
+#   #             scale = TRUE,
+#   #             tol = NULL),
+#   # g <- princomp(m,
+#   #               cor = TRUE,
+#   #               fix_sign = FALSE),
+#   check = FALSE)
+# head(a[[1]])
+# head(as.matrix(b$rotation))
+# (a[[2]])
+# (b$sdev)
+#
+# fmean(m)
+# a[[3]]
+#
+# (fsd(m))
+# (a[[4]])
+#
+# rec <- recipe(~., data = as.data.frame(m))
+# pca_trans <- rec %>%
+#   step_normalize(all_numeric()) %>%
+#   step_pca(all_numeric(), num_comp = 3)
+# pca_estimates <- prep(pca_trans, training = USArrests)
+# pca_data <- bake(pca_estimates, USArrests)
+#
+# mdf <- as.data.frame(m)
+# bench::mark(
+#   # {rec <- recipe(~., data = mdf)  |>
+#   #   step_pca(all_numeric(), num_comp = 3) |>
+#   #   prep() |>
+#   #   bake(new_data = NULL)},
+#   a <- hydrorecipes:::pca(m, center = FALSE, scale = FALSE),
+#   b <- prcomp(m,
+#               retx = TRUE,
+#               center = FALSE,
+#               scale = FALSE,
+#               tol = NULL),
+#   check = FALSE
+#
+# )
+# m <- collapse::qM(dat)
+#
+#
+# m <- matrix(rnorm(2e6), ncol = 100)
+# l <- unclass(qDF(m))
+# c <- fmean(l)
+# s <- fsd(l)
+# bench::mark(
+#
+#   a <- fscale(m),
+#   qM(fscale(l)),
+#   # fsd(l,stable.algo=FALSE),
+#   # fmean(l,stable.algo=FALSE),
+#   scale(m, TRUE, TRUE),
+#   d <- hydrorecipes:::scale_list_to_matrix_2(l, fmean(l), fsd(l)),
+#   b <- hydrorecipes:::scale_list_to_matrix(l),
+#   check = FALSE
+#
+# )
+#
+#
+# {rec <- recipe(~., data = mdf)  |>
+#     step_pca(all_numeric(), num_comp = 3) |>
+#     prep()}
+#
+#
+# library(correlateR)
+# n <- 50
+# m <- matrix(rnorm(2e6), ncol = n)
+# l <- unclass(qDF(m))
+# bench::mark(
+#   # a <- fscale(m),
+#   # corEigen(m),
+#   # e <- hydrorecipes:::cor_eigen(m),
+#   # ee <- hydrorecipes:::pca_eigen(l),
+#   b <- fscale(l),
+#   d <- hydrorecipes:::scale_list_eigen(l),
+#   d2 <- hydrorecipes:::scale_list_param_eigen(l, d$center, d$scale),
+#   dd <- hydrorecipes:::scale_list_matrix_eigen(l),
+#   ddd <- qM(hydrorecipes:::scale_list_eigen(l)[[1]]),
+#   e <- hydrorecipes:::cor_list_eigen(l),
+#   f <- hydrorecipes:::pca_list_eigen(l, scale = TRUE, center = TRUE, prep = FALSE),
+#   ff <- hydrorecipes:::pca_list_eigen(l, scale = TRUE, center = TRUE, prep = TRUE),
+#   fff <- qM(l),
+#   # eeee <- hydrorecipes:::pca(m),
+#   # b <- hydrorecipes:::scale_eigen(m),
+#   # f <- hydrorecipes:::scale_list_matrix_eigen(l),
+#   g <- prcomp(m, center = TRUE, scale = TRUE),
+#   h <- cor(m),
+#   check = FALSE,
+#   relative = FALSE
+# )
+#
+# bench::mark(
+#   a <- hydrorecipes:::scale_param(l),
+#   b <- hydrorecipes:::scale_list_eigen(l),
+#   d <- collapse::fsd(l),
+#   d <- collapse::fmean(l),
+#   e <- lapply(l,sd),
+#   f <- lapply(l,mean),
+#   check = FALSE
+# )
 
 */

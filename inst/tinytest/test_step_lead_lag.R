@@ -4,8 +4,8 @@ rows <- 20
 dat <- data.frame(x = rnorm(rows),
                   y = as.numeric(1:rows),
                   z = rnorm(rows))
-frec = Recipe$new(formula = formula, data = dat)$
-  add_step(StepLeadLag$new(y, lag = 1))$
+frec = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepLeadLag$new(y, lag = 1))$
   plate("tbl")
 
 rec  = recipes::recipe(formula = formula, data = dat) |>
@@ -13,4 +13,4 @@ rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::prep() |>
   recipes::bake(new_data = NULL)
 
-tinytest::expect_equivalent(frec, rec)
+expect_equivalent(frec, rec)

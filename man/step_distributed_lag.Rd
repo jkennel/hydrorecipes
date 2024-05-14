@@ -22,7 +22,7 @@ step_distributed_lag(
 \item{terms}{the unquoted names of the variables to use or a selector
 function.  terms replaces the `...` of the recipes package but requires
 variables to be included within `c()`.  For example to include variables x
-and y you would write `c(x,y)` in the frecipes package.}
+and y you would write `c(x,y)` in the hydrorecipes package.}
 
 \item{role}{character - the name of the role}
 
@@ -44,7 +44,7 @@ dat <- data.frame(x = rnorm(rows),
                   z = rnorm(rows))
 
 frec = recipe(formula = formula, data = dat) |>
- step_distributed_lag(x, knots = frecipes:::log_lags_arma(6, 800))
+ step_distributed_lag(x, knots = hydrorecipes:::log_lags_arma(6, 800))
 
 }
 \references{

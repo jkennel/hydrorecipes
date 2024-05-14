@@ -1,4 +1,4 @@
-# frecipes (name will likely change to hydrorecipes as it is designed to replace it)
+# hydrorecipes (name will likely change to hydrorecipes as it is designed to replace it)
 
 WARNING: This package is in early stages of development and is likely to change dramatically. Names of steps and thier implementations are likely to change.
 

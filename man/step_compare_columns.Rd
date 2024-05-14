@@ -37,7 +37,7 @@ data("kennel_2020")
 
 kennel_2020[1e4, wl := 13.36]
 frec1 = recipe(wl~baro, data = kennel_2020)$
- add_step(frecipes:::StepCompareColumns$new(data = wl, compare = baro, n_sd = 15))$
+ add_step(hydrorecipes:::StepCompareColumns$new(data = wl, compare = baro, n_sd = 15))$
  prep()$
  bake()
 

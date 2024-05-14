@@ -7,9 +7,9 @@ c0 <- 1.0
 x <- 1.0
 t <- 1.4
 
-ob_1 <- frecipes:::ogata_banks_ind(D, v, c0, x, t)
+ob_1 <- hydrorecipes:::ogata_banks_ind(D, v, c0, x, t)
 
-ob_2 <- frecipes:::ogata_banks_decay_ind(c0 = c0,
+ob_2 <- hydrorecipes:::ogata_banks_decay_ind(c0 = c0,
                                        v = v,
                                        D = D,
                                        R = R,
@@ -18,14 +18,14 @@ ob_2 <- frecipes:::ogata_banks_decay_ind(c0 = c0,
                                        t = t)
 
 
-tinytest::expect_equivalent(ob_1, ob_2,
+expect_equivalent(ob_1, ob_2,
                             info = "Ogata Banks without decay and retardation are equal")
 
 
 
 
 # value from https://www.civil.uwaterloo.ca/jrcraig/pdf/OgataBanks.xlsm
-tinytest::expect_equivalent(0.838457815, ob_2,
+expect_equivalent(0.838457815, ob_2,
                             tolerance = 1e-4,
                             info = "Ogata Banks without decay and retardation are equal")
 
@@ -38,7 +38,7 @@ c0 <- 1.0
 x <- 1.0
 t <- 1.4
 
-ob_2 <- frecipes:::ogata_banks_decay_ind(c0 = c0,
+ob_2 <- hydrorecipes:::ogata_banks_decay_ind(c0 = c0,
                                          v = v,
                                          D = D,
                                          R = R,
@@ -47,7 +47,7 @@ ob_2 <- frecipes:::ogata_banks_decay_ind(c0 = c0,
                                          t = t)
 
 # value from https://www.civil.uwaterloo.ca/jrcraig/pdf/OgataBanks.xlsm
-tinytest::expect_equivalent(0.587007929, ob_2,
+expect_equivalent(0.587007929, ob_2,
                             tolerance = 1e-4,
                             info = "Ogata Banks with decay and retardation are equal")
 
@@ -59,7 +59,7 @@ c0 <- 1.0
 x <- c(-1.0, 0.0, 10000.0, 0.0, 10000.0)
 t <- c(-1.0, 0.0, 0.0, 10000.0, 10000.0)
 
-ob_2 <- frecipes:::ogata_banks_decay_vec(c0 = c0,
+ob_2 <- hydrorecipes:::ogata_banks_decay_vec(c0 = c0,
                                          v = v,
                                          D = D,
                                          R = R,
@@ -67,7 +67,7 @@ ob_2 <- frecipes:::ogata_banks_decay_vec(c0 = c0,
                                          x = x,
                                          t = t)
 
-tinytest::expect_equivalent(c(0.0, 0.0, 0.0, 1.0, 0.0), ob_2,
+expect_equivalent(c(0.0, 0.0, 0.0, 1.0, 0.0), ob_2,
                             info = "Ogata Banks with short and long values")
 
 
@@ -83,7 +83,7 @@ tinytest::expect_equivalent(c(0.0, 0.0, 0.0, 1.0, 0.0), ob_2,
 # x <- 10000.0
 # t <- 1.4
 #
-# ob_2 <- frecipes:::ogata_banks_decay_ind(c0 = c0,
+# ob_2 <- hydrorecipes:::ogata_banks_decay_ind(c0 = c0,
 #                                          v = v,
 #                                          D = D,
 #                                          R = R,

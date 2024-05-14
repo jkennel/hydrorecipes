@@ -1,4 +1,4 @@
-#include "frecipes.h"
+#include "hydrorecipes.h"
 
 
 
@@ -64,7 +64,7 @@ y <- matrix(rnorm(2000000), ncol = 10)
 # yv <- as.numeric(y)
 
 bench::mark(
-  tmp <- frecipes:::llt_solve(x,y),
+  tmp <- hydrorecipes:::llt_solve(x,y),
   tmp2 <- lm(y~x-1, model = FALSE),
   a <- x[,2:3] %*% tmp[2:3,],
   check = FALSE

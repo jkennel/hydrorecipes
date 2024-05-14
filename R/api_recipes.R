@@ -20,7 +20,7 @@
 #'
 #' @importFrom collapse fmean fsd fscale fsum fquantile fndistinct flag
 #' @importFrom collapse missing_cases varying rowbind
-#' @importFrom collapse qDF qM qF qTBL mctl
+#' @importFrom collapse qDF qM qF qTBL mctl %!in%
 #' @importFrom earthtide calc_earthtide
 #' @importFrom R6 R6Class
 #' @importFrom Bessel BesselK BesselJ BesselI
@@ -31,7 +31,9 @@
 #' @importFrom stats spec.pgram
 #' @importFrom R6 R6Class
 #'
-#' @useDynLib frecipes, .registration = TRUE
+#' @importFrom data.table rleid
+#'
+#' @useDynLib hydrorecipes, .registration = TRUE
 #'
 #' @examples
 #' dat <- data.frame(x = rnorm(10), y = rnorm(10))
@@ -563,7 +565,7 @@ step_check_spacing <- function(.rec,
 #'
 #' kennel_2020[1e4, wl := 13.36]
 #' frec1 = recipe(wl~baro, data = kennel_2020)$
-#'  add_step(frecipes:::StepCompareColumns$new(data = wl, compare = baro, n_sd = 15))$
+#'  add_step(hydrorecipes:::StepCompareColumns$new(data = wl, compare = baro, n_sd = 15))$
 #'  prep()$
 #'  bake()
 #'
@@ -605,7 +607,7 @@ step_compare_columns <- function(.rec,
 #'                   z = rnorm(rows))
 #'
 #' frec = recipe(formula = formula, data = dat) |>
-#'  step_distributed_lag(x, knots = frecipes:::log_lags_arma(6, 800))
+#'  step_distributed_lag(x, knots = hydrorecipes:::log_lags_arma(6, 800))
 #'
 step_distributed_lag <- function(.rec,
                                  terms,
@@ -1178,7 +1180,7 @@ step_ols_gap_fill <- function(.rec,
 #'
 #' frec = Recipe$new(formula = formula, data = unclass(kennel_2020))$
 #'   add_step(StepDistributedLag$new(baro,
-#'                                   knots = frecipes:::log_lags_arma(n_knots, max_lag)))$
+#'                                   knots = hydrorecipes:::log_lags_arma(n_knots, max_lag)))$
 #'   add_step(StepSplineB$new(datetime, df = deg_free, intercept = FALSE))$
 #'   add_step(StepIntercept$new())$
 #'   add_step(StepDropColumns$new(baro))$
@@ -1250,7 +1252,7 @@ step_pca <- function(.rec,
 #' @param terms the unquoted names of the variables to use or a selector
 #'   function.  terms replaces the `...` of the recipes package but requires
 #'   variables to be included within `c()`.  For example to include variables x
-#'   and y you would write `c(x,y)` in the frecipes package.
+#'   and y you would write `c(x,y)` in the hydrorecipes package.
 #' @param role character - the name of the role
 #' @param skip logical - should the step be skipped
 #' @param na_rm logical - should NA values be removed from calculations
@@ -1820,7 +1822,7 @@ plate <- function(.rec, type = "dt") {
 # formula <- as.formula(y~x)
 # data <- data.frame(x = as.numeric(1:10000), y = as.numeric(1:10000))
 # dat <- data
-# frec4 <- frecipes:::recipe(formula, data) |>
+# frec4 <- hydrorecipes:::recipe(formula, data) |>
 #   step_normalize(x) |>
 #   prep() |>
 #   bake()
@@ -1834,15 +1836,15 @@ plate <- function(.rec, type = "dt") {
 #     add_step(StepScale$new(x))$
 #     prep()$
 #     bake(),
-#   frec1 <- frecipes:::recipe(formula, data) |>
+#   frec1 <- hydrorecipes:::recipe(formula, data) |>
 #     step_scale(x) |>
 #     prep() |>
 #     bake(),
-#   frec3 <- frecipes:::recipe(formula, data) |>
+#   frec3 <- hydrorecipes:::recipe(formula, data) |>
 #     step_center(x) |>
 #     prep() |>
 #     bake(),
-#   frec4 <- frecipes:::recipe(formula, data) |>
+#   frec4 <- hydrorecipes:::recipe(formula, data) |>
 #     step_normalize(x) |>
 #     prep() |>
 #     bake(),

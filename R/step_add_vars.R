@@ -18,7 +18,11 @@ StepAddVars <- R6Class(
       # get function parameters to pass to parent - strings can be passed
       is_string <- tryCatch(as.character(terms),
                             error = function(terms) (terms))
+
+
       if ("error" %in% class(is_string)) {
+        terms <- (substitute(terms))
+      } else if (!class(terms) == "character") {
         terms <- substitute(terms)
       }
 
@@ -39,8 +43,9 @@ StepAddVars <- R6Class(
     },
 
     bake = function(new_data) {
-
+      # print(new_data)
       return(unclass(new_data))
+
     }
 
   )
