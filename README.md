@@ -88,14 +88,14 @@ plot(value~x, data = resp[term == "distributed_lag_interpolated" & variable == "
 pred <- cbind(kennel_2020, rec$get_predict_data())
 
 # initial
-plot(wl~datetime, pred, type = "l")
+plot(wl~datetime, pred, type = "l", 
+       xlab = "", ylab = "Pressure (dbar)")
 
 # predicted sum of components
 points(wl_step_distributed_lag + 
        wl_step_spline_b + 
        wl_step_lead_lag + 
-       wl_step_intercept~datetime, pred, type = "l", col = "red", 
-       xlab = "", ylab = "Pressure (dbar)")
+       wl_step_intercept~datetime, pred, type = "l", col = "red")
 ```
 
 ![](README.markdown_github_files/figure-markdown_github/unnamed-chunk-1-2.png)
