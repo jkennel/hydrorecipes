@@ -129,15 +129,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 9 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100 356.15µs 445.87µs     2188.    2.05MB     6.15
-2 frec2          100 361.63µs 442.33µs     2104.      544B     6.14
-3 rec            100   1.77ms   2.17ms      452.    1.46MB     6.22
-4 frec1        10000 356.74µs 455.81µs     2139.      544B     6.15
-5 frec2        10000 372.81µs 459.45µs     2085.      544B     6.17
-6 rec          10000   1.79ms   2.13ms      464.   42.63KB     6.21
-7 frec1      1000000 374.07µs 463.79µs     1813.      544B     6.44
-8 frec2      1000000 364.53µs 451.06µs     2098.      544B     6.16
-9 rec        1000000   1.77ms   2.09ms      470.    3.82MB     6.19</code></pre>
+1 frec1          100 352.02µs  435.8µs     2242.    2.05MB     6.13
+2 frec2          100 356.62µs 457.93µs     2137.      544B     6.13
+3 rec            100   1.74ms   1.98ms      494.    1.46MB     6.18
+4 frec1        10000 350.79µs 421.57µs     2273.      544B     8.24
+5 frec2        10000 359.72µs 444.52µs     2213.      544B     6.15
+6 rec          10000   1.74ms   2.13ms      470.   42.63KB     6.38
+7 frec1      1000000  352.9µs 458.07µs     2174.      544B     6.14
+8 frec2      1000000 358.95µs 453.21µs     2204.      544B     6.15
+9 rec        1000000   1.74ms   1.99ms      490.    3.82MB     6.20</code></pre>
 </div>
 </div>
 </section>
@@ -167,15 +167,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 9 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100 497.07µs 597.39µs     1630.  547.93KB     8.30
-2 frec2          100  506.2µs 610.72µs     1589.    1.06KB     6.16
-3 rec            100   1.84ms   2.17ms      455.   73.66KB     6.21
-4 frec1        10000 499.89µs 602.85µs     1621.    1.06KB     7.12
-5 frec2        10000 499.32µs 588.24µs     1629.    1.06KB     6.13
-6 rec          10000   1.83ms   2.17ms      461.   43.16KB     6.17
-7 frec1      1000000 484.33µs 582.55µs     1684.    1.06KB     6.15
-8 frec2      1000000 495.88µs 622.76µs     1575.    1.06KB     6.13
-9 rec        1000000   1.82ms   2.14ms      458.    3.82MB     6.20</code></pre>
+1 frec1          100 487.79µs 596.63µs     1651.  547.91KB     6.16
+2 frec2          100 506.67µs 632.58µs     1571.    1.06KB     8.29
+3 rec            100   1.82ms   2.08ms      472.   73.66KB     4.09
+4 frec1        10000 491.19µs 606.34µs     1642.    1.06KB     5.02
+5 frec2        10000  493.6µs 590.02µs     1651.    1.06KB     8.22
+6 rec          10000   1.81ms   1.97ms      483.   43.16KB     6.19
+7 frec1      1000000 482.17µs 594.59µs     1670.    1.06KB     6.13
+8 frec2      1000000 497.32µs 586.72µs     1640.    1.06KB     6.14
+9 rec        1000000   1.81ms   2.12ms      470.    3.82MB     6.19</code></pre>
 </div>
 </div>
 </section>
@@ -207,17 +207,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 7
-  expression                rows      min   median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;               &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec$prep()                100  72.61µs  91.26µs   10460.    70.84KB    10.6 
-2 hydrorecipes:::prep(frec2)     100  73.31µs  91.05µs   10269.         0B    10.4 
-3 recipes::prep(rec)         100   8.63ms   9.96ms      99.6    3.92MB     6.50
-4 frec$prep()              10000  78.44µs  97.18µs    9904.         0B    10.4 
-5 hydrorecipes:::prep(frec2)   10000  79.35µs 101.06µs    9428.         0B     8.25
-6 recipes::prep(rec)       10000   8.77ms   9.67ms     102.   224.78KB     6.48
-7 frec$prep()            1000000 662.82µs 794.76µs    1259.         0B     2.02
-8 hydrorecipes:::prep(frec2) 1000000 662.29µs 781.69µs    1264.         0B     0   
-9 recipes::prep(rec)     1000000  23.54ms  24.73ms      40.8    19.1MB   106.  </code></pre>
+  expression                  rows      min  median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;                 &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:t&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 frec$prep()                  1e2  71.18µs    91µs   10023.    70.84KB    10.7 
+2 hydrorecipes:::prep(frec2)   1e2  71.89µs  89.8µs    9739.         0B    10.4 
+3 recipes::prep(rec)           1e2   8.35ms    10ms     101.     3.92MB     4.21
+4 frec$prep()                  1e4  78.02µs    98µs    9904.         0B    10.4 
+5 hydrorecipes:::prep(frec2)   1e4  77.89µs 101.9µs    9542.         0B    10.4 
+6 recipes::prep(rec)           1e4    8.4ms  10.2ms     101.   224.78KB     4.21
+7 frec$prep()                  1e6  657.9µs 766.8µs    1294.         0B     0   
+8 hydrorecipes:::prep(frec2)   1e6 660.31µs 801.4µs    1255.         0B     2.02
+9 recipes::prep(rec)           1e6  22.26ms    24ms      42.0    19.1MB    84.1 </code></pre>
 </div>
 </div>
 </section>
@@ -251,15 +251,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 9 × 7
   expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1$prep()$bake()         1e2  115.5µs  142.5µs    6602.   383.91KB    10.4 
-2 hydrorecipes::bake(hydrorecipes:…   1e2 117.85µs 145.15µs    6636.       848B    10.3 
-3 recipes::bake(recipes::p…   1e2   9.19ms  12.33ms      80.1  161.56KB     4.22
-4 frec1$prep()$bake()         1e4 134.64µs 172.47µs    5284.    78.17KB     8.29
-5 hydrorecipes::bake(hydrorecipes:…   1e4 136.35µs 173.03µs    5385.    78.17KB     8.25
-6 recipes::bake(recipes::p…   1e4  10.76ms  13.13ms      77.3  229.11KB     4.29
-7 frec1$prep()$bake()         1e6   1.48ms   1.74ms     525.     7.63MB   127.  
-8 hydrorecipes::bake(hydrorecipes:…   1e6   1.41ms   1.58ms     613.     7.63MB   123.  
-9 recipes::bake(recipes::p…   1e6  21.28ms  23.32ms      42.9   19.11MB    32.2 </code></pre>
+1 frec1$prep()$bake()         1e2 114.43µs 147.73µs    6580.   383.91KB    10.4 
+2 hydrorecipes::bake(hydro…   1e2    116µs 148.22µs    6548.       848B    10.4 
+3 recipes::bake(recipes::p…   1e2   9.02ms  10.57ms      95.7  161.56KB     5.17
+4 frec1$prep()$bake()         1e4 129.66µs  159.9µs    6004.    78.17KB     8.21
+5 hydrorecipes::bake(hydro…   1e4 131.89µs 162.27µs    5966.    78.17KB    10.3 
+6 recipes::bake(recipes::p…   1e4   8.87ms  10.07ms      98.3  229.11KB     4.18
+7 frec1$prep()$bake()         1e6   1.41ms   1.63ms     557.     7.63MB   172.  
+8 hydrorecipes::bake(hydro…   1e6    1.4ms   1.58ms     584.     7.63MB   123.  
+9 recipes::bake(recipes::p…   1e6  22.14ms  23.95ms      42.0   19.11MB    25.8 </code></pre>
 </div>
 </div>
 </section>
@@ -295,12 +295,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100 718.35µs 891.29µs    1106.    94.47KB     6.16
-2 rec            100  10.87ms  13.24ms      76.4   40.24KB     6.54
-3 frec         10000 726.93µs 891.53µs    1123.    79.23KB     6.16
-4 rec          10000   11.2ms  12.92ms      78.3  272.27KB     6.52
-5 frec       1000000   1.86ms   2.32ms     411.     7.63MB    87.8 
-6 rec        1000000  25.77ms  27.42ms      36.5   22.93MB    29.2 </code></pre>
+1 frec           100 713.34µs 874.76µs    1128.    94.48KB     6.14
+2 rec            100     11ms  12.59ms      79.8   40.24KB     6.65
+3 frec         10000 732.34µs 897.46µs    1115.    79.23KB     6.15
+4 rec          10000  11.07ms  12.55ms      79.7  272.27KB     6.46
+5 frec       1000000   1.84ms   2.33ms     420.     7.63MB    83.9 
+6 rec        1000000  24.07ms  26.89ms      37.4   22.93MB    30.0 </code></pre>
 </div>
 </div>
 </section>
@@ -335,12 +335,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100 721.59µs  830.7µs    1163.   595.91KB     6.15
-2 rec            100  10.96ms  12.75ms      78.8  125.46KB     6.57
-3 frec         10000 763.14µs 908.71µs    1069.    79.23KB     6.17
-4 rec          10000  11.89ms  13.21ms      73.5  233.21KB     6.48
-5 frec       1000000   3.64ms   4.41ms     230.     7.63MB    37.6 
-6 rec        1000000  27.16ms  29.41ms      34.2   19.11MB    10.5 </code></pre>
+1 frec           100 719.13µs  897.5µs    1090.   595.94KB     6.21
+2 rec            100  11.21ms  13.19ms      76.9  125.46KB     6.41
+3 frec         10000 751.42µs 916.77µs    1068.    79.23KB     6.15
+4 rec          10000  10.91ms  12.76ms      78.0  233.21KB     6.50
+5 frec       1000000   3.58ms   4.43ms     224.     7.63MB    37.4 
+6 rec        1000000  24.99ms  28.19ms      35.3   19.11MB    17.6 </code></pre>
 </div>
 </div>
 </section>
@@ -374,12 +374,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100 720.42µs 881.28µs    1113.    532.4KB     6.15
-2 rec            100  11.15ms  12.54ms      78.3  105.87KB     6.52
-3 frec         10000 728.59µs 898.04µs     934.    79.23KB     4.07
-4 rec          10000  10.77ms  12.15ms      81.6  112.12KB     6.44
-5 frec       1000000   1.37ms   1.72ms     546.     7.63MB    92.1 
-6 rec        1000000  14.38ms  16.32ms      61.7    7.66MB     6.61</code></pre>
+1 frec           100 711.56µs 892.71µs    1114.   532.43KB     6.15
+2 rec            100  10.43ms  12.23ms      82.3  105.87KB     6.67
+3 frec         10000  715.5µs 891.48µs    1110.    79.23KB     6.21
+4 rec          10000   10.2ms  12.17ms      83.5  112.12KB     6.59
+5 frec       1000000   1.47ms   2.36ms     418.     7.63MB    78.9 
+6 rec        1000000  15.54ms  17.42ms      58.2    7.66MB     6.71</code></pre>
 </div>
 </div>
 </section>
@@ -421,15 +421,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 9 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100 774.03µs 937.19µs    1040.   556.02KB     6.24
-2 frec2          100 966.84µs   1.16ms     840.     6.56KB     8.34
-3 rec            100  11.87ms  13.79ms      71.5   80.51KB     4.20
-4 frec1        10000 881.86µs   1.03ms     946.   235.58KB     6.16
-5 frec2        10000   1.09ms   1.29ms     765.   470.62KB     6.19
-6 rec          10000  12.57ms  14.91ms      67.8  663.09KB     6.56
-7 frec1      1000000   13.4ms  15.11ms      65.7   22.89MB    34.8 
-8 frec2      1000000  16.34ms  17.27ms      56.7   45.78MB   147.  
-9 rec        1000000  43.14ms  45.64ms      21.9   61.07MB   110.  </code></pre>
+1 frec1          100 773.49µs  942.9µs    1049.   556.04KB     8.29
+2 frec2          100 958.29µs   1.18ms     829.     6.56KB     6.16
+3 rec            100  11.28ms  13.39ms      75.1   80.51KB     6.63
+4 frec1        10000 872.96µs    1.1ms     909.   235.58KB     6.17
+5 frec2        10000   1.08ms   1.31ms     761.   470.62KB     6.21
+6 rec          10000  11.64ms  13.49ms      74.5  663.09KB     6.58
+7 frec1      1000000  13.11ms  14.35ms      69.9   22.89MB    34.9 
+8 frec2      1000000  15.06ms  16.02ms      60.8   45.78MB   194.  
+9 rec        1000000  42.71ms  43.99ms      21.7   61.07MB    57.8 </code></pre>
 </div>
 </div>
 </section>
@@ -464,12 +464,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100 916.84µs   1.14ms    819.     678.8KB     6.23
-2 rec            100  14.22ms  17.26ms     56.3      272KB     4.33
-3 frec1        10000   1.01ms   1.26ms    766.       2.3MB    30.5 
-4 rec          10000  15.51ms  17.57ms     57.3      5.9MB     5.46
-5 frec1      1000000   18.5ms  26.81ms     16.3    228.9MB    13.0 
-6 rec        1000000  124.7ms 137.66ms      6.50   579.9MB     9.75</code></pre>
+1 frec1          100  814.7µs   1.02ms    971.     678.8KB     6.19
+2 rec            100   13.8ms  15.62ms     64.7      272KB     6.69
+3 frec1        10000  975.2µs   1.15ms    855.       2.3MB    22.2 
+4 rec          10000   13.5ms   16.1ms     63.3      5.9MB     6.78
+5 frec1      1000000   17.5ms  32.29ms     15.5    228.9MB    15.5 
+6 rec        1000000  112.9ms  134.2ms      6.63   579.9MB    11.9 </code></pre>
 </div>
 </div>
 </section>
@@ -503,9 +503,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 3 × 7
   expression     rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;    &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec         100000   16.6ms  18.11ms    52.3      7.04MB    2.09 
-2 frec        1000000   89.4ms  92.14ms    10.8     33.82MB    0    
-3 frec       10000000  998.1ms    1.02s     0.977  308.47MB    0.977</code></pre>
+1 frec         100000   13.8ms   15.6ms     64.6     7.04MB     2.48
+2 frec        1000000   77.9ms   80.1ms     12.3    33.82MB     0   
+3 frec       10000000  852.6ms  852.6ms      1.17  308.47MB     1.17</code></pre>
 </div>
 </div>
 </section>
@@ -548,12 +548,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100 827.58µs   1.02ms    966.    594.84KB     6.17
-2 rec            100  12.85ms  15.03ms     65.2   154.05KB     4.21
-3 frec         10000   1.67ms   2.16ms    454.    548.27KB     2.02
-4 rec          10000  13.21ms  15.17ms     65.7     1.91MB     6.57
-5 frec       1000000  97.57ms 102.81ms      9.60   53.41MB     1.07
-6 rec        1000000 134.78ms 139.75ms      7.18  186.96MB     7.18</code></pre>
+1 frec           100  819.5µs   1.01ms    968.    594.95KB     5.04
+2 rec            100  11.79ms  12.94ms     75.9   154.05KB     6.51
+3 frec         10000   1.63ms   1.97ms    510.    548.27KB     4.08
+4 rec          10000  12.45ms  14.79ms     64.8     1.91MB     6.48
+5 frec       1000000  89.71ms  93.45ms     10.7    53.41MB     0   
+6 rec        1000000 128.94ms 137.85ms      7.30  186.96MB     1.83</code></pre>
 </div>
 </div>
 </section>
@@ -636,30 +636,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 24 × 14
    expression    rows      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc
    &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
- 1 frec1          100 959.24µs   1.19ms    828.    742.84KB     6.23   399     3
- 2 frec2          100 940.43µs   1.18ms    715.     32.77KB     4.08   351     2
- 3 frec3          100 904.37µs   1.14ms    883.     31.77KB     8.35   423     4
- 4 frec4          100 901.39µs   1.14ms    843.     22.83KB     5.49   307     2
- 5 rec1           100  13.81ms  17.09ms     57.3   653.42KB     4.24    27     2
- 6 rec2           100  13.46ms  15.48ms     65.2   282.34KB     6.75    29     3
- 7 rec3           100  14.23ms  15.64ms     62.3   157.93KB     6.68    28     3
- 8 rec4           100  13.47ms  15.86ms     62.8   141.39KB     6.73    28     3
- 9 frec1        10000   2.08ms   2.54ms    389.      3.36MB     2.02   192     1
-10 frec2        10000   1.91ms   2.34ms    417.       2.6MB     4.08   204     2
-11 frec3        10000   1.57ms   1.89ms    532.      2.45MB     4.09   260     2
-12 frec4        10000   1.42ms   1.71ms    590.      1.68MB     4.09   289     2
-13 rec1         10000  20.62ms  22.75ms     44.3    21.24MB     4.43    20     2
-14 rec2         10000  19.99ms  21.59ms     46.4    20.09MB     4.42    21     2
-15 rec3         10000  16.37ms  18.63ms     53.3     7.96MB     4.26    25     2
-16 rec4         10000  15.94ms   17.5ms     56.8     6.81MB     6.82    25     3
-17 frec1      1000000 154.37ms 156.15ms      6.35   335.7MB     4.76     4     3
-18 frec2      1000000 125.74ms 137.57ms      7.33   259.4MB     5.50     4     3
-19 frec3      1000000  86.11ms  95.44ms      9.76  244.15MB     5.86     5     3
-20 frec4      1000000   66.7ms   75.2ms     10.9   167.85MB     3.63     6     2
-21 rec1       1000000 849.93ms 922.02ms      1.08    2.07GB     6.51     2    12
-22 rec2       1000000 811.11ms 884.97ms      1.13    1.96GB     8.47     2    15
-23 rec3       1000000 368.93ms 432.37ms      2.31  789.71MB     6.94     2     6
-24 rec4       1000000 367.34ms 417.37ms      2.40  675.26MB     5.99     2     5
+ 1 frec1          100 938.91µs   1.16ms    867.    742.87KB     6.28   414     3
+ 2 frec2          100 932.86µs   1.17ms    860.     32.77KB     6.19   417     3
+ 3 frec3          100 898.89µs   1.09ms    914.     31.77KB     6.18   444     3
+ 4 frec4          100 890.03µs    1.1ms    912.     22.83KB     6.18   443     3
+ 5 rec1           100  13.28ms  15.99ms     60.7   653.42KB     6.74    27     3
+ 6 rec2           100  12.92ms  15.35ms     65.9   282.34KB     6.59    30     3
+ 7 rec3           100  13.23ms  15.37ms     65.8   157.93KB     6.58    30     3
+ 8 rec4           100  12.96ms  15.14ms     66.9   141.39KB     6.69    30     3
+ 9 frec1        10000   2.03ms   2.39ms    419.      3.36MB     4.11   204     2
+10 frec2        10000   1.89ms   2.13ms    464.       2.6MB     2.02   230     1
+11 frec3        10000   1.56ms   1.78ms    550.      2.45MB     4.09   269     2
+12 frec4        10000    1.4ms   1.69ms    597.      1.68MB     4.09   292     2
+13 rec1         10000  20.11ms  22.24ms     45.0    21.24MB     4.29    21     2
+14 rec2         10000  19.03ms   21.8ms     46.5    20.09MB     6.98    20     3
+15 rec3         10000  15.98ms  19.01ms     53.5     7.96MB     4.28    25     2
+16 rec4         10000  15.94ms  18.83ms     51.6     6.81MB     6.73    23     3
+17 frec1      1000000 135.41ms  150.4ms      6.66   335.7MB     8.32     4     5
+18 frec2      1000000 119.96ms 128.96ms      6.67   259.4MB     6.67     4     4
+19 frec3      1000000   82.9ms  87.67ms     11.0   244.15MB     9.19     6     5
+20 frec4      1000000  65.86ms  67.38ms     14.3   167.85MB     5.35     8     3
+21 rec1       1000000 847.86ms 950.97ms      1.05    2.07GB     9.46     2    18
+22 rec2       1000000 931.79ms 936.32ms      1.07    1.96GB     8.54     2    16
+23 rec3       1000000 355.28ms 357.12ms      2.80  789.71MB     7.00     2     5
+24 rec4       1000000 339.53ms 388.47ms      2.57  675.26MB     5.15     2     4
 # ℹ 5 more variables: total_time &lt;bch:tm&gt;, result &lt;list&gt;, memory &lt;list&gt;,
 #   time &lt;list&gt;, gc &lt;list&gt;</code></pre>
 </div>
@@ -695,12 +695,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100 824.24µs   1.04ms   940.     584.37KB     6.18
-2 rec            100  14.78ms  17.53ms    56.7    475.38KB     4.20
-3 frec         10000   1.01ms    1.2ms   787.     353.05KB     4.09
-4 rec          10000  26.02ms  29.82ms    33.0      6.09MB     4.40
-5 frec       1000000   7.08ms  10.06ms    87.4     42.33MB     7.95
-6 rec        1000000    1.68s    1.68s     0.596  606.33MB     1.79</code></pre>
+1 frec           100 805.04µs 984.13µs   969.     584.41KB     6.22
+2 rec            100   12.2ms  14.67ms    69.7    475.38KB     6.54
+3 frec         10000 849.18µs   1.04ms   942.     353.05KB     6.17
+4 rec          10000  24.11ms  26.53ms    37.9      6.09MB     4.46
+5 frec       1000000   5.92ms   6.52ms   129.      42.33MB    13.9 
+6 rec        1000000    1.51s    1.51s     0.663  606.33MB     1.99</code></pre>
 </div>
 </div>
 </section>
@@ -738,12 +738,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100  853.6µs   1.08ms     902.    582.6KB    12.5 
-2 rec            100   13.1ms  15.45ms      64.8   174.2KB    14.7 
-3 frec         10000  976.2µs   1.18ms     828.    157.5KB    12.2 
-4 rec          10000   14.8ms  16.41ms      59.3   585.1KB    10.8 
-5 frec       1000000   10.9ms  12.65ms      79.0    15.3MB     4.39
-6 rec        1000000   83.7ms  85.59ms      11.5    53.4MB     2.31</code></pre>
+1 frec           100 806.66µs 931.25µs    1027.    582.6KB    15.1 
+2 rec            100  11.29ms  13.29ms      75.5   174.2KB    13.5 
+3 frec         10000 909.81µs   1.12ms     873.    157.5KB    11.7 
+4 rec          10000  11.72ms  13.08ms      75.7   585.1KB    14.5 
+5 frec       1000000   9.95ms   11.8ms      85.8    15.3MB     4.40
+6 rec        1000000  77.98ms  78.61ms      12.7    53.4MB     5.07</code></pre>
 </div>
 </div>
 </section>
@@ -778,12 +778,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100 752.79µs 981.63µs     994.   589.43KB    12.1 
-2 rec            100  13.53ms  16.18ms      61.6   93.13KB    10.7 
-3 frec         10000 783.03µs   1.02ms     944.    40.17KB    12.3 
-4 rec          10000  13.49ms  15.43ms      63.1    1.33MB     6.31
-5 frec       1000000   1.79ms   2.15ms     436.     3.82MB     2.04
-6 rec        1000000  79.94ms  82.41ms      12.0  115.59MB     2.41</code></pre>
+1 frec           100  723.7µs 902.03µs    1105.   589.44KB    14.7 
+2 rec            100  11.31ms  13.55ms      74.5   93.13KB    13.3 
+3 frec         10000 737.85µs 924.39µs    1073.    40.17KB    14.4 
+4 rec          10000  12.08ms  14.01ms      71.4    1.33MB    13.2 
+5 frec       1000000   1.62ms   1.87ms     500.     3.82MB     6.75
+6 rec        1000000     72ms   82.4ms      11.9  115.59MB     5.94</code></pre>
 </div>
 </div>
 </section>
@@ -819,10 +819,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 4 × 7
   expression   rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;  &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec        10000   1.02ms   1.32ms    734.     702.9KB     4.13
-2 rec         10000  62.76ms  64.63ms     15.6   351.52KB     2.22
-3 frec       100000   1.98ms   2.44ms    407.    821.48KB     2.03
-4 rec        100000 917.74ms 917.74ms      1.09    1.58MB     0   </code></pre>
+1 frec        10000   1.04ms   1.29ms    761.    702.95KB     8.95
+2 rec         10000  59.96ms   61.8ms     16.2   351.52KB     2.31
+3 frec       100000   1.91ms   2.33ms    433.    821.48KB     2.03
+4 rec        100000 917.61ms 917.61ms      1.09    1.58MB     0   </code></pre>
 </div>
 </div>
 </section>
@@ -864,14 +864,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
-  expression                  rows     min   median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt;                 &lt;dbl&gt; &lt;bch:t&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 "frec$plate(\"tbl\")"        1e2 161.1µs 208.23µs   4496.     23.94KB     8.52
-2 "recipes::bake(recipes::p…   1e2  21.6ms  22.81ms     43.1   186.12KB     7.18
-3 "frec$plate(\"tbl\")"        1e4 178.4µs 227.27µs   4151.      1.69MB     8.48
-4 "recipes::bake(recipes::p…   1e4  22.5ms  24.31ms     41.3     5.09MB     7.29
-5 "frec$plate(\"tbl\")"        1e6   1.5ms   1.77ms    455.    167.85MB    21.8 
-6 "recipes::bake(recipes::p…   1e6 371.8ms 375.08ms      2.67  496.04MB     8.00</code></pre>
+  expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt;                &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 "frec$plate(\"tbl\")"       1e2 156.86µs 194.89µs   4802.     23.94KB    10.7 
+2 "recipes::bake(recipes::…   1e2  20.03ms  21.73ms     46.4   186.12KB     6.96
+3 "frec$plate(\"tbl\")"       1e4 176.55µs 222.99µs   4292.      1.69MB     8.44
+4 "recipes::bake(recipes::…   1e4  20.21ms  22.85ms     44.6     5.09MB     7.04
+5 "frec$plate(\"tbl\")"       1e6   1.48ms   1.66ms    418.    167.85MB    19.9 
+6 "recipes::bake(recipes::…   1e6 362.62ms 363.31ms      2.75  496.04MB     9.63</code></pre>
 </div>
 </div>
 </section>
@@ -905,12 +905,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100 865.86µs   1.05ms    925.    617.01KB     6.28
-2 rec            100  13.22ms   15.4ms     64.0   355.27KB     6.86
-3 frec         10000   1.54ms   1.83ms    538.      1.07MB     4.17
-4 rec          10000   15.2ms  16.66ms     59.1     4.55MB     4.38
-5 frec       1000000  91.07ms  99.21ms     10.2   106.81MB     6.10
-6 rec        1000000 268.78ms 334.44ms      3.00  450.18MB     4.81</code></pre>
+1 frec           100 858.59µs   1.05ms    938.    617.05KB     6.27
+2 rec            100  12.52ms  15.19ms     66.9   355.27KB     6.69
+3 frec         10000   1.53ms   1.81ms    554.      1.07MB     6.25
+4 rec          10000   15.3ms  16.94ms     58.2     4.55MB     4.31
+5 frec       1000000  77.58ms  87.39ms     11.4   106.81MB     4.55
+6 rec        1000000 240.68ms 344.68ms      3.06  450.18MB     6.43</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(<span class="st">"2016-08-18"</span>, <span class="at">tz =</span> <span class="st">"UTC"</span>)</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>end <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(<span class="st">"2016-10-13"</span>, <span class="at">tz =</span> <span class="st">"UTC"</span>)</span>
@@ -952,12 +952,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100 837.18µs   1.07ms    932.     587.2KB     6.34
-2 frec2          100 896.22µs   1.14ms    824.    533.12KB     6.21
-3 frec1        10000   1.38ms   1.78ms    558.    160.19KB     2.03
-4 frec2        10000   1.46ms   1.81ms    548.     83.09KB     4.13
-5 frec1      1000000  99.86ms 101.26ms      9.90   15.26MB     0   
-6 frec2      1000000  101.6ms 104.47ms      9.49    7.63MB     0   </code></pre>
+1 frec1          100 833.14µs   1.01ms    989.    587.26KB     6.98
+2 frec2          100 878.13µs   1.09ms    901.    533.12KB     6.27
+3 frec1        10000   1.38ms   1.73ms    558.    160.19KB     4.09
+4 frec2        10000   1.44ms    1.8ms    560.     83.09KB     2.04
+5 frec1      1000000  91.49ms   97.7ms     10.2    15.26MB     0   
+6 frec2      1000000  98.87ms 102.16ms      9.84    7.63MB     0   </code></pre>
 </div>
 </div>
 </section>
@@ -991,12 +991,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100 920.04µs   1.15ms    851.    636.73KB     6.32
-2 frec2          100 984.72µs   1.24ms    777.      7.45KB     4.13
-3 frec1        10000   1.64ms   2.08ms    476.    396.41KB     4.14
-4 frec2        10000   1.56ms   2.12ms    445.      84.8KB     4.18
-5 frec1      1000000 125.52ms 129.33ms      7.75   38.15MB     2.58
-6 frec2      1000000  86.67ms  89.75ms     11.1     7.64MB     0   </code></pre>
+1 frec1          100 907.55µs   1.09ms    893.    636.77KB     6.30
+2 frec2          100 967.17µs   1.21ms    814.      7.45KB     6.31
+3 frec1        10000    1.6ms   1.93ms    512.    396.41KB     4.15
+4 frec2        10000   1.51ms   1.85ms    541.      84.8KB     4.13
+5 frec1      1000000 118.31ms 121.83ms      8.19   38.15MB     2.05
+6 frec2      1000000  83.37ms  85.11ms     11.7     7.64MB     0   </code></pre>
 </div>
 </div>
 </section>
@@ -1039,8 +1039,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 2 × 7
   expression   rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;  &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1      100000   7.06ms   8.02ms    122.      1.53MB        0
-2 frec3      100000 600.47ms 600.47ms      1.67    1.33MB        0</code></pre>
+1 frec1      100000   6.62ms   8.15ms    112.      1.53MB        0
+2 frec3      100000  579.6ms  579.6ms      1.73    1.33MB        0</code></pre>
 </div>
 </div>
 </section>
@@ -1072,9 +1072,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 3 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100    748µs 970.43µs    1002.    559.3KB     6.53
-2 frec1        10000  855.5µs   1.07ms     913.    160.1KB     6.34
-3 frec1      1000000   14.1ms  15.82ms      63.4    15.3MB     2.04</code></pre>
+1 frec1          100  731.6µs 890.11µs    1117.    559.4KB     8.54
+2 frec1        10000  824.6µs   1.05ms     961.    160.1KB     6.31
+3 frec1      1000000   13.9ms  15.74ms      64.1    15.3MB     2.07</code></pre>
 </div>
 </div>
 </section>
@@ -1104,9 +1104,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 3 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1          100    802µs  989.9µs   1011.     579.2KB     6.31
-2 frec1        10000   2.64ms    3.3ms    308.     785.1KB     2.04
-3 frec1      1000000 188.32ms  195.1ms      5.13    76.3MB     1.28</code></pre>
+1 frec1          100 787.29µs 977.74µs   1006.     579.2KB     5.28
+2 frec1        10000   2.64ms   3.22ms    314.     785.1KB     2.03
+3 frec1      1000000 188.94ms 193.37ms      5.19    76.3MB     2.22</code></pre>
 </div>
 </div>
 </section>
@@ -1137,7 +1137,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 1 × 6
   expression      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1        1.07ms   1.23ms      788.     611KB     2.04</code></pre>
+1 frec1        1.06ms   1.29ms      782.     611KB     2.04</code></pre>
 </div>
 </div>
 </section>
@@ -1168,7 +1168,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 1 × 6
   expression      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1        5.97ms   6.94ms      145.     617KB        0</code></pre>
+1 frec1        5.97ms      7ms      145.     617KB        0</code></pre>
 </div>
 </div>
 </section>
@@ -1216,15 +1216,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 9 × 7
   expression               rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;              &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 "frec3$plate(\"dt\")"     100   86.7µs    110µs     8703.   17.78KB     4.18
-2 "frec1$plate(\"dt\")"     100   86.7µs    109µs     8816.   21.14KB     4.17
-3 "frec2$plate(\"dt\")"     100   87.1µs    109µs     8595.    8.84KB     4.15
-4 "frec3$plate(\"dt\")"   10000   86.3µs    108µs     8972.    1.07MB     4.10
-5 "frec1$plate(\"dt\")"   10000     87µs    111µs     8699.    1.38MB     2.19
-6 "frec2$plate(\"dt\")"   10000   87.1µs    110µs     8649.  251.98KB     4.18
-7 "frec3$plate(\"dt\")" 1000000   87.9µs    107µs     8956.  106.81MB     4.18
-8 "frec1$plate(\"dt\")" 1000000   86.7µs    113µs     8484.  137.33MB     4.17
-9 "frec2$plate(\"dt\")" 1000000   87.6µs    116µs     8347.   24.42MB     4.18</code></pre>
+1 "frec3$plate(\"dt\")"     100     85µs    108µs     8854.    17.8KB     4.17
+2 "frec1$plate(\"dt\")"     100   85.2µs    107µs     9036.   21.16KB     4.17
+3 "frec2$plate(\"dt\")"     100   85.2µs    111µs     8703.    8.87KB     4.17
+4 "frec3$plate(\"dt\")"   10000     85µs    107µs     9059.    1.07MB     4.16
+5 "frec1$plate(\"dt\")"   10000   85.3µs    105µs     9123.    1.38MB     4.12
+6 "frec2$plate(\"dt\")"   10000   85.4µs    109µs     9025.  251.98KB     4.09
+7 "frec3$plate(\"dt\")" 1000000   85.9µs    111µs     8894.  106.81MB     2.04
+8 "frec1$plate(\"dt\")" 1000000   84.9µs    105µs     9127.  137.33MB     6.26
+9 "frec2$plate(\"dt\")" 1000000   86.7µs    115µs     8483.   24.42MB     2.04</code></pre>
 </div>
 </div>
 </section>
@@ -1261,12 +1261,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 7
   expression               rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;              &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 "frec1$plate(\"dt\")"     100   86.5µs    112µs     8521.    11.2KB     4.18
-2 "frec2$plate(\"dt\")"     100   86.5µs    112µs     8652.     8.1KB     4.18
-3 "frec1$plate(\"dt\")"   10000   86.7µs    109µs     8936.   470.6KB     4.18
-4 "frec2$plate(\"dt\")"   10000   86.2µs    106µs     9070.   189.3KB     4.17
-5 "frec1$plate(\"dt\")" 1000000     86µs    112µs     7747.    45.8MB     2.06
-6 "frec2$plate(\"dt\")" 1000000   85.2µs    109µs     8497.    18.3MB     4.22</code></pre>
+1 "frec1$plate(\"dt\")"     100   83.9µs    111µs     8478.   11.25KB     4.19
+2 "frec2$plate(\"dt\")"     100   84.9µs    112µs     8813.    8.12KB     4.18
+3 "frec1$plate(\"dt\")"   10000   84.8µs    109µs     8826.  470.59KB     4.18
+4 "frec2$plate(\"dt\")"   10000   83.9µs    113µs     8783.  189.34KB     4.18
+5 "frec1$plate(\"dt\")" 1000000   85.1µs    108µs     8910.   45.78MB     4.18
+6 "frec2$plate(\"dt\")" 1000000   84.5µs    102µs     9330.   18.31MB     4.18</code></pre>
 </div>
 </div>
 </section>
@@ -1299,9 +1299,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 3 × 7
   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;   &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec           100   1.47ms   1.78ms     546.   791.68KB     4.41
-2 frec         10000   1.72ms   2.08ms     468.     1.34MB     2.04
-3 frec       1000000  30.11ms  31.65ms      29.7  133.52MB    18.6 </code></pre>
+1 frec           100   1.46ms   1.67ms     578.   791.78KB     2.05
+2 frec         10000   1.71ms   2.03ms     489.     1.34MB     4.20
+3 frec       1000000   28.5ms  31.23ms      30.5  133.52MB    20.4 </code></pre>
 </div>
 </div>
 </section>
@@ -1411,8 +1411,8 @@ NULL</code></pre>
 <pre><code># A tibble: 2 × 7
   expression   rows      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt;  &lt;dbl&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 frec1      100000   1.23ms   1.51ms      653.     2.6MB     2.05
-2 frec2      100000   1.49ms   1.79ms      552.   782.9KB     2.04</code></pre>
+1 frec1      100000   1.21ms   1.48ms      669.     2.6MB     2.05
+2 frec2      100000   1.46ms   1.79ms      565.   782.9KB     2.04</code></pre>
 </div>
 </div>
 <!-- ```{r} -->
