@@ -2,7 +2,7 @@
 
 WARNING: This package is in early stages of development and is likely to change.
 
-This package is based on [recipes](https://recipes.tidymodels.org) framework consisting of a recipe and a set of steps to apply. The goals of the package are to increased the computational speed, decrease memory consumption, increase consistency between steps, and decrease some boiler plate code for step additions. The first three goals are likely to be achieved but the fourth might not given that the package implements two APIs (one for R6 and one for S3).
+This package is based on [recipes](https://recipes.tidymodels.org) framework consisting of a recipe and a set of steps to apply. The goals of the package are to improve speed, decrease memory consumption, increase consistency between steps, and decrease some boiler plate code for step additions. The first three goals are likely to be achieved but the fourth might not given that the package implements two APIs (one for R6 and one for S3).
 
 It diverges in a few ways:
 
