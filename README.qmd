@@ -32,7 +32,6 @@ Example usage:
 ```{r}
 
 library(hydrorecipes)
-library(ggplot2)
 
 data(kennel_2020)
 

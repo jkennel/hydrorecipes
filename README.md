@@ -49,8 +49,6 @@ library(hydrorecipes)
     Loading required package: Bessel
 
 ``` r
-library(ggplot2)
-
 data(kennel_2020)
 
 # kennel_2020$datetime <- as.numeric(kennel_2020$datetime)
