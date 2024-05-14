@@ -283,15 +283,21 @@ Recipe <- R6Class(
 
       self
     },
-
-
     # @description
     # Get the type of the step.
     # @return character vector for the step types
     get_step_types = function() {
       vapply(self$steps, FUN = function(x) x$type, FUN.VALUE = character(1))
     },
-
+    # @description
+    # Get the type of the step.
+    # @return character vector for the step types
+    check_result_lengths = function() {
+      n <- collapse::fnunique(collapse::vlengths(self$results))
+      if (n > 1) {
+        warning('Result lengths are not equal')
+      }
+    },
 
     # @description
     # Get the indices of previously baked steps.
