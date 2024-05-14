@@ -74,7 +74,7 @@ resp <- rec$get_response_data(type = "dt")
 
 # barometric response function
 plot(value~x, data = resp[term == "distributed_lag_interpolated" & variable == "cumulative"], 
-     log = "x")
+     type = "l", log = "x")
 ```
 
     Warning in xy.coords(x, y, xlabel, ylabel, log): 1 x value <= 0 omitted from
@@ -93,7 +93,7 @@ plot(wl~datetime, pred, type = "l")
 points(wl_step_distributed_lag + 
        wl_step_spline_b + 
        wl_step_lead_lag + 
-       wl_step_intercept~datetime, pred, type = 'l', col = 'red')
+       wl_step_intercept~datetime, pred, type = "l", col = "red")
 ```
 
 ![](README.markdown_github_files/figure-markdown_github/unnamed-chunk-1-2.png)
