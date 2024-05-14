@@ -47,7 +47,7 @@ Example usage:
 #|message: false
 
 
-suppressWarnings(library(hydrorecipes))
+library(hydrorecipes)
 ```
 
     Loading required package: Bessel
@@ -76,11 +76,10 @@ resp <- rec$get_response_data(type = "dt")
 
 # barometric response function
 plot(value~x, data = resp[term == "distributed_lag_interpolated" & variable == "cumulative"], 
-     type = "l", log = "x")
+     type = "l",
+     xlab = "Lag time in minutes",
+     ylab = "Cumulative response")
 ```
-
-    Warning in xy.coords(x, y, xlabel, ylabel, log): 1 x value <= 0 omitted from
-    logarithmic plot
 
 ![](README.markdown_github_files/figure-markdown_github/unnamed-chunk-1-1.png)
 
@@ -95,7 +94,8 @@ plot(wl~datetime, pred, type = "l")
 points(wl_step_distributed_lag + 
        wl_step_spline_b + 
        wl_step_lead_lag + 
-       wl_step_intercept~datetime, pred, type = "l", col = "red")
+       wl_step_intercept~datetime, pred, type = "l", col = "red", 
+       xlab = "", ylab = "Pressure (dbar)")
 ```
 
 ![](README.markdown_github_files/figure-markdown_github/unnamed-chunk-1-2.png)
