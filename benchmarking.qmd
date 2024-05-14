@@ -583,22 +583,24 @@ library(RcppRoll)
 formula <- as.formula(y~x+z)
 
 results <- bench::press(
-  rows = c(1e4, 1e5),
+  rows = c(2e4, 2e5),
   {
     dat <- data.frame(x = rep(1, rows), 
                       y = 1:rows,
                       z = cumsum(rnorm(rows)))
     bench::mark(
-      frec = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+      frec = unname(hydrorecipes:::Recipe$new(formula = formula, data = dat)$
         add_step(hydrorecipes:::StepKernelFilter$new(z, 
                                       kernel = list(rep(1, 5001)/5001), align = "center"))$
-        plate("tbl"),
-      rec  = recipes::recipe(formula = formula, data = dat) |>
+        plate("tbl")[10000, "kernel_filter_z"]),
+      {rec  = recipes::recipe(formula = formula, data = dat) |>
         recipes::step_window(z, size = 5001, statistic = "mean") |>
         recipes::prep() |>
-        recipes::bake(new_data = NULL),
+        recipes::bake(new_data = NULL)
+      unname(rec[10000, "z"])},
+      
       min_iterations = 1,
-      check = FALSE
+      check = TRUE
     )
   }
 )
