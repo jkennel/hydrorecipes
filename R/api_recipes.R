@@ -556,6 +556,9 @@ step_check_spacing <- function(.rec,
 #'
 #' @inheritParams step_scale
 #'
+#' @param data \code{variable} unquoted data column name
+#' @param compare \code{variable} unquoted column name for comparison
+#'
 #' @return an updated recipe
 #' @export
 #'
@@ -564,9 +567,10 @@ step_check_spacing <- function(.rec,
 #' data("kennel_2020")
 #'
 #' kennel_2020[1e4, wl := 13.36]
-#' frec1 = recipe(wl~baro, data = kennel_2020)$
-#'  add_step(hydrorecipes:::StepCompareColumns$new(data = wl, compare = baro, n_sd = 15))$
-#'  prep()$
+#'
+#' frec = recipe(wl~baro, data = kennel_2020) |>
+#'  step_compare_columns(data = wl, compare = baro, n_sd = 15) |>
+#'  prep() |>
 #'  bake()
 #'
 step_compare_columns <- function(.rec,
@@ -1178,15 +1182,14 @@ step_ols_gap_fill <- function(.rec,
 #' deg_free <- 27
 #' max_lag <- 1 + 720
 #'
-#' frec = Recipe$new(formula = formula, data = unclass(kennel_2020))$
-#'   add_step(StepDistributedLag$new(baro,
-#'                                   knots = hydrorecipes:::log_lags_arma(n_knots, max_lag)))$
-#'   add_step(StepSplineB$new(datetime, df = deg_free, intercept = FALSE))$
-#'   add_step(StepIntercept$new())$
-#'   add_step(StepDropColumns$new(baro))$
-#'   add_step(StepDropColumns$new(datetime))$
-#'   add_step(StepOls$new(formula))$
-#'   prep()$
+#' frec = recipe(formula = formula, data = unclass(kennel_2020)) |>
+#'   step_distributed_lag(baro, knots = hydrorecipes:::log_lags_arma(n_knots, max_lag)) |>
+#'   step_spline_b(datetime, df = deg_free, intercept = FALSE) |>
+#'   step_intercept() |>
+#'   step_drop_columns(baro) |>
+#'   step_drop_columns(datetime) |>
+#'   step_ols(formula) |>
+#'   prep() |>
 #'   bake()
 step_ols <- function(.rec,
                      formula,
@@ -1370,7 +1373,7 @@ step_slug_cbp <- function(.rec,
 #' dat <- data.frame(x = rnorm(rows),
 #'                   y = 1:rows,
 #'                   z = cumsum(rnorm(rows)))
-#' ik <- fquantile(dat$x, probs = seq(0, 1, 0.1))
+#' ik <- collapse::fquantile(dat$x, probs = seq(0, 1, 0.1))
 #' bk <- ik[c(1, length(ik))]
 #' ik <- ik[-c(1, length(ik))]
 #'

@@ -17,6 +17,10 @@ step_compare_columns(
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
+\item{data}{\code{variable} unquoted data column name}
+
+\item{compare}{\code{variable} unquoted column name for comparison}
+
 \item{role}{character - the name of the role}
 
 \item{n_sd}{numeric - number of standard deviations for the scaling}
@@ -36,9 +40,10 @@ Check the spacing of a variable
 data("kennel_2020")
 
 kennel_2020[1e4, wl := 13.36]
-frec1 = recipe(wl~baro, data = kennel_2020)$
- add_step(hydrorecipes:::StepCompareColumns$new(data = wl, compare = baro, n_sd = 15))$
- prep()$
+
+frec = recipe(wl~baro, data = kennel_2020) |>
+ step_compare_columns(data = wl, compare = baro, n_sd = 15) |>
+ prep() |>
  bake()
 
 }

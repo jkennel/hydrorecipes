@@ -55,9 +55,10 @@ StepCompareColumns <- R6Class(
     bake = function(new_data) {
 
       new_data <- unclass(new_data)[self$columns]
-      ret <- abs(diff(new_data[[1]])) > (self$column_values * self$n_sd)
+      ret <- list(c(FALSE, abs(diff(new_data[[1]])) > (self$column_values * self$n_sd)))
 
-      return(list(ret))
+      setNames(ret, paste0(self$id, "_", self$columns[1], "_", self$columns[2]))
+
 
     }
   )

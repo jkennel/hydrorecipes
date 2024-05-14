@@ -68,7 +68,7 @@ rows <- 1e5
 dat <- data.frame(x = rnorm(rows),
                   y = 1:rows,
                   z = cumsum(rnorm(rows)))
-ik <- fquantile(dat$x, probs = seq(0, 1, 0.1))
+ik <- collapse::fquantile(dat$x, probs = seq(0, 1, 0.1))
 bk <- ik[c(1, length(ik))]
 ik <- ik[-c(1, length(ik))]
 

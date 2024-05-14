@@ -1,4 +1,4 @@
-# hydrorecipes (name will likely change to hydrorecipes as it is designed to replace it)
+# hydrorecipes
 
 WARNING: This package is in early stages of development and is likely to change.
 
