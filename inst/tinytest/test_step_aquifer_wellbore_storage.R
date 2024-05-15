@@ -1,3 +1,4 @@
+# Inputs based on Chris Neville's work
 
 m <- matrix(
   c(1.50000000E-01,1.00000000E-05,1.41143286E-03,
@@ -48,12 +49,25 @@ pc <- hydrorecipes:::papadopulos_cooper_laplace(times,
                                            rw,
                                            Tr,
                                            S,
-                                           prec, 12L)
-# plot(x=times, y=pc, log= 'x', type = 'l')
+                                           prec,
+                                           12L)
 
 expect_equivalent(pc, m[, 3], tolerance = 5e-4)
 
 
+dat <- data.frame(x = m[, 2])
+formula <- as.formula(.~x)
+
+frec = recipe(formula = formula, data = dat) |>
+  step_aquifer_wellbore_storage(time = x,
+                                flow_rate = 10.0,
+                                hydraulic_conductivity = 10.0,
+                                specific_storage = 1e-4) |>
+  prep() |>
+  bake()
+
+expect_equivalent(frec$result$aquifer_wellbore_storage, m[, 3],
+                  tolerance = 5e-4)
 
 
 # bench::mark(

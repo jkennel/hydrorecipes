@@ -358,6 +358,61 @@ step_aquifer_patch <- function(.rec,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' step_aquifer_patch
+#'
+#' @description
+#' Papadopulos-Cooper 1967 solution for wellbore storage.
+#'
+#' @inheritParams step_scale
+#' @inheritParams step_aquifer_grf
+#'
+#' @param radius distance from center of well
+#' @param radius_casing radius of casing in the interval over which the water
+#'   level declines
+#' @param radius_well effective radius of well screen or open hole
+#'
+#'
+#' @return The drawdown using the Papadopulos-Cooper model
+#'
+#' @references
+#' Papadopulos, I.S. and H.H. Cooper, 1967. Drawdown in a well of large
+#'   diameter, Water Resources Research, vol. 3, no. 1, pp. 241-244.
+#'
+#'
+#' @family aquifer
+#'
+#' @examples
+#' dat <- data.frame(x = 10^seq(-5, 2, length.out = 100),
+#'                   y = rep(0.01, 100))
+#' formula <- as.formula(y~x)
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_aquifer_wellbore_storage(time = x,
+#'                                 flow_rate = 10.0,
+#'                                 hydraulic_conductivity = 10.0,
+#'                                 specific_storage = 1e-4) |>
+#'   prep() |>
+#'   bake()
+#'
+#' @export
+step_aquifer_wellbore_storage <- function(.rec,
+                                          time,
+                                          flow_rate = 1.0,
+                                          radius = 0.15,
+                                          radius_casing = 0.15,
+                                          radius_well = 0.15,
+                                          thickness = 1.0,
+                                          specific_storage = 1.0e-6,
+                                          hydraulic_conductivity = 1.0e-4,
+                                          n_terms = 12L,
+                                          role = "predictor",
+                                          ...) {
+  time <- substitute(time)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepAquiferWellboreStorage$new,
+                        env_list))
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_baro_clark
 #'
 #' @description

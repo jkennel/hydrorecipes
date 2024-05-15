@@ -64,6 +64,7 @@ Other aquifer:
 \code{\link{step_aquifer_constant_drawdown}()},
 \code{\link{step_aquifer_grf}()},
 \code{\link{step_aquifer_patch}()},
-\code{\link{step_aquifer_theis}()}
+\code{\link{step_aquifer_theis}()},
+\code{\link{step_aquifer_wellbore_storage}()}
 }
 \concept{aquifer}
