@@ -23,14 +23,14 @@ StepAquiferLeaky <- R6Class(
     transmissivity = NULL,
     # max_terms number of terms to use in Hantush solution.  More is more
     #   precise but slower.
-    max_terms = NULL,
+    precision = NULL,
     initialize = function(time,
                           flow_rate,
                           leakage = 100.0,
                           radius = 100.0,
                           storativity = 1e-6,
                           transmissivity = 1e-4,
-                          max_terms = 20,
+                          precision = 1e-10,
                           role = "predictor",
                           ...) {
       # get function parameters to pass to parent
@@ -56,7 +56,7 @@ StepAquiferLeaky <- R6Class(
       # K & Ss
       self$storativity <- storativity
       self$transmissivity <- transmissivity
-      self$max_terms <- max_terms
+      self$precision <- precision
 
       self$columns <- c(time, flow_rate)
 
@@ -74,7 +74,7 @@ StepAquiferLeaky <- R6Class(
         self$storativity,
         self$transmissivity,
         self$leakage,
-        self$max_terms
+        self$precision
       )
 
       setNames(hj, self$new_columns)

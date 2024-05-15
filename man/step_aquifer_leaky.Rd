@@ -12,7 +12,7 @@ step_aquifer_leaky(
   radius = 100,
   storativity = 1e-06,
   transmissivity = 1e-04,
-  max_terms = 20,
+  precision = 1e-10,
   role = "predictor",
   ...
 )
@@ -24,11 +24,11 @@ step_aquifer_leaky(
 
 \item{flow_rate}{the flow rate from the well (L^3/t)}
 
-\item{leakage}{the leakage defined by hantush}
+\item{leakage}{the leakage defined by hantush (smaller indicates more leaky)}
 
 \item{radius}{the distance to the observation well (L)}
 
-\item{max_terms}{the number of terms for solution}
+\item{precision}{the precision of the solution (default 1e-10)}
 
 \item{role}{character - the name of the role}
 
@@ -52,9 +52,9 @@ frec = recipe(formula = formula, data = dat) |>
 
 }
 \references{
-J.H.A. Prodanoff; W.J. Mansur; F.C.B. Mascarenhas (2006).
- Numerical evaluation of Theis and Hantush-Jacob well functions. , 318(1-4),
- 0–183. doi:10.1016/j.jhydrol.2005.05.026 eq: 10, 11, 12
+Prodanoff, J.H.A., Mansur, W.J. and Mascarenhas, F.C.B., 2006. Numerical
+  evaluation of Theis and Hantush-Jacob well functions. Journal of hydrology,
+  318(1-4), pp.173-183. eq: 10, 11, 12
 
 Hantush, M.S. and C.E. Jacob, 1955. Non-steady radial flow in an infinite
  leaky aquifer, Am. Geophys. Union Trans., vol. 36, no. 1, pp. 95-100.

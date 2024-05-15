@@ -7,14 +7,14 @@ editor_options:
 
 WARNING: This package is in early stages of development and is likely to change.
 
-This package is based on [recipes](https://recipes.tidymodels.org) framework consisting of a recipe and a set of steps to apply. The goals of the package are to improve speed, decrease memory consumption, increase consistency between steps, and decrease some boiler plate code for step additions. The first three goals are likely to be achieved but the fourth might not given that the package implements two APIs (one for R6 and one for S3).  Speed and memory improvements comes from the [collapse](https://sebkrantz.github.io/collapse/) package, Rcpp code, using algorithms that scale better, and attempts to reduce copying data.
+This package is modeled after the [recipes](https://recipes.tidymodels.org) framework consisting of a recipe and a set of steps to apply. The goals of the package are to improve speed, decrease memory consumption, increase consistency between steps, and decrease some boiler plate code for step additions. The first three goals are likely to be achieved but the fourth might not given that the package implements two APIs (one for R6 and one for S3).  Speed and memory improvements comes from the [collapse](https://sebkrantz.github.io/collapse/) package, Rcpp code, using algorithms that scale better, and attempts to reduce copying data.
 
 It diverges in a few ways:
 
 - based on [R6](https://r6.r-lib.org)
-- focus is on long datasets (millions of rows)
-- attention to memory usage
-- attention to speed
+- focus on long datasets (millions of rows)
+- focus on memory usage
+- focus on speed
 - steps tailored to groundwater applications
 - decrease the number of dependencies and foreign functions
 - more flexible output options (list, matrix, data.frame, data.table, tibble)

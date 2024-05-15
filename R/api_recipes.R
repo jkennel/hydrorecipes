@@ -266,15 +266,15 @@ step_aquifer_theis <- function(.rec,
 #'
 #' @inheritParams step_scale
 #' @inheritParams step_aquifer_grf
-#' @param leakage the leakage defined by hantush
-#' @param max_terms the number of terms for solution
+#' @param leakage the leakage defined by hantush (smaller indicates more leaky)
+#' @param precision the precision of the solution (default 1e-10)
 #'
 #' @return The drawdown using the Hantush and Jacob 1955 model
 #'
 #' @references
-#' J.H.A. Prodanoff; W.J. Mansur; F.C.B. Mascarenhas (2006).
-#'  Numerical evaluation of Theis and Hantush-Jacob well functions. , 318(1-4),
-#'  0–183. doi:10.1016/j.jhydrol.2005.05.026 eq: 10, 11, 12
+#'   Prodanoff, J.H.A., Mansur, W.J. and Mascarenhas, F.C.B., 2006. Numerical
+#'   evaluation of Theis and Hantush-Jacob well functions. Journal of hydrology,
+#'   318(1-4), pp.173-183. eq: 10, 11, 12
 #'
 #' Hantush, M.S. and C.E. Jacob, 1955. Non-steady radial flow in an infinite
 #'  leaky aquifer, Am. Geophys. Union Trans., vol. 36, no. 1, pp. 95-100.
@@ -299,7 +299,7 @@ step_aquifer_leaky <- function(.rec,
                                radius = 100.0,
                                storativity = 1e-6,
                                transmissivity = 1e-4,
-                               max_terms = 20,
+                               precision = 1e-10,
                                role = "predictor",
                                ...) {
   time <- substitute(time)

@@ -489,15 +489,14 @@ double hantush_epsilon(const double radius,
 
 //==============================================================================
 //' @title
-//' hantush_well_single
+//' hantush_well
 //'
 //' @description
 //' Result of the hantush well function
 //'
-//' J.H.A. Prodanoff; W.J. Mansur; F.C.B. Mascarenhas (2006). Numerical
-//' evaluation of Theis and Hantush-Jacob well functions. , 318(1-4),
-//' 0–183. doi:10.1016/j.jhydrol.2005.05.026 eq: 10, 11, 12
-//'
+//' Prodanoff, J.H.A., Mansur, W.J. and Mascarenhas, F.C.B., 2006. Numerical
+//'   evaluation of Theis and Hantush-Jacob well functions. Journal of
+//'   hydrology, 318(1-4), pp.173-183.
 //'
 //' @param u value of the Theis u
 //' @param b the leakance
@@ -518,7 +517,7 @@ double hantush_well(double u, double b, double precision){
   double out = 0.0;
   double en;
   double to_add;
-  unsigned int n_terms = 30;
+  unsigned int n_terms = 64;
 
   //eq 10
   if (b_div_u >= u){

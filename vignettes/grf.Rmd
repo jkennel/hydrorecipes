@@ -15,13 +15,11 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup, results = "hide", include = FALSE}
-
 library(hydrorecipes)
 library(plotly)
 set.seed(1)
 ```
 
-## Solution
 
 ### Generalized radial flow model (Barker, 1988)
 
@@ -30,10 +28,11 @@ This flow model handles flow dimensions between 1 (linear) and 3 (spherical). Fo
 ### Parameters
 
 ```{r grfparameters, echo = TRUE}
-times <- 1:2000
-flow_rates <- c(abs(rnorm(1000)) / 1000, rep(0.0, 1000))
+time <- 1:2000
+flow_rate <- c(runif(1000, 0, 0.003),
+               rep(0.0, 1000))
 
-dat <- data.frame(times, flow_rates)
+dat <- data.frame(time, flow_rate)
 
 ```
 
@@ -43,9 +42,9 @@ The following step is designed for regularly spaced times series for both the fl
 
 ```{r grf, echo=TRUE}
 # radial (flow_dimension = 2 Theis)
-dd_rad <- recipe(times~flow_rates, dat) |>
-  step_aquifer_grf(time = times, 
-                   flow_rate = flow_rates, 
+dd_rad <- recipe(time~flow_rate, dat) |>
+  step_aquifer_grf(time = time, 
+                   flow_rate = flow_rate, 
                    thickness = 1.0,
                    radius = 20, 
                    specific_storage = 1e-5,
@@ -56,9 +55,9 @@ dd_rad <- recipe(times~flow_rates, dat) |>
 
 # linear (flow_dimension = 1)
 
-dd_lin <- recipe(times~flow_rates, dat) |>
-  step_aquifer_grf(time = times, 
-                   flow_rate = flow_rates, 
+dd_lin <- recipe(time~flow_rate, dat) |>
+  step_aquifer_grf(time = time, 
+                   flow_rate = flow_rate, 
                    thickness = 1.0,
                    radius = 20, 
                    specific_storage = 1e-5,
@@ -67,9 +66,9 @@ dd_lin <- recipe(times~flow_rates, dat) |>
   plate()
 
 # spherical (flow_dimension = 3)
-dd_sph <- recipe(times~flow_rates, dat) |>
-  step_aquifer_grf(time = times, 
-                   flow_rate = flow_rates, 
+dd_sph <- recipe(time~flow_rate, dat) |>
+  step_aquifer_grf(time = time, 
+                   flow_rate = flow_rate, 
                    thickness = 1.0,
                    radius = 20, 
                    specific_storage = 1e-5,
@@ -83,29 +82,29 @@ dd_sph <- recipe(times~flow_rates, dat) |>
 
 ```{r grfplot, echo=FALSE}
 
-grf <- data.frame(times = times, 
-                  flow_rates = flow_rates,
+grf <- data.frame(time = time, 
+                  flow_rate = flow_rate,
                   drawdown_rad = dd_rad$aquifer_grf,
                   drawdown_lin = dd_lin$aquifer_grf,
                   drawdown_sph = dd_sph$aquifer_grf
 )
 
 
-p1 <- plot_ly(grf, x = ~times, y = ~drawdown_lin,
-        type = "scatter", mode = "lines", 
-        yaxis = "y1", name = "linear")
+p1 <- plot_ly(grf, x = ~time, y = ~drawdown_lin,
+        type = "scatter", mode = "lines",
+        name = "linear")
 
-p2 <- plot_ly(grf, x = ~times, y = ~drawdown_rad,
-        type = "scatter", mode = "lines", 
-        yaxis = "y1", name = "radial")
+p2 <- plot_ly(grf, x = ~time, y = ~drawdown_rad,
+        type = "scatter", mode = "lines",
+        name = "radial")
 
-p3 <- plot_ly(grf, x = ~times, y = ~drawdown_sph,
-        type = "scatter", mode = "lines", 
-        yaxis = "y1", name = "spherical")
+p3 <- plot_ly(grf, x = ~time, y = ~drawdown_sph,
+        type = "scatter", mode = "lines",
+        name = "spherical")
 
-p4 <- plot_ly(grf, x = ~times, y = ~flow_rates,
-        type = "scatter", mode = "lines", 
-        yaxis = "y1", name = "flow rates")
+p4 <- plot_ly(grf, x = ~time, y = ~flow_rate,
+        type = "scatter", mode = "lines",
+        name = "flow rates")
 
 subplot(p1, p2, p3, p4, shareX = TRUE, nrows = 4)
 
