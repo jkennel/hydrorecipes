@@ -124,7 +124,7 @@ results <- bench::press(
 results
 ```
 
-## step_center bake
+## step_center prep and bake
 
 ```{r}
 #| echo: true

@@ -31,7 +31,8 @@ Suggests:
     tibble,
     RcppRoll,
     knitr,
-    rmarkdown
+    rmarkdown,
+    plotly
 SystemRequirements: fftw3 (libfftw3-dev (deb), or fftw-devel (rpm)), C++17
 RoxygenNote: 7.3.1
 URL: https://jkennel.github.io/hydrorecipes/
