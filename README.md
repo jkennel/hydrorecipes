@@ -11,7 +11,7 @@ for step additions. The first three goals are likely to be achieved but
 the fourth might not given that the package implements two APIs (one for
 R6 and one for S3). Speed and memory improvements comes from the
 [collapse](https://sebkrantz.github.io/collapse/) package, Rcpp code,
-and attempts to reduce copying data.
+using algorithms that scale better, and attempts to reduce copying data.
 
 It diverges in a few ways:
 
@@ -53,10 +53,14 @@ library(hydrorecipes)
     Loading required package: Bessel
 
 ``` r
-data(kennel_2020)
+# kennel_2020 (1 minute interval)
+#  water level
+#  barometric pressure
+#  synthetic earthtide
+data(kennel_2020) 
 
 form     <- as.formula(wl~.)
-ba_knots <- log_lags_arma(15, 1440) # knots for distributed lag baro terms
+ba_knots <- log_lags_arma(15, 1441) # knots for distributed lag baro terms
 df       <- 5                            # degrees of freedom for spline background trend
 
 rec <- recipe(form, kennel_2020) |>
@@ -101,12 +105,15 @@ points(wl_step_distributed_lag +
 
 ## To do:
 
--   Change modelling steps to recipe function?
+-   Determine how to store model results or steps that result in fewer
+    rows
     -   response
     -   predict
     -   coefficients
     -   fft
     -   baro
+-   Assess default bake step for steps
+-   improve use of …
 -   Explore convolution methods for Laplace solutions
 -   Optimize Laplace solutions
 -   Fix selectors
@@ -115,6 +122,7 @@ points(wl_step_distributed_lag +
 -   Increase test coverage
 -   Steps
     -   step_temporary_deployment
+    -   step_read_transducer
 -   Tests for selectors
 -   Increase speed
 -   Decrease memory consumption
