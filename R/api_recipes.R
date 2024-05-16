@@ -126,6 +126,21 @@ step_add_vars <- function(.rec,
 #'  drawdown in an extensive aquifer, Trans. Am. Geophys. Union, vol. 33,
 #'  pp. 559-569.
 #'
+#' @examples
+#' time <- 10^seq(-5, 2, 0.1)
+#' form <- formula(time~.)
+#' dat <- data.frame(time = time)
+#'
+#' jl = recipe(formula = form, data = dat) |>
+#'   step_aquifer_constant_drawdown(time = time,
+#'                                  drawdown = 10,
+#'                                  thickness = 10,
+#'                                  radius_well = 0.15,
+#'                                  specific_storage = 1e-6,
+#'                                  hydraulic_conductivity = 1,
+#'                                  n_terms = 12L) |>
+#'   plate()
+#'
 #' @export
 step_aquifer_constant_drawdown <- function(.rec,
                                            time,
@@ -172,21 +187,48 @@ step_aquifer_constant_drawdown <- function(.rec,
 #' @family aquifer
 #'
 #' @examples
-#' dat <- data.frame(x = as.numeric(1:100),
-#'                   y = rep(0.01, 100))
-#' formula <- as.formula(y~x)
+#' time <- 1:2000
+#' flow_rate  <- c(rep(0.001, 500),
+#'                 rep(0.002, 500),
+#'                 rep(0.0, 1000))
 #'
-#' # Spherical
-#' frec = recipe(formula = formula, data = dat) |>
-#'   step_aquifer_grf(time = x, flow_rate = y, flow_dimension = 3.0) |>
-#'   prep() |>
-#'   bake()
+#' dat <- data.frame(time, flow_rate)
 #'
-#' # Theis
-#' frec = recipe(formula = formula, data = dat) |>
-#'   step_aquifer_grf(time = x, flow_rate = y, flow_dimension = 2.0) |>
-#'   prep() |>
-#'   bake()
+#' # radial (flow_dimension = 2 Theis)
+#' dd_rad <- recipe(time~flow_rate, dat) |>
+#'   step_aquifer_grf(time = time,
+#'                    flow_rate = flow_rate,
+#'                    thickness = 1.0,
+#'                    radius = 20,
+#'                    specific_storage = 1e-5,
+#'                    hydraulic_conductivity = 1e-3,
+#'                    flow_dimension = 2) |>
+#'   plate()
+#'
+#'
+#' # linear (flow_dimension = 1)
+#'
+#' dd_lin <- recipe(time~flow_rate, dat) |>
+#'   step_aquifer_grf(time = time,
+#'                    flow_rate = flow_rate,
+#'                    thickness = 1.0,
+#'                    radius = 20,
+#'                    specific_storage = 1e-5,
+#'                    hydraulic_conductivity = 1e-3,
+#'                    flow_dimension = 1) |>
+#'   plate()
+#'
+#' # spherical (flow_dimension = 3)
+#' dd_sph <- recipe(time~flow_rate, dat) |>
+#'   step_aquifer_grf(time = time,
+#'                    flow_rate = flow_rate,
+#'                    thickness = 1.0,
+#'                    radius = 20,
+#'                    specific_storage = 1e-5,
+#'                    hydraulic_conductivity = 1e-3,
+#'                    flow_dimension = 3) |>
+#'   plate()
+#'
 #'
 #' @export
 step_aquifer_grf <- function(.rec,
@@ -282,14 +324,41 @@ step_aquifer_theis <- function(.rec,
 #' @family aquifer
 #'
 #' @examples
-#' dat <- data.frame(x = as.numeric(1:100),
-#'                   y = rep(0.01, 100))
-#' formula <- as.formula(y~x)
+#' time <- 1:2000
+#' flow_rate <- c(rep(0.001, 500),
+#'                rep(0.002, 500),
+#'                rep(0.0, 1000))
 #'
-#' frec = recipe(formula = formula, data = dat) |>
-#'   step_aquifer_leaky(time = x, flow_rate = y) |>
-#'   prep() |>
-#'   bake()
+#' # high
+#' dat <- data.frame(time = 1:2000, flow_rate = flow_rate)
+#' hj_100 <- recipe(flow_rate~time, dat) |>
+#'   step_aquifer_leaky(time,
+#'                      flow_rate,
+#'                      leakage = 100,
+#'                      radius = 100,
+#'                      storativity = 1e-6,
+#'                      transmissivity = 1e-4) |>
+#'   plate()
+#'
+#' # medium
+#' hj_200 <- recipe(flow_rate~time, dat) |>
+#'   step_aquifer_leaky(time,
+#'                      flow_rate,
+#'                      leakage = 200,
+#'                      radius = 100,
+#'                      storativity = 1e-6,
+#'                      transmissivity = 1e-4) |>
+#'   plate()
+#'
+#' # low
+#' hj_1000 <- recipe(flow_rate~time, dat) |>
+#'   step_aquifer_leaky(time,
+#'                      flow_rate,
+#'                      leakage = 1000,
+#'                      radius = 100,
+#'                      storativity = 1e-6,
+#'                      transmissivity = 1e-4) |>
+#'   plate()
 #'
 #' @export
 step_aquifer_leaky <- function(.rec,
@@ -329,14 +398,12 @@ step_aquifer_leaky <- function(.rec,
 #' @family aquifer
 #'
 #' @examples
-#' dat <- data.frame(x = as.numeric(1:100),
-#'                   y = rep(0.01, 100))
-#' formula <- as.formula(y~x)
+#' dat <- data.frame(time = as.numeric(1:100))
+#' formula <- as.formula(time~.)
 #'
 #' frec = recipe(formula = formula, data = dat) |>
-#'   step_aquifer_patch(time = x, flow_rate = y) |>
-#'   prep() |>
-#'   bake()
+#'   step_aquifer_patch(time = time, flow_rate = 0.01) |>
+#'   plate()
 #'
 #' @export
 step_aquifer_patch <- function(.rec,

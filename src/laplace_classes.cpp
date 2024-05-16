@@ -685,6 +685,7 @@ struct BarkerHerbert
     double A = sqrt(s_2 * p / t_2);
 
     double ct = (t_2 / t_1) * (A / N);
+    double s = Q / (2.0 * M_PI * t_1);
 
     double bi_n0 = std::cyl_bessel_i(0.0, N * radius_patch);
     double bk_a0 = std::cyl_bessel_k(0.0, A * radius_patch);
@@ -698,22 +699,39 @@ struct BarkerHerbert
     double term_1 = (bk_n1 * bk_a0 - bk_a1 * bk_n0 * ct);
     double term_2 = (bk_n0 * bi_n1 + bk_n1 * bi_n0);
 
+    double term;
     double drawdown;
+
+    // Rcpp::Rcout << "The value is N * radius_patch " << N * radius_patch << std::endl;
+    // Rcpp::Rcout << "The value is A * radius_patch " << A * radius_patch << std::endl;
+    //
+    // Rcpp::Rcout << "The value is bi_n0 " << bi_n0 << std::endl;
+    // Rcpp::Rcout << "The value is bi_n1 " << bi_n1 << std::endl;
+    // Rcpp::Rcout << "The value is bk_n0 " << bi_n0 << std::endl;
+    // Rcpp::Rcout << "The value is bk_n1 " << bi_n1 << std::endl;
+    // Rcpp::Rcout << "The value is bk_a0 " << bi_n0 << std::endl;
+    // Rcpp::Rcout << "The value is bk_a1 " << bi_n1 << std::endl;
+    // Rcpp::Rcout << "The value is denom " << denom << std::endl;
+    // Rcpp::Rcout << "The value is term_1 " << term_1 << std::endl;
+    // Rcpp::Rcout << "The value is term_2 " << term_2 << std::endl;
 
     // if radius is inside the patch
     if (radius <= radius_patch)
     {
+      term = (bk_n1 * bk_a0 - bk_a1 * bk_n0 * ct);
 
       drawdown = std::cyl_bessel_k(0.0, N * radius) / p +
-        (term_1 * std::cyl_bessel_i(0.0, N * radius)) / denom;
+        (term * std::cyl_bessel_i(0.0, N * radius)) / denom;
 
-      return (drawdown);
+      // return (drawdown);
+    } else {
+      term = (bk_n0 * bi_n1 + bk_n1 * bi_n0);
+
+      // if radius is outside the patch
+      drawdown = term * std::cyl_bessel_k(0.0, A * radius) / denom;
     }
 
-    // if radius is outside the patch
-    drawdown = term_2 * std::cyl_bessel_k(0.0, A * radius) / denom;
-
-    return (drawdown * Q / (2.0 * M_PI * t_1));
+    return (drawdown * s);
   }
 };
 
@@ -1069,7 +1087,7 @@ Eigen::VectorXd barker_herbert(
   BarkerHerbert well(time, radius, radius_patch,
                      t_1, t_2, s_1, s_2, Q, prec);
 
-return (stehfest(well, n_terms) * (Q / (2.0 * M_PI * t_1)));
+return stehfest(well, n_terms);
 }
 
 

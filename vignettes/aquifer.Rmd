@@ -1,0 +1,359 @@
+---
+title: "Aquifer steps"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Aquifer steps}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, results = "hide", include = FALSE}
+library(hydrorecipes)
+```
+
+
+### Generalized radial flow model (Barker, 1988)
+
+```{r grf}
+time <- 1:2000
+flow_rate  <- c(rep(0.001, 500),
+                rep(0.002, 500),
+                rep(0.0, 1000))
+
+dat <- data.frame(time, flow_rate)
+
+# radial (flow_dimension = 2 Theis)
+grf <- recipe(time~flow_rate, dat) |>
+  step_aquifer_grf(time = time,
+                   flow_rate = flow_rate,
+                   thickness = 1.0,
+                   radius = 20,
+                   specific_storage = 1e-5,
+                   hydraulic_conductivity = 1e-3,
+                   flow_dimension = 2) |>
+  plate()
+plot(aquifer_grf~time, grf,
+     type = "l", 
+     ylab = "drawdown", 
+     xlab = "")
+```
+
+### Hantush-Jacob leaky aquifer (Hantush-Jacob, 1955)
+
+```{r hj}
+
+time <- 1:2000
+flow_rate <- c(rep(0.001, 500), 
+               rep(0.002, 500),
+               rep(0.0, 1000))
+
+# high
+dat <- data.frame(time = 1:2000, flow_rate = flow_rate)
+hj <- recipe(flow_rate~time, dat) |>
+  step_aquifer_leaky(time, 
+                     flow_rate, 
+                     leakage = 100, 
+                     radius = 100, 
+                     storativity = 1e-6,
+                     transmissivity = 1e-4) |> 
+  plate()
+
+plot(aquifer_leaky~time, hj, type = "l", 
+     ylab = "drawdown", 
+     xlab = "")
+```
+
+
+### Barker-Herbert radially symmetric patch (Barker-Herbert, 1982)
+
+
+#### Figure 2
+
+```{r bh2}
+
+formula <- as.formula(flow_rate~time)
+q <- 0.05
+t_1 <- 1.0
+t_2 <- 1.0
+s_1 <- 1e-5
+s_2 <- 1e-7
+r <- 10
+R <- 100
+time <- 10^seq(-4, 4, 0.01)
+dat <- data.frame(time = time)
+
+bh = recipe(formula = formula, data = dat) |>
+  step_aquifer_patch(time = time, 
+                     flow_rate = q,
+                     thickness = 1.0,
+                     radius = r,
+                     radius_patch = R,
+                     specific_storage_inner = s_1,
+                     specific_storage_outer = s_2,
+                     hydraulic_conductivity_inner = t_1,
+                     hydraulic_conductivity_outer = t_2,
+                     n_stehfest = 12L) |>
+  plate()
+
+dim_time_scale = (4.0 * t_1) / (s_1 * r^2)
+dim_s_scale = 4.0 * pi * t_1 / q
+bh$dim_time <- bh$time * dim_time_scale
+bh$dim_s <- bh$aquifer_patch * dim_s_scale
+
+plot(dim_s~dim_time, bh, type = "l", 
+     ylab = "drawdown (dimensionless)", 
+     xlab = "time (dimensionless)",
+     log = "x",
+     ylim = c(0, 50))
+
+bh = recipe(formula = formula, data = dat) |>
+  step_aquifer_patch(time = time, 
+                     flow_rate = q,
+                     thickness = 1.0,
+                     radius = r,
+                     radius_patch = R,
+                     specific_storage_inner = s_1,
+                     specific_storage_outer = s_2,
+                     hydraulic_conductivity_inner = t_1,
+                     hydraulic_conductivity_outer = t_2 * 10,
+                     n_stehfest = 12L) |>
+  plate()
+
+dim_time_scale = (4.0 * t_1) / (s_1 * r^2)
+dim_s_scale = 4.0 * pi * t_1 / q
+bh$dim_time <- bh$time * dim_time_scale
+bh$dim_s <- bh$aquifer_patch * dim_s_scale
+
+
+points(dim_s~dim_time, bh, type = "l")
+
+t_1 <- t_1 * 10.0
+bh = recipe(formula = formula, data = dat) |>
+  step_aquifer_patch(time = time, 
+                     flow_rate = q,
+                     thickness = 1.0,
+                     radius = r,
+                     radius_patch = R,
+                     specific_storage_inner = s_1,
+                     specific_storage_outer = s_2,
+                     hydraulic_conductivity_inner = t_1,
+                     hydraulic_conductivity_outer = t_2,
+                     n_stehfest = 12L) |>
+  plate()
+
+dim_time_scale = (4.0 * t_1) / (s_1 * r^2)
+dim_s_scale = (4.0 * pi * t_1) / q
+bh$dim_time <- bh$time * dim_time_scale
+bh$dim_s <- bh$aquifer_patch * dim_s_scale
+
+
+points(dim_s~dim_time, bh, type = "l")
+
+```
+
+#### Figure 3
+
+```{r bh3}
+
+formula <- as.formula(flow_rate~time)
+t_1 <- 1.0
+t_2 <- 1.0
+s_1 <- 1e-5
+s_2 <- 1e-5
+
+bh = recipe(formula = formula, data = dat) |>
+  step_aquifer_patch(time = time, 
+                     flow_rate = q,
+                     thickness = 1.0,
+                     radius = r,
+                     radius_patch = R,
+                     specific_storage_inner = s_1,
+                     specific_storage_outer = s_2,
+                     hydraulic_conductivity_inner = t_1,
+                     hydraulic_conductivity_outer = t_2,
+                     n_stehfest = 12L) |>
+  plate()
+
+dim_time_scale = (4.0 * t_1) / (s_1 * r^2)
+dim_s_scale = 4.0 * pi * t_1 / q
+bh$dim_time <- bh$time * dim_time_scale
+bh$dim_s <- bh$aquifer_patch * dim_s_scale
+
+plot(dim_s~dim_time, bh, type = "l", 
+     ylab = "drawdown (dimensionless)", 
+     xlab = "time (dimensionless)",
+     log = "x",
+     ylim = c(0, 50))
+
+bh = recipe(formula = formula, data = dat) |>
+  step_aquifer_patch(time = time, 
+                     flow_rate = q,
+                     thickness = 1.0,
+                     radius = r,
+                     radius_patch = R,
+                     specific_storage_inner = s_1,
+                     specific_storage_outer = s_2,
+                     hydraulic_conductivity_inner = t_1,
+                     hydraulic_conductivity_outer = t_2 * 10,
+                     n_stehfest = 12L) |>
+  plate()
+
+dim_time_scale = (4.0 * t_1) / (s_1 * r^2)
+dim_s_scale = 4.0 * pi * t_1 / q
+bh$dim_time <- bh$time * dim_time_scale
+bh$dim_s <- bh$aquifer_patch * dim_s_scale
+
+
+points(dim_s~dim_time, bh, type = "l")
+t_1 <- t_1 * 10.0
+bh = recipe(formula = formula, data = dat) |>
+  step_aquifer_patch(time = time, 
+                     flow_rate = q,
+                     thickness = 1.0,
+                     radius = r,
+                     radius_patch = R,
+                     specific_storage_inner = s_1,
+                     specific_storage_outer = s_2,
+                     hydraulic_conductivity_inner = t_1,
+                     hydraulic_conductivity_outer = t_2,
+                     n_stehfest = 12L) |>
+  plate()
+
+dim_time_scale = (4.0 * t_1) / (s_1 * r^2)
+dim_s_scale = (4.0 * pi * t_1) / q
+bh$dim_time <- bh$time * dim_time_scale
+bh$dim_s <- bh$aquifer_patch * dim_s_scale
+
+
+points(dim_s~dim_time, bh, type = "l")
+
+```
+
+#### Figure 4
+
+```{r bh4}
+
+formula <- as.formula(flow_rate~time)
+q <- 0.05
+t_1 <- 1.0
+t_2 <- 1.0
+s_1 <- 1e-5
+s_2 <- 1e-5
+r <- 100
+R <- 90
+
+bh = recipe(formula = formula, data = dat) |>
+  step_aquifer_patch(time = time, 
+                     flow_rate = q,
+                     thickness = 1.0,
+                     radius = r,
+                     radius_patch = R,
+                     specific_storage_inner = s_1,
+                     specific_storage_outer = s_2,
+                     hydraulic_conductivity_inner = t_1,
+                     hydraulic_conductivity_outer = t_2,
+                     n_stehfest = 14L) |>
+  plate()
+
+dim_time_scale = (4.0 * t_1) / (s_2 * r^2)
+dim_s_scale = 4.0 * pi * t_2 / q
+bh$dim_time <- bh$time * dim_time_scale
+bh$dim_s <- bh$aquifer_patch * dim_s_scale
+
+plot(dim_s~dim_time, bh, type = "l", 
+     ylab = "drawdown (dimensionless)", 
+     xlab = "time (dimensionless)",
+     log = "x",
+     ylim = c(0, 10))
+
+bh = recipe(formula = formula, data = dat) |>
+  step_aquifer_patch(time = time, 
+                     flow_rate = q,
+                     thickness = 1.0,
+                     radius = r,
+                     radius_patch = R,
+                     specific_storage_inner = s_1,
+                     specific_storage_outer = s_2,
+                     hydraulic_conductivity_inner = t_1,
+                     hydraulic_conductivity_outer = t_2 * 10,
+                     n_stehfest = 14L) |>
+  plate()
+
+dim_time_scale = (4.0 * t_2 * 10) / (s_1 * r^2)
+dim_s_scale = 4.0 * pi * t_2 * 10 / q
+bh$dim_time <- bh$time * dim_time_scale
+bh$dim_s <- bh$aquifer_patch * dim_s_scale
+
+
+points(dim_s~dim_time, bh, type = "l")
+
+bh = recipe(formula = formula, data = dat) |>
+  step_aquifer_patch(time = time, 
+                     flow_rate = q,
+                     thickness = 1.0,
+                     radius = r,
+                     radius_patch = R,
+                     specific_storage_inner = s_1,
+                     specific_storage_outer = s_2,
+                     hydraulic_conductivity_inner = t_1 * 10,
+                     hydraulic_conductivity_outer = t_2,
+                     n_stehfest = 14L) |>
+  plate()
+
+dim_time_scale = (4.0 * t_2) / (s_1 * r^2)
+dim_s_scale = (4.0 * pi * t_2) / q
+bh$dim_time <- bh$time * dim_time_scale
+bh$dim_s <- bh$aquifer_patch * dim_s_scale
+
+
+points(dim_s~dim_time, bh, type = "l")
+
+```
+
+### Jacob-Lohman constant drawdown (Jacob-Lohman, 1952)
+
+
+```{r jl}
+
+time <- 10^seq(-5, 2, 0.1)
+form <- formula(time~.)
+dat <- data.frame(time = time)
+
+
+jl = recipe(formula = form, data = dat) |>
+  step_aquifer_constant_drawdown(time = time,
+                                 drawdown = 10,
+                                 thickness = 10,
+                                 radius_well = 0.15,
+                                 specific_storage = 1e-6,
+                                 hydraulic_conductivity = 1,
+                                 n_terms = 12L) |>
+  plate()
+
+plot(aquifer_constant_drawdown~time, jl, type = "l", 
+     ylab = "flow rate", 
+     xlab = "")
+```
+
+## References
+
+Barker, J.A., A generalized radial flow model for hydraulic tests in fractured rock. Water Resour. Res., 24 (1988), pp. 1796-1804, 10.1029/WR024i010p01796
+
+Barker, J.A., and R. Herbert, 1982: Pumping tests in patchy aquifers, Ground Water, vol. 20, No. 2, pp. 150-155.
+
+Butler, J.J., 1988: Pumping tests in nonuniform aquifers – The radially symmetric case, Journal of Hydrology, Vol. 101, pp. 15-30.
+
+Hantush, M.S. and C.E. Jacob, 1955. Non-steady radial flow in an infinite leaky aquifer, Am. Geophys. Union Trans., vol. 36, no. 1, pp. 95-100.
+
+Jacob, C.E. and S.W. Lohman, 1952. Nonsteady flow to a well of constant drawdown in an extensive aquifer, Trans. Am. Geophys. Union, vol. 33, pp. 559-569.
+
+Prodanoff, J.H.A., Mansur, W.J. and Mascarenhas, F.C.B., 2006. Numerical evaluation of Theis and Hantush-Jacob well functions. Journal of hydrology, 318(1-4), pp.173-183.
