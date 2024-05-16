@@ -36,7 +36,7 @@ library(data.table)
 library(hydrorecipes)
 library(bench)
 library(tibble)
-library(RcppRoll) # for step_window
+library(RcppRoll) # for recipes::step_window
 
 ```
 
@@ -47,7 +47,7 @@ library(RcppRoll) # for step_window
 #| warning: false
 
 relative <- FALSE
-n <- c(1e2, 1e4, 1e6)
+n <- c(1e2, 1e4, 5e6)
 formula <- as.formula(y~x)
 
 results <- bench::press(
@@ -1051,7 +1051,8 @@ f = recipe(formula = frm, data = dat) |>
 
 bench::mark(
   hrec = recipe(formula = frm, data = dat) |>
-    step_ols_gap_fill(c(x, y, z), recipe = f)
+    step_ols_gap_fill(c(x, y, z), recipe = f) |>
+        plate(),
 )
 
 
