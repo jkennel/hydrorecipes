@@ -44,5 +44,6 @@ form <- as.formula("wl~.")
 
   rec <- recipe(form, kennel_2020) |>
   step_fft_transfer_welch(c(wl, baro, et), spans = 3) |>
+  plate()
 
 }

@@ -920,7 +920,7 @@ step_fft_welch <- function(.rec,
 #'  Calculates the transfer function with pgram results.
 #'
 #' @inheritParams step_scale
-#' @inheritParams step_fft_pgram
+#' @inheritParams stats::spec.pgram
 #'
 #' @return an updated recipe
 #' @export
@@ -932,6 +932,7 @@ step_fft_welch <- function(.rec,
 #'
 #' rec <- recipe(form, kennel_2020) |>
 #'        step_fft_transfer_pgram(c(wl, baro, et), spans = 3) |>
+#'        plate()
 #'
 step_fft_transfer_pgram <- function(.rec,
                                     terms,
@@ -964,6 +965,7 @@ step_fft_transfer_pgram <- function(.rec,
 #'
 #'   rec <- recipe(form, kennel_2020) |>
 #'   step_fft_transfer_welch(c(wl, baro, et), spans = 3) |>
+#'   plate()
 #'
 step_fft_transfer_welch <- function(.rec,
                                     terms,
