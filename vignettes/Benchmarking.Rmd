@@ -3,8 +3,10 @@ title: "Benchmarking"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Benchmarking}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -632,13 +634,15 @@ results <- bench::press(
   {
     dat <- data.frame(x = as.numeric(1:rows), 
                       y = 1:rows)
+    bench::mark(
     hrec = recipe(formula = formula, data = dat) |>
       step_lead_lag(x, lag = 1:10) |>
       step_harmonic(x, 
                     frequency = c(1, 2, 3, 4, 5), 
                     cycle_size = 0.1, 
                     starting_value = 0) |>
-      step_center(x)
+      step_center(x) |> 
+      plate("tbl"),
     rec  = recipes::recipe(formula = formula, data = dat) |>
       recipes::step_lag(x, lag = 1:10, keep_original_cols = TRUE) |>
       recipes::step_harmonic(x, 
@@ -646,10 +650,9 @@ results <- bench::press(
                              cycle_size = 0.1, 
                              starting_val = 0,
                              keep_original_cols = TRUE) |>
-      recipes::step_center(x)
-    bench::mark(
-      hrec$plate("tbl"),
-      rec |> recipes::prep() |> recipes::bake(new_data = NULL),
+      recipes::step_center(x) |> 
+      recipes::prep() |> 
+      recipes::bake(new_data = NULL),
       check = FALSE,
       relative = relative,
       min_iterations = 1
@@ -856,6 +859,7 @@ results
 ```
 
 ## step_transport_fractures_solute
+
 ```{r}
 #| echo: true
 #| warning: false
@@ -870,11 +874,11 @@ names(dat) <- c("time", "z", "x")
 
 results <- 
   bench::mark(
-    hrec1 = (recipe(formula = formula, data = dat) |>
-               step_transport_fractures_solute(time = time,
-                                               distance_fracture = z,
-                                               distance_matrix = x) |>
-               plate("dt")),
+    hrec1 = recipe(formula = formula, data = dat) |>
+      step_transport_fractures_solute(time = time,
+                                      distance_fracture = z,
+                                      distance_matrix = x) |>
+      plate("dt"),
     check = FALSE,
     min_iterations = 10
   )
@@ -898,11 +902,11 @@ names(dat) <- c("time", "z", "x")
 
 results <- 
   bench::mark(
-    hrec1 = (recipe(formula = formula, data = dat) |>
-               step_transport_fractures_heat(time = time,
-                                             distance_fracture = z,
-                                             distance_matrix = x) |>
-               plate("dt")),
+    hrec1 = recipe(formula = formula, data = dat) |>
+      step_transport_fractures_heat(time = time,
+                                    distance_fracture = z,
+                                    distance_matrix = x) |>
+      plate("dt"),
     check = FALSE,
     min_iterations = 10
   )
@@ -923,29 +927,29 @@ results <- bench::press(
   {
     dat <- data.frame(x = rnorm(rows), y = rnorm(rows), z = rnorm(rows),
                       q = rnorm(rows), r = rnorm(rows), s = rnorm(rows))
+    bench::mark(
     hrec1 = recipe(formula = formula, data = dat) |>
       step_fft_pgram(c(x, y), 
                  3,
                  TRUE,
                  TRUE,
                  FALSE,
-                 0.1)
+                 0.1) |> 
+      plate(),
     hrec2 = recipe(formula = formula, data = dat) |>
       step_fft_pgram(c(x, y), 
                  3,
                  TRUE,
                  TRUE,
                  TRUE,
-                 0.1)
+                 0.1) |> 
+      plate(),
     hrec3 = recipe(formula = formula, data = dat) |>
       step_fft_welch(c(x, y),
                  length_subset =  nrow(dat) / 10,
                  overlap = 0.60,
-                 window = window_nuttall(nrow(dat) / 10))
-    bench::mark(
-      hrec1 |> plate("dt"),
-      hrec2 |> plate("dt"),
-      hrec3 |> plate("dt"),
+                 window = window_nuttall(nrow(dat) / 10)) |>
+      plate(),
       check = FALSE,
       min_iterations = 3
     )
@@ -967,21 +971,22 @@ results <- bench::press(
   rows = n,
   {
     dat <- data.frame(x = rnorm(rows), y = rnorm(rows))
-    hrec1 = recipe(formula = formula, data = dat) |>
-      step_fft_transfer_pgram(c(x, y), 
-                              3,
-                              TRUE,
-                              TRUE,
-                              0.1)
-    hrec2 = recipe(formula = formula, data = dat) |>
-      step_fft_transfer_welch(c(x, y),
-                          length_subset =  nrow(dat) / 10,
-                          overlap = 0.60,
-                          window = window_nuttall(nrow(dat) / 10))
-    bench::mark(hrec1 |> plate("dt"),
-                hrec2 |> plate("dt"),
-                check = FALSE,
-                min_iterations = 2
+    bench::mark(
+      hrec1 = recipe(formula = formula, data = dat) |>
+        step_fft_transfer_pgram(c(x, y), 
+                                3,
+                                TRUE,
+                                TRUE,
+                                0.1) |> 
+        plate("dt"),
+      hrec2 = recipe(formula = formula, data = dat) |>
+        step_fft_transfer_welch(c(x, y),
+                                length_subset =  nrow(dat) / 10,
+                                overlap = 0.60,
+                                window = window_nuttall(nrow(dat) / 10)) |> 
+        plate("dt"),
+      check = FALSE,
+      min_iterations = 2
     )
   }
 )
@@ -1035,7 +1040,6 @@ dat <- data.table(x = x, y = x, z = as.numeric(1:n))
 dat[, x := x + c(rep(20, n/2), rep(0, n/2))]
 dat[, x := x + 3.0 * sin(z * 1/n)]
 tmp <- copy(dat$x)
-plot(tmp, type = 'l')
 dat[60000:70000, x := NA_real_]
 
 dat <- unclass(dat)
@@ -1045,16 +1049,10 @@ f = recipe(formula = frm, data = dat) |>
   step_spline_b(z, df = 4) |>
   step_drop_columns(z)
 
-hrec = recipe(formula = frm, data = dat) |>
-  step_ols_gap_fill(c(x, y, z), recipe = f)
-
-
-tmp2 <- hrec$plate()
-points(dat$x, type = 'p', pch = 20, cex = 0.2, col = "blue")
-points(tmp2$ols_gap_fill_x, type = 'l', col = 'red')
-
-
-
+bench::mark(
+  hrec = recipe(formula = frm, data = dat) |>
+    step_ols_gap_fill(c(x, y, z), recipe = f)
+)
 
 
 ```
