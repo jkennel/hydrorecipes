@@ -1,0 +1,13 @@
+pandoc: 3.1.11
+pkgdown: 2.0.9
+pkgdown_sha: ~
+articles:
+  Benchmarking: Benchmarking.html
+  grf: grf.html
+  hantush_jacob: hantush_jacob.html
+  Regression: Regression.html
+last_built: 2024-05-16T16:01Z
+urls:
+  reference: https://jkennel.github.io/hydrorecipes/reference
+  article: https://jkennel.github.io/hydrorecipes/articles
+
