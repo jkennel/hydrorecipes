@@ -3,13 +3,14 @@
 WARNING: This package is in early stages of development and is likely to
 change.
 
-This package is based on [recipes](https://recipes.tidymodels.org)
-framework consisting of a recipe and a set of steps to apply. The goals
-of the package are to improve speed, decrease memory consumption,
-increase consistency between steps, and decrease some boiler plate code
-for step additions. The first three goals are likely to be achieved but
-the fourth might not given that the package implements two APIs (one for
-R6 and one for S3). Speed and memory improvements comes from the
+This package is modeled after the
+[recipes](https://recipes.tidymodels.org) framework consisting of a
+recipe and a set of steps to apply. The goals of the package are to
+improve speed, decrease memory consumption, increase consistency between
+steps, and decrease some boiler plate code for step additions. The first
+three goals are likely to be achieved but the fourth might not given
+that the package implements two APIs (one for R6 and one for S3). Speed
+and memory improvements comes from the
 [collapse](https://sebkrantz.github.io/collapse/) package, Rcpp code,
 using algorithms that scale better, and attempts to reduce copying data.
 
@@ -17,11 +18,11 @@ It diverges in a few ways:
 
 -   based on [R6](https://r6.r-lib.org)
 
--   focus is on long datasets (millions of rows)
+-   focus on long datasets (millions of rows)
 
--   attention to memory usage
+-   focus on memory usage
 
--   attention to speed
+-   focus on speed
 
 -   steps tailored to groundwater applications
 
@@ -39,69 +40,6 @@ It diverges in a few ways:
     -   uses *terms* instead of *…* for variable selection and
         selections are wrapped in `c()` when more than one is required.
     -   *R6* and standard R interfaces
-
-Example usage:
-
-``` r
-#|warning: false
-#|message: false
-
-
-library(hydrorecipes)
-```
-
-    Loading required package: Bessel
-
-``` r
-# kennel_2020 (1 minute interval)
-#  water level
-#  barometric pressure
-#  synthetic earthtide
-data(kennel_2020) 
-
-form     <- as.formula(wl~.)
-ba_knots <- log_lags_arma(15, 1441) # knots for distributed lag baro terms
-df       <- 5                            # degrees of freedom for spline background trend
-
-rec <- recipe(form, kennel_2020) |>
-  step_distributed_lag(baro, knots = ba_knots) |>
-  step_spline_b(datetime, df = df) |>
-  step_lead_lag(et, lag = seq(-120, 120, 60)) |>
-  step_intercept() |>
-  step_drop_columns(c(baro, et, datetime)) |>
-  step_ols(formula = form) |>
-  prep() |>
-  bake()
-
-
-# responses
-resp <- rec$get_response_data(type = "dt")
-
-# barometric response function
-plot(value~x, data = resp[term == "distributed_lag_interpolated" & variable == "cumulative"], 
-     type = "l",
-     xlab = "Lag time in minutes",
-     ylab = "Cumulative response")
-```
-
-![](README.markdown_github_files/figure-markdown_github/unnamed-chunk-1-1.png)
-
-``` r
-# decomposition
-pred <- cbind(kennel_2020, rec$get_predict_data())
-
-# initial
-plot(wl~datetime, pred, type = "l", 
-       xlab = "", ylab = "Pressure (dbar)")
-
-# predicted sum of components
-points(wl_step_distributed_lag + 
-       wl_step_spline_b + 
-       wl_step_lead_lag + 
-       wl_step_intercept~datetime, pred, type = "l", col = "red")
-```
-
-![](README.markdown_github_files/figure-markdown_github/unnamed-chunk-1-2.png)
 
 ## To do:
 
