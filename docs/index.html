@@ -63,13 +63,13 @@
 <div class="page-header"><h1 id="hydrorecipes">hydrorecipes<a class="anchor" aria-label="anchor" href="#hydrorecipes"></a>
 </h1></div>
 <p>WARNING: This package is in early stages of development and is likely to change.</p>
-<p>This package is based on <a href="https://recipes.tidymodels.org" class="external-link">recipes</a> framework consisting of a recipe and a set of steps to apply. The goals of the package are to improve speed, decrease memory consumption, increase consistency between steps, and decrease some boiler plate code for step additions. The first three goals are likely to be achieved but the fourth might not given that the package implements two APIs (one for R6 and one for S3). Speed and memory improvements comes from the <a href="https://sebkrantz.github.io/collapse/" class="external-link">collapse</a> package, Rcpp code, using algorithms that scale better, and attempts to reduce copying data.</p>
+<p>This package is modeled after the <a href="https://recipes.tidymodels.org" class="external-link">recipes</a> framework consisting of a recipe and a set of steps to apply. The goals of the package are to improve speed, decrease memory consumption, increase consistency between steps, and decrease some boiler plate code for step additions. The first three goals are likely to be achieved but the fourth might not given that the package implements two APIs (one for R6 and one for S3). Speed and memory improvements comes from the <a href="https://sebkrantz.github.io/collapse/" class="external-link">collapse</a> package, Rcpp code, using algorithms that scale better, and attempts to reduce copying data.</p>
 <p>It diverges in a few ways:</p>
 <ul>
 <li><p>based on <a href="https://r6.r-lib.org" class="external-link">R6</a></p></li>
-<li><p>focus is on long datasets (millions of rows)</p></li>
-<li><p>attention to memory usage</p></li>
-<li><p>attention to speed</p></li>
+<li><p>focus on long datasets (millions of rows)</p></li>
+<li><p>focus on memory usage</p></li>
+<li><p>focus on speed</p></li>
 <li><p>steps tailored to groundwater applications</p></li>
 <li><p>decrease the number of dependencies and foreign functions</p></li>
 <li><p>more flexible output options (list, matrix, data.frame, data.table, tibble)</p></li>
@@ -84,63 +84,11 @@
 </ul>
 </li>
 </ul>
-<p>Example usage:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#|warning: false</span></span>
-<span><span class="co">#|message: false</span></span>
-<span></span>
-<span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jkennel.github.io/hydrorecipes/">hydrorecipes</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>Loading required package<span class="sc">:</span> Bessel</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># kennel_2020 (1 minute interval)</span></span>
-<span><span class="co">#  water level</span></span>
-<span><span class="co">#  barometric pressure</span></span>
-<span><span class="co">#  synthetic earthtide</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">kennel_2020</span><span class="op">)</span> </span>
-<span></span>
-<span><span class="va">form</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">.</span><span class="op">)</span></span>
-<span><span class="va">ba_knots</span> <span class="op">&lt;-</span> <span class="fu">log_lags_arma</span><span class="op">(</span><span class="fl">15</span>, <span class="fl">1441</span><span class="op">)</span> <span class="co"># knots for distributed lag baro terms</span></span>
-<span><span class="va">df</span>       <span class="op">&lt;-</span> <span class="fl">5</span>                            <span class="co"># degrees of freedom for spline background trend</span></span>
-<span></span>
-<span><span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">form</span>, <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/step_distributed_lag.html">step_distributed_lag</a></span><span class="op">(</span><span class="va">baro</span>, knots <span class="op">=</span> <span class="va">ba_knots</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/step_spline_b.html">step_spline_b</a></span><span class="op">(</span><span class="va">datetime</span>, df <span class="op">=</span> <span class="va">df</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/step_lead_lag.html">step_lead_lag</a></span><span class="op">(</span><span class="va">et</span>, lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">120</span>, <span class="fl">120</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/step_intercept.html">step_intercept</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/step_drop_columns.html">step_drop_columns</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">baro</span>, <span class="va">et</span>, <span class="va">datetime</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/step_ols.html">step_ols</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">form</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/prep.html">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/bake.html">bake</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="co"># responses</span></span>
-<span><span class="va">resp</span> <span class="op">&lt;-</span> <span class="va">rec</span><span class="op">$</span><span class="fu">get_response_data</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"dt"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># barometric response function</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">value</span><span class="op">~</span><span class="va">x</span>, data <span class="op">=</span> <span class="va">resp</span><span class="op">[</span><span class="va">term</span> <span class="op">==</span> <span class="st">"distributed_lag_interpolated"</span> <span class="op">&amp;</span> <span class="va">variable</span> <span class="op">==</span> <span class="st">"cumulative"</span><span class="op">]</span>, </span>
-<span>     type <span class="op">=</span> <span class="st">"l"</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"Lag time in minutes"</span>,</span>
-<span>     ylab <span class="op">=</span> <span class="st">"Cumulative response"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="README.markdown_github_files/figure-markdown_github/unnamed-chunk-1-1.png"></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># decomposition</span></span>
-<span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">kennel_2020</span>, <span class="va">rec</span><span class="op">$</span><span class="fu">get_predict_data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># initial</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">datetime</span>, <span class="va">pred</span>, type <span class="op">=</span> <span class="st">"l"</span>, </span>
-<span>       xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">"Pressure (dbar)"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># predicted sum of components</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">wl_step_distributed_lag</span> <span class="op">+</span> </span>
-<span>       <span class="va">wl_step_spline_b</span> <span class="op">+</span> </span>
-<span>       <span class="va">wl_step_lead_lag</span> <span class="op">+</span> </span>
-<span>       <span class="va">wl_step_intercept</span><span class="op">~</span><span class="va">datetime</span>, <span class="va">pred</span>, type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="README.markdown_github_files/figure-markdown_github/unnamed-chunk-1-2.png"></p>
 <div class="section level2">
 <h2 id="to-do">To do:<a class="anchor" aria-label="anchor" href="#to-do"></a>
 </h2>
 <ul>
+<li>Documentation</li>
 <li>Determine how to store model results or steps that result in fewer rows
 <ul>
 <li>response</li>
