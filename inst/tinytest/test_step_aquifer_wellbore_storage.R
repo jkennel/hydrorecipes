@@ -70,8 +70,6 @@ expect_equivalent(frec$result$aquifer_wellbore_storage, m[, 3],
                   tolerance = 5e-4)
 
 
-
-
 formula <- as.formula(flow_rate~time)
 q <- 0.05
 t_1 <- 10000.0
@@ -111,53 +109,6 @@ expect_equivalent(pc$aquifer_wellbore_storage, bh$aquifer_patch,
                   tolerance = 1e-6,
                   info = "StepAquiferWellboreStorage is equivalent to StepAquiferPatch with inner and outer zones having the same properties",
 )
-
-
-# bench::mark(
-#
-# times1 <-  10^seq(-6, 3, 0.001),#seq(1, 86400*1, length.out = 1000000)/86400
-# pc1 <- hydrorecipes:::papadopulos_cooper_laplace(times1,
-#                                             Q,
-#                                             r,
-#                                             rc,
-#                                             rw,
-#                                             Tr,
-#                                             S,
-#                                             prec, 8L),
-# times2 <-  seq(0.1, 86400*1, length.out = 1000000)/86400,
-# pc2 <- hydrorecipes:::papadopulos_cooper_laplace(times2,
-#                                              Q,
-#                                              r,
-#                                              rc,
-#                                              rw,
-#                                              Tr,
-#                                              S,
-#                                              prec, 8L),
-#
-#
-# pc_approx <- approx(x = times1, y = pc1, xout = times2)$y,
-# check = FALSE
-# )
-#
-# range(pc_approx - pc2)
-# which.max(pc_approx - pc2)
-# which.min(pc_approx - pc2)
-#
-# tmp1 <- pc2-shift(pc2, 1)
-# tmp2 <- pc_approx-shift(pc_approx, 1)
-#
-# range(tmp1-tmp2, na.rm = TRUE)
-# which.max(tmp1 - tmp2)
-# which.min(tmp1 - tmp2)
-#
-# library(data.table)
-# plot(y = pc2-shift(pc2, 1), x = times2, type = 'l', log = 'xy')
-# points(y = pc_approx-shift(pc_approx, 1), x = times2, type = 'l', col = 'red')
-# abline(v = times2[which.max(pc_approx - pc2)])
-# abline(v = times2[which.min(pc_approx - pc2)])
-# abline(v = times2[which.max(tmp1 - tmp2)], col = "blue")
-# abline(v = times2[which.min(tmp1 - tmp2)], col = "blue")
-# plot(y = pc, x = times, type = 'l', log = 'x')
 
 
 

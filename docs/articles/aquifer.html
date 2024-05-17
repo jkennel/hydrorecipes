@@ -373,9 +373,46 @@
 </div>
 </div>
 <div class="section level3">
-<h3 id="jacob-lohman-constant-drawdown-jacob-lohman-1952">Jacob-Lohman constant drawdown (Jacob-Lohman, 1952)<a class="anchor" aria-label="anchor" href="#jacob-lohman-constant-drawdown-jacob-lohman-1952"></a>
+<h3 id="papadopulos-cooper-wellbore-storagepapadopulos-cooper-1967">Papadopulos-Cooper wellbore storage(Papadopulos-Cooper, 1967)<a class="anchor" aria-label="anchor" href="#papadopulos-cooper-wellbore-storagepapadopulos-cooper-1967"></a>
 </h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">2</span>, length.out <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>,</span>
+<span>                  flow_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">flow_rate</span><span class="op">~</span><span class="va">time</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pc</span> <span class="op">=</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/step_aquifer_wellbore_storage.html">step_aquifer_wellbore_storage</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>                                radius_casing <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>                                radius_well <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>                                radius <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>                                flow_rate <span class="op">=</span> <span class="fl">10.0</span>,</span>
+<span>                                hydraulic_conductivity <span class="op">=</span> <span class="fl">10.0</span>,</span>
+<span>                                specific_storage <span class="op">=</span> <span class="fl">1e-4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">th</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">time</span><span class="op">~</span><span class="va">flow_rate</span>, <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/step_aquifer_grf.html">step_aquifer_grf</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>                   flow_rate <span class="op">=</span> <span class="va">flow_rate</span>,</span>
+<span>                   thickness <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>                   radius <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>                   specific_storage <span class="op">=</span> <span class="fl">1e-4</span>,</span>
+<span>                   hydraulic_conductivity <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>                   flow_dimension <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">aquifer_wellbore_storage</span><span class="op">~</span><span class="va">time</span>, <span class="va">pc</span>, </span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>     log <span class="op">=</span> <span class="st">"x"</span>,</span>
+<span>     ylab <span class="op">=</span> <span class="st">"drawdown"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">"elapsed time"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">aquifer_grf</span><span class="op">~</span><span class="va">time</span>, <span class="va">th</span>, type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="st">"darkgrey"</span>, lty <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="aquifer_files/figure-html/pc-1.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="jacob-lohman-constant-drawdown-jacob-lohman-1952">Jacob-Lohman constant drawdown (Jacob-Lohman, 1952)<a class="anchor" aria-label="anchor" href="#jacob-lohman-constant-drawdown-jacob-lohman-1952"></a>
+</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fl">10</span><span class="op">^</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">2</span>, <span class="fl">0.1</span><span class="op">)</span></span>
 <span><span class="va">form</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">formula</a></span><span class="op">(</span><span class="va">time</span><span class="op">~</span><span class="va">.</span><span class="op">)</span></span>
@@ -388,8 +425,7 @@
 <span>                                 thickness <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>                                 radius_well <span class="op">=</span> <span class="fl">0.15</span>,</span>
 <span>                                 specific_storage <span class="op">=</span> <span class="fl">1e-6</span>,</span>
-<span>                                 hydraulic_conductivity <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>                                 n_terms <span class="op">=</span> <span class="fl">12L</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>                                 hydraulic_conductivity <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">aquifer_constant_drawdown</span><span class="op">~</span><span class="va">time</span>, <span class="va">jl</span>, type <span class="op">=</span> <span class="st">"l"</span>, </span>
@@ -413,6 +449,8 @@ pp. 95-100.</p>
 <p>Jacob, C.E. and S.W. Lohman, 1952. Nonsteady flow to a well of
 constant drawdown in an extensive aquifer, Trans. Am. Geophys. Union,
 vol. 33, pp. 559-569.</p>
+<p>Papadopulos, I.S. and H.H. Cooper, 1967. Drawdown in a well of large
+diameter, Water Resources Research, vol. 3, no. 1, pp. 241-244.</p>
 <p>Prodanoff, J.H.A., Mansur, W.J. and Mascarenhas, F.C.B., 2006.
 Numerical evaluation of Theis and Hantush-Jacob well functions. Journal
 of hydrology, 318(1-4), pp.173-183.</p>

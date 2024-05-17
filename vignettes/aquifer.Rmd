@@ -370,8 +370,7 @@ jl = recipe(formula = form, data = dat) |>
                                  thickness = 10,
                                  radius_well = 0.15,
                                  specific_storage = 1e-6,
-                                 hydraulic_conductivity = 1,
-                                 n_terms = 12L) |>
+                                 hydraulic_conductivity = 1) |>
   plate()
 
 plot(aquifer_constant_drawdown~time, jl, type = "l", 
@@ -390,5 +389,7 @@ Butler, J.J., 1988: Pumping tests in nonuniform aquifers – The radially symmet
 Hantush, M.S. and C.E. Jacob, 1955. Non-steady radial flow in an infinite leaky aquifer, Am. Geophys. Union Trans., vol. 36, no. 1, pp. 95-100.
 
 Jacob, C.E. and S.W. Lohman, 1952. Nonsteady flow to a well of constant drawdown in an extensive aquifer, Trans. Am. Geophys. Union, vol. 33, pp. 559-569.
+
+Papadopulos, I.S. and H.H. Cooper, 1967. Drawdown in a well of large diameter, Water Resources Research, vol. 3, no. 1, pp. 241-244.
 
 Prodanoff, J.H.A., Mansur, W.J. and Mascarenhas, F.C.B., 2006. Numerical evaluation of Theis and Hantush-Jacob well functions. Journal of hydrology, 318(1-4), pp.173-183.
