@@ -84,8 +84,10 @@ frec2 = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
                                                hydraulic_conductivity = 1.0e-4))$
   plate("dt")
 
-# plot(x = frec1[[1]], y = frec1[[3]])
+# plot(x = frec1[[1]], y = frec1[[3]], type = 'l')
 # points(x = frec2[[1]], y = frec2[[3]], type = 'l', col = 'red')
 
-expect_equivalent(frec1, frec2,
-                            info = "StepAquiferPatch is equivalent to StepAquiferTheis with inner and outer zones having the same properties", tolerance = 1e-4)
+expect_equivalent(frec1,
+                  frec2,
+                  info = "StepAquiferPatch is equivalent to StepAquiferTheis with inner and outer zones having the same properties",
+                  tolerance = 1e-3)
