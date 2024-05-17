@@ -319,8 +319,43 @@ points(dim_s~dim_time, bh, type = "l")
 
 ```
 
-### Jacob-Lohman constant drawdown (Jacob-Lohman, 1952)
+### Papadopulos-Cooper wellbore storage(Papadopulos-Cooper, 1967)
 
+```{r pc}
+
+
+dat <- data.frame(time = 10^seq(-5, 2, length.out = 100),
+                  flow_rate = rep(10, 100))
+formula <- as.formula(flow_rate~time)
+
+pc = recipe(formula = formula, data = dat) |>
+  step_aquifer_wellbore_storage(time = time,
+                                radius_casing = 0.3,
+                                radius_well = 0.3,
+                                radius = 10,
+                                flow_rate = 10.0,
+                                hydraulic_conductivity = 10.0,
+                                specific_storage = 1e-4) |>
+  plate()
+th <- recipe(time~flow_rate, dat) |>
+  step_aquifer_grf(time = time,
+                   flow_rate = flow_rate,
+                   thickness = 1.0,
+                   radius = 10,
+                   specific_storage = 1e-4,
+                   hydraulic_conductivity = 10,
+                   flow_dimension = 2) |>
+  plate()
+
+plot(aquifer_wellbore_storage~time, pc, 
+     type = "l", lwd = 3,
+     log = "x",
+     ylab = "drawdown", 
+     xlab = "elapsed time")
+points(aquifer_grf~time, th, type = "l", col = "darkgrey", lty = "dashed")
+```
+
+### Jacob-Lohman constant drawdown (Jacob-Lohman, 1952)
 
 ```{r jl}
 
