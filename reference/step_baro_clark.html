@@ -24,10 +24,11 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Benchmarking.html">Benchmarking</a>
-    <a class="dropdown-item" href="../articles/grf.html">Generalized radial flow model</a>
-    <a class="dropdown-item" href="../articles/hantush_jacob.html">Hantush-Jacob leaky aquifer</a>
-    <a class="dropdown-item" href="../articles/Regression.html">Regression</a>
+    <a class="dropdown-item" href="../articles/aquifer.html">Aquifer steps</a>
+    <a class="dropdown-item" href="../articles/barometric_pressure.html">Barometric pressure steps</a>
+    <a class="dropdown-item" href="../articles/benchmarking.html">Benchmarking</a>
+    <a class="dropdown-item" href="../articles/regression.html">Regression</a>
+    <a class="dropdown-item" href="../articles/slug_test.html">Slug test steps</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -108,15 +109,31 @@ data analysis. John Wiley &amp; Sons.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other barometric: 
-<code><a href="step_baro_harmonic.html">step_baro_harmonic</a>()</code></p></div>
+<code><a href="step_baro_harmonic.html">step_baro_harmonic</a>()</code>,
+<code><a href="step_baro_least_squares.html">step_baro_least_squares</a>()</code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">rows</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="va">rows</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'rows' not found</span>
-<span class="r-in"><span><span class="va">formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">y</span><span class="op">~</span><span class="va">x</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">kennel_2020</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">clarks</span> <span class="op">&lt;-</span> <span class="fu"><a href="recipe.html">recipe</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">.</span>, <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">step_baro_clark</span><span class="op">(</span><span class="va">wl</span>, <span class="va">baro</span>, lag_space <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># 1 minutes (every minute differences)</span></span></span>
+<span class="r-in"><span>  <span class="fu">step_baro_clark</span><span class="op">(</span><span class="va">wl</span>, <span class="va">baro</span>, lag_space <span class="op">=</span> <span class="fl">60</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># 60 minutes (hourly differences)</span></span></span>
+<span class="r-in"><span>  <span class="fu">step_baro_clark</span><span class="op">(</span><span class="va">wl</span>, <span class="va">baro</span>, lag_space <span class="op">=</span> <span class="fl">1440</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># 1440 minutes (daily differences)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="prep.html">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="bake.html">bake</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">clarks</span><span class="op">$</span><span class="fu">get_step_data</span><span class="op">(</span><span class="st">"barometric_efficiency"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $baro_clark_lhkFp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1941766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $baro_clark_kHjkh</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4738098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $baro_clark_rv1qe</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8453437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
