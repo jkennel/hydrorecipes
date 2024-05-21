@@ -1,7 +1,7 @@
 Package: hydrorecipes
 Type: Package
 Title: Hydrogeology steps 
-Version: 0.0.2
+Version: 0.0.3
 Author: Jonathan Kennel
 Maintainer: Jonathan Kennel <jkennel@uoguelph.ca>
 Description: This package is an implementation of some common steps of the
@@ -9,7 +9,7 @@ Description: This package is an implementation of some common steps of the
     that may be useful for the geosciences and signal processing. Two goals of 
     this package are to provide a higher performance package (memory and 
     computation time), and as a learning experience. 
-License: GPL-3
+License: MIT
 Encoding: UTF-8
 LazyData: true
 Depends:
