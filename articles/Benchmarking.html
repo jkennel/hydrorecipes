@@ -115,15 +115,15 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100 640.66µs 661.21µs     <span style="text-decoration: underline;">1</span>498.    1.87MB     8.33</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2          100 638.48µs 662.05µs     <span style="text-decoration: underline;">1</span>500.    3.66KB     6.27</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> rec            100   2.94ms      3ms      330.   84.14MB     4.10</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec1        <span style="text-decoration: underline;">10</span>000 643.94µs 663.97µs     <span style="text-decoration: underline;">1</span>493.      544B     8.34</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec2        <span style="text-decoration: underline;">10</span>000 643.26µs 662.69µs     <span style="text-decoration: underline;">1</span>489.      544B     6.20</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec          <span style="text-decoration: underline;">10</span>000   2.93ms   2.99ms      334.   42.63KB     4.12</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> hrec1      5<span style="text-decoration: underline;">000</span>000 637.63µs 669.44µs     <span style="text-decoration: underline;">1</span>469.      544B     4.07</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> hrec2      5<span style="text-decoration: underline;">000</span>000 636.35µs 667.16µs     <span style="text-decoration: underline;">1</span>487.      544B     6.30</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> rec        5<span style="text-decoration: underline;">000</span>000   2.92ms   2.99ms      333.   19.08MB     4.09</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100 643.63µs 665.39µs     <span style="text-decoration: underline;">1</span>477.    1.87MB     6.19</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2          100 642.95µs 664.15µs     <span style="text-decoration: underline;">1</span>488.    3.66KB     6.95</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> rec            100   2.91ms   2.99ms      327.   84.14MB     4.09</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec1        <span style="text-decoration: underline;">10</span>000 640.57µs 661.19µs     <span style="text-decoration: underline;">1</span>497.      544B     4.07</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec2        <span style="text-decoration: underline;">10</span>000 643.59µs 661.88µs     <span style="text-decoration: underline;">1</span>499.      544B     6.16</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec          <span style="text-decoration: underline;">10</span>000   2.91ms   2.97ms      336.   42.63KB     6.25</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> hrec1      5<span style="text-decoration: underline;">000</span>000 640.35µs 662.02µs     <span style="text-decoration: underline;">1</span>497.      544B     6.48</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> hrec2      5<span style="text-decoration: underline;">000</span>000 640.65µs 657.96µs     <span style="text-decoration: underline;">1</span>505.      544B     4.07</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> rec        5<span style="text-decoration: underline;">000</span>000   2.91ms   2.96ms      336.   19.08MB     6.23</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="add-a-step">add a step<a class="anchor" aria-label="anchor" href="#add-a-step"></a>
@@ -157,15 +157,15 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100 872.33µs 896.63µs     <span style="text-decoration: underline;">1</span>105.  531.23KB     6.20</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2          100 887.51µs 915.99µs     <span style="text-decoration: underline;">1</span>083.    6.57KB     6.18</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> rec            100   2.88ms    3.1ms      322.  102.48KB     4.10</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec1        <span style="text-decoration: underline;">10</span>000 812.33µs 896.77µs     <span style="text-decoration: underline;">1</span>109.    1.06KB     6.18</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec2        <span style="text-decoration: underline;">10</span>000 821.77µs 912.97µs     <span style="text-decoration: underline;">1</span>097.    1.06KB     4.09</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec          <span style="text-decoration: underline;">10</span>000   3.04ms   3.12ms      318.   43.16KB     6.24</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> hrec1      5<span style="text-decoration: underline;">000</span>000 874.28µs 906.51µs     <span style="text-decoration: underline;">1</span>097.    1.06KB     6.40</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> hrec2      5<span style="text-decoration: underline;">000</span>000 893.93µs 920.93µs     <span style="text-decoration: underline;">1</span>079.    1.06KB     4.08</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> rec        5<span style="text-decoration: underline;">000</span>000   3.05ms   3.12ms      320.   19.08MB     6.28</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100 868.55µs 892.43µs     <span style="text-decoration: underline;">1</span>104.  531.23KB     6.18</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2          100 891.83µs 925.42µs     <span style="text-decoration: underline;">1</span>069.    6.57KB     6.30</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> rec            100   3.03ms   3.12ms      318.  102.48KB     4.10</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec1        <span style="text-decoration: underline;">10</span>000 868.75µs 901.76µs     <span style="text-decoration: underline;">1</span>103.    1.06KB     6.18</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec2        <span style="text-decoration: underline;">10</span>000 888.89µs 919.56µs     <span style="text-decoration: underline;">1</span>082.    1.06KB     6.21</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec          <span style="text-decoration: underline;">10</span>000   3.03ms   3.12ms      320.   43.16KB     4.10</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> hrec1      5<span style="text-decoration: underline;">000</span>000 870.86µs 891.51µs     <span style="text-decoration: underline;">1</span>114.    1.06KB     4.08</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> hrec2      5<span style="text-decoration: underline;">000</span>000 886.83µs 912.45µs     <span style="text-decoration: underline;">1</span>089.    1.06KB     6.19</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> rec        5<span style="text-decoration: underline;">000</span>000   3.04ms   3.09ms      322.   19.08MB     6.35</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_center-prep">step_center prep<a class="anchor" aria-label="anchor" href="#step_center-prep"></a>
@@ -203,15 +203,15 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 7</span></span></span>
 <span><span class="co">#&gt;   expression            rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1$prep()           100 180.61µs 187.37µs   <span style="text-decoration: underline;">5</span>238.     80.73KB     6.28</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> prep(hrec2)            100 182.44µs 187.88µs   <span style="text-decoration: underline;">5</span>235.      2.69KB     6.16</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> recipes::prep(rec)     100  13.77ms  13.94ms     71.5     4.06MB     4.20</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec1$prep()         <span style="text-decoration: underline;">10</span>000 192.42µs 197.99µs   <span style="text-decoration: underline;">4</span>971.          0B     6.15</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> prep(hrec2)          <span style="text-decoration: underline;">10</span>000 191.74µs 198.04µs   <span style="text-decoration: underline;">4</span>975.          0B     6.16</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> recipes::prep(rec)   <span style="text-decoration: underline;">10</span>000   13.9ms  14.08ms     70.8   224.78KB     4.29</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> hrec1$prep()       5<span style="text-decoration: underline;">000</span>000   4.99ms   5.09ms    197.          0B     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> prep(hrec2)        5<span style="text-decoration: underline;">000</span>000   5.06ms   5.09ms    196.          0B     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> recipes::prep(rec) 5<span style="text-decoration: underline;">000</span>000 101.21ms 185.88ms      5.36    95.4MB     8.04</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1$prep()           100 181.91µs 188.72µs   <span style="text-decoration: underline;">5</span>238.     80.73KB     6.18</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> prep(hrec2)            100 182.44µs  189.4µs   <span style="text-decoration: underline;">5</span>173.      2.69KB     6.17</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> recipes::prep(rec)     100  13.72ms  13.91ms     71.6     4.06MB     6.71</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec1$prep()         <span style="text-decoration: underline;">10</span>000 190.77µs 198.63µs   <span style="text-decoration: underline;">4</span>932.          0B     6.17</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> prep(hrec2)          <span style="text-decoration: underline;">10</span>000  193.3µs 200.07µs   <span style="text-decoration: underline;">4</span>943.          0B     6.18</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> recipes::prep(rec)   <span style="text-decoration: underline;">10</span>000  13.82ms  14.04ms     70.7   224.78KB     6.63</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> hrec1$prep()       5<span style="text-decoration: underline;">000</span>000   4.99ms   5.08ms    196.          0B     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> prep(hrec2)        5<span style="text-decoration: underline;">000</span>000   5.05ms   5.08ms    197.          0B     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> recipes::prep(rec) 5<span style="text-decoration: underline;">000</span>000  101.8ms 106.78ms      6.47    95.4MB    10.4</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_center-prep-and-bake">step_center prep and bake<a class="anchor" aria-label="anchor" href="#step_center-prep-and-bake"></a>
@@ -249,15 +249,15 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 7</span></span></span>
 <span><span class="co">#&gt;   expression                   rows     min  median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:t&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:t&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1$prep()$bake()           1<span style="color: #949494;">e</span>2 261.2µs 269.2µs   <span style="text-decoration: underline;">3</span>654.    382.14KB     6.13</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> bake(prep(hrec2))             1<span style="color: #949494;">e</span>2 262.5µs 270.7µs   <span style="text-decoration: underline;">3</span>649.      3.56KB     4.07</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> recipes::bake(recipes::pre…   1<span style="color: #949494;">e</span>2  14.6ms  14.8ms     67.7   161.56KB     6.77</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec1$prep()$bake()           1<span style="color: #949494;">e</span>4 260.4µs   289µs   <span style="text-decoration: underline;">3</span>371.     78.17KB     6.17</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> bake(prep(hrec2))             1<span style="color: #949494;">e</span>4 261.7µs 288.8µs   <span style="text-decoration: underline;">3</span>433.     78.17KB     4.07</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> recipes::bake(recipes::pre…   1<span style="color: #949494;">e</span>4  14.7ms    15ms     66.6   229.11KB     6.66</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> hrec1$prep()$bake()           5<span style="color: #949494;">e</span>6  12.4ms  12.4ms     77.8    38.15MB    55.6 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> bake(prep(hrec2))             5<span style="color: #949494;">e</span>6  11.8ms  12.4ms     81.5    38.15MB    59.7 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> recipes::bake(recipes::pre…   5<span style="color: #949494;">e</span>6  99.6ms 102.6ms      9.69    95.4MB    14.5</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1$prep()$bake()           1<span style="color: #949494;">e</span>2 260.9µs 270.3µs   <span style="text-decoration: underline;">3</span>605.    382.14KB     6.17</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> bake(prep(hrec2))             1<span style="color: #949494;">e</span>2 260.7µs 271.7µs   <span style="text-decoration: underline;">3</span>640.      3.56KB     6.17</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> recipes::bake(recipes::pre…   1<span style="color: #949494;">e</span>2  14.4ms  14.7ms     67.6   161.56KB     4.22</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec1$prep()$bake()           1<span style="color: #949494;">e</span>4 280.3µs 291.8µs   <span style="text-decoration: underline;">3</span>389.     78.17KB     4.13</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> bake(prep(hrec2))             1<span style="color: #949494;">e</span>4 280.6µs 291.4µs   <span style="text-decoration: underline;">3</span>353.     78.17KB     6.18</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> recipes::bake(recipes::pre…   1<span style="color: #949494;">e</span>4  14.6ms  14.8ms     67.0   229.11KB     6.70</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> hrec1$prep()$bake()           5<span style="color: #949494;">e</span>6  12.4ms  12.4ms     80.2    38.15MB    80.2 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> bake(prep(hrec2))             5<span style="color: #949494;">e</span>6  12.2ms  12.4ms     78.4    38.15MB    39.2 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> recipes::bake(recipes::pre…   5<span style="color: #949494;">e</span>6 100.7ms 101.7ms      9.84    95.4MB    44.3</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_center">step_center<a class="anchor" aria-label="anchor" href="#step_center"></a>
@@ -297,12 +297,12 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   1.27ms   1.31ms    763.      97.5KB     6.20</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  17.92ms  18.13ms     54.8     40.2KB     4.38</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   1.29ms   1.32ms    754.      80.9KB     6.19</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  18.11ms  18.36ms     54.3    272.3KB     4.34</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000  13.65ms  13.75ms     72.3     38.1MB    27.1 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000 109.92ms 112.05ms      8.80   114.5MB    13.2</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   1.26ms   1.31ms    759.      97.5KB     6.26</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  17.77ms  18.08ms     55.0     40.2KB     4.23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   1.28ms   1.32ms    751.      80.9KB     6.22</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000     18ms  18.23ms     54.5    272.3KB     4.36</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000  10.08ms  13.68ms     74.4     38.1MB    47.8 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000  110.8ms  110.8ms      9.03   114.5MB    81.2</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_scale">step_scale<a class="anchor" aria-label="anchor" href="#step_scale"></a>
@@ -341,12 +341,12 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   1.27ms   1.31ms    757.     594.8KB     6.21</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  17.74ms  17.95ms     55.5    133.2KB     4.27</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   1.31ms   1.35ms    737.      79.2KB     4.10</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  17.97ms  18.19ms     55.1    233.2KB     6.88</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000  23.55ms  24.24ms     41.3     38.1MB     9.72</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000 128.75ms 130.62ms      7.67    95.4MB     5.11</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   1.27ms   1.31ms    756.     594.8KB     6.22</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  17.65ms  17.99ms     54.2    133.2KB     4.34</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   1.31ms   1.35ms    728.      79.2KB     6.20</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  17.83ms  18.08ms     54.8    233.2KB     4.39</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000  20.82ms  24.55ms     41.6     38.1MB    17.8 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000 131.12ms 131.27ms      7.62    95.4MB    11.4</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_intercept">step_intercept<a class="anchor" aria-label="anchor" href="#step_intercept"></a>
@@ -384,12 +384,12 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   1.23ms   1.28ms     772.    527.7KB     6.19</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  16.82ms  17.02ms      58.6   116.3KB     4.34</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   1.25ms   1.28ms     776.     79.2KB     6.19</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  16.77ms  17.08ms      58.3   112.1KB     4.32</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000   7.04ms  10.59ms      97.2    38.1MB    13.9 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000  46.64ms  50.07ms      20.1    38.2MB     5.02</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   1.24ms   1.28ms     774.    527.7KB     6.23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  16.64ms   16.9ms      58.9   116.3KB     4.36</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   1.24ms   1.29ms     764.     79.2KB     6.21</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  16.79ms  17.04ms      58.3   112.1KB     6.73</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000  10.65ms  10.93ms      91.5    38.1MB    25.0 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000  48.75ms  50.15ms      20.0    38.2MB     8.55</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_normalize">step_normalize<a class="anchor" aria-label="anchor" href="#step_normalize"></a>
@@ -435,15 +435,15 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.33ms   1.38ms    717.    541.98KB     6.20</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2          100    1.7ms   1.75ms    562.      6.56KB     4.09</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> rec            100  18.28ms  18.61ms     53.6    88.22KB     6.69</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec1        <span style="text-decoration: underline;">10</span>000   1.51ms   1.55ms    644.    235.58KB     4.09</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec2        <span style="text-decoration: underline;">10</span>000   1.89ms   1.93ms    510.    470.62KB     4.10</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec          <span style="text-decoration: underline;">10</span>000   18.9ms   19.1ms     52.2   663.09KB     6.81</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> hrec1      5<span style="text-decoration: underline;">000</span>000  92.98ms  94.33ms      7.41  114.44MB     3.70</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> hrec2      5<span style="text-decoration: underline;">000</span>000 100.97ms 106.66ms      6.88  228.88MB     6.88</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> rec        5<span style="text-decoration: underline;">000</span>000 278.13ms 279.81ms      3.57  305.21MB     5.36</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.34ms   1.38ms    719.    541.98KB     6.24</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2          100    1.7ms   1.75ms    568.      6.56KB     6.26</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> rec            100  18.23ms  18.61ms     52.9    88.22KB     4.24</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec1        <span style="text-decoration: underline;">10</span>000   1.51ms   1.55ms    642.    235.58KB     6.23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec2        <span style="text-decoration: underline;">10</span>000   1.88ms   1.94ms    514.    470.62KB     4.11</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec          <span style="text-decoration: underline;">10</span>000  18.69ms     19ms     52.3   663.09KB     6.82</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> hrec1      5<span style="text-decoration: underline;">000</span>000  83.16ms  90.09ms     11.2   114.44MB     5.59</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> hrec2      5<span style="text-decoration: underline;">000</span>000  99.27ms 101.64ms      9.86  228.88MB     9.86</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> rec        5<span style="text-decoration: underline;">000</span>000 273.57ms 273.77ms      3.65  305.21MB     3.65</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_lag">step_lag<a class="anchor" aria-label="anchor" href="#step_lag"></a>
@@ -482,12 +482,12 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   2.81ms    2.9ms    340.    799.77KB     6.27</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  22.81ms  22.98ms     43.4   281.48KB     4.34</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec1        <span style="text-decoration: underline;">10</span>000   2.97ms   3.05ms    309.       2.3MB     6.22</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  23.93ms   24.2ms     41.3      5.9MB     4.35</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec1      5<span style="text-decoration: underline;">000</span>000 178.18ms 197.53ms      4.03    1.12GB     3.63</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000 638.31ms 766.51ms      1.27    2.83GB     2.29</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   2.83ms    2.9ms    340.    799.77KB     6.29</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  22.44ms  22.88ms     43.7   281.48KB     4.37</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec1        <span style="text-decoration: underline;">10</span>000   2.98ms   3.06ms    317.       2.3MB     4.12</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  23.64ms  23.93ms     41.6      5.9MB     6.93</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec1      5<span style="text-decoration: underline;">000</span>000 179.61ms 196.59ms      3.95    1.12GB     3.95</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000 660.25ms 722.94ms      1.29    2.83GB     2.19</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_distributed_lag">step_distributed_lag<a class="anchor" aria-label="anchor" href="#step_distributed_lag"></a>
@@ -522,9 +522,9 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 7</span></span></span>
 <span><span class="co">#&gt;   expression     rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec         <span style="text-decoration: underline;">500</span>000   63.6ms   66.9ms     15.0     19.1MB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec        5<span style="text-decoration: underline;">000</span>000  457.5ms  458.2ms      2.18   155.9MB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec       10<span style="text-decoration: underline;">000</span>000  852.9ms  852.9ms      1.17   308.5MB     1.17</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec         <span style="text-decoration: underline;">500</span>000   65.8ms   69.7ms     14.4     19.1MB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec        5<span style="text-decoration: underline;">000</span>000  450.2ms  450.2ms      2.22   155.9MB     2.22</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec       10<span style="text-decoration: underline;">000</span>000  904.9ms  904.9ms      1.11   308.5MB     1.11</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_harmonic">step_harmonic<a class="anchor" aria-label="anchor" href="#step_harmonic"></a>
@@ -571,12 +571,12 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   1.42ms   1.46ms    680.    565.88KB    4.11 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100   18.3ms  18.77ms     53.2   176.72KB    6.94 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   2.65ms    2.7ms    370.    548.27KB    2.02 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  20.27ms  20.54ms     48.5     1.91MB    4.41 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000 596.04ms 597.08ms      1.66  267.03MB    0.184</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000 779.87ms 798.26ms      1.25  934.64MB    0.832</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   1.41ms   1.46ms    680.    565.88KB    6.22 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  18.57ms  18.87ms     52.7   176.72KB    4.39 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   2.67ms    2.7ms    369.    548.27KB    4.10 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  20.28ms   20.5ms     48.4     1.91MB    4.40 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000 596.49ms 618.41ms      1.63  267.03MB    0.181</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000  775.4ms 782.13ms      1.25  934.64MB    0.535</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_pca">step_pca<a class="anchor" aria-label="anchor" href="#step_pca"></a>
@@ -662,30 +662,30 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 × 14</span></span></span>
 <span><span class="co">#&gt;    expression    rows      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> hrec1          100   1.62ms   1.67ms   596.     706.11KB    6.39    280     3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> hrec2          100   1.62ms   1.66ms   593.      34.89KB    4.12    288     2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> hrec3          100   1.56ms   1.61ms   619.      34.02KB    6.32    294     3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> hrec4          100   1.55ms    1.6ms   623.      24.95KB    4.11    303     2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> rec1           100  21.86ms  22.22ms    44.6    661.98KB    7.05     19     3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> rec2           100  21.26ms  21.49ms    46.0    277.84KB    4.38     21     2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> rec3           100  21.34ms  21.58ms    46.3    153.43KB    6.95     20     3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> rec4           100  20.91ms  21.15ms    47.3    136.89KB    4.30     22     2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> hrec1        <span style="text-decoration: underline;">10</span>000    4.2ms   4.25ms   226.       3.37MB    2.03    111     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> hrec2        <span style="text-decoration: underline;">10</span>000   4.14ms   4.18ms   239.        2.6MB    2.04    117     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> hrec3        <span style="text-decoration: underline;">10</span>000   3.17ms   3.21ms   302.       2.45MB    2.03    149     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> hrec4        <span style="text-decoration: underline;">10</span>000   3.06ms   3.13ms   319.       1.69MB    4.15    154     2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> rec1         <span style="text-decoration: underline;">10</span>000  41.19ms  41.52ms    23.9     21.17MB    2.17     11     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> rec2         <span style="text-decoration: underline;">10</span>000  40.32ms   40.9ms    24.5     20.02MB    2.04     12     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> rec3         <span style="text-decoration: underline;">10</span>000  34.67ms  35.05ms    28.3      7.89MB    4.71     12     2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> rec4         <span style="text-decoration: underline;">10</span>000  33.89ms  34.11ms    29.2      6.74MB    4.50     13     2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> hrec1      5<span style="text-decoration: underline;">000</span>000 801.83ms 831.47ms     1.20     1.64GB    0.601     2     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> hrec2      5<span style="text-decoration: underline;">000</span>000 787.12ms 806.19ms     1.24     1.27GB    1.24      2     2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> hrec3      5<span style="text-decoration: underline;">000</span>000  480.9ms 494.06ms     2.02     1.19GB    0         2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span> hrec4      5<span style="text-decoration: underline;">000</span>000 409.89ms 410.83ms     2.43   839.24MB    1.22      2     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">21</span> rec1       5<span style="text-decoration: underline;">000</span>000    4.32s    4.42s     0.226    10.3GB    1.36      2    12</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">22</span> rec2       5<span style="text-decoration: underline;">000</span>000    4.05s    4.25s     0.235    9.74GB    1.88      2    16</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">23</span> rec3       5<span style="text-decoration: underline;">000</span>000     1.6s    1.63s     0.614    3.82GB    1.23      2     4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">24</span> rec4       5<span style="text-decoration: underline;">000</span>000    1.65s    1.68s     0.596    3.26GB    1.79      2     6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> hrec1          100   1.63ms   1.68ms   594.     706.11KB    6.25    285     3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> hrec2          100   1.63ms   1.68ms   594.      34.89KB    4.11    289     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> hrec3          100   1.56ms   1.61ms   621.      34.02KB    6.24    299     3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> hrec4          100   1.56ms    1.6ms   621.      24.95KB    6.23    299     3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> rec1           100  21.69ms  22.21ms    44.7    661.98KB    4.47     20     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> rec2           100  21.14ms  21.49ms    46.5    277.84KB    6.97     20     3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> rec3           100  21.28ms  21.59ms    46.2     154.4KB    6.93     20     3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> rec4           100  20.77ms  21.08ms    47.3    136.89KB    4.30     22     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> hrec1        <span style="text-decoration: underline;">10</span>000   4.24ms   4.28ms   224.       3.37MB    2.03    110     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> hrec2        <span style="text-decoration: underline;">10</span>000   4.15ms    4.2ms   238.        2.6MB    4.17    114     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> hrec3        <span style="text-decoration: underline;">10</span>000   3.17ms   3.22ms   299.       2.45MB    2.03    147     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> hrec4        <span style="text-decoration: underline;">10</span>000    3.1ms   3.15ms   317.       1.69MB    2.03    156     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> rec1         <span style="text-decoration: underline;">10</span>000  41.54ms  41.82ms    23.8     21.17MB    4.76     10     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> rec2         <span style="text-decoration: underline;">10</span>000  40.52ms  41.01ms    24.3     20.02MB    2.03     12     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> rec3         <span style="text-decoration: underline;">10</span>000  34.57ms  34.99ms    28.4      7.89MB    4.73     12     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> rec4         <span style="text-decoration: underline;">10</span>000  33.78ms  34.03ms    29.3      6.74MB    4.51     13     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> hrec1      5<span style="text-decoration: underline;">000</span>000 782.28ms 807.83ms     1.24     1.64GB    0.619     2     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> hrec2      5<span style="text-decoration: underline;">000</span>000 730.48ms 767.09ms     1.30     1.27GB    0.652     2     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> hrec3      5<span style="text-decoration: underline;">000</span>000 391.58ms 409.78ms     2.44     1.19GB    2.44      2     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span> hrec4      5<span style="text-decoration: underline;">000</span>000 318.48ms  361.1ms     2.77   839.24MB    0         2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">21</span> rec1       5<span style="text-decoration: underline;">000</span>000    4.14s     4.2s     0.238    10.3GB    1.43      2    12</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">22</span> rec2       5<span style="text-decoration: underline;">000</span>000    4.01s    4.33s     0.231    9.74GB    2.08      2    18</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">23</span> rec3       5<span style="text-decoration: underline;">000</span>000    2.01s    2.07s     0.483    3.82GB    1.21      2     5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">24</span> rec4       5<span style="text-decoration: underline;">000</span>000    1.69s    1.73s     0.577    3.26GB    1.44      2     5</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: total_time &lt;bch:tm&gt;, result &lt;list&gt;, memory &lt;list&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   time &lt;list&gt;, gc &lt;list&gt;</span></span></span></code></pre></div>
 </div>
@@ -726,12 +726,12 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   2.79ms   2.86ms  348.      559.23KB    6.30 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  21.32ms  21.59ms   46.2     487.89KB    4.40 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   2.88ms   2.95ms  334.      353.05KB    6.27 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  37.75ms  38.18ms   25.5       6.09MB    2.13 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000  46.32ms  49.47ms   15.7     235.66MB    1.96 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000   11.98s   11.98s    0.083<span style="text-decoration: underline;">5</span>    2.98GB    0.167</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100    2.8ms   2.88ms  346.      559.23KB    6.36 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100   21.2ms   21.6ms   46.3     487.89KB    4.41 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000    2.9ms   2.97ms  333.      353.05KB    4.11 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000     38ms  38.45ms   25.9       6.09MB    4.70 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000   45.8ms  48.57ms   19.2     235.66MB    3.83 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000    11.5s   11.48s    0.087<span style="text-decoration: underline;">1</span>    2.98GB    0.261</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_find_interval">step_find_interval<a class="anchor" aria-label="anchor" href="#step_find_interval"></a>
@@ -773,12 +773,12 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   1.42ms   1.46ms    681.     562.7KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  18.29ms  18.48ms     53.8    174.2KB     2.83</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   1.56ms   1.59ms    626.     157.5KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  19.03ms  19.24ms     51.8    585.1KB     2.25</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000  71.12ms  71.43ms     13.8     76.3MB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000 355.04ms 355.04ms      2.82   267.1MB     2.82</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   1.39ms   1.43ms    692.     562.7KB     6.99</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  18.38ms  18.77ms     52.5    174.2KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   1.53ms   1.58ms    632.     157.5KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  18.68ms  19.36ms     51.1    585.1KB     2.13</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000  71.02ms  71.37ms     13.9     76.3MB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000 377.75ms 383.97ms      2.60   267.1MB     0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_varying">step_varying<a class="anchor" aria-label="anchor" href="#step_varying"></a>
@@ -817,12 +817,12 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   1.26ms    1.3ms    769.    583.33KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  18.18ms  18.33ms     54.1    93.13KB     2.25</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   1.22ms   1.31ms    762.     40.17KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  18.86ms  19.06ms     52.2     1.33MB     2.27</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000   5.36ms   5.49ms    182.     19.07MB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000 636.85ms 636.85ms      1.57   649.8MB     0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   1.26ms   1.29ms    768.    583.33KB     2.08</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  17.88ms   18.4ms     53.9    93.13KB     2.07</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   1.25ms   1.29ms    760.     40.17KB     2.06</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  18.51ms  18.61ms     53.4     1.33MB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000   5.42ms    5.5ms    179.     19.07MB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000 628.34ms 628.34ms      1.59   649.8MB     0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_kernel_filter">step_kernel_filter<a class="anchor" aria-label="anchor" href="#step_kernel_filter"></a>
@@ -861,9 +861,9 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 7</span></span></span>
 <span><span class="co">#&gt;   expression                 rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec                        2<span style="color: #949494;">e</span>4   3.64ms   3.69ms   270.        750KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> { rec = recipes::bake(re…   2<span style="color: #949494;">e</span>4 299.27ms 299.96ms     3.33   508.16KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec                        2<span style="color: #949494;">e</span>5   5.89ms   5.96ms   166.       1.56MB     2.27</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec                        2<span style="color: #949494;">e</span>4   3.59ms   3.65ms   273.        750KB     2.07</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> { rec = recipes::bake(re…   2<span style="color: #949494;">e</span>4 300.12ms 300.44ms     3.33   508.16KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec                        2<span style="color: #949494;">e</span>5   5.82ms   5.92ms   167.       1.56MB     0   </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> { rec = recipes::bake(re…   2<span style="color: #949494;">e</span>5    3.64s    3.64s     0.275    3.11MB     0</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -913,12 +913,12 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   2.13ms   2.32ms   431.      26.89KB    0    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  34.86ms  35.07ms    28.4    191.67KB    2.37 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   3.37ms   3.41ms   293.       1.76MB    0    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  37.19ms  37.52ms    26.7      5.13MB    2.42 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000    2.04s    2.04s     0.489  877.39MB    0.978</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000    2.74s    2.74s     0.366    2.44GB    0.731</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   2.24ms   2.29ms   436.      26.89KB     2.08</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  33.93ms  34.48ms    28.8    191.67KB     2.21</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   3.33ms   3.39ms   295.       1.76MB     2.05</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  36.27ms  36.51ms    27.2      5.13MB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000    2.03s    2.03s     0.493  877.39MB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000    2.78s    2.78s     0.360    2.44GB     1.08</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_spline_b">step_spline_b<a class="anchor" aria-label="anchor" href="#step_spline_b"></a>
@@ -956,12 +956,12 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   2.95ms      3ms   332.     583.65KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  21.75ms  22.02ms    45.3    365.84KB     2.16</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000    3.9ms   3.94ms   253.       1.07MB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000  24.05ms  24.34ms    40.6      4.55MB     2.14</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000 582.47ms 625.23ms     1.58   534.06MB     1.58</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000    1.65s    1.83s     0.559     2.2GB     1.12</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   2.95ms   3.02ms   330.     583.65KB    0    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rec            100  21.59ms  21.91ms    45.4    365.84KB    2.16 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec         <span style="text-decoration: underline;">10</span>000   3.81ms    3.9ms   255.       1.07MB    2.08 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> rec          <span style="text-decoration: underline;">10</span>000   23.9ms  24.26ms    40.6      4.55MB    2.14 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec       5<span style="text-decoration: underline;">000</span>000 530.38ms 590.65ms     1.72   534.06MB    0.687</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> rec        5<span style="text-decoration: underline;">000</span>000    1.62s    1.66s     0.575     2.2GB    1.21</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_aquifer_grf-step_aquifer_theis">step_aquifer_grf &amp; step_aquifer_theis<a class="anchor" aria-label="anchor" href="#step_aquifer_grf-step_aquifer_theis"></a>
@@ -997,12 +997,12 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.44ms   1.49ms    671.     555.2KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2          100   1.51ms   1.56ms    639.     530.4KB     2.06</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec1        <span style="text-decoration: underline;">10</span>000   2.35ms   2.42ms    408.     160.2KB     2.07</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec2        <span style="text-decoration: underline;">10</span>000   2.47ms   2.52ms    397.      83.1KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec1      5<span style="text-decoration: underline;">000</span>000 635.75ms 635.75ms      1.57    76.3MB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> hrec2      5<span style="text-decoration: underline;">000</span>000 641.11ms 641.11ms      1.56    38.2MB     0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.42ms    1.5ms    667.     555.2KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2          100    1.5ms   1.54ms    628.     530.4KB     3.57</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec1        <span style="text-decoration: underline;">10</span>000   2.34ms   2.38ms    419.     160.2KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec2        <span style="text-decoration: underline;">10</span>000   2.43ms   2.48ms    402.      83.1KB     2.07</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec1      5<span style="text-decoration: underline;">000</span>000 604.03ms 604.03ms      1.66    76.3MB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> hrec2      5<span style="text-decoration: underline;">000</span>000 596.65ms 596.65ms      1.68    38.2MB     0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_aquifer_leaky">step_aquifer_leaky<a class="anchor" aria-label="anchor" href="#step_aquifer_leaky"></a>
@@ -1040,12 +1040,12 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.52ms   1.58ms   632.      615.1KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2          100   1.61ms   1.67ms   594.       7.45KB     2.08</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec1        <span style="text-decoration: underline;">10</span>000   3.28ms   3.34ms   299.     396.41KB     2.08</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec2        <span style="text-decoration: underline;">10</span>000   2.55ms   2.61ms   379.       84.8KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec1      5<span style="text-decoration: underline;">000</span>000    1.35s    1.35s     0.741  190.74MB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> hrec2      5<span style="text-decoration: underline;">000</span>000 637.34ms 637.34ms     1.57    38.15MB     0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.52ms   1.56ms   634.      615.1KB     2.07</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2          100    1.6ms   1.64ms   606.       7.45KB     2.07</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec1        <span style="text-decoration: underline;">10</span>000   3.27ms    3.3ms   298.     396.41KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec2        <span style="text-decoration: underline;">10</span>000   2.54ms   2.58ms   387.       84.8KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec1      5<span style="text-decoration: underline;">000</span>000    1.32s    1.32s     0.758  190.74MB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> hrec2      5<span style="text-decoration: underline;">000</span>000 615.82ms 615.82ms     1.62    38.15MB     0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_aquifer_patch">step_aquifer_patch<a class="anchor" aria-label="anchor" href="#step_aquifer_patch"></a>
@@ -1089,8 +1089,8 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
 <span><span class="co">#&gt;   expression   rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1      <span style="text-decoration: underline;">100</span>000   9.95ms   10.1ms     97.7     1.53MB        0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec3      <span style="text-decoration: underline;">100</span>000 950.02ms    950ms      1.05    1.31MB        0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1      <span style="text-decoration: underline;">100</span>000   9.88ms   10.1ms     98.4     1.53MB        0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec3      <span style="text-decoration: underline;">100</span>000 953.04ms    953ms      1.05    1.31MB        0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_vadose_weeks">step_vadose_weeks<a class="anchor" aria-label="anchor" href="#step_vadose_weeks"></a>
@@ -1126,9 +1126,9 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.28ms   1.32ms    754.     545.5KB     2.09</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec1        <span style="text-decoration: underline;">10</span>000   1.44ms    1.5ms    654.     160.1KB     2.09</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec1      5<span style="text-decoration: underline;">000</span>000 171.61ms  172.4ms      5.78    76.3MB     0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.27ms   1.31ms    760.     545.5KB     2.07</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec1        <span style="text-decoration: underline;">10</span>000   1.46ms   1.49ms    669.     160.1KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec1      5<span style="text-decoration: underline;">000</span>000 171.34ms 171.85ms      5.80    76.3MB     0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_transport_ogata_banks">step_transport_ogata_banks<a class="anchor" aria-label="anchor" href="#step_transport_ogata_banks"></a>
@@ -1162,9 +1162,9 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.37ms   1.41ms   706.        559KB     2.07</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec1        <span style="text-decoration: underline;">10</span>000   4.69ms   4.73ms   211.        785KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec1      5<span style="text-decoration: underline;">000</span>000    1.47s    1.47s     0.681     381MB     1.02</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.35ms   1.39ms   718.        559KB     2.07</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec1        <span style="text-decoration: underline;">10</span>000   4.65ms   4.72ms   209.        785KB     2.09</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec1      5<span style="text-decoration: underline;">000</span>000    1.47s    1.47s     0.680     381MB     1.02</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_transport_fractures_solute">step_transport_fractures_solute<a class="anchor" aria-label="anchor" href="#step_transport_fractures_solute"></a>
@@ -1193,7 +1193,7 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 6</span></span></span>
 <span><span class="co">#&gt;   expression      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1        1.79ms   1.84ms      536.     580KB        0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1        1.78ms   1.84ms      538.     580KB        0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_transport_fractures_heat">step_transport_fractures_heat<a class="anchor" aria-label="anchor" href="#step_transport_fractures_heat"></a>
@@ -1222,7 +1222,7 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 6</span></span></span>
 <span><span class="co">#&gt;   expression      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1        10.3ms   10.4ms      96.2     587KB        0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1        10.3ms   10.3ms      96.5     587KB        0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_pgram-and-step_welch">step_pgram and step_welch<a class="anchor" aria-label="anchor" href="#step_pgram-and-step_welch"></a>
@@ -1274,15 +1274,15 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.65ms   1.69ms    590.    566.41KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2          100   1.63ms    1.7ms    576.     18.21KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec3          100   1.39ms    1.5ms    664.     546.3KB     2.16</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec1        <span style="text-decoration: underline;">10</span>000   2.22ms   2.38ms    422.      1.38MB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec2        <span style="text-decoration: underline;">10</span>000   2.15ms    2.2ms    454.      1.07MB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> hrec3        <span style="text-decoration: underline;">10</span>000   2.74ms    2.8ms    352.    260.91KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> hrec1      5<span style="text-decoration: underline;">000</span>000 447.71ms 462.87ms      2.16  686.65MB     2.16</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> hrec2      5<span style="text-decoration: underline;">000</span>000 432.58ms 432.58ms      2.31  534.06MB     4.62</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> hrec3      5<span style="text-decoration: underline;">000</span>000 426.46ms 431.95ms      2.31  125.89MB     0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.65ms    1.7ms    586.    566.41KB     2.76</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2          100   1.68ms   1.72ms    574.     18.21KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec3          100   1.48ms   1.54ms    647.     546.3KB     2.56</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec1        <span style="text-decoration: underline;">10</span>000   2.39ms   2.43ms    410.      1.38MB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec2        <span style="text-decoration: underline;">10</span>000   2.25ms   2.38ms    421.      1.07MB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> hrec3        <span style="text-decoration: underline;">10</span>000   2.71ms    2.8ms    356.    260.91KB     2.58</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> hrec1      5<span style="text-decoration: underline;">000</span>000 471.55ms 487.89ms      2.05  686.65MB     1.02</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> hrec2      5<span style="text-decoration: underline;">000</span>000 414.88ms 414.88ms      2.41  534.06MB     4.82</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> hrec3      5<span style="text-decoration: underline;">000</span>000 443.85ms 454.35ms      2.22  125.89MB     0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_transfer_welch-and-step_transfer_pgram">step_transfer_welch and step_transfer_pgram<a class="anchor" aria-label="anchor" href="#step_transfer_welch-and-step_transfer_pgram"></a>
@@ -1324,12 +1324,12 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.58ms   1.71ms    587.     548.3KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1          100   1.65ms   1.72ms    572.     548.3KB     0   </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2          100   1.54ms   1.58ms    631.     542.9KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec1        <span style="text-decoration: underline;">10</span>000   3.24ms   3.34ms    298.     471.7KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec2        <span style="text-decoration: underline;">10</span>000   2.86ms   2.92ms    341.     198.3KB     2.15</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec1      5<span style="text-decoration: underline;">000</span>000 952.45ms 952.45ms      1.05   228.9MB     1.05</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> hrec2      5<span style="text-decoration: underline;">000</span>000 507.07ms 507.17ms      1.97    95.4MB     0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec1        <span style="text-decoration: underline;">10</span>000   3.22ms   3.35ms    291.     471.7KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hrec2        <span style="text-decoration: underline;">10</span>000   2.88ms   2.94ms    340.     198.3KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hrec1      5<span style="text-decoration: underline;">000</span>000 949.08ms 949.08ms      1.05   229.1MB     1.05</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> hrec2      5<span style="text-decoration: underline;">000</span>000 489.63ms 494.47ms      2.02    95.4MB     0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_ols">step_ols<a class="anchor" aria-label="anchor" href="#step_ols"></a>
@@ -1366,9 +1366,9 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 7</span></span></span>
 <span><span class="co">#&gt;   expression    rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   2.67ms   2.72ms    367.    812.21KB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec         <span style="text-decoration: underline;">10</span>000   4.56ms   4.61ms    217.      1.34MB     0   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec       5<span style="text-decoration: underline;">000</span>000 243.58ms 243.58ms      4.11  667.58MB     4.11</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec           100   2.68ms   2.77ms    356.    812.21KB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec         <span style="text-decoration: underline;">10</span>000   4.63ms   4.66ms    214.      1.34MB     0   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hrec       5<span style="text-decoration: underline;">000</span>000 208.04ms  212.5ms      4.71  667.58MB     2.35</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step_ols_gap_fill">step_ols_gap_fill<a class="anchor" aria-label="anchor" href="#step_ols_gap_fill"></a>
@@ -1481,10 +1481,20 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt;   ..$ : NULL</span></span>
 <span><span class="co">#&gt;   ..$ : chr [1:8] "y" "find_interval_z_1" "find_interval_z_2" "intercept" ...</span></span>
 <span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt;  num [1:100000, 1:8] -0.56 -0.791 0.768 0.839 0.968 ...</span></span>
+<span><span class="co">#&gt;  - attr(*, "dimnames")=List of 2</span></span>
+<span><span class="co">#&gt;   ..$ : NULL</span></span>
+<span><span class="co">#&gt;   ..$ : chr [1:8] "y" "find_interval_z_1" "find_interval_z_2" "intercept" ...</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt;  num [1:100000, 1:8] -0.56 -0.791 0.768 0.839 0.968 ...</span></span>
+<span><span class="co">#&gt;  - attr(*, "dimnames")=List of 2</span></span>
+<span><span class="co">#&gt;   ..$ : NULL</span></span>
+<span><span class="co">#&gt;   ..$ : chr [1:8] "y" "find_interval_z_1" "find_interval_z_2" "intercept" ...</span></span>
+<span><span class="co">#&gt; NULL</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 6</span></span></span>
 <span><span class="co">#&gt;   expression                             min median `itr/sec` mem_alloc `gc/sec`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;bch:&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> { h = step_drop_columns(step_splin… 26.2ms 26.3ms      34.9    38.2MB     2.49</span></span></code></pre></div>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>                           <span style="color: #949494; font-style: italic;">&lt;bch&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> { h = step_drop_columns(step_spline…  26ms 26.1ms      38.3    38.2MB     2.39</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -1530,8 +1540,8 @@ are between 2-10x and memory consumption is typically half of the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
 <span><span class="co">#&gt;   expression   rows      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1      <span style="text-decoration: underline;">100</span>000    1.9ms      2ms      499.    2.59MB     2.14</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2      <span style="text-decoration: underline;">100</span>000   2.34ms   2.39ms      416.  782.89KB     0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hrec1      <span style="text-decoration: underline;">100</span>000   1.89ms   1.93ms      510.    2.59MB        0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hrec2      <span style="text-decoration: underline;">100</span>000   2.32ms   2.36ms      422.  782.89KB        0</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
