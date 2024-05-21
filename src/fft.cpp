@@ -1255,10 +1255,16 @@ Eigen::MatrixXd list_to_matrix(Rcpp::List& x, int sub_start, int sub_end) {
 Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
                                 size_t n_groups) {
 
+
   // original number of series
   size_t n_col = get_column_number(x.cols());
 
   size_t n_row = x.rows() / 2 + 1; // half spectrum only
+
+  if (n_groups > n_row) {
+    Rcpp::stop("The number of groups (n_groups) cannot be larger than the size of the half spectrum.");
+  }
+
   VectorXi groups = make_groups(n_groups, n_row);
   size_t n_ols = groups.size();
   size_t sub_size = n_col - 1;

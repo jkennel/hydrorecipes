@@ -117,7 +117,7 @@ results <- bench::press(
       hrec2 |> prep(),
       rec |> recipes::prep(),
       check = FALSE,
-      min_iterations = 10,
+      min_iterations = 1,
       relative = relative
     )
   }
@@ -148,7 +148,7 @@ results <- bench::press(
       hrec2 |> prep() |> bake(),
       rec |> recipes::prep() |> recipes::bake(new_data = NULL),
       check = FALSE,
-      min_iterations = 10,
+      min_iterations = 1,
       relative = relative
     )
   }
@@ -181,7 +181,7 @@ results <- bench::press(
                 recipes::prep() |> 
                 recipes::bake(new_data = NULL))[["x"]],
       check = TRUE,
-      min_iterations = 10,
+      min_iterations = 1,
       relative = relative
     )
   }
@@ -214,7 +214,7 @@ results <- bench::press(
         recipes::bake(new_data = NULL))[["x"]],
       check = TRUE,
       relative = relative,
-      min_iterations = 5
+      min_iterations = 1
     )
   }
 )
@@ -245,7 +245,7 @@ results <- bench::press(
       recipes::bake(new_data = NULL))[["intercept"]],
       check = TRUE,
       relative = relative,
-      min_iterations = 2
+      min_iterations = 1
     )
     
   }
@@ -285,7 +285,7 @@ results <- bench::press(
         recipes::bake(new_data = NULL),
       
       relative = relative,
-      min_iterations = 2,
+      min_iterations = 1,
       check = TRUE
     )
   }
@@ -320,7 +320,7 @@ results <- bench::press(
                        recipes::bake(new_data = NULL)),
       check = TRUE,
       relative = relative,
-      min_iterations = 10
+      min_iterations = 1
     )
   }
 )
@@ -350,7 +350,7 @@ results <- bench::press(
         plate(),
       check = FALSE,
       relative = relative,
-      min_iterations = 2
+      min_iterations = 1
     )
   }
 )
@@ -391,7 +391,7 @@ results <- bench::press(
       # sin and cos terms order is different
       check = FALSE,
       relative = relative,
-      min_iterations = 10
+      min_iterations = 1
     )
   }
 )
@@ -467,7 +467,7 @@ results <- bench::press(
         recipes::bake(new_data = NULL),
       check = FALSE,
       relative = relative,
-      min_iterations = 2
+      min_iterations = 1
     )
   }
 )
@@ -689,7 +689,7 @@ results <- bench::press(
                       recipes::bake(new_data = NULL)),
       check = TRUE,
       relative = relative,
-      min_iterations = 10
+      min_iterations = 2
     )
   }
 )
@@ -823,7 +823,7 @@ results <- bench::press(
                                    precision = 1e-12) |>
                  plate("dt")),
       check = FALSE,
-      min_iterations = 10
+      min_iterations = 2
     )
   }
 )
@@ -850,7 +850,7 @@ results <- bench::press(
                                             distance = y) |>
                  plate("dt")),
       check = FALSE,
-      min_iterations = 10
+      min_iterations = 2
     )
   }
 )
@@ -880,7 +880,7 @@ results <-
                                       distance_matrix = x) |>
       plate("dt"),
     check = FALSE,
-    min_iterations = 10
+    min_iterations = 2
   )
 
 results
@@ -908,13 +908,13 @@ results <-
                                     distance_matrix = x) |>
       plate("dt"),
     check = FALSE,
-    min_iterations = 10
+    min_iterations = 2
   )
 
 results
 ```
 
-## step_pgram and step_welch
+## step_fft_pgram, step_fft_welch
 
 ```{r}
 #| echo: true
@@ -936,7 +936,8 @@ results <- bench::press(
                        FALSE,
                        0.1, 
                        time_step = 1) |> 
-        plate(),
+        prep() |>
+        bake(),
       hrec2 = recipe(formula = formula, data = dat) |>
         step_fft_pgram(c(x, y), 
                        3,
@@ -945,16 +946,18 @@ results <- bench::press(
                        TRUE,
                        0.1, 
                        time_step = 1) |> 
-        plate(),
-      # hrec3 = recipe(formula = formula, data = dat) |>
-      #   step_fft_welch(c(x, y),
-      #                  length_subset =  nrow(dat) / 10,
-      #                  overlap = 0.60,
-      #                  window = window_nuttall(nrow(dat) / 10), 
-      #                  time_step = 1) |>
-      #   plate(),
+        prep() |>
+        bake(),
+      hrec3 = recipe(formula = formula, data = dat) |>
+        step_fft_welch(c(x, y),
+                       length_subset =  nrow(dat) / 10,
+                       overlap = 0.60,
+                       window = window_nuttall(nrow(dat) / 10),
+                       time_step = 1) |>
+        prep() |>
+        bake(),
       check = FALSE,
-      min_iterations = 3
+      min_iterations = 1
     )
   }
 )
@@ -962,7 +965,7 @@ results <- bench::press(
 results
 ```
 
-## step_transfer_welch and step_transfer_pgram
+## step_fft_transfer_welch and step_fft_transfer_pgram, step_fft_transfer_experimental
 
 ```{r}
 #| echo: true
@@ -971,7 +974,7 @@ results
 formula <- as.formula(y~x)
 
 results <- bench::press(
-  rows = n,
+  rows = c(1e5, 1e6, 1e7),
   {
     dat <- data.frame(x = rnorm(rows), y = rnorm(rows))
     bench::mark(
@@ -982,16 +985,27 @@ results <- bench::press(
                                 TRUE,
                                 0.1, 
                                 time_step = 1) |> 
-        plate("dt"),
+        prep() |>
+        bake(),
       hrec2 = recipe(formula = formula, data = dat) |>
         step_fft_transfer_welch(c(x, y),
                                 length_subset =  nrow(dat) / 10,
                                 overlap = 0.60,
                                 window = window_nuttall(nrow(dat) / 10), 
                                 time_step = 1) |> 
-        plate("dt"),
+        prep() |>
+        bake(),
+      hrec3 <- recipe(formula = formula, data = dat) |>
+        step_fft_transfer_experimental(c(x, y), 
+                                       spans = 3, 
+                                       taper = 0.1, 
+                                       power = 3,
+                                       n_groups = 300,
+                                       time_step = 1) |>
+        prep() |>
+        bake(),
       check = FALSE,
-      min_iterations = 2
+      min_iterations = 1
     )
   }
 )
@@ -1101,7 +1115,7 @@ results <- bench::press(
         bake(),
       check = FALSE,
       relative = relative,
-      min_iterations = 10
+      min_iterations = 2
     )
   }
 )
