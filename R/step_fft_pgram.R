@@ -15,6 +15,9 @@ StepPgram <- R6Class(
     taper = NA_real_,
     lst = NA,
     pad_fft = NA,
+    time_step = NA,
+    fft_result = NA,
+
     initialize = function(terms,
                           spans = 3,
                           detrend = TRUE,
@@ -22,8 +25,10 @@ StepPgram <- R6Class(
                           lst = TRUE,
                           taper = 0.1,
                           pad_fft = TRUE,
-                          role = "predictor",
+                          role = "augment",
+                          time_step = 1,
                           ...) {
+
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
@@ -41,13 +46,14 @@ StepPgram <- R6Class(
       self$taper <- taper
       self$lst <- lst
       self$pad_fft <- pad_fft
+      self$time_step <- time_step
 
       invisible(self)
     },
     bake = function(new_data) {
 
       if (self$lst) {
-        pspec <- collapse::mctl(spec_pgram(
+        self$fft_result <- collapse::mctl(spec_pgram(
           collapse::qM(new_data),
           self$spans,
           self$detrend,
@@ -56,7 +62,7 @@ StepPgram <- R6Class(
           self$pad_fft
         ))
       } else {
-        pspec <- spec_pgram_list(
+        self$fft_result <- spec_pgram_list(
           new_data,
           self$spans,
           self$detrend,
@@ -65,10 +71,18 @@ StepPgram <- R6Class(
           self$pad_fft
         )
       }
-      self$new_columns <- name_columns(self$prefix, NULL, n = length(pspec))
-      names(pspec) <- self$new_columns
 
-      return(pspec)
+      self$new_columns <- name_columns(self$prefix, NULL, n = length(self$fft_result))
+      names(self$fft_result) <- self$new_columns
+
+
+      n  <- length(self$fft_result[[1]])
+      df <- 1 / n
+      frequency <- list(frequency = seq.int(from = 0, by = df,
+                           length.out = n) * 86400 / self$time_step)
+      self$fft_result <- append(self$fft_result, frequency)
+
+      return(NULL)
     }
   )
 )

@@ -101,46 +101,59 @@ double be_clark_cpp(arma::vec dep,
 
 
 // [[Rcpp::export]]
-double be_least_squares_diff_cpp(arma::vec dep,
-                            arma::vec ind,
-                            int lag_space,
-                            bool inverse) {
+Eigen::MatrixXd be_least_squares_diff_cpp(Eigen::VectorXd dep,
+                                 Eigen::VectorXd ind,
+                                 int lag_space,
+                                 bool inverse) {
 
-  int n = dep.n_elem-lag_space;
-  arma::vec ret;
+  unsigned int n = dep.size() - lag_space;
 
-
-  dep = dep.head( n ) - dep.tail( n );
-  ind = ind.head( n ) - ind.tail( n );
+  Eigen::MatrixXd x = Eigen::MatrixXd::Ones(n, 1);
+  Eigen::MatrixXd y = Eigen::MatrixXd(n, 1);
 
   if (inverse) {
     dep = -dep;
   }
 
-  ret = arma::solve(ind, dep);
+  // difference inputs
+  y.col(0) = dep.head( n ) - dep.tail( n );
+  x.col(0) = ind.head( n ) - ind.tail( n );
 
-  return ret(0);
+  const int p = 1;
+
+  const Eigen::LLT<Eigen::MatrixXd> llt(Eigen::MatrixXd(p, p).setZero().selfadjointView<Lower>().
+                                          rankUpdate(x.adjoint()));
+
+  return llt.solve(x.adjoint() * y);
+
 }
 
 
 // [[Rcpp::export]]
-double be_least_squares_cpp(arma::vec dep,
-                            arma::vec ind,
+Eigen::MatrixXd be_least_squares_cpp(Eigen::VectorXd dep,
+                            Eigen::VectorXd ind,
                             bool inverse) {
 
-  unsigned int n = ind.n_elem;
-  arma::mat y = arma::ones(n, 2);
-  y.col(0) = ind;
 
-  arma::vec ret;
+  unsigned int n = ind.size();
+  Eigen::MatrixXd x = Eigen::MatrixXd(n, 1);
+  Eigen::MatrixXd y = Eigen::MatrixXd(n, 1);
 
   if (inverse) {
     dep = -dep;
   }
 
-  ret = arma::solve(y, dep);
+  // detrend inputs
+  y.col(0) = detrend_vector(dep);
+  x.col(0) = detrend_vector(ind);
 
-  return ret(0);
+  const int p = 1;
+
+  const Eigen::LLT<Eigen::MatrixXd> llt(Eigen::MatrixXd(p, p).setZero().selfadjointView<Lower>().
+                                          rankUpdate(x.adjoint()));
+
+
+  return llt.solve(x.adjoint() * y);
 }
 
 // //' @title
@@ -519,28 +532,17 @@ Rcpp::List be_harmonic_cpp(Eigen::VectorXcd x,
   rau = std::abs((s2_gw - term_rau * s2_et) / s2_at);
 
   //----------------------------------------------------------------------------
-  // tf
-
-  Eigen::MatrixXcd tf(1, 3);
-  tf(0, 0) = s2_gw;
-  tf(0, 1) = s2_at;
-  tf(0, 2) = s2_et;
-  Eigen::MatrixXcd dft_mat = multiply_ffts(tf);
-
-  double tf_out = std::abs(solve_cplx_parallel(dft_mat)(0,0));
-
 
   if (inverse) {
     ratio = 1.0 - ratio;
     acworth = 1.0 - acworth;
     rau = 1.0 - rau;
-    tf_out = 1.0 - tf_out;
   }
 
   return(Rcpp::List::create(Named("ratio") = ratio,
                             _["acworth"] = acworth,
-                            _["rau"] = rau,
-                            _["tf"] = tf_out));
+                            _["rau"] = rau));
+
 
 
 }

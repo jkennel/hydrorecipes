@@ -116,13 +116,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // be_least_squares_diff_cpp
-double be_least_squares_diff_cpp(arma::vec dep, arma::vec ind, int lag_space, bool inverse);
+Eigen::MatrixXd be_least_squares_diff_cpp(Eigen::VectorXd dep, Eigen::VectorXd ind, int lag_space, bool inverse);
 RcppExport SEXP _hydrorecipes_be_least_squares_diff_cpp(SEXP depSEXP, SEXP indSEXP, SEXP lag_spaceSEXP, SEXP inverseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type dep(depSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type ind(indSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type dep(depSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type ind(indSEXP);
     Rcpp::traits::input_parameter< int >::type lag_space(lag_spaceSEXP);
     Rcpp::traits::input_parameter< bool >::type inverse(inverseSEXP);
     rcpp_result_gen = Rcpp::wrap(be_least_squares_diff_cpp(dep, ind, lag_space, inverse));
@@ -130,13 +130,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // be_least_squares_cpp
-double be_least_squares_cpp(arma::vec dep, arma::vec ind, bool inverse);
+Eigen::MatrixXd be_least_squares_cpp(Eigen::VectorXd dep, Eigen::VectorXd ind, bool inverse);
 RcppExport SEXP _hydrorecipes_be_least_squares_cpp(SEXP depSEXP, SEXP indSEXP, SEXP inverseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type dep(depSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type ind(indSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type dep(depSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type ind(indSEXP);
     Rcpp::traits::input_parameter< bool >::type inverse(inverseSEXP);
     rcpp_result_gen = Rcpp::wrap(be_least_squares_cpp(dep, ind, inverse));
     return rcpp_result_gen;

@@ -9,10 +9,11 @@ StepCoherence <- R6Class(
   classname = "step_fft_coherence",
   inherit = Step,
   public = list(
+    coherence = NULL,
 
     # step specific variables
     initialize = function(terms,
-                          role = "predictor",
+                          role = "augment",
                           ...) {
       # get function parameters to pass to parent
       terms <- substitute(terms)
@@ -29,13 +30,14 @@ StepCoherence <- R6Class(
     },
     bake = function(new_data) {
 
-      cohere <- collapse::mctl(ordinary_coherence_phase(collapse::qM(new_data)))
+      self$coherence <- collapse::mctl(ordinary_coherence_phase(collapse::qM(new_data)))
       n <- length(new_data)
       comb <- expand.grid(x = 1:n, y = 1:n)
       comb <- comb[comb$y > comb$x]
       self$new_columns <- paste(self$prefix, comb$x, comb$y, sep = "_")
-      setnames(cohere, self$new_columns)
+      setnames(self$coherence, self$new_columns)
 
+      return(NULL)
     }
   )
 )

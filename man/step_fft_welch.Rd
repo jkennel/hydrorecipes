@@ -10,7 +10,8 @@ step_fft_welch(
   length_subset,
   overlap = 0.8,
   window,
-  role = "predictor",
+  time_step = 1,
+  role = "augment",
   ...
 )
 }

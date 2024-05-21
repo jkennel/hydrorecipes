@@ -1,0 +1,189 @@
+---
+title: "Barometric pressure steps"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Barometric pressure steps}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, results = "hide", include = FALSE}
+library(hydrorecipes)
+```
+
+```{r data}
+# minute data
+data(kennel_2020)
+```
+
+### Time domain
+
+#### Single value
+
+```{r clark}
+clarks <- recipe(wl~., kennel_2020) |>
+  step_baro_clark(wl,
+                  baro,
+                  lag_space = 1) |> # 1 minutes (every minute differences)
+  step_baro_clark(wl,
+                  baro, 
+                  lag_space = 60) |> # 60 minutes (hourly differences)
+  step_baro_clark(wl, 
+                  baro, 
+                  lag_space = 1440) |> # 1440 minutes (daily differences)
+  prep() |>
+  bake()
+
+# The barometric efficiency is stored in the step (warning: this may change)
+clarks$get_step_data("barometric_efficiency")
+
+```
+
+```{r regression}
+least_squares <- recipe(wl~., kennel_2020) |>
+  step_baro_least_squares(wl, baro) |> 
+  step_baro_least_squares(wl, baro, 
+                          lag_space = 1440, 
+                          differences = TRUE) |> # 1440 minutes (daily differences)
+  prep() |>
+  bake()
+
+least_squares$get_step_data("barometric_efficiency")
+
+
+```
+
+#### Response function
+
+Standard lag method
+
+```{r lag}
+
+lag_standard <- recipe(wl~., kennel_2020) |>
+  step_lead_lag(baro, lag = 0:1440) |> 
+  step_spline_b(datetime, df = 11, intercept = TRUE) |> 
+  step_drop_columns(c(baro, datetime, et)) |>
+  step_ols(wl~.) |> 
+  prep() |>
+  bake()
+resp_l <- lag_standard$get_response_data()
+
+```
+
+Distributed lag method
+
+```{r distlag}
+lag_standard <- recipe(wl~., kennel_2020) |>
+  step_distributed_lag(baro, knots = log_lags_arma(15, 1440)) |> 
+  step_spline_b(datetime, df = 11, intercept = TRUE) |> 
+  step_drop_columns(c(baro, datetime, et)) |>
+  step_ols(wl~.) |> 
+  prep() |>
+  bake()
+resp_dl <- lag_standard$get_response_data()
+
+plot(value~x, resp_l[resp_l$term == "lead_lag" & resp_l$variable == "cumulative", ],
+     type = "l", ylim = c(0, 1),
+     xlab = "Lag in minutes",
+     ylab = "Cumulative Response"
+     )
+points(value~x, resp_dl[resp_dl$term == "distributed_lag_interpolated" & resp_dl$variable == "cumulative", ],
+       type = "l", col = "red")
+
+```
+
+### Frequency domain
+
+#### Single value
+
+These methods are based on the 2 cpd frequency which may not be indicative of the static barometric efficiency, in cases with a frequency dependent response (large wellbore storage or non-confined conditions).
+
+```{r ac}
+data(kennel_2020)
+
+harmonic <- recipe(wl~., kennel_2020) |>
+  step_baro_harmonic(datetime, wl, baro, et) |> 
+  prep() |>
+  bake()
+
+harmonic$get_step_data("barometric_efficiency")
+
+```
+
+
+#### Transfer function
+
+Three methods:
+
+- pgram based
+  - assumes smooth periodogram
+- Welch's 
+  - loss of low frequency information
+- Experimental 
+  - assumes smooth periodogram
+  - smoothing across multiple frequencies
+  - many higher frequecies discarded
+  - should be very fast
+
+```{r tf}
+
+form <- as.formula("wl~.")
+
+pgram <- recipe(form, kennel_2020) |>
+  step_fft_transfer_pgram(c(wl, baro, et), spans = c(3, 5, 7), taper = 0.4,
+                          time_step = 60) |>
+  prep() |>
+  bake()
+
+pg <- as.data.frame(pgram$get_step_data("fft_result")[[1]])
+
+
+
+welch <- recipe(form, kennel_2020) |>
+  step_fft_transfer_welch(c(wl, baro, et),
+                          length_subset = 40000,
+                          overlap = 0.97,
+                          window = window_nuttall(40000), 
+                          time_step = 60) |>
+  prep() |>
+  bake()
+
+we <- as.data.frame(welch$get_step_data("fft_result")[[1]])
+
+form <- as.formula("wl~.")
+
+pgram_experimental <- recipe(form, kennel_2020) |>
+  step_fft_transfer_experimental(c(wl, baro, et), spans = c(3, 5, 7), 
+                                 taper = 0.4, power = 3, n_groups = 400,
+                          time_step = 60) |>
+  prep() |>
+  bake()
+
+experimental <- as.data.frame(pgram_experimental$get_step_data("fft_result")[[1]])
+
+
+plot(Mod(fft_transfer_pgram_1)~frequency, pg, type = "l", log = "x",
+     col = "#00900080")
+points(Mod(transfer_welch_1)~frequency, we, type = "l",
+       col = "#90000080")
+points(Mod(fft_transfer_experimental_1)~frequency, experimental, type = "l", 
+       col = "#00009080")
+
+```
+
+
+### References
+
+
+```{r session}
+sessionInfo()
+```

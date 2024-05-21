@@ -41,14 +41,41 @@ The drawdown using the Hantush and Jacob 1955 model
 hantush_jacob 1955 solution for a leaky aquifer
 }
 \examples{
-dat <- data.frame(x = as.numeric(1:100),
-                  y = rep(0.01, 100))
-formula <- as.formula(y~x)
+time <- 1:2000
+flow_rate <- c(rep(0.001, 500),
+               rep(0.002, 500),
+               rep(0.0, 1000))
 
-frec = recipe(formula = formula, data = dat) |>
-  step_aquifer_leaky(time = x, flow_rate = y) |>
-  prep() |>
-  bake()
+# high
+dat <- data.frame(time = 1:2000, flow_rate = flow_rate)
+hj_100 <- recipe(flow_rate~time, dat) |>
+  step_aquifer_leaky(time,
+                     flow_rate,
+                     leakage = 100,
+                     radius = 100,
+                     storativity = 1e-6,
+                     transmissivity = 1e-4) |>
+  plate()
+
+# medium
+hj_200 <- recipe(flow_rate~time, dat) |>
+  step_aquifer_leaky(time,
+                     flow_rate,
+                     leakage = 200,
+                     radius = 100,
+                     storativity = 1e-6,
+                     transmissivity = 1e-4) |>
+  plate()
+
+# low
+hj_1000 <- recipe(flow_rate~time, dat) |>
+  step_aquifer_leaky(time,
+                     flow_rate,
+                     leakage = 1000,
+                     radius = 100,
+                     storativity = 1e-6,
+                     transmissivity = 1e-4) |>
+  plate()
 
 }
 \references{

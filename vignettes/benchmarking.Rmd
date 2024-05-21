@@ -928,28 +928,31 @@ results <- bench::press(
     dat <- data.frame(x = rnorm(rows), y = rnorm(rows), z = rnorm(rows),
                       q = rnorm(rows), r = rnorm(rows), s = rnorm(rows))
     bench::mark(
-    hrec1 = recipe(formula = formula, data = dat) |>
-      step_fft_pgram(c(x, y), 
-                 3,
-                 TRUE,
-                 TRUE,
-                 FALSE,
-                 0.1) |> 
-      plate(),
-    hrec2 = recipe(formula = formula, data = dat) |>
-      step_fft_pgram(c(x, y), 
-                 3,
-                 TRUE,
-                 TRUE,
-                 TRUE,
-                 0.1) |> 
-      plate(),
-    hrec3 = recipe(formula = formula, data = dat) |>
-      step_fft_welch(c(x, y),
-                 length_subset =  nrow(dat) / 10,
-                 overlap = 0.60,
-                 window = window_nuttall(nrow(dat) / 10)) |>
-      plate(),
+      hrec1 = recipe(formula = formula, data = dat) |>
+        step_fft_pgram(c(x, y), 
+                       3,
+                       TRUE,
+                       TRUE,
+                       FALSE,
+                       0.1, 
+                       time_step = 1) |> 
+        plate(),
+      hrec2 = recipe(formula = formula, data = dat) |>
+        step_fft_pgram(c(x, y), 
+                       3,
+                       TRUE,
+                       TRUE,
+                       TRUE,
+                       0.1, 
+                       time_step = 1) |> 
+        plate(),
+      # hrec3 = recipe(formula = formula, data = dat) |>
+      #   step_fft_welch(c(x, y),
+      #                  length_subset =  nrow(dat) / 10,
+      #                  overlap = 0.60,
+      #                  window = window_nuttall(nrow(dat) / 10), 
+      #                  time_step = 1) |>
+      #   plate(),
       check = FALSE,
       min_iterations = 3
     )
@@ -977,13 +980,15 @@ results <- bench::press(
                                 3,
                                 TRUE,
                                 TRUE,
-                                0.1) |> 
+                                0.1, 
+                                time_step = 1) |> 
         plate("dt"),
       hrec2 = recipe(formula = formula, data = dat) |>
         step_fft_transfer_welch(c(x, y),
                                 length_subset =  nrow(dat) / 10,
                                 overlap = 0.60,
-                                window = window_nuttall(nrow(dat) / 10)) |> 
+                                window = window_nuttall(nrow(dat) / 10), 
+                                time_step = 1) |> 
         plate("dt"),
       check = FALSE,
       min_iterations = 2
@@ -1103,6 +1108,8 @@ results <- bench::press(
 
 results
 
+```
 
-
+```{r session}
+sessionInfo()
 ```

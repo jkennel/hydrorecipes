@@ -4,7 +4,7 @@
 \alias{step_find_interval}
 \title{step_find_interval}
 \usage{
-step_find_interval(.rec, terms, vec, role = "predictor", ...)
+step_find_interval(.rec, terms, vec, role = "augment", ...)
 }
 \arguments{
 \item{.rec}{the R6 recipe object.}

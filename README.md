@@ -10,7 +10,7 @@ improve speed, decrease memory consumption, increase consistency between
 steps, and decrease some boiler plate code for step additions. The first
 three goals are likely to be achieved but the fourth might not given
 that the package implements two APIs (one for R6 and one for S3). Speed
-and memory improvements comes from the
+and memory improvements come from the
 [collapse](https://sebkrantz.github.io/collapse/) package, Rcpp code,
 using algorithms that scale better, and attempts to reduce copying data.
 

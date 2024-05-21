@@ -375,10 +375,11 @@ jl = recipe(formula = form, data = dat) |>
 
 plot(aquifer_constant_drawdown~time, jl, type = "l", 
      ylab = "flow rate", 
-     xlab = "")
+     xlab = "elapsed time",
+     log = "x")
 ```
 
-## References
+### References
 
 Barker, J.A., A generalized radial flow model for hydraulic tests in fractured rock. Water Resour. Res., 24 (1988), pp. 1796-1804, 10.1029/WR024i010p01796
 
@@ -393,3 +394,7 @@ Jacob, C.E. and S.W. Lohman, 1952. Nonsteady flow to a well of constant drawdown
 Papadopulos, I.S. and H.H. Cooper, 1967. Drawdown in a well of large diameter, Water Resources Research, vol. 3, no. 1, pp. 241-244.
 
 Prodanoff, J.H.A., Mansur, W.J. and Mascarenhas, F.C.B., 2006. Numerical evaluation of Theis and Hantush-Jacob well functions. Journal of hydrology, 318(1-4), pp.173-183.
+
+```{r session}
+sessionInfo()
+```

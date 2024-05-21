@@ -31,8 +31,10 @@ time series."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/lib
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/aquifer.html">Aquifer steps</a>
+    <a class="dropdown-item" href="../articles/barometric_pressure.html">Barometric pressure steps</a>
     <a class="dropdown-item" href="../articles/benchmarking.html">Benchmarking</a>
     <a class="dropdown-item" href="../articles/regression.html">Regression</a>
+    <a class="dropdown-item" href="../articles/slug_test.html">Slug test steps</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -140,21 +142,48 @@ time series.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">y</span><span class="op">~</span><span class="va">x</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2000</span></span></span>
+<span class="r-in"><span><span class="va">flow_rate</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">500</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.002</span>, <span class="fl">500</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.0</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Spherical</span></span></span>
-<span class="r-in"><span><span class="va">frec</span> <span class="op">=</span> <span class="fu"><a href="recipe.html">recipe</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">step_aquifer_grf</span><span class="op">(</span>time <span class="op">=</span> <span class="va">x</span>, flow_rate <span class="op">=</span> <span class="va">y</span>, flow_dimension <span class="op">=</span> <span class="fl">3.0</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="prep.html">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="bake.html">bake</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">flow_rate</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Theis</span></span></span>
-<span class="r-in"><span><span class="va">frec</span> <span class="op">=</span> <span class="fu"><a href="recipe.html">recipe</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">step_aquifer_grf</span><span class="op">(</span>time <span class="op">=</span> <span class="va">x</span>, flow_rate <span class="op">=</span> <span class="va">y</span>, flow_dimension <span class="op">=</span> <span class="fl">2.0</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="prep.html">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="bake.html">bake</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># radial (flow_dimension = 2 Theis)</span></span></span>
+<span class="r-in"><span><span class="va">dd_rad</span> <span class="op">&lt;-</span> <span class="fu"><a href="recipe.html">recipe</a></span><span class="op">(</span><span class="va">time</span><span class="op">~</span><span class="va">flow_rate</span>, <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">step_aquifer_grf</span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>,</span></span>
+<span class="r-in"><span>                   flow_rate <span class="op">=</span> <span class="va">flow_rate</span>,</span></span>
+<span class="r-in"><span>                   thickness <span class="op">=</span> <span class="fl">1.0</span>,</span></span>
+<span class="r-in"><span>                   radius <span class="op">=</span> <span class="fl">20</span>,</span></span>
+<span class="r-in"><span>                   specific_storage <span class="op">=</span> <span class="fl">1e-5</span>,</span></span>
+<span class="r-in"><span>                   hydraulic_conductivity <span class="op">=</span> <span class="fl">1e-3</span>,</span></span>
+<span class="r-in"><span>                   flow_dimension <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># linear (flow_dimension = 1)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dd_lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="recipe.html">recipe</a></span><span class="op">(</span><span class="va">time</span><span class="op">~</span><span class="va">flow_rate</span>, <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">step_aquifer_grf</span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>,</span></span>
+<span class="r-in"><span>                   flow_rate <span class="op">=</span> <span class="va">flow_rate</span>,</span></span>
+<span class="r-in"><span>                   thickness <span class="op">=</span> <span class="fl">1.0</span>,</span></span>
+<span class="r-in"><span>                   radius <span class="op">=</span> <span class="fl">20</span>,</span></span>
+<span class="r-in"><span>                   specific_storage <span class="op">=</span> <span class="fl">1e-5</span>,</span></span>
+<span class="r-in"><span>                   hydraulic_conductivity <span class="op">=</span> <span class="fl">1e-3</span>,</span></span>
+<span class="r-in"><span>                   flow_dimension <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># spherical (flow_dimension = 3)</span></span></span>
+<span class="r-in"><span><span class="va">dd_sph</span> <span class="op">&lt;-</span> <span class="fu"><a href="recipe.html">recipe</a></span><span class="op">(</span><span class="va">time</span><span class="op">~</span><span class="va">flow_rate</span>, <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">step_aquifer_grf</span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>,</span></span>
+<span class="r-in"><span>                   flow_rate <span class="op">=</span> <span class="va">flow_rate</span>,</span></span>
+<span class="r-in"><span>                   thickness <span class="op">=</span> <span class="fl">1.0</span>,</span></span>
+<span class="r-in"><span>                   radius <span class="op">=</span> <span class="fl">20</span>,</span></span>
+<span class="r-in"><span>                   specific_storage <span class="op">=</span> <span class="fl">1e-5</span>,</span></span>
+<span class="r-in"><span>                   hydraulic_conductivity <span class="op">=</span> <span class="fl">1e-3</span>,</span></span>
+<span class="r-in"><span>                   flow_dimension <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

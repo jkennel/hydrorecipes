@@ -36,9 +36,16 @@ barometric efficiency using Clark's method
 Clark 1967 solution for calculating barometric efficiency (Algorithm from Batu 1998, pg 76)
 }
 \examples{
-dat <- data.frame(x = as.numeric(1:rows),
-                  y = rep(0.01, rows))
-formula <- as.formula(y~x)
+data(kennel_2020)
+
+clarks <- recipe(wl~., kennel_2020) |>
+  step_baro_clark(wl, baro, lag_space = 1) |> # 1 minutes (every minute differences)
+  step_baro_clark(wl, baro, lag_space = 60) |> # 60 minutes (hourly differences)
+  step_baro_clark(wl, baro, lag_space = 1440) |> # 1440 minutes (daily differences)
+  prep() |>
+  bake()
+
+clarks$get_step_data("barometric_efficiency")
 
 }
 \references{
@@ -50,6 +57,7 @@ data analysis. John Wiley & Sons.
 }
 \seealso{
 Other barometric: 
-\code{\link{step_baro_harmonic}()}
+\code{\link{step_baro_harmonic}()},
+\code{\link{step_baro_least_squares}()}
 }
 \concept{barometric}

@@ -49,21 +49,48 @@ convolution so many rates can be included, but requires a regular
 time series.
 }
 \examples{
-dat <- data.frame(x = as.numeric(1:100),
-                  y = rep(0.01, 100))
-formula <- as.formula(y~x)
+time <- 1:2000
+flow_rate  <- c(rep(0.001, 500),
+                rep(0.002, 500),
+                rep(0.0, 1000))
 
-# Spherical
-frec = recipe(formula = formula, data = dat) |>
-  step_aquifer_grf(time = x, flow_rate = y, flow_dimension = 3.0) |>
-  prep() |>
-  bake()
+dat <- data.frame(time, flow_rate)
 
-# Theis
-frec = recipe(formula = formula, data = dat) |>
-  step_aquifer_grf(time = x, flow_rate = y, flow_dimension = 2.0) |>
-  prep() |>
-  bake()
+# radial (flow_dimension = 2 Theis)
+dd_rad <- recipe(time~flow_rate, dat) |>
+  step_aquifer_grf(time = time,
+                   flow_rate = flow_rate,
+                   thickness = 1.0,
+                   radius = 20,
+                   specific_storage = 1e-5,
+                   hydraulic_conductivity = 1e-3,
+                   flow_dimension = 2) |>
+  plate()
+
+
+# linear (flow_dimension = 1)
+
+dd_lin <- recipe(time~flow_rate, dat) |>
+  step_aquifer_grf(time = time,
+                   flow_rate = flow_rate,
+                   thickness = 1.0,
+                   radius = 20,
+                   specific_storage = 1e-5,
+                   hydraulic_conductivity = 1e-3,
+                   flow_dimension = 1) |>
+  plate()
+
+# spherical (flow_dimension = 3)
+dd_sph <- recipe(time~flow_rate, dat) |>
+  step_aquifer_grf(time = time,
+                   flow_rate = flow_rate,
+                   thickness = 1.0,
+                   radius = 20,
+                   specific_storage = 1e-5,
+                   hydraulic_conductivity = 1e-3,
+                   flow_dimension = 3) |>
+  plate()
+
 
 }
 \references{

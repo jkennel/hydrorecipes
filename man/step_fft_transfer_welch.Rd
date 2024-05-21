@@ -10,7 +10,8 @@ step_fft_transfer_welch(
   length_subset,
   overlap = 0.8,
   window,
-  role = "predictor",
+  time_step = 1,
+  role = "augment",
   ...
 )
 }
@@ -43,7 +44,10 @@ data(kennel_2020)
 form <- as.formula("wl~.")
 
   rec <- recipe(form, kennel_2020) |>
-  step_fft_transfer_welch(c(wl, baro, et), spans = 3) |>
+  step_fft_transfer_welch(c(wl, baro, et),
+                          length_subset = 1440*8 + 1,
+                          overlap = 0.6,
+                          window = window_nuttall(1440*8+1)) |>
   plate()
 
 }

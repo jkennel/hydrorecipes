@@ -7,6 +7,9 @@
     <loc>https://jkennel.github.io/hydrorecipes/articles/aquifer.html</loc>
   </url>
   <url>
+    <loc>https://jkennel.github.io/hydrorecipes/articles/barometric_pressure.html</loc>
+  </url>
+  <url>
     <loc>https://jkennel.github.io/hydrorecipes/articles/benchmarking.html</loc>
   </url>
   <url>
@@ -14,6 +17,9 @@
   </url>
   <url>
     <loc>https://jkennel.github.io/hydrorecipes/articles/regression.html</loc>
+  </url>
+  <url>
+    <loc>https://jkennel.github.io/hydrorecipes/articles/slug_test.html</loc>
   </url>
   <url>
     <loc>https://jkennel.github.io/hydrorecipes/authors.html</loc>
@@ -115,6 +121,9 @@
     <loc>https://jkennel.github.io/hydrorecipes/reference/step_baro_harmonic.html</loc>
   </url>
   <url>
+    <loc>https://jkennel.github.io/hydrorecipes/reference/step_baro_least_squares.html</loc>
+  </url>
+  <url>
     <loc>https://jkennel.github.io/hydrorecipes/reference/step_center.html</loc>
   </url>
   <url>
@@ -143,6 +152,9 @@
   </url>
   <url>
     <loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_pgram.html</loc>
+  </url>
+  <url>
+    <loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_transfer_experimental.html</loc>
   </url>
   <url>
     <loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_transfer_pgram.html</loc>

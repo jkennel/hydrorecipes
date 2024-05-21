@@ -336,9 +336,11 @@ Recipe <- R6Class(
     get_step_data = function(field_name) {
 
       data <- lapply(self$steps, function(x) {
-        x[[field_name]]
+        step_data <- x[[field_name]]
+        step_data
       })
 
+      names(data) <- sapply(self$steps, "[[", "id")
       data[!sapply(data, is.null)]
 
     }

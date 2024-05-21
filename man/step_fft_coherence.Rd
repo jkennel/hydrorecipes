@@ -4,7 +4,7 @@
 \alias{step_fft_coherence}
 \title{step_fft_coherence}
 \usage{
-step_fft_coherence(.rec, terms, role = "predictor", ...)
+step_fft_coherence(.rec, terms, role = "augment", ...)
 }
 \arguments{
 \item{.rec}{the R6 recipe object.}

@@ -1,0 +1,29 @@
+---
+title: "Slug test steps"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Slug test steps}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(hydrorecipes)
+```
+
+#### References
+
+Bouwer, H., 1989. The Bouwer and Rice Slug Test—An Update a. Groundwater, 27(3), pp.304-309.
+
+Cooper, H.H., J.D. Bredehoeft and S.S. Papadopulos, 1967. Response of a finite-diameter well to an instantaneous charge of water, Water Resources Research, vol. 3, no. 1, pp. 263-269.
+
+```{r session}
+sessionInfo()
+```

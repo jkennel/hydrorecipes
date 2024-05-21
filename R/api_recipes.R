@@ -504,9 +504,16 @@ step_aquifer_wellbore_storage <- function(.rec,
 #' data analysis. John Wiley & Sons.
 #'
 #' @examples
-#' dat <- data.frame(x = as.numeric(1:rows),
-#'                   y = rep(0.01, rows))
-#' formula <- as.formula(y~x)
+#' data(kennel_2020)
+#'
+#' clarks <- recipe(wl~., kennel_2020) |>
+#'   step_baro_clark(wl, baro, lag_space = 1) |> # 1 minutes (every minute differences)
+#'   step_baro_clark(wl, baro, lag_space = 60) |> # 60 minutes (hourly differences)
+#'   step_baro_clark(wl, baro, lag_space = 1440) |> # 1440 minutes (daily differences)
+#'   prep() |>
+#'   bake()
+#'
+#' clarks$get_step_data("barometric_efficiency")
 #'
 #' @export
 step_baro_clark <- function(.rec,
@@ -522,7 +529,48 @@ step_baro_clark <- function(.rec,
   .rec$add_step(do.call(StepBaroClark$new,
                         env_list))
 }
-
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' step_baro_clark
+#'
+#' @description
+#' Least squares solution for calculating barometric efficiency
+#'
+#' @inheritParams step_baro_clark
+#'
+#' @param differences \code{numeric vector} number of samples between differences
+#'
+#' @return barometric efficiency using least squares
+#'
+#' @family barometric
+#'
+#'
+#' @examples
+#'
+#' data(kennel_2020)
+#'
+#' least_squares <- recipe(wl~., kennel_2020) |>
+#'   step_baro_least_squares(wl, baro) |> # 1 minutes (every minute differences)
+#'   step_baro_least_squares(wl, baro, lag_space = 1440, differences = TRUE) |> # 1440 minutes (daily differences)
+#'   prep() |>
+#'   bake()
+#'
+#' least_squares$get_step_data("barometric_efficiency")
+#'
+#' @export
+step_baro_least_squares <- function(.rec,
+                                    water_level,
+                                    barometric_pressure,
+                                    lag_space = 1L,
+                                    inverse = FALSE,
+                                    differences = FALSE,
+                                    role = "augment",
+                                    ...) {
+  water_level <- substitute(water_level)
+  barometric_pressure <- substitute(barometric_pressure)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepBaroLeastSquares$new,
+                        env_list))
+}
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_baro_harmonic
 #'
@@ -570,7 +618,7 @@ step_baro_harmonic <- function(.rec,
                                frequency = c(1.9324, 2.0),
                                cycle_size = 86400,
                                start = 0.0,
-                               inverse = TRUE,
+                               inverse = FALSE,
                                role = "augment",
                                ...) {
   time <- substitute(time)
@@ -899,7 +947,7 @@ step_earthtide <- function(.rec,
 #'
 step_fft_coherence <- function(.rec,
                                terms,
-                               role = "predictor",
+                               role = "augment",
                                ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
@@ -938,6 +986,7 @@ step_fft_pgram <- function(.rec,
                            lst = TRUE,
                            taper = 0.1,
                            pad_fft = TRUE,
+                           time_step = 1,
                            role = "predictor",
                            ...) {
   terms <- substitute(terms)
@@ -973,7 +1022,8 @@ step_fft_welch <- function(.rec,
                            length_subset,
                            overlap = 0.8,
                            window,
-                           role = "predictor",
+                           time_step = 1.0,
+                           role = "augment",
                            ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
@@ -1007,11 +1057,51 @@ step_fft_transfer_pgram <- function(.rec,
                                     detrend = TRUE,
                                     demean = TRUE,
                                     taper = 0.1,
-                                    role = "predictor",
+                                    time_step = 1.0,
+                                    role = "augment",
                                     ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepTransferPgram$new,
+                        env_list))
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_fft_transfer_experimental
+#'
+#' @description
+#'  Calculates the transfer function with pgram results.
+#'
+#' @inheritParams step_scale
+#' @inheritParams stats::spec.pgram
+#' @param power spacing for the groups
+#' @param n_groups number of results
+#'
+#' @return an updated recipe
+#' @export
+#'
+#' @examples
+#' data(kennel_2020)
+#'
+#' form <- as.formula("wl~.")
+#'
+#' rec <- recipe(form, kennel_2020) |>
+#'        step_fft_transfer_experimental(c(wl, baro, et), spans = 3) |>
+#'        plate()
+#'
+step_fft_transfer_experimental <- function(.rec,
+                                           terms,
+                                           spans = 3,
+                                           detrend = TRUE,
+                                           demean = TRUE,
+                                           taper = 0.1,
+                                           power = 3,
+                                           n_groups = 200,
+                                           time_step = 1.0,
+                                           role = "augment",
+                                           ...) {
+  terms <- substitute(terms)
+  env_list <- get_function_arguments()
+  .rec$add_step(do.call(StepTransferExperimental$new,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1031,7 +1121,10 @@ step_fft_transfer_pgram <- function(.rec,
 #' form <- as.formula("wl~.")
 #'
 #'   rec <- recipe(form, kennel_2020) |>
-#'   step_fft_transfer_welch(c(wl, baro, et), spans = 3) |>
+#'   step_fft_transfer_welch(c(wl, baro, et),
+#'                           length_subset = 1440*8 + 1,
+#'                           overlap = 0.6,
+#'                           window = window_nuttall(1440*8+1)) |>
 #'   plate()
 #'
 step_fft_transfer_welch <- function(.rec,
@@ -1039,7 +1132,8 @@ step_fft_transfer_welch <- function(.rec,
                                     length_subset,
                                     overlap = 0.8,
                                     window,
-                                    role = "predictor",
+                                    time_step = 1.0,
+                                    role = "augment",
                                     ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
@@ -1074,7 +1168,7 @@ step_fft_transfer_welch <- function(.rec,
 step_find_interval <- function(.rec,
                                terms,
                                vec,
-                               role = "predictor",
+                               role = "augment",
                                ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()

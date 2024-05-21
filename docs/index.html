@@ -42,8 +42,10 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="articles/aquifer.html">Aquifer steps</a>
+    <a class="dropdown-item" href="articles/barometric_pressure.html">Barometric pressure steps</a>
     <a class="dropdown-item" href="articles/benchmarking.html">Benchmarking</a>
     <a class="dropdown-item" href="articles/regression.html">Regression</a>
+    <a class="dropdown-item" href="articles/slug_test.html">Slug test steps</a>
   </div>
 </li>
       </ul>
@@ -62,7 +64,7 @@
 <div class="page-header"><h1 id="hydrorecipes">hydrorecipes<a class="anchor" aria-label="anchor" href="#hydrorecipes"></a>
 </h1></div>
 <p>WARNING: This package is in early stages of development and is likely to change.</p>
-<p>This package is modeled after the <a href="https://recipes.tidymodels.org" class="external-link">recipes</a> framework consisting of a recipe and a set of steps to apply. The goals of the package are to improve speed, decrease memory consumption, increase consistency between steps, and decrease some boiler plate code for step additions. The first three goals are likely to be achieved but the fourth might not given that the package implements two APIs (one for R6 and one for S3). Speed and memory improvements comes from the <a href="https://sebkrantz.github.io/collapse/" class="external-link">collapse</a> package, Rcpp code, using algorithms that scale better, and attempts to reduce copying data.</p>
+<p>This package is modeled after the <a href="https://recipes.tidymodels.org" class="external-link">recipes</a> framework consisting of a recipe and a set of steps to apply. The goals of the package are to improve speed, decrease memory consumption, increase consistency between steps, and decrease some boiler plate code for step additions. The first three goals are likely to be achieved but the fourth might not given that the package implements two APIs (one for R6 and one for S3). Speed and memory improvements come from the <a href="https://sebkrantz.github.io/collapse/" class="external-link">collapse</a> package, Rcpp code, using algorithms that scale better, and attempts to reduce copying data.</p>
 <p>It diverges in a few ways:</p>
 <ul>
 <li><p>based on <a href="https://r6.r-lib.org" class="external-link">R6</a></p></li>

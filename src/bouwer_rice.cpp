@@ -1,5 +1,7 @@
 #include "hydrorecipes.h"
 
+// Bouwer, H., 1989. The Bouwer and Rice Slug Test—An Update a. Groundwater, 27(3), pp.304-309.
+
 // http://hydrotools.sourceforge.net/
 // [[Rcpp::export]]
 double a_cpp(double x) {

@@ -42,6 +42,22 @@ an updated recipe
 \description{
 Estimates the flows of a constant drawdown test using Jacob-Lohman 1952.
 }
+\examples{
+time <- 10^seq(-5, 2, 0.1)
+form <- formula(time~.)
+dat <- data.frame(time = time)
+
+jl = recipe(formula = form, data = dat) |>
+  step_aquifer_constant_drawdown(time = time,
+                                 drawdown = 10,
+                                 thickness = 10,
+                                 radius_well = 0.15,
+                                 specific_storage = 1e-6,
+                                 hydraulic_conductivity = 1,
+                                 n_terms = 12L) |>
+  plate()
+
+}
 \references{
 Jacob, C.E. and S.W. Lohman, 1952. Nonsteady flow to a well of constant
  drawdown in an extensive aquifer, Trans. Am. Geophys. Union, vol. 33,

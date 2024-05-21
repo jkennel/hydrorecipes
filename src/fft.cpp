@@ -1038,8 +1038,8 @@ Eigen::MatrixXcd spec_welch(Eigen::MatrixXd& x,
   for (size_t k = 0; k < n_fft; ++k) {
     ind = 0;
     x_block = x.middleRows(starts[k], length_subset);
-    x_block = x_block.array().colwise() * window.array();
     x_block = detrend_and_demean_matrix(x_block, true, true);
+    x_block = x_block.array().colwise() * window.array();
 
     // calculate FFT
     x_fft_mat = fft_matrix(x_block, n_new);
@@ -1059,8 +1059,11 @@ Eigen::MatrixXcd spec_welch(Eigen::MatrixXd& x,
 
   // pgram_mat = fill_lower_left(pgram_mat, n_col, start);
 
+
   pgram_mat.row(0) = 0.5 * (pgram_mat.row(1).array() + pgram_mat.row(n_new - 1).array());
   pgram_mat *= scale;
+
+
 
   // MatrixXd m =  pgram_mat.cwiseAbs2();
   // double mx = m.col(2).maxCoeff();

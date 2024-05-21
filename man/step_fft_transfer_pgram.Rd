@@ -11,7 +11,8 @@ step_fft_transfer_pgram(
   detrend = TRUE,
   demean = TRUE,
   taper = 0.1,
-  role = "predictor",
+  time_step = 1,
+  role = "augment",
   ...
 )
 }

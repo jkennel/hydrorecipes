@@ -13,7 +13,7 @@ step_baro_harmonic(
   frequency = c(1.9324, 2),
   cycle_size = 86400,
   start = 0,
-  inverse = TRUE,
+  inverse = FALSE,
   role = "augment",
   ...
 )
@@ -66,6 +66,7 @@ Acworth, R.I., Halloran, L.J., Rau, G.C., Cuthbert, M.O. and Bernardi, T.L.,
 }
 \seealso{
 Other barometric: 
-\code{\link{step_baro_clark}()}
+\code{\link{step_baro_clark}()},
+\code{\link{step_baro_least_squares}()}
 }
 \concept{barometric}

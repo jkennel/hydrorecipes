@@ -42,14 +42,12 @@ The drawdown using the Theis model
 barker_herbert 1982 solution for radial patches.
 }
 \examples{
-dat <- data.frame(x = as.numeric(1:100),
-                  y = rep(0.01, 100))
-formula <- as.formula(y~x)
+dat <- data.frame(time = as.numeric(1:100))
+formula <- as.formula(time~.)
 
 frec = recipe(formula = formula, data = dat) |>
-  step_aquifer_patch(time = x, flow_rate = y) |>
-  prep() |>
-  bake()
+  step_aquifer_patch(time = time, flow_rate = 0.01) |>
+  plate()
 
 }
 \references{

@@ -13,6 +13,7 @@ step_fft_pgram(
   lst = TRUE,
   taper = 0.1,
   pad_fft = TRUE,
+  time_step = 1,
   role = "predictor",
   ...
 )
