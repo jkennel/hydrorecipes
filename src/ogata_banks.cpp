@@ -104,6 +104,14 @@ double ogata_banks_decay_ind(
     erfc_2 = (exp_x  * std::erfc((x + term_t) * co));
   }
 
+  if(std::isnan(erfc_1)) {
+    erfc_1 = 0.0;
+  }
+
+  if(std::isnan(erfc_2)) {
+    erfc_2 = 0.0;
+  }
+
   if((erfc_1 != 0.0) || (erfc_2 != 0.0)) {
     output = 0.5 * c0 * exp(v * x / (2.0 * D)) * (erfc_1 + erfc_2);
   }

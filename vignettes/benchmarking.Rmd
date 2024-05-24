@@ -999,7 +999,7 @@ results <- bench::press(
         step_fft_transfer_experimental(c(x, y), 
                                        spans = 3, 
                                        taper = 0.1, 
-                                       power = 3,
+                                       # power = 3,
                                        n_groups = 300,
                                        time_step = 1) |>
         prep() |>

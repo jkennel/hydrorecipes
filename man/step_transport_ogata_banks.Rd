@@ -50,6 +50,8 @@ To have values match the excel sheet
 https://www.civil.uwaterloo.ca/jrcraig/pdf/OgataBanks.xlsm the decay
 coefficient needs to be scaled by the retardation coefficient.
 
+Care must be taken so that input values do not lead to NaN. -Need to fix this.
+
 1-D
 infinite source
 uniform flow

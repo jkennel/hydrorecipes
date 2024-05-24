@@ -1,0 +1,106 @@
+---
+title: "transport"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{transport}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(hydrorecipes)
+```
+
+
+#### Sudicky and Frind 1982 dual fractures (solute)
+
+```{r dualsolute}
+
+dat <- expand.grid(seq(0, 0.2, 0.001), seq(0, 0.002, 0.0001), 10^seq(0, 6, 1))
+dat <- collapse::qDT(dat)
+names(dat) <- c("distance_fracture", "distance_matrix", "time")
+cra_sol <- recipe(time~., dat) |>
+  step_transport_fractures_solute(time = time, 
+                                  distance_fracture = distance_fracture, 
+                                  distance_matrix = distance_matrix) |>
+  plate()
+
+ggplot(cra_sol, aes(x = distance_fracture, y = distance_matrix)) + 
+  geom_raster(aes(fill = transport_fractures_solute)) +
+  facet_wrap(time ~.)
+
+```
+
+
+#### Sudicky and Frind 1982 dual fractures (modified for heat)
+
+```{r dualheat}
+
+cra_heat <- recipe(time~., dat) |>
+  step_transport_fractures_heat(time = time, 
+                                distance_fracture = distance_fracture, 
+                                distance_matrix = distance_matrix) |>
+  plate()
+
+ggplot(cra_heat, aes(x = distance_fracture, y = distance_matrix)) + 
+  geom_raster(aes(fill = transport_fractures_heat)) +
+  facet_wrap(time ~.)
+
+```
+
+#### Ogata and Banks 1962 1-D transport with decay and retardation
+
+distance (vector) 
+time (vector)
+
+```{r ogatabanks}
+dat <- expand.grid(seq(0, 5, 0.1), 1:1000)
+dat <- collapse::qDT(dat)
+setnames(dat, c("distance", "time"))
+ob <- recipe(x~., data = dat) |>
+  step_transport_ogata_banks(time = time, 
+                             distance = distance, 
+                             concentration_initial = 1.0, 
+                             velocity = 0.005, 
+                             diffusion = 1e-3, 
+                             retardation = 1.0, 
+                             decay = 0.0) |>
+  plate()
+
+
+library(ggplot2)
+library(viridisLite)
+ggplot(ob, aes(x = distance, y = time)) + 
+  geom_raster(aes(fill = transport_ogata_banks))
+
+
+
+dat <- expand.grid(seq(0, 5, 0.1), 1:1000)
+dat <- collapse::qDT(dat)
+setnames(dat, c("distance", "time"))
+ob <- recipe(x~., data = dat) |>
+  step_transport_ogata_banks(time = time, 
+                             distance = distance, 
+                             concentration_initial = 1.0, 
+                             velocity = 0.005, 
+                             diffusion = 1e-3, 
+                             retardation = 5.0, 
+                             decay = 0.0) |>
+  plate()
+
+ggplot(ob, aes(x = distance, y = time)) + 
+  geom_raster(aes(fill = transport_ogata_banks))
+
+
+
+```
+

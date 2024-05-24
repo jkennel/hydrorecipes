@@ -83,7 +83,8 @@ step_add_noise <- function(.rec,
 #' step_add_vars
 #'
 #' @description
-#'   Add a variable from the initial data set after recipe creation.
+#'   Add a variable from the initial (template) data not included in the
+#'   recipe creation.
 #'
 #' @inheritParams step_scale
 #'
@@ -94,7 +95,8 @@ step_add_noise <- function(.rec,
 #' dat <- data.frame(x = rnorm(10), y = rnorm(10), z = rnorm(10))
 #'
 #' rec <- recipe(y~x, data = dat) |>
-#'        step_add_vars(z) |> plate()
+#'        step_add_vars(z) |>
+#'        plate()
 #'
 step_add_vars <- function(.rec,
                           terms,
@@ -1814,6 +1816,8 @@ step_transport_fractures_solute <- function(.rec,
 #' To have values match the excel sheet
 #' https://www.civil.uwaterloo.ca/jrcraig/pdf/OgataBanks.xlsm the decay
 #' coefficient needs to be scaled by the retardation coefficient.
+#'
+#' Care must be taken so that input values do not lead to NaN. -Need to fix this.
 #'
 #' 1-D
 #' infinite source
