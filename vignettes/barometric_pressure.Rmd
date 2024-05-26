@@ -162,8 +162,11 @@ we <- as.data.frame(welch$get_step_data("fft_result")[[1]])
 form <- as.formula("wl~.")
 
 pgram_experimental <- recipe(form, kennel_2020) |>
-  step_fft_transfer_experimental(c(wl, baro, et), spans = c(3, 5, 7), 
-                                 taper = 0.4, power = 3, n_groups = 400,
+  step_fft_transfer_experimental(c(wl, baro, et), 
+                                 spans = c(3, 5, 7), 
+                                 taper = 0.45,
+                                 # power = 3,
+                                 n_groups = 201,
                           time_step = 60) |>
   prep() |>
   bake()
@@ -171,12 +174,20 @@ pgram_experimental <- recipe(form, kennel_2020) |>
 experimental <- as.data.frame(pgram_experimental$get_step_data("fft_result")[[1]])
 
 
-plot(Mod(fft_transfer_pgram_1)~frequency, pg, type = "l", log = "x",
+plot(Mod(fft_transfer_pgram_1)~frequency, pg, type = "l", log = "x", xlim = c(0.01, 100),
      col = "#00900080")
 points(Mod(transfer_welch_1)~frequency, we, type = "l",
        col = "#90000080")
 points(Mod(fft_transfer_experimental_1)~frequency, experimental, type = "l", 
        col = "#00009080")
+
+hydrorecipes:::group_frequency(we$frequency, 201)
+
+plot(Mod(fft_transfer_experimental_1)~frequency, experimental, type = "l", 
+       col = "#00009080", log = 'x')
+
+plot(Arg(fft_transfer_experimental_1)~frequency, experimental, type = "l", 
+       col = "#00009080", log = 'x')
 
 ```
 
