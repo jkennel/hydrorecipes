@@ -13,7 +13,7 @@ StepTransferExperimental <- R6Class(
     detrend = NA,
     demean = NA,
     taper = NA_real_,
-    power = NA_real_,
+    # power = NA_real_,
     n_groups = NA_integer_,
     time_step = NA_real_,
 
@@ -24,7 +24,7 @@ StepTransferExperimental <- R6Class(
                           detrend = TRUE,
                           demean = TRUE,
                           taper = 0.1,
-                          power = 3,
+                          # power = 3,
                           n_groups = 200,
                           time_step = 1.0,
                           role = "augment",
@@ -44,7 +44,7 @@ StepTransferExperimental <- R6Class(
       self$detrend <- detrend
       self$demean <- demean
       self$taper <- taper
-      self$power <- power
+      # self$power <- power
       self$n_groups <- n_groups
       self$time_step <- time_step
 
@@ -59,7 +59,7 @@ StepTransferExperimental <- R6Class(
           self$detrend,
           self$demean,
           self$taper,
-          self$power,
+          # self$power,
           self$n_groups
         )
       )
@@ -68,8 +68,7 @@ StepTransferExperimental <- R6Class(
 
       n  <- length(new_data[[1]])
       df <- 1.0 / n
-      frequency <- seq.int(from = 0, by = df,
-                                            length.out = n) * 86400 / self$time_step
+      frequency <- seq.int(from = 0, by = df, length.out = n) * 86400 / self$time_step
       # print(head(frequency))
       # print((frequency))
       # print(hydrorecipes:::group_frequency(frequency, 200))

@@ -106,9 +106,14 @@ StepBaroHarmonic <- R6Class(
                            TRUE,
                            0.1,
                            2.0,
-                           self$cycle_size/dt)[1])
+                           self$cycle_size / dt)[1])
 
       names(be_tf) <- "tf"
+
+      if (self$inverse) {
+        be_tf[1] <- 1.0 - be_tf[1]
+      }
+
       self$barometric_efficiency <- c(self$barometric_efficiency, be_tf)
 
 

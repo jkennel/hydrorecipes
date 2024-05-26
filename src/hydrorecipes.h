@@ -193,14 +193,12 @@ Eigen::MatrixXcd transfer_pgram_smooth(Eigen::MatrixXd &x,
                                        bool detrend,
                                        bool demean,
                                        double taper,
-                                       double power,
                                        size_t n_groups);
 Eigen::MatrixXcd transfer_pgram(Eigen::MatrixXd &x,
                                 const Eigen::VectorXi &spans,
                                 bool detrend,
                                 bool demean,
                                 double taper,
-                                double power,
                                 size_t n_groups);
 
 Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd &x,

@@ -1,7 +1,6 @@
 #include "hydrorecipes.h"
 
 
-
 // [[Rcpp::export]]
 Eigen::MatrixXd llt_solve(Eigen::Map<Eigen::MatrixXd> &X,
                           Eigen::Map<Eigen::MatrixXd> &Y) {
@@ -10,6 +9,7 @@ Eigen::MatrixXd llt_solve(Eigen::Map<Eigen::MatrixXd> &X,
 
   const Eigen::LLT<Eigen::MatrixXd> llt(Eigen::MatrixXd(p, p).setZero().selfadjointView<Lower>().
                                           rankUpdate(X.adjoint()));
+
   const MatrixXd betahat(llt.solve(X.adjoint() * Y));
 
   // const Eigen::MatrixXd fitted(X * betahat);
@@ -28,6 +28,19 @@ Eigen::MatrixXd llt_solve(Eigen::Map<Eigen::MatrixXd> &X,
   // );
 
   return(betahat);
+}
+
+
+// [[Rcpp::export]]
+Eigen::MatrixXd llt_weighted_solve(Eigen::Map<Eigen::MatrixXd> &X,
+                          Eigen::Map<Eigen::MatrixXd> &Y,
+                          Eigen::Map<Eigen::VectorXd> &w) {
+  const int n(X.rows());
+  const int p(X.cols());
+
+  Eigen::MatrixXd out = (X.transpose() * w.asDiagonal() * X).llt().solve(X.transpose() * w.asDiagonal() * Y);
+
+  return(out);
 }
 
 // [[Rcpp::export]]
@@ -61,11 +74,16 @@ Eigen::MatrixXd llt_fitted(Eigen::Map<Eigen::MatrixXd> &X,
 
 x <- matrix(rnorm(10000000), ncol = 50)
 y <- matrix(rnorm(2000000), ncol = 10)
+w <- rep(1, 200000)
+tmp <- hydrorecipes:::llt_weighted_solve(x,y,w)
 # yv <- as.numeric(y)
 
 bench::mark(
-  tmp <- hydrorecipes:::llt_solve(x,y),
+  tmp <- hydrorecipes:::llt_solve(x, y),
+  tmp1 <- hydrorecipes:::llt_fitted(x, y),
+  tmpw <- hydrorecipes:::llt_weighted_solve(x, y, w),
   tmp2 <- lm(y~x-1, model = FALSE),
+  tmp3 <- lm.fit(x, y),
   a <- x[,2:3] %*% tmp[2:3,],
   check = FALSE
 )

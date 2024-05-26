@@ -684,8 +684,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // transfer_pgram_smooth
-Eigen::MatrixXcd transfer_pgram_smooth(Eigen::MatrixXd& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper, double power, size_t n_groups);
-RcppExport SEXP _hydrorecipes_transfer_pgram_smooth(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP, SEXP powerSEXP, SEXP n_groupsSEXP) {
+Eigen::MatrixXcd transfer_pgram_smooth(Eigen::MatrixXd& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper, size_t n_groups);
+RcppExport SEXP _hydrorecipes_transfer_pgram_smooth(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP, SEXP n_groupsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -694,9 +694,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type detrend(detrendSEXP);
     Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
     Rcpp::traits::input_parameter< double >::type taper(taperSEXP);
-    Rcpp::traits::input_parameter< double >::type power(powerSEXP);
     Rcpp::traits::input_parameter< size_t >::type n_groups(n_groupsSEXP);
-    rcpp_result_gen = Rcpp::wrap(transfer_pgram_smooth(x, spans, detrend, demean, taper, power, n_groups));
+    rcpp_result_gen = Rcpp::wrap(transfer_pgram_smooth(x, spans, detrend, demean, taper, n_groups));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1839,6 +1838,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// llt_solve2
+Eigen::MatrixXd llt_solve2(Eigen::Map<Eigen::MatrixXd>& X, Eigen::Map<Eigen::MatrixXd>& Y);
+RcppExport SEXP _hydrorecipes_llt_solve2(SEXP XSEXP, SEXP YSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type Y(YSEXP);
+    rcpp_result_gen = Rcpp::wrap(llt_solve2(X, Y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// llt_weighted_solve
+Eigen::MatrixXd llt_weighted_solve(Eigen::Map<Eigen::MatrixXd>& X, Eigen::Map<Eigen::MatrixXd>& Y, Eigen::Map<Eigen::VectorXd>& w);
+RcppExport SEXP _hydrorecipes_llt_weighted_solve(SEXP XSEXP, SEXP YSEXP, SEXP wSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd>& >::type w(wSEXP);
+    rcpp_result_gen = Rcpp::wrap(llt_weighted_solve(X, Y, w));
+    return rcpp_result_gen;
+END_RCPP
+}
 // llt_fitted
 Eigen::MatrixXd llt_fitted(Eigen::Map<Eigen::MatrixXd>& X, Eigen::Map<Eigen::MatrixXd>& Y);
 RcppExport SEXP _hydrorecipes_llt_fitted(SEXP XSEXP, SEXP YSEXP) {
@@ -2221,7 +2245,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_list_to_matrix", (DL_FUNC) &_hydrorecipes_list_to_matrix, 3},
     {"_hydrorecipes_solve_cplx_irr", (DL_FUNC) &_hydrorecipes_solve_cplx_irr, 2},
     {"_hydrorecipes_ordinary_coherence_phase", (DL_FUNC) &_hydrorecipes_ordinary_coherence_phase, 1},
-    {"_hydrorecipes_transfer_pgram_smooth", (DL_FUNC) &_hydrorecipes_transfer_pgram_smooth, 7},
+    {"_hydrorecipes_transfer_pgram_smooth", (DL_FUNC) &_hydrorecipes_transfer_pgram_smooth, 6},
     {"_hydrorecipes_transfer_pgram", (DL_FUNC) &_hydrorecipes_transfer_pgram, 5},
     {"_hydrorecipes_transfer_welch", (DL_FUNC) &_hydrorecipes_transfer_welch, 4},
     {"_hydrorecipes_window_hann", (DL_FUNC) &_hydrorecipes_window_hann, 1},
@@ -2308,6 +2332,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_shift_subset", (DL_FUNC) &_hydrorecipes_shift_subset, 4},
     {"_hydrorecipes_lag_list", (DL_FUNC) &_hydrorecipes_lag_list, 4},
     {"_hydrorecipes_llt_solve", (DL_FUNC) &_hydrorecipes_llt_solve, 2},
+    {"_hydrorecipes_llt_solve2", (DL_FUNC) &_hydrorecipes_llt_solve2, 2},
+    {"_hydrorecipes_llt_weighted_solve", (DL_FUNC) &_hydrorecipes_llt_weighted_solve, 3},
     {"_hydrorecipes_llt_fitted", (DL_FUNC) &_hydrorecipes_llt_fitted, 2},
     {"_hydrorecipes_ogata_banks_ind", (DL_FUNC) &_hydrorecipes_ogata_banks_ind, 5},
     {"_hydrorecipes_ogata_banks_vec", (DL_FUNC) &_hydrorecipes_ogata_banks_vec, 5},

@@ -11,7 +11,6 @@ step_fft_transfer_experimental(
   detrend = TRUE,
   demean = TRUE,
   taper = 0.1,
-  power = 3,
   n_groups = 200,
   time_step = 1,
   role = "augment",
@@ -39,13 +38,13 @@ and y you would write `c(x,y)` in the hydrorecipes package.}
     cosine bell taper is applied to this proportion of the data at the
     beginning and end of the series.}
 
-\item{power}{spacing for the groups}
-
 \item{n_groups}{number of results}
 
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
+
+\item{power}{spacing for the groups}
 }
 \value{
 an updated recipe

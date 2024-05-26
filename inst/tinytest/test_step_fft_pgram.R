@@ -36,7 +36,7 @@ gain = as.numeric(Mod(hydrorecipes:::transfer_pgram_smooth(m,
                                                        detrend = FALSE,
                                                        demean = FALSE,
                                                        taper = 0.1,
-                                                       power = 3,
+                                                       # power = 3,
                                                        n_groups = n_groups)))
 expect_equivalent(gain, rep(0.2, n_groups),
                             info = "transfer_pgram_smooth gives the right gain")

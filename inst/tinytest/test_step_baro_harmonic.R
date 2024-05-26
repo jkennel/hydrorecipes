@@ -40,12 +40,12 @@ expect_equivalent(unlist(frec$get_step_data("barometric_efficiency")),
 
 
 frec = hydrorecipes:::Recipe$new(formula = formula,
-                  data = unclass(kennel_2020))$
+                                 data = unclass(kennel_2020))$
   add_step(hydrorecipes:::StepBaroHarmonic$new(datetime,
-                                wl,
-                                baro,
-                                et,
-                                inverse = TRUE))$
+                                               wl,
+                                               baro,
+                                               et,
+                                               inverse = TRUE))$
   prep()$
   bake()
 expect_equivalent(unlist(frec$get_step_data("barometric_efficiency")),

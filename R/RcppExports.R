@@ -672,8 +672,8 @@ ordinary_coherence_phase <- function(x) {
 #'
 #' @noRd
 #'
-transfer_pgram_smooth <- function(x, spans, detrend, demean, taper, power, n_groups) {
-    .Call(`_hydrorecipes_transfer_pgram_smooth`, x, spans, detrend, demean, taper, power, n_groups)
+transfer_pgram_smooth <- function(x, spans, detrend, demean, taper, n_groups) {
+    .Call(`_hydrorecipes_transfer_pgram_smooth`, x, spans, detrend, demean, taper, n_groups)
 }
 
 transfer_pgram <- function(x, spans, detrend, demean, taper) {
@@ -1597,6 +1597,14 @@ lag_list <- function(x, lags, n_subset, n_shift) {
 
 llt_solve <- function(X, Y) {
     .Call(`_hydrorecipes_llt_solve`, X, Y)
+}
+
+llt_solve2 <- function(X, Y) {
+    .Call(`_hydrorecipes_llt_solve2`, X, Y)
+}
+
+llt_weighted_solve <- function(X, Y, w) {
+    .Call(`_hydrorecipes_llt_weighted_solve`, X, Y, w)
 }
 
 llt_fitted <- function(X, Y) {

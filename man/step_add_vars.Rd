@@ -22,12 +22,14 @@ and y you would write `c(x,y)` in the hydrorecipes package.}
 recipe with added variables
 }
 \description{
-Add a variable from the initial data set after recipe creation.
+Add a variable from the initial (template) data not included in the
+  recipe creation.
 }
 \examples{
 dat <- data.frame(x = rnorm(10), y = rnorm(10), z = rnorm(10))
 
 rec <- recipe(y~x, data = dat) |>
-       step_add_vars(z) |> plate()
+       step_add_vars(z) |>
+       plate()
 
 }

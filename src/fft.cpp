@@ -1265,6 +1265,7 @@ Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
     Rcpp::stop("The number of groups (n_groups) cannot be larger than the size of the half spectrum.");
   }
 
+  // check the last group
   VectorXi groups = make_groups(n_groups, n_row);
   size_t n_ols = groups.size();
   size_t sub_size = n_col - 1;
@@ -1772,7 +1773,6 @@ Eigen::MatrixXcd transfer_pgram_smooth(Eigen::MatrixXd& x,
                                        bool detrend,
                                        bool demean,
                                        double taper,
-                                       double power,
                                        size_t n_groups) {
 
   // size_t min_aggregate = 1;
