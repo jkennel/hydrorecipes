@@ -18,6 +18,9 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(hydrorecipes)
+library(ggplot2)
+library(viridisLite)
+library(data.table)
 ```
 
 
@@ -77,8 +80,7 @@ ob <- recipe(x~., data = dat) |>
   plate()
 
 
-library(ggplot2)
-library(viridisLite)
+
 ggplot(ob, aes(x = distance, y = time)) + 
   geom_raster(aes(fill = transport_ogata_banks))
 

@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hydrorecipes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,6 +46,7 @@
     <a class="dropdown-item" href="../articles/benchmarking.html">Benchmarking</a>
     <a class="dropdown-item" href="../articles/regression.html">Regression</a>
     <a class="dropdown-item" href="../articles/slug_test.html">Slug test steps</a>
+    <a class="dropdown-item" href="../articles/transport.html">transport</a>
   </div>
 </li>
       </ul>
@@ -242,8 +243,11 @@ conditions).</p>
 <span><span class="va">form</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="st">"wl~."</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">pgram_experimental</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">form</span>, <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/step_fft_transfer_experimental.html">step_fft_transfer_experimental</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">wl</span>, <span class="va">baro</span>, <span class="va">et</span><span class="op">)</span>, spans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">7</span><span class="op">)</span>, </span>
-<span>                                 taper <span class="op">=</span> <span class="fl">0.4</span>, power <span class="op">=</span> <span class="fl">3</span>, n_groups <span class="op">=</span> <span class="fl">400</span>,</span>
+<span>  <span class="fu"><a href="../reference/step_fft_transfer_experimental.html">step_fft_transfer_experimental</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">wl</span>, <span class="va">baro</span>, <span class="va">et</span><span class="op">)</span>, </span>
+<span>                                 spans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">7</span><span class="op">)</span>, </span>
+<span>                                 taper <span class="op">=</span> <span class="fl">0.45</span>,</span>
+<span>                                 <span class="co"># power = 3,</span></span>
+<span>                                 n_groups <span class="op">=</span> <span class="fl">201</span>,</span>
 <span>                          time_step <span class="op">=</span> <span class="fl">60</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/prep.html">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/bake.html">bake</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -251,7 +255,7 @@ conditions).</p>
 <span><span class="va">experimental</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pgram_experimental</span><span class="op">$</span><span class="fu">get_step_data</span><span class="op">(</span><span class="st">"fft_result"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/complex.html" class="external-link">Mod</a></span><span class="op">(</span><span class="va">fft_transfer_pgram_1</span><span class="op">)</span><span class="op">~</span><span class="va">frequency</span>, <span class="va">pg</span>, type <span class="op">=</span> <span class="st">"l"</span>, log <span class="op">=</span> <span class="st">"x"</span>,</span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/complex.html" class="external-link">Mod</a></span><span class="op">(</span><span class="va">fft_transfer_pgram_1</span><span class="op">)</span><span class="op">~</span><span class="va">frequency</span>, <span class="va">pg</span>, type <span class="op">=</span> <span class="st">"l"</span>, log <span class="op">=</span> <span class="st">"x"</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">100</span><span class="op">)</span>,</span>
 <span>     col <span class="op">=</span> <span class="st">"#00900080"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in xy.coords(x, y, xlabel, ylabel, log): 1 x value &lt;= 0 omitted from</span></span>
 <span><span class="co">#&gt; logarithmic plot</span></span>
@@ -260,12 +264,54 @@ conditions).</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/complex.html" class="external-link">Mod</a></span><span class="op">(</span><span class="va">fft_transfer_experimental_1</span><span class="op">)</span><span class="op">~</span><span class="va">frequency</span>, <span class="va">experimental</span>, type <span class="op">=</span> <span class="st">"l"</span>, </span>
 <span>       col <span class="op">=</span> <span class="st">"#00009080"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="barometric_pressure_files/figure-html/tf-1.png" width="700"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu">hydrorecipes</span><span class="fu">:::</span><span class="fu">group_frequency</span><span class="op">(</span><span class="va">we</span><span class="op">$</span><span class="va">frequency</span>, <span class="fl">201</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   [1]    0.000    0.036    0.072    0.108    0.144    0.180    0.216    0.252</span></span>
+<span><span class="co">#&gt;   [9]    0.288    0.324    0.360    0.396    0.432    0.468    0.504    0.540</span></span>
+<span><span class="co">#&gt;  [17]    0.576    0.612    0.648    0.684    0.720    0.756    0.792    0.828</span></span>
+<span><span class="co">#&gt;  [25]    0.864    0.900    0.936    0.972    1.008    1.044    1.080    1.116</span></span>
+<span><span class="co">#&gt;  [33]    1.152    1.188    1.224    1.260    1.296    1.332    1.368    1.404</span></span>
+<span><span class="co">#&gt;  [41]    1.440    1.476    1.512    1.548    1.584    1.620    1.656    1.692</span></span>
+<span><span class="co">#&gt;  [49]    1.728    1.764    1.800    1.836    1.872    1.908    1.944    1.980</span></span>
+<span><span class="co">#&gt;  [57]    2.016    2.052    2.088    2.124    2.160    2.196    2.250    2.322</span></span>
+<span><span class="co">#&gt;  [65]    2.394    2.466    2.538    2.610    2.682    2.754    2.826    2.898</span></span>
+<span><span class="co">#&gt;  [73]    2.970    3.060    3.168    3.276    3.384    3.492    3.600    3.726</span></span>
+<span><span class="co">#&gt;  [81]    3.870    4.014    4.158    4.302    4.464    4.644    4.824    5.022</span></span>
+<span><span class="co">#&gt;  [89]    5.238    5.454    5.670    5.904    6.156    6.408    6.678    6.984</span></span>
+<span><span class="co">#&gt;  [97]    7.308    7.632    7.974    8.334    8.712    9.108    9.522    9.972</span></span>
+<span><span class="co">#&gt; [105]   10.458   10.962   11.484   12.042   12.618   13.230   13.878   14.562</span></span>
+<span><span class="co">#&gt; [113]   15.282   16.038   16.848   17.694   18.576   19.512   20.502   21.546</span></span>
+<span><span class="co">#&gt; [121]   22.644   23.814   25.038   26.316   27.684   29.124   30.636   32.238</span></span>
+<span><span class="co">#&gt; [129]   33.930   35.694   37.566   39.546   41.616   43.812   46.134   48.564</span></span>
+<span><span class="co">#&gt; [137]   51.120   53.838   56.700   59.706   62.892   66.240   69.768   73.494</span></span>
+<span><span class="co">#&gt; [145]   77.418   81.558   85.932   90.540   95.382  100.494  105.894  111.600</span></span>
+<span><span class="co">#&gt; [153]  117.612  123.930  130.590  137.628  145.044  152.856  161.118  169.812</span></span>
+<span><span class="co">#&gt; [161]  178.974  188.658  198.828  209.538  220.842  232.758  245.322  258.570</span></span>
+<span><span class="co">#&gt; [169]  272.538  287.262  302.796  319.176  336.456  354.690  373.914  394.164</span></span>
+<span><span class="co">#&gt; [177]  415.530  438.066  461.826  486.882  513.288  541.152  570.528  601.488</span></span>
+<span><span class="co">#&gt; [185]  634.158  668.610  704.934  743.238  783.612  826.182  871.074  918.414</span></span>
+<span><span class="co">#&gt; [193]  968.346 1020.996 1076.508 1135.044 1196.766 1261.836 1330.452 1402.812</span></span>
+<span><span class="co">#&gt; [201] 1439.964</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/complex.html" class="external-link">Mod</a></span><span class="op">(</span><span class="va">fft_transfer_experimental_1</span><span class="op">)</span><span class="op">~</span><span class="va">frequency</span>, <span class="va">experimental</span>, type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>       col <span class="op">=</span> <span class="st">"#00009080"</span>, log <span class="op">=</span> <span class="st">'x'</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in xy.coords(x, y, xlabel, ylabel, log): 1 x value &lt;= 0 omitted from</span></span>
+<span><span class="co">#&gt; logarithmic plot</span></span></code></pre></div>
+<p><img src="barometric_pressure_files/figure-html/tf-2.png" width="700"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/complex.html" class="external-link">Arg</a></span><span class="op">(</span><span class="va">fft_transfer_experimental_1</span><span class="op">)</span><span class="op">~</span><span class="va">frequency</span>, <span class="va">experimental</span>, type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>       col <span class="op">=</span> <span class="st">"#00009080"</span>, log <span class="op">=</span> <span class="st">'x'</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in xy.coords(x, y, xlabel, ylabel, log): 1 x value &lt;= 0 omitted from</span></span>
+<span><span class="co">#&gt; logarithmic plot</span></span></code></pre></div>
+<p><img src="barometric_pressure_files/figure-html/tf-3.png" width="700"></p>
 </div>
 </div>
 <div class="section level3">
 <h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.4.0 (2024-04-24)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
@@ -288,7 +334,7 @@ conditions).</p>
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] hydrorecipes_0.0.2 Bessel_0.6-0      </span></span>
+<span><span class="co">#&gt; [1] hydrorecipes_0.0.3 Bessel_0.6-0      </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;  [1] vctrs_0.6.5       cli_3.6.2         knitr_1.46        rlang_1.1.3      </span></span>
