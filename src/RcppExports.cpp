@@ -915,41 +915,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// std_expint
-double std_expint(double u);
-RcppExport SEXP _hydrorecipes_std_expint(SEXP uSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type u(uSEXP);
-    rcpp_result_gen = Rcpp::wrap(std_expint(u));
-    return rcpp_result_gen;
-END_RCPP
-}
-// std_tgamma
-double std_tgamma(double u, double a);
-RcppExport SEXP _hydrorecipes_std_tgamma(SEXP uSEXP, SEXP aSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type u(uSEXP);
-    Rcpp::traits::input_parameter< double >::type a(aSEXP);
-    rcpp_result_gen = Rcpp::wrap(std_tgamma(u, a));
-    return rcpp_result_gen;
-END_RCPP
-}
-// binary_search
-int binary_search(Eigen::VectorXd x, Eigen::VectorXd y);
-RcppExport SEXP _hydrorecipes_binary_search(SEXP xSEXP, SEXP ySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Eigen::VectorXd >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(binary_search(x, y));
-    return rcpp_result_gen;
-END_RCPP
-}
 // std_to_eigen
 Eigen::VectorXd std_to_eigen(std::vector<double> u);
 RcppExport SEXP _hydrorecipes_std_to_eigen(SEXP uSEXP) {
@@ -991,6 +956,52 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type u(uSEXP);
     rcpp_result_gen = Rcpp::wrap(rcpp_to_std(u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// std_expint
+double std_expint(double u);
+RcppExport SEXP _hydrorecipes_std_expint(SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(std_expint(u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// std_expint_vec
+Eigen::VectorXd std_expint_vec(std::vector<double> u);
+RcppExport SEXP _hydrorecipes_std_expint_vec(SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(std_expint_vec(u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// std_tgamma
+double std_tgamma(double u, double a);
+RcppExport SEXP _hydrorecipes_std_tgamma(SEXP uSEXP, SEXP aSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type u(uSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    rcpp_result_gen = Rcpp::wrap(std_tgamma(u, a));
+    return rcpp_result_gen;
+END_RCPP
+}
+// binary_search
+int binary_search(Eigen::VectorXd x, Eigen::VectorXd y);
+RcppExport SEXP _hydrorecipes_binary_search(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(binary_search(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1083,6 +1094,51 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type transmissivity(transmissivitySEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type time(timeSEXP);
     rcpp_result_gen = Rcpp::wrap(theis_u_time_rcpp(radius, storativity, transmissivity, time));
+    return rcpp_result_gen;
+END_RCPP
+}
+// theis_aniso_coefficient
+double theis_aniso_coefficient(const double transmissivity_x, const double transmissivity_y);
+RcppExport SEXP _hydrorecipes_theis_aniso_coefficient(SEXP transmissivity_xSEXP, SEXP transmissivity_ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type transmissivity_x(transmissivity_xSEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity_y(transmissivity_ySEXP);
+    rcpp_result_gen = Rcpp::wrap(theis_aniso_coefficient(transmissivity_x, transmissivity_y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// theis_aniso_u
+double theis_aniso_u(const double x, const double y, const double storativity, const double transmissivity_x, const double transmissivity_y);
+RcppExport SEXP _hydrorecipes_theis_aniso_u(SEXP xSEXP, SEXP ySEXP, SEXP storativitySEXP, SEXP transmissivity_xSEXP, SEXP transmissivity_ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const double >::type storativity(storativitySEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity_x(transmissivity_xSEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity_y(transmissivity_ySEXP);
+    rcpp_result_gen = Rcpp::wrap(theis_aniso_u(x, y, storativity, transmissivity_x, transmissivity_y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// theis_aniso_time
+Rcpp::List theis_aniso_time(const double distance_x, const double distance_y, const double storativity, const double transmissivity_x, const double transmissivity_y, const double thickness, Eigen::VectorXd time, Eigen::VectorXd flow_rate);
+RcppExport SEXP _hydrorecipes_theis_aniso_time(SEXP distance_xSEXP, SEXP distance_ySEXP, SEXP storativitySEXP, SEXP transmissivity_xSEXP, SEXP transmissivity_ySEXP, SEXP thicknessSEXP, SEXP timeSEXP, SEXP flow_rateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type distance_x(distance_xSEXP);
+    Rcpp::traits::input_parameter< const double >::type distance_y(distance_ySEXP);
+    Rcpp::traits::input_parameter< const double >::type storativity(storativitySEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity_x(transmissivity_xSEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity_y(transmissivity_ySEXP);
+    Rcpp::traits::input_parameter< const double >::type thickness(thicknessSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type flow_rate(flow_rateSEXP);
+    rcpp_result_gen = Rcpp::wrap(theis_aniso_time(distance_x, distance_y, storativity, transmissivity_x, transmissivity_y, thickness, time, flow_rate));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1838,18 +1894,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// llt_solve2
-Eigen::MatrixXd llt_solve2(Eigen::Map<Eigen::MatrixXd>& X, Eigen::Map<Eigen::MatrixXd>& Y);
-RcppExport SEXP _hydrorecipes_llt_solve2(SEXP XSEXP, SEXP YSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type Y(YSEXP);
-    rcpp_result_gen = Rcpp::wrap(llt_solve2(X, Y));
-    return rcpp_result_gen;
-END_RCPP
-}
 // llt_weighted_solve
 Eigen::MatrixXd llt_weighted_solve(Eigen::Map<Eigen::MatrixXd>& X, Eigen::Map<Eigen::MatrixXd>& Y, Eigen::Map<Eigen::VectorXd>& w);
 RcppExport SEXP _hydrorecipes_llt_weighted_solve(SEXP XSEXP, SEXP YSEXP, SEXP wSEXP) {
@@ -2263,13 +2307,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_impulse_function", (DL_FUNC) &_hydrorecipes_impulse_function, 1},
     {"_hydrorecipes_impulse_function_rcpp", (DL_FUNC) &_hydrorecipes_impulse_function_rcpp, 1},
     {"_hydrorecipes_impulse_function_eigen", (DL_FUNC) &_hydrorecipes_impulse_function_eigen, 1},
-    {"_hydrorecipes_std_expint", (DL_FUNC) &_hydrorecipes_std_expint, 1},
-    {"_hydrorecipes_std_tgamma", (DL_FUNC) &_hydrorecipes_std_tgamma, 2},
-    {"_hydrorecipes_binary_search", (DL_FUNC) &_hydrorecipes_binary_search, 2},
     {"_hydrorecipes_std_to_eigen", (DL_FUNC) &_hydrorecipes_std_to_eigen, 1},
     {"_hydrorecipes_eigen_to_std", (DL_FUNC) &_hydrorecipes_eigen_to_std, 1},
     {"_hydrorecipes_std_to_rcpp", (DL_FUNC) &_hydrorecipes_std_to_rcpp, 1},
     {"_hydrorecipes_rcpp_to_std", (DL_FUNC) &_hydrorecipes_rcpp_to_std, 1},
+    {"_hydrorecipes_std_expint", (DL_FUNC) &_hydrorecipes_std_expint, 1},
+    {"_hydrorecipes_std_expint_vec", (DL_FUNC) &_hydrorecipes_std_expint_vec, 1},
+    {"_hydrorecipes_std_tgamma", (DL_FUNC) &_hydrorecipes_std_tgamma, 2},
+    {"_hydrorecipes_binary_search", (DL_FUNC) &_hydrorecipes_binary_search, 2},
     {"_hydrorecipes_calculate_distance", (DL_FUNC) &_hydrorecipes_calculate_distance, 4},
     {"_hydrorecipes_well_function_coefficient", (DL_FUNC) &_hydrorecipes_well_function_coefficient, 2},
     {"_hydrorecipes_well_function_coefficient_vec", (DL_FUNC) &_hydrorecipes_well_function_coefficient_vec, 2},
@@ -2277,6 +2322,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_theis_u", (DL_FUNC) &_hydrorecipes_theis_u, 4},
     {"_hydrorecipes_theis_u_time_vec", (DL_FUNC) &_hydrorecipes_theis_u_time_vec, 4},
     {"_hydrorecipes_theis_u_time_rcpp", (DL_FUNC) &_hydrorecipes_theis_u_time_rcpp, 4},
+    {"_hydrorecipes_theis_aniso_coefficient", (DL_FUNC) &_hydrorecipes_theis_aniso_coefficient, 2},
+    {"_hydrorecipes_theis_aniso_u", (DL_FUNC) &_hydrorecipes_theis_aniso_u, 5},
+    {"_hydrorecipes_theis_aniso_time", (DL_FUNC) &_hydrorecipes_theis_aniso_time, 8},
     {"_hydrorecipes_grf_coefficient", (DL_FUNC) &_hydrorecipes_grf_coefficient, 4},
     {"_hydrorecipes_grf_u", (DL_FUNC) &_hydrorecipes_grf_u, 3},
     {"_hydrorecipes_grf_time", (DL_FUNC) &_hydrorecipes_grf_time, 7},
@@ -2332,7 +2380,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_shift_subset", (DL_FUNC) &_hydrorecipes_shift_subset, 4},
     {"_hydrorecipes_lag_list", (DL_FUNC) &_hydrorecipes_lag_list, 4},
     {"_hydrorecipes_llt_solve", (DL_FUNC) &_hydrorecipes_llt_solve, 2},
-    {"_hydrorecipes_llt_solve2", (DL_FUNC) &_hydrorecipes_llt_solve2, 2},
     {"_hydrorecipes_llt_weighted_solve", (DL_FUNC) &_hydrorecipes_llt_weighted_solve, 3},
     {"_hydrorecipes_llt_fitted", (DL_FUNC) &_hydrorecipes_llt_fitted, 2},
     {"_hydrorecipes_ogata_banks_ind", (DL_FUNC) &_hydrorecipes_ogata_banks_ind, 5},

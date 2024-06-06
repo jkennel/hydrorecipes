@@ -303,6 +303,59 @@ step_aquifer_theis <- function(.rec,
                         env_list))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' step_aquifer_theis_aniso
+#'
+#' @description
+#' Generates the drawdown using the Papadopulos 1965 model.
+#' Papadopulos, I.S., 1965. Nonsteady flow to a well in an infinite anisotropic
+#'   aquifer.
+#'
+#' @inheritParams step_scale
+#' @inheritParams step_aquifer_grf
+#' @param distance_x distance in the x direction
+#' @param distance_y distance in the y direction
+#' @param hydraulic_conductivity_x hydraulic conductivity in the x direction
+#' @param hydraulic_conductivity_y hydraulic conductivity in the y direction
+#'
+#' @return The drawdown using the Papadopulos 1965 model
+#'
+#' @references
+#' Papadopulos, I.S., 1965. Nonsteady flow to a well in an infinite anisotropic
+#'   aquifer.
+#' Heilweil, V.M. and Hsieh, P.A., 2006. Determining anisotropic transmissivity
+#'   using a simplified Papadopulos method. Groundwater, 44(5), pp.749-753.
+#'
+#' @family aquifer
+#'
+#' @examples
+#' dat <- data.frame(x = as.numeric(1:100),
+#'                   y = rep(0.01, 100))
+#' formula <- as.formula(y~x)
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_aquifer_theis_aniso(time = x, flow_rate = y) |>
+#'   prep() |>
+#'   bake()
+#'
+#' @export
+step_aquifer_theis_aniso <- function(.rec,
+                               time,
+                               flow_rate,
+                               thickness = 1.0,
+                               distance_x = 100.0,
+                               distance_y = 100.0,
+                               specific_storage = 1.0e-6,
+                               hydraulic_conductivity_x = 1.0e-4,
+                               hydraulic_conductivity_y = 1.0e-4,
+                               role = "predictor",
+                               ...) {
+  time <- substitute(time)
+  flow_rate <- substitute(flow_rate)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepAquiferTheisAniso$new,
+                        env_list))
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_leaky
 #'
 #' @description

@@ -902,18 +902,6 @@ impulse_function_eigen <- function(u) {
     .Call(`_hydrorecipes_impulse_function_eigen`, u)
 }
 
-std_expint <- function(u) {
-    .Call(`_hydrorecipes_std_expint`, u)
-}
-
-std_tgamma <- function(u, a) {
-    .Call(`_hydrorecipes_std_tgamma`, u, a)
-}
-
-binary_search <- function(x, y) {
-    .Call(`_hydrorecipes_binary_search`, x, y)
-}
-
 std_to_eigen <- function(u) {
     .Call(`_hydrorecipes_std_to_eigen`, u)
 }
@@ -928,6 +916,22 @@ std_to_rcpp <- function(u) {
 
 rcpp_to_std <- function(u) {
     .Call(`_hydrorecipes_rcpp_to_std`, u)
+}
+
+std_expint <- function(u) {
+    .Call(`_hydrorecipes_std_expint`, u)
+}
+
+std_expint_vec <- function(u) {
+    .Call(`_hydrorecipes_std_expint_vec`, u)
+}
+
+std_tgamma <- function(u, a) {
+    .Call(`_hydrorecipes_std_tgamma`, u, a)
+}
+
+binary_search <- function(x, y) {
+    .Call(`_hydrorecipes_binary_search`, x, y)
 }
 
 calculate_distance <- function(x_well, y_well, x_loc, y_loc) {
@@ -956,6 +960,42 @@ theis_u_time_vec <- function(radius, storativity, transmissivity, time) {
 
 theis_u_time_rcpp <- function(radius, storativity, transmissivity, time) {
     .Call(`_hydrorecipes_theis_u_time_rcpp`, radius, storativity, transmissivity, time)
+}
+
+theis_aniso_coefficient <- function(transmissivity_x, transmissivity_y) {
+    .Call(`_hydrorecipes_theis_aniso_coefficient`, transmissivity_x, transmissivity_y)
+}
+
+theis_aniso_u <- function(x, y, storativity, transmissivity_x, transmissivity_y) {
+    .Call(`_hydrorecipes_theis_aniso_u`, x, y, storativity, transmissivity_x, transmissivity_y)
+}
+
+#' @title
+#' theis_aniso_time
+#'
+#' @description
+#' Parallel convolution of GRF well function and flow rates in the time domain.
+#' Time series needs to be regularily spaced and so are the flow rates.  Some
+#' performance gains can be achieved if the number of flow rate does not change
+#' for each time.
+#'
+#' @param radius distance to monitoring interval
+#' @param specific_storage aquifer storativity
+#' @param hydraulic_conductivity aquifer hydraulic conductivity
+#' @param thickness aquifer thickness
+#' @param time prediction times
+#' @param flow_rate well flow rates
+#' @param flow_time_interval time between flow rate measurements in samples
+#' @param flow_dimension flow dimension
+#'
+#' @return theis solution for multiple pumping scenario
+#'
+#'
+#' @export
+#'
+#' @noRd
+theis_aniso_time <- function(distance_x, distance_y, storativity, transmissivity_x, transmissivity_y, thickness, time, flow_rate) {
+    .Call(`_hydrorecipes_theis_aniso_time`, distance_x, distance_y, storativity, transmissivity_x, transmissivity_y, thickness, time, flow_rate)
 }
 
 grf_coefficient <- function(radius, hydraulic_conductivity, thickness, flow_dimension) {
@@ -1597,10 +1637,6 @@ lag_list <- function(x, lags, n_subset, n_shift) {
 
 llt_solve <- function(X, Y) {
     .Call(`_hydrorecipes_llt_solve`, X, Y)
-}
-
-llt_solve2 <- function(X, Y) {
-    .Call(`_hydrorecipes_llt_solve2`, X, Y)
 }
 
 llt_weighted_solve <- function(X, Y, w) {

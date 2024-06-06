@@ -45,6 +45,37 @@ Eigen::VectorXd impulse_function_eigen(Eigen::VectorXd u)
   return u;
 }
 
+
+
+//==============================================================================
+// [[Rcpp::export]]
+Eigen::VectorXd std_to_eigen(std::vector<double> u)
+{
+  Eigen::VectorXd out = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(u.data(), u.size());
+  return(out);
+}
+
+// [[Rcpp::export]]
+std::vector<double> eigen_to_std(Eigen::VectorXd u)
+{
+  std::vector<double> out(u.data(), u.data() + u.size());
+  return(out);
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector std_to_rcpp(std::vector<double> u)
+{
+  return(Rcpp::NumericVector(u.begin(), u.end()));
+}
+
+// [[Rcpp::export]]
+std::vector<double> rcpp_to_std(Rcpp::NumericVector u)
+{
+  return(Rcpp::as<std::vector<double> >(u));
+}
+
+
+
 //==============================================================================
 
 // [[Rcpp::export]]
@@ -61,6 +92,15 @@ double std_expint(double u) {
   return(u);
 }
 
+// [[Rcpp::export]]
+Eigen::VectorXd std_expint_vec(std::vector<double> u) {
+
+  for (auto &out : u)
+    out = std_expint(out);
+
+
+  return(std_to_eigen(u));
+}
 
 
 
@@ -167,33 +207,6 @@ int binary_search(Eigen::VectorXd x, Eigen::VectorXd y)
     return -1;
 }
 
-// [[Rcpp::export]]
-Eigen::VectorXd std_to_eigen(std::vector<double> u)
-{
-  Eigen::VectorXd out = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(u.data(), u.size());
-  return(out);
-}
-
-// [[Rcpp::export]]
-std::vector<double> eigen_to_std(Eigen::VectorXd u)
-{
-  std::vector<double> out(u.data(), u.data() + u.size());
-  return(out);
-}
-
-// [[Rcpp::export]]
-Rcpp::NumericVector std_to_rcpp(std::vector<double> u)
-{
-  return(Rcpp::NumericVector(u.begin(), u.end()));
-}
-
-// [[Rcpp::export]]
-std::vector<double> rcpp_to_std(Rcpp::NumericVector u)
-{
-  return(Rcpp::as<std::vector<double> >(u));
-}
-
-
 //==============================================================================
 
 // [[Rcpp::export]]
@@ -252,6 +265,7 @@ double theis_u(double radius,
 
 }
 
+
 // [[Rcpp::export]]
 std::vector<double> theis_u_time_vec(double radius,
                                      double storativity,
@@ -274,6 +288,112 @@ Rcpp::NumericVector theis_u_time_rcpp(const double radius,
   return ((radius * radius * storativity) / (4.0 * transmissivity * time));
 }
 
+
+
+// [[Rcpp::export]]
+double theis_aniso_coefficient(const double transmissivity_x,
+                               const double transmissivity_y) {
+
+  return(1.0 / (4.0 * M_PI * std::sqrt(transmissivity_x * transmissivity_y)));
+
+}
+
+// [[Rcpp::export]]
+double theis_aniso_u(const double x,
+                     const double y,
+                     const double storativity,
+                     const double transmissivity_x,
+                     const double transmissivity_y)
+{
+
+  return ( storativity / (4.0) *
+           (transmissivity_x * y * y + transmissivity_y * x * x) /
+           (transmissivity_x * transmissivity_y));
+}
+
+// // [[Rcpp::export]]
+// std::vector<double> theis_aniso_u_time_vec(const double x,
+//                                            const double y,
+//                                            const double storativity,
+//                                            const double transmissivity_x,
+//                                            const double transmissivity_y,
+//                                            std::vector<double> time) {
+//
+//
+//   for (auto &out : time)
+//     out = theis_aniso_u(x, y, storativity, transmissivity_x, transmissivity_y, out);
+//
+//   return time;
+// }
+
+
+//==============================================================================
+//' @title
+//' theis_aniso_time
+//'
+//' @description
+//' Parallel convolution of GRF well function and flow rates in the time domain.
+//' Time series needs to be regularily spaced and so are the flow rates.  Some
+//' performance gains can be achieved if the number of flow rate does not change
+//' for each time.
+//'
+//' @param radius distance to monitoring interval
+//' @param specific_storage aquifer storativity
+//' @param hydraulic_conductivity aquifer hydraulic conductivity
+//' @param thickness aquifer thickness
+//' @param time prediction times
+//' @param flow_rate well flow rates
+//' @param flow_time_interval time between flow rate measurements in samples
+//' @param flow_dimension flow dimension
+//'
+//' @return theis solution for multiple pumping scenario
+//'
+//'
+//' @export
+//'
+//' @noRd
+// [[Rcpp::export]]
+Rcpp::List theis_aniso_time(const double distance_x,
+                            const double distance_y,
+                            const double storativity,
+                            const double transmissivity_x,
+                            const double transmissivity_y,
+                            const double thickness,
+                            Eigen::VectorXd time,
+                            Eigen::VectorXd flow_rate)
+{
+
+  size_t n_flow_rate = flow_rate.size();
+  size_t n_time = time.size();
+
+  // check that the number of times and flow rates are equal
+  if (n_flow_rate != n_time)
+  {
+    Rcpp::stop("The number of times and flow_rate should be the same");
+  }
+
+  const double a = -1.0;
+
+  // calculate the constant part
+  const double u_const = theis_aniso_u(distance_x, distance_y,
+                                       storativity,
+                                       transmissivity_x,
+                                       transmissivity_y);
+
+  const double coef_const = theis_aniso_coefficient(transmissivity_x,
+                                              transmissivity_y);
+
+   Eigen::VectorXd coef = coef_const * flow_rate.array();
+   Eigen::VectorXd u = u_const / time.array();
+
+   u = std_expint_vec(eigen_to_std(u));
+   u = impulse_function_eigen(u);
+
+   return Rcpp::List::create(
+     Rcpp::Named("generalized_radial") = convolve_filter(u, coef, false, true)
+   );
+
+ }
 
 // [[Rcpp::export]]
 double grf_coefficient(const double radius,
@@ -305,6 +425,8 @@ double grf_u(const double radius,
           (4.0 * hydraulic_conductivity));
   ;
 }
+
+
 
 
 //==============================================================================

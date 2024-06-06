@@ -74,6 +74,7 @@ Other aquifer:
 \code{\link{step_aquifer_grf}()},
 \code{\link{step_aquifer_leaky}()},
 \code{\link{step_aquifer_patch}()},
+\code{\link{step_aquifer_theis_aniso}()},
 \code{\link{step_aquifer_wellbore_storage}()}
 }
 \concept{aquifer}
