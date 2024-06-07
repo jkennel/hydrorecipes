@@ -63,6 +63,7 @@ StepAquiferGRF <- R6Class(
       self$new_columns <- self$prefix
       self$columns <- paste(self$columns, collapse = ",")
 
+
       setNames(grf_time(
         radius = self$radius,
         specific_storage = self$specific_storage,

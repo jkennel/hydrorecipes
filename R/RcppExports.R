@@ -162,6 +162,14 @@ bouwer_rice <- function(time, drawdown, radius_screen, radius_casing, Le, Lw, H)
     .Call(`_hydrorecipes_bouwer_rice`, time, drawdown, radius_screen, radius_casing, Le, Lw, H)
 }
 
+coordinate_transform <- function(coords, anisotropy, major_axis_angle) {
+    .Call(`_hydrorecipes_coordinate_transform`, coords, anisotropy, major_axis_angle)
+}
+
+coordinate_rotate <- function(coords, major_axis_angle) {
+    .Call(`_hydrorecipes_coordinate_rotate`, coords, major_axis_angle)
+}
+
 dft <- function(x, frequency) {
     .Call(`_hydrorecipes_dft`, x, frequency)
 }

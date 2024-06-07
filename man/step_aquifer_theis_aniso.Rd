@@ -12,8 +12,9 @@ step_aquifer_theis_aniso(
   distance_x = 100,
   distance_y = 100,
   specific_storage = 1e-06,
-  hydraulic_conductivity_x = 1e-04,
-  hydraulic_conductivity_y = 1e-04,
+  hydraulic_conductivity_major = 1e-04,
+  hydraulic_conductivity_minor = 1e-05,
+  major_axis_angle = 0,
   role = "predictor",
   ...
 )
@@ -33,9 +34,11 @@ step_aquifer_theis_aniso(
 
 \item{specific_storage}{specific storage of aquifer (L/L)}
 
-\item{hydraulic_conductivity_x}{hydraulic conductivity in the x direction}
+\item{hydraulic_conductivity_major}{hydraulic conductivity in the major principal direction}
 
-\item{hydraulic_conductivity_y}{hydraulic conductivity in the y direction}
+\item{hydraulic_conductivity_minor}{hydraulic conductivity in the minor principal direction}
+
+\item{major_axis_angle}{the orientation of the major principal axis (angle between the x axis and major axis)}
 
 \item{role}{character - the name of the role}
 

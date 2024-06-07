@@ -248,6 +248,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// coordinate_transform
+Eigen::MatrixXd coordinate_transform(Eigen::Map<Eigen::MatrixXd> coords, const double anisotropy, const double major_axis_angle);
+RcppExport SEXP _hydrorecipes_coordinate_transform(SEXP coordsSEXP, SEXP anisotropySEXP, SEXP major_axis_angleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type coords(coordsSEXP);
+    Rcpp::traits::input_parameter< const double >::type anisotropy(anisotropySEXP);
+    Rcpp::traits::input_parameter< const double >::type major_axis_angle(major_axis_angleSEXP);
+    rcpp_result_gen = Rcpp::wrap(coordinate_transform(coords, anisotropy, major_axis_angle));
+    return rcpp_result_gen;
+END_RCPP
+}
+// coordinate_rotate
+Eigen::MatrixXd coordinate_rotate(Eigen::Map<Eigen::MatrixXd> coords, const double major_axis_angle);
+RcppExport SEXP _hydrorecipes_coordinate_rotate(SEXP coordsSEXP, SEXP major_axis_angleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type coords(coordsSEXP);
+    Rcpp::traits::input_parameter< const double >::type major_axis_angle(major_axis_angleSEXP);
+    rcpp_result_gen = Rcpp::wrap(coordinate_rotate(coords, major_axis_angle));
+    return rcpp_result_gen;
+END_RCPP
+}
 // dft
 std::complex<double> dft(Eigen::VectorXd x, double frequency);
 RcppExport SEXP _hydrorecipes_dft(SEXP xSEXP, SEXP frequencySEXP) {
@@ -2257,6 +2282,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_c_cpp", (DL_FUNC) &_hydrorecipes_c_cpp, 1},
     {"_hydrorecipes_bouwer_rice_abc", (DL_FUNC) &_hydrorecipes_bouwer_rice_abc, 4},
     {"_hydrorecipes_bouwer_rice", (DL_FUNC) &_hydrorecipes_bouwer_rice, 7},
+    {"_hydrorecipes_coordinate_transform", (DL_FUNC) &_hydrorecipes_coordinate_transform, 3},
+    {"_hydrorecipes_coordinate_rotate", (DL_FUNC) &_hydrorecipes_coordinate_rotate, 2},
     {"_hydrorecipes_dft", (DL_FUNC) &_hydrorecipes_dft, 2},
     {"_hydrorecipes_dft_with_window", (DL_FUNC) &_hydrorecipes_dft_with_window, 2},
     {"_hydrorecipes_dft_goertzel", (DL_FUNC) &_hydrorecipes_dft_goertzel, 2},

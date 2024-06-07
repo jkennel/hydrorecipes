@@ -314,8 +314,9 @@ step_aquifer_theis <- function(.rec,
 #' @inheritParams step_aquifer_grf
 #' @param distance_x distance in the x direction
 #' @param distance_y distance in the y direction
-#' @param hydraulic_conductivity_x hydraulic conductivity in the x direction
-#' @param hydraulic_conductivity_y hydraulic conductivity in the y direction
+#' @param hydraulic_conductivity_major hydraulic conductivity in the major principal direction
+#' @param hydraulic_conductivity_minor hydraulic conductivity in the minor principal direction
+#' @param major_axis_angle the orientation of the major principal axis (angle between the x axis and major axis)
 #'
 #' @return The drawdown using the Papadopulos 1965 model
 #'
@@ -339,16 +340,17 @@ step_aquifer_theis <- function(.rec,
 #'
 #' @export
 step_aquifer_theis_aniso <- function(.rec,
-                               time,
-                               flow_rate,
-                               thickness = 1.0,
-                               distance_x = 100.0,
-                               distance_y = 100.0,
-                               specific_storage = 1.0e-6,
-                               hydraulic_conductivity_x = 1.0e-4,
-                               hydraulic_conductivity_y = 1.0e-4,
-                               role = "predictor",
-                               ...) {
+                                     time,
+                                     flow_rate,
+                                     thickness = 1.0,
+                                     distance_x = 100.0,
+                                     distance_y = 100.0,
+                                     specific_storage = 1.0e-6,
+                                     hydraulic_conductivity_major = 1.0e-4,
+                                     hydraulic_conductivity_minor = 1.0e-5,
+                                     major_axis_angle = 0.0,
+                                     role = "predictor",
+                                     ...) {
   time <- substitute(time)
   flow_rate <- substitute(flow_rate)
   env_list <- get_function_arguments_no_rec()
