@@ -978,6 +978,10 @@ theis_aniso_u <- function(x, y, storativity, transmissivity_x, transmissivity_y)
     .Call(`_hydrorecipes_theis_aniso_u`, x, y, storativity, transmissivity_x, transmissivity_y)
 }
 
+theis_aniso_u_grid <- function(x, y, storativity, transmissivity_x, transmissivity_y) {
+    .Call(`_hydrorecipes_theis_aniso_u_grid`, x, y, storativity, transmissivity_x, transmissivity_y)
+}
+
 #' @title
 #' theis_aniso_time
 #'
@@ -1004,6 +1008,10 @@ theis_aniso_u <- function(x, y, storativity, transmissivity_x, transmissivity_y)
 #' @noRd
 theis_aniso_time <- function(distance_x, distance_y, storativity, transmissivity_x, transmissivity_y, thickness, time, flow_rate) {
     .Call(`_hydrorecipes_theis_aniso_time`, distance_x, distance_y, storativity, transmissivity_x, transmissivity_y, thickness, time, flow_rate)
+}
+
+grid_pumping_regimes <- function(distance_x, distance_y, output_times, start_times, flow_rates, well_x, well_y, storativity, transmissivity_x, transmissivity_y, thickness) {
+    .Call(`_hydrorecipes_grid_pumping_regimes`, distance_x, distance_y, output_times, start_times, flow_rates, well_x, well_y, storativity, transmissivity_x, transmissivity_y, thickness)
 }
 
 grf_coefficient <- function(radius, hydraulic_conductivity, thickness, flow_dimension) {

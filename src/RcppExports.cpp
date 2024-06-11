@@ -1149,6 +1149,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// theis_aniso_u_grid
+Eigen::VectorXd theis_aniso_u_grid(Eigen::VectorXd x, Eigen::VectorXd y, const double storativity, const double transmissivity_x, const double transmissivity_y);
+RcppExport SEXP _hydrorecipes_theis_aniso_u_grid(SEXP xSEXP, SEXP ySEXP, SEXP storativitySEXP, SEXP transmissivity_xSEXP, SEXP transmissivity_ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const double >::type storativity(storativitySEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity_x(transmissivity_xSEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity_y(transmissivity_ySEXP);
+    rcpp_result_gen = Rcpp::wrap(theis_aniso_u_grid(x, y, storativity, transmissivity_x, transmissivity_y));
+    return rcpp_result_gen;
+END_RCPP
+}
 // theis_aniso_time
 Rcpp::List theis_aniso_time(const double distance_x, const double distance_y, const double storativity, const double transmissivity_x, const double transmissivity_y, const double thickness, Eigen::VectorXd time, Eigen::VectorXd flow_rate);
 RcppExport SEXP _hydrorecipes_theis_aniso_time(SEXP distance_xSEXP, SEXP distance_ySEXP, SEXP storativitySEXP, SEXP transmissivity_xSEXP, SEXP transmissivity_ySEXP, SEXP thicknessSEXP, SEXP timeSEXP, SEXP flow_rateSEXP) {
@@ -1164,6 +1179,27 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
     Rcpp::traits::input_parameter< Eigen::VectorXd >::type flow_rate(flow_rateSEXP);
     rcpp_result_gen = Rcpp::wrap(theis_aniso_time(distance_x, distance_y, storativity, transmissivity_x, transmissivity_y, thickness, time, flow_rate));
+    return rcpp_result_gen;
+END_RCPP
+}
+// grid_pumping_regimes
+Rcpp::List grid_pumping_regimes(Eigen::VectorXd distance_x, Eigen::VectorXd distance_y, Eigen::VectorXd output_times, Eigen::VectorXd start_times, Eigen::VectorXd flow_rates, Eigen::VectorXd well_x, Eigen::VectorXd well_y, double storativity, double transmissivity_x, double transmissivity_y, double thickness);
+RcppExport SEXP _hydrorecipes_grid_pumping_regimes(SEXP distance_xSEXP, SEXP distance_ySEXP, SEXP output_timesSEXP, SEXP start_timesSEXP, SEXP flow_ratesSEXP, SEXP well_xSEXP, SEXP well_ySEXP, SEXP storativitySEXP, SEXP transmissivity_xSEXP, SEXP transmissivity_ySEXP, SEXP thicknessSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type distance_x(distance_xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type distance_y(distance_ySEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type output_times(output_timesSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type start_times(start_timesSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type flow_rates(flow_ratesSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type well_x(well_xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type well_y(well_ySEXP);
+    Rcpp::traits::input_parameter< double >::type storativity(storativitySEXP);
+    Rcpp::traits::input_parameter< double >::type transmissivity_x(transmissivity_xSEXP);
+    Rcpp::traits::input_parameter< double >::type transmissivity_y(transmissivity_ySEXP);
+    Rcpp::traits::input_parameter< double >::type thickness(thicknessSEXP);
+    rcpp_result_gen = Rcpp::wrap(grid_pumping_regimes(distance_x, distance_y, output_times, start_times, flow_rates, well_x, well_y, storativity, transmissivity_x, transmissivity_y, thickness));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -2351,7 +2387,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_theis_u_time_rcpp", (DL_FUNC) &_hydrorecipes_theis_u_time_rcpp, 4},
     {"_hydrorecipes_theis_aniso_coefficient", (DL_FUNC) &_hydrorecipes_theis_aniso_coefficient, 2},
     {"_hydrorecipes_theis_aniso_u", (DL_FUNC) &_hydrorecipes_theis_aniso_u, 5},
+    {"_hydrorecipes_theis_aniso_u_grid", (DL_FUNC) &_hydrorecipes_theis_aniso_u_grid, 5},
     {"_hydrorecipes_theis_aniso_time", (DL_FUNC) &_hydrorecipes_theis_aniso_time, 8},
+    {"_hydrorecipes_grid_pumping_regimes", (DL_FUNC) &_hydrorecipes_grid_pumping_regimes, 11},
     {"_hydrorecipes_grf_coefficient", (DL_FUNC) &_hydrorecipes_grf_coefficient, 4},
     {"_hydrorecipes_grf_u", (DL_FUNC) &_hydrorecipes_grf_u, 3},
     {"_hydrorecipes_grf_time", (DL_FUNC) &_hydrorecipes_grf_time, 7},

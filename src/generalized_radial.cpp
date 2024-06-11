@@ -311,6 +311,20 @@ double theis_aniso_u(const double x,
            (transmissivity_x * transmissivity_y));
 }
 
+// [[Rcpp::export]]
+Eigen::VectorXd theis_aniso_u_grid(Eigen::VectorXd x,
+                                   Eigen::VectorXd y,
+                                   const double storativity,
+                                   const double transmissivity_x,
+                                   const double transmissivity_y)
+{
+
+  return (storativity / (4.0) *
+          (transmissivity_x * y.array().square() + transmissivity_y * x.array().square()) /
+            (transmissivity_x * transmissivity_y));
+}
+
+
 // // [[Rcpp::export]]
 // std::vector<double> theis_aniso_u_time_vec(const double x,
 //                                            const double y,
@@ -381,19 +395,146 @@ Rcpp::List theis_aniso_time(const double distance_x,
                                        transmissivity_y);
 
   const double coef_const = theis_aniso_coefficient(transmissivity_x,
-                                              transmissivity_y);
+                                                    transmissivity_y);
 
    Eigen::VectorXd coef = coef_const * flow_rate.array();
    Eigen::VectorXd u = u_const / time.array();
 
-   u = std_expint_vec(eigen_to_std(u));
-   u = impulse_function_eigen(u);
+   u = impulse_function_eigen(std_expint_vec(eigen_to_std(u)));
 
    return Rcpp::List::create(
      Rcpp::Named("generalized_radial") = convolve_filter(u, coef, false, true)
    );
 
  }
+
+
+
+// [[Rcpp::export]]
+Rcpp::List grid_pumping_regimes(Eigen::VectorXd distance_x,
+                                Eigen::VectorXd distance_y,
+                                Eigen::VectorXd output_times,
+                                Eigen::VectorXd start_times,
+                                Eigen::VectorXd flow_rates,
+                                Eigen::VectorXd well_x,
+                                Eigen::VectorXd well_y,
+                                double storativity,
+                                double transmissivity_x,
+                                double transmissivity_y,
+                                double thickness)
+{
+
+  unsigned int n_out_times = output_times.size();
+  unsigned int n_in_times = start_times.size();
+  unsigned int n_well = well_x.size();
+  unsigned int n_obs = distance_x.size();
+
+  Eigen::VectorXd dx = Eigen::ArrayXd::Zero(n_obs);
+  Eigen::VectorXd dy = dx;
+
+  Eigen::VectorXd u_const(n_obs);
+
+  const double coef_const = theis_aniso_coefficient(transmissivity_x, transmissivity_y);
+
+  Rcpp::List out(n_out_times);
+  for (unsigned int i = 0; i < n_out_times; ++i) {
+    out[i] = Eigen::VectorXd::Zero(n_obs);
+  }
+
+  for (unsigned int j = 0; j < n_in_times; ++j) {
+    bool new_well = (j == 0) || (well_x(j - 1) != well_x(j) || well_y(j - 1) != well_y(j));
+    double flow_change = new_well ? flow_rates(j) : (flow_rates(j) - flow_rates(j - 1));
+
+    if (new_well) {
+      u_const = theis_aniso_u_grid(distance_x.array() - well_x(j),
+                                   distance_y.array() - well_y(j),
+                                   storativity,
+                                   transmissivity_x,
+                                   transmissivity_y).array();
+    }
+
+    const double coef = coef_const * flow_change;
+
+    for (unsigned int i = 0; i < n_out_times; ++i) {
+      double elapsed_time = output_times(i) - start_times(j);
+      if (elapsed_time > 0) {
+        out[i] = Rcpp::as<Eigen::VectorXd>(out[i]).array() +
+          coef * std_expint_vec(eigen_to_std(u_const.array() / elapsed_time)).array();
+      }
+    }
+  }
+
+  return out;
+}
+
+
+
+
+
+// // well_rates
+// // 0) x
+// // 1) y
+// // 2) time
+// // 3) flow_rate
+// // [[Rcpp::export]]
+// Rcpp::List theis_aniso_grid_by_well(Eigen::VectorXd monitor_x,
+//                                          Eigen::VectorXd monitor_y,
+//                                          Eigen::MatrixXd well_rates,
+//                                          const double storativity,
+//                                          const double transmissivity_x,
+//                                          const double transmissivity_y,
+//                                          const double thickness,
+//                                          Eigen::VectorXd output_times)
+// {
+//
+//   const unsigned int n_well = well_rates.rows();
+//   const unsigned int n_monitor = monitor_x.size();
+//   const unsigned int n_times = output_times.size();
+//
+//   Eigen::VectorXd well_contrib = Eigen::VectorXd::Zero(n_monitor);
+//   Rcpp::List out(n_times);
+//   Eigen::VectorXd distance_x(n_monitor);
+//   Eigen::VectorXd distance_y(n_monitor);
+//
+//   double flow_rate;
+//   double output_time;
+//   double elapsed_time;
+//
+//   for (unsigned int j = 0; j < n_times; ++j) {
+//
+//     output_time = output_times(j);
+//
+//     for (unsigned int i = 0; i < n_well; ++i) {
+//
+//       elapsed_time = output_time - well_rates(i, 2);
+//
+//       if (elapsed_time > 0) {
+//
+//         distance_x = monitor_x.array() - (double)well_rates(i, 0);
+//         distance_y = monitor_y.array() - (double)well_rates(i, 1);
+//         flow_rate = 1.0;
+//
+//         well_contrib += theis_aniso_grid(distance_x,
+//                 distance_y,
+//                 storativity,
+//                 transmissivity_x,
+//                 transmissivity_y,
+//                 thickness,
+//                 elapsed_time,
+//                 flow_rate);
+//       }
+//
+//       out[j] = well_contrib;
+//
+//     }
+//
+//
+//   }
+//
+//   return(out);
+// }
+
+
 
 // [[Rcpp::export]]
 double grf_coefficient(const double radius,
@@ -915,5 +1056,24 @@ Eigen::VectorXd ig(Eigen::ArrayXd a, Eigen::ArrayXd u) {
 # gammainc(-1,1)
 # hydrorecipes:::eig(1,1)
 # hydrorecipes:::eig(1,0)
+
+
+xy <- expand.grid(1:200, 1:200)
+bench::mark(
+
+hydrorecipes:::grid_pumping_regimes(xy[,1],
+                     xy[,2],
+                     seq(1, 100, 10),
+                     sort(runif(min = 0, max = 90, 100)),
+                     rnorm(100),
+                     rep(c(200, 400, 500, 20, 10, 50, 7, 700, 800, 177), each = 10),
+                     rep(500, 100),
+                     1e-6,
+                     1e-4,
+                     1e-5,
+                     1.0)
+)
+
+
 
 */
