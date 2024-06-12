@@ -63,8 +63,7 @@
 
 
 
-
-<div class="row">
+<script src="aquifer_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Aquifer steps</h1>
             
@@ -103,9 +102,161 @@
 <p><img src="aquifer_files/figure-html/grf-1.png" width="700"></p>
 </div>
 <div class="section level3">
-<h3 id="hantush-jacob-leaky-aquifer-hantush-jacob-1955">Hantush-Jacob leaky aquifer (Hantush-Jacob, 1955)<a class="anchor" aria-label="anchor" href="#hantush-jacob-leaky-aquifer-hantush-jacob-1955"></a>
+<h3 id="anisotropic-theis-flow-model-papadopulos-1965">Anisotropic Theis flow model (Papadopulos, 1965)<a class="anchor" aria-label="anchor" href="#anisotropic-theis-flow-model-papadopulos-1965"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2000</span></span>
+<span><span class="va">flow_rate</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">500</span><span class="op">)</span>,</span>
+<span>                <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.002</span>, <span class="fl">500</span><span class="op">)</span>,</span>
+<span>                <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.0</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">flow_rate</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># along major direction</span></span>
+<span><span class="va">theis_aniso_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">time</span><span class="op">~</span><span class="va">flow_rate</span>, <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/step_aquifer_theis_aniso.html">step_aquifer_theis_aniso</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>                   flow_rate <span class="op">=</span> <span class="va">flow_rate</span>,</span>
+<span>                   thickness <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>                   distance_x <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>                   distance_y <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                   specific_storage <span class="op">=</span> <span class="fl">1e-5</span>,</span>
+<span>                   hydraulic_conductivity_major <span class="op">=</span> <span class="fl">1.0e-3</span>,</span>
+<span>                   hydraulic_conductivity_minor <span class="op">=</span> <span class="fl">1.0e-4</span>,</span>
+<span>                   major_axis_angle <span class="op">=</span> <span class="fl">0.0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   20    0</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># along minor direction</span></span>
+<span><span class="va">theis_aniso_y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">time</span><span class="op">~</span><span class="va">flow_rate</span>, <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/step_aquifer_theis_aniso.html">step_aquifer_theis_aniso</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>                   flow_rate <span class="op">=</span> <span class="va">flow_rate</span>,</span>
+<span>                   thickness <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>                   distance_x <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                   distance_y <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>                   specific_storage <span class="op">=</span> <span class="fl">1e-5</span>,</span>
+<span>                   hydraulic_conductivity_major <span class="op">=</span> <span class="fl">1.0e-3</span>,</span>
+<span>                   hydraulic_conductivity_minor <span class="op">=</span> <span class="fl">1.0e-4</span>,</span>
+<span>                   major_axis_angle <span class="op">=</span> <span class="fl">0.0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    0   20</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># midway between minor and major</span></span>
+<span><span class="va">theis_aniso_xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">time</span><span class="op">~</span><span class="va">flow_rate</span>, <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/step_aquifer_theis_aniso.html">step_aquifer_theis_aniso</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>                   flow_rate <span class="op">=</span> <span class="va">flow_rate</span>,</span>
+<span>                   thickness <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>                   distance_x <span class="op">=</span> <span class="fl">20</span> <span class="op">/</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                   distance_y <span class="op">=</span> <span class="fl">20</span> <span class="op">/</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                   specific_storage <span class="op">=</span> <span class="fl">1e-5</span>,</span>
+<span>                   hydraulic_conductivity_major <span class="op">=</span> <span class="fl">1.0e-3</span>,</span>
+<span>                   hydraulic_conductivity_minor <span class="op">=</span> <span class="fl">1.0e-4</span>,</span>
+<span>                   major_axis_angle <span class="op">=</span> <span class="fl">0.0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          [,1]     [,2]</span></span>
+<span><span class="co">#&gt; [1,] 14.14214 14.14214</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># isotropic higher K</span></span>
+<span><span class="va">theis_aniso_iso_high</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">time</span><span class="op">~</span><span class="va">flow_rate</span>, <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/step_aquifer_theis_aniso.html">step_aquifer_theis_aniso</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>                   flow_rate <span class="op">=</span> <span class="va">flow_rate</span>,</span>
+<span>                   thickness <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>                   distance_x <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>                   distance_y <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                   specific_storage <span class="op">=</span> <span class="fl">1e-5</span>,</span>
+<span>                   hydraulic_conductivity_major <span class="op">=</span> <span class="fl">1.0e-3</span>,</span>
+<span>                   hydraulic_conductivity_minor <span class="op">=</span> <span class="fl">1.0e-3</span>,</span>
+<span>                   major_axis_angle <span class="op">=</span> <span class="fl">0.0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   20    0</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># isotropic lower K</span></span>
+<span><span class="va">theis_aniso_iso_low</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">time</span><span class="op">~</span><span class="va">flow_rate</span>, <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/step_aquifer_theis_aniso.html">step_aquifer_theis_aniso</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>                   flow_rate <span class="op">=</span> <span class="va">flow_rate</span>,</span>
+<span>                   thickness <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>                   distance_x <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>                   distance_y <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                   specific_storage <span class="op">=</span> <span class="fl">1e-5</span>,</span>
+<span>                   hydraulic_conductivity_major <span class="op">=</span> <span class="fl">1.0e-4</span>,</span>
+<span>                   hydraulic_conductivity_minor <span class="op">=</span> <span class="fl">1.0e-4</span>,</span>
+<span>                   major_axis_angle <span class="op">=</span> <span class="fl">0.0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   20    0</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">aquifer_theis_aniso</span><span class="op">~</span><span class="va">time</span>, <span class="va">theis_aniso_iso_low</span>,</span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"drawdown"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">""</span>,</span>
+<span>     lty <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>     col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">aquifer_theis_aniso</span><span class="op">~</span><span class="va">time</span>, <span class="va">theis_aniso_iso_high</span>,</span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"drawdown"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">""</span>,</span>
+<span>     lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">aquifer_theis_aniso</span><span class="op">~</span><span class="va">time</span>, <span class="va">theis_aniso_x</span>,</span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"drawdown"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">aquifer_theis_aniso</span><span class="op">~</span><span class="va">time</span>, <span class="va">theis_aniso_y</span>,</span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"drawdown"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">""</span>, </span>
+<span>     col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">aquifer_theis_aniso</span><span class="op">~</span><span class="va">time</span>, <span class="va">theis_aniso_xy</span>,</span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"drawdown"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">""</span>, </span>
+<span>     col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="aquifer_files/figure-html/theisaniso-1.png" width="700"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span></span>
+<span><span class="co"># Early time</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">aquifer_theis_aniso</span><span class="op">~</span><span class="va">time</span>, <span class="va">theis_aniso_iso_low</span>,</span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"drawdown"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">""</span>,</span>
+<span>     lty <span class="op">=</span> <span class="fl">2</span>, </span>
+<span>     xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span><span class="op">)</span>,</span>
+<span>     ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>     col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">aquifer_theis_aniso</span><span class="op">~</span><span class="va">time</span>, <span class="va">theis_aniso_iso_high</span>,</span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"drawdown"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">""</span>,</span>
+<span>     lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">aquifer_theis_aniso</span><span class="op">~</span><span class="va">time</span>, <span class="va">theis_aniso_x</span>,</span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"drawdown"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">aquifer_theis_aniso</span><span class="op">~</span><span class="va">time</span>, <span class="va">theis_aniso_y</span>,</span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"drawdown"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">""</span>, </span>
+<span>     col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">aquifer_theis_aniso</span><span class="op">~</span><span class="va">time</span>, <span class="va">theis_aniso_xy</span>,</span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"drawdown"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">""</span>, </span>
+<span>     col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="aquifer_files/figure-html/theisaniso-2.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="hantush-jacob-leaky-aquifer-hantush-jacob-1955">Hantush-Jacob leaky aquifer (Hantush-Jacob, 1955)<a class="anchor" aria-label="anchor" href="#hantush-jacob-leaky-aquifer-hantush-jacob-1955"></a>
+</h3>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2000</span></span>
 <span><span class="va">flow_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">500</span><span class="op">)</span>, </span>
@@ -134,7 +285,7 @@
 <div class="section level4">
 <h4 id="figure-2">Figure 2<a class="anchor" aria-label="anchor" href="#figure-2"></a>
 </h4>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">flow_rate</span><span class="op">~</span><span class="va">time</span><span class="op">)</span></span>
 <span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
@@ -218,7 +369,7 @@
 <div class="section level4">
 <h4 id="figure-3">Figure 3<a class="anchor" aria-label="anchor" href="#figure-3"></a>
 </h4>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">flow_rate</span><span class="op">~</span><span class="va">time</span><span class="op">)</span></span>
 <span><span class="va">t_1</span> <span class="op">&lt;-</span> <span class="fl">1.0</span></span>
@@ -296,7 +447,7 @@
 <div class="section level4">
 <h4 id="figure-4">Figure 4<a class="anchor" aria-label="anchor" href="#figure-4"></a>
 </h4>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">flow_rate</span><span class="op">~</span><span class="va">time</span><span class="op">)</span></span>
 <span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
@@ -378,7 +529,7 @@
 <div class="section level3">
 <h3 id="papadopulos-cooper-wellbore-storagepapadopulos-cooper-1967">Papadopulos-Cooper wellbore storage(Papadopulos-Cooper, 1967)<a class="anchor" aria-label="anchor" href="#papadopulos-cooper-wellbore-storagepapadopulos-cooper-1967"></a>
 </h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">2</span>, length.out <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>,</span>
@@ -415,7 +566,7 @@
 <div class="section level3">
 <h3 id="jacob-lohman-constant-drawdown-jacob-lohman-1952">Jacob-Lohman constant drawdown (Jacob-Lohman, 1952)<a class="anchor" aria-label="anchor" href="#jacob-lohman-constant-drawdown-jacob-lohman-1952"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fl">10</span><span class="op">^</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">2</span>, <span class="fl">0.1</span><span class="op">)</span></span>
 <span><span class="va">form</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">formula</a></span><span class="op">(</span><span class="va">time</span><span class="op">~</span><span class="va">.</span><span class="op">)</span></span>
@@ -440,25 +591,16 @@
 <div class="section level3">
 <h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h3>
-<p>Barker, J.A., A generalized radial flow model for hydraulic tests in
-fractured rock. Water Resour. Res., 24 (1988), pp. 1796-1804,
-10.1029/WR024i010p01796</p>
-<p>Barker, J.A., and R. Herbert, 1982: Pumping tests in patchy aquifers,
-Ground Water, vol. 20, No. 2, pp. 150-155.</p>
-<p>Butler, J.J., 1988: Pumping tests in nonuniform aquifers – The
-radially symmetric case, Journal of Hydrology, Vol. 101, pp. 15-30.</p>
-<p>Hantush, M.S. and C.E. Jacob, 1955. Non-steady radial flow in an
-infinite leaky aquifer, Am. Geophys. Union Trans., vol. 36, no. 1,
-pp. 95-100.</p>
-<p>Jacob, C.E. and S.W. Lohman, 1952. Nonsteady flow to a well of
-constant drawdown in an extensive aquifer, Trans. Am. Geophys. Union,
-vol. 33, pp. 559-569.</p>
-<p>Papadopulos, I.S. and H.H. Cooper, 1967. Drawdown in a well of large
-diameter, Water Resources Research, vol. 3, no. 1, pp. 241-244.</p>
-<p>Prodanoff, J.H.A., Mansur, W.J. and Mascarenhas, F.C.B., 2006.
-Numerical evaluation of Theis and Hantush-Jacob well functions. Journal
-of hydrology, 318(1-4), pp.173-183.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>Barker, J.A., A generalized radial flow model for hydraulic tests in fractured rock. Water Resour. Res., 24 (1988), pp. 1796-1804, 10.1029/WR024i010p01796</p>
+<p>Barker, J.A., and R. Herbert, 1982: Pumping tests in patchy aquifers, Ground Water, vol. 20, No. 2, pp. 150-155.</p>
+<p>Butler, J.J., 1988: Pumping tests in nonuniform aquifers – The radially symmetric case, Journal of Hydrology, Vol. 101, pp. 15-30.</p>
+<p>Hantush, M.S. and C.E. Jacob, 1955. Non-steady radial flow in an infinite leaky aquifer, Am. Geophys. Union Trans., vol. 36, no. 1, pp. 95-100.</p>
+<p>Heilweil, V.M. and Hsieh, P.A., 2006. Determining anisotropic transmissivity using a simplified Papadopulos method. Groundwater, 44(5), pp.749-753.</p>
+<p>Jacob, C.E. and S.W. Lohman, 1952. Nonsteady flow to a well of constant drawdown in an extensive aquifer, Trans. Am. Geophys. Union, vol. 33, pp. 559-569.</p>
+<p>Papadopulos, I.S., 1965. Nonsteady flow to a well in an infinite anisotropic aquifer.</p>
+<p>Papadopulos, I.S. and H.H. Cooper, 1967. Drawdown in a well of large diameter, Water Resources Research, vol. 3, no. 1, pp. 241-244.</p>
+<p>Prodanoff, J.H.A., Mansur, W.J. and Mascarenhas, F.C.B., 2006. Numerical evaluation of Theis and Hantush-Jacob well functions. Journal of hydrology, 318(1-4), pp.173-183.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.4.0 (2024-04-24)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
@@ -484,16 +626,16 @@ of hydrology, 318(1-4), pp.173-183.</p>
 <span><span class="co">#&gt; [1] hydrorecipes_0.0.3 Bessel_0.6-0      </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] vctrs_0.6.5       cli_3.6.2         knitr_1.46        rlang_1.1.3      </span></span>
-<span><span class="co">#&gt;  [5] xfun_0.43         highr_0.10        purrr_1.0.2       textshaping_0.3.7</span></span>
+<span><span class="co">#&gt;  [1] vctrs_0.6.5       cli_3.6.2         knitr_1.47        rlang_1.1.4      </span></span>
+<span><span class="co">#&gt;  [5] xfun_0.44         highr_0.11        purrr_1.0.2       textshaping_0.4.0</span></span>
 <span><span class="co">#&gt;  [9] data.table_1.15.4 jsonlite_1.8.8    htmltools_0.5.8.1 earthtide_0.1.3  </span></span>
-<span><span class="co">#&gt; [13] gmp_0.7-4         ragg_1.3.1        sass_0.4.9        rmarkdown_2.26   </span></span>
-<span><span class="co">#&gt; [17] evaluate_0.23     jquerylib_0.1.4   fastmap_1.1.1     yaml_2.3.8       </span></span>
+<span><span class="co">#&gt; [13] gmp_0.7-4         ragg_1.3.2        sass_0.4.9        rmarkdown_2.27   </span></span>
+<span><span class="co">#&gt; [17] evaluate_0.24.0   jquerylib_0.1.4   fastmap_1.2.0     yaml_2.3.8       </span></span>
 <span><span class="co">#&gt; [21] lifecycle_1.0.4   memoise_2.0.1     compiler_4.4.0    fs_1.6.4         </span></span>
-<span><span class="co">#&gt; [25] Rcpp_1.0.12       htmlwidgets_1.6.4 rstudioapi_0.16.0 systemfonts_1.0.6</span></span>
-<span><span class="co">#&gt; [29] digest_0.6.35     collapse_2.0.13   R6_2.5.1          parallel_4.4.0   </span></span>
+<span><span class="co">#&gt; [25] Rcpp_1.0.12       htmlwidgets_1.6.4 rstudioapi_0.16.0 systemfonts_1.1.0</span></span>
+<span><span class="co">#&gt; [29] digest_0.6.35     collapse_2.0.14   R6_2.5.1          parallel_4.4.0   </span></span>
 <span><span class="co">#&gt; [33] magrittr_2.0.3    bslib_0.7.0       tools_4.4.0       Rmpfr_0.9-5      </span></span>
-<span><span class="co">#&gt; [37] RcppThread_2.1.7  pkgdown_2.0.9     cachem_1.0.8      desc_1.4.3</span></span></code></pre></div>
+<span><span class="co">#&gt; [37] RcppThread_2.1.7  pkgdown_2.0.9     cachem_1.1.0      desc_1.4.3</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

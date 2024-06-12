@@ -47,6 +47,141 @@ plot(aquifer_grf~time, grf,
      xlab = "")
 ```
 
+### Anisotropic Theis flow model (Papadopulos, 1965)
+
+```{r theisaniso}
+time <- 1:2000
+flow_rate  <- c(rep(0.001, 500),
+                rep(0.002, 500),
+                rep(0.0, 1000))
+
+dat <- data.frame(time, flow_rate)
+
+# along major direction
+theis_aniso_x <- recipe(time~flow_rate, dat) |>
+  step_aquifer_theis_aniso(time = time,
+                   flow_rate = flow_rate,
+                   thickness = 1.0,
+                   distance_x = 20,
+                   distance_y = 0,
+                   specific_storage = 1e-5,
+                   hydraulic_conductivity_major = 1.0e-3,
+                   hydraulic_conductivity_minor = 1.0e-4,
+                   major_axis_angle = 0.0) |>
+  plate()
+
+# along minor direction
+theis_aniso_y <- recipe(time~flow_rate, dat) |>
+  step_aquifer_theis_aniso(time = time,
+                   flow_rate = flow_rate,
+                   thickness = 1.0,
+                   distance_x = 0,
+                   distance_y = 20,
+                   specific_storage = 1e-5,
+                   hydraulic_conductivity_major = 1.0e-3,
+                   hydraulic_conductivity_minor = 1.0e-4,
+                   major_axis_angle = 0.0) |>
+  plate()
+
+# midway between minor and major
+theis_aniso_xy <- recipe(time~flow_rate, dat) |>
+  step_aquifer_theis_aniso(time = time,
+                   flow_rate = flow_rate,
+                   thickness = 1.0,
+                   distance_x = 20 / (sqrt(2)),
+                   distance_y = 20 / (sqrt(2)),
+                   specific_storage = 1e-5,
+                   hydraulic_conductivity_major = 1.0e-3,
+                   hydraulic_conductivity_minor = 1.0e-4,
+                   major_axis_angle = 0.0) |>
+  plate()
+
+# isotropic higher K
+theis_aniso_iso_high <- recipe(time~flow_rate, dat) |>
+  step_aquifer_theis_aniso(time = time,
+                   flow_rate = flow_rate,
+                   thickness = 1.0,
+                   distance_x = 20,
+                   distance_y = 0,
+                   specific_storage = 1e-5,
+                   hydraulic_conductivity_major = 1.0e-3,
+                   hydraulic_conductivity_minor = 1.0e-3,
+                   major_axis_angle = 0.0) |>
+  plate()
+# isotropic lower K
+theis_aniso_iso_low <- recipe(time~flow_rate, dat) |>
+  step_aquifer_theis_aniso(time = time,
+                   flow_rate = flow_rate,
+                   thickness = 1.0,
+                   distance_x = 20,
+                   distance_y = 0,
+                   specific_storage = 1e-5,
+                   hydraulic_conductivity_major = 1.0e-4,
+                   hydraulic_conductivity_minor = 1.0e-4,
+                   major_axis_angle = 0.0) |>
+  plate()
+
+
+plot(aquifer_theis_aniso~time, theis_aniso_iso_low,
+     type = "l", 
+     ylab = "drawdown", 
+     xlab = "",
+     lty = 2,
+     col = "red")
+points(aquifer_theis_aniso~time, theis_aniso_iso_high,
+     type = "l", 
+     ylab = "drawdown", 
+     xlab = "",
+     lty = 2)
+
+points(aquifer_theis_aniso~time, theis_aniso_x,
+     type = "l", 
+     ylab = "drawdown", 
+     xlab = "")
+points(aquifer_theis_aniso~time, theis_aniso_y,
+     type = "l", 
+     ylab = "drawdown", 
+     xlab = "", 
+     col = "red")
+points(aquifer_theis_aniso~time, theis_aniso_xy,
+     type = "l", 
+     ylab = "drawdown", 
+     xlab = "", 
+     col = "blue")
+
+
+# Early time
+plot(aquifer_theis_aniso~time, theis_aniso_iso_low,
+     type = "l", 
+     ylab = "drawdown", 
+     xlab = "",
+     lty = 2, 
+     xlim = c(0, 50),
+     ylim = c(0, 1),
+     col = "red")
+points(aquifer_theis_aniso~time, theis_aniso_iso_high,
+     type = "l", 
+     ylab = "drawdown", 
+     xlab = "",
+     lty = 2)
+
+points(aquifer_theis_aniso~time, theis_aniso_x,
+     type = "l", 
+     ylab = "drawdown", 
+     xlab = "")
+points(aquifer_theis_aniso~time, theis_aniso_y,
+     type = "l", 
+     ylab = "drawdown", 
+     xlab = "", 
+     col = "red")
+points(aquifer_theis_aniso~time, theis_aniso_xy,
+     type = "l", 
+     ylab = "drawdown", 
+     xlab = "", 
+     col = "blue")
+
+```
+
 ### Hantush-Jacob leaky aquifer (Hantush-Jacob, 1955)
 
 ```{r hj}
@@ -389,7 +524,11 @@ Butler, J.J., 1988: Pumping tests in nonuniform aquifers – The radially symmet
 
 Hantush, M.S. and C.E. Jacob, 1955. Non-steady radial flow in an infinite leaky aquifer, Am. Geophys. Union Trans., vol. 36, no. 1, pp. 95-100.
 
+Heilweil, V.M. and Hsieh, P.A., 2006. Determining anisotropic transmissivity using a simplified Papadopulos method. Groundwater, 44(5), pp.749-753.
+
 Jacob, C.E. and S.W. Lohman, 1952. Nonsteady flow to a well of constant drawdown in an extensive aquifer, Trans. Am. Geophys. Union, vol. 33, pp. 559-569.
+
+Papadopulos, I.S., 1965. Nonsteady flow to a well in an infinite anisotropic aquifer.
 
 Papadopulos, I.S. and H.H. Cooper, 1967. Drawdown in a well of large diameter, Water Resources Research, vol. 3, no. 1, pp. 241-244.
 

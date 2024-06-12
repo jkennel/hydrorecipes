@@ -67,8 +67,9 @@ Papadopulos, I.S., 1965. Nonsteady flow to a well in an infinite anisotropic
 <span>  distance_x <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  distance_y <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  specific_storage <span class="op">=</span> <span class="fl">1e-06</span>,</span>
-<span>  hydraulic_conductivity_x <span class="op">=</span> <span class="fl">1e-04</span>,</span>
-<span>  hydraulic_conductivity_y <span class="op">=</span> <span class="fl">1e-04</span>,</span>
+<span>  hydraulic_conductivity_major <span class="op">=</span> <span class="fl">1e-04</span>,</span>
+<span>  hydraulic_conductivity_minor <span class="op">=</span> <span class="fl">1e-05</span>,</span>
+<span>  major_axis_angle <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  role <span class="op">=</span> <span class="st">"predictor"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -104,12 +105,16 @@ Papadopulos, I.S., 1965. Nonsteady flow to a well in an infinite anisotropic
 <dd><p>specific storage of aquifer (L/L)</p></dd>
 
 
-<dt>hydraulic_conductivity_x</dt>
-<dd><p>hydraulic conductivity in the x direction</p></dd>
+<dt>hydraulic_conductivity_major</dt>
+<dd><p>hydraulic conductivity in the major principal direction</p></dd>
 
 
-<dt>hydraulic_conductivity_y</dt>
-<dd><p>hydraulic conductivity in the y direction</p></dd>
+<dt>hydraulic_conductivity_minor</dt>
+<dd><p>hydraulic conductivity in the minor principal direction</p></dd>
+
+
+<dt>major_axis_angle</dt>
+<dd><p>the orientation of the major principal axis (angle between the x axis and major axis)</p></dd>
 
 
 <dt>role</dt>
@@ -154,7 +159,8 @@ Heilweil, V.M. and Hsieh, P.A., 2006. Determining anisotropic transmissivity
 <span class="r-in"><span>  <span class="fu">step_aquifer_theis_aniso</span><span class="op">(</span>time <span class="op">=</span> <span class="va">x</span>, flow_rate <span class="op">=</span> <span class="va">y</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="prep.html">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="bake.html">bake</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in theis_aniso_time(distance_x = self$distance_x, distance_y = self$distance_y,     specific_storage = self$specific_storage, hydraulic_conductivity_x = self$hydraulic_conductivity,     hydraulic_conductivity_y = self$hydraulic_conductivity_y,     thickness = self$thickness, time = new_data[[self$time]],     flow_rate = new_data[[self$flow_rate]]):</span> unused arguments (specific_storage = self$specific_storage, hydraulic_conductivity_x = self$hydraulic_conductivity, hydraulic_conductivity_y = self$hydraulic_conductivity_y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  100  100</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
