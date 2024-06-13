@@ -52,7 +52,6 @@ StepAquiferTheisAniso <- R6Class(
       cr <- coordinate_rotate(matrix(c(distance_x, distance_y), ncol = 2),
                               major_axis_angle = major_axis_angle)
 
-      print(cr)
       self$time <- time
       self$flow_rate <- flow_rate
       self$distance_x_transformed <- cr[1]
