@@ -22,6 +22,9 @@
     <loc>https://jkennel.github.io/hydrorecipes/articles/slug_test.html</loc>
   </url>
   <url>
+    <loc>https://jkennel.github.io/hydrorecipes/articles/transport.html</loc>
+  </url>
+  <url>
     <loc>https://jkennel.github.io/hydrorecipes/authors.html</loc>
   </url>
   <url>
@@ -110,6 +113,9 @@
   </url>
   <url>
     <loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_theis.html</loc>
+  </url>
+  <url>
+    <loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_theis_aniso.html</loc>
   </url>
   <url>
     <loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_wellbore_storage.html</loc>
