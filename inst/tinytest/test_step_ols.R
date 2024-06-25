@@ -6,7 +6,7 @@ n_knots <- 12
 deg_free <- 27
 max_lag <- 1 + 720
 
-frec = hydrorecipes:::Recipe$new(formula = formula, data = unclass(kennel_2020))$
+hrec = hydrorecipes:::Recipe$new(formula = formula, data = unclass(kennel_2020))$
   add_step(hydrorecipes:::StepDistributedLag$new(baro,
                                   knots = hydrorecipes:::log_lags_arma(n_knots, max_lag)))$
   add_step(hydrorecipes:::StepSplineB$new(datetime, df = deg_free, intercept = FALSE))$

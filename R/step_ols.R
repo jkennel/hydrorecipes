@@ -53,12 +53,13 @@ StepOls <- R6Class(
 
       self$coefficients <- determine_coefficients(self$predictors, self$outcomes)
 
-
       if (self$do_predict) {
+
         # predict for each group
-        self$decomposition <- predict_groups(self$predictors, self$coefficients)
+        self$decomposition <- predict_groups(self$predictors, self$coefficients, steps)
         self$decomposition <- unlist(self$decomposition, recursive = FALSE)
-        self$decomposition <- append(self$decomposition, list(id = rep(self$id, length(self$decomposition[[1]]))))
+        self$decomposition <- append(self$decomposition,
+                                     list(id = rep(self$id, length(self$decomposition[[1]]))))
       }
 
       if (self$do_response) {
@@ -66,10 +67,10 @@ StepOls <- R6Class(
         # column names in term info
         co_names <- self$predictors$term_info$variable
 
-        # print(x$term_info)
         resp <- list()
 
         for (i in seq_along(steps)) {
+
           wh  <- collapse::whichv(self$predictors$term_info$step_index, i)
           co_name <- co_names[wh]
 
@@ -82,13 +83,15 @@ StepOls <- R6Class(
             if (!"term" %in% names(resp[[i]])) {
               resp[[i]]$term <- rep(co_name, times = ncol(co))
             }
+            resp[[i]]$step_columns <- paste(steps[[i]]$columns, collapse = "_")
           }
         }
 
 
         # save the response
         self$response_data <- collapse::rowbind(resp)
-        self$response_data <- append(self$response_data, list(id = rep(self$id, length(self$response_data[[1]]))))
+        self$response_data <- append(self$response_data,
+                                     list(id = rep(self$id, length(self$response_data[[1]]))))
       }
 
       return(NULL)

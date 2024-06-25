@@ -51,7 +51,7 @@ It diverges in a few ways:
     -   coefficients
     -   fft
     -   baro
--   Assess default bake step for steps
+-   Assess default bake operation for steps
 -   improve use of …
 -   Explore convolution methods for Laplace solutions
 -   Optimize Laplace solutions

@@ -135,15 +135,15 @@ response_groups <- function(steps, x, fit) {
 }
 
 # x = predictors
-predict_groups <- function(x, fit) {
+predict_groups <- function(x, fit, steps) {
 
   # subsets are the regressor groups
   subsets <- subset_groups(x$term_info)
   lst <- list()
 
   for (i in seq_along(subsets)) {
-
-    nms <- paste(colnames(fit), unique(x$term_info[subsets[[i]], "step_name"]), sep = "_")
+    nms_vars <- paste(steps[[i]]$columns, collapse = "_")
+    nms <- paste(colnames(fit), unique(x$term_info[subsets[[i]], "step_name"]), nms_vars, sep = "_")
 
     lst[[i]] <- collapse::mctl(
       x$data[, subsets[[i]], drop = FALSE] %*%

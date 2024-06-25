@@ -47,7 +47,7 @@ StepOlsGapFill <- R6Class(
 
       self$coefficients <- determine_coefficients(x, y)
 
-      print(str(x$data))
+      # print(str(x$data))
       lst <- collapse::mctl(x$data[, , drop = FALSE] %*% self$coefficients[, , drop = FALSE])
 
       self$new_columns <- name_columns(self$prefix, colnames(y$data), n = ncol(y$data))

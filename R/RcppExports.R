@@ -986,7 +986,7 @@ theis_aniso_u_grid <- function(x, y, storativity, transmissivity_x, transmissivi
 #' theis_aniso_time
 #'
 #' @description
-#' Parallel convolution of GRF well function and flow rates in the time domain.
+#' Convolution of GRF well function and flow rates in the time domain.
 #' Time series needs to be regularily spaced and so are the flow rates.  Some
 #' performance gains can be achieved if the number of flow rate does not change
 #' for each time.
@@ -1026,7 +1026,7 @@ grf_u <- function(radius, specific_storage, hydraulic_conductivity) {
 #' grf_time
 #'
 #' @description
-#' Parallel convolution of GRF well function and flow rates in the time domain.
+#' Convolution of GRF well function and flow rates in the time domain.
 #' Time series needs to be regularily spaced and so are the flow rates.  Some
 #' performance gains can be achieved if the number of flow rate does not change
 #' for each time.
