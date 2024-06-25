@@ -140,9 +140,12 @@ predict_groups <- function(x, fit, steps) {
   # subsets are the regressor groups
   subsets <- subset_groups(x$term_info)
   lst <- list()
-
+  print(subsets)
+  print(str(x$term_info))
   for (i in seq_along(subsets)) {
-    nms_vars <- paste(steps[[i]]$columns, collapse = "_")
+    step_index <- unique(x$term_info[subsets[[i]], "step_index"])
+    nms_vars <- paste(steps[[step_index]]$columns, collapse = "_")
+    print(nms_vars)
     nms <- paste(colnames(fit), unique(x$term_info[subsets[[i]], "step_name"]), nms_vars, sep = "_")
 
     lst[[i]] <- collapse::mctl(

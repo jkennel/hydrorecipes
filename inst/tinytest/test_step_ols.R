@@ -9,9 +9,12 @@ max_lag <- 1 + 720
 hrec = hydrorecipes:::Recipe$new(formula = formula, data = unclass(kennel_2020))$
   add_step(hydrorecipes:::StepDistributedLag$new(baro,
                                   knots = hydrorecipes:::log_lags_arma(n_knots, max_lag)))$
+  add_step(hydrorecipes:::StepDistributedLag$new(et,
+                                  knots = hydrorecipes:::log_lags_arma(n_knots, max_lag)))$
   add_step(hydrorecipes:::StepSplineB$new(datetime, df = deg_free, intercept = FALSE))$
   add_step(hydrorecipes:::StepIntercept$new())$
   add_step(hydrorecipes:::StepDropColumns$new(baro))$
+  add_step(hydrorecipes:::StepDropColumns$new(et))$
   add_step(hydrorecipes:::StepDropColumns$new(datetime))$
   add_step(hydrorecipes:::StepOls$new(formula))$
   prep()$
