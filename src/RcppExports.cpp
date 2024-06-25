@@ -1081,28 +1081,28 @@ BEGIN_RCPP
 END_RCPP
 }
 // theis_u
-double theis_u(double radius, double storativity, double transmissivity, double time);
+double theis_u(const double radius, const double storativity, const double transmissivity, const double time);
 RcppExport SEXP _hydrorecipes_theis_u(SEXP radiusSEXP, SEXP storativitySEXP, SEXP transmissivitySEXP, SEXP timeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type radius(radiusSEXP);
-    Rcpp::traits::input_parameter< double >::type storativity(storativitySEXP);
-    Rcpp::traits::input_parameter< double >::type transmissivity(transmissivitySEXP);
-    Rcpp::traits::input_parameter< double >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< const double >::type storativity(storativitySEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity(transmissivitySEXP);
+    Rcpp::traits::input_parameter< const double >::type time(timeSEXP);
     rcpp_result_gen = Rcpp::wrap(theis_u(radius, storativity, transmissivity, time));
     return rcpp_result_gen;
 END_RCPP
 }
 // theis_u_time_vec
-std::vector<double> theis_u_time_vec(double radius, double storativity, double transmissivity, std::vector<double> time);
+std::vector<double> theis_u_time_vec(const double radius, const double storativity, const double transmissivity, std::vector<double> time);
 RcppExport SEXP _hydrorecipes_theis_u_time_vec(SEXP radiusSEXP, SEXP storativitySEXP, SEXP transmissivitySEXP, SEXP timeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type radius(radiusSEXP);
-    Rcpp::traits::input_parameter< double >::type storativity(storativitySEXP);
-    Rcpp::traits::input_parameter< double >::type transmissivity(transmissivitySEXP);
+    Rcpp::traits::input_parameter< const double >::type radius(radiusSEXP);
+    Rcpp::traits::input_parameter< const double >::type storativity(storativitySEXP);
+    Rcpp::traits::input_parameter< const double >::type transmissivity(transmissivitySEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type time(timeSEXP);
     rcpp_result_gen = Rcpp::wrap(theis_u_time_vec(radius, storativity, transmissivity, time));
     return rcpp_result_gen;

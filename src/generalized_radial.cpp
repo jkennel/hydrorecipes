@@ -247,7 +247,7 @@ std::vector<double> well_function_coefficient_vec(std::vector<double> flow_rate,
 
 // [[Rcpp::export]]
 Rcpp::NumericVector well_function_coefficient_rcpp(Rcpp::NumericVector flow_rate,
-                                                       const double transmissivity)
+                                                   const double transmissivity)
 {
   return flow_rate / (4.0 * M_PI * transmissivity);
 }
@@ -255,11 +255,12 @@ Rcpp::NumericVector well_function_coefficient_rcpp(Rcpp::NumericVector flow_rate
 
 
 
+
 // [[Rcpp::export]]
-double theis_u(double radius,
-               double storativity,
-               double transmissivity,
-               double time) {
+double theis_u(const double radius,
+               const double storativity,
+               const double transmissivity,
+               const double time) {
 
   return ((radius * radius * storativity) / (4.0 * transmissivity * time));
 
@@ -267,9 +268,9 @@ double theis_u(double radius,
 
 
 // [[Rcpp::export]]
-std::vector<double> theis_u_time_vec(double radius,
-                                     double storativity,
-                                     double transmissivity,
+std::vector<double> theis_u_time_vec(const double radius,
+                                     const double storativity,
+                                     const double transmissivity,
                                      std::vector<double> time) {
 
 
@@ -346,7 +347,7 @@ Eigen::VectorXd theis_aniso_u_grid(Eigen::VectorXd x,
 //' theis_aniso_time
 //'
 //' @description
-//' Parallel convolution of GRF well function and flow rates in the time domain.
+//' Convolution of GRF well function and flow rates in the time domain.
 //' Time series needs to be regularily spaced and so are the flow rates.  Some
 //' performance gains can be achieved if the number of flow rate does not change
 //' for each time.
@@ -575,7 +576,7 @@ double grf_u(const double radius,
 //' grf_time
 //'
 //' @description
-//' Parallel convolution of GRF well function and flow rates in the time domain.
+//' Convolution of GRF well function and flow rates in the time domain.
 //' Time series needs to be regularily spaced and so are the flow rates.  Some
 //' performance gains can be achieved if the number of flow rate does not change
 //' for each time.
@@ -905,6 +906,18 @@ Eigen::VectorXd ig(Eigen::ArrayXd a, Eigen::ArrayXd u) {
   return(Eigen::igammac(a, u));
 }
 
+// generate all u (each grid point each well)
+// determine range
+// generate vector to cover u values (intelligent spacing)
+// Eigen::VectorXd interpolate_grid(Eigen::VectorXd x_in,
+//                             Eigen::VectorXd y_in,
+//                             Eigen::VectorXd x_out) {
+//
+//   unsigned int n = x_in.size();
+//   Eigen::VectorXd y_out(n);
+//   return(y_out);
+//
+// }
 
 /*** R
 # x <- 1.0
