@@ -28,6 +28,11 @@ Recipe <- R6Class(
     # whether the model is trained.
     trained = NULL,
 
+    # bake time for each step
+    time_bake = NULL,
+    # prep time for each step
+    time_prep = NULL,
+
 
     # result list that holds the created model features.
     result = list(),
@@ -99,7 +104,14 @@ Recipe <- R6Class(
       # print(self$term_info)
 
       for (i in seq_along(self$steps)) {
+        start_time <- Sys.time()
+
         self$steps[[i]]$prep(unclass(self$template), self$term_info)
+
+        end_time <- Sys.time()
+        elapsed_time <- end_time - start_time
+        self$time_prep <- c(self$time_prep, elapsed_time)
+
       }
 
       self$retained <- retain
@@ -134,6 +146,7 @@ Recipe <- R6Class(
       }
 
       for (i in types_loop) {
+        start_time <- Sys.time()
 
         columns <- self$steps[[i]]$columns
         if (is.null(columns)) {
@@ -168,13 +181,20 @@ Recipe <- R6Class(
           # default
           {self$steps[[i]]$bake(unclass(self$result)[columns]);
             self$result}
+
         )
+        end_time <- Sys.time()
+        elapsed_time <- end_time - start_time
+        self$time_bake <- c(self$time_bake, elapsed_time)
 
         self$update_term_info(
           step_name = self$steps[[i]]$step_name,
           step_index = i,
           roles = self$steps[[i]]$role
         )
+
+
+
       }
 
       invisible(self)

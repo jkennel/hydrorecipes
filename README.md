@@ -51,6 +51,7 @@ It diverges in a few ways:
     -   coefficients
     -   fft
     -   baro
+-   Efficient way to solve multiple models with different step parameters (tune/dials like functionality)
 -   Assess default bake operation for steps
 -   improve use of …
 -   Explore convolution methods for Laplace solutions

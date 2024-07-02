@@ -588,6 +588,8 @@ results
 
 ## step_kernel_filter
 
+*step_kernel_filter* uses an Fast Fourier Transform (FFT) based convolution instead of an explicit sliding window. This should be much faster for large datasets and particularly when the kernel size is also large.
+
 ```{r}
 #| echo: true
 #| warning: false

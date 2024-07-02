@@ -23,7 +23,7 @@ StepOls <- R6Class(
     # rank = NULL,
     # std_error = NULL,
 
-    initialize = function(formula,
+    initialize = function(formula = NULL,
                           role = "predictor",
                           do_response = TRUE,
                           do_predict = TRUE,
@@ -48,8 +48,21 @@ StepOls <- R6Class(
     bake = function(new_data, term_info, steps) {
 
 
-      self$predictors <- get_regression_data(new_data, term_info, id_type = "predictor")
-      self$outcomes <- get_regression_data(new_data, term_info, id_type = "outcome")
+      vars_list <- names(new_data)
+
+      if (!is.null(self$formula)) {
+        vars_list <- get_formula_vars(formula = self$formula,
+                                    data = unclass(new_data))
+      }
+
+      self$predictors <- get_regression_data(new_data,
+                                             term_info,
+                                             vars_list,
+                                             id_type = "predictor")
+      self$outcomes   <- get_regression_data(new_data,
+                                             term_info,
+                                             vars_list,
+                                             id_type = "outcome")
 
       self$coefficients <- determine_coefficients(self$predictors, self$outcomes)
 
@@ -57,9 +70,11 @@ StepOls <- R6Class(
 
         # predict for each group
         self$decomposition <- predict_groups(self$predictors, self$coefficients, steps)
+        print(str(self$decomposition))
         self$decomposition <- unlist(self$decomposition, recursive = FALSE)
         self$decomposition <- append(self$decomposition,
                                      list(id = rep(self$id, length(self$decomposition[[1]]))))
+        print(str(self$decomposition))
       }
 
       if (self$do_response) {

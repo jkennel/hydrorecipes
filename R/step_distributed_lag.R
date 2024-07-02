@@ -83,7 +83,7 @@ StepDistributedLag <- R6Class(
         names(dl[[i]]) <- name_columns(self$prefix, column_name[i], length(dl[[i]]))
         self$new_columns <- c(self$new_columns, names(dl[[i]]))
       }
-
+      names(self$basis_matrix) <- self$new_columns
       # self$columns <- rep(self$columns, each = length(self$basis_matrix))
 
       unlist(dl, recursive = FALSE)
@@ -93,11 +93,20 @@ StepDistributedLag <- R6Class(
 
       basis_matrix <- collapse::qM(self$basis_matrix)
 
+      print(str(co))
+      print(str(basis_matrix))
       nr <- nrow(basis_matrix)
       nc <- ncol(co)
 
+      if (nrow(co) != ncol(basis_matrix)) {
+        warning("The provided formula does not match the basis_matrix.
+              Did you select fewer distributed lag terms?")
+      }
+
+      wh <- intersect(colnames(basis_matrix), rownames(co))
+
       # check for multiple outcomes!!
-      resp <- basis_matrix %*% co
+      resp <- basis_matrix[,wh, drop = FALSE] %*% co[wh,,drop = FALSE]
 
       list(x = rep(0:(nr - 1L), nc * 2L),
            variable = rep(c("coefficient", "cumulative"), each = nr * nc),

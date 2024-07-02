@@ -73,18 +73,27 @@ rand_id <- function(prefix = "step", len = 5L) {
 
 # regression helpers ------------------------------------------------------
 # predictors outcomes
-get_regression_data <- function(new_data, term_info, id_type = "predictor") {
+get_regression_data <- function(new_data,
+                                term_info,
+                                vars,
+                                id_type = "predictor") {
 
   nms <- unique(names(new_data))
 
   # term info data
   ti <- collapse::qDF(term_info)
   ti <- ti[ti$source != "removed", ]
+
   ti <- ti[ti$variable %in% nms, ]
 
   x <- list()
   # create regression matrices
   x$term_info <- ti[ti$roles == id_type, ]
+  x$term_info <- x$term_info[x$term_info$variable %in% unlist(vars), ]
+
+  if (nrow(x$term_info) == 0) {
+    stop(paste("Provided formula does not have any valid", id_type))
+  }
 
   x$term_info$inds <- seq_len(nrow(x$term_info))
 
@@ -92,7 +101,6 @@ get_regression_data <- function(new_data, term_info, id_type = "predictor") {
 
   x$to_rem <- collapse::missing_cases(new_data)
   x$data <- collapse::qM(unclass(new_data)[x$term_info$ids])
-
   x
 
 }
@@ -107,8 +115,8 @@ determine_coefficients <- function(x, y) {
     y$data[!y$to_rem, , drop = FALSE]
   )
 
-
   colnames(fit) <- y$term_info$variable
+  rownames(fit) <- x$term_info$variable
   fit
 
 }
@@ -143,8 +151,15 @@ predict_groups <- function(x, fit, steps) {
 
   for (i in seq_along(subsets)) {
     step_index <- unique(x$term_info[subsets[[i]], "step_index"])
-    nms_vars <- paste(steps[[step_index]]$columns, collapse = "_")
-    nms <- paste(colnames(fit), unique(x$term_info[subsets[[i]], "step_name"]), nms_vars, sep = "_")
+    nms_vars   <- paste(steps[[step_index]]$columns, collapse = "_")
+    step_name  <- unique(x$term_info[subsets[[i]], "step_name"])
+
+
+    if (nms_vars == "" | step_name == "step_add_vars") {
+      nms <- paste(colnames(fit), step_name, sep = "_")
+    } else {
+      nms <- paste(colnames(fit), step_name, nms_vars, sep = "_")
+    }
 
     lst[[i]] <- collapse::mctl(
       x$data[, subsets[[i]], drop = FALSE] %*%
