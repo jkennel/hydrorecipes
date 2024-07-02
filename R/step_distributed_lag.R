@@ -93,8 +93,7 @@ StepDistributedLag <- R6Class(
 
       basis_matrix <- collapse::qM(self$basis_matrix)
 
-      print(str(co))
-      print(str(basis_matrix))
+
       nr <- nrow(basis_matrix)
       nc <- ncol(co)
 
