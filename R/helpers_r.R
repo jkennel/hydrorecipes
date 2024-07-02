@@ -150,6 +150,7 @@ predict_groups <- function(x, fit, steps) {
   lst <- list()
 
   for (i in seq_along(subsets)) {
+
     step_index <- unique(x$term_info[subsets[[i]], "step_index"])
     nms_vars   <- paste(steps[[step_index]]$columns, collapse = "_")
     step_name  <- unique(x$term_info[subsets[[i]], "step_name"])

@@ -70,11 +70,9 @@ StepOls <- R6Class(
 
         # predict for each group
         self$decomposition <- predict_groups(self$predictors, self$coefficients, steps)
-        print(str(self$decomposition))
         self$decomposition <- unlist(self$decomposition, recursive = FALSE)
         self$decomposition <- append(self$decomposition,
                                      list(id = rep(self$id, length(self$decomposition[[1]]))))
-        print(str(self$decomposition))
       }
 
       if (self$do_response) {
