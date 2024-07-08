@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hydrorecipes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -125,9 +125,9 @@
 <span>       xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">"Pressure (dbar)"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># predicted sum of components</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">wl_step_distributed_lag</span> <span class="op">+</span> </span>
-<span>       <span class="va">wl_step_spline_b</span> <span class="op">+</span> </span>
-<span>       <span class="va">wl_step_lead_lag</span> <span class="op">+</span> </span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">wl_step_distributed_lag_baro</span> <span class="op">+</span> </span>
+<span>       <span class="va">wl_step_spline_b_datetime</span> <span class="op">+</span> </span>
+<span>       <span class="va">wl_step_lead_lag_et</span> <span class="op">+</span> </span>
 <span>       <span class="va">wl_step_intercept</span><span class="op">~</span><span class="va">datetime</span>, <span class="va">pred</span>, type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="regression_files/figure-html/unnamed-chunk-2-2.png" width="700"></p>
   </main>

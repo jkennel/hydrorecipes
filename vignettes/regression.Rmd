@@ -3,8 +3,10 @@ title: "Regression"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Regression}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -65,9 +67,9 @@ plot(wl~datetime, pred, type = "l",
        xlab = "", ylab = "Pressure (dbar)")
 
 # predicted sum of components
-points(wl_step_distributed_lag + 
-       wl_step_spline_b + 
-       wl_step_lead_lag + 
+points(wl_step_distributed_lag_baro + 
+       wl_step_spline_b_datetime + 
+       wl_step_lead_lag_et + 
        wl_step_intercept~datetime, pred, type = "l", col = "red")
 
 

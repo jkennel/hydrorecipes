@@ -22,7 +22,5 @@ hrec = hydrorecipes:::Recipe$new(formula = formula, data = unclass(kennel_2020))
   add_step(hydrorecipes:::StepOls$new(formula))$
   prep()$
   bake()
-collapse::qDT(collapse::rowbind(hrec$get_step_data("decomposition")))
-
 
 hrec$get_response_data(type = 'dt')

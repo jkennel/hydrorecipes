@@ -38,8 +38,10 @@ StepOlsGapFill <- R6Class(
       rec <- rec$prep()$bake(data = new_data)
       dat <- rec$result
 
-      x <- get_regression_data(dat, rec$term_info, id_type = "predictor")
-      y <- get_regression_data(dat, rec$term_info, id_type = "outcome")
+      vars_list <- names(new_data)
+
+      x <- get_regression_data(dat, rec$term_info, vars_list, id_type = "predictor")
+      y <- get_regression_data(dat, rec$term_info, vars_list, id_type = "outcome")
 
       mode(x$data) <- "double"
       mode(y$data) <- "double"
@@ -47,7 +49,6 @@ StepOlsGapFill <- R6Class(
 
       self$coefficients <- determine_coefficients(x, y)
 
-      # print(str(x$data))
       lst <- collapse::mctl(x$data[, , drop = FALSE] %*% self$coefficients[, , drop = FALSE])
 
       self$new_columns <- name_columns(self$prefix, colnames(y$data), n = ncol(y$data))
