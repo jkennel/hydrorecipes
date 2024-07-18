@@ -54,7 +54,7 @@ StepHarmonic <- R6Class(
 
         nn <- paste(
           rep(name_columns(self$prefix, column_name, n_frequency), each = 2L),
-          rep(c("sin", "cos"), n_frequency),
+          rep(c("cos", "sin"), n_frequency),
           sep = "_"
         )
 
@@ -68,17 +68,18 @@ StepHarmonic <- R6Class(
     response = function(co) {
 
       f  <- self$frequency
-      x  <- rep(f, 2L)
 
       nr <- length(f)
       nc <- ncol(co)
+
+      x  <- rep(rep(f, each = nc), 2L)
 
       cos_coefficient <- co[seq.int(1L, nr * 2L, 2L), , drop = FALSE]
       sin_coefficient <- co[seq.int(2L, nr * 2L, 2L), , drop = FALSE]
 
       amp_phase <- c(
-        as.vector(sqrt(cos_coefficient^2 + sin_coefficient^2)), # amplitude
-        as.vector(atan2(cos_coefficient, sin_coefficient))      # phase
+        as.vector(t(sqrt(cos_coefficient^2 + sin_coefficient^2))), # amplitude
+        as.vector(t(atan2(cos_coefficient, sin_coefficient)))      # phase
       )
 
       variable <- c(

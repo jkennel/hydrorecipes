@@ -25,7 +25,7 @@ StepTransferExperimental <- R6Class(
                           demean = TRUE,
                           taper = 0.1,
                           # power = 3,
-                          n_groups = 200,
+                          n_groups = 100,
                           time_step = 1.0,
                           role = "augment",
                           ...) {

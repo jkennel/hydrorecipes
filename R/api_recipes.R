@@ -972,6 +972,7 @@ step_earthtide <- function(.rec,
                            eop = NULL,
                            scale = TRUE,
                            n_thread = 1L,
+                           astro_update = 1L,
                            role = "predictor",
                            ...) {
   terms <- substitute(terms)

@@ -117,8 +117,6 @@ StepBaroHarmonic <- R6Class(
       self$barometric_efficiency <- c(self$barometric_efficiency, be_tf)
 
 
-
-
     return(NULL)
 
     }

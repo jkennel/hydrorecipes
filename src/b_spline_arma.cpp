@@ -211,11 +211,11 @@ arma::vec log_lags_arma(arma::uword n, arma::uword max_lag) {
 
   // check inputs
   if (n <= 0) {
-    Rcpp::stop("log_lags_eigen: n must be greater than 0");
+    Rcpp::stop("log_lags_arma: n must be greater than 0");
   }
 
   if (max_lag < 0) {
-    Rcpp::stop("log_lags_eigen: max_time_lag must be non-negative");
+    Rcpp::stop("log_lags_arma: max_time_lag must be non-negative");
   }
 
   if (n > (max_lag + 1L)) {
@@ -233,6 +233,51 @@ arma::vec log_lags_arma(arma::uword n, arma::uword max_lag) {
   }
 
   return(round(lags));
+}
+
+
+//' @title
+//' log_lags
+//'
+//' @description
+//' Generate logarithmically spaced lags
+//'
+//' @param n integer number of lag terms
+//' @param max_lag integer the maximum lag
+//'
+//' @return vector of logarithmically spaced lags
+//'
+//' @export
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::ArrayXd log_lags(unsigned int n, unsigned int max_lag) {
+
+  // check inputs
+  if (n <= 0) {
+    Rcpp::stop("log_lags: n must be greater than 0");
+  }
+
+  if (max_lag < 0) {
+    Rcpp::stop("log_lags: max_time_lag must be non-negative");
+  }
+
+  if (n > (max_lag + 1L)) {
+    Rcpp::warning("The number of lags is greater than the maximum time lag");
+    return(ArrayXd::LinSpaced(max_lag + 1, 0.0, (double)max_lag));
+  }
+  // Lags begin at zero
+  Eigen::ArrayXd lags = Eigen::exp(ArrayXd::LinSpaced(n, 0.0, std::log((double)max_lag + 1.0))) - 1;
+
+  // lags cannot be spaced closer than one sample
+  for (unsigned int i = 0; i < n; ++i) {
+    if (lags(i) < i) {
+      lags(i) = i;
+    }
+  }
+
+  return(Eigen::round(lags));
 }
 
 /*** R
@@ -256,8 +301,8 @@ microbenchmark::microbenchmark(
 )
 
 bench::mark(
-  hydrorecipes:::log_lags_eigen(1000, max_lag = 1e7),
-  log_lags_arma(1000, max_lag = 1e7),
+  hydrorecipes:::log_lags(1000, max_lag = 1e7),
+  as.numeric(log_lags_arma(1000, max_lag = 1e7)),
   check = TRUE
 )
 */

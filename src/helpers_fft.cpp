@@ -687,12 +687,12 @@ Eigen::VectorXi make_groups(size_t n_groups, size_t n) {
 
   // check inputs
   if (n_groups <= 0) {
-    Rcpp::stop("log_lags_eigen: n must be greater than 0");
+    Rcpp::stop("log_lags: n must be greater than 0");
   }
 
 
   if (n < 0) {
-    Rcpp::stop("log_lags_eigen: max_time_lag must be non-negative");
+    Rcpp::stop("log_lags: max_time_lag must be non-negative");
   }
 
 

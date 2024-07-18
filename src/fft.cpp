@@ -1273,6 +1273,7 @@ Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
   VectorXi ind_sum(n_ols);
 
   ind_sum(0) = 0;
+
   for (size_t j = 1; j < n_ols; ++j) {
     ind_sum(j) = ind_sum(j - 1) + groups(j - 1);
   }
@@ -1352,7 +1353,7 @@ Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
 //   size_t n_col = get_column_number(x.cols());
 //
 //   size_t n_row = x.rows() / 2 + 1; // half spectrum only
-//   ArrayXd groups = log_lags_eigen(n, max_lag-1);
+//   ArrayXd groups = log_lags(n, max_lag-1);
 //   size_t n_ols = groups.size();
 //   size_t sub_size = n_col - 1;
 //

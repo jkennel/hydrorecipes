@@ -101,6 +101,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// log_lags
+Eigen::ArrayXd log_lags(unsigned int n, unsigned int max_lag);
+RcppExport SEXP _hydrorecipes_log_lags(SEXP nSEXP, SEXP max_lagSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< unsigned int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type max_lag(max_lagSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_lags(n, max_lag));
+    return rcpp_result_gen;
+END_RCPP
+}
 // be_clark_cpp
 double be_clark_cpp(arma::vec dep, arma::vec ind, int lag_space, bool inverse);
 RcppExport SEXP _hydrorecipes_be_clark_cpp(SEXP depSEXP, SEXP indSEXP, SEXP lag_spaceSEXP, SEXP inverseSEXP) {
@@ -2307,6 +2319,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_b_spline_list2", (DL_FUNC) &_hydrorecipes_b_spline_list2, 9},
     {"_hydrorecipes_b_spline_list3", (DL_FUNC) &_hydrorecipes_b_spline_list3, 9},
     {"_hydrorecipes_log_lags_arma", (DL_FUNC) &_hydrorecipes_log_lags_arma, 2},
+    {"_hydrorecipes_log_lags", (DL_FUNC) &_hydrorecipes_log_lags, 2},
     {"_hydrorecipes_be_clark_cpp", (DL_FUNC) &_hydrorecipes_be_clark_cpp, 4},
     {"_hydrorecipes_be_least_squares_diff_cpp", (DL_FUNC) &_hydrorecipes_be_least_squares_diff_cpp, 4},
     {"_hydrorecipes_be_least_squares_cpp", (DL_FUNC) &_hydrorecipes_be_least_squares_cpp, 3},

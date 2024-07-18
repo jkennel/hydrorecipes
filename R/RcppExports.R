@@ -70,6 +70,25 @@ log_lags_arma <- function(n, max_lag) {
 }
 
 #' @title
+#' log_lags
+#'
+#' @description
+#' Generate logarithmically spaced lags
+#'
+#' @param n integer number of lag terms
+#' @param max_lag integer the maximum lag
+#'
+#' @return vector of logarithmically spaced lags
+#'
+#' @export
+#'
+#' @noRd
+#'
+log_lags <- function(n, max_lag) {
+    .Call(`_hydrorecipes_log_lags`, n, max_lag)
+}
+
+#' @title
 #' be_clark_cpp
 #'
 #' @description

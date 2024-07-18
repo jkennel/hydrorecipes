@@ -26,6 +26,7 @@ StepEarthtide <- R6Class(
     method = NA_character_,
     frequency = NA_real_,
     return_matrix = TRUE,
+    astro_update = NA_integer_,
 
     initialize = function(terms,
                           do_predict = TRUE,
@@ -43,6 +44,7 @@ StepEarthtide <- R6Class(
                           eop = NULL,
                           scale = TRUE,
                           n_thread = 1L,
+                          astro_update = 1L,
                           role = "predictor",
                           ...) {
 
@@ -73,6 +75,7 @@ StepEarthtide <- R6Class(
       self$scale <- scale
       self$n_thread <- n_thread
       self$do_predict <- do_predict
+      self$astro_update <- astro_update
 
       if (!do_predict) {
 
@@ -105,7 +108,8 @@ StepEarthtide <- R6Class(
         eop = self$eop,
         scale = self$scale,
         return_matrix = self$return_matrix,
-        n_thread = self$n_thread
+        n_thread = self$n_thread,
+        astro_update = self$astro_update
       ))
 
       if (self$do_predict) {
@@ -123,21 +127,22 @@ StepEarthtide <- R6Class(
     response = function(co) {
 
       if (is.na(self$frequency)) {
-        super$response()
+        return(super$response(co))
       }
 
       f  <- self$frequency
-      x  <- rep(f, 2L)
 
       nr <- length(f)
       nc <- ncol(co)
+
+      x  <- rep(rep(f, each = nc), 2L)
 
       cos_coefficient <- co[seq.int(1L, nr * 2L, 2L), , drop = FALSE]
       sin_coefficient <- co[seq.int(2L, nr * 2L, 2L), , drop = FALSE]
 
       amp_phase <- c(
-        as.vector(sqrt(cos_coefficient^2 + sin_coefficient^2)), # amplitude
-        as.vector(atan2(cos_coefficient, sin_coefficient))      # phase
+        as.vector(t(sqrt(cos_coefficient^2 + sin_coefficient^2))), # amplitude
+        as.vector(t(atan2(cos_coefficient, sin_coefficient)))      # phase
       )
 
       variable <- c(

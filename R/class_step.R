@@ -100,18 +100,3 @@ Step <- R6Class(
 
 
 
-# b <- 10
-#
-# a <- function(..., x = 'blah', y = 1, z = NULL) {
-#   tmp <- c(`...` = enquos(...), environment())
-#   print(get_env(environment()))
-#   print(as.list(environment()))
-# }
-#
-# l <- function(..., x = 'blah', y = 1, z = NULL) {
-#   b
-# }
-#
-# z <- a(b, x = 'ada')
-#
-# do.call(l, z)

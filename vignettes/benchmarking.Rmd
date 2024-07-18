@@ -625,6 +625,8 @@ results
 
 ## multiple steps
 
+*step_harmonic* dominates these results.
+
 ```{r}
 #| echo: true
 #| warning: false

@@ -17,10 +17,12 @@ hrec = hydrorecipes:::Recipe$new(formula = formula, data = unclass(kennel_2020))
   add_step(hydrorecipes:::StepSplineB$new(datetime, df = deg_free, intercept = FALSE))$
   add_step(hydrorecipes:::StepIntercept$new())$
   add_step(hydrorecipes:::StepDropColumns$new(baro))$
+  add_step(hydrorecipes:::StepHarmonic$new(datetime, frequency = c(1, 2, 3), cycle_size = 86400))$
+  add_step(hydrorecipes:::StepEarthtide$new(datetime, do_predict = FALSE))$
   # add_step(hydrorecipes:::StepDropColumns$new(et))$
   add_step(hydrorecipes:::StepDropColumns$new(datetime))$
   add_step(hydrorecipes:::StepOls$new(formula))$
   prep()$
   bake()
 
-hrec$get_response_data(type = 'dt')
+# hrec$get_response_data(type = 'dt')[grep("harmonic", step_id)]
