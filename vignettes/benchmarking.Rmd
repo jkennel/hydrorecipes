@@ -1038,7 +1038,8 @@ results <- bench::press(
         step_center(x) |>
         step_scale(z) |>
         step_ols(formula = formula) |>
-        plate(),
+        prep() |>
+        bake(),
       check = FALSE,
       relative = relative
     )

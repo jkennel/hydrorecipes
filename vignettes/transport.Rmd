@@ -1,6 +1,8 @@
 ---
 title: "transport"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    fig_caption: false
 vignette: >
   %\VignetteIndexEntry{transport}
   %\VignetteEncoding{UTF-8}
@@ -26,7 +28,7 @@ library(data.table)
 
 #### Sudicky and Frind 1982 dual fractures (solute)
 
-```{r dualsolute}
+```{r dualsolute, fig.cap = "Seven heatmaps of solute concentration for times ranging from 1 to 1 million seconds. The distance into the matrix is on the y axis and the distance along the fracture is along the x-axis. Inital concentrations are mostly zero and get larger with time progressing into the matrix and along the fracture."}
 
 dat <- expand.grid(seq(0, 0.2, 0.001), seq(0, 0.002, 0.0001), 10^seq(0, 6, 1))
 dat <- collapse::qDT(dat)
@@ -46,7 +48,7 @@ ggplot(cra_sol, aes(x = distance_fracture, y = distance_matrix)) +
 
 #### Sudicky and Frind 1982 dual fractures (modified for heat)
 
-```{r dualheat}
+```{r dualheat, fig.cap = "Seven heatmaps of temperature for times ranging from 1 to 1 million seconds. The distance into the matrix is on the y axis and the distance along the fracture is along the x-axis. Inital temperature is 10 degrees and rises with time progressing further into the matrix and along the fracture."}
 
 cra_heat <- recipe(time~., dat) |>
   step_transport_fractures_heat(time = time, 
@@ -65,7 +67,7 @@ ggplot(cra_heat, aes(x = distance_fracture, y = distance_matrix)) +
 distance (vector) 
 time (vector)
 
-```{r ogatabanks}
+```{r ogatabanks, fig.cap = c("Heatmaps of concentration as a function of distance from a constant source and time. Concentrations increase with increasing time and decreasing distance.", "Heatmaps of concentration as a function of distance from a constant source and time. Concentrations increase with increasing time and decreasing distance. This scenario has a retardation set to 5, and the solute does not travel as far as the previous figure where retardation was set to 1.")}
 dat <- expand.grid(seq(0, 5, 0.1), 1:1000)
 dat <- collapse::qDT(dat)
 setnames(dat, c("distance", "time"))

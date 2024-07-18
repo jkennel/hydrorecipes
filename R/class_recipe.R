@@ -328,10 +328,17 @@ Recipe <- R6Class(
       }
       unique(self$term_info$step_index)
     },
-
     # @description
-    # Get the indices of previously baked steps.
-    # @return integer vector of indices
+    # Get the result data
+    # @return table of results
+    get_result = function(type = "df") {
+
+      return_type(self$result, type = type)
+
+    },
+    # @description
+    # Get responses separated by step
+    # @return response table from regression
     get_response_data = function(type = "df") {
 
       resp <- self$get_step_data("response_data")
@@ -340,8 +347,8 @@ Recipe <- R6Class(
 
     },
     # @description
-    # Get the indices of previously baked steps.
-    # @return integer vector of indices
+    # Get the predictions separated by step
+    # @return predicted values based on regression
     get_predict_data = function(type = "df") {
 
       # at the moment we don't handle multiple ols runs
@@ -351,8 +358,8 @@ Recipe <- R6Class(
 
     },
     # @description
-    # Get the indices of previously baked steps.
-    # @return integer vector of indices
+    # Get the data from a step by name
+    # @return data from a specific step
     get_step_data = function(field_name) {
 
       data <- lapply(self$steps, function(x) {

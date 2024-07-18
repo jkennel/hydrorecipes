@@ -1,228 +1,78 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/404.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/articles/aquifer.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/articles/barometric_pressure.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/articles/benchmarking.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/articles/regression.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/articles/slug_test.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/articles/transport.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/index.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/bake.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/bessel_k_cplx.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/bouwer.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/bouwer_1976_abc.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/bouwer_1976_water_level.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/brf_from_frf.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/get_formula_vars.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/hsieh_1987_fig_2_3.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/kennel_2020.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/liu_1989_fig_8.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/pad_num.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/plate.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/prep.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/rand_id.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/recipe.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/rojstaczer_1988b_fig_3.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/rojstaczer_1988b_fig_5.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/rojstaczer_1990_fig_2.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/rojstaczer_1990_fig_3.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/rojstaczer_1990_fig_4.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_add_noise.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_add_vars.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_constant_drawdown.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_grf.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_leaky.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_patch.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_theis.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_theis_aniso.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_wellbore_storage.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_baro_clark.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_baro_harmonic.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_baro_least_squares.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_center.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_check_na.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_check_spacing.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_compare_columns.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_distributed_lag.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_drop_columns.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_dummy.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_earthtide.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_coherence.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_pgram.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_transfer_experimental.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_transfer_pgram.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_transfer_welch.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_welch.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_find_interval.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_harmonic.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_intercept.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_kernel_filter.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_lead_lag.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_normalize.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_ols.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_ols_gap_fill.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_pca.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_scale.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_slug_cbp.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_spline_b.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_subset_rows.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_transport_fractures_heat.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_transport_fractures_solute.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_transport_ogata_banks.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_vadose_weeks.html</loc>
-  </url>
-  <url>
-    <loc>https://jkennel.github.io/hydrorecipes/reference/step_varying.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://jkennel.github.io/hydrorecipes/404.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/articles/aquifer.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/articles/barometric_pressure.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/articles/benchmarking.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/articles/index.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/articles/regression.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/articles/slug_test.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/articles/transport.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/authors.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/index.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/bake.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/bessel_k_cplx.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/bouwer.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/bouwer_1976_abc.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/bouwer_1976_water_level.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/brf_from_frf.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/get_formula_vars.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/hsieh_1987_fig_2_3.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/index.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/kennel_2020.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/liu_1989_fig_8.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/pad_num.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/plate.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/prep.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/rand_id.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/recipe.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/rojstaczer_1988b_fig_3.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/rojstaczer_1988b_fig_5.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/rojstaczer_1990_fig_2.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/rojstaczer_1990_fig_3.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/rojstaczer_1990_fig_4.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_add_noise.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_add_vars.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_constant_drawdown.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_grf.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_leaky.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_patch.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_theis.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_theis_aniso.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_wellbore_storage.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_baro_clark.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_baro_harmonic.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_baro_least_squares.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_center.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_check_na.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_check_spacing.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_compare_columns.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_distributed_lag.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_drop_columns.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_dummy.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_earthtide.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_coherence.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_pgram.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_transfer_experimental.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_transfer_pgram.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_transfer_welch.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_fft_welch.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_find_interval.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_harmonic.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_intercept.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_kernel_filter.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_lead_lag.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_normalize.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_ols.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_ols_gap_fill.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_pca.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_scale.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_slug_cbp.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_spline_b.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_subset_rows.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_transport_fractures_heat.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_transport_fractures_solute.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_transport_ogata_banks.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_vadose_weeks.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_varying.html</loc></url>
 </urlset>
+

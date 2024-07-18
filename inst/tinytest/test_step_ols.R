@@ -1,6 +1,6 @@
 data("kennel_2020")
 kennel_2020[, datetime := as.numeric(datetime)]
-kennel_2020[, wl2 := wl*0.8]
+kennel_2020[, wl2 := wl * 0.8]
 formula <- as.formula(wl + wl2~.)
 n_knots <- 12
 deg_free <- 27
@@ -18,11 +18,15 @@ hrec = hydrorecipes:::Recipe$new(formula = formula, data = unclass(kennel_2020))
   add_step(hydrorecipes:::StepIntercept$new())$
   add_step(hydrorecipes:::StepDropColumns$new(baro))$
   add_step(hydrorecipes:::StepHarmonic$new(datetime, frequency = c(1, 2, 3), cycle_size = 86400))$
-  add_step(hydrorecipes:::StepEarthtide$new(datetime, do_predict = FALSE))$
+  add_step(hydrorecipes:::StepEarthtide$new(datetime, do_predict = FALSE, astro_update = 30))$
   # add_step(hydrorecipes:::StepDropColumns$new(et))$
   add_step(hydrorecipes:::StepDropColumns$new(datetime))$
   add_step(hydrorecipes:::StepOls$new(formula))$
+  add_step(hydrorecipes:::StepOls$new(formula2))$
+  add_step(hydrorecipes:::StepOls$new(formula3))$
   prep()$
   bake()
 
-# hrec$get_response_data(type = 'dt')[grep("harmonic", step_id)]
+hrec$get_response_data(type = 'dt')[grep("harmonic", step_id)]
+hrec$get_response_data(type = 'dt')[grep("earthtide", step_id)]
+hrec$get_response_data(type = 'dt')[grep("spline", step_id)]

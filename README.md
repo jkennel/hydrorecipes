@@ -1,5 +1,6 @@
 # hydrorecipes
 
+
 WARNING: This package is in early stages of development and is likely to
 change.
 
@@ -44,6 +45,7 @@ It diverges in a few ways:
 ## To do:
 
 -   Documentation
+-   Add alt text for figures in vignettes
 -   Determine how to store model results or steps that result in fewer
     rows
     -   response
@@ -51,8 +53,7 @@ It diverges in a few ways:
     -   coefficients
     -   fft
     -   baro
--   Efficient way to solve multiple models with different step parameters (tune/dials like functionality)
--   Assess default bake operation for steps
+-   Assess default bake step for steps
 -   improve use of …
 -   Explore convolution methods for Laplace solutions
 -   Optimize Laplace solutions
