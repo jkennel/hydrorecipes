@@ -2402,58 +2402,58 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 
 /*** R
 
-x <- rnorm(1e7)
-y <- rnorm(1e6)
-
-# plot(hydrorecipes:::convolve_overlap_save(x, rev(y)), type = 'l')
-# plot(hydrorecipes:::convolve_overlap_add(x, rev(y)), type = 'l', col = "green")
-# points(hydrorecipes:::convolve_filter(x, y, TRUE, TRUE), type = 'l', col = 'red')
-y1 <- rev(y)
-tmp <-bench::press(
-  y_len = c(1e2+1, 3e5),
-  {
-    x <- rnorm(1e7+1)
-    y <- rnorm(y_len)
-    y1 <- rev(y)
-    bench::mark(
-      a <- hydrorecipes:::convolve_filter(x, y, TRUE, TRUE),
-      b <- hydrorecipes:::convolve_overlap_add(x, y1),
-      c <- hydrorecipes:::convolve_overlap_save(x, y1, 0),
-      # hydrorecipes:::convolve_overlap_save(x, y1, 1),
-      # hydrorecipes:::convolve_overlap_save(x, y1, 2),
-      # hydrorecipes:::convolve_vec(x, hydrorecipes:::pad_vector(y1, y_len, 1e7)),
-      check = TRUE,
-      min_iterations = 2
-    )}
-)
-
-tmp
-x <- cumsum(rnorm(1000000))
-y <- hydrorecipes:::window_nuttall(1000)/sum(window_nuttall(1000))
-plot(x, type = 'l')
-points(hydrorecipes:::convolve_overlap_save(x, y, 1), type = 'l', col = 'red')
-
-
-m <- matrix(rep(y, 10), ncol = 10)
-l <- list(y,y,y,y,y,y,
-          # y,y,y,y,y,y,
-          # y,y,y,y,y,y,
-          y,y,y,y)
-bench::mark(
-  a <- hydrorecipes:::convolve_overlap_save_list(x, l),
-  b <- hydrorecipes:::convolve_list(x, l, TRUE, TRUE),
-  # d <- hydrorecipes:::convolve_filter(x, y, TRUE, TRUE),
-  # e <- hydrorecipes:::convolve_matrix(x, m, TRUE, TRUE),
-  check = FALSE,
-  min_iterations = 1
-)
-
-bench::mark(
-  a <- hydrorecipes:::spec_pgram(m, spans = 3, TRUE, TRUE, taper = 0.1),
-  base <- spec.pgram(m, spans = 3, demean = TRUE, detrend = TRUE, taper = 0.1, plot = FALSE),
-  b <- collapse::qM(hydrorecipes:::spec_pgram_list(l, spans = 3, TRUE, TRUE, taper = 0.1)),
-  check = FALSE
-)
+# x <- rnorm(1e7)
+# y <- rnorm(1e6)
+#
+# # plot(hydrorecipes:::convolve_overlap_save(x, rev(y)), type = 'l')
+# # plot(hydrorecipes:::convolve_overlap_add(x, rev(y)), type = 'l', col = "green")
+# # points(hydrorecipes:::convolve_filter(x, y, TRUE, TRUE), type = 'l', col = 'red')
+# y1 <- rev(y)
+# tmp <-bench::press(
+#   y_len = c(1e2+1, 3e5),
+#   {
+#     x <- rnorm(1e7+1)
+#     y <- rnorm(y_len)
+#     y1 <- rev(y)
+#     bench::mark(
+#       a <- hydrorecipes:::convolve_filter(x, y, TRUE, TRUE),
+#       b <- hydrorecipes:::convolve_overlap_add(x, y1),
+#       c <- hydrorecipes:::convolve_overlap_save(x, y1, 0),
+#       # hydrorecipes:::convolve_overlap_save(x, y1, 1),
+#       # hydrorecipes:::convolve_overlap_save(x, y1, 2),
+#       # hydrorecipes:::convolve_vec(x, hydrorecipes:::pad_vector(y1, y_len, 1e7)),
+#       check = TRUE,
+#       min_iterations = 2
+#     )}
+# )
+#
+# tmp
+# x <- cumsum(rnorm(1000000))
+# y <- hydrorecipes:::window_nuttall(1000)/sum(window_nuttall(1000))
+# plot(x, type = 'l')
+# points(hydrorecipes:::convolve_overlap_save(x, y, 1), type = 'l', col = 'red')
+#
+#
+# m <- matrix(rep(y, 10), ncol = 10)
+# l <- list(y,y,y,y,y,y,
+#           # y,y,y,y,y,y,
+#           # y,y,y,y,y,y,
+#           y,y,y,y)
+# bench::mark(
+#   a <- hydrorecipes:::convolve_overlap_save_list(x, l),
+#   b <- hydrorecipes:::convolve_list(x, l, TRUE, TRUE),
+#   # d <- hydrorecipes:::convolve_filter(x, y, TRUE, TRUE),
+#   # e <- hydrorecipes:::convolve_matrix(x, m, TRUE, TRUE),
+#   check = FALSE,
+#   min_iterations = 1
+# )
+#
+# bench::mark(
+#   a <- hydrorecipes:::spec_pgram(m, spans = 3, TRUE, TRUE, taper = 0.1),
+#   base <- spec.pgram(m, spans = 3, demean = TRUE, detrend = TRUE, taper = 0.1, plot = FALSE),
+#   b <- collapse::qM(hydrorecipes:::spec_pgram_list(l, spans = 3, TRUE, TRUE, taper = 0.1)),
+#   check = FALSE
+# )
 
 
 

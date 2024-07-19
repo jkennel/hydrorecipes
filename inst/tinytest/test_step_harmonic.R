@@ -6,16 +6,16 @@ dat <- data.frame(x = rnorm(rows),
                   z = rnorm(rows))
 frec = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
   add_step(hydrorecipes:::StepHarmonic$new(y,
-                                       frequency = c(3),
-                                       cycle_size = 0.1,
-                                       starting_value = 0))$
+                                           frequency = c(3),
+                                           cycle_size = 0.1,
+                                           starting_value = 0))$
   plate("tbl")
 
 rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::step_harmonic(y,
                          frequency = c(3),
                          cycle_size = 0.1,
-                         starting_value = 0,
+                         starting_val = 0.0,
                          keep_original_cols = TRUE) |>
   recipes::prep() |>
   recipes::bake(new_data = NULL)

@@ -174,30 +174,30 @@ expect_equivalent(b2$generalized_radial, frecb2$aquifer_theis_aniso,
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 dat <- expand.grid(seq(0.1, 10, 0.01), seq(0.1, 10, 0.01))
 
-bench::mark(
-
-b1 <- hydrorecipes:::theis_aniso_grid(
-  distance_x = dat[,1],
-  distance_y = dat[,2],
-  storativity = 1e-6,
-  transmissivity_x = 1e-4,
-  transmissivity_y = 2e-5,
-  thickness = 1.0,
-  time = 100.0,
-  flow_rate = 0.01
-)
-)
-
-b1 <- matrix(b1$generalized_radial, ncol = 991)
-image(b1)
-
-b2 <- theis_aniso_time(
-  distance_x = 3,
-  distance_y = 3,
-  storativity = 1e-6,
-  transmissivity_x = 1e-4,
-  transmissivity_y = 1e-5,
-  thickness = 1,
-  time = 10,
-  flow_rate = 0.01
-)
+# bench::mark(
+#
+# b1 <- hydrorecipes:::theis_aniso_grid(
+#   distance_x = dat[,1],
+#   distance_y = dat[,2],
+#   storativity = 1e-6,
+#   transmissivity_x = 1e-4,
+#   transmissivity_y = 2e-5,
+#   thickness = 1.0,
+#   time = 100.0,
+#   flow_rate = 0.01
+# )
+# )
+#
+# b1 <- matrix(b1$generalized_radial, ncol = 991)
+# image(b1)
+#
+# b2 <- theis_aniso_time(
+#   distance_x = 3,
+#   distance_y = 3,
+#   storativity = 1e-6,
+#   transmissivity_x = 1e-4,
+#   transmissivity_y = 1e-5,
+#   thickness = 1,
+#   time = 10,
+#   flow_rate = 0.01
+# )

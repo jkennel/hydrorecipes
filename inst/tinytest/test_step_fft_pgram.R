@@ -44,18 +44,18 @@ expect_equivalent(gain, rep(0.2, n_groups),
 
 
 
-data(kennel_2020)
-formula <- as.formula(.~baro+wl+et)
-
-frec2 = recipe(formula = formula, data = kennel_2020) |>
-  step_fft_transfer_experimental(c(wl, baro, et), n_groups = 500, spans = c(3, 3), time_step = 60) |>
-  prep("df") |>
-  bake()
-
-a <- collapse::qDT(frec2$get_step_data(field_name = "fft_result")[[1]])
-plot(Mod(fft_transfer_experimental_1)~frequency, a, type = "l", log = "x", ylim = c(0, 1))
-abline(v = 2)
-abline(v = 1)
+# data(kennel_2020)
+# formula <- as.formula(.~baro+wl+et)
+#
+# frec2 = recipe(formula = formula, data = kennel_2020) |>
+#   step_fft_transfer_experimental(c(wl, baro, et), n_groups = 500, spans = c(3, 3), time_step = 60) |>
+#   prep("df") |>
+#   bake()
+#
+# a <- collapse::qDT(frec2$get_step_data(field_name = "fft_result")[[1]])
+# plot(Mod(fft_transfer_experimental_1)~frequency, a, type = "l", log = "x", ylim = c(0, 1))
+# abline(v = 2)
+# abline(v = 1)
 
 #
 # frec2 = recipe(formula = formula, data = kennel_2020) |>

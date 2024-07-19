@@ -5,10 +5,10 @@ frm <- formula(x ~ y + z)
 
 
 x <- cumsum(rnorm(n))
-dat <- data.table(x = x, y = x, z = as.numeric(1:n))
+dat <- data.table::data.table(x = x, y = x, z = as.numeric(1:n))
 dat[, x := x + c(rep(20, n/2), rep(0, n / 2))]
 dat[, x := x + 3.0 * sin(z * 1 / n)]
-tmp <- copy(dat$x)
+tmp <- data.table::copy(dat$x)
 
 # Set value to NA.  These values will be estimated.
 dat[60000:70000, x := NA_real_]
