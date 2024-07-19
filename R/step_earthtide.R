@@ -27,6 +27,8 @@ StepEarthtide <- R6Class(
     frequency = NA_real_,
     return_matrix = TRUE,
     astro_update = NA_integer_,
+    interp_factor = NA_integer_,
+    utc_interp = NULL,
 
     initialize = function(terms,
                           do_predict = TRUE,
@@ -45,6 +47,7 @@ StepEarthtide <- R6Class(
                           scale = TRUE,
                           n_thread = 1L,
                           astro_update = 1L,
+                          interp_factor = 1L,
                           role = "predictor",
                           ...) {
 
@@ -58,6 +61,7 @@ StepEarthtide <- R6Class(
         env_list[names(env_list) != "terms"],
         ...
       )
+
 
       # step specific values
       self$method <- method
@@ -76,6 +80,7 @@ StepEarthtide <- R6Class(
       self$n_thread <- n_thread
       self$do_predict <- do_predict
       self$astro_update <- astro_update
+      self$interp_factor = interp_factor
 
       if (!do_predict) {
 
@@ -90,9 +95,20 @@ StepEarthtide <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
+
       column_name <- self$columns
-      et <- mctl(calc_earthtide(
-        new_data[[column_name]],
+
+      if (self$interp_factor != 1L) {
+        self$utc_interp <- unclass(new_data)[[self$columns]]
+        utc <- self$utc_interp[(0:(length(self$utc_interp) - 1) %% self$interp_factor) == 0]
+      } else {
+        utc <- unclass(new_data)[[self$columns]]
+      }
+
+
+
+      et <- unclass(earthtide::calc_earthtide(
+        utc = utc,
         do_predict = self$do_predict,
         method = self$method,
         latitude = self$latitude,
@@ -107,10 +123,13 @@ StepEarthtide <- R6Class(
         catalog = self$catalog,
         eop = self$eop,
         scale = self$scale,
-        return_matrix = self$return_matrix,
+        return_matrix = FALSE,
         n_thread = self$n_thread,
-        astro_update = self$astro_update
-      ))
+        astro_update = self$astro_update,
+        utc_interp = self$utc_interp
+      )[, -1, drop = FALSE])
+
+
 
       if (self$do_predict) {
         self$new_columns <- paste0(self$prefix)

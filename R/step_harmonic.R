@@ -42,11 +42,11 @@ StepHarmonic <- R6Class(
 
       column_name <- self$columns
 
-      hals <- list()
+      hls <- list()
       for (i in seq_along(column_name)) {
 
 
-        hals[[i]] <- harmonic_list(unclass(new_data)[[i]],
+        hls[[i]] <- harmonic_list(unclass(new_data)[[i]],
           frequency = self$frequency,
           start = self$starting_value,
           cycle_size = self$cycle_size
@@ -58,12 +58,12 @@ StepHarmonic <- R6Class(
           sep = "_"
         )
 
-        names(hals[[i]]) <- nn
+        names(hls[[i]]) <- nn
         self$new_columns <- c(self$new_columns, nn)
 
       }
 
-      unlist(hals, recursive = FALSE)
+      unlist(hls, recursive = FALSE)
     },
     response = function(co) {
 

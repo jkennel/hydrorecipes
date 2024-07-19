@@ -57,3 +57,32 @@ et <- earthtide::calc_earthtide(kennel_2020$datetime,
 
 expect_equivalent(frec[,-c(2L, 3L)], et)
 
+# bench::mark(
+# frec1 = hydrorecipes:::Recipe$new(formula = wl~baro+datetime, data = kennel_2020)$
+#   add_step(hydrorecipes:::StepEarthtide$new(datetime,
+#                                             do_predict = TRUE,
+#                                             wave_groups = wave_groups_dl,
+#                                             latitude = latitude,
+#                                             longitude = longitude,
+#                                             elevation = elevation,
+#                                             cutoff = cutoff,
+#                                             catalog = catalog,
+#                                             interp_factor = 10L,
+#                                             n_thread = 10L))$
+#   plate(),
+#
+# frec2 = hydrorecipes:::Recipe$new(formula = wl~baro+datetime, data = kennel_2020)$
+#   add_step(hydrorecipes:::StepEarthtide$new(datetime,
+#                                             do_predict = TRUE,
+#                                             wave_groups = wave_groups_dl,
+#                                             latitude = latitude,
+#                                             longitude = longitude,
+#                                             elevation = elevation,
+#                                             cutoff = cutoff,
+#                                             catalog = catalog,
+#                                             interp_factor = 1L))$
+#   plate(), check = FALSE
+# )
+#
+# plot(earthtide~datetime, frec1, type = "l")
+# plot(earthtide~datetime, frec2, type = "l", col = "red")

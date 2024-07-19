@@ -928,6 +928,8 @@ step_dummy <- function(.rec,
 #'
 #' @inheritParams step_scale
 #' @inheritParams earthtide::calc_earthtide
+#' @param interp_factor calculate for every \code{interp_factor} samples. This
+#'   may be faster while being more accurate than adjusting the cutoff.
 #'
 #' @return an updated recipe
 #' @export
@@ -973,6 +975,7 @@ step_earthtide <- function(.rec,
                            scale = TRUE,
                            n_thread = 1L,
                            astro_update = 1L,
+                           interp_factor = 1L,
                            role = "predictor",
                            ...) {
   terms <- substitute(terms)

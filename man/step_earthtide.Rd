@@ -22,6 +22,7 @@ step_earthtide(
   scale = TRUE,
   n_thread = 1L,
   astro_update = 1L,
+  interp_factor = 1L,
   role = "predictor",
   ...
 )
@@ -71,6 +72,9 @@ following columns: datetime, ddt, ut1_utc, lod, x, y, dx, dy}
 
 \item{astro_update}{How often to update astro parameters in number of
 samples. This speeds up code but may make it slightly less accurate.}
+
+\item{interp_factor}{calculate for every \code{interp_factor} samples. This
+may be faster while being more accurate than adjusting the cutoff.}
 
 \item{role}{character - the name of the role}
 
