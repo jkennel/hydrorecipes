@@ -18,6 +18,7 @@ StepAquiferTheis <- R6Class(
                           ...) {
 
       # get function parameters to pass to parent
+
       inputs <- list(
         time = substitute(time),
         flow_rate = substitute(flow_rate),

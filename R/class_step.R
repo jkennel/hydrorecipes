@@ -33,6 +33,7 @@ Step <- R6Class(
       }
 
       dots <- c(...)
+
       self$role <- dots$role
       self$skip <- dots$skip
       self$keep_original_cols <- dots$keep_original_cols

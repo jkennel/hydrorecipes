@@ -77,7 +77,7 @@ step_add_noise <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepAddNoise$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_add_vars
@@ -106,7 +106,8 @@ step_add_vars <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepAddVars$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_constant_drawdown
@@ -157,7 +158,8 @@ step_aquifer_constant_drawdown <- function(.rec,
   time <- substitute(time)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepAquiferConstantDrawdown$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_grf
@@ -247,7 +249,9 @@ step_aquifer_grf <- function(.rec,
   flow_rate <- substitute(flow_rate)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepAquiferGRF$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))  # need to add ... to this??
+
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_theis
@@ -293,14 +297,13 @@ step_aquifer_theis <- function(.rec,
                                radius = 100.0,
                                specific_storage = 1.0e-6,
                                hydraulic_conductivity = 1.0e-4,
-                               flow_dimension = 2.0,
                                role = "predictor",
                                ...) {
   time <- substitute(time)
   flow_rate <- substitute(flow_rate)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepAquiferTheis$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_theis_aniso
@@ -355,7 +358,8 @@ step_aquifer_theis_aniso <- function(.rec,
   flow_rate <- substitute(flow_rate)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepAquiferTheisAniso$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_leaky
@@ -432,7 +436,8 @@ step_aquifer_leaky <- function(.rec,
   flow_rate <- substitute(flow_rate)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepAquiferLeaky$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_patch
@@ -479,7 +484,8 @@ step_aquifer_patch <- function(.rec,
   time <- substitute(time)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepAquiferPatch$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_patch
@@ -534,7 +540,8 @@ step_aquifer_wellbore_storage <- function(.rec,
   time <- substitute(time)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepAquiferWellboreStorage$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_baro_clark
@@ -584,7 +591,8 @@ step_baro_clark <- function(.rec,
   barometric_pressure <- substitute(barometric_pressure)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepBaroClark$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_baro_clark
@@ -626,7 +634,8 @@ step_baro_least_squares <- function(.rec,
   barometric_pressure <- substitute(barometric_pressure)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepBaroLeastSquares$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_baro_harmonic
@@ -684,7 +693,8 @@ step_baro_harmonic <- function(.rec,
   earth_tide <- substitute(earth_tide)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepBaroHarmonic$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_center
@@ -716,7 +726,8 @@ step_center <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepCenter$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_check_na
@@ -745,7 +756,8 @@ step_check_na <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepCheckNA$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_check_spacing
@@ -774,7 +786,8 @@ step_check_spacing <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepCheckSpacing$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_check_spacing
@@ -812,7 +825,8 @@ step_compare_columns <- function(.rec,
   compare <- substitute(compare)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepCompareColumns$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_distributed_lag
@@ -853,7 +867,8 @@ step_distributed_lag <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepDistributedLag$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_drop_columns
@@ -884,7 +899,8 @@ step_drop_columns <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepDropColumns$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_dummy
@@ -917,7 +933,7 @@ step_dummy <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepDummy$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
 
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -981,7 +997,8 @@ step_earthtide <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepEarthtide$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_fft_coherence
@@ -1013,7 +1030,8 @@ step_fft_coherence <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepCoherence$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_fft_pgram
@@ -1053,7 +1071,8 @@ step_fft_pgram <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepPgram$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_fft_welch
@@ -1089,7 +1108,8 @@ step_fft_welch <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepWelch$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_fft_transfer_pgram
@@ -1124,7 +1144,8 @@ step_fft_transfer_pgram <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepTransferPgram$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_fft_transfer_experimental
@@ -1163,7 +1184,8 @@ step_fft_transfer_experimental <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepTransferExperimental$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_fft_transfer_welch
@@ -1199,7 +1221,8 @@ step_fft_transfer_welch <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepTransferWelch$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_find_interval
@@ -1234,7 +1257,8 @@ step_find_interval <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepFindInterval$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_harmonic
@@ -1271,7 +1295,8 @@ step_harmonic <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepHarmonic$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_intercept
@@ -1296,7 +1321,8 @@ step_intercept <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepIntercept$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_kernel_filter
@@ -1335,7 +1361,8 @@ step_kernel_filter <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepKernelFilter$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1380,7 +1407,8 @@ step_lead_lag <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepLeadLag$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_normalize
@@ -1407,7 +1435,8 @@ step_normalize <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepNormalize$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_ols_gap_fill
@@ -1434,7 +1463,8 @@ step_ols_gap_fill <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepOlsGapFill$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_ols
@@ -1480,7 +1510,8 @@ step_ols <- function(.rec,
 
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepOls$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_pca
@@ -1523,7 +1554,8 @@ step_pca <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepPca$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_scale
@@ -1567,7 +1599,8 @@ step_scale <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepScale$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_slug_cbp
@@ -1629,7 +1662,8 @@ step_slug_cbp <- function(.rec,
   times <- substitute(times)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepSlugCbp$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_spline_b
@@ -1674,7 +1708,8 @@ step_spline_b <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepSplineB$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_subset_rows
@@ -1706,7 +1741,8 @@ step_subset_rows <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepSubsetRows$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_transport_fractures_heat
@@ -1781,7 +1817,8 @@ step_transport_fractures_heat <- function(.rec,
   distance_matrix <- substitute(distance_matrix)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepTransportFracturesHeat$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_transport_fractures_solute
@@ -1862,7 +1899,8 @@ step_transport_fractures_solute <- function(.rec,
   distance_matrix <- substitute(distance_matrix)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepTransportFracturesSolute$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_transport_ogata_banks
@@ -1930,7 +1968,8 @@ step_transport_ogata_banks <- function(.rec,
   distance <- substitute(distance)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepTransportOgataBanks$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_vadose_weeks
@@ -1980,7 +2019,8 @@ step_vadose_weeks <- function(.rec,
   time <- substitute(time)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepVadoseWeeks$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_varying
@@ -2012,7 +2052,8 @@ step_varying <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepVarying$new,
-                        env_list))
+                        modifyList(x = env_list, val = list(...))))
+
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #

@@ -12,7 +12,6 @@ step_aquifer_theis(
   radius = 100,
   specific_storage = 1e-06,
   hydraulic_conductivity = 1e-04,
-  flow_dimension = 2,
   role = "predictor",
   ...
 )
@@ -31,9 +30,6 @@ step_aquifer_theis(
 \item{specific_storage}{specific storage of aquifer (L/L)}
 
 \item{hydraulic_conductivity}{the hydraulic conductivity (L/t)}
-
-\item{flow_dimension}{aquifer flow dimension (1 = linear, 2 = radial,
-3 = spherical)}
 
 \item{role}{character - the name of the role}
 
