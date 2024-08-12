@@ -594,6 +594,102 @@ step_baro_clark <- function(.rec,
                         modifyList(x = env_list, val = list(...))))
 
 }
+
+
+
+# Hussein
+# Determination of Fluid Flow Properties From the Response of Water Levels in Wells to Atmospheric Loading
+#' step_baro_frequency_semi_confined
+#'
+#' @description
+#' Rojstaczer 1988 solution
+#'
+#' step_baro_frequency_semi_confined
+#'
+#' @inheritParams step_scale
+#'
+#' @param frequency
+#' @param radius_well
+#' @param transmissivity
+#' @param storage_confining
+#' @param storage_aquifer
+#' @param diffusivity_confining
+#' @param diffusivity_vadose
+#' @param thickness_confining
+#' @param thickness_vadose
+#' @param loading_efficiency
+#' @param attenuation
+#'
+#' @return complex response vector in frequency domain
+#'
+#' @export
+step_baro_frequency_semi_confined <- function(.rec,
+                                              frequency,
+                                              radius_well,
+                                              transmissivity,
+                                              storage_confining,
+                                              storage_aquifer,
+                                              diffusivity_confining,
+                                              diffusivity_vadose,
+                                              thickness_confining,
+                                              thickness_vadose,
+                                              loading_efficiency,
+                                              attenuation,
+                                              role = "predictor",
+                                              ...) {
+  frequency <- substitute(frequency)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepBaroFrequencySemiConfined$new,
+                        modifyList(x = env_list,
+                                   val = list(...))))
+
+}
+
+
+
+#' step_baro_frequency_semi_confined
+#'
+#' @description
+#' Rojstaczer 1988 solution
+#'
+#' step_baro_frequency_unconfined
+#'
+#' @inheritParams step_scale
+#' @inheritParams step_baro_frequency_semi_confined
+#'
+#' @param specific_yield
+#' @param k_vertical
+#' @param diffusivity_vertical
+#' @param thickness_saturated_well
+#' @param thickness_vadose
+#' @param thickness_aquifer
+#'
+#' @return complex response vector in frequency domain
+#'
+#' @export
+step_baro_frequency_unconfined <- function(.rec,
+                                           frequency,
+                                           radius_well,
+                                           storage_aquifer,
+                                           specific_yield,
+                                           k_vertical,
+                                           diffusivity_vertical,
+                                           diffusivity_vadose,
+                                           thickness_saturated_well,
+                                           thickness_vadose,
+                                           thickness_aquifer,
+                                           loading_efficiency,
+                                           attenuation,
+                                           role = "predictor",
+                                           ...) {
+  frequency <- substitute(frequency)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepBaroFrequencyUnconfined$new,
+                        modifyList(x = env_list,
+                                   val = list(...))))
+
+}
+
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_baro_clark
 #'

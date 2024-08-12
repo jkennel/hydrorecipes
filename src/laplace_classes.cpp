@@ -626,6 +626,170 @@ struct PapadopulosCooper
 };
 
 
+// from WTAQ2
+// struct DoughertyBabu
+// {
+//   Eigen::VectorXd tau;
+//   double fact_1;
+//   double fact_2;
+//   double Q;
+//   double r;
+//   double r_c;
+//   double r_w;
+//   double Tr;
+//   double S;
+//   double fact;
+//   double prec;
+//   DoughertyBabu(
+//     Eigen::VectorXd time,
+//     double Q,
+//     double r,
+//     double r_c,
+//     double r_w,
+//     double Tr,
+//     double S,
+//     double prec) : Q(Q), r(r), r_w(r_w), r_c(r_c), Tr(Tr), S(S), prec(prec)
+//   {
+//     fact_1 = S * r_w * r_w / Tr;
+//     fact_2 = Q / (4.0 * M_PI * Tr); // assume thickness == 1 to start
+//
+//     tau = std::log(2.0) / time.array(); // xln2 is log(2)
+//
+//     // VARIABLES
+//     // sigma - ratio of storativity to specific yield
+//     // xkd  - Ratio of vertical to horizontal hydraulic conductivity
+//     // xkr  - horizontal hydraulic conductivity
+//     // xkz  - vertical hydraulic conductivity
+//     // sy   - specific yield
+//     // idra - drainage at water table (instantaneous)
+//     // idra - drainage at water table (delayed)
+//     // idpr - delayed piezometer response
+//     // qq   - pumping rate
+//     // td   - dimensionless time TD = DELTD * TDLAST * RDSQ
+//     // tdlast - maximum time value
+//     // rd   - r / rw
+//     // rdsq - rd * rd
+//     // zpd  - top of screened interval
+//     // zpl  - bottom of screened interval
+//
+//
+//     // ipdw - infinitesimal diameter
+//     // ipds - partially penetrating
+//
+//     // iows - partially penetrating observation well 0,
+//     //        fully penetrating observation well 1,
+//     //        observation piezometer 2
+//
+//     // kk   - variable to loop through wells
+//
+//     // FUNCTIONS
+//     // LINVST - Stehfest coefficients
+//
+//   };
+//   double lp(double p)
+//   {
+//     double w = sqrt(p * S / Tr);
+//     double dbar = Q * 1.0 / p;
+//     double a1 = r_w * w;
+//     double a2 = r * w;
+//
+//     double f_p = Q * std::cyl_bessel_k(0, a2) /
+//       (M_PI * p * ((r_c * r_c * p * std::cyl_bessel_k(0.0, a1)) +
+//         (2 * r_w * Tr * w * std::cyl_bessel_k(1.0, a1))));
+//
+//     return(f_p);
+//
+//     // double term_1 = (r_c * r_c * p / (2.0 * Tr)) *
+//     //   std::cyl_bessel_k(0,a1) / std::cyl_bessel_k(0, a2);
+//     // double term_2 = r_w * w * std::cyl_bessel_k(1.0, a1)/std::cyl_bessel_k(0, a2);
+//     // return (dbar / (term_1 + term_2));
+//
+//   };
+// };
+
+
+struct Theis
+{
+  Eigen::VectorXd tau;
+  double r;
+  double Tr;
+  double S;
+  double Q;
+  double prec;
+  double w_coef;
+  double theis_coef;
+  Theis(Eigen::VectorXd time,
+               double r,
+               double Tr,
+               double S,
+               double Q,
+               double prec) : r(r), Tr(Tr), S(S), Q(Q), prec(prec)
+  {
+
+    tau = std::log(2.0) / time.array();
+    w_coef = (r * r * S) / Tr;
+    theis_coef = Q / (2.0 * M_PI * Tr);
+
+  };
+  double lp(double p)
+  {
+    double w = std::sqrt(w_coef * p);
+    // Rcpp::Rcout << "w " << w << std::endl;
+    return (theis_coef / p * std::cyl_bessel_k(0.0, w));
+  };
+};
+
+
+// struct Moench_1984
+// {
+//   Eigen::VectorXd tau;
+//   double rc;
+//   double rw;
+//   double K;
+//   double K_prime;
+//   double Ss;
+//   double Ss_prime;
+//   double Sw;
+//   double b_prime;
+//   double Q;
+//   double l;
+//   double d;
+//   double prec;
+//   double wd;
+//   double sigma;
+//   double gamma;
+//   Moench_1984(Eigen::VectorXd time,
+//         double rc,
+//         double rw,
+//         double K,
+//         double K_prime,
+//         double Ss,
+//         double Ss_prime,
+//         double Sw,
+//         double b_prime,
+//         double Q,
+//         double l,
+//         double d,
+//         double prec) : rc(rc), rw(rw), K(K), K_prime(K_prime), Ss(Ss), Ss_prime(Ss_prime), Sw(Sw), b_prime(b_prime), Q(Q), l(l), d(d), prec(prec)
+//   {
+//     sigma = Ss_prime / Ss;
+//     gamma = rw / b_prime * sqrt(K_prime / K);
+//     wd = dimensionless_well_bore_storage(rc, rw, Ss, l, d);
+//     tau = std::log(2.0) / time.array();
+//   };
+//   double lp(double p)
+//   {
+//     double m = sqrt(sigma * p) / gamma;
+//     double qd = gamma * gamma * m * tanh(m);
+//     double x = sqrt(p + qd);
+//     double k0 = std::cyl_bessel_k(0.0, x);
+//     double k1 = std::cyl_bessel_k(1.0, x);
+//     double t1 = (k0 + x * Sw * k1);
+//
+//     return(2.0 * t1 / p * (p * wd * (t1) * x * k1));
+//   };
+// };
+
 
 struct HantushJacob
 {
@@ -650,7 +814,7 @@ struct HantushJacob
   double lp(double p)
   {
     double w = (S * c * p + 1.0) / (c * Tr);
-    return (-Q / (2.0 * M_PI * Tr * p) * std::cyl_bessel_k(0.0, r * sqrt(w)));
+    return (Q / (2.0 * M_PI * Tr * p) * std::cyl_bessel_k(0.0, r * sqrt(w)));
   };
 };
 
@@ -824,6 +988,7 @@ Eigen::VectorXd stehfest(T &well, int n_terms)
 {
 
   Eigen::VectorXd v = stehfest_v(n_terms);
+  // Possibly can do this without making this large matrix
   Eigen::MatrixXd p = stehfest_p(well.tau, n_terms);
 
   std::vector<double> p_vec(p.data(), p.data() + p.size());
@@ -1071,6 +1236,61 @@ Eigen::VectorXd hantush_jacob_laplace(
 }
 
 // [[Rcpp::export]]
+Eigen::VectorXd theis_laplace(
+    Eigen::VectorXd time,
+    double r,
+    double Tr,
+    double S,
+    double Q,
+    double prec,
+    int n_terms)
+{
+
+  Theis well(time, r, Tr, S, Q, prec);
+
+  return (stehfest(well, n_terms));
+}
+
+
+// // [[Rcpp::export]]
+// Eigen::VectorXd moench_double_porosity_laplace(
+//     Eigen::VectorXd time,
+//     double r,
+//     double Tr,
+//     double S,
+//     double Q,
+//     double prec,
+//     int n_terms)
+// {
+//
+//   Theis well(time, r, Tr, S, Q, prec);
+//
+//   return (stehfest(well, n_terms));
+// }
+
+
+//
+// // [[Rcpp::export]]
+// Eigen::VectorXd dougherty_babu_laplace(
+//     Eigen::VectorXd time,
+//     double r,
+//     double Tr,
+//     double S,
+//     double Q,
+//     double prec,
+//     int n_terms)
+// {
+//
+//   DoughertyBabu well(time, r, Tr, S, Q, prec);
+//
+//   return (stehfest(well, n_terms));
+// }
+
+
+
+
+
+// [[Rcpp::export]]
 Eigen::VectorXd barker_herbert(
     Eigen::VectorXd time,
     double radius,
@@ -1241,7 +1461,7 @@ Eigen::VectorXd parallel_fractures_heat(
 
 /*** R
 n <- 10000
-time = c(0, 1:86400)
+time = c(1:(20*86400))
 # CooperBredehoeftPapadopulos well(time, r, r_c, r_w, Tr, S, h_0);
 
 kern_slug <- hydrorecipes:::cooper_bredehoeft_papadopulos_laplace(time,
@@ -1255,10 +1475,10 @@ kern_slug <- hydrorecipes:::cooper_bredehoeft_papadopulos_laplace(time,
 
 
 Tr = 200 # transmissivity of aquifer, m^2/d
-S = 0.0005 # storage coefficient of aquifer, -
+S = 0.00001 # storage coefficient of aquifer, -
 cc = 1000 # resistance of leaky layer, d
 Q = 800 # discharge of well, m^3/d
-rw = 2500 # radius of well, m
+rw = 1 # radius of well, m
 lab = sqrt(cc * Tr)
 n_terms <- 8L
 prec = 1e-5
@@ -1267,21 +1487,44 @@ times <- round(2*c(seq(0, 3000000, by = 60), 60), 0)
 # bench::mark(GCD(as.integer(times)))
 flow_rate <- rep(Q, n)
 
+
+# Eigen::VectorXd theis_laplace(
+#   Eigen::VectorXd time,
+#   double r,
+#   double Tr,
+#   double S,
+#   double Q,
+#   double prec,
+#   int n_terms)
+# {
+#
+#   Theis well(time, r, Tr, S, Q, prec);
+#
+#   return (stehfest(well, n_terms));
+# }
+
 bench::mark(
-  a <- hydrorecipes:::jacob_lohman_laplace(times, rw, Tr, s, S, prec, n_terms),
-  b <- hydrorecipes:::hantush_jacob(times, flow_rate, rw,S,Tr, lab, prec),
+b <- hydrorecipes:::theis_laplace(time, rw, Tr, S, Q, prec, n_terms),
+bb <- hydrorecipes::theis_aniso_time(0,1,S,Tr,Tr,1,time, rep(Q, length(time)))[[1]],
+check = FALSE
+)
+
+bench::mark(
+  a <- hydrorecipes:::hantush_jacob_laplace(times, cc, rw, Tr, S, Q, prec, n_terms),
+  b <- hydrorecipes:::theis_laplace(times, rw, Tr, S, Q, prec, n_terms),
   # c <- hydrorecipes:::hantush_jacob_quad(times, lab, rw, Tr, S, Q, 1e-16),
   # c <- hydrorecipes:::barker_herbert(times, c, rw, Tr, S, Q, prec, 12L),
   check = FALSE
 )
 
 bench::mark(
-  a <- hydrorecipes:::hantush_jacob_laplace(times, cc, rw, Tr, S, Q, prec, n_terms),
+  a <- hydrorecipes:::jacob_lohman_laplace(times, rw, Tr, s, S, prec, n_terms),
   b <- hydrorecipes:::hantush_jacob(times, flow_rate, rw,S,Tr, lab, prec),
-  # c <- hydrorecipes:::hantush_jacob_quad(times, lab, rw, Tr, S, Q, 1e-16),
+  # c <- hydrorecipes:::theis(times, lab, rw, Tr, S, Q, 1e-16),
   # c <- hydrorecipes:::barker_herbert(times, c, rw, Tr, S, Q, prec, 12L),
   check = FALSE
 )
+
 
 
 
@@ -1312,15 +1555,15 @@ a <- hydrorecipes:::papadopulos_cooper_laplace(times,
                                            S,
                                            prec, 16L)
 
-Eigen::VectorXd time,
-double Q,
-double r,
-double r_c,
-double r_w,
-double Tr,
-double S,
-double prec,
-int n_terms
+# Eigen::VectorXd time,
+# double Q,
+# double r,
+# double r_c,
+# double r_w,
+# double Tr,
+# double S,
+# double prec,
+# int n_terms
 # ParallelFracturesSolute fracture(time,
 #                                  z,
 #                                  x,

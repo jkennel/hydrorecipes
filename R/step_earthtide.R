@@ -145,7 +145,7 @@ StepEarthtide <- R6Class(
     },
     response = function(co) {
 
-      if (is.na(self$frequency)) {
+      if (all(is.na(self$frequency))) {
         return(super$response(co))
       }
 

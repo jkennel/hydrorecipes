@@ -83,8 +83,8 @@ double std_expint(double u) {
 
     if (u == 0){
       u = R_PosInf;
-    } else if (u > 700.0){
-      u = 0;
+    } else if (u > 708.0){
+      u = 708.0;
     } else {
       u = -std::expint(-u);
     }
@@ -1071,20 +1071,33 @@ Eigen::VectorXd ig(Eigen::ArrayXd a, Eigen::ArrayXd u) {
 # hydrorecipes:::eig(1,0)
 
 
-xy <- expand.grid(1:200, 1:200)
+xy <- expand.grid(1:100, 1:100)
 bench::mark(
 
-hydrorecipes:::grid_pumping_regimes(xy[,1],
-                     xy[,2],
-                     seq(1, 100, 10),
-                     sort(runif(min = 0, max = 90, 100)),
-                     rnorm(100),
-                     rep(c(200, 400, 500, 20, 10, 50, 7, 700, 800, 177), each = 10),
-                     rep(500, 100),
-                     1e-6,
-                     1e-4,
-                     1e-5,
-                     1.0)
+  # Eigen::VectorXd distance_x,
+  # Eigen::VectorXd distance_y,
+  # Eigen::VectorXd output_times,
+  # Eigen::VectorXd start_times,
+  # Eigen::VectorXd flow_rates,
+  # Eigen::VectorXd well_x,
+  # Eigen::VectorXd well_y,
+  # double storativity,
+  # double transmissivity_x,
+  # double transmissivity_y,
+  # double thickness)
+
+  a <- hydrorecipes:::grid_pumping_regimes(
+    distance_x = xy[,1],
+    distance_y = xy[,2],
+    output_times = seq(1, 100, 1),
+    start_times = sort(runif(min = 0, max = 90, 100)),
+    flow_rates = rnorm(100),
+    well_x = rep(c(200, 400, 500, 20, 10, 50, 7, 700, 800, 177), each = 10),
+    well_y = rep(500, 100),
+    storativity = 1e-6,
+    transmissivity_x = 1e-4,
+    transmissivity_y = 1e-5,
+    thickness = 1.0)
 )
 
 

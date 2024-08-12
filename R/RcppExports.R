@@ -1186,6 +1186,62 @@ harmonic_list <- function(time, frequency, start, cycle_size) {
     .Call(`_hydrorecipes_harmonic_list`, time, frequency, start, cycle_size)
 }
 
+well_bore_storage <- function(rc, rw, Ss, zpl, zpd) {
+    .Call(`_hydrorecipes_well_bore_storage`, rc, rw, Ss, zpl, zpd)
+}
+
+well_skin <- function(kr, ks, ds, rw) {
+    .Call(`_hydrorecipes_well_skin`, kr, ks, ds, rw)
+}
+
+shape_factor <- function(L, rp, kr, kz) {
+    .Call(`_hydrorecipes_shape_factor`, L, rp, kr, kz)
+}
+
+well_delay <- function(rp, rw, Ss, kr, kz, L) {
+    .Call(`_hydrorecipes_well_delay`, rp, rw, Ss, kr, kz, L)
+}
+
+dimensionless_time <- function(Kr, t, rw, Ss, b = 1.0) {
+    .Call(`_hydrorecipes_dimensionless_time`, Kr, t, rw, Ss, b)
+}
+
+dimensionless_head <- function(Kr, t, rw, ht, h, Q, b = 1) {
+    .Call(`_hydrorecipes_dimensionless_head`, Kr, t, rw, ht, h, Q, b)
+}
+
+dimensionless_ratio <- function(a, b) {
+    .Call(`_hydrorecipes_dimensionless_ratio`, a, b)
+}
+
+dimensionless_beta <- function(Kd, rd) {
+    .Call(`_hydrorecipes_dimensionless_beta`, Kd, rd)
+}
+
+dimensionless_sigma <- function(Ss, b, Sy) {
+    .Call(`_hydrorecipes_dimensionless_sigma`, Ss, b, Sy)
+}
+
+dimensionless_alpha <- function(Ss, b, Sy) {
+    .Call(`_hydrorecipes_dimensionless_alpha`, Ss, b, Sy)
+}
+
+dimensionless_gamma <- function(alpha, b, Sy, Kz) {
+    .Call(`_hydrorecipes_dimensionless_gamma`, alpha, b, Sy, Kz)
+}
+
+dimensionless_well_bore_storage <- function(rc, rw, Ss, l, d) {
+    .Call(`_hydrorecipes_dimensionless_well_bore_storage`, rc, rw, Ss, l, d)
+}
+
+dimensionless_w_prime <- function(rc, rw, Ss, f_prime) {
+    .Call(`_hydrorecipes_dimensionless_w_prime`, rc, rw, Ss, f_prime)
+}
+
+dimensionless_S <- function(Kr, ds, Ks, rw) {
+    .Call(`_hydrorecipes_dimensionless_S`, Kr, ds, Ks, rw)
+}
+
 any_decimal <- function(x) {
     .Call(`_hydrorecipes_any_decimal`, x)
 }
@@ -1600,6 +1656,10 @@ jacob_lohman_laplace <- function(time, s, r, Tr, S, prec, n_terms) {
 
 hantush_jacob_laplace <- function(time, c, r, Tr, S, Q, prec, n_terms) {
     .Call(`_hydrorecipes_hantush_jacob_laplace`, time, c, r, Tr, S, Q, prec, n_terms)
+}
+
+theis_laplace <- function(time, r, Tr, S, Q, prec, n_terms) {
+    .Call(`_hydrorecipes_theis_laplace`, time, r, Tr, S, Q, prec, n_terms)
 }
 
 barker_herbert <- function(time, radius, radius_patch, t_1, t_2, s_1, s_2, Q, prec, n_terms) {

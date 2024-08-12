@@ -299,3 +299,19 @@ Rcpp::List distributed_lag_list3(Eigen::VectorXd x,
                                  const bool periodic = false,
                                  const unsigned int derivs = 0,
                                  const bool integral = false);
+
+//==============================================================================
+// helpers_aquifer.cpp
+double dimensionless_well_bore_storage(double rc,
+                                       double rw,
+                                       double Ss,
+                                       double l,
+                                       double d);
+
+
+//==============================================================================
+// laplace_classes.cpp
+Rcpp::ComplexMatrix bessel_k_cplx(const Rcpp::ComplexMatrix &x,
+                                  double nu,
+                                  bool expon_scaled,
+                                  size_t n_seq);

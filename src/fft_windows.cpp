@@ -175,9 +175,9 @@ Eigen::ArrayXd window_first_deriv(size_t n,
 
   ArrayXd k = Eigen::ArrayXd::LinSpaced(n, 0.0, n - 1.0) / double(n - 1.0);
 
-  return(a0 - a1 * (2 * M_PI * k).cos() +
-              a2 * (4 * M_PI * k).cos() -
-              a3 * (6 * M_PI * k).cos());
+  return(a0 - a1 * (2.0 * M_PI * k).cos() +
+              a2 * (4.0 * M_PI * k).cos() -
+              a3 * (6.0 * M_PI * k).cos());
 
 }
 

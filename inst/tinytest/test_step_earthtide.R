@@ -16,7 +16,7 @@ wave_groups_dl <- wave_groups_dl[, c("start", "end")]
 ngr <- nrow(wave_groups_dl)
 
 
-frec = hydrorecipes:::Recipe$new(formula = wl~baro+datetime, data = kennel_2020)$
+hrec = hydrorecipes:::Recipe$new(formula = wl~baro+datetime, data = kennel_2020)$
   add_step(hydrorecipes:::StepEarthtide$new(datetime,
                                         wave_groups = wave_groups_dl,
                                         latitude = latitude,
@@ -35,10 +35,10 @@ et <- earthtide::calc_earthtide(kennel_2020$datetime,
                                 catalog = catalog,
                                 astro_update = 60)
 
-expect_equivalent(frec$earthtide, et$gravity)
+expect_equivalent(hrec$earthtide, et$gravity)
 
 
-frec = hydrorecipes:::Recipe$new(formula = wl~baro+datetime, data = kennel_2020)$
+hrec = hydrorecipes:::Recipe$new(formula = wl~baro+datetime, data = kennel_2020)$
   add_step(hydrorecipes:::StepEarthtide$new(datetime,
                                         do_predict = FALSE,
                                         wave_groups = wave_groups_dl,
@@ -59,9 +59,22 @@ et <- earthtide::calc_earthtide(kennel_2020$datetime,
                                 catalog = catalog,
                                 astro_update = 60)
 
-expect_equivalent(frec[,-c(2L, 3L)], et)
+hrec2 = recipe(formula = wl~baro+datetime, data = kennel_2020) |>
+  step_earthtide(datetime,
+                 do_predict = FALSE,
+                 wave_groups = wave_groups_dl,
+                 latitude = latitude,
+                 longitude = longitude,
+                 elevation = elevation,
+                 cutoff = cutoff,
+                 catalog = catalog,
+                 astro_update = 60) |>
+  plate()
 
-frec1 = hydrorecipes:::Recipe$new(formula = wl~baro+datetime, data = kennel_2020)$
+expect_equivalent(hrec, hrec2)
+expect_equivalent(hrec[,-c(2L, 3L)], et)
+
+hrec1 = hydrorecipes:::Recipe$new(formula = wl~baro+datetime, data = kennel_2020)$
   add_step(hydrorecipes:::StepEarthtide$new(datetime,
                                             do_predict = TRUE,
                                             wave_groups = wave_groups_dl,
@@ -74,7 +87,7 @@ frec1 = hydrorecipes:::Recipe$new(formula = wl~baro+datetime, data = kennel_2020
                                             n_thread = 10L))$
   plate()
 
-frec2 = hydrorecipes:::Recipe$new(formula = wl~baro+datetime, data = kennel_2020)$
+hrec2 = hydrorecipes:::Recipe$new(formula = wl~baro+datetime, data = kennel_2020)$
   add_step(hydrorecipes:::StepEarthtide$new(datetime,
                                             do_predict = TRUE,
                                             wave_groups = wave_groups_dl,
@@ -86,8 +99,8 @@ frec2 = hydrorecipes:::Recipe$new(formula = wl~baro+datetime, data = kennel_2020
                                             interp_factor = 1L,
                                             n_thread = 10L))$
   plate()
-expect_equivalent(frec1, frec2)
+expect_equivalent(hrec1, hrec2)
 
 
-# plot(earthtide~datetime, frec1, type = "l")
-# plot(earthtide~datetime, frec2, type = "l", col = "red")
+# plot(earthtide~datetime, hrec1, type = "l")
+# plot(earthtide~datetime, hrec2, type = "l", col = "red")

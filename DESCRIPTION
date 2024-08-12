@@ -1,7 +1,7 @@
 Package: hydrorecipes
 Type: Package
 Title: Hydrogeology steps 
-Version: 0.0.5
+Version: 0.0.6
 Author: Jonathan Kennel
 Maintainer: Jonathan Kennel <jkennel@uoguelph.ca>
 Description: This package is an implementation of some common steps of the

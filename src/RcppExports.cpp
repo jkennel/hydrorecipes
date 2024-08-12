@@ -1371,6 +1371,204 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// well_bore_storage
+double well_bore_storage(double rc, double rw, double Ss, double zpl, double zpd);
+RcppExport SEXP _hydrorecipes_well_bore_storage(SEXP rcSEXP, SEXP rwSEXP, SEXP SsSEXP, SEXP zplSEXP, SEXP zpdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type rc(rcSEXP);
+    Rcpp::traits::input_parameter< double >::type rw(rwSEXP);
+    Rcpp::traits::input_parameter< double >::type Ss(SsSEXP);
+    Rcpp::traits::input_parameter< double >::type zpl(zplSEXP);
+    Rcpp::traits::input_parameter< double >::type zpd(zpdSEXP);
+    rcpp_result_gen = Rcpp::wrap(well_bore_storage(rc, rw, Ss, zpl, zpd));
+    return rcpp_result_gen;
+END_RCPP
+}
+// well_skin
+double well_skin(double kr, double ks, double ds, double rw);
+RcppExport SEXP _hydrorecipes_well_skin(SEXP krSEXP, SEXP ksSEXP, SEXP dsSEXP, SEXP rwSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type kr(krSEXP);
+    Rcpp::traits::input_parameter< double >::type ks(ksSEXP);
+    Rcpp::traits::input_parameter< double >::type ds(dsSEXP);
+    Rcpp::traits::input_parameter< double >::type rw(rwSEXP);
+    rcpp_result_gen = Rcpp::wrap(well_skin(kr, ks, ds, rw));
+    return rcpp_result_gen;
+END_RCPP
+}
+// shape_factor
+double shape_factor(double L, double rp, double kr, double kz);
+RcppExport SEXP _hydrorecipes_shape_factor(SEXP LSEXP, SEXP rpSEXP, SEXP krSEXP, SEXP kzSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type L(LSEXP);
+    Rcpp::traits::input_parameter< double >::type rp(rpSEXP);
+    Rcpp::traits::input_parameter< double >::type kr(krSEXP);
+    Rcpp::traits::input_parameter< double >::type kz(kzSEXP);
+    rcpp_result_gen = Rcpp::wrap(shape_factor(L, rp, kr, kz));
+    return rcpp_result_gen;
+END_RCPP
+}
+// well_delay
+double well_delay(double rp, double rw, double Ss, double kr, double kz, double L);
+RcppExport SEXP _hydrorecipes_well_delay(SEXP rpSEXP, SEXP rwSEXP, SEXP SsSEXP, SEXP krSEXP, SEXP kzSEXP, SEXP LSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type rp(rpSEXP);
+    Rcpp::traits::input_parameter< double >::type rw(rwSEXP);
+    Rcpp::traits::input_parameter< double >::type Ss(SsSEXP);
+    Rcpp::traits::input_parameter< double >::type kr(krSEXP);
+    Rcpp::traits::input_parameter< double >::type kz(kzSEXP);
+    Rcpp::traits::input_parameter< double >::type L(LSEXP);
+    rcpp_result_gen = Rcpp::wrap(well_delay(rp, rw, Ss, kr, kz, L));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dimensionless_time
+double dimensionless_time(double Kr, double t, double rw, double Ss, double b);
+RcppExport SEXP _hydrorecipes_dimensionless_time(SEXP KrSEXP, SEXP tSEXP, SEXP rwSEXP, SEXP SsSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type Kr(KrSEXP);
+    Rcpp::traits::input_parameter< double >::type t(tSEXP);
+    Rcpp::traits::input_parameter< double >::type rw(rwSEXP);
+    Rcpp::traits::input_parameter< double >::type Ss(SsSEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(dimensionless_time(Kr, t, rw, Ss, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dimensionless_head
+double dimensionless_head(double Kr, double t, double rw, double ht, double h, double Q, double b);
+RcppExport SEXP _hydrorecipes_dimensionless_head(SEXP KrSEXP, SEXP tSEXP, SEXP rwSEXP, SEXP htSEXP, SEXP hSEXP, SEXP QSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type Kr(KrSEXP);
+    Rcpp::traits::input_parameter< double >::type t(tSEXP);
+    Rcpp::traits::input_parameter< double >::type rw(rwSEXP);
+    Rcpp::traits::input_parameter< double >::type ht(htSEXP);
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(dimensionless_head(Kr, t, rw, ht, h, Q, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dimensionless_ratio
+double dimensionless_ratio(double a, double b);
+RcppExport SEXP _hydrorecipes_dimensionless_ratio(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(dimensionless_ratio(a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dimensionless_beta
+double dimensionless_beta(double Kd, double rd);
+RcppExport SEXP _hydrorecipes_dimensionless_beta(SEXP KdSEXP, SEXP rdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type Kd(KdSEXP);
+    Rcpp::traits::input_parameter< double >::type rd(rdSEXP);
+    rcpp_result_gen = Rcpp::wrap(dimensionless_beta(Kd, rd));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dimensionless_sigma
+double dimensionless_sigma(double Ss, double b, double Sy);
+RcppExport SEXP _hydrorecipes_dimensionless_sigma(SEXP SsSEXP, SEXP bSEXP, SEXP SySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type Ss(SsSEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< double >::type Sy(SySEXP);
+    rcpp_result_gen = Rcpp::wrap(dimensionless_sigma(Ss, b, Sy));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dimensionless_alpha
+double dimensionless_alpha(double Ss, double b, double Sy);
+RcppExport SEXP _hydrorecipes_dimensionless_alpha(SEXP SsSEXP, SEXP bSEXP, SEXP SySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type Ss(SsSEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< double >::type Sy(SySEXP);
+    rcpp_result_gen = Rcpp::wrap(dimensionless_alpha(Ss, b, Sy));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dimensionless_gamma
+double dimensionless_gamma(double alpha, double b, double Sy, double Kz);
+RcppExport SEXP _hydrorecipes_dimensionless_gamma(SEXP alphaSEXP, SEXP bSEXP, SEXP SySEXP, SEXP KzSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< double >::type Sy(SySEXP);
+    Rcpp::traits::input_parameter< double >::type Kz(KzSEXP);
+    rcpp_result_gen = Rcpp::wrap(dimensionless_gamma(alpha, b, Sy, Kz));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dimensionless_well_bore_storage
+double dimensionless_well_bore_storage(double rc, double rw, double Ss, double l, double d);
+RcppExport SEXP _hydrorecipes_dimensionless_well_bore_storage(SEXP rcSEXP, SEXP rwSEXP, SEXP SsSEXP, SEXP lSEXP, SEXP dSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type rc(rcSEXP);
+    Rcpp::traits::input_parameter< double >::type rw(rwSEXP);
+    Rcpp::traits::input_parameter< double >::type Ss(SsSEXP);
+    Rcpp::traits::input_parameter< double >::type l(lSEXP);
+    Rcpp::traits::input_parameter< double >::type d(dSEXP);
+    rcpp_result_gen = Rcpp::wrap(dimensionless_well_bore_storage(rc, rw, Ss, l, d));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dimensionless_w_prime
+double dimensionless_w_prime(double rc, double rw, double Ss, double f_prime);
+RcppExport SEXP _hydrorecipes_dimensionless_w_prime(SEXP rcSEXP, SEXP rwSEXP, SEXP SsSEXP, SEXP f_primeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type rc(rcSEXP);
+    Rcpp::traits::input_parameter< double >::type rw(rwSEXP);
+    Rcpp::traits::input_parameter< double >::type Ss(SsSEXP);
+    Rcpp::traits::input_parameter< double >::type f_prime(f_primeSEXP);
+    rcpp_result_gen = Rcpp::wrap(dimensionless_w_prime(rc, rw, Ss, f_prime));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dimensionless_S
+double dimensionless_S(double Kr, double ds, double Ks, double rw);
+RcppExport SEXP _hydrorecipes_dimensionless_S(SEXP KrSEXP, SEXP dsSEXP, SEXP KsSEXP, SEXP rwSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type Kr(KrSEXP);
+    Rcpp::traits::input_parameter< double >::type ds(dsSEXP);
+    Rcpp::traits::input_parameter< double >::type Ks(KsSEXP);
+    Rcpp::traits::input_parameter< double >::type rw(rwSEXP);
+    rcpp_result_gen = Rcpp::wrap(dimensionless_S(Kr, ds, Ks, rw));
+    return rcpp_result_gen;
+END_RCPP
+}
 // any_decimal
 double any_decimal(std::vector<double> x);
 RcppExport SEXP _hydrorecipes_any_decimal(SEXP xSEXP) {
@@ -1797,6 +1995,23 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type prec(precSEXP);
     Rcpp::traits::input_parameter< int >::type n_terms(n_termsSEXP);
     rcpp_result_gen = Rcpp::wrap(hantush_jacob_laplace(time, c, r, Tr, S, Q, prec, n_terms));
+    return rcpp_result_gen;
+END_RCPP
+}
+// theis_laplace
+Eigen::VectorXd theis_laplace(Eigen::VectorXd time, double r, double Tr, double S, double Q, double prec, int n_terms);
+RcppExport SEXP _hydrorecipes_theis_laplace(SEXP timeSEXP, SEXP rSEXP, SEXP TrSEXP, SEXP SSEXP, SEXP QSEXP, SEXP precSEXP, SEXP n_termsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< double >::type r(rSEXP);
+    Rcpp::traits::input_parameter< double >::type Tr(TrSEXP);
+    Rcpp::traits::input_parameter< double >::type S(SSEXP);
+    Rcpp::traits::input_parameter< double >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< double >::type prec(precSEXP);
+    Rcpp::traits::input_parameter< int >::type n_terms(n_termsSEXP);
+    rcpp_result_gen = Rcpp::wrap(theis_laplace(time, r, Tr, S, Q, prec, n_terms));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -2414,6 +2629,20 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_hantush_jacob", (DL_FUNC) &_hydrorecipes_hantush_jacob, 7},
     {"_hydrorecipes_ig", (DL_FUNC) &_hydrorecipes_ig, 2},
     {"_hydrorecipes_harmonic_list", (DL_FUNC) &_hydrorecipes_harmonic_list, 4},
+    {"_hydrorecipes_well_bore_storage", (DL_FUNC) &_hydrorecipes_well_bore_storage, 5},
+    {"_hydrorecipes_well_skin", (DL_FUNC) &_hydrorecipes_well_skin, 4},
+    {"_hydrorecipes_shape_factor", (DL_FUNC) &_hydrorecipes_shape_factor, 4},
+    {"_hydrorecipes_well_delay", (DL_FUNC) &_hydrorecipes_well_delay, 6},
+    {"_hydrorecipes_dimensionless_time", (DL_FUNC) &_hydrorecipes_dimensionless_time, 5},
+    {"_hydrorecipes_dimensionless_head", (DL_FUNC) &_hydrorecipes_dimensionless_head, 7},
+    {"_hydrorecipes_dimensionless_ratio", (DL_FUNC) &_hydrorecipes_dimensionless_ratio, 2},
+    {"_hydrorecipes_dimensionless_beta", (DL_FUNC) &_hydrorecipes_dimensionless_beta, 2},
+    {"_hydrorecipes_dimensionless_sigma", (DL_FUNC) &_hydrorecipes_dimensionless_sigma, 3},
+    {"_hydrorecipes_dimensionless_alpha", (DL_FUNC) &_hydrorecipes_dimensionless_alpha, 3},
+    {"_hydrorecipes_dimensionless_gamma", (DL_FUNC) &_hydrorecipes_dimensionless_gamma, 4},
+    {"_hydrorecipes_dimensionless_well_bore_storage", (DL_FUNC) &_hydrorecipes_dimensionless_well_bore_storage, 5},
+    {"_hydrorecipes_dimensionless_w_prime", (DL_FUNC) &_hydrorecipes_dimensionless_w_prime, 4},
+    {"_hydrorecipes_dimensionless_S", (DL_FUNC) &_hydrorecipes_dimensionless_S, 4},
     {"_hydrorecipes_any_decimal", (DL_FUNC) &_hydrorecipes_any_decimal, 1},
     {"_hydrorecipes_decimal_to_scaled_integer", (DL_FUNC) &_hydrorecipes_decimal_to_scaled_integer, 1},
     {"_hydrorecipes_gcd", (DL_FUNC) &_hydrorecipes_gcd, 1},
@@ -2448,6 +2677,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_papadopulos_cooper_laplace", (DL_FUNC) &_hydrorecipes_papadopulos_cooper_laplace, 9},
     {"_hydrorecipes_jacob_lohman_laplace", (DL_FUNC) &_hydrorecipes_jacob_lohman_laplace, 7},
     {"_hydrorecipes_hantush_jacob_laplace", (DL_FUNC) &_hydrorecipes_hantush_jacob_laplace, 8},
+    {"_hydrorecipes_theis_laplace", (DL_FUNC) &_hydrorecipes_theis_laplace, 7},
     {"_hydrorecipes_barker_herbert", (DL_FUNC) &_hydrorecipes_barker_herbert, 10},
     {"_hydrorecipes_parallel_fractures_solute", (DL_FUNC) &_hydrorecipes_parallel_fractures_solute, 18},
     {"_hydrorecipes_parallel_fractures_heat", (DL_FUNC) &_hydrorecipes_parallel_fractures_heat, 17},
