@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hydrorecipes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,15 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">cra_sol</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">distance_fracture</span>, y <span class="op">=</span> <span class="va">distance_matrix</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">transport_fractures_solute</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">time</span> <span class="op">~</span><span class="va">.</span><span class="op">)</span></span></code></pre></div>
-<p><img src="transport_files/figure-html/dualsolute-1.png" width="700"></p>
+<div class="figure">
+<img src="transport_files/figure-html/dualsolute-1.png" alt="Seven heatmaps of solute concentration for times ranging from 1 to 1 million seconds. The distance into the matrix is on the y axis and the distance along the fracture is along the x-axis. Inital concentrations are mostly zero and get larger with time progressing into the matrix and along the fracture." width="700"><p class="caption">
+Seven heatmaps of solute concentration for times ranging from 1 to 1
+million seconds. The distance into the matrix is on the y axis and the
+distance along the fracture is along the x-axis. Inital concentrations
+are mostly zero and get larger with time progressing into the matrix and
+along the fracture.
+</p>
+</div>
 </div>
 <div class="section level4">
 <h4 id="sudicky-and-frind-1982-dual-fractures-modified-for-heat">Sudicky and Frind 1982 dual fractures (modified for heat)<a class="anchor" aria-label="anchor" href="#sudicky-and-frind-1982-dual-fractures-modified-for-heat"></a>
@@ -107,7 +115,15 @@
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">cra_heat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">distance_fracture</span>, y <span class="op">=</span> <span class="va">distance_matrix</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">transport_fractures_heat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">time</span> <span class="op">~</span><span class="va">.</span><span class="op">)</span></span></code></pre></div>
-<p><img src="transport_files/figure-html/dualheat-1.png" width="700"></p>
+<div class="figure">
+<img src="transport_files/figure-html/dualheat-1.png" alt="Seven heatmaps of temperature for times ranging from 1 to 1 million seconds. The distance into the matrix is on the y axis and the distance along the fracture is along the x-axis. Inital temperature is 10 degrees and rises with time progressing further into the matrix and along the fracture." width="700"><p class="caption">
+Seven heatmaps of temperature for times ranging from 1 to 1 million
+seconds. The distance into the matrix is on the y axis and the distance
+along the fracture is along the x-axis. Inital temperature is 10 degrees
+and rises with time progressing further into the matrix and along the
+fracture.
+</p>
+</div>
 </div>
 <div class="section level4">
 <h4 id="ogata-and-banks-1962-1-d-transport-with-decay-and-retardation">Ogata and Banks 1962 1-D transport with decay and retardation<a class="anchor" aria-label="anchor" href="#ogata-and-banks-1962-1-d-transport-with-decay-and-retardation"></a>
@@ -131,7 +147,13 @@
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ob</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">distance</span>, y <span class="op">=</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">transport_ogata_banks</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="transport_files/figure-html/ogatabanks-1.png" width="700"></p>
+<div class="figure">
+<img src="transport_files/figure-html/ogatabanks-1.png" alt="Heatmaps of concentration as a function of distance from a constant source and time. Concentrations increase with increasing time and decreasing distance." width="700"><p class="caption">
+Heatmaps of concentration as a function of distance from a constant
+source and time. Concentrations increase with increasing time and
+decreasing distance.
+</p>
+</div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span></span>
@@ -151,7 +173,15 @@
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ob</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">distance</span>, y <span class="op">=</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">transport_ogata_banks</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="transport_files/figure-html/ogatabanks-2.png" width="700"></p>
+<div class="figure">
+<img src="transport_files/figure-html/ogatabanks-2.png" alt="Heatmaps of concentration as a function of distance from a constant source and time. Concentrations increase with increasing time and decreasing distance. This scenario has a retardation set to 5, and the solute does not travel as far as the previous figure where retardation was set to 1." width="700"><p class="caption">
+Heatmaps of concentration as a function of distance from a constant
+source and time. Concentrations increase with increasing time and
+decreasing distance. This scenario has a retardation set to 5, and the
+solute does not travel as far as the previous figure where retardation
+was set to 1.
+</p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
