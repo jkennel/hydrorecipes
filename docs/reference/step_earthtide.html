@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hydrorecipes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +23,7 @@
     <li><a class="dropdown-item" href="../articles/benchmarking.html">Benchmarking</a></li>
     <li><a class="dropdown-item" href="../articles/regression.html">Regression</a></li>
     <li><a class="dropdown-item" href="../articles/slug_test.html">Slug test steps</a></li>
-    <li><a class="dropdown-item" href="../articles/transport.html">transport</a></li>
+    <li><a class="dropdown-item" href="../articles/transport.html">Contaminant transport steps</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -64,6 +64,7 @@
 <span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n_thread <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>  astro_update <span class="op">=</span> <span class="fl">1L</span>,</span>
+<span>  interp_factor <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>  role <span class="op">=</span> <span class="st">"predictor"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -148,6 +149,11 @@ following columns: datetime, ddt, ut1_utc, lod, x, y, dx, dy</p></dd>
 <dt id="arg-astro-update">astro_update<a class="anchor" aria-label="anchor" href="#arg-astro-update"></a></dt>
 <dd><p>How often to update astro parameters in number of
 samples. This speeds up code but may make it slightly less accurate.</p></dd>
+
+
+<dt id="arg-interp-factor">interp_factor<a class="anchor" aria-label="anchor" href="#arg-interp-factor"></a></dt>
+<dd><p>calculate for every <code>interp_factor</code> samples. This
+may be faster while being more accurate than adjusting the cutoff.</p></dd>
 
 
 <dt id="arg-role">role<a class="anchor" aria-label="anchor" href="#arg-role"></a></dt>

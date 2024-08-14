@@ -9,15 +9,19 @@
 <url><loc>https://jkennel.github.io/hydrorecipes/articles/transport.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/authors.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/index.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/areal_rojstaczer_semiconfined.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/bake.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/bessel_k_cplx.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/bouwer.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/bouwer_1976_abc.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/bouwer_1976_water_level.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/brf_from_frf.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/convert_for_rojstaczer.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/convert_le_to_be.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/get_formula_vars.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/hsieh_1987_fig_2_3.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/index.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/kelvin.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/kennel_2020.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/liu_1989_fig_8.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/pad_num.html</loc></url>
@@ -40,6 +44,8 @@
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_theis_aniso.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_aquifer_wellbore_storage.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_baro_clark.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_baro_frequency_semi_confined.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_baro_frequency_unconfined.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_baro_harmonic.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_baro_least_squares.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_center.html</loc></url>
@@ -74,5 +80,8 @@
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_transport_ogata_banks.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_vadose_weeks.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_varying.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/tidal_cooper_1965.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/tidal_hsieh_1987.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/unwrap.html</loc></url>
 </urlset>
 

@@ -34,7 +34,7 @@ step_baro_frequency_semi_confined(
 complex response vector in frequency domain
 }
 \description{
-Rojstaczer 1988 solution
+Work in Progress: Do not use. Rojstaczer 1988 solution
 
 step_baro_frequency_semi_confined
 }
