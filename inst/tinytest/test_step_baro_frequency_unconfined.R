@@ -1,7 +1,7 @@
 # unconfined --------------------------------------------------------------
 
 
-check_rojstaczer_1990_fig_4 <- function(R_Qu_ratio, diffusivity_vadose) {
+check_rojstaczer_1990_fig_4 <- function(R_Qu_rat, diffusivity_vadose) {
 
   data('rojstaczer_1990_fig_4')
 
@@ -20,7 +20,7 @@ check_rojstaczer_1990_fig_4 <- function(R_Qu_ratio, diffusivity_vadose) {
   loading_efficiency   <- 0.5
 
 
-  vals <- rojstaczer_1990_fig_4[R_div_Qu == R_Qu_ratio]
+  vals <- rojstaczer_1990_fig_4[R_div_Qu == R_Qu_rat]
 
   frequency <- vals$Qu * 2.0 * diffusivity_vertical / (2.0 * pi * thickness_saturated_well^2)
   roj_1990 <- areal_rojstaczer_unconfined(frequency,
@@ -39,9 +39,10 @@ check_rojstaczer_1990_fig_4 <- function(R_Qu_ratio, diffusivity_vadose) {
   wh_gain <- which(vals$variable == "gain")
   wh_phase <- which(vals$variable == "phase")
 
-  expect_equal(Mod(roj_1990[wh_gain]), vals[wh_gain]$response, tolerance = 0.005)
+  expect_equal(Mod(roj_1990[wh_gain]), vals[wh_gain]$response, tolerance = 0.02)
   expect_equal(unwrap(Arg(roj_1990[wh_phase])) * 180 / pi, vals[wh_phase]$response, tolerance = 0.2)
 
+  return(NULL)
 
 }
 

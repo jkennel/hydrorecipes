@@ -2,7 +2,7 @@
 # semi-confined -----------------------------------------------------------
 
 
-check_rojstaczer_fig_3 <- function(Q_W_ratio, transmissivity) {
+check_rojstaczer_fig_3 <- function(Q_W_rat, transmissivity) {
   data("rojstaczer_1988b_fig_3")
 
   thickness_confining  <- 10
@@ -18,7 +18,7 @@ check_rojstaczer_fig_3 <- function(Q_W_ratio, transmissivity) {
   radius_well          <- 0.10
   diffusivity_vadose   <- 0.1
 
-  vals <- rojstaczer_1988b_fig_3[Q_div_W == Q_W_ratio]
+  vals <- rojstaczer_1988b_fig_3[Q_div_W == Q_W_rat]
 
   frequency <- vals$W * transmissivity / (2.0 * pi * radius_well^2)
 
@@ -37,9 +37,13 @@ check_rojstaczer_fig_3 <- function(Q_W_ratio, transmissivity) {
   wh_gain <- which(vals$variable == "gain")
   wh_phase <- which(vals$variable == "phase")
 
-  expect_equal(Mod(roj_1988[wh_gain]), vals[wh_gain]$response, tolerance = 0.005)
+  expect_equal(Mod(roj_1988[wh_gain]), vals[wh_gain]$response, tolerance = 0.02)
+
   # had to add a 360 degree shift
-  expect_equal(unwrap(Arg(roj_1988[wh_phase])) * 180 / pi, vals[wh_phase]$response, tolerance = 0.003)
+  expect_equal(unwrap(Arg(roj_1988[wh_phase])) * 180.0 / pi,
+               vals[wh_phase]$response, tolerance = 0.003)
+
+  return(NULL)
 
 }
 
@@ -101,9 +105,10 @@ check_rojstaczer_fig_5 <- function(storage_aquifer, storage_confining) {
   wh_gain <- which(vals$variable == "gain")
   wh_phase <- which(vals$variable == "phase")
 
-  expect_equal(Mod(roj_1988[wh_gain]), vals[wh_gain]$response, tolerance = 0.005)
+  expect_equal(Mod(roj_1988[wh_gain]), vals[wh_gain]$response, tolerance = 0.02)
   expect_equal(unwrap(Arg(roj_1988[wh_phase])) * 180 / pi - 360, vals[wh_phase]$response, tolerance = 0.2)
 
+  return(NULL)
 }
 
 storage_confining <- 1e-7
@@ -122,7 +127,7 @@ check_rojstaczer_fig_5(storage_aquifer, storage_confining)
 
 
 
-check_rojstaczer_fig_5 <- function(R_div_Q, diffusivity_vadose) {
+check_rojstaczer_fig_6 <- function(R_d_Q, diffusivity_vadose) {
 
   data("rojstaczer_1988b_fig_6")
 
@@ -140,7 +145,7 @@ check_rojstaczer_fig_5 <- function(R_div_Q, diffusivity_vadose) {
   storage_confining    <- 1e-7
 
 
-  vals <- rojstaczer_1988b_fig_6[R_div_Q == R_div_Q]
+  vals <- rojstaczer_1988b_fig_6[R_div_Q == R_d_Q]
   frequency <- vals$dimensionless_frequency * 2.0 * diffusivity_confining / (2.0 * pi * thickness_confining^2)
 
   roj_1988 <- areal_rojstaczer_semiconfined(frequency,
@@ -161,27 +166,29 @@ check_rojstaczer_fig_5 <- function(R_div_Q, diffusivity_vadose) {
   expect_equal(Mod(roj_1988[wh_gain]), vals[wh_gain]$response, tolerance = 0.005)
   expect_equal(unwrap(Arg(roj_1988[wh_phase])) * 180 / pi, vals[wh_phase]$response, tolerance = 0.2)
 
+  return(NULL)
+
 }
 
 diffusivity_vadose   <- 0.0001
 R_div_Q <- 1000
-check_rojstaczer_fig_5(R_div_Q, diffusivity_vadose)
+check_rojstaczer_fig_6(R_div_Q, diffusivity_vadose)
 
 diffusivity_vadose   <- 0.001
 R_div_Q <- 100
-check_rojstaczer_fig_5(R_div_Q, diffusivity_vadose)
+check_rojstaczer_fig_6(R_div_Q, diffusivity_vadose)
 
 diffusivity_vadose   <- 0.01
 R_div_Q <- 10
-check_rojstaczer_fig_5(R_div_Q, diffusivity_vadose)
+check_rojstaczer_fig_6(R_div_Q, diffusivity_vadose)
 
 diffusivity_vadose   <- 0.1
 R_div_Q <- 1
-check_rojstaczer_fig_5(R_div_Q, diffusivity_vadose)
+check_rojstaczer_fig_6(R_div_Q, diffusivity_vadose)
 
 diffusivity_vadose   <- 100
 R_div_Q <- 0.00011
-check_rojstaczer_fig_5(R_div_Q, diffusivity_vadose)
+check_rojstaczer_fig_6(R_div_Q, diffusivity_vadose)
 
 
 

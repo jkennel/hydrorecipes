@@ -83,8 +83,8 @@ double std_expint(double u) {
 
     if (u == 0){
       u = R_PosInf;
-    } else if (u > 708.0){
-      u = 708.0;
+    // } else if (u > 708.0){
+    //   u = 708.0;
     } else {
       u = -std::expint(-u);
     }
@@ -788,8 +788,8 @@ double hantush_well(double u, double b, double precision){
     // Rcpp::Rcout << "here: " << b_div_u << std::endl;
     en = std_expint(b_div_u);
 
-    for (unsigned int i = 0; i < n_terms; i++) {
-      to_add = en * (pow(-u, i) / std::tgamma(i+1));
+    for (unsigned int i = 0; i < n_terms; ++i) {
+      to_add = en * (pow(-u, i) / std::tgamma(i + 1));
       out += to_add;
       if (std::fabs(to_add) < precision){
         break;
@@ -804,17 +804,17 @@ double hantush_well(double u, double b, double precision){
 
     en = std_expint(u);
 
-    for (unsigned int i = 0; i < n_terms; i++) {
+    for (unsigned int i = 0; i < n_terms; ++i) {
       to_add = en * (pow(-b_div_u, i) / std::tgamma(i + 1)); // tgamma(i+1) = factorial(i)
       out += to_add;
       if (std::fabs(to_add) < precision){
         break;
       }
       en = (1.0 / ((double)i + 1.0)) * (exp(-u) - u * en);
-
     }
 
   }
+  // Rcpp::Rcout << "out: " << out << std::endl;
 
   if (out < 0.0) {
     out = 0.0;
