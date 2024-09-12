@@ -360,15 +360,29 @@ Recipe <- R6Class(
     # @description
     # Get the data from a step by name
     # @return data from a specific step
-    get_step_data = function(field_name) {
+    get_step_data = function(field_name, type = "raw") {
 
-      data <- lapply(self$steps, function(x) {
-        step_data <- x[[field_name]]
-        step_data
-      })
+      data <- list()
+      for (i in seq_along(self$steps)) {
+        tmp <- self$steps[[i]][[field_name]]
+        if (!is.null(tmp)) {
+          data[i] <- tmp
+          names(data[i]) <- self$steps[[i]][["id"]]
+        }
+      }
 
-      names(data) <- sapply(self$steps, "[[", "id")
-      data[!sapply(data, is.null)]
+      # names(data) <- sapply(self$steps, "[[", "id")
+      data <- data[!sapply(data, is.null)]
+
+      if (type == "raw") {
+        return(data)
+      }
+
+      if (type == "df") {
+
+        return(collapse::rowbind(lapply(data, collapse::qDF)))
+
+      }
 
     }
 

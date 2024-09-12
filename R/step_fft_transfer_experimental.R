@@ -17,7 +17,11 @@ StepTransferExperimental <- R6Class(
     n_groups = NA_integer_,
     time_step = NA_real_,
 
-    fft_result = NA,
+    formula = NULL,
+    outcomes = NULL,
+    predictors = NULL,
+
+    fft_result = list(),
 
     initialize = function(terms,
                           spans = 3,
@@ -27,19 +31,20 @@ StepTransferExperimental <- R6Class(
                           # power = 3,
                           n_groups = 100,
                           time_step = 1.0,
+                          formula = NULL,
                           role = "augment",
                           ...) {
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
       env_list$step_name <- "step_fft_transfer_experimental"
-      env_list$type <- "add"
+      env_list$type <- "supervise_augment"
       super$initialize(
         terms = terms,
         env_list[names(env_list) != "terms"],
         ...
       )
-
+      self$formula <- formula
       self$spans <- spans
       self$detrend <- detrend
       self$demean <- demean
@@ -51,30 +56,51 @@ StepTransferExperimental <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
-      self$fft_result <- collapse::mctl(
-        transfer_pgram_smooth(
-          collapse::qM(new_data),
-          self$spans,
-          self$detrend,
-          self$demean,
-          self$taper,
-          # self$power,
-          self$n_groups
-        )
-      )
-      self$new_columns <- name_columns(self$prefix, NULL, n = length(self$fft_result))
-      names(self$fft_result) <- self$new_columns
+    bake = function(new_data, term_info, steps) {
 
       n  <- length(new_data[[1]])
       df <- 1.0 / n
       frequency <- seq.int(from = 0, by = df, length.out = n) * 86400 / self$time_step
-      # print(head(frequency))
-      # print((frequency))
-      # print(hydrorecipes:::group_frequency(frequency, 200))
-
       frequency <- list(frequency = group_frequency(frequency, self$n_groups))
-      self$fft_result <- append(self$fft_result, frequency)
+      n_freq <- length(frequency[[1]])
+
+      vars_list <- names(new_data)
+
+      if (!is.null(self$formula)) {
+        vars_list <- get_formula_vars(formula = self$formula,
+                                      data = unclass(new_data))
+
+      } else {
+        vars_list <- list(predictors = self$columns[-1],
+                          outcomes = self$columns[1])
+      }
+
+      for(i in seq_along(vars_list$outcomes)) {
+        tmp_data <- unclass(new_data)[c(vars_list$outcomes[i],
+                                        vars_list$predictors)]
+
+        res <- collapse::mctl(
+          transfer_pgram_smooth(
+            collapse::qM(tmp_data),
+            self$spans,
+            self$detrend,
+            self$demean,
+            self$taper,
+            # self$power,
+            self$n_groups
+          )
+        )
+
+        self$new_columns <- name_columns(self$prefix, NULL, n = length(res))
+        names(res) <- self$new_columns
+        res <- append(res, frequency)
+
+        res <- append(res, list(variable = rep(vars_list$outcomes[i], n_freq)))
+        res <- append(res, list(id = rep(self$id, n_freq)))
+
+        self$fft_result[[i]] <- res
+
+      }
 
       return(NULL)
     }

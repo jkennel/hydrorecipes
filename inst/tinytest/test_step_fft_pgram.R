@@ -45,9 +45,10 @@ expect_equivalent(gain, rep(0.2, n_groups),
 
 
 # data(kennel_2020)
-# formula <- as.formula(.~baro+wl+et)
+# formula <- as.formula(datetime~baro+wl+et)
 #
 # frec2 = recipe(formula = formula, data = kennel_2020) |>
+#   step_fft_transfer_experimental(c(wl, baro, et), n_groups = 500, spans = c(3, 3), time_step = 60) |>
 #   step_fft_transfer_experimental(c(wl, baro, et), n_groups = 500, spans = c(3, 3), time_step = 60) |>
 #   prep("df") |>
 #   bake()

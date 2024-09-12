@@ -1235,6 +1235,7 @@ step_fft_transfer_pgram <- function(.rec,
                                     demean = TRUE,
                                     taper = 0.1,
                                     time_step = 1.0,
+                                    formula = NULL,
                                     role = "augment",
                                     ...) {
   terms <- substitute(terms)
