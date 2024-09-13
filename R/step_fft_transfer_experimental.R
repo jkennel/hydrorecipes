@@ -79,6 +79,9 @@ StepTransferExperimental <- R6Class(
         tmp_data <- unclass(new_data)[c(vars_list$outcomes[i],
                                         vars_list$predictors)]
 
+        print(c(vars_list$outcomes[i],
+                vars_list$predictors))
+        print(str(tmp_data))
         res <- collapse::mctl(
           transfer_pgram_smooth(
             collapse::qM(tmp_data),
