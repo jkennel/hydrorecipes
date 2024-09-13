@@ -79,26 +79,27 @@ StepTransferExperimental <- R6Class(
         tmp_data <- unclass(new_data)[c(vars_list$outcomes[i],
                                         vars_list$predictors)]
 
-        res <- collapse::mctl(
-          transfer_pgram_smooth(
-            collapse::qM(tmp_data),
-            self$spans,
-            self$detrend,
-            self$demean,
-            self$taper,
-            # self$power,
-            self$n_groups
-          )
-        )
-
-        self$new_columns <- name_columns(self$prefix, NULL, n = length(res))
-        names(res) <- self$new_columns
-        res <- append(res, frequency)
-
-        res <- append(res, list(variable = rep(vars_list$outcomes[i], n_freq)))
-        res <- append(res, list(id = rep(self$id, n_freq)))
-
-        self$fft_result[[i]] <- res
+        print(str(tmp_data))
+        # res <- collapse::mctl(
+        #   transfer_pgram_smooth(
+        #     collapse::qM(tmp_data),
+        #     self$spans,
+        #     self$detrend,
+        #     self$demean,
+        #     self$taper,
+        #     # self$power,
+        #     self$n_groups
+        #   )
+        # )
+        #
+        # self$new_columns <- name_columns(self$prefix, NULL, n = length(res))
+        # names(res) <- self$new_columns
+        # res <- append(res, frequency)
+        #
+        # res <- append(res, list(variable = rep(vars_list$outcomes[i], n_freq)))
+        # res <- append(res, list(id = rep(self$id, n_freq)))
+        #
+        # self$fft_result[[i]] <- res
 
       }
 
