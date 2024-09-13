@@ -366,8 +366,8 @@ Recipe <- R6Class(
       for (i in seq_along(self$steps)) {
         tmp <- self$steps[[i]][[field_name]]
         if (!is.null(tmp)) {
-          data[i] <- tmp
-          names(data[i]) <- self$steps[[i]][["id"]]
+          data[[i]] <- tmp
+          # names(data[i]) <- self$steps[[i]][["id"]]
         }
       }
 
@@ -379,8 +379,7 @@ Recipe <- R6Class(
       }
 
       if (type == "df") {
-
-        return(collapse::rowbind(lapply(data, collapse::qDF)))
+        return(collapse::rowbind(lapply(data[[1]], function(x) collapse::qDF(x))))
 
       }
 
