@@ -105,6 +105,9 @@ get_regression_data <- function(new_data,
 
 }
 
+
+
+
 # y = outcomes
 # x = predictors
 determine_coefficients <- function(x, y) {

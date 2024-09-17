@@ -64,24 +64,29 @@ StepTransferExperimental <- R6Class(
       frequency <- list(frequency = group_frequency(frequency, self$n_groups))
       n_freq <- length(frequency[[1]])
 
-      vars_list <- names(new_data)
+      # vars_list <- names(new_data)
+      #
+      # if (!is.null(self$formula)) {
+      #   vars_list <- get_formula_vars(formula = self$formula,
+      #                                 data = unclass(new_data))
+      #
+      # } else {
+      #   vars_list <- list(predictors = self$columns[-1],
+      #                     outcomes = self$columns[1])
+      # }
 
-      if (!is.null(self$formula)) {
-        vars_list <- get_formula_vars(formula = self$formula,
-                                      data = unclass(new_data))
-
-      } else {
-        vars_list <- list(predictors = self$columns[-1],
-                          outcomes = self$columns[1])
-      }
+      vars_list <- select_fft_vars_list(new_data, self$formula, self$columns)
 
       for(i in seq_along(vars_list$outcomes)) {
+
+
         tmp_data <- unclass(new_data)[c(vars_list$outcomes[i],
                                         vars_list$predictors)]
 
-        print(c(vars_list$outcomes[i],
-                vars_list$predictors))
-        print(str(tmp_data))
+        # print(c(vars_list$outcomes[i],
+        #         vars_list$predictors))
+        # print(str(tmp_data))
+
         res <- collapse::mctl(
           transfer_pgram_smooth(
             collapse::qM(tmp_data),
@@ -109,3 +114,5 @@ StepTransferExperimental <- R6Class(
     }
   )
 )
+
+

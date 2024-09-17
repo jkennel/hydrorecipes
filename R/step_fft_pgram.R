@@ -16,7 +16,8 @@ StepPgram <- R6Class(
     lst = NA,
     pad_fft = NA,
     time_step = NA,
-    fft_result = NA,
+
+    fft_result = list(),
 
     initialize = function(terms,
                           spans = 3,
@@ -25,8 +26,8 @@ StepPgram <- R6Class(
                           lst = TRUE,
                           taper = 0.1,
                           pad_fft = TRUE,
-                          role = "augment",
                           time_step = 1,
+                          role = "augment",
                           ...) {
 
       # get function parameters to pass to parent

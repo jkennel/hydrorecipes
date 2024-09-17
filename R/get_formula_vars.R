@@ -130,6 +130,22 @@ get_formula_vars <- function(formula, data) {
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+select_fft_vars_list <- function(new_data, formula, columns) {
+
+  vars_list <- names(new_data)
+
+  if (!is.null(formula)) {
+    vars_list <- get_formula_vars(formula = formula,
+                                  data = unclass(new_data))
+
+  } else {
+    vars_list <- list(predictors = self$columns[-1],
+                      outcomes = self$columns[1])
+  }
+
+  return(vars_list)
+}
+
 
 # formula <- as.formula(x~.)
 # data <- data.frame(x = 1, y = 3, z = 4, a = 1, b = 3)

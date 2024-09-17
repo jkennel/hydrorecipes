@@ -374,13 +374,15 @@ Recipe <- R6Class(
       # names(data) <- sapply(self$steps, "[[", "id")
       data <- data[!sapply(data, is.null)]
 
+      print(str(data))
       if (type == "raw") {
         return(data)
       }
-
       if (type == "df") {
-        return(collapse::rowbind(lapply(data[[1]], function(x) collapse::qDF(x))))
-
+        return(collapse::rowbind(lapply(data, function(z) {collapse::rowbind(lapply(z, function(x) collapse::qDF(x)))}), use.names = FALSE))
+      }
+      if (type == "dt") {
+        return(collapse::rowbind(lapply(data, function(z) {collapse::rowbind(lapply(z, function(x) collapse::qDT(x)))}), use.names = FALSE))
       }
 
     }
