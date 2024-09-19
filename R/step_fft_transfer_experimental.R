@@ -64,16 +64,6 @@ StepTransferExperimental <- R6Class(
       frequency <- list(frequency = group_frequency(frequency, self$n_groups))
       n_freq <- length(frequency[[1]])
 
-      # vars_list <- names(new_data)
-      #
-      # if (!is.null(self$formula)) {
-      #   vars_list <- get_formula_vars(formula = self$formula,
-      #                                 data = unclass(new_data))
-      #
-      # } else {
-      #   vars_list <- list(predictors = self$columns[-1],
-      #                     outcomes = self$columns[1])
-      # }
 
       vars_list <- select_fft_vars_list(new_data, self$formula, self$columns)
 
@@ -82,10 +72,6 @@ StepTransferExperimental <- R6Class(
 
         tmp_data <- unclass(new_data)[c(vars_list$outcomes[i],
                                         vars_list$predictors)]
-
-        # print(c(vars_list$outcomes[i],
-        #         vars_list$predictors))
-        # print(str(tmp_data))
 
         res <- collapse::mctl(
           transfer_pgram_smooth(
@@ -99,11 +85,11 @@ StepTransferExperimental <- R6Class(
           )
         )
 
-        self$new_columns <- name_columns(self$prefix, NULL, n = length(res))
+        self$new_columns <- name_columns(paste(names(tmp_data), collapse = "_"), NULL, n = length(res))
         names(res) <- self$new_columns
         res <- append(res, frequency)
 
-        res <- append(res, list(variable = rep(vars_list$outcomes[i], n_freq)))
+        # res <- append(res, list(variable = rep(vars_list$outcomes[i], n_freq)))
         res <- append(res, list(id = rep(self$id, n_freq)))
 
         self$fft_result[[i]] <- res

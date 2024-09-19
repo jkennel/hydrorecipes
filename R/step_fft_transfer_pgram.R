@@ -77,15 +77,13 @@ StepTransferPgram <- R6Class(
         frequency <- list(frequency = seq.int(from = 0, by = df,
                                               length.out = n) * 86400 / self$time_step)
 
-        self$new_columns <- name_columns(self$prefix, NULL, n = length(res))
+        self$new_columns <- name_columns(paste(names(tmp_data), collapse = "_"), NULL, n = length(res))
         names(res) <- self$new_columns
         res <- append(res, frequency)
 
-        res <- append(res, list(variable = rep(vars_list$outcomes[i], n)))
+        # res <- append(res, list(variable = rep(vars_list$outcomes[i], n)))
         res <- append(res, list(id = rep(self$id, n)))
 
-
-        # res <- append(self$fft_result, frequency)
         self$fft_result[[i]] <- res
 
       }

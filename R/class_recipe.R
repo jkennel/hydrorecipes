@@ -101,8 +101,7 @@ Recipe <- R6Class(
       # currently this is run twice for the first step
       self$tr_info <- self$train_info()
 
-      # print(self$term_info)
-
+      self$time_prep <- c()
       for (i in seq_along(self$steps)) {
         start_time <- Sys.time()
 
@@ -132,7 +131,6 @@ Recipe <- R6Class(
       baked <- self$is_baked()
 
       types_loop <- seq_along(types)
-
 
       if (is.null(data)) {
         # remove any previously baked
@@ -358,6 +356,46 @@ Recipe <- R6Class(
 
     },
     # @description
+    # Get the transfer function for steps
+    # @return data from a specific step
+    get_transfer_data = function(type = "raw") {
+
+      data <- list()
+      for (i in seq_along(self$steps)) {
+        tmp <- self$steps[[i]][["fft_result"]]
+
+        if (!is.null(tmp)) {
+          data[[i]] <- tmp
+        }
+
+      }
+
+      data <- data[!sapply(data, is.null)]
+
+      if (type == "raw") {
+        return(data)
+      }
+
+      if (type %in% c("df", "dt")) {
+        return(collapse::rowbind(
+          lapply(data, function(z) {
+            collapse::rowbind(lapply(z, function(x) {
+              d <- collapse::pivot(collapse::qDT(x), ids = c("frequency", "id"))
+              }))
+          }), use.names = FALSE))
+      }
+
+      # if (type == "dt") {
+      #   return(collapse::rowbind(
+      #     lapply(data, function(z) {
+      #       collapse::rowbind(lapply(z, function(x) {
+      #         data.table::melt(collapse::qDT(x), id.vars = c("frequency", "variable", "id"))
+      #       }))
+      #     }), use.names = FALSE))
+      # }
+
+    },
+    # @description
     # Get the data from a step by name
     # @return data from a specific step
     get_step_data = function(field_name, type = "raw") {
@@ -374,7 +412,6 @@ Recipe <- R6Class(
       # names(data) <- sapply(self$steps, "[[", "id")
       data <- data[!sapply(data, is.null)]
 
-      print(str(data))
       if (type == "raw") {
         return(data)
       }
@@ -385,6 +422,15 @@ Recipe <- R6Class(
         return(collapse::rowbind(lapply(data, function(z) {collapse::rowbind(lapply(z, function(x) collapse::qDT(x)))}), use.names = FALSE))
       }
 
+    },
+
+    # @description
+    # Get the time required for prep and bake
+    # @return table of elapsed times
+    get_elapsed_times = function() {
+      data.frame(step_id = sapply(self$steps, "[[", "id"),
+                 time_prep = self$time_prep,
+                 time_bake = self$time_bake)
     }
 
   )

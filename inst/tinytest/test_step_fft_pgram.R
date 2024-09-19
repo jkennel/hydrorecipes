@@ -43,19 +43,32 @@ expect_equivalent(gain, rep(0.2, n_groups),
 
 
 
+# step_fft_welch(c(x,y), length_subset = 10, window = hydrorecipes:::window_rectangle(10)) |>
 
-# data(kennel_2020)
-# formula <- as.formula(datetime~baro+wl+et)
-# formula_1 <- as.formula(wl+et~baro)
-#
-# frec2 = recipe(formula = formula, data = kennel_2020) |>
-#   step_fft_transfer_pgram(formula = formula_1, spans = c(3, 3), time_step = 60) |>
-#   step_fft_transfer_experimental(formula = formula_1, n_groups = 502, spans = c(3, 3), time_step = 60) |>
-#   prep("df") |>
-#   bake()
-#
-# #
-# a <- frec2$get_step_data(field_name = "fft_result", type = "df")
+data(kennel_2020)
+formula <- as.formula(datetime~baro+wl+et)
+formula_1 <- as.formula(wl~baro + et)
+
+frec2 = recipe(formula = formula, data = kennel_2020) |>
+  step_fft_transfer_welch(formula = formula_1, length_subset = 1000,
+                          window = hydrorecipes:::window_rectangle(1000),
+                          time_step = 60) |>
+  step_fft_transfer_pgram(formula = formula_1, spans = c(3, 3), time_step = 60) |>
+  step_fft_transfer_experimental(formula = formula_1, n_groups = 100, spans = c(3, 3), time_step = 60) |>
+  prep("df") |>
+  bake()
+
+a <- frec2$get_transfer_data(type = "df")
+
+library(ggplot2)
+ggplot(a, aes(x = frequency, y = Mod(value), color = id, group = id)) +
+  geom_line(alpha = 0.5) +
+  # geom_point() +
+  facet_wrap(variable~., ncol = 1) +
+  scale_x_log10() +
+  scale_y_continuous(limits = c(0, 1))
+
+
 # plot(Mod(fft_transfer_experimental_1)~frequency, a, type = "l", log = "x", ylim = c(0, 1))
 # abline(v = 2)
 # abline(v = 1)

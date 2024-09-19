@@ -22,6 +22,8 @@
 #' @importFrom collapse vlengths fnunique
 #' @importFrom collapse missing_cases varying rowbind
 #' @importFrom collapse qDF qM qF qTBL mctl %!in%
+#' @importFrom collapse pivot
+#'
 #' @importFrom earthtide calc_earthtide
 #' @importFrom R6 R6Class
 #' @importFrom Bessel BesselK BesselJ BesselI
@@ -1276,6 +1278,7 @@ step_fft_transfer_experimental <- function(.rec,
                                            # power = 3,
                                            n_groups = 200,
                                            time_step = 1.0,
+                                           formula = NULL,
                                            role = "augment",
                                            ...) {
   terms <- substitute(terms)
@@ -1313,6 +1316,7 @@ step_fft_transfer_welch <- function(.rec,
                                     overlap = 0.8,
                                     window,
                                     time_step = 1.0,
+                                    formula = NULL,
                                     role = "augment",
                                     ...) {
   terms <- substitute(terms)
