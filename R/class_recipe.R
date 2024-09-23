@@ -383,7 +383,7 @@ Recipe <- R6Class(
             collapse::rowbind(lapply(z, function(x) {
               d <- collapse::pivot(data = collapse::qDT(x),
                                    ids = c("frequency", "id"),
-                                   factor = FALSE,
+                                   factor = "names",
                                    how = "longer")
             }))
           }), use.names = FALSE))
