@@ -58,7 +58,7 @@ frec2 = recipe(formula = formula, data = kennel_2020) |>
   prep("df") |>
   bake()
 
-a <- frec2$get_transfer_data(type = "df")
+a <- frec2$get_transfer_data(type = "dt")
 
 library(ggplot2)
 ggplot(a, aes(x = frequency, y = Mod(value), color = id, group = id)) +

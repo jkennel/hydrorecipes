@@ -377,12 +377,17 @@ Recipe <- R6Class(
       }
 
       if (type %in% c("df", "dt")) {
+
         return(collapse::rowbind(
           lapply(data, function(z) {
             collapse::rowbind(lapply(z, function(x) {
-              d <- collapse::pivot(collapse::qDT(x), ids = c("frequency", "id"))
-              }))
+              d <- collapse::pivot(data = collapse::qDT(x),
+                                   ids = c("frequency", "id"),
+                                   factor = FALSE,
+                                   how = "longer")
+            }))
           }), use.names = FALSE))
+
       }
 
       # if (type == "dt") {
@@ -416,10 +421,10 @@ Recipe <- R6Class(
         return(data)
       }
       if (type == "df") {
-        return(collapse::rowbind(lapply(data, function(z) {collapse::rowbind(lapply(z, function(x) collapse::qDF(x)))}), use.names = FALSE))
+        return(collapse::rowbind(lapply(data, function(z) {collapse::rowbind(lapply(z, function(x) collapse::qDT(x)), return = "data.frame")}), use.names = FALSE, return = "data.frame"))
       }
       if (type == "dt") {
-        return(collapse::rowbind(lapply(data, function(z) {collapse::rowbind(lapply(z, function(x) collapse::qDT(x)))}), use.names = FALSE))
+        return(collapse::rowbind(lapply(data, function(z) {collapse::rowbind(lapply(z, function(x) collapse::qDT(x)))}), use.names = FALSE, return = "data.table"))
       }
 
     },
