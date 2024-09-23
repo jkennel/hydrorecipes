@@ -384,6 +384,7 @@ Recipe <- R6Class(
               d <- collapse::pivot(data = collapse::qDT(x),
                                    ids = c("frequency", "id"),
                                    factor = "names",
+                                   check.dups = FALSE,
                                    how = "longer")
             }))
           }), use.names = FALSE))
