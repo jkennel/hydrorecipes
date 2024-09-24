@@ -60,6 +60,8 @@ frec2 = recipe(formula = formula, data = kennel_2020) |>
 
 a <- frec2$get_transfer_data(type = "dt")
 
+
+
 library(ggplot2)
 ggplot(a, aes(x = frequency, y = Mod(value), color = id, group = id)) +
   geom_line(alpha = 0.5) +

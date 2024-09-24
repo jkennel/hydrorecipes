@@ -875,7 +875,7 @@ Eigen::VectorXd group_frequency(Eigen::ArrayXd frequencies,
   for(size_t i = 0; i < n_groups; ++i) {
     group_size = g(i);
 
-    fs(i) = (frequencies.segment(s, group_size).array().mean());
+    fs(i) = std::exp(frequencies.segment(s, group_size).array().log().mean());
     s += group_size;
 
   }
