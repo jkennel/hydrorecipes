@@ -81,7 +81,7 @@ resp_l <- lag_standard$get_response_data()
 
 Distributed lag method
 
-```{r distlag}
+```{r distlag, fig.alt = "Barometric response functions with standard leading and lagging method compared to the distributed lag method.  Both methods are generally the same but the distributed lag method is smoother."}
 lag_standard <- recipe(wl~., kennel_2020) |>
   step_distributed_lag(baro, knots = log_lags_arma(15, 1440)) |> 
   step_spline_b(datetime, df = 11, intercept = TRUE) |> 
@@ -134,60 +134,47 @@ Three methods:
   - many higher frequecies discarded
   - should be very fast
 
-```{r tf}
+```{r tf, fig.alt = "Transfer functions."}
 
-form <- as.formula("wl~.")
+data(kennel_2020)
+formula <- as.formula(datetime~baro+wl+et)
+formula_1 <- as.formula(wl~baro + et)
 
-pgram <- recipe(form, kennel_2020) |>
-  step_fft_transfer_pgram(c(wl, baro, et), spans = c(3, 5, 7), taper = 0.4,
-                          time_step = 60) |>
-  prep() |>
-  bake()
-
-pg <- as.data.frame(pgram$get_step_data("fft_result")[[1]])
-
-
-
-welch <- recipe(form, kennel_2020) |>
-  step_fft_transfer_welch(c(wl, baro, et),
+pg = recipe(formula = formula, data = kennel_2020) |>
+  step_fft_transfer_welch(formula = formula_1, 
                           length_subset = 40000,
-                          overlap = 0.97,
-                          window = window_nuttall(40000), 
+                          window = hydrorecipes:::window_rectangle(40000),
                           time_step = 60) |>
-  prep() |>
+  step_fft_transfer_pgram(formula = formula_1, 
+                          spans = c(3, 3), 
+                          time_step = 60) |>
+  step_fft_transfer_experimental(formula = formula_1, 
+                                 n_groups = 600,
+                                 spans = c(3, 3), 
+                                 time_step = 60) |>
+  prep("df") |>
   bake()
 
-we <- as.data.frame(welch$get_step_data("fft_result")[[1]])
+pg$get_elapsed_times()
+tf <- pg$get_transfer_data(type = "dt")
 
-form <- as.formula("wl~.")
-
-pgram_experimental <- recipe(form, kennel_2020) |>
-  step_fft_transfer_experimental(c(wl, baro, et), 
-                                 spans = c(3, 5, 7), 
-                                 taper = 0.45,
-                                 # power = 3,
-                                 n_groups = 201,
-                          time_step = 60) |>
-  prep() |>
-  bake()
-
-experimental <- as.data.frame(pgram_experimental$get_step_data("fft_result")[[1]])
-
-
-plot(Mod(fft_transfer_pgram_1)~frequency, pg, type = "l", log = "x", xlim = c(0.01, 100),
+plot(Mod(value)~frequency, 
+     data = tf[grepl("fft_transfer_experimental", id) & variable == "wl_baro_et_1"], 
+     type = "l", 
+     log = "x", 
+     xlim = c(0.01, 200),
+     ylim = c(0, 1),
      col = "#00900080")
-points(Mod(transfer_welch_1)~frequency, we, type = "l",
-       col = "#90000080")
-points(Mod(fft_transfer_experimental_1)~frequency, experimental, type = "l", 
-       col = "#00009080")
+points(Mod(value)~frequency, 
+       data = tf[grepl("fft_transfer_welch", id) & variable == "wl_baro_et_1"], 
+       type = "l",
+       col = "#90000050")
+points(Mod(value)~frequency, 
+       tf[grepl("fft_transfer_pgram", id) & variable == "wl_baro_et_1"],
+       type = "l", 
+       col = "#00009050")
 
-hydrorecipes:::group_frequency(we$frequency, 201)
 
-plot(Mod(fft_transfer_experimental_1)~frequency, experimental, type = "l", 
-       col = "#00009080", log = 'x')
-
-plot(Arg(fft_transfer_experimental_1)~frequency, experimental, type = "l", 
-       col = "#00009080", log = 'x')
 
 ```
 

@@ -58,8 +58,8 @@ StepTransferExperimental <- R6Class(
     },
     bake = function(new_data, term_info, steps) {
 
-      # n  <- hydrorecipes:::next_n_eigen(length(new_data[[1]]))
-      n  <- length(new_data[[1]])
+      n  <- hydrorecipes:::next_n_eigen(length(new_data[[1]]))
+      # n  <- length(new_data[[1]])
 
       df <- 1.0 / n
       frequency <- seq.int(from = 0.0, by = df, length.out = floor(n / 2L) + 1L) * 86400.0 / self$time_step

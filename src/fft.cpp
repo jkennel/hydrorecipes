@@ -1787,7 +1787,7 @@ Eigen::MatrixXcd transfer_pgram_smooth(Eigen::MatrixXd& x,
   //   min_aggregate = 3;
   // }
 
-  Eigen::MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper, false);
+  Eigen::MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper);
   Eigen::MatrixXcd out   = solve_cplx_irr(pgram, n_groups);
 
   return(out);
@@ -1803,7 +1803,7 @@ Eigen::MatrixXcd transfer_pgram(Eigen::MatrixXd& x,
                                 bool demean,
                                 double taper) {
 
-  Eigen::MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper, false);
+  Eigen::MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper);
   Eigen::MatrixXcd out   = solve_cplx_parallel(pgram);
   return(out);
 }
