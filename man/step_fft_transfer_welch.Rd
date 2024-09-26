@@ -11,6 +11,7 @@ step_fft_transfer_welch(
   overlap = 0.8,
   window,
   time_step = 1,
+  formula = NULL,
   role = "augment",
   ...
 )

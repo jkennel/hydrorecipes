@@ -13,6 +13,7 @@ step_fft_transfer_experimental(
   taper = 0.1,
   n_groups = 200,
   time_step = 1,
+  formula = NULL,
   role = "augment",
   ...
 )

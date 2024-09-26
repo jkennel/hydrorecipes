@@ -12,6 +12,7 @@ step_fft_transfer_pgram(
   demean = TRUE,
   taper = 0.1,
   time_step = 1,
+  formula = NULL,
   role = "augment",
   ...
 )
