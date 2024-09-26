@@ -139,8 +139,8 @@ select_fft_vars_list <- function(new_data, formula, columns) {
                                   data = unclass(new_data))
 
   } else {
-    vars_list <- list(predictors = self$columns[-1],
-                      outcomes = self$columns[1])
+    vars_list <- list(predictors = columns[-1],
+                      outcomes = columns[1])
   }
 
   return(vars_list)

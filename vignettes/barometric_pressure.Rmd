@@ -176,6 +176,23 @@ points(Mod(value)~frequency,
 
 
 
+
+plot(Mod(value)~frequency, 
+     data = tf[grepl("fft_transfer_experimental", id) & variable == "wl_baro_et_1"], 
+     type = "l", 
+     log = "x", 
+     xlim = c(0.01, 200),
+     ylim = c(0, 1),
+     col = "#00900080")
+
+plot(Arg(value)~frequency, 
+     data = tf[grepl("fft_transfer_experimental", id) & variable == "wl_baro_et_1"], 
+     type = "l", 
+     log = "x", 
+     xlim = c(0.01, 200),
+     ylim = c(0, 1),
+     col = "#00900080")
+
 ```
 
 

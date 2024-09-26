@@ -44,6 +44,7 @@ StepTransferExperimental <- R6Class(
         env_list[names(env_list) != "terms"],
         ...
       )
+
       self$formula <- formula
       self$spans <- spans
       self$detrend <- detrend
@@ -69,6 +70,7 @@ StepTransferExperimental <- R6Class(
 
 
       vars_list <- select_fft_vars_list(new_data, self$formula, self$columns)
+
 
       for(i in seq_along(vars_list$outcomes)) {
 
