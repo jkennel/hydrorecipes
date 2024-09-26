@@ -1277,8 +1277,7 @@ Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
   for (size_t j = 1; j < n_ols; ++j) {
     ind_sum(j) = ind_sum(j - 1) + groups(j - 1);
   }
-  Rcpp::Rcout << "ind_sum: " << ind_sum << std::endl;
-  Rcpp::Rcout << "groups: " << groups << std::endl;
+
 
 
   MatrixXcd out(n_ols, sub_size);
@@ -1785,8 +1784,8 @@ Eigen::MatrixXcd transfer_pgram_smooth(Eigen::MatrixXd& x,
   //   min_aggregate = 3;
   // }
 
-  MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper);
-  MatrixXcd out   = solve_cplx_irr(pgram, n_groups);
+  Eigen::MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper, false);
+  Eigen::MatrixXcd out   = solve_cplx_irr(pgram, n_groups);
 
   return(out);
 }
@@ -1801,7 +1800,7 @@ Eigen::MatrixXcd transfer_pgram(Eigen::MatrixXd& x,
                                 bool demean,
                                 double taper) {
 
-  Eigen::MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper);
+  Eigen::MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper, false);
   Eigen::MatrixXcd out   = solve_cplx_parallel(pgram);
   return(out);
 }
