@@ -732,6 +732,7 @@ Eigen::VectorXi make_groups(size_t n_groups, size_t n) {
     lg(i) = int(lags(i));
   }
 
+
   return(lg);
 }
 
@@ -880,6 +881,7 @@ Eigen::VectorXd group_frequency(Eigen::ArrayXd frequencies,
     s += group_size;
 
   }
+
 
   return(fs);
 

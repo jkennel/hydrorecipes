@@ -54,7 +54,7 @@ frec2 = recipe(formula = formula, data = kennel_2020) |>
                           window = hydrorecipes:::window_rectangle(1000),
                           time_step = 60) |>
   step_fft_transfer_pgram(formula = formula_1, spans = c(3, 3), time_step = 60) |>
-  step_fft_transfer_experimental(formula = formula_1, n_groups = 100, spans = c(3, 3), time_step = 60) |>
+  step_fft_transfer_experimental(formula = formula_1, n_groups = 500, spans = c(3, 3), time_step = 60) |>
   prep("df") |>
   bake()
 
