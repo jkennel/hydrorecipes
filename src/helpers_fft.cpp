@@ -685,6 +685,9 @@ Eigen::VectorXd spec_taper(size_t n_row, double p) {
 // [[Rcpp::export]]
 Eigen::VectorXi make_groups(size_t n_groups, size_t n) {
 
+  // Rcpp::Rcout << "n: " << n << std::endl;
+  // Rcpp::Rcout << "n_groups: " << n_groups << std::endl;
+
   // check inputs
   if (n_groups <= 0) {
     Rcpp::stop("log_lags: n must be greater than 0");
@@ -732,6 +735,7 @@ Eigen::VectorXi make_groups(size_t n_groups, size_t n) {
     lg(i) = int(lags(i));
   }
 
+  // Rcpp::Rcout << "groups: " << lg << std::endl;
 
   return(lg);
 }
@@ -872,6 +876,7 @@ Eigen::VectorXd group_frequency(Eigen::ArrayXd frequencies,
   size_t group_size = 0;
 
   Eigen::VectorXi g = make_groups(n_groups, frequencies.size());
+
 
   for(size_t i = 0; i < n_groups; ++i) {
     group_size = g(i);

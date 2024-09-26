@@ -1274,9 +1274,12 @@ Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
 
   ind_sum(0) = 0;
 
+
   for (size_t j = 1; j < n_ols; ++j) {
     ind_sum(j) = ind_sum(j - 1) + groups(j - 1);
   }
+
+  // Rcpp::Rcout << "ind_sum: " << ind_sum << std::endl;
 
 
 
