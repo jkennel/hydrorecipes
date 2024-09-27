@@ -4,7 +4,7 @@ output:
   rmarkdown::html_vignette:
     fig_caption: false
 vignette: >
-  %\VignetteIndexEntry{transport}
+  %\VignetteIndexEntry{Contaminant transport steps}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -30,7 +30,7 @@ library(data.table)
 
 ```{r dualsolute, fig.cap = "Seven heatmaps of solute concentration for times ranging from 1 to 1 million seconds. The distance into the matrix is on the y axis and the distance along the fracture is along the x-axis. Inital concentrations are mostly zero and get larger with time progressing into the matrix and along the fracture."}
 
-dat <- expand.grid(seq(0, 0.2, 0.001), seq(0, 0.002, 0.0001), 10^seq(0, 6, 1))
+dat <- expand.grid(seq(0.0, 0.2, 0.001), seq(0.0, 0.002, 0.0001), 10^seq(0, 6, 1))
 dat <- collapse::qDT(dat)
 names(dat) <- c("distance_fracture", "distance_matrix", "time")
 cra_sol <- recipe(time~., dat) |>
