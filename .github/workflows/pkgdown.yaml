@@ -2,16 +2,16 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master]
+    branches: [hydrorecipes]
   pull_request:
-    branches: [main, master]
+    branches: [hydrorecipes]
   release:
     types: [published]
   workflow_dispatch:
 
 name: pkgdown
 
-permissions: read-all
+permissions: write
 
 jobs:
   pkgdown:
