@@ -107,9 +107,10 @@
 <span>     type <span class="op">=</span> <span class="st">"l"</span>,</span>
 <span>     xlab <span class="op">=</span> <span class="st">"Lag time in minutes"</span>,</span>
 <span>     ylab <span class="op">=</span> <span class="st">"Cumulative response"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="regression_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+<p><img src="regression_files/figure-html/unnamed-chunk-2-1.png" alt="Estimated barometric response function which starts at zero and increases to around 0.82 after 500 minutes." width="700"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<code class="sourceCode R"><span><span class="co">#|warning: false</span></span>
+<span><span class="co">#|message: false</span></span>
 <span></span>
 <span><span class="co"># decomposition</span></span>
 <span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">kennel_2020</span>, <span class="va">rec</span><span class="op">$</span><span class="fu">get_predict_data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -123,7 +124,7 @@
 <span>       <span class="va">wl_step_spline_b_datetime</span> <span class="op">+</span> </span>
 <span>       <span class="va">wl_step_lead_lag_et</span> <span class="op">+</span> </span>
 <span>       <span class="va">wl_step_intercept</span><span class="op">~</span><span class="va">datetime</span>, <span class="va">pred</span>, type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="regression_files/figure-html/unnamed-chunk-2-2.png" width="700"></p>
+<p><img src="regression_files/figure-html/unnamed-chunk-3-1.png" alt="Comparison of the predicted and observed water levels. Only small differences between the two curves are evident." width="700"></p>
   </main>
 </div>
 
