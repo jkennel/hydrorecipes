@@ -11,7 +11,7 @@ on:
 
 name: pkgdown
 
-permissions: write
+permissions: read-all
 
 jobs:
   pkgdown:
