@@ -22,7 +22,7 @@ library(hydrorecipes)
 
 Example usage:
 
-```{r}
+```{r, fig.alt = "Estimated barometric response function which starts at zero and increases to around 0.82 after 500 minutes."}
 #|warning: false
 #|message: false
 
@@ -58,6 +58,11 @@ plot(value~x, data = resp[term == "distributed_lag_interpolated" & variable == "
      xlab = "Lag time in minutes",
      ylab = "Cumulative response")
 
+```
+
+```{r, fig.alt = "Comparison of the predicted and observed water levels. Only small differences between the two curves are evident."}
+#|warning: false
+#|message: false
 
 # decomposition
 pred <- cbind(kennel_2020, rec$get_predict_data())

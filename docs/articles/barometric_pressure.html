@@ -231,10 +231,10 @@ conditions).</p>
 <span></span>
 <span><span class="va">pg</span><span class="op">$</span><span class="fu">get_elapsed_times</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                           step_id    time_prep    time_bake</span></span>
-<span><span class="co">#&gt; 1                  add_vars_LGGmr 4.148483e-05 1.502037e-05</span></span>
-<span><span class="co">#&gt; 2        fft_transfer_welch_Fe2kG 2.074242e-05 1.433921e-02</span></span>
-<span><span class="co">#&gt; 3        fft_transfer_pgram_JgwxH 1.621246e-05 1.413012e-02</span></span>
-<span><span class="co">#&gt; 4 fft_transfer_experimental_hiYO6 1.430511e-05 8.976460e-03</span></span>
+<span><span class="co">#&gt; 1                  add_vars_LGGmr 3.910065e-05 1.645088e-05</span></span>
+<span><span class="co">#&gt; 2        fft_transfer_welch_Fe2kG 2.098083e-05 1.477146e-02</span></span>
+<span><span class="co">#&gt; 3        fft_transfer_pgram_JgwxH 1.525879e-05 1.499534e-02</span></span>
+<span><span class="co">#&gt; 4 fft_transfer_experimental_hiYO6 1.406670e-05 1.375961e-02</span></span>
 <span><span class="va">tf</span> <span class="op">&lt;-</span> <span class="va">pg</span><span class="op">$</span><span class="fu">get_transfer_data</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"dt"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/complex.html" class="external-link">Mod</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">~</span><span class="va">frequency</span>, </span>

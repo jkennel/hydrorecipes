@@ -23,7 +23,7 @@ library(hydrorecipes)
 
 ### Generalized radial flow model (Barker, 1988)
 
-```{r grf}
+```{r grf, fig.alt = "Drawdown curves determined using two pumping rates and radial flow. A recovery period is following the pumping is included."}
 time <- 1:2000
 flow_rate  <- c(rep(0.001, 500),
                 rep(0.002, 500),
@@ -49,7 +49,7 @@ plot(aquifer_grf~time, grf,
 
 ### Anisotropic Theis flow model (Papadopulos, 1965)
 
-```{r theisaniso}
+```{r theisaniso, fig.alt = "A series of anisotropic Theis drawdown and recovery curves for monitoring wells with different orientations to the major and minor axes."}
 time <- 1:2000
 flow_rate  <- c(rep(0.001, 500),
                 rep(0.002, 500),
@@ -184,7 +184,7 @@ points(aquifer_theis_aniso~time, theis_aniso_xy,
 
 ### Hantush-Jacob leaky aquifer (Hantush-Jacob, 1955)
 
-```{r hj}
+```{r hj, fig.alt = "Drawdown curves determined using two pumping rates and the Hantush-Jacob solution."}
 
 time <- 1:2000
 flow_rate <- c(rep(0.001, 500), 
@@ -213,7 +213,7 @@ plot(aquifer_leaky~time, hj, type = "l",
 
 #### Figure 2
 
-```{r bh2}
+```{r bh2, fig.alt = "Dimensionless drawdown curves to match the Barker-Herbert, 1982 figure 2."}
 
 formula <- as.formula(flow_rate~time)
 q <- 0.05
@@ -297,7 +297,7 @@ points(dim_s~dim_time, bh, type = "l")
 
 #### Figure 3
 
-```{r bh3}
+```{r bh3, fig.alt = "Dimensionless drawdown curves to match the Barker-Herbert, 1982 figure 3."}
 
 formula <- as.formula(flow_rate~time)
 t_1 <- 1.0
@@ -375,7 +375,7 @@ points(dim_s~dim_time, bh, type = "l")
 
 #### Figure 4
 
-```{r bh4}
+```{r bh4, fig.alt = "Dimensionless drawdown curves to match the Barker-Herbert, 1982 figure 4."}
 
 formula <- as.formula(flow_rate~time)
 q <- 0.05
@@ -456,7 +456,7 @@ points(dim_s~dim_time, bh, type = "l")
 
 ### Papadopulos-Cooper wellbore storage(Papadopulos-Cooper, 1967)
 
-```{r pc}
+```{r pc, fig.alt = "Drawdown curve showing delayed drawdown relative to the Theis solution due to wellbore storage."}
 
 
 dat <- data.frame(time = 10^seq(-5, 2, length.out = 100),
@@ -492,7 +492,7 @@ points(aquifer_grf~time, th, type = "l", col = "darkgrey", lty = "dashed")
 
 ### Jacob-Lohman constant drawdown (Jacob-Lohman, 1952)
 
-```{r jl}
+```{r jl, fig.alt = "Flow rate declining with elapsed time and constant head pumping."}
 
 time <- 10^seq(-5, 2, 0.1)
 form <- formula(time~.)
