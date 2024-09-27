@@ -23,7 +23,7 @@
     <li><a class="dropdown-item" href="../articles/benchmarking.html">Benchmarking</a></li>
     <li><a class="dropdown-item" href="../articles/regression.html">Regression</a></li>
     <li><a class="dropdown-item" href="../articles/slug_test.html">Slug test steps</a></li>
-    <li><a class="dropdown-item" href="../articles/transport.html">transport</a></li>
+    <li><a class="dropdown-item" href="../articles/transport.html">Contaminant transport steps</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -111,7 +111,7 @@
 <span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span></span></span>
 <span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">rows</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">rows</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'rows' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'rows' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">frec1</span> <span class="op">=</span> <span class="fu"><a href="recipe.html">recipe</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">step_vadose_weeks</span><span class="op">(</span>time <span class="op">=</span> <span class="va">x</span>,</span></span>
@@ -119,7 +119,7 @@
 <span class="r-in"><span>                    thickness <span class="op">=</span> <span class="fl">5</span>,</span></span>
 <span class="r-in"><span>                    precision <span class="op">=</span> <span class="fl">1e-12</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="plate.html">plate</a></span><span class="op">(</span><span class="st">"dt"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'dat' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'dat' not found</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -131,7 +131,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
