@@ -339,8 +339,15 @@ Recipe <- R6Class(
     # @return response table from regression
     get_response_data = function(type = "df") {
 
-      resp <- self$get_step_data("response_data")
-      resp <- collapse::rowbind(resp)
+      resp <- self$get_step_data("response_data", type = "dt")
+
+      if (is.null(resp)) return(NULL)
+
+      if(is.data.frame(resp)) {
+        return(return_type(resp, type = type))
+      }
+
+      resp <- collapse::rowbind(resp, use.names = FALSE)
       return_type(resp, type = type)
 
     },
@@ -376,60 +383,85 @@ Recipe <- R6Class(
         return(data)
       }
 
-      if (type %in% c("df", "dt")) {
 
-        return(collapse::rowbind(
+      if (type %in% c("df", "dt")) {
+        type_name <- "data.frame"
+
+        if (type == "dt") type_name <- "data.table"
+
+        tf <- collapse::rowbind(
           lapply(data, function(z) {
             collapse::rowbind(lapply(z, function(x) {
               dt <- collapse::qDT(x)
               nms <- names(dt)
+
               if (ncol(dt) == 3) {
                 dt[, variable := nms[1]]
-                return(setnames(dt, nms[1], c("value")))
+                setnames(dt, nms[1], c("value"))
+                return(return_type(dt, type = type))
               }
+
               d <- collapse::pivot(data = dt,
                                    ids = c("frequency", "id"),
                                    how = "longer")
             }))
-          }), use.names = TRUE))
+          }), use.names = TRUE)
+
+
+        return(return_type(tf, type = type))
 
       }
-
-      # if (type == "dt") {
-      #   return(collapse::rowbind(
-      #     lapply(data, function(z) {
-      #       collapse::rowbind(lapply(z, function(x) {
-      #         data.table::melt(collapse::qDT(x), id.vars = c("frequency", "variable", "id"))
-      #       }))
-      #     }), use.names = FALSE))
-      # }
-
     },
     # @description
     # Get the data from a step by name
     # @return data from a specific step
-    get_step_data = function(field_name, type = "raw") {
+    get_step_data = function(field_name,
+                             type = "raw",
+                             additional_columns = NULL) {
 
       data <- list()
+
       for (i in seq_along(self$steps)) {
-        tmp <- self$steps[[i]][[field_name]]
-        if (!is.null(tmp)) {
-          data[[i]] <- tmp
-          # names(data[i]) <- self$steps[[i]][["id"]]
+
+        n_list <- self$steps[[i]][[field_name]]
+
+        if (!is.null(n_list)) {
+
+
+          if (!is.null(additional_columns)) {
+            for (j in seq_along(additional_columns)) {
+
+              to_add <- self$steps[[i]][[additional_columns[j]]]
+
+              if (is.null(to_add)) {
+                to_add <- NA
+              }
+
+              to_add <- list(to_add)
+              names(to_add) <- additional_columns[j]
+              n_list <- modifyList(x = n_list, val = to_add)
+            }
+          }
+          n_list <- list(n_list)
+          data <- append(data, (n_list))
+
         }
       }
 
-      # names(data) <- sapply(self$steps, "[[", "id")
       data <- data[!sapply(data, is.null)]
 
+      if (length(data) == 0) {
+        warning("There were no steps with the provided field_name.")
+        return(NULL)
+      }
       if (type == "raw") {
         return(data)
-      }
-      if (type == "df") {
-        return(collapse::rowbind(lapply(data, function(z) {collapse::rowbind(lapply(z, function(x) collapse::qDT(x)), return = "data.frame")}), use.names = FALSE, return = "data.frame"))
-      }
-      if (type == "dt") {
-        return(collapse::rowbind(lapply(data, function(z) {collapse::rowbind(lapply(z, function(x) collapse::qDT(x)))}), use.names = FALSE, return = "data.table"))
+      } else {
+        return(
+          return_type(
+            collapse::rowbind(lapply(data, function(x) {
+              collapse::qDT(x)}), use.names = FALSE), type)
+          )
       }
 
     },

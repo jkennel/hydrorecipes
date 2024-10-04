@@ -4,6 +4,7 @@
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 StepDistributedLag <- R6Class(
+
   classname = "step_distributed_lag",
   inherit = Step,
   public = list(
@@ -29,6 +30,7 @@ StepDistributedLag <- R6Class(
                           intercept = FALSE,
                           role = "predictor",
                           ...) {
+
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
@@ -46,7 +48,7 @@ StepDistributedLag <- R6Class(
         if (!all(is.na(knots))) {
           self$knots <- knots
         } else {
-          self$knots <- log_lags_arma(self$n_lag, self$max_lag)
+          self$knots <- log_lags(self$n_lag, self$max_lag)
         }
 
         self$n_lag <- length(knots)
@@ -89,6 +91,7 @@ StepDistributedLag <- R6Class(
       unlist(dl, recursive = FALSE)
 
     },
+    # returns a named list
     response = function(co) {
 
       basis_matrix <- collapse::qM(self$basis_matrix)
@@ -105,7 +108,7 @@ StepDistributedLag <- R6Class(
       wh <- intersect(colnames(basis_matrix), rownames(co))
 
       # check for multiple outcomes!!
-      resp <- basis_matrix[,wh, drop = FALSE] %*% co[wh,,drop = FALSE]
+      resp <- basis_matrix[, wh, drop = FALSE] %*% co[wh, , drop = FALSE]
 
       list(x = rep(0:(nr - 1L), nc * 2L),
            variable = rep(c("coefficient", "cumulative"), each = nr * nc),

@@ -7,12 +7,12 @@ dat <- data.frame(x = rnorm(rows),
 
 frec1 = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
   add_step(hydrorecipes:::StepDistributedLag$new(x,
-                                             knots = hydrorecipes:::log_lags_arma(6, 86401)))$
+                                             knots = hydrorecipes:::log_lags(6, 86401)))$
   prep()$
   bake()
 
 frec2 = recipe(formula = formula, data = dat) |>
-  step_distributed_lag(x, knots = hydrorecipes:::log_lags_arma(6, 86401)) |>
+  step_distributed_lag(x, knots = hydrorecipes:::log_lags(6, 86401)) |>
   prep() |>
   bake()
 
@@ -20,6 +20,7 @@ expect_equivalent(frec1$result, frec2$result,
                   info = "R6 and hydrorecipes api are equivalent")
 
 
+frec1$get_response_data(type = "df")
 
 
 # spline checks

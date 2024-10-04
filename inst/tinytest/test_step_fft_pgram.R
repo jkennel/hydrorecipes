@@ -43,24 +43,35 @@ expect_equivalent(gain, rep(0.2, n_groups),
 
 
 
-# step_fft_welch(c(x,y), length_subset = 10, window = hydrorecipes:::window_rectangle(10)) |>
+data(kennel_2020)
+formula <- as.formula(datetime~baro+wl+et)
+formula_1 <- as.formula(wl~baro + et)
 
-# data(kennel_2020)
-# formula <- as.formula(datetime~baro+wl+et)
-# formula_1 <- as.formula(wl~baro + et)
-#
-# frec2 = recipe(formula = formula, data = kennel_2020) |>
-#   # step_fft_transfer_welch(formula = formula_1, length_subset = 1000,
-#   #                         window = hydrorecipes:::window_rectangle(1000),
-#   #                         time_step = 60) |>
-#   step_fft_transfer_pgram(formula = formula_1, spans = c(3, 3), time_step = 60) |>
-#   step_fft_transfer_experimental(formula = formula_1, n_groups = 600,
-#                                  spans = c(3,3), taper = 0.05, time_step = 60) |>
-#   prep("df") |>
-#   bake()
-#
-# frec2$get_elapsed_times()
-# a <- frec2$get_transfer_data(type = "dt")
+frec2 = recipe(formula = formula, data = kennel_2020) |>
+  step_fft_transfer_welch(formula = formula_1, length_subset = 1000,
+                          window = hydrorecipes:::window_rectangle(1000),
+                          time_step = 60) |>
+  step_fft_transfer_pgram(formula = formula_1, spans = c(3, 3), time_step = 60) |>
+  step_fft_transfer_experimental(formula = formula_1, n_groups = 600,
+                                 spans = c(3,3), taper = 0.05, time_step = 60) |>
+  prep("df") |>
+  bake()
+
+frec2$get_elapsed_times()
+tf <- frec2$get_transfer_data(type = "dt")
+expect_equivalent(class(tf),
+                  c("data.table", "data.frame"),
+                  info = "extracting the transfer function returns a data.table")
+
+expect_equivalent(nrow(tf), 167040L,
+                  info = "transfer number of rows is correct")
+
+
+tf <- frec2$get_transfer_data(type = "df")
+expect_equivalent(class(tf),
+                  c("data.frame"),
+                  info = "extracting the transfer function returns a data.frame")
+
 #
 #
 #

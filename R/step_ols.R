@@ -101,10 +101,10 @@ StepOls <- R6Class(
         }
 
 
-        # save the response
-        self$response_data <- collapse::rowbind(resp)
-        self$response_data <- append(self$response_data,
-                                     list(id = rep(self$id, length(self$response_data[[1]]))))
+        res <- collapse::rowbind(resp)
+
+        res <- append(res, list(id = rep(self$id, length(res[[1]]))))
+        self$response_data <- res
       }
 
       return(NULL)

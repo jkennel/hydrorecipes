@@ -29,8 +29,13 @@ data(kennel_2020)
 
 #### Single value
 
-```{r clark}
-clarks <- recipe(wl~., kennel_2020) |>
+- Clark's 1967 method.  Because Clark's method is based on differences, the spacing between samples can affect the results. The following example uses differences of 1 minute, 1 hour, and 1 day for the Clark method.
+- Least Squares method. The least squares method can be based on differenced or non-differenced data.  In the following example the non-differenced data is used in addition to the 1 minute, 1 hour, and 1 day differences.
+
+If the values vary based on the interval used in the difference calculation, it may suggest that the system does not behave like an ideal confined system or observational noise is high relative to true changes.
+
+```{r static_time}
+static_time <- recipe(wl~., kennel_2020) |>
   step_baro_clark(wl,
                   baro,
                   lag_space = 1) |> # 1 minutes (every minute differences)
@@ -40,31 +45,31 @@ clarks <- recipe(wl~., kennel_2020) |>
   step_baro_clark(wl, 
                   baro, 
                   lag_space = 1440) |> # 1440 minutes (daily differences)
-  prep() |>
-  bake()
-
-# The barometric efficiency is stored in the step (warning: this may change)
-clarks$get_step_data("barometric_efficiency")
-
-```
-
-```{r regression}
-least_squares <- recipe(wl~., kennel_2020) |>
   step_baro_least_squares(wl, baro) |> 
+  step_baro_least_squares(wl, baro, 
+                          lag_space = 1, 
+                          differences = TRUE) |> # 1 minutes (every minute differences)
+  step_baro_least_squares(wl, baro, 
+                          lag_space = 60, 
+                          differences = TRUE) |> # 60 minutes (hourly differences)
   step_baro_least_squares(wl, baro, 
                           lag_space = 1440, 
                           differences = TRUE) |> # 1440 minutes (daily differences)
   prep() |>
   bake()
 
-least_squares$get_step_data("barometric_efficiency")
-
+# The barometric efficiency is stored in the step (warning: this may change)
+static_time$get_step_data("barometric_efficiency",
+                          additional_columns = c("step_name", 
+                                                 "lag_space", 
+                                                 "differences"),
+                          type = "dt")
 
 ```
 
-#### Response function
+#### Response functions
 
-Standard lag method
+Standard lags
 
 ```{r lag}
 
@@ -79,17 +84,19 @@ resp_l <- lag_standard$get_response_data()
 
 ```
 
-Distributed lag method
+Distributed lags
 
 ```{r distlag, fig.alt = "Barometric response functions with standard leading and lagging method compared to the distributed lag method.  Both methods are generally the same but the distributed lag method is smoother."}
-lag_standard <- recipe(wl~., kennel_2020) |>
-  step_distributed_lag(baro, knots = log_lags_arma(15, 1440)) |> 
+lag_dl <- recipe(wl~., kennel_2020) |>
+  step_distributed_lag(baro, knots = log_lags(15, 1440)) |> 
   step_spline_b(datetime, df = 11, intercept = TRUE) |> 
   step_drop_columns(c(baro, datetime, et)) |>
   step_ols(wl~.) |> 
   prep() |>
   bake()
-resp_dl <- lag_standard$get_response_data()
+resp_dl <- lag_dl$get_response_data()
+resp_dl <- lag_dl$get_step_data("response_data", 
+                                type = "dt")
 
 plot(value~x, resp_l[resp_l$term == "lead_lag" & resp_l$variable == "cumulative", ],
      type = "l", ylim = c(0, 1),
@@ -105,11 +112,9 @@ points(value~x, resp_dl[resp_dl$term == "distributed_lag_interpolated" & resp_dl
 
 #### Single value
 
-These methods are based on the 2 cpd frequency which may not be indicative of the static barometric efficiency, in cases with a frequency dependent response (large wellbore storage or non-confined conditions).
+These methods are based on the 2 cpd frequency which may not be indicative of the static barometric efficiency, in cases with a frequency dependent response (wellbore storage or non-confined conditions).
 
 ```{r ac}
-data(kennel_2020)
-
 harmonic <- recipe(wl~., kennel_2020) |>
   step_baro_harmonic(datetime, wl, baro, et) |> 
   prep() |>
@@ -128,36 +133,37 @@ Three methods:
   - assumes smooth periodogram
 - Welch's 
   - loss of low frequency information
+  - optimal values dependent on the subset length
 - Experimental 
   - assumes smooth periodogram
   - smoothing across multiple frequencies
   - many higher frequecies discarded
-  - should be very fast
+  - should be faster
+  - least squares fit of multiple frequencies
 
 ```{r tf, fig.alt = "Transfer functions."}
 
-data(kennel_2020)
-formula <- as.formula(datetime~baro+wl+et)
-formula_1 <- as.formula(wl~baro + et)
+# this formula determines the variables to use for the transfer functions
+formula_tf <- as.formula(wl ~ baro + et)
 
-pg = recipe(formula = formula, data = kennel_2020) |>
-  step_fft_transfer_welch(formula = formula_1, 
+pg = recipe(wl~., data = kennel_2020) |>
+  step_fft_transfer_welch(formula = formula_tf, 
                           length_subset = 40000,
                           window = hydrorecipes:::window_rectangle(40000),
                           time_step = 60) |>
-  step_fft_transfer_pgram(formula = formula_1, 
+  step_fft_transfer_pgram(formula = formula_tf, 
                           spans = c(3, 3), 
                           time_step = 60) |>
-  step_fft_transfer_experimental(formula = formula_1, 
+  step_fft_transfer_experimental(formula = formula_tf, 
                                  n_groups = 600,
                                  spans = c(3, 3), 
                                  time_step = 60) |>
   prep("df") |>
   bake()
 
-pg$get_elapsed_times()
 tf <- pg$get_transfer_data(type = "dt")
 
+# plot the barometric transfer functions for the different methods
 plot(Mod(value)~frequency, 
      data = tf[grepl("fft_transfer_experimental", id) & variable == "wl_baro_et_1"], 
      type = "l", 
@@ -176,7 +182,7 @@ points(Mod(value)~frequency,
 
 
 
-
+# plot the amplitude
 plot(Mod(value)~frequency, 
      data = tf[grepl("fft_transfer_experimental", id) & variable == "wl_baro_et_1"], 
      type = "l", 
@@ -185,12 +191,12 @@ plot(Mod(value)~frequency,
      ylim = c(0, 1),
      col = "#00900080")
 
+# plot the phase
 plot(Arg(value)~frequency, 
      data = tf[grepl("fft_transfer_experimental", id) & variable == "wl_baro_et_1"], 
      type = "l", 
      log = "x", 
      xlim = c(0.01, 200),
-     # ylim = c(0, 1),
      col = "#00900080")
 
 ```

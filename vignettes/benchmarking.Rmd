@@ -346,7 +346,7 @@ results <- bench::press(
                       z = rnorm(rows))
     bench::mark(
       hrec = recipe(formula = formula, data = dat) |>
-        step_distributed_lag(x, knots = log_lags_arma(5, 86401)) |>
+        step_distributed_lag(x, knots = log_lags(5, 86401)) |>
         plate(),
       check = FALSE,
       relative = relative,

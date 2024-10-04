@@ -77,8 +77,22 @@
 <div class="section level4">
 <h4 id="single-value">Single value<a class="anchor" aria-label="anchor" href="#single-value"></a>
 </h4>
+<ul>
+<li>Clark’s 1967 method. Because Clark’s method is based on differences,
+the spacing between samples can affect the results. The following
+example uses differences of 1 minute, 1 hour, and 1 day for the Clark
+method.</li>
+<li>Least Squares method. The least squares method can be based on
+differenced or non-differenced data. In the following example the
+non-differenced data is used in addition to the 1 minute, 1 hour, and 1
+day differences.</li>
+</ul>
+<p>If the values vary based on the interval used in the difference
+calculation, it may suggest that the system does not behave like an
+ideal confined system or observational noise is high relative to true
+changes.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">clarks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">.</span>, <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">static_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">.</span>, <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/step_baro_clark.html">step_baro_clark</a></span><span class="op">(</span><span class="va">wl</span>,</span>
 <span>                  <span class="va">baro</span>,</span>
 <span>                  lag_space <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># 1 minutes (every minute differences)</span></span>
@@ -88,40 +102,40 @@
 <span>  <span class="fu"><a href="../reference/step_baro_clark.html">step_baro_clark</a></span><span class="op">(</span><span class="va">wl</span>, </span>
 <span>                  <span class="va">baro</span>, </span>
 <span>                  lag_space <span class="op">=</span> <span class="fl">1440</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># 1440 minutes (daily differences)</span></span>
-<span>  <span class="fu"><a href="../reference/prep.html">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/bake.html">bake</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># The barometric efficiency is stored in the step (warning: this may change)</span></span>
-<span><span class="va">clarks</span><span class="op">$</span><span class="fu">get_step_data</span><span class="op">(</span><span class="st">"barometric_efficiency"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [[1]]</span></span>
-<span><span class="co">#&gt; [1] 0.1941766</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[2]]</span></span>
-<span><span class="co">#&gt; [1] 0.4738098</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[3]]</span></span>
-<span><span class="co">#&gt; [1] 0.8453437</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">least_squares</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">.</span>, <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/step_baro_least_squares.html">step_baro_least_squares</a></span><span class="op">(</span><span class="va">wl</span>, <span class="va">baro</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/step_baro_least_squares.html">step_baro_least_squares</a></span><span class="op">(</span><span class="va">wl</span>, <span class="va">baro</span>, </span>
+<span>                          lag_space <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                          differences <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># 1 minutes (every minute differences)</span></span>
+<span>  <span class="fu"><a href="../reference/step_baro_least_squares.html">step_baro_least_squares</a></span><span class="op">(</span><span class="va">wl</span>, <span class="va">baro</span>, </span>
+<span>                          lag_space <span class="op">=</span> <span class="fl">60</span>, </span>
+<span>                          differences <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># 60 minutes (hourly differences)</span></span>
 <span>  <span class="fu"><a href="../reference/step_baro_least_squares.html">step_baro_least_squares</a></span><span class="op">(</span><span class="va">wl</span>, <span class="va">baro</span>, </span>
 <span>                          lag_space <span class="op">=</span> <span class="fl">1440</span>, </span>
 <span>                          differences <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># 1440 minutes (daily differences)</span></span>
 <span>  <span class="fu"><a href="../reference/prep.html">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/bake.html">bake</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">least_squares</span><span class="op">$</span><span class="fu">get_step_data</span><span class="op">(</span><span class="st">"barometric_efficiency"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [[1]]</span></span>
-<span><span class="co">#&gt; [1] 0.8273019</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[2]]</span></span>
-<span><span class="co">#&gt; [1] 0.8410913</span></span></code></pre></div>
+<span><span class="co"># The barometric efficiency is stored in the step (warning: this may change)</span></span>
+<span><span class="va">static_time</span><span class="op">$</span><span class="fu">get_step_data</span><span class="op">(</span><span class="st">"barometric_efficiency"</span>,</span>
+<span>                          additional_columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"step_name"</span>, </span>
+<span>                                                 <span class="st">"lag_space"</span>, </span>
+<span>                                                 <span class="st">"differences"</span><span class="op">)</span>,</span>
+<span>                          type <span class="op">=</span> <span class="st">"dt"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;           be               step_name lag_space differences</span></span>
+<span><span class="co">#&gt;        &lt;num&gt;                  &lt;char&gt;     &lt;num&gt;      &lt;lgcl&gt;</span></span>
+<span><span class="co">#&gt; 1: 0.1941766         step_baro_clark         1        TRUE</span></span>
+<span><span class="co">#&gt; 2: 0.4738098         step_baro_clark        60        TRUE</span></span>
+<span><span class="co">#&gt; 3: 0.8453437         step_baro_clark      1440        TRUE</span></span>
+<span><span class="co">#&gt; 4: 0.8273019 step_baro_least_squares         1       FALSE</span></span>
+<span><span class="co">#&gt; 5: 0.2493419 step_baro_least_squares         1        TRUE</span></span>
+<span><span class="co">#&gt; 6: 0.4529153 step_baro_least_squares        60        TRUE</span></span>
+<span><span class="co">#&gt; 7: 0.8410913 step_baro_least_squares      1440        TRUE</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="response-function">Response function<a class="anchor" aria-label="anchor" href="#response-function"></a>
+<h4 id="response-functions">Response functions<a class="anchor" aria-label="anchor" href="#response-functions"></a>
 </h4>
-<p>Standard lag method</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>Standard lags</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">lag_standard</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">.</span>, <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/step_lead_lag.html">step_lead_lag</a></span><span class="op">(</span><span class="va">baro</span>, lag <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">1440</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -131,16 +145,18 @@
 <span>  <span class="fu"><a href="../reference/prep.html">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/bake.html">bake</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">resp_l</span> <span class="op">&lt;-</span> <span class="va">lag_standard</span><span class="op">$</span><span class="fu">get_response_data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Distributed lag method</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lag_standard</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">.</span>, <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/step_distributed_lag.html">step_distributed_lag</a></span><span class="op">(</span><span class="va">baro</span>, knots <span class="op">=</span> <span class="fu">log_lags_arma</span><span class="op">(</span><span class="fl">15</span>, <span class="fl">1440</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<p>Distributed lags</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lag_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">.</span>, <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/step_distributed_lag.html">step_distributed_lag</a></span><span class="op">(</span><span class="va">baro</span>, knots <span class="op">=</span> <span class="fu">log_lags</span><span class="op">(</span><span class="fl">15</span>, <span class="fl">1440</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/step_spline_b.html">step_spline_b</a></span><span class="op">(</span><span class="va">datetime</span>, df <span class="op">=</span> <span class="fl">11</span>, intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/step_drop_columns.html">step_drop_columns</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">baro</span>, <span class="va">datetime</span>, <span class="va">et</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/step_ols.html">step_ols</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">.</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/prep.html">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/bake.html">bake</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">resp_dl</span> <span class="op">&lt;-</span> <span class="va">lag_standard</span><span class="op">$</span><span class="fu">get_response_data</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">resp_dl</span> <span class="op">&lt;-</span> <span class="va">lag_dl</span><span class="op">$</span><span class="fu">get_response_data</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">resp_dl</span> <span class="op">&lt;-</span> <span class="va">lag_dl</span><span class="op">$</span><span class="fu">get_step_data</span><span class="op">(</span><span class="st">"response_data"</span>, </span>
+<span>                                type <span class="op">=</span> <span class="st">"dt"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">value</span><span class="op">~</span><span class="va">x</span>, <span class="va">resp_l</span><span class="op">[</span><span class="va">resp_l</span><span class="op">$</span><span class="va">term</span> <span class="op">==</span> <span class="st">"lead_lag"</span> <span class="op">&amp;</span> <span class="va">resp_l</span><span class="op">$</span><span class="va">variable</span> <span class="op">==</span> <span class="st">"cumulative"</span>, <span class="op">]</span>,</span>
 <span>     type <span class="op">=</span> <span class="st">"l"</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -160,12 +176,10 @@
 </h4>
 <p>These methods are based on the 2 cpd frequency which may not be
 indicative of the static barometric efficiency, in cases with a
-frequency dependent response (large wellbore storage or non-confined
+frequency dependent response (wellbore storage or non-confined
 conditions).</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">kennel_2020</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">harmonic</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">.</span>, <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">harmonic</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">.</span>, <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/step_baro_harmonic.html">step_baro_harmonic</a></span><span class="op">(</span><span class="va">datetime</span>, <span class="va">wl</span>, <span class="va">baro</span>, <span class="va">et</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/prep.html">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/bake.html">bake</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -197,6 +211,7 @@ conditions).</p>
 <li>Welch’s
 <ul>
 <li>loss of low frequency information</li>
+<li>optimal values dependent on the subset length</li>
 </ul>
 </li>
 <li>Experimental
@@ -204,39 +219,34 @@ conditions).</p>
 <li>assumes smooth periodogram</li>
 <li>smoothing across multiple frequencies</li>
 <li>many higher frequecies discarded</li>
-<li>should be very fast</li>
+<li>should be faster</li>
+<li>least squares fit of multiple frequencies</li>
 </ul>
 </li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">kennel_2020</span><span class="op">)</span></span>
-<span><span class="va">formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">datetime</span><span class="op">~</span><span class="va">baro</span><span class="op">+</span><span class="va">wl</span><span class="op">+</span><span class="va">et</span><span class="op">)</span></span>
-<span><span class="va">formula_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">baro</span> <span class="op">+</span> <span class="va">et</span><span class="op">)</span></span>
+<span><span class="co"># this formula determines the variables to use for the transfer functions</span></span>
+<span><span class="va">formula_tf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">wl</span> <span class="op">~</span> <span class="va">baro</span> <span class="op">+</span> <span class="va">et</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pg</span> <span class="op">=</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula</span>, data <span class="op">=</span> <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/step_fft_transfer_welch.html">step_fft_transfer_welch</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula_1</span>, </span>
+<span><span class="va">pg</span> <span class="op">=</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">.</span>, data <span class="op">=</span> <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/step_fft_transfer_welch.html">step_fft_transfer_welch</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula_tf</span>, </span>
 <span>                          length_subset <span class="op">=</span> <span class="fl">40000</span>,</span>
 <span>                          window <span class="op">=</span> <span class="fu">hydrorecipes</span><span class="fu">:::</span><span class="fu">window_rectangle</span><span class="op">(</span><span class="fl">40000</span><span class="op">)</span>,</span>
 <span>                          time_step <span class="op">=</span> <span class="fl">60</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/step_fft_transfer_pgram.html">step_fft_transfer_pgram</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula_1</span>, </span>
+<span>  <span class="fu"><a href="../reference/step_fft_transfer_pgram.html">step_fft_transfer_pgram</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula_tf</span>, </span>
 <span>                          spans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, </span>
 <span>                          time_step <span class="op">=</span> <span class="fl">60</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/step_fft_transfer_experimental.html">step_fft_transfer_experimental</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula_1</span>, </span>
+<span>  <span class="fu"><a href="../reference/step_fft_transfer_experimental.html">step_fft_transfer_experimental</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula_tf</span>, </span>
 <span>                                 n_groups <span class="op">=</span> <span class="fl">600</span>,</span>
 <span>                                 spans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, </span>
 <span>                                 time_step <span class="op">=</span> <span class="fl">60</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/prep.html">prep</a></span><span class="op">(</span><span class="st">"df"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/bake.html">bake</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pg</span><span class="op">$</span><span class="fu">get_elapsed_times</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                           step_id    time_prep    time_bake</span></span>
-<span><span class="co">#&gt; 1                  add_vars_LGGmr 3.910065e-05 1.645088e-05</span></span>
-<span><span class="co">#&gt; 2        fft_transfer_welch_Fe2kG 2.098083e-05 1.477146e-02</span></span>
-<span><span class="co">#&gt; 3        fft_transfer_pgram_JgwxH 1.525879e-05 1.499534e-02</span></span>
-<span><span class="co">#&gt; 4 fft_transfer_experimental_hiYO6 1.406670e-05 1.375961e-02</span></span>
 <span><span class="va">tf</span> <span class="op">&lt;-</span> <span class="va">pg</span><span class="op">$</span><span class="fu">get_transfer_data</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"dt"</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># plot the barometric transfer functions for the different methods</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/complex.html" class="external-link">Mod</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">~</span><span class="va">frequency</span>, </span>
 <span>     data <span class="op">=</span> <span class="va">tf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"fft_transfer_experimental"</span>, <span class="va">id</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">variable</span> <span class="op">==</span> <span class="st">"wl_baro_et_1"</span><span class="op">]</span>, </span>
 <span>     type <span class="op">=</span> <span class="st">"l"</span>, </span>
@@ -255,11 +265,11 @@ conditions).</p>
 <span>       type <span class="op">=</span> <span class="st">"l"</span>, </span>
 <span>       col <span class="op">=</span> <span class="st">"#00009050"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="barometric_pressure_files/figure-html/tf-1.png" alt="Transfer functions." width="700"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span></span>
 <span></span>
-<span></span>
+<span><span class="co"># plot the amplitude</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/complex.html" class="external-link">Mod</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">~</span><span class="va">frequency</span>, </span>
 <span>     data <span class="op">=</span> <span class="va">tf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"fft_transfer_experimental"</span>, <span class="va">id</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">variable</span> <span class="op">==</span> <span class="st">"wl_baro_et_1"</span><span class="op">]</span>, </span>
 <span>     type <span class="op">=</span> <span class="st">"l"</span>, </span>
@@ -270,14 +280,14 @@ conditions).</p>
 <span><span class="co">#&gt; Warning in xy.coords(x, y, xlabel, ylabel, log): 1 x value &lt;= 0 omitted from</span></span>
 <span><span class="co">#&gt; logarithmic plot</span></span></code></pre></div>
 <p><img src="barometric_pressure_files/figure-html/tf-2.png" alt="Transfer functions." width="700"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
+<span><span class="co"># plot the phase</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/complex.html" class="external-link">Arg</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">~</span><span class="va">frequency</span>, </span>
 <span>     data <span class="op">=</span> <span class="va">tf</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"fft_transfer_experimental"</span>, <span class="va">id</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">variable</span> <span class="op">==</span> <span class="st">"wl_baro_et_1"</span><span class="op">]</span>, </span>
 <span>     type <span class="op">=</span> <span class="st">"l"</span>, </span>
 <span>     log <span class="op">=</span> <span class="st">"x"</span>, </span>
 <span>     xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">200</span><span class="op">)</span>,</span>
-<span>     <span class="co"># ylim = c(0, 1),</span></span>
 <span>     col <span class="op">=</span> <span class="st">"#00900080"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in xy.coords(x, y, xlabel, ylabel, log): 1 x value &lt;= 0 omitted from</span></span>
 <span><span class="co">#&gt; logarithmic plot</span></span></code></pre></div>
@@ -287,7 +297,7 @@ conditions).</p>
 <div class="section level3">
 <h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h3>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.4.1 (2024-06-14)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>

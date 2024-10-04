@@ -12,6 +12,7 @@ StepBaroClark <- R6Class(
     barometric_pressure = NULL,
     lag_space = NULL,
     inverse = NULL,
+    differences = TRUE,
 
     barometric_efficiency = c(),
 
@@ -44,15 +45,18 @@ StepBaroClark <- R6Class(
     },
     bake = function(new_data) {
 
+      be <- list()
       for (i in seq_along(self$lag_space)) {
-        self$barometric_efficiency[i] <- be_clark_cpp(
+        be[[i]] <- list(be = be_clark_cpp(
           dep = new_data[[1]],
           ind = new_data[[2]],
           lag_space = self$lag_space[i],
           inverse = self$inverse
-        )
-      }
+        ))
 
+      }
+      be <- collapse::rowbind(be)
+      self$barometric_efficiency <- be
     return(NULL)
     }
   )

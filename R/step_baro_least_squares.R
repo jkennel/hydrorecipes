@@ -14,7 +14,7 @@ StepBaroLeastSquares <- R6Class(
     inverse = NULL,
     differences = NULL,
 
-    barometric_efficiency = c(),
+    barometric_efficiency = list(),
 
     # step specific variables
     initialize = function(water_level,
@@ -47,23 +47,26 @@ StepBaroLeastSquares <- R6Class(
     },
     bake = function(new_data) {
 
+      be <- list()
       for (i in seq_along(self$lag_space)) {
         if (self$differences) {
-          self$barometric_efficiency[i] <- be_least_squares_diff_cpp(
+          be[[i]] <- list(be = be_least_squares_diff_cpp(
             dep = new_data[[1]],
             ind = new_data[[2]],
             lag_space = self$lag_space[i],
             inverse = self$inverse
-          )
+          ))
         } else {
 
-          self$barometric_efficiency[i] <- be_least_squares_cpp(
+          be[[i]] <- list(be = be_least_squares_cpp(
             dep = new_data[[1]],
             ind = new_data[[2]],
             inverse = self$inverse
-          )
+          ))
 
         }
+        be <- collapse::rowbind(be)
+        self$barometric_efficiency <- be
       }
 
       return(NULL)

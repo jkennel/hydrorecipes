@@ -65,7 +65,7 @@ n <- 864
 x <- rnorm(n*100)
 n_knots <- 9
 max_lag <- 1 + n
-knots <- hydrorecipes:::log_lags_arma(n_knots, max_lag)
+knots <- hydrorecipes:::log_lags(n_knots, max_lag)
 one_n <- c(1, length(knots))
 
 y1 <- hydrorecipes:::n_spline_list(0:n, 0L, 3L, knots[-one_n],

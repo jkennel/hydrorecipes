@@ -90,7 +90,8 @@ StepTransferExperimental <- R6Class(
           )
         )
 
-        self$new_columns <- name_columns(paste(names(tmp_data), collapse = "_"), NULL, n = length(res))
+        self$new_columns <- name_columns(paste(names(tmp_data), collapse = "_"),
+                                         NULL, n = length(res))
         names(res) <- self$new_columns
         res <- append(res, frequency)
 

@@ -20,7 +20,14 @@ knitr::opts_chunk$set(
 library(hydrorecipes)
 ```
 
-Example usage:
+This example generates the following regressor terms and then calculates the ordinary least squares solution.
+
+- Distributed lag terms for barometric pressure
+- B-spline terms for background trend
+- Standard lagged terms for Earth tides
+- Global intercept
+
+The _get_response_data_ function returns the response and cumulative responses based on the regression coefficients.
 
 ```{r, fig.alt = "Estimated barometric response function which starts at zero and increases to around 0.82 after 500 minutes."}
 #|warning: false
@@ -35,7 +42,7 @@ library(hydrorecipes)
 data(kennel_2020) 
 
 form     <- as.formula(wl~.)
-ba_knots <- log_lags_arma(15, 1441) # knots for distributed lag baro terms
+ba_knots <- log_lags(15, 1441) # knots for distributed lag baro terms
 df       <- 5                       # degrees of freedom for spline background trend
 
 rec <- recipe(form, kennel_2020) |>
@@ -59,6 +66,8 @@ plot(value~x, data = resp[term == "distributed_lag_interpolated" & variable == "
      ylab = "Cumulative response")
 
 ```
+
+The regression coefficients can also be used to predict contributions from the regression model using the _get_predict_data_ function.  Summing all the terms give the predicted value from the regression model.  
 
 ```{r, fig.alt = "Comparison of the predicted and observed water levels. Only small differences between the two curves are evident."}
 #|warning: false
