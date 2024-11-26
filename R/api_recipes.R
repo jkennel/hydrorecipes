@@ -927,6 +927,51 @@ step_compare_columns <- function(.rec,
 
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_convolve_gamma
+#'
+#' @description
+#'   linearly convolve a gamma kernel with a data series.
+#'
+#' @param amplitude amplitude
+#' @param k shape
+#' @param theta scale
+#'
+#' @inheritParams step_kernel_filter
+#'
+#' @return an updated recipe
+#' @export
+#'
+#' @examples
+#'
+#' formula <- as.formula(x~y+z)
+#' rows <- 1e4
+#'
+#' dat <- data.frame(x = rep(1, rows),
+#'                   y = 1:rows,
+#'                   z = cumsum(rnorm(rows)))
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_convolve_gamma(z, amplitude = 1, theta = 1, k = 1) |>
+#'   plate("tbl")
+#'
+step_convolve_gamma <- function(.rec,
+                                terms,
+                                amplitude,
+                                k,
+                                theta,
+                                align = "right",
+                                max_length = Inf,
+                                role = "predictor",
+                                ...) {
+
+  terms <- substitute(terms)
+  env_list <- get_function_arguments()
+  .rec$add_step(do.call(StepConvolveGamma$new,
+                        modifyList(x = env_list, val = list(...))))
+
+
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_distributed_lag
 #'
 #' @description
@@ -1809,6 +1854,52 @@ step_spline_b <- function(.rec,
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepSplineB$new,
+                        modifyList(x = env_list, val = list(...))))
+
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_spline_n
+#'
+#' @description
+#'   generates basis splines.
+#'
+#' @param internal_knots equivalent to knots from `splines2::bSplines`
+#' @param boundary_knots equivalent to Boundary.knots from `splines2::bSplines`
+#' @inheritParams splines2::nsp
+#' @inheritParams step_scale
+#'
+#' @return an updated recipe
+#' @export
+#'
+#' @examples
+#'
+#' formula <- as.formula(x~y+z)
+#' rows <- 1e5
+#'
+#' dat <- data.frame(x = rnorm(rows),
+#'                   y = 1:rows,
+#'                   z = cumsum(rnorm(rows)))
+#' ik <- collapse::fquantile(dat$x, probs = seq(0, 1, 0.1))
+#' bk <- ik[c(1, length(ik))]
+#' ik <- ik[-c(1, length(ik))]
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_spline_n(x, df = 11L, intercept = FALSE)  |>
+#'  plate("tbl")
+#'
+step_spline_n <- function(.rec,
+                          terms,
+                          df = 0L,
+                          internal_knots = NULL,
+                          boundary_knots = NULL,
+                          intercept = FALSE,
+                          periodic = FALSE,
+                          degree = 3L,
+                          role = "predictor",
+                          ...) {
+  terms <- substitute(terms)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepSplineN$new,
                         modifyList(x = env_list, val = list(...))))
 
 }

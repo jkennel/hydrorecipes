@@ -155,7 +155,7 @@ pg = recipe(wl~., data = kennel_2020) |>
                           spans = c(3, 3), 
                           time_step = 60) |>
   step_fft_transfer_experimental(formula = formula_tf, 
-                                 n_groups = 600,
+                                 n_groups = 150,
                                  spans = c(3, 3), 
                                  time_step = 60) |>
   prep("df") |>
@@ -201,6 +201,86 @@ plot(Arg(value)~frequency,
 
 ```
 
+
+```{r frftobrf}
+
+# tf <- pg$get_transfer_data(type = "dt")
+# tmp <-  tf[grepl("fft_transfer_experimental", id) & variable == "wl_baro_et_1"]
+# tmp[, frequency_log := log10(frequency)]
+# tmp <- tmp[-c(1, .N)]
+# fit_r <- lm(Re(value)~splines2::bSpline(frequency_log, df = 10), tmp)
+# fit_i <- lm(Im(value)~splines2::bSpline(frequency_log, df = 10), tmp)
+# plot(Re(value)~frequency_log, tmp)
+# points(fit_r$fitted.values~frequency_log, tmp, type = "l", col = "red")
+# plot(fit_r$fitted.values~frequency, tmp, type = "l", col = "red")
+# 
+# plot(Im(value)~frequency_log, tmp)
+# points(fit_i$fitted.values~frequency_log, tmp, type = "l", col = "red")
+# 
+# plot(Im(value)~frequency, tmp)
+# points(fit_i$fitted.values~frequency, tmp, type = "l", col = "red")
+# 
+# brf_from_frf <- function(x) {
+# 
+#   n <- floor(length(x) / 2) + 1
+# 
+#   imp <- fft(x, inverse = TRUE) / length(x)
+#   imp <- Mod(imp) * sign(Re(imp))
+# 
+#   cumsum(rev(imp)[1:n] + (imp)[1:n])
+# 
+# }
+# 
+# 
+# x <- tmp$frequency
+# y <- tmp$value
+# frequency_to_time_domain <- function(x, y) {
+# 
+#   dc1 <- y[1] # DC values
+#   dc2 <- y[length(y)] # DC values
+#   x_n <- x[-c(1, length(x))] # DC indices
+#   y_n <- y[-c(1, length(y))] # DC values
+#   
+#   # knots <- hydrorecipes:::log_lags(20, max(x_n))
+#   # knots <- knots[-c(1, length(knots))]
+#   # len <- min(knots):max(knots)
+#   len <- seq(min(x_n), max(x_n), length.out = 10000)
+# # this is used to smooth the complex response
+#   sp_in  <- splines2::bSpline(x_n, df = 10)
+#   sp_out <- splines2::bSpline(len, df = 10)
+# 
+# 
+#     # out <- matrix(NA_real_,
+#     #               nrow = length(len),
+#     #               ncol = 1)
+#     # out[1] <- len
+# 
+# # loop through each transfer function - smooth the response - estimate brf
+#     # for (i in 1:ncol(y_n)) {
+# 
+# # smooth the real and imaginary components separately
+#   re <- Re(y_n)
+#   im <- Im(y_n)
+#   
+#   fit_r <- RcppEigen::fastLm(X = sp_in, y = re)$coefficients
+#   fit_i <- RcppEigen::fastLm(X = sp_in, y = im)$coefficients
+#   
+#   re <- as.vector(sp_out %*% fit_r)
+#   im <- as.vector(sp_out %*% fit_i)
+# 
+# # estimate the brf from the smoothed uniform spaced frf
+#         out <- brf_from_frf(complex(real = re, imaginary = im))
+#     # }
+# 
+#         plot(out, type = "l", log = "x")
+# 
+#     out
+# }
+# tmp <- tf[grepl("fft_transfer_experimental", id) & variable == "wl_baro_et_1"]
+# frequency_to_time_domain(x = tmp$frequency, 
+#                          y = tmp$value)
+
+```
 
 ### References
 

@@ -52,7 +52,7 @@ StepOls <- R6Class(
 
       if (!is.null(self$formula)) {
         vars_list <- get_formula_vars(formula = self$formula,
-                                    data = unclass(new_data))
+                                      data = unclass(new_data))
       }
 
       self$predictors <- get_regression_data(new_data,
@@ -88,23 +88,27 @@ StepOls <- R6Class(
           co_name <- co_names[wh]
 
           if (length(co_name) > 0) {
+
             co <- self$coefficients[wh, , drop = FALSE]
             resp[[i]] <- steps[[i]]$response(co)
+
             if (!"outcome" %in% names(resp[[i]])) {
               resp[[i]]$outcome <- rep(colnames(co), times = nrow(co))
             }
+
             if (!"term" %in% names(resp[[i]])) {
               resp[[i]]$term <- rep(co_name, times = ncol(co))
             }
+
             resp[[i]]$step_columns <- paste(steps[[i]]$columns, collapse = "_")
           }
         }
-
 
         res <- collapse::rowbind(resp)
 
         res <- append(res, list(id = rep(self$id, length(res[[1]]))))
         self$response_data <- res
+
       }
 
       return(NULL)

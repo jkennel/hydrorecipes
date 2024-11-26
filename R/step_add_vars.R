@@ -43,8 +43,10 @@ StepAddVars <- R6Class(
     },
 
     bake = function(new_data) {
-      # print(new_data)
-      return(unclass(new_data))
+      # add result data
+      self$result <- unclass(new_data)
+
+      self$result
 
     }
 

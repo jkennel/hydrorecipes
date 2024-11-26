@@ -78,7 +78,8 @@ StepBaroFrequencySemiConfined <- R6Class(
 
       self$new_columns <- self$prefix
 
-      setNames(roj_1988, self$new_columns)
+      self$result <- setNames(roj_1988, self$new_columns)
+      self$result
 
     }
   )

@@ -77,7 +77,9 @@ StepAquiferLeaky <- R6Class(
         self$precision
       )
 
-      setNames(hj, self$new_columns)
+
+      self$result <- setNames(hj, self$new_columns)
+      self$result
     }
   )
 )

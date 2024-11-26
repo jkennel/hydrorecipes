@@ -15,6 +15,7 @@ StepOlsGapFill <- R6Class(
                           recipe,
                           role = "predictor",
                           ...) {
+
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
@@ -26,7 +27,6 @@ StepOlsGapFill <- R6Class(
         ...
       )
 
-
       # step specific values
       self$recipe <- recipe
 
@@ -34,8 +34,10 @@ StepOlsGapFill <- R6Class(
     },
     bake = function(new_data) {
 
+      # print(str(new_data))
       rec <- self$recipe
       rec <- rec$prep()$bake(data = new_data)
+      # print('here')
       dat <- rec$result
 
       vars_list <- names(new_data)
@@ -54,7 +56,9 @@ StepOlsGapFill <- R6Class(
       self$new_columns <- name_columns(self$prefix, colnames(y$data), n = ncol(y$data))
       names(lst) <- self$new_columns
 
-      lst
+
+      self$result <- lst
+      self$result
 
     }
   )

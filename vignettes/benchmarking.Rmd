@@ -26,6 +26,7 @@ standard API so the remaining benchmarks only present that. Typical speed
 improvements are between 2-10x and memory consumption is typically half of the 
 *recipes* package.
 
+
 ```{r}
 #| echo: false
 #| warning: false
@@ -155,6 +156,16 @@ results <- bench::press(
 )
 
 results
+
+n <- 1e2
+dat <- data.frame(x = rnorm(n), 
+                  y = 1:n)
+
+hrec2 = recipe(formula = formula, data = dat) |>
+  step_center(x) |> prep() |> bake()
+
+bench::mark(tmp <- (hrec2$get_result()))
+
 ```
 
 ## step_center
@@ -318,7 +329,7 @@ results <- bench::press(
                        recipes::step_lag(x, lag = 1:30) |> 
                        recipes::prep() |> 
                        recipes::bake(new_data = NULL)),
-      check = TRUE,
+      check = FALSE,
       relative = relative,
       min_iterations = 1
     )
@@ -396,6 +407,35 @@ results <- bench::press(
   }
 )
 results
+
+# rows <- 1e6
+# dat <- data.frame(x = rnorm(rows), 
+#                   y = 1:rows,
+#                   z = rnorm(rows))
+# bench::mark(
+#   
+#   {hrec = recipe(formula = formula, data = dat) |>
+#     step_harmonic(x, 
+#                   frequency = c(1.0, 2.0, 3.0), 
+#                   cycle_size = 0.1, 
+#                   starting_value = 0.0,
+#                   varying = "cycle_size") |>
+#         step_harmonic(x, 
+#                   frequency = c(1.0, 2.0, 3.0), 
+#                   cycle_size = 0.1, 
+#                   starting_value = 0.0) |>
+#     step_intercept() |>
+#     step_center(x) |>
+#     prep() |>
+#     bake()}, 
+#   
+#   {hrec$steps[[2]]$update_step("cycle_size", 0.2)
+#     hrec$bake()
+#   },
+#   check = FALSE
+# )
+
+
 ```
 
 ## step_pca
@@ -679,7 +719,7 @@ results
 formula <- as.formula(y~x)
 
 results <- bench::press(
-  rows = n,
+  rows = c(100, 1e4, 1e6),
   {
     dat <- data.frame(x = rnorm(rows),
                       y = 1:rows)
@@ -689,6 +729,39 @@ results <- bench::press(
                       plate("tbl")),
       rec  = unname(recipes::recipe(formula = formula, data = dat) |>
                       recipes::step_spline_b(x, deg_free = 13, keep_original_cols = TRUE)|> 
+                      recipes::prep() |> 
+                      recipes::bake(new_data = NULL)),
+      check = TRUE,
+      relative = relative,
+      min_iterations = 2
+    )
+  }
+)
+
+results
+
+```
+
+
+## step_spline_n
+
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x)
+
+results <- bench::press(
+  rows = c(100, 1e4, 1e6),
+  {
+    dat <- data.frame(x = rnorm(rows),
+                      y = 1:rows)
+    bench::mark(
+      hrec = unname(recipe(formula = formula, data = dat) |>
+                      step_spline_n(x, df = 11L) |>
+                      plate("tbl")),
+      rec  = unname(recipes::recipe(formula = formula, data = dat) |>
+                      recipes::step_spline_natural(x, deg_free = 11L, keep_original_cols = TRUE)|> 
                       recipes::prep() |> 
                       recipes::bake(new_data = NULL)),
       check = TRUE,
@@ -1032,6 +1105,7 @@ results <- bench::press(
     dat <- data.frame(x = rnorm(rows), 
                       y = rnorm(rows),
                       z = rnorm(rows))
+    m <- qM(dat)
     bench::mark(
       hrec = recipe(formula = formula, data = dat) |>
         step_center(x) |>
@@ -1039,6 +1113,8 @@ results <- bench::press(
         step_ols(formula = formula) |>
         prep() |>
         bake(),
+      lm = lm(formula, dat),
+      lm.fit(x = m[, c(2, 3)], y = m[,1]),
       check = FALSE,
       relative = relative
     )
@@ -1071,22 +1147,52 @@ dat[60000:70000, x := NA_real_]
 
 dat <- unclass(dat)
 
-bench::mark(
-  {h = recipe(formula = frm, data = dat) |>
-    step_find_interval(z, vec = c(0, n/2, n)) |>
-    step_intercept() |>
-    step_spline_b(z, df = 4) |>
-    step_drop_columns(z)
-  
-  hrec = recipe(formula = frm, data = dat) |>
-    step_ols_gap_fill(c(x, y, z), recipe = h) |>
-    plate()},
-)
+# bench::mark(
+#   {h = recipe(formula = frm, data = dat) |>
+#     step_find_interval(z, vec = c(0, n/2, n)) |>
+#     step_intercept() |>
+#     step_spline_b(z, df = 4) |>
+#     step_drop_columns(z)
+#   
+#   hrec = recipe(formula = frm, data = dat) |>
+#     step_ols_gap_fill(c(x, y, z), recipe = h) |>
+#     prep() |> 
+#     bake()},
+# )
+
 
 
 ```
 
 
+# update
+
+```{r}
+
+formula <- as.formula(y~x)
+
+# results <- bench::press(
+#   rows = n,
+#   {
+#     dat <- data.frame(x = rnorm(rows), 
+#                       y = 1:rows,
+#                       z = rnorm(rows))
+#     bench::mark(
+#       hrec1 = unname(recipe(formula = formula, data = dat) |>
+#                        step_lead_lag(x, lag = 1:30) |>
+#                        plate("tbl")),
+#       hrec1 = unname(recipe(formula = formula, data = dat) |>
+#                        step_lead_lag(x, lag = 1:30) |>
+#                        plate("tbl")),
+#       check = TRUE,
+#       relative = relative,
+#       min_iterations = 1
+#     )
+#   }
+# )
+# 
+# results
+```
 
 # check
 

@@ -79,7 +79,7 @@ StepAquiferPatch <- R6Class(
 
       self$new_columns <- self$prefix
 
-      setNames(
+      self$result <- setNames(
         list(
           barker_herbert(
             time = new_data[[1]],
@@ -96,7 +96,7 @@ StepAquiferPatch <- R6Class(
         ),
         self$new_columns)
 
-
+      self$result
     }
   )
 )

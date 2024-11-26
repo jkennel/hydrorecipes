@@ -1,3 +1,6 @@
+#include "hydrorecipes.h"
+
+
 // #define EIGEN_FFTW_DEFAULT
 //
 // #include <RcppArmadillo.h>
@@ -90,21 +93,21 @@
 // }
 // //==============================================================================
 // //' @title
-//  //' b_spline
-//  //'
-//  //' @description
-//  //' Calculate the basis splines
-//  //'
-//  //' @inheritParams splines::bs
-//  //' @param knots location of knots for the b-splines. Unlike `splines::bs` this
-//  //' includes the boundary knots. (numeric vector)
-//  //'
-//  //'
-//  //' @return the basis spline values with intercept.
-//  //'
-//  //' @noRd
-//  //'
-//  // [[Rcpp::export]]
+// //' b_spline
+// //'
+// //' @description
+// //' Calculate the basis splines
+// //'
+// //' @inheritParams splines::bs
+// //' @param knots location of knots for the b-splines. Unlike `splines::bs` this
+// //' includes the boundary knots. (numeric vector)
+// //'
+// //'
+// //' @return the basis spline values with intercept.
+// //'
+// //' @noRd
+// //'
+// // [[Rcpp::export]]
 // std::list<Eigen::VectorXd> b_spline(Eigen::Map<Eigen::VectorXd> x,
 //                           Eigen::Map<Eigen::VectorXd> knots,
 //                           size_t degree) {
@@ -142,7 +145,6 @@
 //      out(i, ind(i)) = 1;
 //    }
 //
-//
 //    // the degree of the curve
 //    for (size_t k = 1; k <= degree; ++k) {
 //      k_offset = degree - k;
@@ -179,73 +181,73 @@
 //  }
 //
 //
-// // // [[Rcpp::export]]
-// // NumericMatrix b_spline2(const NumericVector& x,
-// //                         const NumericVector& knots,
-// //                         size_t degree) {
-// //
-// //   size_t n = x.size();
-// //   size_t n_knot = knots.size();
-// //   size_t n_cols = n_knot + degree - 1;
-// //   size_t n_knots = (degree) * 2 + n_knot;
-// //
-// //   size_t order = degree + 1;
-// //   size_t k_offset = 0;
-// //   size_t j_index = 0;
-// //
-// //   double i1 = 0;
-// //   double i2 = 0;
-// //
-// //   double saved;
-// //   double den;
-// //   double term;
-// //
-// //   NumericVector knots_pad(n_knots);
-// //   NumericVector pad(degree);
-// //
-// //   pad.fill(knots(0));
-// //   knots_pad[Range(0, degree - 1)] = pad;
-// //   pad.fill(knots(n_knot - 1));
-// //   knots_pad[Range(n_knots - degree, n_knots-1)] = pad;
-// //   knots_pad[Range(degree, degree + n_knot - 1)] = knots;
-// //
-// //   NumericMatrix out(n,n_cols);
-// //   IntegerVector ind = fi(x, knots, true, true, true)-1;
-// //
-// //   // These are the indices to keep
-// //   for (size_t i = 0; i < n; ++i) {
-// //     out(i, ind(i)) = 1;
-// //   }
-// //
-// //
-// //   // the degree of the curve
-// //   for (size_t k = 1; k <= degree; ++k) {
-// //     k_offset = degree - k;
-// //
-// //     // loop through each x value
-// //     for (size_t i = 0; i < n; ++i) {
-// //       saved = 0;
-// //
-// //       for (size_t j = 0; j < k; ++j) {
-// //         j_index = ind(i) + j;
-// //         i1 = knots_pad(j_index + k_offset + 1);
-// //         i2 = knots_pad(j_index + order);
-// //         den  = i2 - i1;
-// //         if (den == 0) {
-// //           term = 0;
-// //         } else {
-// //           term = out(i, j_index) / den;
-// //         }
-// //         out(i, j_index) = saved + (i2 - x(i)) * term;
-// //         saved = (x(i) - i1) * term;
-// //       }
-// //       out(i, ind(i) + k) = saved;
-// //     }
-// //   }
-// //
-// //   return(out);
-// //
-// // }
+// // [[Rcpp::export]]
+// NumericMatrix b_spline2(const NumericVector& x,
+//                         const NumericVector& knots,
+//                         size_t degree) {
+//
+//   size_t n = x.size();
+//   size_t n_knot = knots.size();
+//   size_t n_cols = n_knot + degree - 1;
+//   size_t n_knots = (degree) * 2 + n_knot;
+//
+//   size_t order = degree + 1;
+//   size_t k_offset = 0;
+//   size_t j_index = 0;
+//
+//   double i1 = 0;
+//   double i2 = 0;
+//
+//   double saved;
+//   double den;
+//   double term;
+//
+//   NumericVector knots_pad(n_knots);
+//   NumericVector pad(degree);
+//
+//   pad.fill(knots(0));
+//   knots_pad[Range(0, degree - 1)] = pad;
+//   pad.fill(knots(n_knot - 1));
+//   knots_pad[Range(n_knots - degree, n_knots-1)] = pad;
+//   knots_pad[Range(degree, degree + n_knot - 1)] = knots;
+//
+//   NumericMatrix out(n,n_cols);
+//   IntegerVector ind = fi(x, knots, true, true, true)-1;
+//
+//   // These are the indices to keep
+//   for (size_t i = 0; i < n; ++i) {
+//     out(i, ind(i)) = 1;
+//   }
+//
+//
+//   // the degree of the curve
+//   for (size_t k = 1; k <= degree; ++k) {
+//     k_offset = degree - k;
+//
+//     // loop through each x value
+//     for (size_t i = 0; i < n; ++i) {
+//       saved = 0;
+//
+//       for (size_t j = 0; j < k; ++j) {
+//         j_index = ind(i) + j;
+//         i1 = knots_pad(j_index + k_offset + 1);
+//         i2 = knots_pad(j_index + order);
+//         den  = i2 - i1;
+//         if (den == 0) {
+//           term = 0;
+//         } else {
+//           term = out(i, j_index) / den;
+//         }
+//         out(i, j_index) = saved + (i2 - x(i)) * term;
+//         saved = (x(i) - i1) * term;
+//       }
+//       out(i, ind(i) + k) = saved;
+//     }
+//   }
+//
+//   return(out);
+//
+// }
 
 
 

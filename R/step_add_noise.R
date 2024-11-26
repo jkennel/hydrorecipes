@@ -48,7 +48,10 @@ StepAddNoise <- R6Class(
         new_data[[i]] <- new_data[[i]] + noise
       }
 
-      new_data
+      # add result data
+      self$result <- new_data
+
+      self$result
     }
   )
 )

@@ -58,6 +58,7 @@ StepDistributedLag <- R6Class(
         rng = 0:self$max_lag
         one_n = c(1L, self$n_lag)
 
+        # natural spline
         self$basis_matrix <- n_spline_list(rng, 0L, 3L, self$knots[-one_n],
                                            self$knots[one_n], self$intercept,
                                            FALSE, 0L, FALSE)
@@ -88,7 +89,8 @@ StepDistributedLag <- R6Class(
       names(self$basis_matrix) <- self$new_columns
       # self$columns <- rep(self$columns, each = length(self$basis_matrix))
 
-      unlist(dl, recursive = FALSE)
+      self$result <- unlist(dl, recursive = FALSE)
+      self$result
 
     },
     # returns a named list

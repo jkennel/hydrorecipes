@@ -53,7 +53,9 @@ StepVadoseWeeks <- R6Class(
       )
 
       self$new_columns <- self$prefix
-      setNames(vr, self$new_columns)
+      self$result <- setNames(vr, self$new_columns)
+      self$result
+
     }
   )
 )

@@ -48,9 +48,9 @@ StepLeadLag <- R6Class(
           ll[[i]] <- collapse::flag(new_data[i], self$lag)
         } else {
           ll[[i]] <- lag_list(unclass(new_data)[[i]],
-            self$lag,
-            n_subset = self$n_subset,
-            n_shift = self$n_shift
+                              self$lag,
+                              n_subset = self$n_subset,
+                              n_shift = self$n_shift
           )
         }
 
@@ -64,7 +64,9 @@ StepLeadLag <- R6Class(
         self$new_columns <- c(self$new_columns, nn)
       }
 
-      unlist(ll, recursive = FALSE)
+      self$result <- unlist(ll, recursive = FALSE)
+      self$result
+
     },
     response = function(co) {
 

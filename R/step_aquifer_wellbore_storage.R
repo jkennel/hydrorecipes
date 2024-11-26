@@ -76,8 +76,8 @@ StepAquiferWellboreStorage <- R6Class(
                                             1e-8, # currently not used
                                             self$n_terms))
 
-      setNames(pc, self$new_columns)
-
+      self$result <- setNames(pc, self$new_columns)
+      self$result
 
     }
   )

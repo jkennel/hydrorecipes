@@ -111,7 +111,9 @@ StepTransportFracturesHeat <- R6Class(
 
       names(pfh) <- self$new_columns
 
-      pfh
+      self$result <- pfh
+      self$result
+
     }
   )
 )

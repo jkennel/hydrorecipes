@@ -1,7 +1,7 @@
 set.seed(123)
 
 formula <- as.formula(x~y+z)
-rows <- 11
+rows <- 20000
 
 dat <- data.frame(x = rep(1, rows),
                   y = 1:rows,
@@ -12,6 +12,17 @@ frec = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
                                            kernel = list(rep(1, 3)/3),
                                            align = "center"))$
   plate("tbl")
+
+
+
+
+frec = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
+  add_step(hydrorecipes:::StepConvolveGamma$new(z,
+                                                amplitude = 1,
+                                                k = 1,
+                                                theta = 20))$
+  plate("tbl")
+
 
 rec  = recipes::recipe(formula = formula, data = dat) |>
   recipes::step_window(z, size = 3, statistic = "mean") |>

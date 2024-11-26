@@ -141,7 +141,9 @@ StepEarthtide <- R6Class(
 
       names(et) <- self$new_columns
 
-      et
+      self$result <- et
+      self$result
+
     },
     response = function(co) {
 

@@ -690,17 +690,17 @@ Eigen::VectorXi make_groups(size_t n_groups, size_t n) {
 
   // check inputs
   if (n_groups <= 0) {
-    Rcpp::stop("log_lags: n must be greater than 0");
+    Rcpp::stop("n_groups: n must be greater than 0");
   }
 
 
-  if (n < 0) {
-    Rcpp::stop("log_lags: max_time_lag must be non-negative");
+  if (n <= 0) {
+    Rcpp::stop("n: maximum number of values must be positive");
   }
 
 
   if(n_groups > (n + 1L)) {
-    Rcpp::warning("The number of lags is greater than the maximum time lag");
+    Rcpp::warning("The number of groups is greater than the number of values");
     return(VectorXi::LinSpaced(n + 1, 0, n));
   }
 

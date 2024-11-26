@@ -238,7 +238,7 @@ conditions).</p>
 <span>                          spans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, </span>
 <span>                          time_step <span class="op">=</span> <span class="fl">60</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/step_fft_transfer_experimental.html">step_fft_transfer_experimental</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula_tf</span>, </span>
-<span>                                 n_groups <span class="op">=</span> <span class="fl">600</span>,</span>
+<span>                                 n_groups <span class="op">=</span> <span class="fl">150</span>,</span>
 <span>                                 spans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, </span>
 <span>                                 time_step <span class="op">=</span> <span class="fl">60</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/prep.html">prep</a></span><span class="op">(</span><span class="st">"df"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -292,12 +292,89 @@ conditions).</p>
 <span><span class="co">#&gt; Warning in xy.coords(x, y, xlabel, ylabel, log): 1 x value &lt;= 0 omitted from</span></span>
 <span><span class="co">#&gt; logarithmic plot</span></span></code></pre></div>
 <p><img src="barometric_pressure_files/figure-html/tf-3.png" alt="Transfer functions." width="700"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># tf &lt;- pg$get_transfer_data(type = "dt")</span></span>
+<span><span class="co"># tmp &lt;-  tf[grepl("fft_transfer_experimental", id) &amp; variable == "wl_baro_et_1"]</span></span>
+<span><span class="co"># tmp[, frequency_log := log10(frequency)]</span></span>
+<span><span class="co"># tmp &lt;- tmp[-c(1, .N)]</span></span>
+<span><span class="co"># fit_r &lt;- lm(Re(value)~splines2::bSpline(frequency_log, df = 10), tmp)</span></span>
+<span><span class="co"># fit_i &lt;- lm(Im(value)~splines2::bSpline(frequency_log, df = 10), tmp)</span></span>
+<span><span class="co"># plot(Re(value)~frequency_log, tmp)</span></span>
+<span><span class="co"># points(fit_r$fitted.values~frequency_log, tmp, type = "l", col = "red")</span></span>
+<span><span class="co"># plot(fit_r$fitted.values~frequency, tmp, type = "l", col = "red")</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># plot(Im(value)~frequency_log, tmp)</span></span>
+<span><span class="co"># points(fit_i$fitted.values~frequency_log, tmp, type = "l", col = "red")</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># plot(Im(value)~frequency, tmp)</span></span>
+<span><span class="co"># points(fit_i$fitted.values~frequency, tmp, type = "l", col = "red")</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># brf_from_frf &lt;- function(x) {</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co">#   n &lt;- floor(length(x) / 2) + 1</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co">#   imp &lt;- fft(x, inverse = TRUE) / length(x)</span></span>
+<span><span class="co">#   imp &lt;- Mod(imp) * sign(Re(imp))</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co">#   cumsum(rev(imp)[1:n] + (imp)[1:n])</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># }</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># x &lt;- tmp$frequency</span></span>
+<span><span class="co"># y &lt;- tmp$value</span></span>
+<span><span class="co"># frequency_to_time_domain &lt;- function(x, y) {</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co">#   dc1 &lt;- y[1] # DC values</span></span>
+<span><span class="co">#   dc2 &lt;- y[length(y)] # DC values</span></span>
+<span><span class="co">#   x_n &lt;- x[-c(1, length(x))] # DC indices</span></span>
+<span><span class="co">#   y_n &lt;- y[-c(1, length(y))] # DC values</span></span>
+<span><span class="co">#   </span></span>
+<span><span class="co">#   # knots &lt;- hydrorecipes:::log_lags(20, max(x_n))</span></span>
+<span><span class="co">#   # knots &lt;- knots[-c(1, length(knots))]</span></span>
+<span><span class="co">#   # len &lt;- min(knots):max(knots)</span></span>
+<span><span class="co">#   len &lt;- seq(min(x_n), max(x_n), length.out = 10000)</span></span>
+<span><span class="co"># # this is used to smooth the complex response</span></span>
+<span><span class="co">#   sp_in  &lt;- splines2::bSpline(x_n, df = 10)</span></span>
+<span><span class="co">#   sp_out &lt;- splines2::bSpline(len, df = 10)</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co">#     # out &lt;- matrix(NA_real_,</span></span>
+<span><span class="co">#     #               nrow = length(len),</span></span>
+<span><span class="co">#     #               ncol = 1)</span></span>
+<span><span class="co">#     # out[1] &lt;- len</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># # loop through each transfer function - smooth the response - estimate brf</span></span>
+<span><span class="co">#     # for (i in 1:ncol(y_n)) {</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># # smooth the real and imaginary components separately</span></span>
+<span><span class="co">#   re &lt;- Re(y_n)</span></span>
+<span><span class="co">#   im &lt;- Im(y_n)</span></span>
+<span><span class="co">#   </span></span>
+<span><span class="co">#   fit_r &lt;- RcppEigen::fastLm(X = sp_in, y = re)$coefficients</span></span>
+<span><span class="co">#   fit_i &lt;- RcppEigen::fastLm(X = sp_in, y = im)$coefficients</span></span>
+<span><span class="co">#   </span></span>
+<span><span class="co">#   re &lt;- as.vector(sp_out %*% fit_r)</span></span>
+<span><span class="co">#   im &lt;- as.vector(sp_out %*% fit_i)</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># # estimate the brf from the smoothed uniform spaced frf</span></span>
+<span><span class="co">#         out &lt;- brf_from_frf(complex(real = re, imaginary = im))</span></span>
+<span><span class="co">#     # }</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co">#         plot(out, type = "l", log = "x")</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co">#     out</span></span>
+<span><span class="co"># }</span></span>
+<span><span class="co"># tmp &lt;- tf[grepl("fft_transfer_experimental", id) &amp; variable == "wl_baro_et_1"]</span></span>
+<span><span class="co"># frequency_to_time_domain(x = tmp$frequency, </span></span>
+<span><span class="co">#                          y = tmp$value)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
 <h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.4.1 (2024-06-14)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>

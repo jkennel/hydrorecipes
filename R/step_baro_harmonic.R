@@ -101,12 +101,12 @@ StepBaroHarmonic <- R6Class(
       dt <- diff(as.numeric(new_data[[1]])[1:2])
       cycle_size <- self$cycle_size/dt
       be_tf <- Mod(be_transfer(collapse::qM(new_data[2:4]),
-                           5,
-                           TRUE,
-                           TRUE,
-                           0.1,
-                           2.0,
-                           self$cycle_size / dt)[1])
+                               5,
+                               TRUE,
+                               TRUE,
+                               0.1,
+                               2.0,
+                               self$cycle_size / dt)[1])
 
       names(be_tf) <- "tf"
 
@@ -117,7 +117,7 @@ StepBaroHarmonic <- R6Class(
       self$barometric_efficiency <- c(self$barometric_efficiency, be_tf)
 
 
-    return(NULL)
+      return(NULL)
 
     }
   )

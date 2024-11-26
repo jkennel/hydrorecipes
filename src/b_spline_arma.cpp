@@ -93,6 +93,7 @@ Rcpp::List n_spline_list(const arma::vec& x,
     bs_obj = splines2::NaturalSpline(x, df, boundary_knots);
   }
 
+
   // get natural-spline basis functions
   const arma::mat bs_mat = bs_obj.basis(complete_basis);
 
@@ -150,14 +151,14 @@ Rcpp::List b_spline_list2(const arma::vec& x,
 
 // [[Rcpp::export]]
 std::list<Eigen::VectorXd> b_spline_list3(const arma::vec& x,
-                         const unsigned int df,
-                         const unsigned int degree,
-                         const arma::vec& internal_knots,
-                         const arma::vec& boundary_knots,
-                         const bool complete_basis = true,
-                         const bool periodic = false,
-                         const unsigned int derivs = 0,
-                         const bool integral = false
+                                          const unsigned int df,
+                                          const unsigned int degree,
+                                          const arma::vec& internal_knots,
+                                          const arma::vec& boundary_knots,
+                                          const bool complete_basis = true,
+                                          const bool periodic = false,
+                                          const unsigned int derivs = 0,
+                                          const bool integral = false
 )
 {
 
@@ -188,6 +189,7 @@ std::list<Eigen::VectorXd> b_spline_list3(const arma::vec& x,
 
   return out;
 }
+
 
 //==============================================================================
 

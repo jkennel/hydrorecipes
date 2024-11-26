@@ -64,7 +64,7 @@ StepAquiferGRF <- R6Class(
       self$columns <- paste(self$columns, collapse = ",")
 
 
-      setNames(grf_time(
+      self$result <- setNames(grf_time(
         radius = self$radius,
         specific_storage = self$specific_storage,
         hydraulic_conductivity = self$hydraulic_conductivity,
@@ -75,6 +75,7 @@ StepAquiferGRF <- R6Class(
       ), self$new_columns)
 
 
+      self$result
     }
 
   )

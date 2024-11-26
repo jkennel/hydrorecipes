@@ -25,7 +25,7 @@ StepWelch <- R6Class(
       terms <- substitute(terms)
       env_list <- get_function_arguments()
       env_list$step_name <- "step_fft_welch"
-      env_list$type <- "add"
+      env_list$type <- "augment"
       super$initialize(
         terms = terms,
         env_list[names(env_list) != "terms"],

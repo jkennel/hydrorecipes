@@ -34,7 +34,7 @@ StepPgram <- R6Class(
       terms <- substitute(terms)
       env_list <- get_function_arguments()
       env_list$step_name <- "step_fft_pgram"
-      env_list$type <- "add"
+      env_list$type <- "augment"
       super$initialize(
         terms = terms,
         env_list[names(env_list) != "terms"],
@@ -81,7 +81,10 @@ StepPgram <- R6Class(
       df <- 1 / n
       frequency <- list(frequency = seq.int(from = 0, by = df,
                            length.out = n) * 86400 / self$time_step)
+      # print(str(self$fft_result))
+      # print(str(frequency))
       self$fft_result <- append(self$fft_result, frequency)
+      # print(is.list(self$fft_result))
 
       return(NULL)
     }

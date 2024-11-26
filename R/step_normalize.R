@@ -44,6 +44,7 @@ StepNormalize <- R6Class(
     },
     # subtract the central value from a column
     bake = function(new_data) {
+
       for (i in seq_along(self$columns)) {
         new_data[[i]] <- (new_data[[i]] - self$center[i]) *
           (1.0 / self$scale[i])
@@ -54,7 +55,8 @@ StepNormalize <- R6Class(
       #                        center = self$center,
       #                        scale = 1.0/self$scale)
 
-      new_data
+      self$result <- new_data
+      self$result
     }
   )
 )

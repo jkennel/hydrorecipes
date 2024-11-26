@@ -65,7 +65,8 @@ StepTidalCooper <- R6Class(
 
       self$new_columns <- self$prefix
 
-      setNames(cooper_1965, self$new_columns)
+      self$result <- setNames(cooper_1965, self$new_columns)
+      self$result
 
     }
   )

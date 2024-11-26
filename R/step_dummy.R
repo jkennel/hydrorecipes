@@ -59,7 +59,9 @@ StepDummy <- R6Class(
         )
       }
 
-      unlist(dum, recursive = FALSE)
+      self$result <- unlist(dum, recursive = FALSE)
+      self$result
+
     }
   )
 )

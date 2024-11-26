@@ -103,7 +103,6 @@ Eigen::VectorXd std_expint_vec(std::vector<double> u) {
 }
 
 
-
 // [[Rcpp::export]]
 double std_tgamma(double u, double a) {
 
@@ -115,8 +114,17 @@ double std_tgamma(double u, double a) {
   else {
     ret = 0.0;
   }
+
   return(ret);
 }
+
+// [[Rcpp::export]]
+double bh_gamma_p_inv(double a, double p) {
+
+  return(boost::math::gamma_p_inv(a, p));
+
+}
+
 
 //
 //
@@ -906,6 +914,197 @@ Eigen::VectorXd ig(Eigen::ArrayXd a, Eigen::ArrayXd u) {
   return(Eigen::igammac(a, u));
 }
 
+
+
+// (https://en.wikipedia.org/wiki/Exponential_distribution)
+// lamda is a rate parameter
+// amplitude is a scaling parameter
+// [[Rcpp::export]]
+double exp_2_parameter(double t,
+                       const double amplitude,
+                       const double lamda) {
+
+  return (amplitude / lamda) * std::exp(-t / lamda);
+
+}
+
+// [[Rcpp::export]]
+std::vector<double> exp_2_old(std::vector<double> t, double amplitude, double lamda){
+
+
+  for (auto& out : t)
+    out = exp_2_parameter(out, amplitude, lamda);
+
+  return(t);
+}
+
+// [[Rcpp::export]]
+std::vector<double> exp_2(std::vector<double> t, const double amplitude, const double lamda){
+
+  const double scale = amplitude / lamda;
+
+  double exp_val;
+
+  for (auto& out : t) {
+    exp_val = out / -lamda;
+    if (exp_val < -800) {
+      out = 0;
+    } else {
+      out = scale * std::exp(exp_val);
+    }
+  }
+  return(t);
+}
+
+// [[Rcpp::export]]
+std::vector<double> exp_2_test(const double amplitude,
+                               const double lamda){
+
+  const double scale = amplitude / lamda;
+  int max_t = 750 * std::ceil(lamda);
+
+  std::vector<double> out(max_t);
+  for (int i = 0; i < max_t; ++i) {
+    out[i] = scale * std::exp((double)i / -lamda);
+  }
+  return(out);
+}
+
+
+// [[Rcpp::export]]
+Eigen::ArrayXd exp_2_eigen(const double amplitude,
+                           const double lamda){
+
+  const int max_t = 720 * std::ceil(lamda);
+
+  Eigen::ArrayXd out = Eigen::ArrayXd::LinSpaced(max_t + 1, 0.0, (double)max_t);
+
+  return(amplitude / lamda * (out / -lamda).exp());
+
+}
+
+
+
+// for specifying response functions
+// (https://en.wikipedia.org/wiki/Gamma_distribution)
+// k is a shape parameter
+// theta is a scaling parameter
+// amplitude is a scaling parameter
+// [[Rcpp::export]]
+double gamma_3_parameter(double t,
+                         const double amplitude,
+                         const double k,
+                         const double theta) {
+
+  return (amplitude * std::pow(t,  (k - 1.0)) * std::exp(-t / theta) /
+          (std::pow(theta, k) * std::tgamma(k)));
+
+}
+
+// [[Rcpp::export]]
+std::vector<double> gamma_3_old(std::vector<double> t,
+                                const double amplitude,
+                                const double k,
+                                const double theta){
+
+
+  for (auto& out : t)
+    out = gamma_3_parameter(out, amplitude, k, theta);
+
+  return(t);
+}
+
+
+// [[Rcpp::export]]
+std::vector<double> gamma_3_old2(std::vector<double> t,
+                                 const double amplitude,
+                                 const double k,
+                                 const double theta){
+
+  const double denom = (std::pow(theta, k) * std::tgamma(k));
+
+  for (auto& out : t)
+    out = amplitude * std::pow(out,  (k - 1.0)) * std::exp(out / -theta) / denom;
+
+  return(t);
+}
+
+// [[Rcpp::export]]
+std::vector<double> gamma_3(std::vector<double> t,
+                            const double amplitude,
+                            const double k,
+                            const double theta){
+
+
+  // return exponetial if k = 1
+  if (k == 1) {
+    return(exp_2(t, amplitude, theta));
+  }
+
+  const double denom = (std::pow(theta, k) * std::tgamma(k));
+  double exp_val;
+
+  for (auto& out : t) {
+    exp_val = out / -theta;
+    if (exp_val < -800) {
+      out = 0;
+    } else {
+      out = amplitude * std::pow(out, (k - 1.0)) * std::exp(exp_val) / denom;
+    }
+  }
+
+
+  return(t);
+}
+
+// [[Rcpp::export]]
+std::vector<double> gamma_3_test(const double amplitude,
+                                 const double k,
+                                 const double theta){
+
+  const double denom = (std::pow(theta, k) * std::tgamma(k));
+  double exp_val;
+  int max_t = 720 * std::ceil(theta);
+
+  std::vector<double> out(max_t + 1);
+  for (int i = 0; i < max_t + 1; ++i) {
+    out[i] = amplitude * std::pow(i, (k - 1.0)) * std::exp(((double)i / -theta)) / denom;
+  }
+
+  return(out);
+}
+
+// [[Rcpp::export]]
+Eigen::ArrayXd gamma_3_eigen(const double amplitude,
+                             const double k,
+                             const double theta){
+
+  const double denom = (std::pow(theta, k) * std::tgamma(k));
+  const int max_t = 720 * std::ceil(theta);
+
+  Eigen::ArrayXd out = Eigen::ArrayXd::LinSpaced(max_t + 1, 0.0, (double)max_t);
+
+  return(amplitude * out.pow(k - 1.0) * (out / -theta).exp() / denom);
+
+  // for (int i = 1; i < max_t; ++i) {
+  //   out[i] = amplitude * std::pow(i, (k - 1.0)) * std::exp(((double)i / -theta)) / denom;
+  // }
+  //
+  // return(out);
+}
+
+// // [[Rcpp::export]]
+// std::vector<double> test(std::vector<double> t) {
+//
+//   std::gamma_distribution<double> d(1.0, 2.0);
+//
+//   for (auto& out : t)
+//     out = d(out);
+//
+//   return(t);
+//
+// }
+
 // generate all u (each grid point each well)
 // determine range
 // generate vector to cover u values (intelligent spacing)
@@ -920,6 +1119,53 @@ Eigen::VectorXd ig(Eigen::ArrayXd a, Eigen::ArrayXd u) {
 // }
 
 /*** R
+
+library(bench)
+library(hydrorecipes)
+
+A <- 1.4
+a <- 10000
+n <- 1.0
+t <- as.numeric(1:1e6)
+
+
+bench::mark(
+hydrorecipes:::bh_gamma_p_inv(n, 0.9999) * a
+)
+
+tmp <- hydrorecipes:::gamma_3(t, A, n, a)
+bench::mark(
+  hydrorecipes:::exp_2(t, A, a),
+  hydrorecipes:::exp_2_old(t, A, a),
+  hydrorecipes:::gamma_3(t, A, n, a),
+  hydrorecipes:::gamma_3_old(t, A, n, a),
+  hydrorecipes:::gamma_3_old2(t, A, n, a),
+  check = TRUE
+)
+
+bench::mark(
+  hydrorecipes:::gamma_3(t, A, n, a),
+  hydrorecipes:::gamma_3_old(t, A, n, a),
+  hydrorecipes:::gamma_3_old2(t, A, n, a),
+  check = TRUE
+)
+
+
+bench::mark(
+  # hydrorecipes:::exp_2(t, A, a),
+  # hydrorecipes:::exp_2_test(A, a),
+  # hydrorecipes:::exp_2_old(t, A, a),
+  # hydrorecipes:::gamma_3(t, A, n, a),
+  hydrorecipes:::gamma_3(0:7200000, A, n, a),
+  hydrorecipes:::gamma_3_test(A, n, a),
+  hydrorecipes:::gamma_3_eigen(A, n, a),
+  hydrorecipes:::exp_2(0:7200000, A, a),
+  hydrorecipes:::exp_2_eigen(A, a),
+  # hydrorecipes:::gamma_3_old(t, A, n, a),
+  # hydrorecipes:::gamma_3_old2(t, A, n, a),
+  check = TRUE
+)
+
 # x <- 1.0
 #
 # ig(rep(3.0, 1), 1.0)

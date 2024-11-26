@@ -33,7 +33,6 @@ Recipe <- R6Class(
     # prep time for each step
     time_prep = NULL,
 
-
     # result list that holds the created model features.
     result = list(),
 
@@ -69,10 +68,12 @@ Recipe <- R6Class(
         )
       )
       self$vars <- unlist(vars_list, use.names = FALSE)
-      self$template <- unclass(data)
+      # self$template <- unclass(data)
 
       # add variables as a step
-      self$add_step(StepAddVars$new(self$vars, role = roles))$prep()$bake()
+      self$add_step(StepAddVars$new(terms = self$vars, role = roles))
+      self$steps[[1]]$set_result(unclass(data)[self$vars])
+      # $prep()$bake()
       self$term_info$source[] <- "original"
 
       self$requirements <- list(
@@ -118,7 +119,6 @@ Recipe <- R6Class(
       invisible(self)
     },
 
-
     # @description
     # Create the dataset.
     # @param data The input data to the recipe. If it is not specified it uses
@@ -129,21 +129,18 @@ Recipe <- R6Class(
 
       types <- self$get_step_types()
       baked <- self$is_baked()
+      status <- self$get_step_status() # rerun a step
 
       types_loop <- seq_along(types)
+      types_loop <- types_loop[which(status)]
 
-      if (is.null(data)) {
-        # remove any previously baked
-        if (any(baked)) {
-          types_loop <- types_loop[-baked]
-        }
-
-      } else {
+      if (!is.null(data)) {
         self$template <- unclass(data)#[unique(self$vars)]
         self$result <- NULL
       }
 
       for (i in types_loop) {
+
         start_time <- Sys.time()
 
         columns <- self$steps[[i]]$columns
@@ -151,39 +148,31 @@ Recipe <- R6Class(
           columns <- names(self$result)[1]
         }
 
-        # modify results
-        self$result <- switch(
+        switch(
+
           types[i],
+          # "add" = self$steps[[i]]$bake(unclass(self$result)[columns]),
+          #
+          # "modify" = self$steps[[i]]$bake(unclass(self$result)[columns]),
 
-          "add" = append(
-            self$result,
-            self$steps[[i]]$bake(unclass(self$result)[columns])),
+          "supervise_add" = self$steps[[i]]$bake(unclass(self$result),
+                                                 self$term_info),
 
-          "modify" = modifyList(
-            self$result,
-            self$steps[[i]]$bake(unclass(self$result)[columns])),
+          # "add_from_template" = self$steps[[i]]$bake(unclass(self$template)[columns]),
 
-          "supervise_add" = append(
-            self$result,
-            self$steps[[i]]$bake(unclass(self$result), self$term_info)),
-
-          "add_from_template" = append(
-            self$result,
-            self$steps[[i]]$bake(unclass(self$template)[columns])),
-
-          "supervise_augment" = {self$steps[[i]]$bake(unclass(self$result),
-                                                      self$term_info,
-                                                      self$steps);
-            self$result},
-
+          "supervise_augment" = self$steps[[i]]$bake(unclass(self$result),
+                                                     self$term_info,
+                                                     self$steps),
           # default
-          {self$steps[[i]]$bake(unclass(self$result)[columns]);
-            self$result}
+          self$steps[[i]]$bake(unclass(self$template)[columns])
 
         )
+
+
         end_time <- Sys.time()
         elapsed_time <- end_time - start_time
         self$time_bake <- c(self$time_bake, elapsed_time)
+
 
         self$update_term_info(
           step_name = self$steps[[i]]$step_name,
@@ -191,12 +180,14 @@ Recipe <- R6Class(
           roles = self$steps[[i]]$role
         )
 
-
+        self$steps[[i]]$rerun <- FALSE
 
       }
 
       invisible(self)
     },
+
+
     # @description
     # Reduce the recipe to tabular form. Bake and coerce to the desired output
     # type.
@@ -204,11 +195,8 @@ Recipe <- R6Class(
     # @return tabular output of baked Recipe.
     plate = function(type = "df") {
       # prep and bake recipe if it hasn't been done
-      # if (length(self$result) == 0) {
-      self$prep()$bake()
-      # }
+      return_type(self$prep()$bake()$get_result(), type = type)
 
-      return_type(self$result, type = type)
     },
     # @description
     # get info about steps
@@ -310,6 +298,24 @@ Recipe <- R6Class(
     # @description
     # Get the type of the step.
     # @return character vector for the step types
+    get_step_status = function() {
+      vapply(self$steps, FUN = function(x) x$rerun, FUN.VALUE = logical(1))
+    },
+    # @description
+    # Get the type of the step.
+    # @return character vector for the step types
+    get_varying = function() {
+      lapply(self$steps, FUN = function(x) x$varying)
+    },
+    # @description
+    # Get the type of the step.
+    # @return character vector for the step types
+    get_step_columns = function() {
+      lapply(self$steps, "[[", "columns")
+    },
+    # @description
+    # Get the type of the step.
+    # @return character vector for the step types
     check_result_lengths = function() {
       n <- collapse::fnunique(collapse::vlengths(self$results))
       if (n > 1) {
@@ -331,7 +337,7 @@ Recipe <- R6Class(
     # @return table of results
     get_result = function(type = "df") {
 
-      return_type(self$result, type = type)
+      unlist(lapply(self$steps, "[[", "result"), recursive = FALSE)
 
     },
     # @description

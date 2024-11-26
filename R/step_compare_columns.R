@@ -57,8 +57,8 @@ StepCompareColumns <- R6Class(
       new_data <- unclass(new_data)[self$columns]
       ret <- list(c(FALSE, abs(diff(new_data[[1]])) > (self$column_values * self$n_sd)))
 
-      setNames(ret, paste0(self$id, "_", self$columns[1], "_", self$columns[2]))
-
+      self$result <- setNames(ret, paste0(self$id, "_", self$columns[1], "_", self$columns[2]))
+      self$result
 
     }
   )

@@ -17,7 +17,7 @@
 
 // #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/expint.hpp>
-// #include <boost/math/special_functions/erf.hpp>
+#include <boost/math/special_functions/gamma.hpp>
 // #include <boost/math/special_functions/factorials.hpp>
 // #include <boost/math/special_functions/bessel.hpp>
 // #include <boost/math/quadrature/gauss_kronrod.hpp>

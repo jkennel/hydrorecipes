@@ -61,7 +61,8 @@ StepAquiferConstantDrawdown <- R6Class(
       S  <- self$specific_storage * self$thickness
 
 
-      setNames(list(jacob_lohman_laplace(
+      # add result data
+      self$result <- setNames(list(jacob_lohman_laplace(
         time = new_data[[self$columns]],
         s = self$drawdown,
         r = self$radius_well,
@@ -72,6 +73,7 @@ StepAquiferConstantDrawdown <- R6Class(
       )), self$new_columns)
 
 
+      self$result
     }
   )
 )

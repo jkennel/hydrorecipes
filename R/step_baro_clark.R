@@ -55,9 +55,11 @@ StepBaroClark <- R6Class(
         ))
 
       }
+
       be <- collapse::rowbind(be)
       self$barometric_efficiency <- be
-    return(NULL)
+
+      return(NULL)
     }
   )
 )

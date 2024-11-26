@@ -83,7 +83,8 @@ StepSlugCbp <- R6Class(
 
       self$new_columns <- self$prefix
 
-      setNames(cbp, self$new_columns)
+      self$result <- setNames(cbp, self$new_columns)
+      self$result
 
     }
   )

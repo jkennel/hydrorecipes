@@ -53,7 +53,10 @@ StepFindInterval <- R6Class(
         names(dum[[i]]) <- nn
         self$new_columns <- c(self$new_columns, nn)
       }
-      unlist(dum, recursive = FALSE)
+
+      self$result <- unlist(dum, recursive = FALSE)
+      self$result
+
     }
   )
 )

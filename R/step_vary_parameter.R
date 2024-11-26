@@ -1,35 +1,32 @@
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# Add an Intercept Term --------------------------------------------------------
+# Theis Step -------------------------------------------------------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-StepIntercept <- R6Class(
-  classname = "step_intercept",
+StepVaryParameter <- R6Class(
+  classname = "step_vary_parameter",
   inherit = Step,
+
   public = list(
 
     # step specific variables
-    initialize = function(terms,
+    initialize = function(parameters,
                           role = "predictor",
                           ...) {
       # get function parameters to pass to parent
       env_list <- get_function_arguments()
-      env_list$step_name <- "step_intercept"
-      env_list$type <- "add"
+      env_list$step_name <- "step_vary_parameter"
+      env_list$type <- "modify"
       super$initialize(
         terms = NULL,
         env_list[names(env_list) != "terms"],
         ...
       )
 
+      do.call(super$initialize, inputs)
+      self$parameters <- parameters
 
       invisible(self)
-    },
-    bake = function(new_data) {
-      self$new_columns <- self$prefix
-
-      self$result <- setNames(list(rep(1.0, length(new_data[[1]]))), self$new_columns)
-      self$result
 
     }
   )

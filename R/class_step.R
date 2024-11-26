@@ -8,7 +8,7 @@ Step <- R6Class(
   public = list(
     type = NULL, # check, add, remove, update/modify
 
-    # base step
+    # base steps
     terms = NULL,
     role = NULL,
     trained = FALSE,
@@ -18,9 +18,16 @@ Step <- R6Class(
     keep_original_cols = TRUE,
     id = NULL,
     prefix = NULL,
+    result = NULL,
+
+
+    varying = NULL, # list(name = , initial = , lower = , upper = )
+    rerun = TRUE,
 
     check = NULL,
     new_columns = c(),
+
+
 
     initialize = function(terms, ...) {
 
@@ -41,6 +48,7 @@ Step <- R6Class(
       self$type <- dots$type
       self$prefix <- dots$prefix
 
+      self$varying <- dots$varying
 
       # super specific values
       if (is.null(self$prefix)) {
@@ -86,6 +94,7 @@ Step <- R6Class(
     response = function(co) {
       n_each = nrow(co)
       n <- length(co)
+
       list(
         x = rep(NA_real_, n),
         variable = rep("coefficient", n),
@@ -93,6 +102,35 @@ Step <- R6Class(
         step_id = rep(self$id, n),
         outcome = rep(colnames(co), each = n_each)
       )
+
+    },
+
+    get_fields = function() {
+      sapply(self, class)
+    },
+    get_result = function(column_name = NULL) {
+
+      if (is.null(column_name)) {
+        return(self$result)
+      }
+
+      nms <- names(self$result)
+      if (column_name %in% nms) {
+        return(self$result[column_name])
+      }
+
+      return(NULL)
+    },
+    set_result = function(values) {
+      self$result <- values
+
+      return(self)
+    },
+    update_step = function(field_name, field_value) {
+
+      self[[field_name]] <- field_value
+      self$rerun <- TRUE
+
     }
 
   )

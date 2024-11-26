@@ -28,11 +28,14 @@ StepDropColumns <- R6Class(
     bake = function(new_data) {
 
       columns <- self$columns
+
       for (i in seq_along(columns)) {
         new_data[columns[i]] <- list(NULL)
       }
 
-      new_data
+      self$result <- new_data
+      self$result
+
     }
 
   )

@@ -30,9 +30,10 @@ StepSubsetRows <- R6Class(
       invisible(self)
     },
     bake = function(new_data) {
-      # print(str(new_data))
-      # print(str(unclass(collapse::qDF(new_data)[self$row_numbers, ])))
-      unclass(collapse::qDF(new_data)[self$row_numbers, , drop = FALSE])
+
+      # should this be set in recipe
+      self$result <- unclass(collapse::qDF(new_data)[self$row_numbers, , drop = FALSE])
+      self$result
     }
   )
 )

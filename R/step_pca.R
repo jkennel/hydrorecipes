@@ -88,7 +88,9 @@ StepPca <- R6Class(
       self$new_columns <- name_columns(self$prefix, NULL, n = self$n_comp)
       names(new_data) <- self$new_columns
 
-      new_data
+      self$result <- new_data
+      self$result
+
     }
   )
 )

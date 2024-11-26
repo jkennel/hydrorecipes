@@ -18,17 +18,21 @@ StepHarmonic <- R6Class(
                           starting_value = 0.0,
                           role = "predictor",
                           ...) {
+
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
       env_list$step_name <- "step_harmonic"
       env_list$type <- "add"
+
       super$initialize(
         terms = terms,
         env_list[names(env_list) != "terms"],
         ...
       )
 
+
+      # self$call <- match.call()
 
       # step specific values
       self$frequency <- sort(frequency)
@@ -63,7 +67,9 @@ StepHarmonic <- R6Class(
 
       }
 
-      unlist(hls, recursive = FALSE)
+      self$result <- unlist(hls, recursive = FALSE)
+      self$result
+
     },
     response = function(co) {
 
@@ -88,6 +94,9 @@ StepHarmonic <- R6Class(
       )
 
       list(x = x, variable = variable, value = amp_phase, step_id = self$id)
+    },
+    test_eval = function() {
+      eval(self$call)
     }
 
   )

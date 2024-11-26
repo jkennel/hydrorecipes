@@ -16,6 +16,7 @@ StepKernelFilter <- R6Class(
                           align = "center",
                           role = "predictor",
                           ...) {
+
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
@@ -44,6 +45,7 @@ StepKernelFilter <- R6Class(
 
       self$new_columns <- c()
       filt <- list()
+
       for (i in seq_along(column_name)) {
         if (self$align == "center") {
           filt[[i]] <- convolve_overlap_save_list(
@@ -75,7 +77,8 @@ StepKernelFilter <- R6Class(
 
       }
 
-      unlist(filt, recursive = FALSE)
+      self$result <- unlist(filt, recursive = FALSE)
+      self$result
     }
   )
 )

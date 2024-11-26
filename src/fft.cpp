@@ -119,59 +119,59 @@ Eigen::VectorXd convolve_vec(Eigen::VectorXd x,
 //'
 // [[Rcpp::export]]
 Eigen::VectorXd convolve_filter(const Eigen::VectorXd& x,
-                                 const Eigen::VectorXd& y,
-                                 const bool remove_partial,
-                                 const bool reverse) {
+                                const Eigen::VectorXd& y,
+                                const bool remove_partial,
+                                const bool reverse) {
 
-   size_t n_x = x.size();
-   size_t n_y = y.size();
+  size_t n_x = x.size();
+  size_t n_y = y.size();
 
-   if (n_y > n_x) Rcpp::stop("n_y cannot be larger than n_x");
+  if (n_y > n_x) Rcpp::stop("n_y cannot be larger than n_x");
 
-   Eigen::FFT<double> fft;
-   size_t n_new = next_n_eigen(n_x + n_y - 1);
+  Eigen::FFT<double> fft;
+  size_t n_new = next_n_eigen(n_x + n_y - 1);
 
-   // Temporary vectors
-   VectorXd x_dbl = VectorXd::Zero(n_new);
-   VectorXd out_dbl = VectorXd::Zero(n_new);
+  // Temporary vectors
+  VectorXd x_dbl = VectorXd::Zero(n_new);
+  VectorXd out_dbl = VectorXd::Zero(n_new);
 
-   VectorXcd fft_x(n_new);
-   VectorXcd fft_y(n_new);
+  VectorXcd fft_x(n_new);
+  VectorXcd fft_y(n_new);
 
-   // Output
-   VectorXd out(n_y);
+  // Output
+  VectorXd out(n_y);
 
-   if (reverse) {
-     x_dbl.tail(n_x) = x.reverse();
-   } else {
-     x_dbl.tail(n_x) = x;
-   }
+  if (reverse) {
+    x_dbl.tail(n_x) = x.reverse();
+  } else {
+    x_dbl.tail(n_x) = x;
+  }
 
-   // do fft for x
-   fft.fwd(fft_x, x_dbl);
+  // do fft for x
+  fft.fwd(fft_x, x_dbl);
 
-   // do fft for y and convolution
-   out_dbl.head(n_y) = y;
+  // do fft for y and convolution
+  out_dbl.head(n_y) = y;
 
-   fft.fwd(fft_y, out_dbl);
+  fft.fwd(fft_y, out_dbl);
 
-   fft_y = fft_x.array() * fft_y.conjugate().array();
+  fft_y = fft_x.array() * fft_y.conjugate().array();
 
-   fft.inv(out_dbl, fft_y);
+  fft.inv(out_dbl, fft_y);
 
-   if (reverse) {
-     out = out_dbl.tail(n_x).reverse();
-   } else {
-     out = out_dbl.head(n_x);
-   }
+  if (reverse) {
+    out = out_dbl.tail(n_x).reverse();
+  } else {
+    out = out_dbl.head(n_x);
+  }
 
-   if (remove_partial) {
-     out.head(n_y - 1).setConstant(NA_REAL);
-   }
+  if (remove_partial) {
+    out.head(n_y - 1).setConstant(NA_REAL);
+  }
 
-   return(out);
+  return(out);
 
- }
+}
 //==============================================================================
 
 
@@ -273,8 +273,10 @@ Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd x,
   Eigen::VectorXd x_sub = Eigen::VectorXd::Zero(n_pad);
   Eigen::VectorXd y_sub = pad_vector(y, n_y, n_pad);
 
+
   VectorXcd fft_y(n_pad);
   fft.fwd(fft_y, y_sub);
+
   VectorXcd fft_x(n_pad);
   VectorXd z(n_pad);
   VectorXd out = VectorXd::Zero(n_x);
@@ -290,6 +292,7 @@ Eigen::VectorXd convolve_overlap_save(Eigen::VectorXd x,
   if (align == 2) {
     n_align = 1;
   }
+
   size_t i = n_x - n_pad;
 
   while (i >= 0) {
@@ -1492,7 +1495,115 @@ Eigen::MatrixXd ordinary_coherence_phase(const Eigen::ArrayXXcd& x) {
 
 
 
-
+// //==============================================================================
+// // x are frequencies
+// // y is the transfer function
+// // knots for the spline regression fit
+// // degree fro the spline regresssion fit
+// //' @title
+// //' interpolate_tf
+// //'
+// //' @description
+// //' Go from irregularly spaced frequency response function to a regularly
+// //' spaced version.  This function will smooth out local variability depending
+// //' on the chosen knots.
+// //'
+// //' @inheritParams which_indices
+// //'
+// //' @param x the frequencies. (numeric vector)
+// //' @param y the frequency response function values. (complex matrix)
+// //' @param knots locations used to interpolate the frequency response. (numeric vector)
+// //' @param degree the degree for the \code{b_spline} function. (integer)
+// //' @param x_interp the frequencies for interpolation. (numeric vector)
+// //'
+// //'
+// //'
+// //' @return the time domain cumulative impulse response.
+// //'
+// //' @noRd
+// //'
+// // [[Rcpp::export]]
+// Eigen::MatrixXcd interpolate_tf(Eigen::MatrixXcd& x,
+//                                 const Eigen::ArrayXd& frequency_irregular,
+//                                 const Eigen::ArrayXd& frequency_regular,
+//                                 Eigen::VectorXd& knots
+// ) {
+//
+//   size_t n_x = x.rows();   // transfer function values
+//   size_t n_freq = frequency_irregular.size(); // frequencies for transfer function
+//   size_t n_col = x.cols(); // number of series
+//   size_t n = n_x - 2;      // n without dc components
+//   size_t n_knots = knots.size();
+//
+//
+//   // check inputs
+//   if (n_x != n_freq) stop("interpolate_tf: x and y lengths must be equal");
+//   if (n_x < n_knots) stop("interpolate_tf: the number of knots cannot be greater than the input length");
+//
+//
+//   // check knots
+//   for (size_t i = 0; i < knots.size(); ++i) {
+//     if (knots(i) < frequency_irregular(i + 1)) {
+//       knots(i) = (frequency_irregular(i + 1) + frequency_irregular(i + 2)) / 2.0;
+//     }
+//   }
+//
+//   // we don't want to use the dc values in the interpolation
+//   VectorXcd dc1 = x.row(0);
+//   VectorXcd dc2 = x.row(n_x - 1);
+//
+//
+//   VectorXd frequency_sub = frequency_irregular.segment(1, n);
+//   size_t max = frequency_regular.size();
+//
+//   // generate knots
+//   MatrixXd bs_in  = b_spline(frequency_sub, knots);
+//   MatrixXd bs_out = b_spline(frequency_regular, knots);
+//   // size_t n_interp = x_interp.size();
+//
+//   VectorXcd frf(max);
+//   VectorXd fit_real(n);
+//   VectorXd fit_imag(n);
+//   VectorXd re(n);
+//   VectorXd im(n);
+//   VectorXcd x_sub(n);
+//   Eigen::MatrixXcd out(max * 2 , n_col);
+//
+//
+//   for (size_t i = 0; i < n_col; ++i) {
+//
+//     // do y by col
+//     x_sub = x.col(i).segment(1, n);
+//
+//     fit_real = bs_in.colPivHouseholderQr().solve(x_sub.real());;
+//     fit_imag = bs_in.colPivHouseholderQr().solve(x_sub.imag());;
+//
+//     re = bs_out * fit_real;
+//     im = bs_out * fit_imag;
+//
+//     // generate full length sequence
+//     for (size_t j = 0; j < max; ++j) {
+//       frf(j) = std::complex<double>(re[j], im[j]);
+//     }
+//     // Rcpp::Rcout << "The value frf head " << frf.head(5) << std::endl;
+//     // Rcpp::Rcout << "The value frf tail" << frf.head(5) << std::endl;
+//
+//     // out.col(i) << dc1(i), frf, dc2(i), frf.reverse().conjugate();
+//     // out.col(i) << y_sub(1), frf, y_sub.tail(1), frf.reverse().conjugate();
+//     out.col(i) << frf, frf(0), frf.tail(max-1).reverse().conjugate();
+//     // out.col(i) << frf(0), frf, frf.tail(1), frf.reverse().conjugate();
+//     // Rcpp::Rcout << "The value out head " << out.col(i).head(5) << std::endl;
+//     // Rcpp::Rcout << "The value out tail" << out.col(i).tail(5) << std::endl;
+//
+//
+//   }
+//
+//   return(out);
+//
+// }
+// //==============================================================================
+//
+//
 // //==============================================================================
 // //' @title
 // //' frequency_to_time_domain
@@ -1555,6 +1666,7 @@ Eigen::MatrixXd ordinary_coherence_phase(const Eigen::ArrayXXcd& x) {
 // //==============================================================================
 
 
+
 // frequency_to_time_domain <- function(x, y) {
 //
 //   dc1 <- y[1,] # DC values
@@ -1566,8 +1678,8 @@ Eigen::MatrixXd ordinary_coherence_phase(const Eigen::ArrayXXcd& x) {
 //   len <- min(knots):max(knots)
 //
 // # this is used to smooth the complex response
-//   sp_in  <- splines2::bSpline(x_n, knots = knots, Boundary.knots = c(0, max(x_n)+1e-16))
-//     sp_out <- splines2::bSpline(len, knots = knots, Boundary.knots = c(0, max(x_n)+1e-16))
+//   sp_in  <- splines2::bSpline(x_n, knots = knots, Boundary.knots = c(0, max(x_n) + 1e-16))
+//     sp_out <- splines2::bSpline(len, knots = knots, Boundary.knots = c(0, max(x_n) + 1e-16))
 //
 //
 //     out <- matrix(NA_real_,
@@ -1641,114 +1753,6 @@ Eigen::MatrixXd ordinary_coherence_phase(const Eigen::ArrayXXcd& x) {
 // }
 // //==============================================================================
 
-
-// //==============================================================================
-// // x are frequencies
-// // y is the transfer function
-// // knots for the spline regression fit
-// // degree fro the spline regresssion fit
-// //' @title
-// //' interpolate_tf
-// //'
-// //' @description
-// //' Go from irregularly spaced frequency response function to a regularly
-// //' spaced version.  This function will smooth out local variability depending
-// //' on the chosen knots.
-// //'
-// //' @inheritParams which_indices
-// //'
-// //' @param x the frequencies. (numeric vector)
-// //' @param y the frequency response function values. (complex matrix)
-// //' @param knots locations used to interpolate the frequency response. (numeric vector)
-// //' @param degree the degree for the \code{b_spline} function. (integer)
-// //' @param x_interp the frequencies for interpolation. (numeric vector)
-// //'
-// //'
-// //'
-// //' @return the time domain cumulative impulse response.
-// //'
-// //' @noRd
-// //'
-// // [[Rcpp::export]]
-// Eigen::MatrixXcd interpolate_tf(Eigen::MatrixXcd& x,
-//                                  const Eigen::ArrayXd& frequency_irregular,
-//                                  const Eigen::ArrayXd& frequency_regular,
-//                                  Eigen::VectorXd& knots
-// ) {
-//
-//   size_t n_x = x.rows();   // transfer function values
-//   size_t n_freq = frequency_irregular.size(); // frequencies for transfer function
-//   size_t n_col = x.cols(); // number of series
-//   size_t n = n_x - 2;      // n without dc components
-//   size_t n_knots = knots.size();
-//
-//
-//   // check inputs
-//   if (n_x != n_freq) stop("interpolate_tf: x and y lengths must be equal");
-//   if (n_x < n_knots) stop("interpolate_tf: the number of knots cannot be greater than the input length");
-//
-//
-//   // check knots
-//   for (size_t i = 0; i < knots.size(); ++i) {
-//     if (knots(i) < frequency_irregular(i + 1)) {
-//       knots(i) = (frequency_irregular(i + 1) + frequency_irregular(i + 2)) / 2.0;
-//     }
-//   }
-//
-//   // we don't want to use the dc values in the interpolation
-//   VectorXcd dc1 = x.row(0);
-//   VectorXcd dc2 = x.row(n_x - 1);
-//
-//
-//   VectorXd frequency_sub = frequency_irregular.segment(1, n);
-//   size_t max = frequency_regular.size();
-//
-//   // generate knots
-//   MatrixXd bs_in  = b_spline(frequency_sub, knots);
-//   MatrixXd bs_out = b_spline(frequency_regular, knots);
-//   // size_t n_interp = x_interp.size();
-//
-//   VectorXcd frf(max);
-//   VectorXd fit_real(n);
-//   VectorXd fit_imag(n);
-//   VectorXd re(n);
-//   VectorXd im(n);
-//   VectorXcd x_sub(n);
-//   Eigen::MatrixXcd out(max * 2 , n_col);
-//
-//
-//   for (size_t i = 0; i < n_col; ++i) {
-//
-//     // do y by col
-//     x_sub = x.col(i).segment(1, n);
-//
-//     fit_real = bs_in.colPivHouseholderQr().solve(x_sub.real());;
-//     fit_imag = bs_in.colPivHouseholderQr().solve(x_sub.imag());;
-//
-//     re = bs_out * fit_real;
-//     im = bs_out * fit_imag;
-//
-//     // generate full length sequence
-//     for (size_t j = 0; j < max; ++j) {
-//       frf(j) = std::complex<double>(re[j], im[j]);
-//     }
-//       // Rcpp::Rcout << "The value frf head " << frf.head(5) << std::endl;
-//       // Rcpp::Rcout << "The value frf tail" << frf.head(5) << std::endl;
-//
-//     // out.col(i) << dc1(i), frf, dc2(i), frf.reverse().conjugate();
-//     // out.col(i) << y_sub(1), frf, y_sub.tail(1), frf.reverse().conjugate();
-//     out.col(i) << frf, frf(0), frf.tail(max-1).reverse().conjugate();
-//     // out.col(i) << frf(0), frf, frf.tail(1), frf.reverse().conjugate();
-//       // Rcpp::Rcout << "The value out head " << out.col(i).head(5) << std::endl;
-//       // Rcpp::Rcout << "The value out tail" << out.col(i).tail(5) << std::endl;
-//
-//
-//   }
-//
-//   return(out);
-//
-// }
-// //==============================================================================
 
 
 //==============================================================================
@@ -2433,25 +2437,36 @@ Eigen::MatrixXcd transfer_welch(Eigen::MatrixXd& x,
 # )
 #
 # tmp
-# x <- cumsum(rnorm(1000000))
-# y <- hydrorecipes:::window_nuttall(1000)/sum(window_nuttall(1000))
-# plot(x, type = 'l')
-# points(hydrorecipes:::convolve_overlap_save(x, y, 1), type = 'l', col = 'red')
-#
-#
-# m <- matrix(rep(y, 10), ncol = 10)
-# l <- list(y,y,y,y,y,y,
-#           # y,y,y,y,y,y,
-#           # y,y,y,y,y,y,
-#           y,y,y,y)
-# bench::mark(
-#   a <- hydrorecipes:::convolve_overlap_save_list(x, l),
-#   b <- hydrorecipes:::convolve_list(x, l, TRUE, TRUE),
-#   # d <- hydrorecipes:::convolve_filter(x, y, TRUE, TRUE),
-#   # e <- hydrorecipes:::convolve_matrix(x, m, TRUE, TRUE),
-#   check = FALSE,
-#   min_iterations = 1
-# )
+x <- cumsum(rnorm(1000000))
+y <- hydrorecipes:::window_nuttall(1000)/sum(window_nuttall(1000))
+plot(x, type = 'l')
+points(hydrorecipes:::convolve_overlap_save(x, y, 1), type = 'l', col = 'red')
+
+
+m <- matrix(rep(y, 10), ncol = 10)
+l <- list(y,y,y,y,y,y,
+          # y,y,y,y,y,y,
+          # y,y,y,y,y,y,
+          y,y,y,y)
+bench::mark(
+  a <- hydrorecipes:::convolve_overlap_save_list(x, l, align = 0),
+  b <- hydrorecipes:::convolve_list(x, l, TRUE, TRUE),
+  d <- hydrorecipes:::convolve_filter(x, y, TRUE, TRUE),
+  e <- hydrorecipes:::convolve_overlap_save(x, y, 0),
+  # e <- hydrorecipes:::convolve_matrix(x, m, TRUE, TRUE),
+  check = FALSE,
+  min_iterations = 1
+)
+
+y1 <- hydrorecipes:::gamma_3(1:100000, 1, 2.2, 1)
+y2 <- hydrorecipes:::gamma_3(1:750, 1, 2.2, 1)
+bench::mark(
+  d <- tail(hydrorecipes:::convolve_overlap_save(x, y1, 0), 1000),
+  e <- tail(hydrorecipes:::convolve_overlap_save(x, y2, 0), 1000),
+  check = TRUE,
+  min_iterations = 1
+)
+
 #
 # bench::mark(
 #   a <- hydrorecipes:::spec_pgram(m, spans = 3, TRUE, TRUE, taper = 0.1),

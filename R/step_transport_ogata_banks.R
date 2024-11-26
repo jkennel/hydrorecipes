@@ -61,7 +61,8 @@ StepTransportOgataBanks <- R6Class(
         new_data[[1]]
       ))
       self$new_columns <- self$prefix
-      setNames(ob, self$new_columns)
+      self$result <- setNames(ob, self$new_columns)
+      self$result
 
     }
   )

@@ -957,6 +957,10 @@ std_tgamma <- function(u, a) {
     .Call(`_hydrorecipes_std_tgamma`, u, a)
 }
 
+bh_gamma_p_inv <- function(a, p) {
+    .Call(`_hydrorecipes_bh_gamma_p_inv`, a, p)
+}
+
 binary_search <- function(x, y) {
     .Call(`_hydrorecipes_binary_search`, x, y)
 }
@@ -1163,6 +1167,50 @@ hantush_jacob <- function(time, flow_rate, radius, storativity, transmissivity, 
 
 ig <- function(a, u) {
     .Call(`_hydrorecipes_ig`, a, u)
+}
+
+exp_2_parameter <- function(t, amplitude, lamda) {
+    .Call(`_hydrorecipes_exp_2_parameter`, t, amplitude, lamda)
+}
+
+exp_2_old <- function(t, amplitude, lamda) {
+    .Call(`_hydrorecipes_exp_2_old`, t, amplitude, lamda)
+}
+
+exp_2 <- function(t, amplitude, lamda) {
+    .Call(`_hydrorecipes_exp_2`, t, amplitude, lamda)
+}
+
+exp_2_test <- function(amplitude, lamda) {
+    .Call(`_hydrorecipes_exp_2_test`, amplitude, lamda)
+}
+
+exp_2_eigen <- function(amplitude, lamda) {
+    .Call(`_hydrorecipes_exp_2_eigen`, amplitude, lamda)
+}
+
+gamma_3_parameter <- function(t, amplitude, k, theta) {
+    .Call(`_hydrorecipes_gamma_3_parameter`, t, amplitude, k, theta)
+}
+
+gamma_3_old <- function(t, amplitude, k, theta) {
+    .Call(`_hydrorecipes_gamma_3_old`, t, amplitude, k, theta)
+}
+
+gamma_3_old2 <- function(t, amplitude, k, theta) {
+    .Call(`_hydrorecipes_gamma_3_old2`, t, amplitude, k, theta)
+}
+
+gamma_3 <- function(t, amplitude, k, theta) {
+    .Call(`_hydrorecipes_gamma_3`, t, amplitude, k, theta)
+}
+
+gamma_3_test <- function(amplitude, k, theta) {
+    .Call(`_hydrorecipes_gamma_3_test`, amplitude, k, theta)
+}
+
+gamma_3_eigen <- function(amplitude, k, theta) {
+    .Call(`_hydrorecipes_gamma_3_eigen`, amplitude, k, theta)
 }
 
 #' @title

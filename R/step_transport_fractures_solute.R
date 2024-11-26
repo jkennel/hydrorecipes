@@ -116,7 +116,8 @@ StepTransportFracturesSolute <- R6Class(
 
       names(pfs) <- self$new_columns
 
-      pfs
+      self$result <- pfs
+      self$result
 
     }
   )

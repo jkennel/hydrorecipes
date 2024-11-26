@@ -31,7 +31,8 @@ StepVarying <- R6Class(
       self$to_remove <- !collapse::varying(new_data)
       new_data[self$to_remove] <- list(NULL)
 
-      new_data
+      self$result <- new_data
+      self$result
     }
   )
 )

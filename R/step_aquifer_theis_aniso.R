@@ -72,7 +72,7 @@ StepAquiferTheisAniso <- R6Class(
       self$new_columns <- self$prefix
       self$columns <- paste(self$columns, collapse = ",")
 
-      setNames(theis_aniso_time(
+      self$result <- setNames(theis_aniso_time(
         distance_x = self$distance_x_transformed,
         distance_y = self$distance_y_transformed,
         storativity = self$storativity,
@@ -83,6 +83,7 @@ StepAquiferTheisAniso <- R6Class(
         flow_rate = new_data[[self$flow_rate]]
       ), self$new_columns)
 
+      self$result
 
     }
 
