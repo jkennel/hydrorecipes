@@ -8,8 +8,10 @@ StepIntercept <- R6Class(
   inherit = Step,
   public = list(
 
+    value = NA_real_,
     # step specific variables
     initialize = function(terms,
+                          value = 1.0,
                           role = "predictor",
                           ...) {
       # get function parameters to pass to parent
@@ -21,15 +23,18 @@ StepIntercept <- R6Class(
         env_list[names(env_list) != "terms"],
         ...
       )
+      self$value <- value
 
 
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
+      n <- length(s[["result"]][[1L]])
       self$new_columns <- self$prefix
 
-      self$result <- setNames(list(rep(1.0, length(new_data[[1]]))), self$new_columns)
-      self$result
+      self$result <- setNames(list(rep.int(self$value, n)), self$new_columns)
+      return(NULL)
+
 
     }
   )

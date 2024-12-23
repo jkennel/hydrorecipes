@@ -47,14 +47,14 @@ StepTransferWelch <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data, term_info, steps) {
+    bake = function(s) {
 
-      vars_list <- select_fft_vars_list(new_data, self$formula, self$columns)
+      vars_list <- select_fft_vars_list(s[["result"]], self$formula, self$columns)
 
       for(i in seq_along(vars_list$outcomes)) {
 
-        tmp_data <- unclass(new_data)[c(vars_list$outcomes[i],
-                                        vars_list$predictors)]
+        tmp_data <- s[["result"]][c(vars_list$outcomes[i],
+                                    vars_list$predictors)]
 
         res <- collapse::mctl(
           transfer_welch(
@@ -65,10 +65,10 @@ StepTransferWelch <- R6Class(
           )
         )
 
-        n  <- length(res[[1]])
-        df <- 1 / n
-        frequency <- list(frequency = seq.int(from = 0, by = df,
-                                              length.out = n) * 86400 / self$time_step)
+        n  <- length(res[[1L]])
+        df <- 1.0 / n
+        frequency <- list(frequency = seq.int(from = 0.0, by = df,
+                                              length.out = n) * 86400.0 / self$time_step)
 
         self$new_columns <- name_columns(paste(names(tmp_data), collapse = "_"), NULL, n = length(res))
 
@@ -76,7 +76,7 @@ StepTransferWelch <- R6Class(
         res <- append(res, frequency)
 
         # res <- append(res, list(variable = rep(vars_list$outcomes[i], n)))
-        res <- append(res, list(id = rep(self$id, n)))
+        res <- append(res, list(id = rep.int(self$id, n)))
 
         self$fft_result[[i]] <- res
       }

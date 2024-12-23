@@ -79,7 +79,7 @@ tidal_cooper_1965 <- function(frequency,
   alpha <- .calc_alpha_w(omega, storativity, transmissivity, radius_well)
   t1    <- .calc_dimensionless_frequency(omega, radius_casing, transmissivity)
 
-  kel   <- kelvin(alpha, nSeq = 1)
+  kel   <- kelvin(alpha, nSeq = 1L)
 
   ker_0 <- kel[['ker_0']]
   kei_0 <- kel[['kei_0']]

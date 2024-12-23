@@ -33,24 +33,16 @@ StepCenter <- R6Class(
 
       invisible(self)
     },
-    prep = function(new_data, info) {
-      super$prep(new_data, info)
+    prep = function(data) {
 
-      self$column_values <- self$fun(unclass(new_data)[self$columns],
-        na.rm = self$na_rm, drop = TRUE
-      )
+      self$column_values <- self$fun(data, na.rm = self$na_rm)
 
     },
 
     # subtract the central value from a column
-    bake = function(new_data) {
+    bake = function(s) {
 
-
-      for (i in seq_along(self$columns)) {
-        new_data[[i]] <- new_data[[i]] - self$column_values[i]
-      }
-
-      self$result <- new_data
+      s[["result"]][self$columns] <- s[["result"]][self$columns] %r-% self$column_values
 
       return(NULL)
 

@@ -30,33 +30,25 @@ StepNormalize <- R6Class(
 
       invisible(self)
     },
-    prep = function(new_data, info) {
-      super$prep(new_data, info)
+    prep = function(data) {
 
-      self$center <- collapse::fmean(unclass(new_data)[self$columns],
-        na.rm = self$na_rm,
-        drop = TRUE
-      )
-      self$scale <- collapse::fsd(unclass(new_data)[self$columns],
-        na.rm = self$na_rm,
-        drop = TRUE
-      )
+
+      # print("00000")
+      # print(head(data))
+      self$center <- collapse::fmean(data, na.rm = self$na_rm)
+
+      self$scale <- collapse::fsd(data, na.rm = self$na_rm)
+      self$scale <- 1.0 / self$scale
+
     },
-    # subtract the central value from a column
-    bake = function(new_data) {
+    # subtract the central value from a column and divide by the standard deviation
+    bake = function(s) {
 
-      for (i in seq_along(self$columns)) {
-        new_data[[i]] <- (new_data[[i]] - self$center[i]) *
-          (1.0 / self$scale[i])
-      }
+      # print(head(s[["result"]][self$columns]))
+      s[["result"]][self$columns] <- (s[["result"]][self$columns] %r-% self$center) %r*%
+        (self$scale)
 
-      # fscale(new_data, self$center, self$scale)
-      # scale_list_param_std(new_data,
-      #                        center = self$center,
-      #                        scale = 1.0/self$scale)
-
-      self$result <- new_data
-      self$result
+      return(NULL)
     }
   )
 )

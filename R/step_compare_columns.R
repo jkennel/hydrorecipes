@@ -1,5 +1,5 @@
 # This is experimental...The goal is to compare two columns and remove values
-# that fall far from the estimated value.
+# that fall far from the expected value.
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Filter based on column comparison --------------------------------------------
@@ -43,22 +43,25 @@ StepCompareColumns <- R6Class(
       invisible(self)
     },
 
-    prep = function(new_data, info) {
+    prep = function(data) {
 
-      super$prep(new_data, info)
-      new_data <- unclass(new_data)[self$columns]
-      self$column_values <- collapse::fsd(abs(diff(new_data[[2]])),
+      self$column_values <- collapse::fsd(abs(diff(data[[2L]])),
                                           na.rm = self$na_rm)
 
     },
 
-    bake = function(new_data) {
+    bake = function(s) {
 
-      new_data <- unclass(new_data)[self$columns]
-      ret <- list(c(FALSE, abs(diff(new_data[[1]])) > (self$column_values * self$n_sd)))
 
-      self$result <- setNames(ret, paste0(self$id, "_", self$columns[1], "_", self$columns[2]))
-      self$result
+      self$result <- list(c(FALSE,
+                            abs(diff(s[["result"]][[1L]])) > (self$column_values * self$n_sd)))
+
+      self$result <- setNames(self$result,
+                              paste0(self$id, "_",
+                                     self$columns[1L], "_",
+                                     self$columns[2]))
+
+      return(NULL)
 
     }
   )

@@ -11,13 +11,13 @@ StepOls <- R6Class(
     # step specific variables
     outcomes = NULL,
     predictors = NULL,
-    coefficients = NULL,
+    fit = NULL,
     formula = NULL,
-    decomposition = NULL,
+    # decomposition = NULL,
     response_data = NULL,
 
     do_response = NULL,
-    do_predict = NULL,
+    # do_predict = NULL,
     # s = NULL,
     # df_residual = NULL,
     # rank = NULL,
@@ -26,13 +26,13 @@ StepOls <- R6Class(
     initialize = function(formula = NULL,
                           role = "predictor",
                           do_response = TRUE,
-                          do_predict = TRUE,
+                          # do_predict = TRUE,
                           ...) {
       # get function parameters to pass to parent
       # terms <- substitute(terms)
       env_list <- get_function_arguments()
       env_list$step_name <- "step_ols"
-      env_list$type <- "supervise_augment"
+      env_list$type <- "model"
       super$initialize(
         terms = NULL,
         env_list[names(env_list) != "terms"],
@@ -41,72 +41,95 @@ StepOls <- R6Class(
 
       self$formula <- formula
       self$do_response <- do_response
-      self$do_predict <- do_predict
+      # self$do_predict <- do_predict
 
       invisible(self)
     },
-    bake = function(new_data, term_info, steps) {
+    bake = function(r) {
+
+      step_names  <- r$get_step_field("step_name")
+
+      new_data <- return_type(x = r$get_result(),
+                              type = "m",
+                              formula = self$formula,
+                              combined = FALSE)
+
+      self$predictors <- new_data[[1L]]
+      self$outcomes   <- new_data[[2L]]
+
+      co_names <- colnames(self$predictors)
+      nms_outcome <- colnames(self$outcomes)
+      column_list <- r$get_term_index(co_names)
+
+      to_rem <- !(complete.cases(self$predictors, self$outcomes))
 
 
-      vars_list <- names(new_data)
+      # NEED naming coefficients, fitted.values, decomposition, residuals
+      # ols:
+      #  - coefficients
+      #  - fitted.values
+      #  - decomposition
+      #  - residuals
+      #  - s
+      #  - df.residual
+      #  - rank
+      #  - Std. Error
+      self$fit <- determine_coefficients(self$predictors,
+                                         self$outcomes,
+                                         to_rem,
+                                         column_list)
 
-      if (!is.null(self$formula)) {
-        vars_list <- get_formula_vars(formula = self$formula,
-                                      data = unclass(new_data))
-      }
 
-      self$predictors <- get_regression_data(new_data,
-                                             term_info,
-                                             vars_list,
-                                             id_type = "predictor")
-      self$outcomes   <- get_regression_data(new_data,
-                                             term_info,
-                                             vars_list,
-                                             id_type = "outcome")
-
-      self$coefficients <- determine_coefficients(self$predictors, self$outcomes)
-
-      if (self$do_predict) {
-
-        # predict for each group
-        self$decomposition <- predict_groups(self$predictors, self$coefficients, steps)
-        self$decomposition <- unlist(self$decomposition, recursive = FALSE)
-        self$decomposition <- append(self$decomposition,
-                                     list(id = rep(self$id, length(self$decomposition[[1]]))))
-      }
 
       if (self$do_response) {
+        new_columns <- r$get_step_field("new_columns")
+        # new_columns <- new_columns[lengths(new_columns) != 0]
+
         # response for each group
         # column names in term info
-        co_names <- self$predictors$term_info$variable
 
         resp <- list()
 
-        for (i in seq_along(steps)) {
+        # print("xxxxxxxx")
+        # print(new_columns)
+        for (i in seq_along(new_columns)) {
+          nc <- new_columns[[i]]
+          if (is.null(nc)) {
+            next
+          }
 
-          wh  <- collapse::whichv(self$predictors$term_info$step_index, i)
+          wh  <- co_names %in% nc
+          if(sum(wh) == 0) {
+            next
+          }
+
           co_name <- co_names[wh]
-
+          # print("---------")
+          # print(wh)
+          # print(co_name)
           if (length(co_name) > 0) {
 
-            co <- self$coefficients[wh, , drop = FALSE]
-            resp[[i]] <- steps[[i]]$response(co)
+            co <- self$fit$coefficients[wh, , drop = FALSE]
+            # print(co)
+            colnames(co) <- nms_outcome
+            resp[[i]] <- r$steps[[i]]$response(co)
+            # print(str(resp[[i]]))
 
             if (!"outcome" %in% names(resp[[i]])) {
-              resp[[i]]$outcome <- rep(colnames(co), times = nrow(co))
+              resp[[i]]$outcome <- rep(nms_outcome, times = nrow(co))
             }
 
             if (!"term" %in% names(resp[[i]])) {
               resp[[i]]$term <- rep(co_name, times = ncol(co))
             }
 
-            resp[[i]]$step_columns <- paste(steps[[i]]$columns, collapse = "_")
+            resp[[i]]$step_columns <- paste(r$steps[[i]]$columns, collapse = "_")
           }
         }
 
         res <- collapse::rowbind(resp)
 
-        res <- append(res, list(id = rep(self$id, length(res[[1]]))))
+        res <- append(res, list(id = rep(self$id, length(res[[1L]]))))
         self$response_data <- res
 
       }

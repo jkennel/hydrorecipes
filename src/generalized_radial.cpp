@@ -927,16 +927,16 @@ double exp_2_parameter(double t,
   return (amplitude / lamda) * std::exp(-t / lamda);
 
 }
-
-// [[Rcpp::export]]
-std::vector<double> exp_2_old(std::vector<double> t, double amplitude, double lamda){
-
-
-  for (auto& out : t)
-    out = exp_2_parameter(out, amplitude, lamda);
-
-  return(t);
-}
+//
+// // [[Rcpp::export]]
+// std::vector<double> exp_2_old(std::vector<double> t, double amplitude, double lamda){
+//
+//
+//   for (auto& out : t)
+//     out = exp_2_parameter(out, amplitude, lamda);
+//
+//   return(t);
+// }
 
 // [[Rcpp::export]]
 std::vector<double> exp_2(std::vector<double> t, const double amplitude, const double lamda){
@@ -955,34 +955,34 @@ std::vector<double> exp_2(std::vector<double> t, const double amplitude, const d
   }
   return(t);
 }
-
-// [[Rcpp::export]]
-std::vector<double> exp_2_test(const double amplitude,
-                               const double lamda){
-
-  const double scale = amplitude / lamda;
-  int max_t = 750 * std::ceil(lamda);
-
-  std::vector<double> out(max_t);
-  for (int i = 0; i < max_t; ++i) {
-    out[i] = scale * std::exp((double)i / -lamda);
-  }
-  return(out);
-}
-
-
-// [[Rcpp::export]]
-Eigen::ArrayXd exp_2_eigen(const double amplitude,
-                           const double lamda){
-
-  const int max_t = 720 * std::ceil(lamda);
-
-  Eigen::ArrayXd out = Eigen::ArrayXd::LinSpaced(max_t + 1, 0.0, (double)max_t);
-
-  return(amplitude / lamda * (out / -lamda).exp());
-
-}
-
+//
+// // [[Rcpp::export]]
+// std::vector<double> exp_2_test(const double amplitude,
+//                                const double lamda){
+//
+//   const double scale = amplitude / lamda;
+//   int max_t = 750 * std::ceil(lamda);
+//
+//   std::vector<double> out(max_t);
+//   for (int i = 0; i < max_t; ++i) {
+//     out[i] = scale * std::exp((double)i / -lamda);
+//   }
+//   return(out);
+// }
+//
+//
+// // [[Rcpp::export]]
+// Eigen::ArrayXd exp_2_eigen(const double amplitude,
+//                            const double lamda){
+//
+//   const int max_t = 720 * std::ceil(lamda);
+//
+//   Eigen::ArrayXd out = Eigen::ArrayXd::LinSpaced(max_t + 1, 0.0, (double)max_t);
+//
+//   return(amplitude / lamda * (out / -lamda).exp());
+//
+// }
+//
 
 
 // for specifying response functions
@@ -1001,39 +1001,39 @@ double gamma_3_parameter(double t,
 
 }
 
-// [[Rcpp::export]]
-std::vector<double> gamma_3_old(std::vector<double> t,
-                                const double amplitude,
-                                const double k,
-                                const double theta){
-
-
-  for (auto& out : t)
-    out = gamma_3_parameter(out, amplitude, k, theta);
-
-  return(t);
-}
-
-
-// [[Rcpp::export]]
-std::vector<double> gamma_3_old2(std::vector<double> t,
-                                 const double amplitude,
-                                 const double k,
-                                 const double theta){
-
-  const double denom = (std::pow(theta, k) * std::tgamma(k));
-
-  for (auto& out : t)
-    out = amplitude * std::pow(out,  (k - 1.0)) * std::exp(out / -theta) / denom;
-
-  return(t);
-}
+// // [[Rcpp::export]]
+// std::vector<double> gamma_3_old(std::vector<double> t,
+//                                 const double amplitude,
+//                                 const double k,
+//                                 const double theta){
+//
+//
+//   for (auto& out : t)
+//     out = gamma_3_parameter(out, amplitude, k, theta);
+//
+//   return(t);
+// }
+//
+//
+// // [[Rcpp::export]]
+// std::vector<double> gamma_3_old2(std::vector<double> t,
+//                                  const double amplitude,
+//                                  const double k,
+//                                  const double theta){
+//
+//   const double denom = (std::pow(theta, k) * std::tgamma(k));
+//
+//   for (auto& out : t)
+//     out = amplitude * std::pow(out,  (k - 1.0)) * std::exp(out / -theta) / denom;
+//
+//   return(t);
+// }
 
 // [[Rcpp::export]]
 std::vector<double> gamma_3(std::vector<double> t,
                             const double amplitude,
                             const double k,
-                            const double theta){
+                            const double theta) {
 
 
   // return exponetial if k = 1
@@ -1057,41 +1057,115 @@ std::vector<double> gamma_3(std::vector<double> t,
   return(t);
 }
 
+// // [[Rcpp::export]]
+// std::vector<double> gamma_3_test(const double amplitude,
+//                                  const double k,
+//                                  const double theta) {
+//
+//   const double denom = (std::pow(theta, k) * std::tgamma(k));
+//   double exp_val;
+//   int max_t = 720 * std::ceil(theta);
+//
+//   std::vector<double> out(max_t + 1);
+//   for (int i = 0; i < max_t + 1; ++i) {
+//     out[i] = amplitude * std::pow(i, (k - 1.0)) * std::exp(((double)i / -theta)) / denom;
+//   }
+//
+//   return(out);
+// }
+//
+// // [[Rcpp::export]]
+// Eigen::ArrayXd gamma_3_eigen(const double amplitude,
+//                              const double k,
+//                              const double theta) {
+//
+//   const double denom = (std::pow(theta, k) * std::tgamma(k));
+//   const int max_t = 720 * std::ceil(theta);
+//
+//   Eigen::ArrayXd out = Eigen::ArrayXd::LinSpaced(max_t + 1, 0.0, (double)max_t);
+//
+//   return(amplitude * out.pow(k - 1.0) * (out / -theta).exp() / denom);
+//
+//   // for (int i = 1; i < max_t; ++i) {
+//   //   out[i] = amplitude * std::pow(i, (k - 1.0)) * std::exp(((double)i / -theta)) / denom;
+//   // }
+//   //
+//   // return(out);
+// }
+
+
+// https://pastas.readthedocs.io/stable/benchmarks/check_response_functions.html
 // [[Rcpp::export]]
-std::vector<double> gamma_3_test(const double amplitude,
-                                 const double k,
-                                 const double theta){
+std::vector<double> hantush_3(std::vector<double> t,
+                              const double A,
+                              const double a,
+                              const double b) {
 
-  const double denom = (std::pow(theta, k) * std::tgamma(k));
-  double exp_val;
-  int max_t = 720 * std::ceil(theta);
 
-  std::vector<double> out(max_t + 1);
-  for (int i = 0; i < max_t + 1; ++i) {
-    out[i] = amplitude * std::pow(i, (k - 1.0)) * std::exp(((double)i / -theta)) / denom;
+  const double a_ko = 0.5 * A / std::cyl_bessel_k(0.0, 2.0 * std::sqrt(b));
+
+  for (auto& out : t) {
+    out = a_ko / out * std::exp((-out / a) - ((a * b) / out));
   }
 
-  return(out);
+
+  return(t);
 }
 
+
+// https://pastas.readthedocs.io/stable/benchmarks/check_response_functions.html
 // [[Rcpp::export]]
-Eigen::ArrayXd gamma_3_eigen(const double amplitude,
-                             const double k,
-                             const double theta){
+std::vector<double> polder_3(std::vector<double> t,
+                              const double A,
+                              const double a,
+                              const double b) {
 
-  const double denom = (std::pow(theta, k) * std::tgamma(k));
-  const int max_t = 720 * std::ceil(theta);
 
-  Eigen::ArrayXd out = Eigen::ArrayXd::LinSpaced(max_t + 1, 0.0, (double)max_t);
+  const double t1 = A * std::sqrt(a * b / M_PI);
 
-  return(amplitude * out.pow(k - 1.0) * (out / -theta).exp() / denom);
+  for (auto& out : t) {
+    out = t1 * std::pow(out, -1.5) * std::exp((-out / a) - ((a * b) / out));
+  }
 
-  // for (int i = 1; i < max_t; ++i) {
-  //   out[i] = amplitude * std::pow(i, (k - 1.0)) * std::exp(((double)i / -theta)) / denom;
-  // }
-  //
-  // return(out);
+
+  return(t);
 }
+
+// https://pastas.readthedocs.io/stable/benchmarks/check_response_functions.html
+// [[Rcpp::export]]
+std::vector<double> double_exp_4(std::vector<double> t,
+                                 const double A,
+                                 const double a,
+                                 const double b,
+                                 const double f) {
+
+
+  const double t1 = (1.0 - f) / a;
+  const double t2 = f / b;
+
+  for (auto& out : t) {
+    out = A * ((t1 * std::exp(-out / a)) +
+               (t2 * std::exp(-out / b)));
+  }
+
+
+  return(t);
+}
+
+
+// for polder and hantush
+// [[Rcpp::export]]
+int quadratic_t_max(const double a,
+                    const double b,
+                    const double small = -720) {
+
+  // quadratic formula exp(-720) = 2.032231e-313
+  return(((small * a) - std::sqrt(std::pow(small * a, 2) - (4.0 * -1.0 * a * a * b))) / -2.0);
+
+
+}
+
+
 
 // // [[Rcpp::export]]
 // std::vector<double> test(std::vector<double> t) {
@@ -1120,14 +1194,51 @@ Eigen::ArrayXd gamma_3_eigen(const double amplitude,
 
 /*** R
 
+
+t <- 1:345
+A <- 5.0
+alpha <- 0.4
+a_1 <- 10.0
+a_2 <- 50.0
+cumsum(A * ((1 - alpha) / a_1 * exp(-t / a_1) + alpha / a_2 * exp(-t / a_2)))
+
+
 library(bench)
 library(hydrorecipes)
 
 A <- 1.4
 a <- 10000
 n <- 1.0
-t <- as.numeric(1:1e6)
+t <- as.numeric(seq(0, 345, 0.00001))
+A <- 5.0
+a <- 50.0
+b <- 2.0
+# hantush t_max
+t_max <- (-(720 * a) - sqrt((-720 * a)^2 - (4 * -1 * a^2*b))) / -2.0
 
+bench::mark(
+  h <- hydrorecipes:::hantush_3(t = t, A = 5.0, a = 50.0, b = 2.0),
+  t_max <- hydrorecipes:::quadratic_t_max(a, b, -720),
+  p <- hydrorecipes:::polder_3(t, 5, 100, 0.25),
+  de <- hydrorecipes:::double_exp_4(t, 5, 10, 50, 0.4),
+
+  check = FALSE
+)
+
+hydrorecipes:::quadratic_t_max(a, b, small = -720)
+hydrorecipes:::quadratic_t_max(a, b, small = -600)
+hydrorecipes:::quadratic_t_max(a, b, small = -200)
+hydrorecipes:::quadratic_t_max(a, b, small = -100)
+hydrorecipes:::quadratic_t_max(a, b, small = -50)
+hydrorecipes:::quadratic_t_max(a, b, small = -40)
+
+
+plot(cumsum(de), type = 'l', ylim = c(0,5), xlim = c(0, 350))
+
+abline(h = 4)
+abline(v = 50)
+grid()
+plot(cumsum(p), type = 'l', ylim = c(0,2))
 
 bench::mark(
 hydrorecipes:::bh_gamma_p_inv(n, 0.9999) * a

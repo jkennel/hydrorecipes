@@ -972,6 +972,49 @@ step_convolve_gamma <- function(.rec,
 
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_convolve_exponential
+#'
+#' @description
+#'   linearly convolve a gamma kernel with a data series.
+#'
+#' @param amplitude amplitude
+#' @param theta scale
+#'
+#' @inheritParams step_kernel_filter
+#'
+#' @return an updated recipe
+#' @export
+#'
+#' @examples
+#'
+#' formula <- as.formula(x~y+z)
+#' rows <- 1e4
+#'
+#' dat <- data.frame(x = rep(1, rows),
+#'                   y = 1:rows,
+#'                   z = cumsum(rnorm(rows)))
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'   step_convolve_gamma(z, amplitude = 1, theta = 1, k = 1) |>
+#'   plate("tbl")
+#'
+step_convolve_exponential <- function(.rec,
+                                terms,
+                                amplitude,
+                                theta,
+                                align = "right",
+                                max_length = Inf,
+                                role = "predictor",
+                                ...) {
+
+  terms <- substitute(terms)
+  env_list <- get_function_arguments()
+  .rec$add_step(do.call(StepConvolveExponential$new,
+                        modifyList(x = env_list, val = list(...))))
+
+
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_distributed_lag
 #'
 #' @description
@@ -1462,6 +1505,7 @@ step_harmonic <- function(.rec,
 #'        step_intercept()
 step_intercept <- function(.rec,
                            terms,
+                           value = 1.0,
                            role = "predictor",
                            ...) {
   terms <- substitute(terms)
@@ -1557,6 +1601,34 @@ step_lead_lag <- function(.rec,
 
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_multiply
+#'
+#' @inheritParams step_scale
+#'
+#' @return an updated recipe
+#' @export
+#'
+#' @examples
+#' dat <- data.frame(x = rnorm(10), y = rnorm(10))
+#'
+#' rec <- recipe(y~x, data = dat) |>
+#'        step_multiply(x, value = 4)
+#'
+step_multiply <- function(.rec,
+                           terms,
+                           values = 1.0,
+                           role = "predictor",
+                           skip = FALSE,
+                           keep_original_cols = FALSE,
+                           ...){
+
+  terms <- substitute(terms)
+  env_list <- get_function_arguments()
+  .rec$add_step(do.call(StepMultiply$new,
+                        modifyList(x = env_list, val = list(...))))
+
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_normalize
 #'
 #' @inheritParams step_scale
@@ -1621,7 +1693,6 @@ step_ols_gap_fill <- function(.rec,
 #'
 #' @inheritParams step_scale
 #' @param do_response \code{logical} calculate and return the responses?
-#' @param do_predict calculate and return the predictions?
 #' @param formula formula for the regression
 #'
 #' @return an updated recipe
@@ -1651,11 +1722,61 @@ step_ols <- function(.rec,
                      formula,
                      role = "predictor",
                      do_response = TRUE,
-                     do_predict = TRUE,
+                     # do_predict = TRUE,
                      ...){
 
   env_list <- get_function_arguments()
   .rec$add_step(do.call(StepOls$new,
+                        modifyList(x = env_list, val = list(...))))
+
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_nls
+#'
+#' @description Uses the Eigen C++ library fast versions to generate
+#' predictions and coefficients from a recipe.
+#'
+#'
+#' @inheritParams step_scale
+#' @param do_response \code{logical} calculate and return the responses?
+#' @param do_predict calculate and return the predictions?
+#' @param formula formula for the regression
+#'
+#' @return an updated recipe
+#'
+#' @family ols
+#'
+#' @export
+#'
+#' @examples
+#' data("kennel_2020")
+#' kennel_2020[, datetime := as.numeric(datetime)]
+#' formula <- as.formula(wl~.)
+#' n_knots <- 12
+#' deg_free <- 27
+#' max_lag <- 1 + 720
+#'
+#' frec = recipe(formula = formula, data = unclass(kennel_2020)) |>
+#'   step_distributed_lag(baro, knots = hydrorecipes:::log_lags_arma(n_knots, max_lag)) |>
+#'   step_spline_b(datetime, df = deg_free, intercept = FALSE) |>
+#'   step_intercept() |>
+#'   step_drop_columns(baro) |>
+#'   step_drop_columns(datetime) |>
+#'   step_ols(formula) |>
+#'   prep() |>
+#'   bake()
+step_nls <- function(.rec,
+                     formula,
+                     role = "predictor",
+                     algorithm = "lm",
+                     n_subset = 1L,
+                     n_shift = 0L,
+                     # do_response = TRUE,
+                     # do_predict = TRUE,
+                     ...){
+
+  env_list <- get_function_arguments()
+  .rec$add_step(do.call(StepNls$new,
                         modifyList(x = env_list, val = list(...))))
 
 }
@@ -2328,8 +2449,8 @@ bake <- function(.rec, data = NULL) {
 #'        step_scale(x) |>
 #'        plate()
 #'
-plate <- function(.rec, type = "dt") {
-  .rec$plate(type = type)
+plate <- function(.rec, type = "dt", ...) {
+  .rec$plate(type = type, ...)
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

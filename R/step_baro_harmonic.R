@@ -65,12 +65,12 @@ StepBaroHarmonic <- R6Class(
     bake = function(new_data) {
 
       # this is a hack to deal with NSE issues
-      names(new_data)[1] <- "time_col"
+      names(new_data)[1L] <- "time_col"
 
       nms <- names(new_data)
 
       # create regression formula
-      formula_txt <- paste0(paste(nms[-1], collapse = '+'), "~", nms[1])
+      formula_txt <- paste0(paste(nms[-1L], collapse = '+'), "~", nms[1])
 
       # include linear trend and intercept
       harmonics <- Recipe$new(formula = as.formula(formula_txt), new_data)$
@@ -98,20 +98,20 @@ StepBaroHarmonic <- R6Class(
       self$barometric_efficiency <- be_harmonic_cpp(soln_cplx, self$inverse)
       names(self$barometric_efficiency) <- c("ratio", "acworth", "rau")
 
-      dt <- diff(as.numeric(new_data[[1]])[1:2])
-      cycle_size <- self$cycle_size/dt
+      dt <- diff(as.numeric(new_data[[1L]])[1:2])
+      cycle_size <- self$cycle_size / dt
       be_tf <- Mod(be_transfer(collapse::qM(new_data[2:4]),
                                5,
                                TRUE,
                                TRUE,
                                0.1,
                                2.0,
-                               self$cycle_size / dt)[1])
+                               self$cycle_size / dt)[1L])
 
       names(be_tf) <- "tf"
 
       if (self$inverse) {
-        be_tf[1] <- 1.0 - be_tf[1]
+        be_tf[1L] <- 1.0 - be_tf[1L]
       }
 
       self$barometric_efficiency <- c(self$barometric_efficiency, be_tf)

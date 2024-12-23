@@ -51,11 +51,11 @@ StepPgram <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
 
       if (self$lst) {
         self$fft_result <- collapse::mctl(spec_pgram(
-          collapse::qM(new_data),
+          collapse::qM(s[["result"]][self$columns]),
           self$spans,
           self$detrend,
           self$demean,
@@ -64,7 +64,7 @@ StepPgram <- R6Class(
         ))
       } else {
         self$fft_result <- spec_pgram_list(
-          new_data,
+          s[["result"]][self$columns],
           self$spans,
           self$detrend,
           self$demean,
@@ -77,10 +77,10 @@ StepPgram <- R6Class(
       names(self$fft_result) <- self$new_columns
 
 
-      n  <- length(self$fft_result[[1]])
-      df <- 1 / n
-      frequency <- list(frequency = seq.int(from = 0, by = df,
-                           length.out = n) * 86400 / self$time_step)
+      n  <- length(self$fft_result[[1L]])
+      df <- 1.0 / n
+      frequency <- list(frequency = seq.int(from = 0.0, by = df,
+                           length.out = n) * 86400.0 / self$time_step)
       # print(str(self$fft_result))
       # print(str(frequency))
       self$fft_result <- append(self$fft_result, frequency)

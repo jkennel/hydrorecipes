@@ -12,7 +12,6 @@ StepConvolveGamma <- R6Class(
     k = NULL,
     theta = NULL,
     cutoff = NULL,
-    max_length = NULL,
 
     initialize = function(terms,
                           amplitude,
@@ -38,23 +37,31 @@ StepConvolveGamma <- R6Class(
       self$amplitude <- amplitude
       self$k <- k
       self$theta <- theta
-      self$max_length <- max_length
+
+      if (is.finite(max_length)) {
+        self$n_na_max <- max_length
+      } else {
+        if (!is.null(self$varying)) {
+          if (!is.null(self$varying$upper)) {
+            self$n_na_max <- 720L * ceiling(self$varying$upper[3])
+          }
+        } else {
+          self$n_na_max <- 720L * ceiling(self$theta)
+        }
+      }
+
 
       invisible(self)
     },
 
-    bake = function(new_data) {
+    bake = function(s) {
 
-      n <- length(unclass(new_data)[[1]])
+      self$kernel <- list(gamma_3(0L:(self$n_na_max),
+                                  self$amplitude,
+                                  self$k,
+                                  self$theta))
 
-      max_t <- 720L * ceiling(self$theta);
-
-      self$max_length <- pmin(n - 1L, self$max_length)
-      max_t <- pmin(max_t, self$max_length)
-
-      self$kernel <- list(gamma_3(1L:max_t, self$amplitude, self$k, self$theta))
-
-      super$bake(new_data)
+      super$bake(s)
 
     }
   )

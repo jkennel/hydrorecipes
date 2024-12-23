@@ -33,35 +33,36 @@ StepKernelFilter <- R6Class(
       self$kernel <- if (!inherits(kernel, "list")) list(kernel) else kernel
       n_kernel <- length(kernel)
       n_align <- length(align)
-      if (n_align != 1) {
+      if (n_align != 1L) {
         stop("align should be length 1")
       }
       self$align <- align
 
       invisible(self)
     },
-    bake = function(new_data) {
-      column_name <- self$columns
+    bake = function(s) {
 
       self$new_columns <- c()
       filt <- list()
+      for (i in seq_along(self$columns)) {
 
-      for (i in seq_along(column_name)) {
+        column_name <- self$columns[i]
+
         if (self$align == "center") {
           filt[[i]] <- convolve_overlap_save_list(
-            unclass(new_data)[[i]],
+            s[["result"]][[column_name]],
             self$kernel, 1
           )
         }
         if (self$align == "right") {
           filt[[i]] <- convolve_overlap_save_list(
-            unclass(new_data)[[i]],
+            s[["result"]][[column_name]],
             self$kernel, 0
           )
         }
         if (self$align == "left") {
           filt[[i]] <- convolve_overlap_save_list(
-            unclass(new_data)[[i]],
+            s[["result"]][[column_name]],
             self$kernel, 2
           )
         }
@@ -78,7 +79,9 @@ StepKernelFilter <- R6Class(
       }
 
       self$result <- unlist(filt, recursive = FALSE)
-      self$result
+
+      return(NULL)
+      # self$result
     }
   )
 )

@@ -39,19 +39,19 @@ StepAddNoise <- R6Class(
     },
 
     # subtract the central value from a column
-    bake = function(new_data) {
+    bake = function(s) {
 
-      n <- length(new_data[[1]])
+      n <- length(s[["result"]][[self$columns[1L]]])
 
       for (i in seq_along(self$columns)) {
+        column_name <- self$columns[i]
         noise <- self$fun(n, self$mean, self$sd)
-        new_data[[i]] <- new_data[[i]] + noise
+
+        s[["result"]][[column_name]] <-
+          s[["result"]][[column_name]] + noise
+
       }
-
-      # add result data
-      self$result <- new_data
-
-      self$result
+      return(NULL)
     }
   )
 )

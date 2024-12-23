@@ -14,6 +14,7 @@ Step <- R6Class(
     trained = FALSE,
     skip = FALSE,
     columns = NULL,
+    new_columns = NULL,
     step_name = NULL,
     keep_original_cols = TRUE,
     id = NULL,
@@ -23,16 +24,16 @@ Step <- R6Class(
 
     varying = NULL, # list(name = , initial = , lower = , upper = )
     rerun = TRUE,
+    n_na_max = NULL,
 
     check = NULL,
-    new_columns = c(),
 
 
 
     initialize = function(terms, ...) {
 
       if (!missing(terms)) {
-        if (length(terms) == 1) {
+        if (length(terms) == 1L) {
           self$terms <- get_terms_and_symbols(c(terms))
         } else {
           self$terms <- get_terms_and_symbols(terms)
@@ -48,7 +49,8 @@ Step <- R6Class(
       self$type <- dots$type
       self$prefix <- dots$prefix
 
-      self$varying <- dots$varying
+      # don't want flattened list so use list(...)
+      self$varying <- list(...)[["varying"]]
 
       # super specific values
       if (is.null(self$prefix)) {
@@ -60,14 +62,13 @@ Step <- R6Class(
     },
 
     # these are the base methods - can be overwritten in individual steps
-    prep = function(new_data, info) {
-      nms <- names(new_data)
-      self$columns <- get_terms_from_info(self$terms, nms, info)
+    prep = function(column_names) {
+      # self$columns <- get_terms_from_info(self$terms, column_names)
       self$trained <- TRUE
 
       invisible(self)
     },
-    bake = function() {
+    bake = function(s) {
       invisible(self)
     },
     tidy = function(i) {
@@ -96,17 +97,19 @@ Step <- R6Class(
       n <- length(co)
 
       list(
-        x = rep(NA_real_, n),
-        variable = rep("coefficient", n),
+        x = rep.int(NA_real_, n),
+        variable = rep.int("coefficient", n),
         value = as.vector(co),
-        step_id = rep(self$id, n),
-        outcome = rep(colnames(co), each = n_each)
+        step_id = rep.int(self$id, n),
+        outcome = rep.int(colnames(co), each = n_each)
       )
 
     },
-
     get_fields = function() {
       sapply(self, class)
+    },
+    get_number_columns = function() {
+      length(self$new_columns)
     },
     get_result = function(column_name = NULL) {
 
@@ -121,14 +124,48 @@ Step <- R6Class(
 
       return(NULL)
     },
+
+    is_coef = function() {
+
+      if (!is.null(self[["varying"]])) {
+        if(all(self[["varying"]][["name"]] == "coef")) {
+          return(TRUE)
+        }
+      }
+
+      return(FALSE)
+    },
+
     set_result = function(values) {
       self$result <- values
 
       return(self)
     },
+    update_varying = function() {
+
+      if (!is.null(self[["varying"]])) {
+        if (self$is_coef()) {
+          n <- self$get_number_columns()
+          if (length(self[["varying"]][["name"]]) == 1L & n > 1L) {
+            self[["varying"]] <- list(name  = rep.int("coef", n),
+                                      start = rep.int(self[["varying"]][["start"]], n),
+                                      lower = rep.int(self[["varying"]][["lower"]], n),
+                                      upper = rep.int(self[["varying"]][["upper"]], n))
+          }
+        }
+      }
+
+    },
     update_step = function(field_name, field_value) {
 
-      self[[field_name]] <- field_value
+      for (i in seq_along(field_name)) {
+
+        if(field_name[[i]] %in% names(self)) {
+          self[[field_name[i]]] <- field_value[i]
+        }
+
+      }
+
       self$rerun <- TRUE
 
     }

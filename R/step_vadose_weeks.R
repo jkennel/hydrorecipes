@@ -45,7 +45,7 @@ StepVadoseWeeks <- R6Class(
     bake = function(new_data) {
 
       vr <- vadose_response(
-        new_data[[1]],
+        new_data[[1L]],
         self$air_diffusivity,
         self$thickness,
         self$precision,

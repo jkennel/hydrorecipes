@@ -24,8 +24,8 @@ StepCheckNA <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
-      self$check <- lapply(new_data, anyNA)
+    bake = function(s) {
+      self$check <- lapply(s[["result"]], anyNA)
 
       return(NULL)
     }

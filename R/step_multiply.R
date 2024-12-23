@@ -3,27 +3,22 @@
 # Adjust the dispersion (e.g. scale by standard deviation) ---------------------
 #
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-StepScale <- R6Class(
-  classname = "step_scale",
+StepMultiply <- R6Class(
+  classname = "step_multiply",
   inherit = Step,
   public = list(
-    column_values = c(),
-    na_rm = NA,
-    fun = NULL,
-    n_sd = NA_integer_,
+    values = NA_real_,
 
     # step specific variables
     initialize = function(terms,
-                          na_rm = TRUE,
-                          fun = collapse::fsd,
-                          n_sd = 1L,
+                          values = 1.0,
                           role = "predictor",
                           ...) {
 
       # get function parameters to pass to parent
       terms <- substitute(terms)
       env_list <- get_function_arguments()
-      env_list$step_name <- "step_scale"
+      env_list$step_name <- "step_multiply"
       env_list$type <- "modify"
       super$initialize(
         terms = terms,
@@ -31,22 +26,15 @@ StepScale <- R6Class(
         ...
       )
 
-      self$na_rm <- na_rm
-      self$fun <- fun
-      self$n_sd <- n_sd
+      self$values <- values
 
       invisible(self)
     },
-    prep = function(data) {
 
-      self$column_values <- self$fun(data, na.rm = self$na_rm) * (self$n_sd)
-      self$column_values <- 1.0 / self$column_values
-    },
-
-    # subtract the central value from a column
+    # multiply column
     bake = function(s) {
 
-      s[["result"]][self$columns] <- s[["result"]][self$columns] %r*% self$column_values
+      self$result <- s[["result"]][self$columns] %r*% self$values
 
       return(NULL)
 

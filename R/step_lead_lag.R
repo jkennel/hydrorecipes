@@ -31,41 +31,41 @@ StepLeadLag <- R6Class(
 
 
       # step specific values
-      self$lag <- as.integer(sort(lag))
+      self$lag <- as.integer(lag[order(lag)])
       self$n_shift <- as.integer(n_shift)
       self$n_subset <- as.integer(n_subset)
 
       invisible(self)
     },
-    bake = function(new_data) {
-      column_name <- self$columns
-
-      self$new_columns <- c()
+    bake = function(s) {
 
       ll <- list()
-      for (i in seq_along(column_name)) {
-        if (self$n_subset == 1) {
-          ll[[i]] <- collapse::flag(new_data[i], self$lag)
-        } else {
-          ll[[i]] <- lag_list(unclass(new_data)[[i]],
+
+      for (i in seq_along(self$columns)) {
+        column_name <- self$columns[i]
+        # if (self$n_subset == 1) {
+        #   ll[[i]] <- collapse::flag(s[["result"]][column_name], self$lag)
+        # } else {
+          ll[[i]] <- lag_list(s[["result"]][[column_name]],
                               self$lag,
                               n_subset = self$n_subset,
                               n_shift = self$n_shift
           )
-        }
+        # }
 
+        # print(str(ll))
         nn <- name_columns(
           self$prefix,
-          column_name[i],
+          column_name,
           n = length(self$lag)
         )
 
         names(ll[[i]]) <- nn
-        self$new_columns <- c(self$new_columns, nn)
+        # self$new_columns <- c(self$new_columns, nn)
       }
 
       self$result <- unlist(ll, recursive = FALSE)
-      self$result
+      return(NULL)
 
     },
     response = function(co) {
@@ -75,12 +75,12 @@ StepLeadLag <- R6Class(
       nc <- ncol(co)
 
 
-      list(x = rep(self$lag, 2L * nc),
+      list(x = rep.int(self$lag, 2L * nc),
            variable = rep(c("coefficient", "cumulative"), each = nr * nc),
            value = c(co, collapse::fcumsum(co)),
-           step_id = rep(self$id, 2L * nr * nc),
+           step_id = rep.int(self$id, 2L * nr * nc),
            outcome = rep(rep(colnames(co), each = nr), 2L),
-           term = rep("lead_lag", 2L * nr * nc))
+           term = rep.int("lead_lag", 2L * nr * nc))
 
 
 

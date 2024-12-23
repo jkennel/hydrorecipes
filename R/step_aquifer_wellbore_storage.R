@@ -66,7 +66,7 @@ StepAquiferWellboreStorage <- R6Class(
       S  <- self$specific_storage * self$thickness
 
 
-      pc <- list(papadopulos_cooper_laplace(new_data[[1]],
+      pc <- list(papadopulos_cooper_laplace(new_data[[1L]],
                                             self$flow_rate,
                                             self$radius,
                                             self$radius_casing,

@@ -1,6 +1,64 @@
 #include "hydrorecipes.h"
 
 // [[Rcpp::export]]
+Eigen::VectorXd row_sums_eigen(Eigen::Map<Eigen::MatrixXd>& x) {
+
+  if (x.cols() == 1) {
+    return(x);
+  }
+
+  return(x.rowwise().sum());
+
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector row_multiply3(Rcpp::List x,
+                                 Rcpp::NumericVector y) {
+
+  Rcpp::NumericVector z = x[0];
+  Rcpp::NumericVector m = z;
+  z = z * y[0];
+
+  for (int i = 1; i < x.size(); ++i) {
+    m = x[i];
+    z = z + m * y[i];
+  }
+
+  return(z);
+}
+
+// [[Rcpp::export]]
+Eigen::VectorXd row_multiply2(Rcpp::List x,
+                              Eigen::VectorXd y) {
+
+  Eigen::VectorXd x_col = Rcpp::as<Eigen::Map<Eigen::VectorXd>>(x[0]) * y[0];
+
+  for (int i = 1; i < x.size(); ++i) {
+    Eigen::VectorXd m = Rcpp::as<Eigen::Map<Eigen::VectorXd>>(x[i]) * y[i];
+    x_col += m;
+  }
+
+  return(x_col);
+}
+
+// [[Rcpp::export]]
+Eigen::VectorXd list_multiply_subset(const Rcpp::List x,
+                              const Eigen::VectorXd& y,
+                              const Eigen::VectorXi& ind) {
+
+  Eigen::VectorXd x_col = Rcpp::as<Eigen::Map<Eigen::VectorXd>>(x[0])(ind) * y[0];
+
+  for (int i = 1; i < x.size(); ++i) {
+    Eigen::VectorXd m = Rcpp::as<Eigen::Map<Eigen::VectorXd>>(x[i])(ind) * y[i];
+    x_col += m;
+  }
+
+  return(x_col);
+}
+
+
+
+// [[Rcpp::export]]
 double any_decimal(std::vector<double> x)
 {
 

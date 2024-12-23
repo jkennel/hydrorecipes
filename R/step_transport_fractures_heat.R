@@ -89,9 +89,9 @@ StepTransportFracturesHeat <- R6Class(
     bake = function(new_data) {
 
       pfh <- list(parallel_fractures_heat(
-        new_data[[1]], # time
-        new_data[[2]], # z
-        new_data[[3]], # x
+        new_data[[1L]], # time
+        new_data[[2L]], # z
+        new_data[[3L]], # x
         self$temperature_influent,
         self$time_influent,
         self$temperature_initial,

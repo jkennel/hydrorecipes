@@ -1382,19 +1382,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// exp_2_old
-std::vector<double> exp_2_old(std::vector<double> t, double amplitude, double lamda);
-RcppExport SEXP _hydrorecipes_exp_2_old(SEXP tSEXP, SEXP amplitudeSEXP, SEXP lamdaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
-    Rcpp::traits::input_parameter< double >::type amplitude(amplitudeSEXP);
-    Rcpp::traits::input_parameter< double >::type lamda(lamdaSEXP);
-    rcpp_result_gen = Rcpp::wrap(exp_2_old(t, amplitude, lamda));
-    return rcpp_result_gen;
-END_RCPP
-}
 // exp_2
 std::vector<double> exp_2(std::vector<double> t, const double amplitude, const double lamda);
 RcppExport SEXP _hydrorecipes_exp_2(SEXP tSEXP, SEXP amplitudeSEXP, SEXP lamdaSEXP) {
@@ -1405,30 +1392,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type amplitude(amplitudeSEXP);
     Rcpp::traits::input_parameter< const double >::type lamda(lamdaSEXP);
     rcpp_result_gen = Rcpp::wrap(exp_2(t, amplitude, lamda));
-    return rcpp_result_gen;
-END_RCPP
-}
-// exp_2_test
-std::vector<double> exp_2_test(const double amplitude, const double lamda);
-RcppExport SEXP _hydrorecipes_exp_2_test(SEXP amplitudeSEXP, SEXP lamdaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const double >::type amplitude(amplitudeSEXP);
-    Rcpp::traits::input_parameter< const double >::type lamda(lamdaSEXP);
-    rcpp_result_gen = Rcpp::wrap(exp_2_test(amplitude, lamda));
-    return rcpp_result_gen;
-END_RCPP
-}
-// exp_2_eigen
-Eigen::ArrayXd exp_2_eigen(const double amplitude, const double lamda);
-RcppExport SEXP _hydrorecipes_exp_2_eigen(SEXP amplitudeSEXP, SEXP lamdaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const double >::type amplitude(amplitudeSEXP);
-    Rcpp::traits::input_parameter< const double >::type lamda(lamdaSEXP);
-    rcpp_result_gen = Rcpp::wrap(exp_2_eigen(amplitude, lamda));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1446,34 +1409,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// gamma_3_old
-std::vector<double> gamma_3_old(std::vector<double> t, const double amplitude, const double k, const double theta);
-RcppExport SEXP _hydrorecipes_gamma_3_old(SEXP tSEXP, SEXP amplitudeSEXP, SEXP kSEXP, SEXP thetaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
-    Rcpp::traits::input_parameter< const double >::type amplitude(amplitudeSEXP);
-    Rcpp::traits::input_parameter< const double >::type k(kSEXP);
-    Rcpp::traits::input_parameter< const double >::type theta(thetaSEXP);
-    rcpp_result_gen = Rcpp::wrap(gamma_3_old(t, amplitude, k, theta));
-    return rcpp_result_gen;
-END_RCPP
-}
-// gamma_3_old2
-std::vector<double> gamma_3_old2(std::vector<double> t, const double amplitude, const double k, const double theta);
-RcppExport SEXP _hydrorecipes_gamma_3_old2(SEXP tSEXP, SEXP amplitudeSEXP, SEXP kSEXP, SEXP thetaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
-    Rcpp::traits::input_parameter< const double >::type amplitude(amplitudeSEXP);
-    Rcpp::traits::input_parameter< const double >::type k(kSEXP);
-    Rcpp::traits::input_parameter< const double >::type theta(thetaSEXP);
-    rcpp_result_gen = Rcpp::wrap(gamma_3_old2(t, amplitude, k, theta));
-    return rcpp_result_gen;
-END_RCPP
-}
 // gamma_3
 std::vector<double> gamma_3(std::vector<double> t, const double amplitude, const double k, const double theta);
 RcppExport SEXP _hydrorecipes_gamma_3(SEXP tSEXP, SEXP amplitudeSEXP, SEXP kSEXP, SEXP thetaSEXP) {
@@ -1488,29 +1423,59 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// gamma_3_test
-std::vector<double> gamma_3_test(const double amplitude, const double k, const double theta);
-RcppExport SEXP _hydrorecipes_gamma_3_test(SEXP amplitudeSEXP, SEXP kSEXP, SEXP thetaSEXP) {
+// hantush_3
+std::vector<double> hantush_3(std::vector<double> t, const double A, const double a, const double b);
+RcppExport SEXP _hydrorecipes_hantush_3(SEXP tSEXP, SEXP ASEXP, SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const double >::type amplitude(amplitudeSEXP);
-    Rcpp::traits::input_parameter< const double >::type k(kSEXP);
-    Rcpp::traits::input_parameter< const double >::type theta(thetaSEXP);
-    rcpp_result_gen = Rcpp::wrap(gamma_3_test(amplitude, k, theta));
+    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
+    Rcpp::traits::input_parameter< const double >::type A(ASEXP);
+    Rcpp::traits::input_parameter< const double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(hantush_3(t, A, a, b));
     return rcpp_result_gen;
 END_RCPP
 }
-// gamma_3_eigen
-Eigen::ArrayXd gamma_3_eigen(const double amplitude, const double k, const double theta);
-RcppExport SEXP _hydrorecipes_gamma_3_eigen(SEXP amplitudeSEXP, SEXP kSEXP, SEXP thetaSEXP) {
+// polder_3
+std::vector<double> polder_3(std::vector<double> t, const double A, const double a, const double b);
+RcppExport SEXP _hydrorecipes_polder_3(SEXP tSEXP, SEXP ASEXP, SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const double >::type amplitude(amplitudeSEXP);
-    Rcpp::traits::input_parameter< const double >::type k(kSEXP);
-    Rcpp::traits::input_parameter< const double >::type theta(thetaSEXP);
-    rcpp_result_gen = Rcpp::wrap(gamma_3_eigen(amplitude, k, theta));
+    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
+    Rcpp::traits::input_parameter< const double >::type A(ASEXP);
+    Rcpp::traits::input_parameter< const double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(polder_3(t, A, a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// double_exp_4
+std::vector<double> double_exp_4(std::vector<double> t, const double A, const double a, const double b, const double f);
+RcppExport SEXP _hydrorecipes_double_exp_4(SEXP tSEXP, SEXP ASEXP, SEXP aSEXP, SEXP bSEXP, SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
+    Rcpp::traits::input_parameter< const double >::type A(ASEXP);
+    Rcpp::traits::input_parameter< const double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const double >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(double_exp_4(t, A, a, b, f));
+    return rcpp_result_gen;
+END_RCPP
+}
+// quadratic_t_max
+int quadratic_t_max(const double a, const double b, const double small);
+RcppExport SEXP _hydrorecipes_quadratic_t_max(SEXP aSEXP, SEXP bSEXP, SEXP smallSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const double >::type small(smallSEXP);
+    rcpp_result_gen = Rcpp::wrap(quadratic_t_max(a, b, small));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1723,6 +1688,54 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type Ks(KsSEXP);
     Rcpp::traits::input_parameter< double >::type rw(rwSEXP);
     rcpp_result_gen = Rcpp::wrap(dimensionless_S(Kr, ds, Ks, rw));
+    return rcpp_result_gen;
+END_RCPP
+}
+// row_sums_eigen
+Eigen::VectorXd row_sums_eigen(Eigen::Map<Eigen::MatrixXd>& x);
+RcppExport SEXP _hydrorecipes_row_sums_eigen(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(row_sums_eigen(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// row_multiply3
+Rcpp::NumericVector row_multiply3(Rcpp::List x, Rcpp::NumericVector y);
+RcppExport SEXP _hydrorecipes_row_multiply3(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(row_multiply3(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// row_multiply2
+Eigen::VectorXd row_multiply2(Rcpp::List x, Eigen::VectorXd y);
+RcppExport SEXP _hydrorecipes_row_multiply2(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(row_multiply2(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// list_multiply_subset
+Eigen::VectorXd list_multiply_subset(const Rcpp::List x, const Eigen::VectorXd& y, const Eigen::VectorXi& ind);
+RcppExport SEXP _hydrorecipes_list_multiply_subset(SEXP xSEXP, SEXP ySEXP, SEXP indSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type ind(indSEXP);
+    rcpp_result_gen = Rcpp::wrap(list_multiply_subset(x, y, ind));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -2339,6 +2352,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// llt_solve_full
+Rcpp::List llt_solve_full(Eigen::Map<Eigen::MatrixXd>& X, Eigen::Map<Eigen::MatrixXd>& Y, Rcpp::List subs);
+RcppExport SEXP _hydrorecipes_llt_solve_full(SEXP XSEXP, SEXP YSEXP, SEXP subsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type subs(subsSEXP);
+    rcpp_result_gen = Rcpp::wrap(llt_solve_full(X, Y, subs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // llt_weighted_solve
 Eigen::MatrixXd llt_weighted_solve(Eigen::Map<Eigen::MatrixXd>& X, Eigen::Map<Eigen::MatrixXd>& Y, Eigen::Map<Eigen::VectorXd>& w);
 RcppExport SEXP _hydrorecipes_llt_weighted_solve(SEXP XSEXP, SEXP YSEXP, SEXP wSEXP) {
@@ -2787,16 +2813,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_hantush_jacob", (DL_FUNC) &_hydrorecipes_hantush_jacob, 7},
     {"_hydrorecipes_ig", (DL_FUNC) &_hydrorecipes_ig, 2},
     {"_hydrorecipes_exp_2_parameter", (DL_FUNC) &_hydrorecipes_exp_2_parameter, 3},
-    {"_hydrorecipes_exp_2_old", (DL_FUNC) &_hydrorecipes_exp_2_old, 3},
     {"_hydrorecipes_exp_2", (DL_FUNC) &_hydrorecipes_exp_2, 3},
-    {"_hydrorecipes_exp_2_test", (DL_FUNC) &_hydrorecipes_exp_2_test, 2},
-    {"_hydrorecipes_exp_2_eigen", (DL_FUNC) &_hydrorecipes_exp_2_eigen, 2},
     {"_hydrorecipes_gamma_3_parameter", (DL_FUNC) &_hydrorecipes_gamma_3_parameter, 4},
-    {"_hydrorecipes_gamma_3_old", (DL_FUNC) &_hydrorecipes_gamma_3_old, 4},
-    {"_hydrorecipes_gamma_3_old2", (DL_FUNC) &_hydrorecipes_gamma_3_old2, 4},
     {"_hydrorecipes_gamma_3", (DL_FUNC) &_hydrorecipes_gamma_3, 4},
-    {"_hydrorecipes_gamma_3_test", (DL_FUNC) &_hydrorecipes_gamma_3_test, 3},
-    {"_hydrorecipes_gamma_3_eigen", (DL_FUNC) &_hydrorecipes_gamma_3_eigen, 3},
+    {"_hydrorecipes_hantush_3", (DL_FUNC) &_hydrorecipes_hantush_3, 4},
+    {"_hydrorecipes_polder_3", (DL_FUNC) &_hydrorecipes_polder_3, 4},
+    {"_hydrorecipes_double_exp_4", (DL_FUNC) &_hydrorecipes_double_exp_4, 5},
+    {"_hydrorecipes_quadratic_t_max", (DL_FUNC) &_hydrorecipes_quadratic_t_max, 3},
     {"_hydrorecipes_harmonic_list", (DL_FUNC) &_hydrorecipes_harmonic_list, 4},
     {"_hydrorecipes_well_bore_storage", (DL_FUNC) &_hydrorecipes_well_bore_storage, 5},
     {"_hydrorecipes_well_skin", (DL_FUNC) &_hydrorecipes_well_skin, 4},
@@ -2812,6 +2835,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_dimensionless_well_bore_storage", (DL_FUNC) &_hydrorecipes_dimensionless_well_bore_storage, 5},
     {"_hydrorecipes_dimensionless_w_prime", (DL_FUNC) &_hydrorecipes_dimensionless_w_prime, 4},
     {"_hydrorecipes_dimensionless_S", (DL_FUNC) &_hydrorecipes_dimensionless_S, 4},
+    {"_hydrorecipes_row_sums_eigen", (DL_FUNC) &_hydrorecipes_row_sums_eigen, 1},
+    {"_hydrorecipes_row_multiply3", (DL_FUNC) &_hydrorecipes_row_multiply3, 2},
+    {"_hydrorecipes_row_multiply2", (DL_FUNC) &_hydrorecipes_row_multiply2, 2},
+    {"_hydrorecipes_list_multiply_subset", (DL_FUNC) &_hydrorecipes_list_multiply_subset, 3},
     {"_hydrorecipes_any_decimal", (DL_FUNC) &_hydrorecipes_any_decimal, 1},
     {"_hydrorecipes_decimal_to_scaled_integer", (DL_FUNC) &_hydrorecipes_decimal_to_scaled_integer, 1},
     {"_hydrorecipes_gcd", (DL_FUNC) &_hydrorecipes_gcd, 1},
@@ -2857,6 +2884,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_shift_subset", (DL_FUNC) &_hydrorecipes_shift_subset, 4},
     {"_hydrorecipes_lag_list", (DL_FUNC) &_hydrorecipes_lag_list, 4},
     {"_hydrorecipes_llt_solve", (DL_FUNC) &_hydrorecipes_llt_solve, 2},
+    {"_hydrorecipes_llt_solve_full", (DL_FUNC) &_hydrorecipes_llt_solve_full, 3},
     {"_hydrorecipes_llt_weighted_solve", (DL_FUNC) &_hydrorecipes_llt_weighted_solve, 3},
     {"_hydrorecipes_llt_fitted", (DL_FUNC) &_hydrorecipes_llt_fitted, 2},
     {"_hydrorecipes_ogata_banks_ind", (DL_FUNC) &_hydrorecipes_ogata_banks_ind, 5},

@@ -27,26 +27,27 @@ StepFindInterval <- R6Class(
         ...
       )
 
-
-
       # step specific values
-      self$vec <- sort(vec)
+      self$vec <- vec[order(vec)] # slightly faster than sort
       self$n_vec <- length(vec)
 
       invisible(self)
     },
-    bake = function(new_data) {
-      column_name <- self$columns
+    bake = function(s) {
+
 
       self$new_columns <- c()
 
       dum <- list()
-      for (i in seq_along(column_name)) {
-        dum[[i]] <- to_dummy_list(unclass(new_data)[[i]], self$vec)
+      for (i in seq_along(self$columns)) {
+
+        column_name <- self$columns[i]
+
+        dum[[i]] <- to_dummy_list(s[["result"]][[column_name]], self$vec)
 
         nn <- name_columns(
           self$prefix,
-          column_name[i],
+          column_name,
           length(dum[[i]])
         )
 
@@ -55,7 +56,8 @@ StepFindInterval <- R6Class(
       }
 
       self$result <- unlist(dum, recursive = FALSE)
-      self$result
+      # self$result
+      return(NULL)
 
     }
   )

@@ -48,8 +48,8 @@ StepBaroClark <- R6Class(
       be <- list()
       for (i in seq_along(self$lag_space)) {
         be[[i]] <- list(be = be_clark_cpp(
-          dep = new_data[[1]],
-          ind = new_data[[2]],
+          dep = new_data[[1L]],
+          ind = new_data[[2L]],
           lag_space = self$lag_space[i],
           inverse = self$inverse
         ))

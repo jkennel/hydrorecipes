@@ -84,8 +84,8 @@ StepEarthtide <- R6Class(
 
       if (!do_predict) {
 
-        self$frequency = earthtide::get_main_frequency(wave_groups[[1]],
-                                                       wave_groups[[2]])
+        self$frequency = earthtide::get_main_frequency(wave_groups[[1L]],
+                                                       wave_groups[[2L]])
 
       } else {
         self$frequency = NA_real_
@@ -94,15 +94,15 @@ StepEarthtide <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
 
       column_name <- self$columns
 
       if (self$interp_factor != 1L) {
-        self$utc_interp <- unclass(new_data)[[self$columns]]
-        utc <- self$utc_interp[(0:(length(self$utc_interp) - 1) %% self$interp_factor) == 0]
+        self$utc_interp <- s[["result"]][[self$columns]]
+        utc <- self$utc_interp[(0:(length(self$utc_interp) - 1L) %% self$interp_factor) == 0L]
       } else {
-        utc <- unclass(new_data)[[self$columns]]
+        utc <- s[["result"]][[self$columns]]
       }
 
 
@@ -127,7 +127,7 @@ StepEarthtide <- R6Class(
         n_thread = self$n_thread,
         astro_update = self$astro_update,
         utc_interp = self$utc_interp
-      )[, -1, drop = FALSE])
+      )[, -1L, drop = FALSE])
 
 
 
@@ -142,7 +142,7 @@ StepEarthtide <- R6Class(
       names(et) <- self$new_columns
 
       self$result <- et
-      self$result
+      return(NULL)
 
     },
     response = function(co) {
@@ -167,8 +167,8 @@ StepEarthtide <- R6Class(
       )
 
       variable <- c(
-        rep("amplitude", nr * nc),
-        rep("phase", nr * nc)
+        rep.int("amplitude", nr * nc),
+        rep.int("phase", nr * nc)
       )
 
       list(x = x, variable = variable, value = amp_phase, step_id = self$id)

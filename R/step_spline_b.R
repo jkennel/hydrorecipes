@@ -49,27 +49,27 @@ StepSplineB <- R6Class(
 
       invisible(self)
     },
-    prep = function(new_data, info) {
-      super$prep(new_data, info)
+    prep = function(data) {
 
       if (self$df != 0L) {
-        ik <- collapse::fquantile(unclass(new_data)[[self$columns]],
-          probs = seq(0.0, 1.0, length.out = self$df - 2),
-          na.rm = TRUE
+        ik <- collapse::fquantile(data[[1L]],
+                                  probs = seq(0.0, 1.0, length.out = self$df - 2L),
+                                  na.rm = TRUE
         )
         self$boundary_knots <- ik[c(1L, length(ik))]
         self$internal_knots <- ik[-c(1L, length(ik))]
       }
     },
-    bake = function(new_data) {
-      column_name <- self$columns
+    bake = function(s) {
 
       self$new_columns <- c()
 
       basis <- list()
-      for (i in seq_along(column_name)) {
+      for (i in seq_along(self$columns)) {
+        column_name <- self$columns[i]
+
         basis[[i]] <- b_spline_list(
-          x = unclass(new_data)[[i]],
+          x = s[["result"]][[column_name]],
           df = self$df,
           degree = 3L,
           internal_knots = self$internal_knots,
@@ -87,7 +87,8 @@ StepSplineB <- R6Class(
       }
 
       self$result <- unlist(basis, recursive = FALSE)
-      self$result
+
+      return(NULL)
     }
   )
 )

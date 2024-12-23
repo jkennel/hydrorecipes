@@ -35,22 +35,23 @@ StepHarmonic <- R6Class(
       # self$call <- match.call()
 
       # step specific values
-      self$frequency <- sort(frequency)
+      self$frequency <- frequency[order(frequency)] # slightly faster than sort
       self$starting_value <- starting_value
       self$cycle_size <- cycle_size
 
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
       n_frequency <- length(self$frequency)
 
-      column_name <- self$columns
+      # column_name <- self$columns
 
       hls <- list()
-      for (i in seq_along(column_name)) {
+      for (i in seq_along(self$columns)) {
+        column_name <- self$columns[i]
 
 
-        hls[[i]] <- harmonic_list(unclass(new_data)[[i]],
+        hls[[i]] <- harmonic_list(s[["result"]][[column_name]],
           frequency = self$frequency,
           start = self$starting_value,
           cycle_size = self$cycle_size
@@ -68,7 +69,8 @@ StepHarmonic <- R6Class(
       }
 
       self$result <- unlist(hls, recursive = FALSE)
-      self$result
+      # self$result
+      return(NULL)
 
     },
     response = function(co) {

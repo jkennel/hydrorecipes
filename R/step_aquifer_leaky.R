@@ -68,8 +68,8 @@ StepAquiferLeaky <- R6Class(
       self$columns <- paste(self$columns, collapse = ",")
 
       hj <- hantush_jacob(
-        new_data[[1]],
-        new_data[[2]],
+        new_data[[1L]],
+        new_data[[2L]],
         self$radius,
         self$storativity,
         self$transmissivity,

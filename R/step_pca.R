@@ -41,26 +41,22 @@ StepPca <- R6Class(
 
       invisible(self)
     },
-    prep = function(new_data, info) {
-      super$prep(new_data, info)
+    prep = function(data) {
 
-      new_data <- unclass(new_data)[self$columns]
 
       if (self$center) {
-        self$center_values <- collapse::fmean(new_data, na.rm = self$na_rm)
+        self$center_values <- collapse::fmean(data, na.rm = self$na_rm)
       } else {
-        self$center_values <- rep(0.0, length(new_data))
+        self$center_values <- rep.int(0.0, length(data))
       }
 
       if (self$scale) {
-        self$scale_values <- collapse::fsd(new_data,
-          na.rm = self$na_rm
-        )
+        self$scale_values <- collapse::fsd(data, na.rm = self$na_rm)
       } else {
-        self$scale_values <- rep(1.0, length(new_data))
+        self$scale_values <- rep.int(1.0, length(data))
       }
 
-      self$pca_results <- pca_list_rotation_eigen(new_data,
+      self$pca_results <- pca_list_rotation_eigen(data,
         center = self$center_values,
         scale = self$scale_values,
         n_comp = self$n_comp
@@ -70,18 +66,22 @@ StepPca <- R6Class(
 
     },
     # subtract the central value from a column
-    bake = function(new_data) {
+    bake = function(s) {
 
-      for (i in seq_along(self$columns)) {
-        if (self$center & self$scale) {
-          new_data[[i]] <- (new_data[[i]] - self$center_values[i]) *
-            (1.0 / self$scale_values[i])
-        } else if (self$center) {
-          new_data[[i]] <- (new_data[[i]] - self$center_values[i])
-        } else if (self$scale) {
-          new_data[[i]] <- (new_data[[i]]) * (1.0 / self$scale_values[i])
-        }
-      }
+      # for (i in seq_along(self$columns)) {
+      #
+      #   if (self$center & self$scale) {
+      #     new_data[[i]] <- (new_data[[i]] - self$center_values[i]) *
+      #       (1.0 / self$scale_values[i])
+      #   } else if (self$center) {
+      #     new_data[[i]] <- (new_data[[i]] - self$center_values[i])
+      #   } else if (self$scale) {
+      #     new_data[[i]] <- (new_data[[i]]) * (1.0 / self$scale_values[i])
+      #   }
+      # }
+
+      new_data <- (s[["result"]][self$columns] %r-% self$center_values) %r*%
+        (1.0 / (self$scale_values))
 
       new_data <- collapse::qM(new_data)
       new_data <- collapse::mctl(new_data %*% self$pca_results)
@@ -89,8 +89,8 @@ StepPca <- R6Class(
       names(new_data) <- self$new_columns
 
       self$result <- new_data
-      self$result
 
+      return(NULL)
     }
   )
 )

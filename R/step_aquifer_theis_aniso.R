@@ -54,8 +54,8 @@ StepAquiferTheisAniso <- R6Class(
 
       self$time <- time
       self$flow_rate <- flow_rate
-      self$distance_x_transformed <- cr[1]
-      self$distance_y_transformed <- cr[2]
+      self$distance_x_transformed <- cr[1L]
+      self$distance_y_transformed <- cr[2L]
       self$storativity <- specific_storage * thickness
       self$transmissivity_major <- hydraulic_conductivity_major * thickness
       self$transmissivity_minor <- hydraulic_conductivity_minor * thickness

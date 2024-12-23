@@ -33,34 +33,34 @@ StepDummy <- R6Class(
       self$one_hot <- one_hot
 
     },
-    prep = function(new_data, info) {
+    prep = function(data) {
 
-      super$prep(new_data, info)
-      self$levels <- lapply(unclass(new_data)[self$columns], levels)
+      self$levels <- lapply(data, levels)
       invisible(self)
 
     },
-    bake = function(new_data) {
-      column_name <- self$columns
+    bake = function(s) {
 
       dum <- list()
-      for (i in seq_along(column_name)) {
-        # check for new level(s)
-        if (sum(levels(unclass(new_data)[[i]]) %!in% self$levels[[i]]) > 0L) {
+      for (i in seq_along(self$columns)) {
+        column_name <- self$columns[i]
+
+        if (sum(levels(s[["result"]][[column_name]]) %!in% self$levels[[i]]) > 0L) {
           warning(paste0("New levels found during bake step. (", self$id, ")"))
         }
 
-        dum[[i]] <- to_dummy(unclass(new_data)[[i]], self$one_hot)
+        dum[[i]] <- to_dummy(s[["result"]][[column_name]], self$one_hot)
 
         names(dum[[i]]) <- name_columns(
           self$id,
-          column_name[i],
+          column_name,
           n = length(dum[[i]])
         )
       }
 
       self$result <- unlist(dum, recursive = FALSE)
-      self$result
+      return(NULL)
+      # self$result
 
     }
   )

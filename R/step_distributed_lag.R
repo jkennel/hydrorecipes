@@ -69,16 +69,18 @@ StepDistributedLag <- R6Class(
         self$basis_matrix <- collapse::mctl(basis_matrix)
       }
 
+      self$n_na_max <- self$max_lag
+
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
 
-      column_name <- self$columns
+      # column_name <- self$columns
       dl <- list()
-      for (i in seq_along(column_name)) {
-
+      for (i in seq_along(self$columns)) {
+        column_name <- self$columns[i]
         dl[[i]] <- distributed_lag_list4(
-          unclass(new_data)[[i]],
+          s[["result"]][[column_name]],
           self$basis_matrix,
           self$max_lag
         )
@@ -90,15 +92,18 @@ StepDistributedLag <- R6Class(
       # self$columns <- rep(self$columns, each = length(self$basis_matrix))
 
       self$result <- unlist(dl, recursive = FALSE)
-      self$result
-
+      # self$result
+      return(NULL)
     },
     # returns a named list
     response = function(co) {
 
       basis_matrix <- collapse::qM(self$basis_matrix)
 
-
+      # print("basis_matrix")
+      # print(str(self$basis_matrix))
+      # print("co")
+      # print(str(co))
       nr <- nrow(basis_matrix)
       nc <- ncol(co)
 
@@ -108,16 +113,19 @@ StepDistributedLag <- R6Class(
       }
 
       wh <- intersect(colnames(basis_matrix), rownames(co))
-
+      # print(str(wh))
       # check for multiple outcomes!!
       resp <- basis_matrix[, wh, drop = FALSE] %*% co[wh, , drop = FALSE]
 
+      # print("mult")
+      # print(str(basis_matrix[, wh, drop = FALSE]))
+      # print(str(co[wh, , drop = FALSE]))
       list(x = rep(0:(nr - 1L), nc * 2L),
            variable = rep(c("coefficient", "cumulative"), each = nr * nc),
            value = c(resp, collapse::fcumsum(resp)),
-           step_id = rep(self$id, 2L * nr * nc),
+           step_id = rep.int(self$id, 2L * nr * nc),
            outcome = rep(rep(colnames(co), each = nr), 2L),
-           term = rep("distributed_lag_interpolated", 2L * nr * nc))
+           term = rep.int("distributed_lag_interpolated", 2L * nr * nc))
     }
   )
 )

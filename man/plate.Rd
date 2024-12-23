@@ -4,13 +4,15 @@
 \alias{plate}
 \title{plate}
 \usage{
-plate(.rec, type = "dt")
+plate(.rec, type = "dt", ...)
 }
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
 \item{type}{the return type for the recipe (dt = `data.table`, df = `data.frame`,
 tbl = `tibble`, list = `list`, m = `matrix`)}
+
+\item{...}{additional arguments}
 }
 \value{
 an updated recipe

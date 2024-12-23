@@ -47,7 +47,7 @@ library(RcppRoll) # for recipes::step_window
 #| echo: true
 #| warning: false
 
-relative <- FALSE
+relative <- TRUE
 n <- c(1e2, 1e4, 5e6)
 formula <- as.formula(y~x)
 
@@ -60,7 +60,8 @@ results <- bench::press(
       hrec1 = hydrorecipes:::Recipe$new(formula = formula, data = dat),
       hrec2 = recipe(formula = formula, data = dat),
       rec   = recipes::recipe(formula = formula, data = dat),
-      check = FALSE
+      check = FALSE,
+      relative = relative
     )
   }
 )
@@ -118,13 +119,14 @@ results <- bench::press(
       hrec2 |> prep(),
       rec |> recipes::prep(),
       check = FALSE,
-      min_iterations = 1,
+      min_iterations = 1L,
       relative = relative
     )
   }
 )
 
 results
+
 ```
 
 ## step_center prep and bake
@@ -144,27 +146,19 @@ results <- bench::press(
       step_center(x)
     rec   = recipes::recipe(formula = formula, data = dat) |>
       recipes::step_center(x)
+    
     bench::mark(
       hrec1$prep()$bake(),
       hrec2 |> prep() |> bake(),
       rec |> recipes::prep() |> recipes::bake(new_data = NULL),
       check = FALSE,
-      min_iterations = 1,
+      min_iterations = 1L,
       relative = relative
     )
   }
 )
 
 results
-
-n <- 1e2
-dat <- data.frame(x = rnorm(n), 
-                  y = 1:n)
-
-hrec2 = recipe(formula = formula, data = dat) |>
-  step_center(x) |> prep() |> bake()
-
-bench::mark(tmp <- (hrec2$get_result()))
 
 ```
 
@@ -192,7 +186,7 @@ results <- bench::press(
                 recipes::prep() |> 
                 recipes::bake(new_data = NULL))[["x"]],
       check = TRUE,
-      min_iterations = 1,
+      min_iterations = 1L,
       relative = relative
     )
   }
@@ -218,14 +212,14 @@ results <- bench::press(
     bench::mark(
       hrec = (recipe(formula = formula, data = dat) |>
         step_scale(x, fun = fsd, n_sd = 2L) |>
-        plate("tbl"))[["x"]],
+        plate())[["x"]],
       rec  = (recipes::recipe(formula = formula, data = dat) |>
         recipes::step_scale(x, factor = 2L) |> 
         recipes::prep() |> 
         recipes::bake(new_data = NULL))[["x"]],
       check = TRUE,
       relative = relative,
-      min_iterations = 1
+      min_iterations = 1L
     )
   }
 )
@@ -256,7 +250,7 @@ results <- bench::press(
       recipes::bake(new_data = NULL))[["intercept"]],
       check = TRUE,
       relative = relative,
-      min_iterations = 1
+      min_iterations = 1L
     )
     
   }
@@ -282,12 +276,12 @@ results <- bench::press(
     
     bench::mark(
       hrec1 = (recipe(formula = formula, data = dat) |>
-        step_normalize(c(x, y, z)) |>
+        step_normalize(c(x, z, y)) |>
         plate("tbl"))[, c("x", "z", "y")],
       
       hrec2 = (recipe(formula = formula, data = dat) |>
-        step_center(c(x, y, z)) |>
-        step_scale(c(x, y, z)) |>
+        step_center(c(x, z, y)) |>
+        step_scale(c(x, z, y)) |>
         plate("tbl"))[, c("x", "z", "y")],
       
       rec = recipes::recipe(formula = formula, data = dat) |>
@@ -296,13 +290,14 @@ results <- bench::press(
         recipes::bake(new_data = NULL),
       
       relative = relative,
-      min_iterations = 1,
+      min_iterations = 1L,
       check = TRUE
     )
   }
 )
 
 results
+
 
 
 ```
@@ -319,7 +314,7 @@ results <- bench::press(
   rows = n,
   {
     dat <- data.frame(x = rnorm(rows), 
-                      y = 1:rows,
+                      y = as.numeric(1:rows),
                       z = rnorm(rows))
     bench::mark(
       hrec1 = unname(recipe(formula = formula, data = dat) |>
@@ -329,14 +324,16 @@ results <- bench::press(
                        recipes::step_lag(x, lag = 1:30) |> 
                        recipes::prep() |> 
                        recipes::bake(new_data = NULL)),
-      check = FALSE,
+      check = TRUE,
       relative = relative,
-      min_iterations = 1
+      min_iterations = 1L
     )
   }
 )
 
 results
+
+
 
 
 ```
@@ -358,10 +355,10 @@ results <- bench::press(
     bench::mark(
       hrec = recipe(formula = formula, data = dat) |>
         step_distributed_lag(x, knots = log_lags(5, 86401)) |>
-        plate(),
+        prep() |> bake(),
       check = FALSE,
-      relative = relative,
-      min_iterations = 1
+      relative = FALSE,
+      min_iterations = 1L
     )
   }
 )
@@ -402,7 +399,7 @@ results <- bench::press(
       # sin and cos terms order is different
       check = FALSE,
       relative = relative,
-      min_iterations = 1
+      min_iterations = 1L
     )
   }
 )
@@ -465,19 +462,19 @@ results <- bench::press(
     )
     bench::mark(
       hrec1 = recipe(formula = formula, data = dat)|>
-        step_pca(all_predictor(), n_comp = 10L) |>
+        step_pca(c(a,b,c,d,e,f,g,h,i,j,k,l), n_comp = 10L) |>
         plate(),
       hrec2 = recipe(formula = formula, data = dat)|>
-        step_pca(all_predictor(), n_comp = 5L) |>
+        step_pca(c(a,b,c,d,e,f,g,h,i,j,k,l), n_comp = 5L) |>
         plate(),
       hrec3 = recipe(formula = formula, data = dat)|>
-        step_pca(all_predictor(),
+        step_pca(c(a,b,c,d,e,f,g,h,i,j,k,l),
                  n_comp = 10L,
                  center = FALSE,
                  scale = FALSE) |>
         plate(),
       hrec4 = recipe(formula = formula, data = dat)|>
-        step_pca(all_predictor(),
+        step_pca(c(a,b,c,d,e,f,g,h,i,j,k,l),
                  n_comp = 5L,
                  center = FALSE,
                  scale = FALSE) |>
@@ -507,7 +504,7 @@ results <- bench::press(
         recipes::bake(new_data = NULL),
       check = FALSE,
       relative = relative,
-      min_iterations = 1
+      min_iterations = 1L
     )
   }
 )
@@ -537,14 +534,14 @@ results <- bench::press(
     bench::mark(
       hrec = unname(recipe(formula = formula, data = dat) |>
                       step_dummy(y) |>
-                      plate("tbl")),
+                      plate("tbl"))[,3:11],
       rec  = unname(recipes::recipe(formula = formula, data = dat) |>
                       recipes::step_dummy(y, keep_original_cols = TRUE) |>
                       recipes::prep() |>
-                      recipes::bake(new_data = NULL)),
+                      recipes::bake(new_data = NULL))[,3:11],
       check = TRUE,
-      relative = FALSE,
-      min_iterations = 1
+      relative = relative,
+      min_iterations = 1L
     )
   }
 )
@@ -580,7 +577,7 @@ results <- bench::press(
         recipes::bake(new_data = NULL),
       check = FALSE,
       relative = relative,
-      min_iterations = 1
+      min_iterations = 1L
     )
   }
 )
@@ -616,7 +613,7 @@ results <- bench::press(
         recipes::bake(new_data = NULL),
       check = TRUE,
       relative = relative,
-      min_iterations = 1
+      min_iterations = 1L
     )
   }
 )
@@ -644,15 +641,16 @@ results <- bench::press(
                       z = cumsum(rnorm(rows)))
     bench::mark(
       hrec = unname((recipe(formula = formula, data = dat) |>
-                       step_kernel_filter(z, kernel = list(rep(1, 5001)/5001), align = "center") |>
+                       step_kernel_filter(z, kernel = list(rep(1, 5001L)/5001L), align = "center") |>
                        plate("tbl"))[10000, "kernel_filter_z"]),
       {rec  = recipes::recipe(formula = formula, data = dat) |>
-        recipes::step_window(z, size = 5001, statistic = "mean") |>
+        recipes::step_window(z, size = 5001L, statistic = "mean") |>
         recipes::prep() |>
         recipes::bake(new_data = NULL)
       unname(rec[10000, "z"])},
       
-      min_iterations = 1,
+      min_iterations = 1L,
+      relative = relative,
       check = TRUE
     )
   }
@@ -662,6 +660,39 @@ results
 
 
 ```
+
+## step_convolve_gamma
+
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x+z)
+
+results <- bench::press(
+  rows = c(2e4, 2e6),
+  {
+    dat <- data.frame(x = rep(1, rows), 
+                      y = 1:rows,
+                      z = cumsum(rnorm(rows)))
+    bench::mark(
+      hrec = (recipe(formula = formula, data = dat) |>
+                       step_convolve_gamma(z, amplitude = 1, k = 1, theta = 1) |>
+                       plate("tbl")),
+      min_iterations = 1,
+      relative = relative,
+      check = TRUE
+    )
+  }
+)
+
+results
+
+
+```
+
+## step_compare_columns
+
 
 ## multiple steps
 
@@ -682,7 +713,7 @@ results <- bench::press(
     hrec = recipe(formula = formula, data = dat) |>
       step_lead_lag(x, lag = 1:10) |>
       step_harmonic(x, 
-                    frequency = c(1, 2, 3, 4, 5), 
+                    frequency = c(1, 2, 3), 
                     cycle_size = 0.1, 
                     starting_value = 0) |>
       step_center(x) |> 
@@ -690,7 +721,7 @@ results <- bench::press(
     rec  = recipes::recipe(formula = formula, data = dat) |>
       recipes::step_lag(x, lag = 1:10, keep_original_cols = TRUE) |>
       recipes::step_harmonic(x, 
-                             frequency = c(1, 2, 3, 4, 5), 
+                             frequency = c(1, 2, 3), 
                              cycle_size = 0.1, 
                              starting_val = 0,
                              keep_original_cols = TRUE) |>
@@ -717,9 +748,9 @@ results
 #| warning: false
 
 formula <- as.formula(y~x)
-
+n <- c(100, 1e4, 5e6)
 results <- bench::press(
-  rows = c(100, 1e4, 1e6),
+  rows = n,
   {
     dat <- data.frame(x = rnorm(rows),
                       y = 1:rows)
@@ -752,7 +783,7 @@ results
 formula <- as.formula(y~x)
 
 results <- bench::press(
-  rows = c(100, 1e4, 1e6),
+  rows = n,
   {
     dat <- data.frame(x = rnorm(rows),
                       y = 1:rows)
@@ -773,11 +804,13 @@ results <- bench::press(
 
 results
 
+
+
+
 ```
 
-## step_aquifer_grf & step_aquifer_theis
+## step_add_noise
 
-The Theis solution is a subset of the grf solution.
 
 ```{r}
 #| echo: true
@@ -798,6 +831,32 @@ results <- bench::press(
         step_aquifer_theis(time = x, flow_rate = y) |>
         plate("dt"),
       check = TRUE,
+      relative = relative)
+  }
+)
+
+results
+```
+
+## step_aquifer_grf & step_aquifer_theis
+
+The Theis solution is a subset of the grf solution.
+
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x)
+
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(x = as.numeric(1:rows),
+                      y = rep(0.01, rows))
+    bench::mark(
+      hrec1 = recipe(formula = formula, data = dat) |>
+        step_add_noise(y) |>
+        plate("dt"),
       relative = relative)
   }
 )
@@ -1108,20 +1167,44 @@ results <- bench::press(
     m <- qM(dat)
     bench::mark(
       hrec = recipe(formula = formula, data = dat) |>
-        step_center(x) |>
-        step_scale(z) |>
-        step_ols(formula = formula) |>
+        # step_center(x) |>
+        step_distributed_lag(z, knots = log_lags(10, 50)) |>
+        # step_intercept() |>
+        step_ols(formula = as.formula(y~.), do_response = FALSE) |>
         prep() |>
         bake(),
       lm = lm(formula, dat),
       lm.fit(x = m[, c(2, 3)], y = m[,1]),
       check = FALSE,
-      relative = relative
+      relative = FALSE
     )
   }
 )
 
 results
+
+
+formula <- as.formula(y~x+z)
+
+
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(x = rnorm(rows), 
+                      y = rnorm(rows),
+                      z = rnorm(rows))
+    bench::mark(
+      hrec = recipe(formula = formula, data = dat) |>
+        step_intercept() |>
+        step_nls(formula = as.formula(y~.)) |>
+        prep() |>
+        bake(),
+      check = FALSE,
+      relative = FALSE
+    )
+  }
+)
+
 ```
 
 

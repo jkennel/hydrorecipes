@@ -57,8 +57,8 @@ StepTransportOgataBanks <- R6Class(
         self$diffusion,
         self$retardation,
         self$decay,
-        new_data[[2]],
-        new_data[[1]]
+        new_data[[2L]],
+        new_data[[1L]]
       ))
       self$new_columns <- self$prefix
       self$result <- setNames(ob, self$new_columns)

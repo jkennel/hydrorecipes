@@ -57,26 +57,26 @@ StepTransferExperimental <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data, term_info, steps) {
+    bake = function(s) {
 
-      n  <- hydrorecipes:::next_n_eigen(length(new_data[[1]]))
+      n  <- hydrorecipes:::next_n_eigen(length(s[["result"]][[1L]]))
       # n  <- length(new_data[[1]])
 
       df <- 1.0 / n
       frequency <- seq.int(from = 0.0, by = df, length.out = floor(n / 2L) + 1L) * 86400.0 / self$time_step
 
       frequency <- list(frequency = group_frequency(frequency, self$n_groups))
-      n_freq <- length(frequency[[1]])
+      n_freq <- length(frequency[[1L]])
 
 
-      vars_list <- select_fft_vars_list(new_data, self$formula, self$columns)
+      vars_list <- select_fft_vars_list(s[["result"]], self$formula, self$columns)
 
 
       for(i in seq_along(vars_list$outcomes)) {
 
 
-        tmp_data <- unclass(new_data)[c(vars_list$outcomes[i],
-                                        vars_list$predictors)]
+        tmp_data <- s[["result"]][c(vars_list$outcomes[i],
+                                    vars_list$predictors)]
 
         res <- collapse::mctl(
           transfer_pgram_smooth(
@@ -96,7 +96,7 @@ StepTransferExperimental <- R6Class(
         res <- append(res, frequency)
 
         # res <- append(res, list(variable = rep(vars_list$outcomes[i], n_freq)))
-        res <- append(res, list(id = rep(self$id, n_freq)))
+        res <- append(res, list(id = rep.int(self$id, n_freq)))
 
         self$fft_result[[i]] <- res
 

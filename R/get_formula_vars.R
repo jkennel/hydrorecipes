@@ -94,16 +94,20 @@
 get_formula_vars <- function(formula, data) {
 
   dot <- "."
+  if (is.null(formula)) {
+    formula <- c("~", names(data)[1L], dot)
+  }
 
   form_char <- as.character(formula)
 
+  # print(form_char)
   left  <- all.vars(
-    as.formula(file.path(form_char[2],
-                         form_char[1], ".", fsep = ' ')), unique = FALSE)
+    as.formula(file.path(form_char[2L],
+                         form_char[1L], ".", fsep = ' ')), unique = FALSE)
 
   right <- all.vars(
-    as.formula(file.path(form_char[3],
-                         form_char[1], ".", fsep = ' ')), unique = FALSE)
+    as.formula(file.path(form_char[3L],
+                         form_char[1L], ".", fsep = ' ')), unique = FALSE)
 
   # remove the added "."
   left <- left[-length(left)]
@@ -139,8 +143,8 @@ select_fft_vars_list <- function(new_data, formula, columns) {
                                   data = unclass(new_data))
 
   } else {
-    vars_list <- list(predictors = columns[-1],
-                      outcomes = columns[1])
+    vars_list <- list(predictors = columns[-1L],
+                      outcomes = columns[1L])
   }
 
   return(vars_list)
@@ -208,20 +212,20 @@ get_terms <- function(x) {
 
 
 get_function_arguments <- function() {
-  as.list(sys.frame(which = -1))
+  as.list(sys.frame(which = -1L))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 get_function_arguments_no_rec <- function() {
-  as.list(sys.frame(which = -1))
+  as.list(sys.frame(which = -1L))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 get_terms_and_symbols <- function(terms) {
 
-  if(length(terms) > 1) {
-    if(terms[[1]] == as.symbol("c")) {
-      terms[[1]] <- NULL
+  if(length(terms) > 1L) {
+    if(terms[[1L]] == as.symbol("c")) {
+      terms[[1L]] <- NULL
     }
   }
 
@@ -230,7 +234,7 @@ get_terms_and_symbols <- function(terms) {
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-get_terms_from_info <- function(terms, nms, info) {
+get_terms_from_info <- function(terms, nms) {
 
   # for each call term, pull out the function selectors and pass the
   # necessary information
@@ -243,19 +247,19 @@ get_terms_from_info <- function(terms, nms, info) {
     if (is.call(terms[[i]])) {
       # handle remove variable
 
-      if (length(terms[[i]]) > 1 & as.character(terms[[i]])[1] == "-") {
-        exclude[[i]] <- as.character(terms[[i]])[2]
+      if (length(terms[[i]]) > 1 & as.character(terms[[i]])[1L] == "-") {
+        exclude[[i]] <- as.character(terms[[i]])[2L]
       }  else {
         terms_list <- as.list(terms[[i]])
 
         # for contains
-        if (length(terms_list) > 1) {
-          include[[i]] <- (do.call(as.character(terms_list[[1]]),
-                                   list(terms_list[[2]], nms)))
+        if (length(terms_list) > 1L) {
+          include[[i]] <- (do.call(as.character(terms_list[[1L]]),
+                                   list(terms_list[[2L]], nms)))
         } else {
 
-          include[[i]] <- (do.call(as.character(terms[[i]]),
-                                   list(nms, info)))
+          # include[[i]] <- (do.call(as.character(terms[[i]]),
+          #                          list(nms, info)))
         }
       }
 
@@ -265,8 +269,8 @@ get_terms_from_info <- function(terms, nms, info) {
   }
 
   # find matches for the data columns
-  intersect(setdiff(unique(unlist(include)),
-                    unique(unlist(exclude))),
+  intersect(setdiff(collapse::funique(unlist(include)),
+                    collapse::funique(unlist(exclude))),
             nms)
 
 }
@@ -292,13 +296,13 @@ all_integer <- function(nms, info) {
   nms[collapse::whichv(info$sub_type, "integer")]
 }
 all_double <- function(nms, info) {
-  nms[which(info$sub_type == "double")]
+  nms[collapse::whichv(info$sub_type, "double")]
 }
 all_factor <- function(nms, info) {
-  nms[which(info$sub_type == "factor")]
+  nms[collapse::whichv(info$sub_type, "factor")]
 }
 all_logical <- function(nms, info) {
-  nms[which(info$sub_type == "logical")]
+  nms[collapse::whichv(info$sub_type, "logical")]
 }
 all_binary <- function(nms, info) {
   nms[collapse::whichv(info$sub_type, "binary")]
@@ -309,10 +313,10 @@ all_complex <- function(nms, info) {
 
 # role selectors
 all_predictor <- function(nms, info) {
-  nms[which(info$roles == "predictor")]
+  nms[collapse::whichv(info$roles, "predictor")]
 }
 all_outcome <- function(nms, info) {
-  nms[which(info$roles == "outcome")]
+  nms[collapse::whichv(info$roles, "outcome")]
 }
 
 

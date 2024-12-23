@@ -1173,44 +1173,32 @@ exp_2_parameter <- function(t, amplitude, lamda) {
     .Call(`_hydrorecipes_exp_2_parameter`, t, amplitude, lamda)
 }
 
-exp_2_old <- function(t, amplitude, lamda) {
-    .Call(`_hydrorecipes_exp_2_old`, t, amplitude, lamda)
-}
-
 exp_2 <- function(t, amplitude, lamda) {
     .Call(`_hydrorecipes_exp_2`, t, amplitude, lamda)
-}
-
-exp_2_test <- function(amplitude, lamda) {
-    .Call(`_hydrorecipes_exp_2_test`, amplitude, lamda)
-}
-
-exp_2_eigen <- function(amplitude, lamda) {
-    .Call(`_hydrorecipes_exp_2_eigen`, amplitude, lamda)
 }
 
 gamma_3_parameter <- function(t, amplitude, k, theta) {
     .Call(`_hydrorecipes_gamma_3_parameter`, t, amplitude, k, theta)
 }
 
-gamma_3_old <- function(t, amplitude, k, theta) {
-    .Call(`_hydrorecipes_gamma_3_old`, t, amplitude, k, theta)
-}
-
-gamma_3_old2 <- function(t, amplitude, k, theta) {
-    .Call(`_hydrorecipes_gamma_3_old2`, t, amplitude, k, theta)
-}
-
 gamma_3 <- function(t, amplitude, k, theta) {
     .Call(`_hydrorecipes_gamma_3`, t, amplitude, k, theta)
 }
 
-gamma_3_test <- function(amplitude, k, theta) {
-    .Call(`_hydrorecipes_gamma_3_test`, amplitude, k, theta)
+hantush_3 <- function(t, A, a, b) {
+    .Call(`_hydrorecipes_hantush_3`, t, A, a, b)
 }
 
-gamma_3_eigen <- function(amplitude, k, theta) {
-    .Call(`_hydrorecipes_gamma_3_eigen`, amplitude, k, theta)
+polder_3 <- function(t, A, a, b) {
+    .Call(`_hydrorecipes_polder_3`, t, A, a, b)
+}
+
+double_exp_4 <- function(t, A, a, b, f) {
+    .Call(`_hydrorecipes_double_exp_4`, t, A, a, b, f)
+}
+
+quadratic_t_max <- function(a, b, small = -720) {
+    .Call(`_hydrorecipes_quadratic_t_max`, a, b, small)
 }
 
 #' @title
@@ -1288,6 +1276,22 @@ dimensionless_w_prime <- function(rc, rw, Ss, f_prime) {
 
 dimensionless_S <- function(Kr, ds, Ks, rw) {
     .Call(`_hydrorecipes_dimensionless_S`, Kr, ds, Ks, rw)
+}
+
+row_sums_eigen <- function(x) {
+    .Call(`_hydrorecipes_row_sums_eigen`, x)
+}
+
+row_multiply3 <- function(x, y) {
+    .Call(`_hydrorecipes_row_multiply3`, x, y)
+}
+
+row_multiply2 <- function(x, y) {
+    .Call(`_hydrorecipes_row_multiply2`, x, y)
+}
+
+list_multiply_subset <- function(x, y, ind) {
+    .Call(`_hydrorecipes_list_multiply_subset`, x, y, ind)
 }
 
 any_decimal <- function(x) {
@@ -1780,6 +1784,10 @@ lag_list <- function(x, lags, n_subset, n_shift) {
 
 llt_solve <- function(X, Y) {
     .Call(`_hydrorecipes_llt_solve`, X, Y)
+}
+
+llt_solve_full <- function(X, Y, subs) {
+    .Call(`_hydrorecipes_llt_solve_full`, X, Y, subs)
 }
 
 llt_weighted_solve <- function(X, Y, w) {

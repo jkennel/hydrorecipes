@@ -105,26 +105,36 @@ get_regression_data <- function(new_data,
 
 }
 
-
-
-
 # y = outcomes
 # x = predictors
-determine_coefficients <- function(x, y) {
+determine_coefficients <- function(x, y, has_na, decomp) {
 
+  # print(str(x[!has_na, , drop = FALSE]))
+  # print(str(y[!has_na, , drop = FALSE]))
   # solve
-  fit <- llt_solve(
-    x$data[!x$to_rem, , drop = FALSE],
-    y$data[!y$to_rem, , drop = FALSE]
+  fit <- llt_solve_full(
+    x[!has_na, , drop = FALSE],
+    y[!has_na, , drop = FALSE],
+    decomp
   )
 
-  colnames(fit) <- y$term_info$variable
-  rownames(fit) <- x$term_info$variable
+  # f <- lm.fit(x[!has_na, , drop = FALSE],
+  #             y[!has_na, , drop = FALSE])
+  # print(fit$coefficients)
+  # print(f$coefficients)
+  # plot(f$fitted.values, type='l', lwd = 3)
+  # points(fit$fitted.values, type = 'l', col = "green")
+  colnames(fit$coefficients) <- colnames(y)
+  rownames(fit$coefficients) <- colnames(x)
   fit
 
 }
 
-
+# X <- matrix(rnorm(1e7), ncol = 10)
+# y <- as.matrix(rnorm(1e6))
+# bench::mark(hydrorecipes:::llt_solve(X, y),
+#             hydrorecipes:::llt_solve_full(X,y, list(a = c(0,2), b = c(2,2))),
+#             lm.fit(X, y), check = FALSE)
 
 subset_groups <- function(x) {
   split(
@@ -146,47 +156,113 @@ response_groups <- function(steps, x, fit) {
 }
 
 # x = predictors
-predict_groups <- function(x, fit, steps) {
+predict_groups <- function(x, fit, step_vars, step_names) {
 
   # subsets are the regressor groups
-  subsets <- subset_groups(x$term_info)
   lst <- list()
 
-  for (i in seq_along(subsets)) {
+  for (i in seq_along(step_vars)) {
 
-    step_index <- unique(x$term_info[subsets[[i]], "step_index"])
-    nms_vars   <- paste(steps[[step_index]]$columns, collapse = "_")
-    step_name  <- unique(x$term_info[subsets[[i]], "step_name"])
+    nms_vars   <- paste(step_vars[[i]], collapse = "_")
 
-
-    if (nms_vars == "" | step_name == "step_add_vars") {
-      nms <- paste(colnames(fit), step_name, sep = "_")
-    } else {
-      nms <- paste(colnames(fit), step_name, nms_vars, sep = "_")
-    }
 
     lst[[i]] <- collapse::mctl(
-      x$data[, subsets[[i]], drop = FALSE] %*%
-        fit[subsets[[i]], , drop = FALSE]
+      x$data[, step_vars[[i]], drop = FALSE] %*%
+        fit[step_vars[[i]], , drop = FALSE]
     )
 
-    names(lst[[i]]) <- nms
+    names(lst[[i]]) <- step_names
 
   }
 
   lst
 }
 
-return_type <- function(x, type = "df") {
+predict_each_step <- function(x, fit, step_vars, step_names) {
 
-  # return types
-  switch(
+  # subsets are the regressor groups
+  lst <- list()
+
+  predicted <- rep.int(0.0, nrow(x))
+
+  for (i in seq_along(step_vars)) {
+
+    nms <- step_vars[[i]]
+
+    if (is.null(nms)) {
+      next
+    }
+
+    wh <- colnames(x) %in% nms
+
+    if (!any(wh)) {
+      next
+    }
+
+
+    nms_step  <- paste(paste(step_names[[i]], collapse = "_"),
+                       paste(nms, collapse = "_"),
+                       sep = "_")
+
+
+    lst[i] <- collapse::mctl(x[, wh, drop = FALSE] %*% fit[wh, , drop = FALSE])
+    predicted %+=% lst[[i]]
+
+    names(lst)[i] <- nms_step
+  }
+
+  lst[["predicted"]] <- predicted
+  lst
+}
+
+
+# formula can be used to subset or separate predictors and outcomes
+return_type <- function(x, type = "df", formula = NULL, combined = TRUE) {
+
+  if (!is.null(formula)) {
+    vars_list <- get_formula_vars(formula = formula, data = unclass(x))
+  } else {
+    vars_list <- names(x)
+
+    if (!combined) {
+      vars_list <- list(predictors = vars_list[-1L],
+                        outcomes = vars_list[1L])
+    }
+
+  }
+
+  if (combined) {
+    vars_list <- unlist(vars_list)
+    # return types
+    x <- switch(
+      type,
+      "df" = collapse::qDF(x[vars_list]),
+      "dt" = collapse::qDT(x[vars_list]),
+      "tbl" = collapse::qTBL(x[vars_list]),
+      "m" = collapse::qM(x[vars_list]),
+      x[vars_list]
+    )
+
+    return(x)
+  }
+
+  x <- switch(
     type,
-    "df" = collapse::qDF(x),
-    "dt" = collapse::qDT(x),
-    "tbl" = collapse::qTBL(x),
-    "m" = collapse::qM(x),
-    x
+    "df" = list(predictors  = collapse::qDF(x[vars_list[[1L]]]),
+                outcomes    = collapse::qDF(x[vars_list[[2L]]])),
+    "dt" = list(predictors  = collapse::qDT(x[vars_list[[1L]]]),
+                outcomes    = collapse::qDT(x[vars_list[[2L]]])),
+    "tbl" = list(predictors = collapse::qTBL(x[vars_list[[1L]]]),
+                 outcomes   = collapse::qTBL(x[vars_list[[2L]]])),
+    "m"   = list(predictors = collapse::qM(x[vars_list[[1L]]]),
+                 outcomes   = collapse::qM(x[vars_list[[2L]]])),
+
+    list(predictors = x[vars_list[[1L]]],
+         outcomes   = x[vars_list[[2L]]])
+
   )
+
+
+
 
 }

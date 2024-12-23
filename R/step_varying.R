@@ -27,12 +27,13 @@ StepVarying <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
-      self$to_remove <- !collapse::varying(new_data)
-      new_data[self$to_remove] <- list(NULL)
+    bake = function(s) {
+      self$to_remove <- !collapse::varying(s[["result"]][self$columns])
+      s[["result"]][self$to_remove] <- NULL
 
-      self$result <- new_data
-      self$result
+      # self$result <- new_data
+      # self$result
+      return(NULL)
     }
   )
 )
