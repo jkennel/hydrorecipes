@@ -38,22 +38,29 @@ If the values vary based on the interval used in the difference calculation, it 
 static_time <- recipe(wl~., kennel_2020) |>
   step_baro_clark(wl,
                   baro,
-                  lag_space = 1) |> # 1 minutes (every minute differences)
+                  lag_space = 1,
+                  inverse = FALSE) |> # 1 minutes (every minute differences)
   step_baro_clark(wl,
                   baro, 
-                  lag_space = 60) |> # 60 minutes (hourly differences)
+                  lag_space = 60,
+                  inverse = FALSE) |> # 60 minutes (hourly differences)
   step_baro_clark(wl, 
                   baro, 
-                  lag_space = 1440) |> # 1440 minutes (daily differences)
-  step_baro_least_squares(wl, baro) |> 
+                  lag_space = 1440,
+                  inverse = FALSE) |> # 1440 minutes (daily differences)
   step_baro_least_squares(wl, baro, 
-                          lag_space = 1, 
+                          inverse = FALSE) |> 
+  step_baro_least_squares(wl, baro, 
+                          lag_space = 1L,
+                          inverse = FALSE,
                           differences = TRUE) |> # 1 minutes (every minute differences)
   step_baro_least_squares(wl, baro, 
-                          lag_space = 60, 
+                          lag_space = 60L,
+                          inverse = FALSE,
                           differences = TRUE) |> # 60 minutes (hourly differences)
   step_baro_least_squares(wl, baro, 
-                          lag_space = 1440, 
+                          lag_space = 1440L,
+                          inverse = FALSE,
                           differences = TRUE) |> # 1440 minutes (daily differences)
   prep() |>
   bake()
@@ -73,11 +80,13 @@ Standard lags
 
 ```{r lag}
 
-lag_standard <- recipe(wl~., kennel_2020) |>
+formula <- as.formula(wl~.)
+
+lag_standard <- recipe(formula = formula, data = kennel_2020) |>
   step_lead_lag(baro, lag = 0:1440) |> 
   step_spline_b(datetime, df = 11, intercept = TRUE) |> 
   step_drop_columns(c(baro, datetime, et)) |>
-  step_ols(wl~.) |> 
+  step_ols(formula = formula) |>
   prep() |>
   bake()
 resp_l <- lag_standard$get_response_data()
@@ -88,7 +97,7 @@ Distributed lags
 
 ```{r distlag, fig.alt = "Barometric response functions with standard leading and lagging method compared to the distributed lag method.  Both methods are generally the same but the distributed lag method is smoother."}
 lag_dl <- recipe(wl~., kennel_2020) |>
-  step_distributed_lag(baro, knots = log_lags(15, 1440)) |> 
+  step_distributed_lag(baro, knots = log_lags(15, 1440), intercept = TRUE) |> 
   step_spline_b(datetime, df = 11, intercept = TRUE) |> 
   step_drop_columns(c(baro, datetime, et)) |>
   step_ols(wl~.) |> 

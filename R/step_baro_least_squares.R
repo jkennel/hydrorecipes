@@ -51,16 +51,16 @@ StepBaroLeastSquares <- R6Class(
       for (i in seq_along(self$lag_space)) {
         if (self$differences) {
           be[[i]] <- list(be = be_least_squares_diff_cpp(
-            dep = s[["result"]][[1L]],
-            ind = s[["result"]][[2L]],
+            dep = s[["result"]][[self$columns[[1L]]]],
+            ind = s[["result"]][[self$columns[[2L]]]],
             lag_space = self$lag_space[i],
             inverse = self$inverse
           ))
         } else {
 
           be[[i]] <- list(be = be_least_squares_cpp(
-            dep = s[["result"]][[1L]],
-            ind = s[["result"]][[2L]],
+            dep = s[["result"]][[self$columns[[1L]]]],
+            ind = s[["result"]][[self$columns[[2L]]]],
             inverse = self$inverse
           ))
 

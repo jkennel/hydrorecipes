@@ -81,10 +81,8 @@ StepBaroHarmonic <- R6Class(
                                   starting_value = self$start))$
         plate("m")
 
-
       X <- harmonics[, -(2:4)]
-      Y <- harmonics[, (2:4)]
-
+      Y <- harmonics[, self$columns[2:4]]
 
       soln <- llt_solve(X, Y)
 
@@ -92,21 +90,21 @@ StepBaroHarmonic <- R6Class(
       wh_s <- grep("sin", co_names)
       wh_c <- grep("cos", co_names)
 
-
-      soln_cplx <- sin_cos_to_complex(c = soln[wh_c,], s = -soln[wh_s,])
+      soln_cplx <- sin_cos_to_complex(c = soln[wh_c, ], s = -soln[wh_s, ])
 
       self$barometric_efficiency <- be_harmonic_cpp(soln_cplx, self$inverse)
       names(self$barometric_efficiency) <- c("ratio", "acworth", "rau")
 
-      dt <- diff(as.numeric(new_data[[1L]])[1:2])
+      dt <- diff(as.numeric(s[["result"]][["time_col"]])[1:2])
       cycle_size <- self$cycle_size / dt
-      be_tf <- Mod(be_transfer(collapse::qM(new_data[2:4]),
+
+      be_tf <- Mod(be_transfer(collapse::qM(s[["result"]][self$columns[2:4]]),
                                5,
                                TRUE,
                                TRUE,
                                0.1,
                                2.0,
-                               self$cycle_size / dt)[1L])
+                               cycle_size)[1L])
 
       names(be_tf) <- "tf"
 

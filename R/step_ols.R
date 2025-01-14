@@ -90,8 +90,6 @@ StepOls <- R6Class(
 
         resp <- list()
 
-        # print("xxxxxxxx")
-        # print(new_columns)
         for (i in seq_along(new_columns)) {
           nc <- new_columns[[i]]
           if (is.null(nc)) {

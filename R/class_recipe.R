@@ -537,7 +537,7 @@ Recipe <- R6Class(
     # @return response table from regression
     get_response_data = function(type = "df") {
 
-      resp <- self$get_step_data("response_data", type = "dt")
+      resp <- self$get_step_data("response_data", type = "df")
 
       if (is.null(resp)) return(NULL)
 

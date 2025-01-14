@@ -235,14 +235,15 @@ return_type <- function(x, type = "df", formula = NULL, combined = TRUE) {
 
   if (combined) {
     vars_list <- unlist(vars_list)
+
     # return types
     x <- switch(
       type,
-      "df" = collapse::qDF(x[vars_list]),
-      "dt" = collapse::qDT(x[vars_list]),
-      "tbl" = collapse::qTBL(x[vars_list]),
-      "m" = collapse::qM(x[vars_list]),
-      x[vars_list]
+      "df" = collapse::qDF(unclass(x)[vars_list]),
+      "dt" = collapse::qDT(unclass(x)[vars_list]),
+      "tbl" = collapse::qTBL(unclass(x)[vars_list]),
+      "m" = collapse::qM(unclass(x)[vars_list]),
+      unclass(x)[vars_list]
     )
 
     return(x)
@@ -250,17 +251,17 @@ return_type <- function(x, type = "df", formula = NULL, combined = TRUE) {
 
   x <- switch(
     type,
-    "df" = list(predictors  = collapse::qDF(x[vars_list[[1L]]]),
-                outcomes    = collapse::qDF(x[vars_list[[2L]]])),
-    "dt" = list(predictors  = collapse::qDT(x[vars_list[[1L]]]),
-                outcomes    = collapse::qDT(x[vars_list[[2L]]])),
-    "tbl" = list(predictors = collapse::qTBL(x[vars_list[[1L]]]),
-                 outcomes   = collapse::qTBL(x[vars_list[[2L]]])),
-    "m"   = list(predictors = collapse::qM(x[vars_list[[1L]]]),
-                 outcomes   = collapse::qM(x[vars_list[[2L]]])),
+    "df" = list(predictors  = collapse::qDF(unclass(x)[vars_list[[1L]]]),
+                outcomes    = collapse::qDF(unclass(x)[vars_list[[2L]]])),
+    "dt" = list(predictors  = collapse::qDT(unclass(x)[vars_list[[1L]]]),
+                outcomes    = collapse::qDT(unclass(x)[vars_list[[2L]]])),
+    "tbl" = list(predictors = collapse::qTBL(unclass(x)[vars_list[[1L]]]),
+                 outcomes   = collapse::qTBL(unclass(x)[vars_list[[2L]]])),
+    "m"   = list(predictors = collapse::qM(unclass(x)[vars_list[[1L]]]),
+                 outcomes   = collapse::qM(unclass(x)[vars_list[[2L]]])),
 
-    list(predictors = x[vars_list[[1L]]],
-         outcomes   = x[vars_list[[2L]]])
+    list(predictors = unclass(x)[vars_list[[1L]]],
+         outcomes   = unclass(x)[vars_list[[2L]]])
 
   )
 

@@ -101,7 +101,7 @@ Step <- R6Class(
         variable = rep.int("coefficient", n),
         value = as.vector(co),
         step_id = rep.int(self$id, n),
-        outcome = rep.int(colnames(co), each = n_each)
+        outcome = rep(colnames(co), each = n_each)
       )
 
     },

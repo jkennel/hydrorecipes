@@ -52,9 +52,9 @@ StepHarmonic <- R6Class(
 
 
         hls[[i]] <- harmonic_list(s[["result"]][[column_name]],
-          frequency = self$frequency,
-          start = self$starting_value,
-          cycle_size = self$cycle_size
+                                  frequency = self$frequency,
+                                  start = self$starting_value,
+                                  cycle_size = self$cycle_size
         )
 
         nn <- paste(

@@ -41,6 +41,7 @@ StepLeadLag <- R6Class(
 
       ll <- list()
 
+      self$new_columns <- c()
       for (i in seq_along(self$columns)) {
         column_name <- self$columns[i]
         # if (self$n_subset == 1) {
@@ -61,7 +62,7 @@ StepLeadLag <- R6Class(
         )
 
         names(ll[[i]]) <- nn
-        # self$new_columns <- c(self$new_columns, nn)
+        self$new_columns <- c(self$new_columns, nn)
       }
 
       self$result <- unlist(ll, recursive = FALSE)
