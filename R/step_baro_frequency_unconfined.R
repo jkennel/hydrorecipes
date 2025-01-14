@@ -63,10 +63,10 @@ StepBaroFrequencyUnconfined <- R6Class(
       invisible(self)
     },
     # subtract the central value from a column
-    bake = function(new_data) {
+    bake = function(s) {
 
       roj_1990 <- list(areal_rojstaczer_unconfined(
-        new_data[[self$columns]],
+        s[["result"]][[self$columns]],
         self$radius_well,
         self$storage_aquifer,
         self$specific_yield,
@@ -82,8 +82,8 @@ StepBaroFrequencyUnconfined <- R6Class(
       self$new_columns <- self$prefix
 
       self$result <- setNames(roj_1990, self$new_columns)
-      self$result
 
+      return(NULL)
     }
   )
 )

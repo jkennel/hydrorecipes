@@ -60,10 +60,10 @@ StepBaroFrequencySemiConfined <- R6Class(
       invisible(self)
     },
     # subtract the central value from a column
-    bake = function(new_data) {
+    bake = function(s) {
 
       roj_1988 <- list(areal_rojstaczer_semiconfined(
-        new_data[[self$columns]],
+        s[["result"]][[self$columns]],
         self$radius_well,
         self$transmissivity,
         self$storage_confining,
@@ -79,7 +79,7 @@ StepBaroFrequencySemiConfined <- R6Class(
       self$new_columns <- self$prefix
 
       self$result <- setNames(roj_1988, self$new_columns)
-      self$result
+      return(NULL)
 
     }
   )

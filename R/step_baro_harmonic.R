@@ -62,18 +62,18 @@ StepBaroHarmonic <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
 
       # this is a hack to deal with NSE issues
-      names(new_data)[1L] <- "time_col"
+      names(s[["result"]])[1L] <- "time_col"
 
-      nms <- names(new_data)
+      nms <- names(s[["result"]])
 
       # create regression formula
       formula_txt <- paste0(paste(nms[-1L], collapse = '+'), "~", nms[1])
 
       # include linear trend and intercept
-      harmonics <- Recipe$new(formula = as.formula(formula_txt), new_data)$
+      harmonics <- Recipe$new(formula = as.formula(formula_txt), s[["result"]])$
         add_step(StepIntercept$new())$
         add_step(StepHarmonic$new(time_col,
                                   frequency = self$frequency,
