@@ -86,12 +86,14 @@ StepTransportFracturesHeat <- R6Class(
       invisible(self)
     },
 
-    bake = function(new_data) {
+    bake = function(s) {
+
+      self$new_columns <- self$prefix
 
       pfh <- list(parallel_fractures_heat(
-        new_data[[1L]], # time
-        new_data[[2L]], # z
-        new_data[[3L]], # x
+        s[["result"]][[1L]], # time
+        s[["result"]][[2L]], # z
+        s[["result"]][[3L]], # x
         self$temperature_influent,
         self$time_influent,
         self$temperature_initial,
@@ -107,12 +109,11 @@ StepTransportFracturesHeat <- R6Class(
         self$porosity,
         self$n_terms))
 
-      self$new_columns <- self$prefix
-
       names(pfh) <- self$new_columns
 
       self$result <- pfh
-      self$result
+
+      return(NULL)
 
     }
   )

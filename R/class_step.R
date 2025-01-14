@@ -118,7 +118,7 @@ Step <- R6Class(
       }
 
       nms <- names(self$result)
-      if (column_name %in% nms) {
+      if (column_name %iin% nms) {
         return(self$result[column_name])
       }
 
@@ -160,7 +160,7 @@ Step <- R6Class(
 
       for (i in seq_along(field_name)) {
 
-        if(field_name[[i]] %in% names(self)) {
+        if(field_name[[i]] %iin% names(self)) {
           self[[field_name[i]]] <- field_value[i]
         }
 

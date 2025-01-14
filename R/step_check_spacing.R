@@ -26,9 +26,9 @@ StepCheckSpacing <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
 
-      self$check <- collapse::fndistinct(collapse::fdiff(new_data)) == 1L
+      self$check <- collapse::fndistinct(collapse::fdiff(s[["result"]])) == 1L
 
       return(NULL)
     }

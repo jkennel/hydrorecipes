@@ -51,7 +51,7 @@ Recipe <- R6Class(
         invisble(self)
       }
 
-      if (!any(class(data) %in% c("list", "data.frame", "data.table", "tbl"))) {
+      if (!any(class(data) %iin% c("list", "data.frame", "data.table", "tbl"))) {
         stop("data must be a data.frame like object or list")
       }
 
@@ -208,7 +208,6 @@ Recipe <- R6Class(
       invisible(self)
     },
 
-
     # @description
     # Reduce the recipe to tabular form. Bake and coerce to the desired output
     # type.
@@ -315,7 +314,7 @@ Recipe <- R6Class(
       }
 
       if (n_rem > 0L) {
-        wh <- which(self$term_info$variable %in% variable_rem)
+        wh <- which(self$term_info$variable %iin% variable_rem)
         self$term_info$source[wh] <- "removed"
         self$term_info$step_index[wh] <- step_index
       }
@@ -490,8 +489,8 @@ Recipe <- R6Class(
         if (is.null(x)) {
           return(x)
         }
-        wh <- which(nms %in% x)
-        if(length(wh) == 0L) {
+        wh <- nms %iin% x
+        if (length(wh) == 0L) {
           return(NULL)
         }
         c(min(wh) - 1L, max(wh) - min(wh) + 1L)
@@ -505,7 +504,10 @@ Recipe <- R6Class(
     # @return table of results
     get_outcome_variable = function(type = "df", steps = NULL) {
 
-      self$steps[[1L]]$result[which(self$steps[[1L]]$role == "outcome")]
+      all_vars <- self$steps[[1L]]$columns
+      outcome_vars <- all_vars[which(self$steps[[1L]]$role == "outcome")]
+
+      self$steps[[1L]]$result[outcome_vars]
 
     },
     # @description
@@ -580,7 +582,7 @@ Recipe <- R6Class(
       }
 
 
-      if (type %in% c("df", "dt")) {
+      if (type %iin% c("df", "dt")) {
         type_name <- "data.frame"
 
         if (type == "dt") type_name <- "data.table"

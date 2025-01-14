@@ -98,8 +98,8 @@ StepOls <- R6Class(
             next
           }
 
-          wh  <- co_names %in% nc
-          if(sum(wh) == 0) {
+          wh  <- co_names %iin% nc
+          if (sum(wh) == 0) {
             next
           }
 
@@ -115,15 +115,16 @@ StepOls <- R6Class(
             resp[[i]] <- r$steps[[i]]$response(co)
             # print(str(resp[[i]]))
 
-            if (!"outcome" %in% names(resp[[i]])) {
+            if ("outcome" %!in% names(resp[[i]])) {
               resp[[i]]$outcome <- rep(nms_outcome, times = nrow(co))
             }
 
-            if (!"term" %in% names(resp[[i]])) {
+            if ("term" %!in% names(resp[[i]])) {
               resp[[i]]$term <- rep(co_name, times = ncol(co))
             }
 
-            resp[[i]]$step_columns <- paste(r$steps[[i]]$columns, collapse = "_")
+            resp[[i]]$step_columns <- paste(r$steps[[i]]$columns,
+                                            collapse = "_")
           }
         }
 

@@ -474,6 +474,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// convolve_correlation
+Eigen::VectorXd convolve_correlation(Eigen::VectorXd x, Eigen::VectorXd y, size_t lag_max);
+RcppExport SEXP _hydrorecipes_convolve_correlation(SEXP xSEXP, SEXP ySEXP, SEXP lag_maxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type y(ySEXP);
+    Rcpp::traits::input_parameter< size_t >::type lag_max(lag_maxSEXP);
+    rcpp_result_gen = Rcpp::wrap(convolve_correlation(x, y, lag_max));
+    return rcpp_result_gen;
+END_RCPP
+}
 // convolve_vec
 Eigen::VectorXd convolve_vec(Eigen::VectorXd x, Eigen::VectorXd y);
 RcppExport SEXP _hydrorecipes_convolve_vec(SEXP xSEXP, SEXP ySEXP) {
@@ -2744,6 +2757,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_distributed_lag_list3", (DL_FUNC) &_hydrorecipes_distributed_lag_list3, 11},
     {"_hydrorecipes_distributed_lag_list4", (DL_FUNC) &_hydrorecipes_distributed_lag_list4, 3},
     {"_hydrorecipes_fft_matrix", (DL_FUNC) &_hydrorecipes_fft_matrix, 2},
+    {"_hydrorecipes_convolve_correlation", (DL_FUNC) &_hydrorecipes_convolve_correlation, 3},
     {"_hydrorecipes_convolve_vec", (DL_FUNC) &_hydrorecipes_convolve_vec, 2},
     {"_hydrorecipes_convolve_filter", (DL_FUNC) &_hydrorecipes_convolve_filter, 4},
     {"_hydrorecipes_convolve_overlap_add", (DL_FUNC) &_hydrorecipes_convolve_overlap_add, 2},

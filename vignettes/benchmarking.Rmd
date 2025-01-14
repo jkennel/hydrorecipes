@@ -33,6 +33,7 @@ improvements are between 2-10x and memory consumption is typically half of the
 #| message: false
 
 library(collapse)
+library(gslnls)
 library(data.table)
 library(hydrorecipes)
 library(bench)
@@ -297,6 +298,78 @@ results <- bench::press(
 )
 
 results
+
+
+
+```
+
+## step_drop_columns
+```{r}
+#| echo: true
+#| warning: false
+
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(x = rnorm(rows), 
+                      y = rnorm(rows),
+                      z = rnorm(rows))
+    bench::mark(
+      hrec = recipe(formula = formula, data = dat)  |>
+        step_drop_columns(z) |>
+        plate("tbl"),
+      rec = recipes::recipe(formula = formula, data = dat)  |>
+        recipes::step_rm(z) |>
+        recipes::prep() |>
+        recipes::bake(new_data = NULL),
+      check = TRUE,
+      relative = relative
+    )
+  }
+)
+
+results
+
+```
+
+## step_cross_correlation
+
+```{r}
+#| echo: true
+#| warning: false
+
+
+formula <- as.formula(y~x)
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(x = rnorm(rows), 
+                      y = rnorm(rows))
+    
+    bench::mark(
+      hrec1 = recipe(formula = formula, data = dat) |>
+        step_cross_correlation(c(x, z, y), lag_max = 1000) |>
+        plate("tbl"),
+      
+      min_iterations = 1L,
+    )
+  }
+)
+
+results
+
+
+x <- rnorm(5e5)
+y <- rnorm(5e5)
+lag_max <- 1000
+results <- bench::mark(fft_ccf  <- hydrorecipes:::convolve_correlation(x, y, lag_max),
+                       ccf_base <- as.numeric(ccf(x, y, lag.max = lag_max, plot = FALSE)$acf),
+                       min_iterations = 1L,
+                       check = TRUE
+)
+
+results
+
 
 
 
@@ -797,7 +870,7 @@ results <- bench::press(
                       recipes::bake(new_data = NULL)),
       check = TRUE,
       relative = relative,
-      min_iterations = 2
+      min_iterations = 2L
     )
   }
 )
@@ -811,6 +884,33 @@ results
 
 ## step_add_noise
 
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x)
+
+results <- bench::press(
+  rows = n,
+  {
+    dat <- data.frame(x = as.numeric(1:rows),
+                      y = rep(0.01, rows))
+    bench::mark(
+      hrec1 = recipe(formula = formula, data = dat) |>
+        step_add_noise(y) |>
+        plate("dt"))
+  }
+)
+
+results
+
+
+```
+
+
+## step_aquifer_grf & step_aquifer_theis
+
+The Theis solution is a subset of the grf solution.
 
 ```{r}
 #| echo: true
@@ -830,17 +930,14 @@ results <- bench::press(
       hrec2 = recipe(formula = formula, data = dat) |>
         step_aquifer_theis(time = x, flow_rate = y) |>
         plate("dt"),
-      check = TRUE,
-      relative = relative)
+      check = TRUE)
   }
 )
 
 results
 ```
 
-## step_aquifer_grf & step_aquifer_theis
-
-The Theis solution is a subset of the grf solution.
+## step_aquifer_theis_aniso
 
 ```{r}
 #| echo: true
@@ -854,16 +951,22 @@ results <- bench::press(
     dat <- data.frame(x = as.numeric(1:rows),
                       y = rep(0.01, rows))
     bench::mark(
-      hrec1 = recipe(formula = formula, data = dat) |>
-        step_add_noise(y) |>
-        plate("dt"),
-      relative = relative)
+      hrec1 = unname(recipe(formula = formula, data = dat) |>
+        step_aquifer_theis_aniso(time = x, 
+                                 flow_rate = y,
+                                 distance_x = 0, 
+                                 distance_y = 100,
+                                 hydraulic_conductivity_major = 1e-4,
+                                 hydraulic_conductivity_minor = 1e-4) |>
+        plate("dt")),
+      hrec2 = unname(recipe(formula = formula, data = dat) |>
+        step_aquifer_theis(time = x, flow_rate = y,) |>
+        plate("dt")),
+      check = TRUE)
   }
 )
 
 results
-
-
 ```
 
 ## step_aquifer_leaky
@@ -889,8 +992,7 @@ results <- bench::press(
                        step_aquifer_theis(time = x,
                                           flow_rate = y) |>
                        plate("dt")),
-      check = TRUE,
-      relative = relative)
+      check = TRUE)
   }
 )
 
@@ -908,7 +1010,7 @@ results
 formula <- as.formula(y~x)
 
 results <- bench::press(
-  rows = c(1e5),
+  rows = c(1e4, 1e5, 1e6),
   {
     dat <- data.frame(x = as.numeric(1:rows),
                       y = rep(0.01, rows))
@@ -934,6 +1036,41 @@ results <- bench::press(
   }
 )
 
+
+results
+```
+
+## step_aquifer_wellbore_storage
+
+- currently this is slow for long series.
+
+```{r}
+#| echo: true
+#| warning: false
+
+results <- bench::press(
+  rows = c(1e3, 1e4, 1e5),
+  {
+    dat <- data.frame(x = as.numeric(1:rows), 
+                      y = as.numeric(1:rows))
+    bench::mark(
+      hrec1 = unname(recipe(formula = formula, data = dat) |>
+        step_aquifer_wellbore_storage(time = x,
+                                      flow_rate = 0.01,
+                                      hydraulic_conductivity = 1e-4,
+                                      specific_storage = 1e-6, 
+                                      radius = 100,
+                                      radius_casing = 1e-15,
+                                      radius_well = 1e-15, n_terms = 18) |>
+        plate("dt")),
+      hrec2 = unname(recipe(formula = formula, data = dat) |>
+                       step_aquifer_theis(time = x,
+                                          flow_rate = y) |>
+                       plate("dt")),
+      check = FALSE
+    )
+  }
+)
 
 results
 ```
@@ -978,7 +1115,8 @@ formula <- as.formula(y~x)
 results <- bench::press(
   rows = n,
   {
-    dat <- data.frame(expand.grid(as.numeric(1:rows), as.numeric(1:10)))
+    dat <- data.frame(expand.grid(as.numeric(1:rows), 
+                                  as.numeric(1:10)))
     names(dat) <- c('x', 'y')
     bench::mark(
       hrec1 = (recipe(formula = formula, data = dat) |>
@@ -1168,13 +1306,13 @@ results <- bench::press(
     bench::mark(
       hrec = recipe(formula = formula, data = dat) |>
         # step_center(x) |>
-        step_distributed_lag(z, knots = log_lags(10, 50)) |>
-        # step_intercept() |>
+        # step_lead_lag(z, knots = log_lags(10, 50)) |>
+        step_intercept() |>
         step_ols(formula = as.formula(y~.), do_response = FALSE) |>
         prep() |>
         bake(),
       lm = lm(formula, dat),
-      lm.fit(x = m[, c(2, 3)], y = m[,1]),
+      lm.fit(x = m[, c(2, 3)], y = m[, 1]),
       check = FALSE,
       relative = FALSE
     )
@@ -1184,31 +1322,123 @@ results <- bench::press(
 results
 
 
-formula <- as.formula(y~x+z)
-
-
-results <- bench::press(
-  rows = n,
-  {
-    dat <- data.frame(x = rnorm(rows), 
-                      y = rnorm(rows),
-                      z = rnorm(rows))
-    bench::mark(
-      hrec = recipe(formula = formula, data = dat) |>
-        step_intercept() |>
-        step_nls(formula = as.formula(y~.)) |>
-        prep() |>
-        bake(),
-      check = FALSE,
-      relative = FALSE
-    )
-  }
-)
+# formula <- as.formula(y~x+z)
+# 
+# 
+# results <- bench::press(
+#   rows = n,
+#   {
+#     dat <- data.frame(x = rnorm(rows), 
+#                       y = rnorm(rows),
+#                       z = rnorm(rows))
+#     bench::mark(
+#       hrec = recipe(formula = formula, data = dat) |>
+#         step_intercept() |>
+#         step_nls(formula = as.formula(y~.)) |>
+#         prep() |>
+#         bake(),
+#       check = FALSE,
+#       relative = FALSE
+#     )
+#   }
+# )
 
 ```
 
+## step_nls
+
+```{r}
+#| echo: true
+#| warning: false
+
+
+n0 <- 5e5
+n <- 2e4
+n2 <- 1e4
+b <- cumsum(rnorm(n0))
+b <- b - mean(b)
+max_t <- 720 * ceiling(2.554)
+a <- hydrorecipes:::convolve_overlap_save(x = b,
+                     y = hydrorecipes:::gamma_3(0:max_t, 0.816, 9.221, 2.554),
+                     0)
+
+max_t <- 720 * ceiling(2.554)
+
+dat <- data.frame(a = a, b = b)
+formula <- formula(a~b)
+
+# for gsl_nls
+f <- function(z, x) {
+  max_t <- 720 * ceiling(z[3])
+  hydrorecipes:::convolve_overlap_save(x = x,
+                                            y = hydrorecipes:::gamma_3(0:max_t, z[1], z[2], z[3]),
+                                            align = 0)[-(1:7200)]
+}
+
+
+results <- bench::mark(
+  gsl_fun <- unname(round(coef(gsl_nls(
+    fn = f,                   ## model function      
+    y = a[-(1:7200)],           ## response vector 
+    x = b,
+    start = c(A = 0.5, n = 2.0, a = 2.0),  ## starting values
+    lower = c(A = 0.01, n = 1.0, a = 1.0), 
+    upper = c(A = 1.0, n = 10.0, a = 10.0),
+    control = gsl_nls_control(xtol = 1e-8),
+    trace = FALSE,
+    algorithm = "lm"               ## algorithm
+  )), 3)), 
+  h_1 = {h = recipe(formula = formula, data = dat) |>
+    step_convolve_gamma(b, amplitude = 0.5, k = 2.0, theta = 2.0, 
+                        varying = list(name = c("amplitude","k", "theta"),
+                                       start = c(0.5, 2.0, 2.0),
+                                       lower = c(0.01, 1.0, 1.0),
+                                       upper = c(1.0, 10.0, 10.0))) |>
+    step_nls(formula = formula(a~b), n_subset = 1L, 
+             trace = FALSE,
+             algorithm = "lm",
+             control = gsl_nls_control(xtol = 1e-8))
+  
+  h$prep()$bake()
+  unname(round(coef(h$steps[[3]]$fit), 3))},
+  
+  h_10 = {h = recipe(formula = formula, data = dat) |>
+    step_convolve_gamma(b, amplitude = 0.5, k = 2.0, theta = 2.0, 
+                        varying = list(name = c("amplitude","k", "theta"),
+                                       start = c(0.5, 2.0, 2.0),
+                                       lower = c(0.01, 1.0, 1.0),
+                                       upper = c(1.0, 10.0, 10.0))) |>
+    step_nls(formula = formula(a~b), n_subset = 10L, 
+             trace = FALSE,
+             algorithm = "lm",
+             control = gsl_nls_control(xtol = 1e-8))
+  
+  h$prep()$bake()
+  unname(round(coef(h$steps[[3]]$fit), 3))},
+  
+  h_100 = {h = recipe(formula = formula, data = dat) |>
+    step_convolve_gamma(b, amplitude = 0.5, k = 2.0, theta = 2.0, 
+                        varying = list(name = c("amplitude","k", "theta"),
+                                       start = c(0.5, 2.0, 2.0),
+                                       lower = c(0.01, 1.0, 1.0),
+                                       upper = c(1.0, 10.0, 10.0))) |>
+    step_nls(formula = formula(a~b), n_subset = 100L, 
+             trace = FALSE,
+             algorithm = "lm",
+             control = gsl_nls_control(xtol = 1e-8))
+  
+  h$prep()$bake()
+  unname(round(coef(h$steps[[3]]$fit), 3))},
+  
+  check = TRUE
+)
+
+results
+
+```
 
 ## step_ols_gap_fill
+
 
 ```{r}
 #| echo: true
@@ -1230,52 +1460,25 @@ dat[60000:70000, x := NA_real_]
 
 dat <- unclass(dat)
 
-# bench::mark(
-#   {h = recipe(formula = frm, data = dat) |>
-#     step_find_interval(z, vec = c(0, n/2, n)) |>
-#     step_intercept() |>
-#     step_spline_b(z, df = 4) |>
-#     step_drop_columns(z)
-#   
-#   hrec = recipe(formula = frm, data = dat) |>
-#     step_ols_gap_fill(c(x, y, z), recipe = h) |>
-#     prep() |> 
-#     bake()},
-# )
+bench::mark(
+  {h = recipe(formula = frm, data = dat) |>
+    step_find_interval(z, vec = c(0, n/2, n)) |>
+    step_intercept() |>
+    step_spline_b(z, df = 4) |>
+    step_drop_columns(z)
+
+  hrec = recipe(formula = frm, data = dat) |>
+    step_ols_gap_fill(c(x, y, z), recipe = h) |>
+    prep() |>
+    bake()},
+  check = FALSE
+)
 
 
 
 ```
 
 
-# update
-
-```{r}
-
-formula <- as.formula(y~x)
-
-# results <- bench::press(
-#   rows = n,
-#   {
-#     dat <- data.frame(x = rnorm(rows), 
-#                       y = 1:rows,
-#                       z = rnorm(rows))
-#     bench::mark(
-#       hrec1 = unname(recipe(formula = formula, data = dat) |>
-#                        step_lead_lag(x, lag = 1:30) |>
-#                        plate("tbl")),
-#       hrec1 = unname(recipe(formula = formula, data = dat) |>
-#                        step_lead_lag(x, lag = 1:30) |>
-#                        plate("tbl")),
-#       check = TRUE,
-#       relative = relative,
-#       min_iterations = 1
-#     )
-#   }
-# )
-# 
-# results
-```
 
 # check
 
@@ -1292,7 +1495,7 @@ results <- bench::press(
   {
     dat <- data.frame(x = rnorm(rows),
                       y = 1:rows)
-    dat[9, "x"] <- NA
+    dat[9:50, "x"] <- NA
     dat[9, "y"] <- NA
     
     bench::mark(

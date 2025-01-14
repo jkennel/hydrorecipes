@@ -58,7 +58,7 @@ StepAquiferGRF <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
 
       self$new_columns <- self$prefix
       self$columns <- paste(self$columns, collapse = ",")
@@ -69,13 +69,13 @@ StepAquiferGRF <- R6Class(
         specific_storage = self$specific_storage,
         hydraulic_conductivity = self$hydraulic_conductivity,
         thickness = self$thickness,
-        time = new_data[[self$time]],
-        flow_rate = new_data[[self$flow_rate]],
+        time = s[["result"]][[1L]],
+        flow_rate = s[["result"]][[2L]],
         flow_dimension = self$flow_dimension
       ), self$new_columns)
 
 
-      self$result
+      return(NULL)
     }
 
   )

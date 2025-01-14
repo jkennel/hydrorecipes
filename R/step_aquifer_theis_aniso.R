@@ -67,24 +67,24 @@ StepAquiferTheisAniso <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
 
       self$new_columns <- self$prefix
       self$columns <- paste(self$columns, collapse = ",")
 
-      self$result <- setNames(theis_aniso_time(
-        distance_x = self$distance_x_transformed,
-        distance_y = self$distance_y_transformed,
-        storativity = self$storativity,
-        transmissivity_x = self$transmissivity_major,
-        transmissivity_y = self$transmissivity_minor,
-        thickness = self$thickness,
-        time = new_data[[self$time]],
-        flow_rate = new_data[[self$flow_rate]]
-      ), self$new_columns)
+      self$result <- setNames(
+        theis_aniso_time(
+          distance_x = self$distance_x_transformed,
+          distance_y = self$distance_y_transformed,
+          storativity = self$storativity,
+          transmissivity_x = self$transmissivity_major,
+          transmissivity_y = self$transmissivity_minor,
+          thickness = self$thickness,
+          time = s[["result"]][[1L]],
+          flow_rate = s[["result"]][[2L]]
+        ), self$new_columns)
 
-      self$result
-
+      return(NULL)
     }
 
   )

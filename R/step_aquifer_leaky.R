@@ -62,14 +62,14 @@ StepAquiferLeaky <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
 
       self$new_columns <- self$prefix
       self$columns <- paste(self$columns, collapse = ",")
 
       hj <- hantush_jacob(
-        new_data[[1L]],
-        new_data[[2L]],
+        s[["result"]][[1L]],
+        s[["result"]][[2L]],
         self$radius,
         self$storativity,
         self$transmissivity,
@@ -79,7 +79,7 @@ StepAquiferLeaky <- R6Class(
 
 
       self$result <- setNames(hj, self$new_columns)
-      self$result
+      return(NULL)
     }
   )
 )

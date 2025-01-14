@@ -75,14 +75,14 @@ StepAquiferPatch <- R6Class(
       invisible(self)
     },
 
-    bake = function(new_data) {
+    bake = function(s) {
 
       self$new_columns <- self$prefix
 
       self$result <- setNames(
         list(
           barker_herbert(
-            time = new_data[[1L]],
+            time = s[["result"]][[1L]],
             radius = self$radius,
             radius_patch = self$radius_patch,
             t_1 = self$transmissivity_inner,
@@ -96,7 +96,7 @@ StepAquiferPatch <- R6Class(
         ),
         self$new_columns)
 
-      self$result
+      return(NULL)
     }
   )
 )

@@ -21,7 +21,7 @@
 #' @importFrom collapse fmean fsd fscale fsum fquantile fndistinct flag
 #' @importFrom collapse vlengths fnunique
 #' @importFrom collapse missing_cases varying rowbind
-#' @importFrom collapse qDF qM qF qTBL mctl %!in%
+#' @importFrom collapse qDF qM qF qTBL mctl %!in% "%iin%"
 #' @importFrom collapse pivot
 #'
 #' @importFrom earthtide calc_earthtide
@@ -1013,6 +1013,42 @@ step_convolve_exponential <- function(.rec,
                         modifyList(x = env_list, val = list(...))))
 
 
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_cross_correlation
+#'
+#' @description
+#'   Calculate the autocorrelation function or cross-correlation
+#'
+#' @inheritParams step_scale
+#'
+#' @references
+#' @return an updated recipe
+#' @export
+#'
+#' @examples
+#' formula <- as.formula(y~x)
+#' rows <- 1e4
+#'
+#' dat <- data.frame(x = rnorm(rows),
+#'                   y = as.numeric(1:rows))
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'  step_cross_correlation(x)
+#'
+#' frec = recipe(formula = formula, data = dat) |>
+#'  step_cross_correlation(c(x, y))
+#'
+step_cross_correlation <- function(.rec,
+                                   terms,
+                                   lag_max = 100,
+                                   role = "predictor",
+                                   ...) {
+
+  terms <- substitute(terms)
+  env_list <- get_function_arguments()
+  .rec$add_step(do.call(StepCrossCorrelation$new,
+                        modifyList(x = env_list, val = list(...))))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_distributed_lag

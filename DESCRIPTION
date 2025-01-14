@@ -23,7 +23,8 @@ Imports:
     RcppEigen,
     earthtide,
     splines2,
-    collapse
+    collapse,
+    gslnls
 LinkingTo: Rcpp, RcppArmadillo, RcppThread, RcppEigen, splines2, BH
 Suggests:
     data.table,

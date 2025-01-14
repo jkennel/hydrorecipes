@@ -327,6 +327,25 @@ fft_matrix <- function(x, n_new) {
 }
 
 #' @title
+#' convolve_ccf
+#'
+#' @description
+#' FFT based cross-correlation
+#'
+#' @param x the vector that holds the series (numeric vector)
+#' @param y the vector to convolve with x (numeric vector)
+#'
+#'
+#' @return numeric vector that is the cross-correlation
+#'
+#'
+#' @noRd
+#'
+convolve_correlation <- function(x, y, lag_max) {
+    .Call(`_hydrorecipes_convolve_correlation`, x, y, lag_max)
+}
+
+#' @title
 #' convolve_vec
 #'
 #' @description

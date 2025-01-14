@@ -50,19 +50,22 @@ StepTransportOgataBanks <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
+
+      self$new_columns <- self$prefix
+
       ob <- list(ogata_banks_decay_vec(
         self$concentration_initial,
         self$velocity,
         self$diffusion,
         self$retardation,
         self$decay,
-        new_data[[2L]],
-        new_data[[1L]]
+        s[["result"]][[2L]],
+        s[["result"]][[1L]]
       ))
-      self$new_columns <- self$prefix
+
       self$result <- setNames(ob, self$new_columns)
-      self$result
+      return(NULL)
 
     }
   )

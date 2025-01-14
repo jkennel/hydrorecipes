@@ -89,12 +89,14 @@ StepTransportFracturesSolute <- R6Class(
       invisible(self)
     },
 
-    bake = function(new_data) {
+    bake = function(s) {
+
+      self$new_columns <- self$prefix
 
       pfs <- list(parallel_fractures_solute(
-        new_data[[1L]], # time
-        new_data[[2L]], # z
-        new_data[[3L]], # x
+        s[["result"]][[1L]], # time
+        s[["result"]][[2L]], # z
+        s[["result"]][[3L]], # x
         self$concentration_influent,
         self$time_influent,
         self$concentration_initial,
@@ -111,14 +113,11 @@ StepTransportFracturesSolute <- R6Class(
         self$tortuosity,
         self$n_terms))
 
-
-      self$new_columns <- self$prefix
-
       names(pfs) <- self$new_columns
 
       self$result <- pfs
-      self$result
 
+      return(NULL)
     }
   )
 )

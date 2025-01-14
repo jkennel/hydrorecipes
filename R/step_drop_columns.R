@@ -29,6 +29,7 @@ StepDropColumns <- R6Class(
 
       s[["result"]][self$columns] <- NULL
 
+      return(NULL)
     }
 
   )

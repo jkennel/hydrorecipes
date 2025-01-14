@@ -1,6 +1,5 @@
 #include "hydrorecipes.h"
 
-
 //==============================================================================
 //' @title
 //' fft_matrix
@@ -47,6 +46,71 @@ Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
 //******************************************************************************
 // Convolution
 //******************************************************************************
+//==============================================================================
+//' @title
+//' convolve_ccf
+//'
+//' @description
+//' FFT based cross-correlation
+//'
+//' @param x the vector that holds the series (numeric vector)
+//' @param y the vector to convolve with x (numeric vector)
+//'
+//'
+//' @return numeric vector that is the cross-correlation
+//'
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::VectorXd convolve_correlation(Eigen::VectorXd x,
+                                     Eigen::VectorXd y,
+                                     size_t lag_max) {
+
+  Eigen::FFT<double> fft;
+  size_t n_x = x.size();
+  size_t n_y = y.size();
+  size_t n_new = next_n_eigen(n_x + n_y - 1);
+
+  if (n_y != n_x) {
+    Rcpp::stop("convolve_vec: the lengths of x and y should be the same");
+  }
+
+  if (lag_max > (n_x - 1)) {
+    lag_max = n_x - 1;
+  }
+
+  if (lag_max < 1) {
+    lag_max = n_x - 1;
+  }
+
+  x = x.array() - x.array().mean();
+  y = y.array()-y.array().mean();
+
+  VectorXd x_pad = pad_vector(x, n_x, n_new);
+  VectorXd y_pad = pad_vector(y, n_x, n_new);
+
+  VectorXcd fft_x(n_new);
+  VectorXcd fft_y(n_new);
+
+  VectorXd z(n_new);
+
+  fft.fwd(fft_x, x_pad);
+  fft.fwd(fft_y, y_pad);
+
+  fft_x = fft_x.array() * fft_y.array().conjugate();
+  fft.inv(z, fft_x);
+
+  z = z / (x_pad.norm() * y_pad.norm());
+
+  VectorXd out(lag_max * 2 + 1);
+  out << z.tail(lag_max), z.head(lag_max + 1);
+
+  return(out);
+}
+//==============================================================================
+
+
 //==============================================================================
 //' @title
 //' convolve_vec

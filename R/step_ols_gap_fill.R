@@ -10,7 +10,10 @@ StepOlsGapFill <- R6Class(
 
     # step specific variables
     recipe = NULL,
-    coefficients = NULL,
+    fit = NULL,
+    predictors = NULL,
+    outcomes = NULL,
+
     initialize = function(terms,
                           recipe,
                           role = "predictor",
@@ -32,33 +35,48 @@ StepOlsGapFill <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
 
-      # print(str(new_data))
-      rec <- self$recipe
-      rec <- rec$prep()$bake(data = new_data)
-      # print('here')
-      dat <- rec$result
+      r <- self$recipe
 
-      vars_list <- names(new_data)
+      new_data <- return_type(x = r$get_result(),
+                              type = "m",
+                              formula = r$formula,
+                              combined = FALSE)
 
-      x <- get_regression_data(dat, rec$term_info, vars_list, id_type = "predictor")
-      y <- get_regression_data(dat, rec$term_info, vars_list, id_type = "outcome")
+      self$predictors <- new_data[[1L]]
+      self$outcomes   <- new_data[[2L]]
 
-      mode(x$data) <- "double"
-      mode(y$data) <- "double"
+      co_names <- colnames(self$predictors)
+      nms_outcome <- colnames(self$outcomes)
+      column_list <- r$get_term_index(co_names)
+
+      to_rem <- !(complete.cases(self$predictors, self$outcomes))
 
 
-      self$coefficients <- determine_coefficients(x, y)
+      # NEED naming coefficients, fitted.values, decomposition, residuals
+      # ols:
+      #  - coefficients
+      #  - fitted.values
+      #  - decomposition
+      #  - residuals
+      #  - s
+      #  - df.residual
+      #  - rank
+      #  - Std. Error
+      self$fit <- determine_coefficients(self$predictors,
+                                         self$outcomes,
+                                         to_rem,
+                                         column_list)
 
-      lst <- collapse::mctl(x$data[, , drop = FALSE] %*% self$coefficients[, , drop = FALSE])
+      lst <- collapse::mctl(self$predictors[, , drop = FALSE] %*% self$fit$coefficients[, , drop = FALSE])
 
-      self$new_columns <- name_columns(self$prefix, colnames(y$data), n = ncol(y$data))
+      self$new_columns <- name_columns(self$prefix, colnames(self$outcomes), n = ncol(self$outcomes))
       names(lst) <- self$new_columns
 
-
       self$result <- lst
-      self$result
+
+      return(NULL)
 
     }
   )

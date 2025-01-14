@@ -110,8 +110,8 @@ StepNls <- R6Class(
                              self$n_subset)
       }
 
-      print(collapse::qDF(varying))
-      print(self$range)
+      # print(collapse::qDF(varying))
+      # print(self$range)
 
       self$fit <- gsl_nls(
 
@@ -131,7 +131,7 @@ StepNls <- R6Class(
         inds = inds
       )
 
-      print(self$fit)
+      # print(self$fit)
 
 
       return(NULL)

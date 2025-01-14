@@ -58,7 +58,7 @@ StepAquiferWellboreStorage <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
 
       self$new_columns <- self$prefix
 
@@ -66,7 +66,7 @@ StepAquiferWellboreStorage <- R6Class(
       S  <- self$specific_storage * self$thickness
 
 
-      pc <- list(papadopulos_cooper_laplace(new_data[[1L]],
+      pc <- list(papadopulos_cooper_laplace(s[["result"]][[1L]],
                                             self$flow_rate,
                                             self$radius,
                                             self$radius_casing,
@@ -77,7 +77,7 @@ StepAquiferWellboreStorage <- R6Class(
                                             self$n_terms))
 
       self$result <- setNames(pc, self$new_columns)
-      self$result
+      return(NULL)
 
     }
   )
