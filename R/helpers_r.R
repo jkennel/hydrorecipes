@@ -84,12 +84,12 @@ get_regression_data <- function(new_data,
   ti <- collapse::qDF(term_info)
   ti <- ti[ti$source != "removed", ]
 
-  ti <- ti[ti$variable %in% nms, ]
+  ti <- ti[ti$variable %iin% nms, ]
 
   x <- list()
   # create regression matrices
   x$term_info <- ti[ti$roles == id_type, ]
-  x$term_info <- x$term_info[x$term_info$variable %in% unlist(vars), ]
+  x$term_info <- x$term_info[x$term_info$variable %iin% unlist(vars), ]
 
   if (nrow(x$term_info) == 0) {
     stop(paste("Provided formula does not have any valid", id_type))
@@ -97,13 +97,15 @@ get_regression_data <- function(new_data,
 
   x$term_info$inds <- seq_len(nrow(x$term_info))
 
-  x$term_info$ids <- which(nms %in% x$term_info$variable)
+  x$term_info$ids <- nms %iin% x$term_info$variable
 
   x$to_rem <- collapse::missing_cases(new_data)
   x$data <- collapse::qM(unclass(new_data)[x$term_info$ids])
   x
 
 }
+
+
 
 # y = outcomes
 # x = predictors
@@ -193,7 +195,7 @@ predict_each_step <- function(x, fit, step_vars, step_names) {
       next
     }
 
-    wh <- colnames(x) %in% nms
+    wh <- colnames(x) %iin% nms
 
     if (!any(wh)) {
       next
