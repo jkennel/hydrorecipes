@@ -24,23 +24,26 @@ library(hydrorecipes)
 ### Generalized radial flow model (Barker, 1988)
 
 ```{r grf, fig.alt = "Drawdown curves determined using two pumping rates and radial flow. A recovery period is following the pumping is included."}
-time <- 1:2000
-flow_rate  <- c(rep(0.001, 500),
+time <- as.numeric(1:2000)
+flow_rate <- c(rep(0.001, 500),
                 rep(0.002, 500),
                 rep(0.0, 1000))
 
-dat <- data.frame(time, flow_rate)
-
 # radial (flow_dimension = 2 Theis)
-grf <- recipe(time~flow_rate, dat) |>
+dat <- data.frame(time = time,
+                  flow_rate = flow_rate)
+formula <- as.formula(flow_rate~time)
+grf = recipe(formula = formula, data = dat) |>
   step_aquifer_grf(time = time,
                    flow_rate = flow_rate,
                    thickness = 1.0,
-                   radius = 20,
+                   radius = 20.0,
                    specific_storage = 1e-5,
                    hydraulic_conductivity = 1e-3,
                    flow_dimension = 2) |>
   plate()
+
+
 plot(aquifer_grf~time, grf,
      type = "l", 
      ylab = "drawdown", 
@@ -50,15 +53,9 @@ plot(aquifer_grf~time, grf,
 ### Anisotropic Theis flow model (Papadopulos, 1965)
 
 ```{r theisaniso, fig.alt = "A series of anisotropic Theis drawdown and recovery curves for monitoring wells with different orientations to the major and minor axes."}
-time <- 1:2000
-flow_rate  <- c(rep(0.001, 500),
-                rep(0.002, 500),
-                rep(0.0, 1000))
-
-dat <- data.frame(time, flow_rate)
 
 # along major direction
-theis_aniso_x <- recipe(time~flow_rate, dat) |>
+theis_aniso_x <- recipe(formula = formula, data = dat) |>
   step_aquifer_theis_aniso(time = time,
                    flow_rate = flow_rate,
                    thickness = 1.0,
@@ -71,7 +68,7 @@ theis_aniso_x <- recipe(time~flow_rate, dat) |>
   plate()
 
 # along minor direction
-theis_aniso_y <- recipe(time~flow_rate, dat) |>
+theis_aniso_y <- recipe(formula = formula, data = dat) |>
   step_aquifer_theis_aniso(time = time,
                    flow_rate = flow_rate,
                    thickness = 1.0,
@@ -84,7 +81,7 @@ theis_aniso_y <- recipe(time~flow_rate, dat) |>
   plate()
 
 # midway between minor and major
-theis_aniso_xy <- recipe(time~flow_rate, dat) |>
+theis_aniso_xy <- recipe(formula = formula, data = dat) |>
   step_aquifer_theis_aniso(time = time,
                    flow_rate = flow_rate,
                    thickness = 1.0,
@@ -97,7 +94,7 @@ theis_aniso_xy <- recipe(time~flow_rate, dat) |>
   plate()
 
 # isotropic higher K
-theis_aniso_iso_high <- recipe(time~flow_rate, dat) |>
+theis_aniso_iso_high <- recipe(formula = formula, data = dat) |>
   step_aquifer_theis_aniso(time = time,
                    flow_rate = flow_rate,
                    thickness = 1.0,
@@ -109,7 +106,7 @@ theis_aniso_iso_high <- recipe(time~flow_rate, dat) |>
                    major_axis_angle = 0.0) |>
   plate()
 # isotropic lower K
-theis_aniso_iso_low <- recipe(time~flow_rate, dat) |>
+theis_aniso_iso_low <- recipe(formula = formula, data = dat) |>
   step_aquifer_theis_aniso(time = time,
                    flow_rate = flow_rate,
                    thickness = 1.0,
@@ -186,14 +183,9 @@ points(aquifer_theis_aniso~time, theis_aniso_xy,
 
 ```{r hj, fig.alt = "Drawdown curves determined using two pumping rates and the Hantush-Jacob solution."}
 
-time <- 1:2000
-flow_rate <- c(rep(0.001, 500), 
-               rep(0.002, 500),
-               rep(0.0, 1000))
 
 # high
-dat <- data.frame(time = 1:2000, flow_rate = flow_rate)
-hj <- recipe(flow_rate~time, dat) |>
+hj <- recipe(formula = formula, data = dat) |>
   step_aquifer_leaky(time, 
                      flow_rate, 
                      leakage = 100, 
@@ -483,7 +475,7 @@ th <- recipe(time~flow_rate, dat) |>
   plate()
 
 plot(aquifer_wellbore_storage~time, pc, 
-     type = "l", lwd = 3,
+     type = "l",
      log = "x",
      ylab = "drawdown", 
      xlab = "elapsed time")

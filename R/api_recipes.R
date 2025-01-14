@@ -21,7 +21,7 @@
 #' @importFrom collapse fmean fsd fscale fsum fquantile fndistinct flag
 #' @importFrom collapse vlengths fnunique
 #' @importFrom collapse missing_cases varying rowbind
-#' @importFrom collapse qDF qM qF qTBL mctl %!in% "%iin%"
+#' @importFrom collapse qDF qM qF qTBL mctl %!in% "%iin%" "%!iin%"
 #' @importFrom collapse pivot
 #'
 #' @importFrom earthtide calc_earthtide

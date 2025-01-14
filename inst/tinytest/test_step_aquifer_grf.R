@@ -10,9 +10,9 @@ frec1 = recipe(formula = formula, data = dat) |>
   plate("dt")
 
 frec2 = hydrorecipes:::Recipe$new(formula = formula, data = dat)$
-                 add_step(hydrorecipes:::StepAquiferGRF$new(time = x,
+  add_step(hydrorecipes:::StepAquiferGRF$new(time = x,
                                              flow_rate = y))$
-                 plate("dt")
+  plate("dt")
 
 
 expect_equivalent(frec1, frec2,

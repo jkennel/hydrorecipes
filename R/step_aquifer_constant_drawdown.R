@@ -53,7 +53,7 @@ StepAquiferConstantDrawdown <- R6Class(
 
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(s) {
 
       self$new_columns <- self$prefix
 
@@ -63,7 +63,7 @@ StepAquiferConstantDrawdown <- R6Class(
 
       # add result data
       self$result <- setNames(list(jacob_lohman_laplace(
-        time = new_data[[self$columns]],
+        time = s[["result"]][[self$columns]],
         s = self$drawdown,
         r = self$radius_well,
         Tr = Tr,
@@ -73,7 +73,7 @@ StepAquiferConstantDrawdown <- R6Class(
       )), self$new_columns)
 
 
-      self$result
+      return(NULL)
     }
   )
 )
