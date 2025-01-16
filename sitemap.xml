@@ -15,7 +15,6 @@
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/bouwer.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/bouwer_1976_abc.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/bouwer_1976_water_level.html</loc></url>
-<url><loc>https://jkennel.github.io/hydrorecipes/reference/brf_from_frf.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/convert_for_rojstaczer.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/convert_le_to_be.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/get_formula_vars.html</loc></url>
@@ -52,6 +51,9 @@
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_check_na.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_check_spacing.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_compare_columns.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_convolve_exponential.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_convolve_gamma.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_cross_correlation.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_distributed_lag.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_drop_columns.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_dummy.html</loc></url>
@@ -67,6 +69,8 @@
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_intercept.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_kernel_filter.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_lead_lag.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_multiply.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_nls.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_normalize.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_ols.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_ols_gap_fill.html</loc></url>
@@ -74,6 +78,7 @@
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_scale.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_slug_cbp.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_spline_b.html</loc></url>
+<url><loc>https://jkennel.github.io/hydrorecipes/reference/step_spline_n.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_subset_rows.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_transport_fractures_heat.html</loc></url>
 <url><loc>https://jkennel.github.io/hydrorecipes/reference/step_transport_fractures_solute.html</loc></url>

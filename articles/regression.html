@@ -8,8 +8,8 @@
 <title>Regression • hydrorecipes</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Regression">
 </head>
 <body>
@@ -94,8 +94,8 @@ cumulative responses based on the regression coefficients.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">kennel_2020</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="va">form</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">wl</span><span class="op">~</span><span class="va">.</span><span class="op">)</span></span>
-<span><span class="va">ba_knots</span> <span class="op">&lt;-</span> <span class="fu">log_lags</span><span class="op">(</span><span class="fl">15</span>, <span class="fl">1441</span><span class="op">)</span> <span class="co"># knots for distributed lag baro terms</span></span>
-<span><span class="va">df</span>       <span class="op">&lt;-</span> <span class="fl">5</span>                       <span class="co"># degrees of freedom for spline background trend</span></span>
+<span><span class="va">ba_knots</span> <span class="op">&lt;-</span> <span class="fu">log_lags</span><span class="op">(</span><span class="fl">15</span>, <span class="fl">1441</span><span class="op">)</span>  <span class="co"># knots for distributed lag baro terms</span></span>
+<span><span class="va">df</span>       <span class="op">&lt;-</span> <span class="fl">5</span>                   <span class="co"># degrees of freedom for spline background trend</span></span>
 <span></span>
 <span><span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">form</span>, <span class="va">kennel_2020</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/step_distributed_lag.html">step_distributed_lag</a></span><span class="op">(</span><span class="va">baro</span>, knots <span class="op">=</span> <span class="va">ba_knots</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -112,7 +112,7 @@ cumulative responses based on the regression coefficients.</p>
 <span><span class="va">resp</span> <span class="op">&lt;-</span> <span class="va">rec</span><span class="op">$</span><span class="fu">get_response_data</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"dt"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># barometric response function</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">value</span><span class="op">~</span><span class="va">x</span>, data <span class="op">=</span> <span class="va">resp</span><span class="op">[</span><span class="va">term</span> <span class="op">==</span> <span class="st">"distributed_lag_interpolated"</span> <span class="op">&amp;</span> <span class="va">variable</span> <span class="op">==</span> <span class="st">"cumulative"</span><span class="op">]</span>, </span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">value</span><span class="op">~</span><span class="va">x</span>, data <span class="op">=</span> <span class="va">resp</span><span class="op">[</span><span class="va">term</span> <span class="op">==</span> <span class="st">"distributed_lag"</span> <span class="op">&amp;</span> <span class="va">variable</span> <span class="op">==</span> <span class="st">"cumulative"</span><span class="op">]</span>, </span>
 <span>     type <span class="op">=</span> <span class="st">"l"</span>,</span>
 <span>     xlab <span class="op">=</span> <span class="st">"Lag time in minutes"</span>,</span>
 <span>     ylab <span class="op">=</span> <span class="st">"Cumulative response"</span><span class="op">)</span></span></code></pre></div>
@@ -133,10 +133,10 @@ model.</p>
 <span>       xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">"Pressure (dbar)"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># predicted sum of components</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">wl_step_distributed_lag_baro</span> <span class="op">+</span> </span>
-<span>       <span class="va">wl_step_spline_b_datetime</span> <span class="op">+</span> </span>
-<span>       <span class="va">wl_step_lead_lag_et</span> <span class="op">+</span> </span>
-<span>       <span class="va">wl_step_intercept</span><span class="op">~</span><span class="va">datetime</span>, <span class="va">pred</span>, type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">wl_distributed_lag_baro</span> <span class="op">+</span> </span>
+<span>       <span class="va">wl_spline_b_datetime</span> <span class="op">+</span> </span>
+<span>       <span class="va">wl_lead_lag_et</span> <span class="op">+</span> </span>
+<span>       <span class="va">wl_intercept</span><span class="op">~</span><span class="va">datetime</span>, <span class="va">pred</span>, type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="regression_files/figure-html/unnamed-chunk-3-1.png" alt="Comparison of the predicted and observed water levels. Only small differences between the two curves are evident." width="700"></p>
   </main>
 </div>
