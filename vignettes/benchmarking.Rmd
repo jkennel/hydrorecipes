@@ -753,7 +753,7 @@ results <- bench::press(
                        step_convolve_gamma(z, amplitude = 1, k = 1, theta = 1) |>
                        plate("tbl")),
       min_iterations = 1,
-      relative = relative,
+      relative = FALSE,
       check = TRUE
     )
   }
@@ -1521,7 +1521,7 @@ results <- bench::press(
         prep() |>
         bake(),
       check = FALSE,
-      relative = relative,
+      relative = FALSE,
       min_iterations = 2
     )
   }
