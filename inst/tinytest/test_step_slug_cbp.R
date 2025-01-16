@@ -27,9 +27,6 @@ frec1 = recipe(formula = formula, data = dat) |>
   plate("dt")
 
 
-
-
-
 expect_equivalent(frec1[[2]], a_01, tolerance = 1e-3,
                             info = "R6 and hydrorecipes api are equivalent")
 

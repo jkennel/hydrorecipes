@@ -4,9 +4,9 @@ formula <- as.formula(y~x)
 
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-frec1 = recipe(formula = formula, data = dat) |>
-  step_subset_rows(x, row_numbers = c(1, 5, 10)) |>
-  plate("dt")
+# frec1 = recipe(formula = formula, data = dat) |>
+#   step_subset_rows(x, row_numbers = c(1, 5, 10)) |>
+#   plate("dt")
 
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

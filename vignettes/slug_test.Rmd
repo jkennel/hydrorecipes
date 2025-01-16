@@ -3,8 +3,10 @@ title: "Slug test steps"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Slug test steps}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -14,12 +16,57 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(hydrorecipes)
+# Cooper Bredehoeft Papadopulos 1967
+
+```{r cbp}
+# check vs. CBP 1967 table 1
+Tt_r2    <- rep(c(1.0, 2.15, 4.64), 4) * 10^(rep(c(-3, -2, -1, 0), each = 3))
+a_01     <- c(0.9771, 0.9658, 0.9490, 0.9238, 0.8860, 0.8283,
+              0.7460, 0.6289, 0.4782, 0.3117, 0.1665, 0.07415)
+a_0001   <- c(0.9969, 0.9949, 0.9914, 0.9853, 0.9744, 0.9545,
+              0.9183, 0.8538, 0.7436, 0.5729, 0.3543, 0.1554)
+a_000001 <- c(0.9992, 0.9985, 0.9970, 0.9942, 0.9888, 0.9781,
+              0.9572, 0.9167, 0.8410, 0.7080, 0.5038, 0.2620)
+
+dat <- list(x = Tt_r2)
+
+formula = formula(x~.)
+frec1 = recipe(formula = formula, data = dat) |>
+  step_slug_cbp(
+    times = x,
+    radius = 1.0,
+    radius_casing = 1.0,
+    radius_well = 1.0,
+    specific_storage = 1e-1,
+    hydraulic_conductivity = 1.0,
+    thickness = 1.0,
+    head_0 = 1.0,
+    n_terms = 12L
+  ) |>
+  plate("dt")
+
+plot(slug_cbp~x, frec1, type = "l")
+points(a_01~dat$x, col = "red", pch = 20)
 ```
 
-!!!!!!!!!!!UNDER DEVELOPMENT!!!!!!!!!!!!!!!
+```{r br}
 
+# data(bouwer)
+# bw <- as.data.frame(bouwer)
+# 
+# rc <- 4/2/12        # radius of 2 inches
+# rw <- 8.25/2/12     # radius of screen
+# Le <- 10            # screen length
+# y0 <- 1.44          # initial drawdown
+# Lw <- 17.92         # height of water above screen bottom
+# wl <- 6.08          # static wl
+# H  <- 18.92         # height of water level above base
+# t  <- as.numeric(bouwer$datetime - bouwer$datetime[1])    # elapsed time
+# y  <- wl - bouwer$val                                     # change in wl
+# 
+# 
+# bouwer_rice(t, y, rw, rc, Le, Lw, H) * 86400 # should be 4.5
+```
 
 #### References
 

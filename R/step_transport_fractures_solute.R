@@ -94,9 +94,9 @@ StepTransportFracturesSolute <- R6Class(
       self$new_columns <- self$prefix
 
       pfs <- list(parallel_fractures_solute(
-        s[["result"]][[1L]], # time
-        s[["result"]][[2L]], # z
-        s[["result"]][[3L]], # x
+        s[["result"]][[self$columns[1L]]], # time
+        s[["result"]][[self$columns[2L]]], # z
+        s[["result"]][[self$columns[3L]]], # x
         self$concentration_influent,
         self$time_influent,
         self$concentration_initial,

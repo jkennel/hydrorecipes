@@ -109,10 +109,10 @@ struct CooperBredehoeftPapadopulos
 struct ParallelFracturesHeat
 {
   Eigen::VectorXd time;
-  Eigen::VectorXd gamma; // gamma
-  Eigen::VectorXd tau;
   Eigen::VectorXd z;
   Eigen::VectorXd x;
+  Eigen::VectorXd gamma; // gamma
+  Eigen::VectorXd tau;
   Eigen::VectorXd del_c;
   Eigen::VectorXd mean_time;
   double t_0;
@@ -184,6 +184,8 @@ struct ParallelFracturesHeat
 
     // D
     double D = lambda_fracture / (spec_heat_w  * rho_w);
+    Rcpp::Rcout << "The value is D " << D << std::endl;
+    Rcpp::Rcout << "The value is D_prime " << D_prime << std::endl;
 
     double R = 1.0;
     double R_prime = 1.0;
@@ -201,6 +203,7 @@ struct ParallelFracturesHeat
 
   double cohen_xy(std::complex<double> p, double t_p, double z, double x)
   {
+
     // Inflow
     std::complex<double> sum(0.0, 0.0);
     std::complex<double> term(0.0, 0.0);
@@ -226,6 +229,13 @@ struct ParallelFracturesHeat
       sum += term;
     }
 
+    p = p + lambda;
+
+    if (x > 0.5 * B)
+    {
+      Rcpp::stop("x should be less than 0.5 B");
+    }
+
     double n_cut = 710.0;
 
     std::complex<double> sqrt_p = std::sqrt(p);
@@ -238,14 +248,14 @@ struct ParallelFracturesHeat
 
     if(sigma_sqrt_p.real() > n_cut) {
       tan_h = std::complex<double>(1.0, 0.0);
-      if(diff.real() > -n_cut & diff.real() < n_cut & x > 0.5 * b) {
+      if(diff.real() > -n_cut & diff.real() < n_cut & x > (0.5 * b)) {
         xterm = std::exp(diff);
       } else if (x > 0.5 * b) {
         xterm = std::complex<double>(0.0, 0.0);
       }
     } else if (sigma_sqrt_p.real() < -n_cut) {
       tan_h = std::complex<double>(-1.0, 0.0);
-      if(diff.real() > -n_cut & diff.real() < n_cut & x > 0.5 * b) {
+      if(diff.real() > -n_cut & diff.real() < n_cut & x > (0.5 * b)) {
         xterm = std::exp(diff);
       } else if (x > 0.5 * b) {
         xterm = std::complex<double>(0.0, 0.0);
@@ -254,10 +264,11 @@ struct ParallelFracturesHeat
       tan_h = std::tanh(sigma_sqrt_p);
       // Rcout << "The value is tanh " << tan_h << std::endl;
 
-      if (x > 0.5 * b) {
+      if (x > (0.5 * b)) {
         xterm = std::cosh(xx) / std::cosh(sigma_sqrt_p);
       }
     }
+
 
     std::complex<double> root = nu *
       (1.0 - std::sqrt(1.0 + k2 * (p + sqrt_p * a * tan_h)));
@@ -343,6 +354,8 @@ struct ParallelFracturesSolute
 
     // D
     double D = alpha_l * v + D_star;
+    Rcpp::Rcout << "The value is D " << D << std::endl;
+    Rcpp::Rcout << "The value is D_prime " << D_prime << std::endl;
 
     // λ
     // equation 3
@@ -403,6 +416,9 @@ struct ParallelFracturesSolute
 
     // Rcout << "The value is p " << p << std::endl;
     p = p + lambda;
+
+    // Rcpp::Rcout << "The value is B " << B << std::endl;
+    // Rcpp::Rcout << "The value is x " << x << std::endl;
 
     if (x > 0.5 * B)
     {
@@ -479,6 +495,10 @@ struct ParallelFracturesSolute
 
     // Rcout << "The value is p " << p << std::endl;
     p = p + lambda;
+
+    // Rcpp::Rcout << "The value is B " << B << std::endl;
+    // Rcpp::Rcout << "The value is x " << x << std::endl;
+
     if (x > 0.5 * B)
     {
       Rcpp::stop("x should be less than 0.5 B");
@@ -1106,7 +1126,6 @@ Eigen::VectorXd cohen_xy(T &well, unsigned int n_terms)
   double d = pow(3.0 + sqrt(8), n_terms);
   d = (d + 1.0 / d) / 2.0;
   Eigen::VectorXd c = cohen_c(d, n_terms);
-
 
   for (unsigned int i = 0; i < p.rows(); ++i)
   {
