@@ -81,7 +81,8 @@ StepLeadLag <- R6Class(
            value = c(co, collapse::fcumsum(co)),
            step_id = rep.int(self$id, 2L * nr * nc),
            outcome = rep(rep(colnames(co), each = nr), 2L),
-           term = rep.int("lead_lag", 2L * nr * nc))
+           term = rep.int(self$prefix, 2L * nr * nc),
+           step_columns = rep.int(paste(self$columns, collapse = "_"), 2L * nr * nc))
 
 
 

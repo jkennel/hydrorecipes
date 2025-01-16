@@ -1293,31 +1293,42 @@ results
 #| echo: true
 #| warning: false
 
-formula <- as.formula(y~x+z)
+formula <- as.formula(y~.)
 
 
 results <- bench::press(
-  rows = n,
+  rows = c(1e5, 1e6, 1e7),
   {
-    dat <- data.frame(x = rnorm(rows), 
-                      y = rnorm(rows),
-                      z = rnorm(rows))
+    dat <- data.frame(
+      y = rnorm(rows),
+      x = rnorm(rows), 
+      z = rnorm(rows),
+      a = rnorm(rows),
+      b = rnorm(rows),
+      d = rnorm(rows),
+      e = rnorm(rows),
+      f = rnorm(rows),
+      g = rnorm(rows))
     m <- qM(dat)
     bench::mark(
-      hrec = recipe(formula = formula, data = dat) |>
-        # step_center(x) |>
-        # step_lead_lag(z, knots = log_lags(10, 50)) |>
-        step_intercept() |>
-        step_ols(formula = as.formula(y~.), do_response = FALSE) |>
+      hrec1 = recipe(formula = formula, data = dat) |>
+        step_ols(formula = as.formula(y~.), 
+                 do_response = FALSE) |>
         prep() |>
         bake(),
-      lm = lm(formula, dat),
-      lm.fit(x = m[, c(2, 3)], y = m[, 1]),
+      hrec2 = recipe(formula = formula, data = dat) |>
+        step_ols(formula = as.formula(y~.), 
+                 do_response = TRUE) |>
+        prep() |>
+        bake(),
+      lm = lm(y~. - 1, dat),
+      lm.fit(x = m[, c(2:ncol(dat))], y = m[, 1]),
       check = FALSE,
       relative = FALSE
     )
   }
 )
+
 
 results
 

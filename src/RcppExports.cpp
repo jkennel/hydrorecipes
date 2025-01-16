@@ -2403,6 +2403,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// predict_decomposition
+Rcpp::List predict_decomposition(Eigen::Map<Eigen::MatrixXd>& X, Eigen::Map<Eigen::MatrixXd>& Y, const Eigen::MatrixXd betahat, const Rcpp::List subs);
+RcppExport SEXP _hydrorecipes_predict_decomposition(SEXP XSEXP, SEXP YSEXP, SEXP betahatSEXP, SEXP subsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd >::type betahat(betahatSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List >::type subs(subsSEXP);
+    rcpp_result_gen = Rcpp::wrap(predict_decomposition(X, Y, betahat, subs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // ogata_banks_ind
 double ogata_banks_ind(const double D, const double v, const double C0, const double x, double t);
 RcppExport SEXP _hydrorecipes_ogata_banks_ind(SEXP DSEXP, SEXP vSEXP, SEXP C0SEXP, SEXP xSEXP, SEXP tSEXP) {
@@ -2901,6 +2915,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_llt_solve_full", (DL_FUNC) &_hydrorecipes_llt_solve_full, 3},
     {"_hydrorecipes_llt_weighted_solve", (DL_FUNC) &_hydrorecipes_llt_weighted_solve, 3},
     {"_hydrorecipes_llt_fitted", (DL_FUNC) &_hydrorecipes_llt_fitted, 2},
+    {"_hydrorecipes_predict_decomposition", (DL_FUNC) &_hydrorecipes_predict_decomposition, 4},
     {"_hydrorecipes_ogata_banks_ind", (DL_FUNC) &_hydrorecipes_ogata_banks_ind, 5},
     {"_hydrorecipes_ogata_banks_vec", (DL_FUNC) &_hydrorecipes_ogata_banks_vec, 5},
     {"_hydrorecipes_ogata_banks_decay_ind", (DL_FUNC) &_hydrorecipes_ogata_banks_decay_ind, 7},

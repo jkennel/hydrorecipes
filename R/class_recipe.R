@@ -489,14 +489,17 @@ Recipe <- R6Class(
         if (is.null(x)) {
           return(x)
         }
+
         wh <- nms %iin% x
         if (length(wh) == 0L) {
           return(NULL)
         }
+
         c(min(wh) - 1L, max(wh) - min(wh) + 1L)
+
       })
 
-      inds[lengths(inds) != 0L]
+      inds
 
     },
     # @description
@@ -555,9 +558,9 @@ Recipe <- R6Class(
     get_predict_data = function(type = "df") {
 
       # at the moment we don't handle multiple ols runs
-      pred <- self$get_step_data("decomposition")
-      pred <- collapse::rowbind(pred)
-      return_type(pred, type = type)
+      fits <- self$get_step_data("fit")[[1]]
+
+      return_type(fits$decomposition, type = type)
 
     },
     # @description

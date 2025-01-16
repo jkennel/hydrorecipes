@@ -13,11 +13,11 @@ StepOls <- R6Class(
     predictors = NULL,
     fit = NULL,
     formula = NULL,
+    coefficients = NULL,
     # decomposition = NULL,
     response_data = NULL,
 
     do_response = NULL,
-    # do_predict = NULL,
     # s = NULL,
     # df_residual = NULL,
     # rank = NULL,
@@ -26,7 +26,6 @@ StepOls <- R6Class(
     initialize = function(formula = NULL,
                           role = "predictor",
                           do_response = TRUE,
-                          # do_predict = TRUE,
                           ...) {
       # get function parameters to pass to parent
       # terms <- substitute(terms)
@@ -41,13 +40,13 @@ StepOls <- R6Class(
 
       self$formula <- formula
       self$do_response <- do_response
-      # self$do_predict <- do_predict
 
       invisible(self)
     },
     bake = function(r) {
 
       step_names  <- r$get_step_field("step_name")
+      new_columns <- r$get_step_field("new_columns")
 
       new_data <- return_type(x = r$get_result(),
                               type = "m",
@@ -61,12 +60,16 @@ StepOls <- R6Class(
       nms_outcome <- colnames(self$outcomes)
       column_list <- r$get_term_index(co_names)
 
+
       to_rem <- !(complete.cases(self$predictors, self$outcomes))
 
+      # steps which have a response
+      wh <- which(lengths(column_list) != 0)
 
       # NEED naming coefficients, fitted.values, decomposition, residuals
       # ols:
       #  - coefficients
+      #  - coefficients_list
       #  - fitted.values
       #  - decomposition
       #  - residuals
@@ -74,64 +77,55 @@ StepOls <- R6Class(
       #  - df.residual
       #  - rank
       #  - Std. Error
-      self$fit <- determine_coefficients(self$predictors,
-                                         self$outcomes,
-                                         to_rem,
-                                         column_list)
 
+      self$coefficients <- determine_coefficients(self$predictors,
+                                                  self$outcomes,
+                                                  to_rem,
+                                                  column_list[wh],
+                                                  FALSE)$coefficients
 
 
       if (self$do_response) {
-        new_columns <- r$get_step_field("new_columns")
-        # new_columns <- new_columns[lengths(new_columns) != 0]
 
-        # response for each group
-        # column names in term info
+        self$fit <- predict_decomposition(self$predictors,
+                                          self$outcomes,
+                                          self$coefficients,
+                                          subs = column_list[wh])
 
         resp <- list()
+        nms_decomp <- list()
 
-        for (i in seq_along(new_columns)) {
-          nc <- new_columns[[i]]
-          if (is.null(nc)) {
-            next
-          }
+        for (i in seq_along(wh)) {
 
-          wh  <- co_names %iin% nc
-          if (sum(wh) == 0) {
-            next
-          }
+          co <- self$fit$coefficients_list[[i]]
+          colnames(co) <- nms_outcome
 
-          co_name <- co_names[wh]
-          # print("---------")
-          # print(wh)
-          # print(co_name)
-          if (length(co_name) > 0) {
+          # response
+          resp[[i]] <- r$steps[[wh[i]]]$response(co)
 
-            co <- self$fit$coefficients[wh, , drop = FALSE]
-            # print(co)
-            colnames(co) <- nms_outcome
-            resp[[i]] <- r$steps[[i]]$response(co)
-            # print(str(resp[[i]]))
-
-            if ("outcome" %!in% names(resp[[i]])) {
-              resp[[i]]$outcome <- rep(nms_outcome, times = nrow(co))
-            }
-
-            if ("term" %!in% names(resp[[i]])) {
-              resp[[i]]$term <- rep(co_name, times = ncol(co))
-            }
-
-            resp[[i]]$step_columns <- paste(r$steps[[i]]$columns,
-                                            collapse = "_")
+          if(resp[[i]]$step_columns[1] == "") {
+            nms_decomp[[i]] <- paste(nms_outcome,
+                                     resp[[i]]$term[1],
+                                     sep = "_")
+          } else {
+            nms_decomp[[i]] <- paste(nms_outcome,
+                                     paste(resp[[i]]$term[1],
+                                           resp[[i]]$step_columns[1],
+                                           sep = "_"), sep = "_")
           }
         }
+
+        nms_decomp <- append(nms_decomp, list(paste(nms_outcome, "fitted", sep = "_"),
+                                              paste(nms_outcome, "residuals", sep = "_")))
 
         res <- collapse::rowbind(resp)
 
         res <- append(res, list(id = rep(self$id, length(res[[1L]]))))
         self$response_data <- res
 
+        names(self$fit$decomposition) <- unlist(nms_decomp)
       }
+
 
       return(NULL)
 

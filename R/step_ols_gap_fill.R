@@ -50,6 +50,7 @@ StepOlsGapFill <- R6Class(
       co_names <- colnames(self$predictors)
       nms_outcome <- colnames(self$outcomes)
       column_list <- r$get_term_index(co_names)
+      wh <- which(lengths(column_list) != 0)
 
       to_rem <- !(complete.cases(self$predictors, self$outcomes))
 
@@ -67,9 +68,10 @@ StepOlsGapFill <- R6Class(
       self$fit <- determine_coefficients(self$predictors,
                                          self$outcomes,
                                          to_rem,
-                                         column_list)
+                                         column_list[wh],
+                                         FALSE)
 
-      lst <- collapse::mctl(self$predictors[, , drop = FALSE] %*% self$fit$coefficients[, , drop = FALSE])
+      lst <- collapse::mctl(self$predictors %*% self$fit$coefficients)
 
       self$new_columns <- name_columns(self$prefix, colnames(self$outcomes), n = ncol(self$outcomes))
       names(lst) <- self$new_columns

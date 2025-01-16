@@ -42,8 +42,8 @@ library(hydrorecipes)
 data(kennel_2020) 
 
 form     <- as.formula(wl~.)
-ba_knots <- log_lags(15, 1441) # knots for distributed lag baro terms
-df       <- 5                       # degrees of freedom for spline background trend
+ba_knots <- log_lags(15, 1441)  # knots for distributed lag baro terms
+df       <- 5                   # degrees of freedom for spline background trend
 
 rec <- recipe(form, kennel_2020) |>
   step_distributed_lag(baro, knots = ba_knots) |>
@@ -60,7 +60,7 @@ rec <- recipe(form, kennel_2020) |>
 resp <- rec$get_response_data(type = "dt")
 
 # barometric response function
-plot(value~x, data = resp[term == "distributed_lag_interpolated" & variable == "cumulative"], 
+plot(value~x, data = resp[term == "distributed_lag" & variable == "cumulative"], 
      type = "l",
      xlab = "Lag time in minutes",
      ylab = "Cumulative response")
@@ -81,11 +81,9 @@ plot(wl~datetime, pred, type = "l",
        xlab = "", ylab = "Pressure (dbar)")
 
 # predicted sum of components
-points(wl_step_distributed_lag_baro + 
-       wl_step_spline_b_datetime + 
-       wl_step_lead_lag_et + 
-       wl_step_intercept~datetime, pred, type = "l", col = "red")
-
-
+points(wl_distributed_lag_baro + 
+       wl_spline_b_datetime + 
+       wl_lead_lag_et + 
+       wl_intercept~datetime, pred, type = "l", col = "red")
 
 ```

@@ -50,6 +50,8 @@ plot(aquifer_grf~time, grf,
      xlab = "")
 ```
 
+
+
 ### Anisotropic Theis flow model (Papadopulos, 1965)
 
 ```{r theisaniso, fig.alt = "A series of anisotropic Theis drawdown and recovery curves for monitoring wells with different orientations to the major and minor axes."}

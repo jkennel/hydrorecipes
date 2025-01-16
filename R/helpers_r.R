@@ -109,25 +109,27 @@ get_regression_data <- function(new_data,
 
 # y = outcomes
 # x = predictors
-determine_coefficients <- function(x, y, has_na, decomp) {
+determine_coefficients <- function(x, y, has_na, decomp, full) {
 
-  # print(str(x[!has_na, , drop = FALSE]))
-  # print(str(y[!has_na, , drop = FALSE]))
+
   # solve
-  fit <- llt_solve_full(
-    x[!has_na, , drop = FALSE],
-    y[!has_na, , drop = FALSE],
-    decomp
-  )
+  if(full) {
+    fit <- llt_solve_full(
+      x[!has_na, , drop = FALSE],
+      y[!has_na, , drop = FALSE],
+      decomp
+    )
+  } else {
+    fit <- list()
+    fit$coefficients <- llt_solve(
+      x[!has_na, , drop = FALSE],
+      y[!has_na, , drop = FALSE]
+    )
+  }
 
-  # f <- lm.fit(x[!has_na, , drop = FALSE],
-  #             y[!has_na, , drop = FALSE])
-  # print(fit$coefficients)
-  # print(f$coefficients)
-  # plot(f$fitted.values, type='l', lwd = 3)
-  # points(fit$fitted.values, type = 'l', col = "green")
   colnames(fit$coefficients) <- colnames(y)
   rownames(fit$coefficients) <- colnames(x)
+
   fit
 
 }
@@ -138,84 +140,84 @@ determine_coefficients <- function(x, y, has_na, decomp) {
 #             hydrorecipes:::llt_solve_full(X,y, list(a = c(0,2), b = c(2,2))),
 #             lm.fit(X, y), check = FALSE)
 
-subset_groups <- function(x) {
-  split(
-    x$inds,
-    data.table::rleid(x$step_index)
-  )
-}
+# subset_groups <- function(x) {
+#   split(
+#     x$inds,
+#     data.table::rleid(x$step_index)
+#   )
+# }
 
-response_groups <- function(steps, x, fit) {
-  # subsets are the regressor groups
-  subsets <- subset_groups(x$term_info)
+# response_groups <- function(steps, fit) {
+#   # subsets are the regressor groups
+#   # subsets <- subset_groups(x$term_info)
+#
+#   lst <- list()
+#   for (i in seq_along(fit)) {
+#     lst[[i]] <- steps[[i]]$response(fit$coefficient_list[i])
+#   }
+#
+#   lst
+# }
 
-  lst <- list()
-  for (i in seq_along(subsets)) {
-    lst[[i]] <- steps[[i]]$response(fit[subsets[[i]], , drop = FALSE])
-  }
+# # x = predictors
+# predict_groups <- function(x, fit, step_vars, step_names) {
+#
+#   # subsets are the regressor groups
+#   lst <- list()
+#
+#   for (i in seq_along(step_vars)) {
+#
+#     nms_vars   <- paste(step_vars[[i]], collapse = "_")
+#
+#
+#     lst[[i]] <- collapse::mctl(
+#       x$data[, step_vars[[i]], drop = FALSE] %*%
+#         fit[step_vars[[i]], , drop = FALSE]
+#     )
+#
+#     names(lst[[i]]) <- step_names
+#
+#   }
+#
+#   lst
+# }
 
-  lst
-}
-
-# x = predictors
-predict_groups <- function(x, fit, step_vars, step_names) {
-
-  # subsets are the regressor groups
-  lst <- list()
-
-  for (i in seq_along(step_vars)) {
-
-    nms_vars   <- paste(step_vars[[i]], collapse = "_")
-
-
-    lst[[i]] <- collapse::mctl(
-      x$data[, step_vars[[i]], drop = FALSE] %*%
-        fit[step_vars[[i]], , drop = FALSE]
-    )
-
-    names(lst[[i]]) <- step_names
-
-  }
-
-  lst
-}
-
-predict_each_step <- function(x, fit, step_vars, step_names) {
-
-  # subsets are the regressor groups
-  lst <- list()
-
-  predicted <- rep.int(0.0, nrow(x))
-
-  for (i in seq_along(step_vars)) {
-
-    nms <- step_vars[[i]]
-
-    if (is.null(nms)) {
-      next
-    }
-
-    wh <- colnames(x) %iin% nms
-
-    if (!any(wh)) {
-      next
-    }
-
-
-    nms_step  <- paste(paste(step_names[[i]], collapse = "_"),
-                       paste(nms, collapse = "_"),
-                       sep = "_")
-
-
-    lst[i] <- collapse::mctl(x[, wh, drop = FALSE] %*% fit[wh, , drop = FALSE])
-    predicted %+=% lst[[i]]
-
-    names(lst)[i] <- nms_step
-  }
-
-  lst[["predicted"]] <- predicted
-  lst
-}
+# predict_each_step <- function(x, fit, step_vars, step_names) {
+#
+#   # subsets are the regressor groups
+#   lst <- list()
+#
+#   predicted <- rep.int(0.0, nrow(x))
+#
+#   for (i in seq_along(step_vars)) {
+#
+#     nms <- step_vars[[i]]
+#
+#     if (is.null(nms)) {
+#       next
+#     }
+#
+#     wh <- colnames(x) %iin% nms
+#
+#     if (!any(wh)) {
+#       next
+#     }
+#
+#
+#     nms_step  <- paste(paste(step_names[[i]], collapse = "_"),
+#                        paste(nms, collapse = "_"),
+#                        sep = "_")
+#
+#
+#     lst[i] <- collapse::mctl(x[, wh, drop = FALSE] %*% fit[wh, , drop = FALSE])
+#     predicted %+=% lst[[i]]
+#
+#     names(lst)[i] <- nms_step
+#   }
+#
+#   lst[["predicted"]] <- predicted
+#   lst
+# }
 
 
 # formula can be used to subset or separate predictors and outcomes

@@ -95,7 +95,14 @@ StepHarmonic <- R6Class(
         rep("phase", nr * nc)
       )
 
-      list(x = x, variable = variable, value = amp_phase, step_id = self$id)
+      list(x = x,
+           variable = variable,
+           value = amp_phase,
+           step_id = rep.int(self$id, nr * nc),
+           outcome = rep(colnames(co), each = nr),
+           term = rep.int(self$prefix, nr * nc),
+           step_columns = rep.int(paste(self$columns, collapse = "_"), nr * nc))
+
     },
     test_eval = function() {
       eval(self$call)

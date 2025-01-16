@@ -636,7 +636,10 @@ Rcpp::List grf_time(const double radius,
   Eigen::VectorXd u = u_const / time.array();
 
   u = gamma_inc(u.array(), a);
+  u = u.unaryExpr([](double v) { return std::isfinite(v)? v : 0.0; });
+
   u = impulse_function_eigen(u);
+  // Rcpp::Rcout << "u: " << u << std::endl;
 
   return Rcpp::List::create(
     Rcpp::Named("generalized_radial") = convolve_filter(u, coef, false, true)

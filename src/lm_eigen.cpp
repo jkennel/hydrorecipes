@@ -4,6 +4,7 @@
 // [[Rcpp::export]]
 Eigen::MatrixXd llt_solve(Eigen::Map<Eigen::MatrixXd> &X,
                           Eigen::Map<Eigen::MatrixXd> &Y) {
+
   const int n(X.rows());
   const int p(X.cols());
 
@@ -12,23 +13,9 @@ Eigen::MatrixXd llt_solve(Eigen::Map<Eigen::MatrixXd> &X,
 
   const MatrixXd betahat(llt.solve(X.adjoint() * Y));
 
-  // const Eigen::MatrixXd fitted(X * betahat);
-  // const Eigen::MatrixXd resid(Y.array() - fitted.array());
-  //
-  // const unsigned int df(n - p);
-  // const Eigen::VectorXd s(resid.colwise().norm().array() / std::sqrt(double(df)));
-  // Eigen::MatrixXd se(s * llt.matrixL().solve(MatrixXd::Identity(p, p)).colwise().norm());
-  // return Rcpp::List::create(Named("coefficients") = betahat,
-  //                           Named("fitted.values") = fitted,
-  //                           Named("residuals") = resid,
-  //                           Named("s") = s,
-  //                           Named("df.residual") = df,
-  //                           Named("rank") = p,
-  //                           Named("Std. Error") = se
-  // );
-
   return(betahat);
 }
+
 
 // [[Rcpp::export]]
 Rcpp::List llt_solve_full(Eigen::Map<Eigen::MatrixXd> &X,
@@ -45,24 +32,28 @@ Rcpp::List llt_solve_full(Eigen::Map<Eigen::MatrixXd> &X,
 
 
   const Eigen::MatrixXd fitted(X * betahat);
-
-  Rcpp::List decomposition(n_terms);
-
-  Eigen::VectorXi ind;
-
-  // for (size_t i = 0; i < n_terms; ++i) {
-  //   ind = subs[i];
-  //   decomposition[i] = X.middleCols(ind[0], ind[1]) * betahat.middleRows(ind[0], ind[1]);
-  // }
-
-
   const Eigen::MatrixXd resid(Y.array() - fitted.array());
-
   const unsigned int df(n - p);
   const Eigen::VectorXd s(resid.colwise().norm().array() / std::sqrt(double(df)));
   Eigen::MatrixXd se(s * llt.matrixL().solve(MatrixXd::Identity(p, p)).colwise().norm());
 
+
+  Rcpp::List decomposition(n_terms);
+  Rcpp::List coefficients_list(n_terms);
+
+
+  Eigen::VectorXi ind(2);
+
+  for (size_t i = 0; i < n_terms; ++i) {
+    ind = subs[i];
+    coefficients_list[i] = betahat.middleRows(ind[0], ind[1]);
+    decomposition[i] = X.middleCols(ind[0], ind[1]) * betahat.middleRows(ind[0], ind[1]);
+  }
+
+
+
   return Rcpp::List::create(Named("coefficients") = betahat,
+                            Named("coefficients_list") = coefficients_list,
                             Named("fitted.values") = fitted,
                             Named("decomposition") = decomposition,
                             Named("residuals") = resid,
@@ -79,8 +70,8 @@ Rcpp::List llt_solve_full(Eigen::Map<Eigen::MatrixXd> &X,
 
 // [[Rcpp::export]]
 Eigen::MatrixXd llt_weighted_solve(Eigen::Map<Eigen::MatrixXd> &X,
-                          Eigen::Map<Eigen::MatrixXd> &Y,
-                          Eigen::Map<Eigen::VectorXd> &w) {
+                                   Eigen::Map<Eigen::MatrixXd> &Y,
+                                   Eigen::Map<Eigen::VectorXd> &w) {
   const int n(X.rows());
   const int p(X.cols());
 
@@ -89,9 +80,10 @@ Eigen::MatrixXd llt_weighted_solve(Eigen::Map<Eigen::MatrixXd> &X,
   return(out);
 }
 
+
 // [[Rcpp::export]]
 Eigen::MatrixXd llt_fitted(Eigen::Map<Eigen::MatrixXd> &X,
-                          Eigen::Map<Eigen::MatrixXd> &Y) {
+                           Eigen::Map<Eigen::MatrixXd> &Y) {
   const int n(X.rows());
   const int p(X.cols());
 
@@ -99,7 +91,7 @@ Eigen::MatrixXd llt_fitted(Eigen::Map<Eigen::MatrixXd> &X,
                                           rankUpdate(X.adjoint()));
   const MatrixXd betahat(llt.solve(X.adjoint() * Y));
   const Eigen::MatrixXd fitted(X * betahat);
-  // const Eigen::MatrixXd resid(Y.array() - fitted.array());
+  const Eigen::MatrixXd resid(Y.array() - fitted.array());
   //
   // const unsigned int df(n - p);
   // const Eigen::VectorXd s(resid.colwise().norm().array() / std::sqrt(double(df)));
@@ -114,6 +106,57 @@ Eigen::MatrixXd llt_fitted(Eigen::Map<Eigen::MatrixXd> &X,
   // );
 
   return(fitted);
+}
+
+
+
+// [[Rcpp::export]]
+Rcpp::List predict_decomposition(Eigen::Map<Eigen::MatrixXd> &X,
+                                 Eigen::Map<Eigen::MatrixXd> &Y,
+                                 const Eigen::MatrixXd betahat,
+                                 const Rcpp::List subs) {
+
+  const size_t n_outcomes = Y.cols();
+  const size_t n_row = X.cols();
+  const size_t n_terms = subs.size();
+
+
+  // model fits and residuals
+  const Eigen::MatrixXd fitted(X * betahat);
+  const Eigen::MatrixXd resid(Y.array() - fitted.array());
+
+
+  Rcpp::List decomposition((n_terms + 2) * n_outcomes);
+  Rcpp::List coefficients_list(n_terms);
+  Eigen::MatrixXd decomp_matrix(n_row, n_outcomes);
+
+  Eigen::VectorXi ind(2);
+
+  // calculate the predicted values for each term
+  for (size_t i = 0; i < n_terms; ++i) {
+
+    ind = subs[i];
+    coefficients_list[i] = betahat.middleRows(ind[0], ind[1]);
+    decomp_matrix = X.middleCols(ind[0], ind[1]) * betahat.middleRows(ind[0], ind[1]);
+
+    for (size_t j = 0; j < n_outcomes; ++j) {
+      decomposition[i * n_outcomes + j] = decomp_matrix.col(j);
+    }
+
+  }
+
+  // total predictions and residuals
+  for (size_t j = 0; j < n_outcomes; ++j) {
+    decomposition[n_terms * n_outcomes + j] = fitted.col(j);
+    decomposition[(n_terms + 1) * n_outcomes + j] = resid.col(j);
+  }
+
+
+  return Rcpp::List::create(Named("coefficients_list") = coefficients_list,
+                            Named("decomposition") = decomposition
+  );
+
+
 }
 
 /*** R

@@ -1817,6 +1817,10 @@ llt_fitted <- function(X, Y) {
     .Call(`_hydrorecipes_llt_fitted`, X, Y)
 }
 
+predict_decomposition <- function(X, Y, betahat, subs) {
+    .Call(`_hydrorecipes_predict_decomposition`, X, Y, betahat, subs)
+}
+
 #' @title
 #' Ogata-Banks solution for 1-D flow.
 #'
