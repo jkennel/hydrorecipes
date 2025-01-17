@@ -184,8 +184,8 @@ struct ParallelFracturesHeat
 
     // D
     double D = lambda_fracture / (spec_heat_w  * rho_w);
-    Rcpp::Rcout << "The value is D " << D << std::endl;
-    Rcpp::Rcout << "The value is D_prime " << D_prime << std::endl;
+    // Rcpp::Rcout << "The value is D " << D << std::endl;
+    // Rcpp::Rcout << "The value is D_prime " << D_prime << std::endl;
 
     double R = 1.0;
     double R_prime = 1.0;
@@ -354,8 +354,8 @@ struct ParallelFracturesSolute
 
     // D
     double D = alpha_l * v + D_star;
-    Rcpp::Rcout << "The value is D " << D << std::endl;
-    Rcpp::Rcout << "The value is D_prime " << D_prime << std::endl;
+    // Rcpp::Rcout << "The value is D " << D << std::endl;
+    // Rcpp::Rcout << "The value is D_prime " << D_prime << std::endl;
 
     // λ
     // equation 3

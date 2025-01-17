@@ -18,7 +18,7 @@ StepSubsetRows <- R6Class(
       terms <- substitute(terms)
       env_list <- get_function_arguments()
       env_list$step_name <- "step_subset_rows"
-      env_list$type <- "modify"
+      env_list$type <- "model"
       super$initialize(
         terms = terms,
         env_list[names(env_list) != "terms"],
@@ -29,11 +29,11 @@ StepSubsetRows <- R6Class(
       self$row_numbers <- as.integer(row_numbers)
       invisible(self)
     },
-    bake = function(new_data) {
+    bake = function(r) {
+      dat <- unclass(r$get_result()[self$row_numbers, , drop = FALSE])
 
       # should this be set in recipe
-      self$result <- unclass(collapse::qDF(new_data)[self$row_numbers, , drop = FALSE])
-      self$result
+      return(NULL)
     }
   )
 )

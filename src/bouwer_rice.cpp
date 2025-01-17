@@ -73,9 +73,9 @@ double bouwer_rice_abc(double rw, double Le, double Lw, double H) {
   b = b_cpp(llr);
   c = c_cpp(llr);
 
-  Rcpp::Rcout << "a: " << a << std::endl;
-  Rcpp::Rcout << "b: " << b << std::endl;
-  Rcpp::Rcout << "c: " << c << std::endl;
+  // Rcpp::Rcout << "a: " << a << std::endl;
+  // Rcpp::Rcout << "b: " << b << std::endl;
+  // Rcpp::Rcout << "c: " << c << std::endl;
 
   t1 = (1.1 / std::log(Lw / rw));
   t2 = std::log((H - Lw) / rw);

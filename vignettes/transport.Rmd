@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(hydrorecipes)
 library(ggplot2)
-library(viridisLite)
+library(viridis)
 library(data.table)
 ```
 

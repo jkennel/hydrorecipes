@@ -563,9 +563,9 @@ Eigen::MatrixXcd be_transfer(Eigen::MatrixXd& x,
   unsigned int n = pgram.rows();
   unsigned int frequency_index = std::round(frequency * (n / cycle_size));
   // Rcpp::Rcout << "n: " << n << std::endl;
-  Rcpp::Rcout << "n: " << n << std::endl;
-  Rcpp::Rcout << "cycle_size: " << cycle_size << std::endl;
-  Rcpp::Rcout << "frequency_index: " << frequency_index << std::endl;
+  // Rcpp::Rcout << "n: " << n << std::endl;
+  // Rcpp::Rcout << "cycle_size: " << cycle_size << std::endl;
+  // Rcpp::Rcout << "frequency_index: " << frequency_index << std::endl;
 
   Eigen::MatrixXcd out = solve_cplx_parallel(pgram.row(frequency_index));
   return(out);
