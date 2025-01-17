@@ -2061,6 +2061,29 @@ step_spline_n <- function(.rec,
 
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_subset_na_omit
+#'
+#' @description
+#'   selects rows from output.
+#'
+#' @inheritParams step_scale
+#'
+#' @return an updated recipe
+#' @export
+#'
+#' @examples
+#'
+step_subset_na_omit <- function(.rec,
+                             terms,
+                             role = "modify",
+                             ...) {
+  terms <- substitute(terms)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepSubsetNAOmit$new,
+                        modifyList(x = env_list, val = list(...))))
+
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_subset_rows
 #'
 #' @description

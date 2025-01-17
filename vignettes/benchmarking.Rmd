@@ -332,6 +332,45 @@ results
 
 ```
 
+## step_subset_na_omit
+
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x+z)
+
+results <- bench::press(
+  rows = c(1e6, 1e7),
+  {
+    dat <- tibble(x = rnorm(rows), 
+                  z = rnorm(rows),
+                  y = rnorm(rows))
+    dat[1:5, "x"] <- NA_real_
+    dat[100:150, "z"] <- NA_real_
+    dat[10000:15000, "y"] <- NA_real_
+    
+    bench::mark(
+      hrec1 = (recipe(formula = formula, data = dat) |>
+                 step_subset_na_omit(terms = x) |>
+                 prep() |>
+                 bake())$get_result("tbl"),
+      
+      rec = recipes::recipe(formula = formula, data = dat) |>
+        recipes::step_naomit(x) |> 
+        recipes::prep() |> 
+        recipes::bake(new_data = NULL),
+      
+      relative = FALSE,
+      min_iterations = 1L,
+      check = TRUE
+    )
+  }
+)
+
+results
+```
+
 ## step_subset_rows
 
 ```{r}
@@ -371,6 +410,9 @@ results <- bench::press(
 results
 
 ```
+
+## step_subset_sample
+
 
 ```{r}
 #| echo: true
