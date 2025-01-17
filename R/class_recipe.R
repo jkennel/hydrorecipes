@@ -33,6 +33,8 @@ Recipe <- R6Class(
     # prep time for each step
     time_prep = NULL,
 
+    template_step = NULL,
+
     # result list that holds the created model features.
     result = list(),
 
@@ -72,6 +74,8 @@ Recipe <- R6Class(
       self$add_step(StepAddVars$new(terms = self$vars, role = roles))
       self$steps[[1L]]$set_result(unclass(data)[self$vars])
       self$steps[[1L]]$columns <- self$vars
+
+      self$template_step <- 1L
 
       self$requirements <- list(
         bake = setNames(object = logical(),
@@ -150,8 +154,8 @@ Recipe <- R6Class(
       }
 
       if (!is.null(data)) {
-        self$steps[[1L]]$set_result(unclass(data)[self$vars])
-        self$steps[[1L]]$columns <- self$vars
+        self$steps[[self$template_step]]$set_result(unclass(data)[self$vars])
+        self$steps[[self$template_step]]$columns <- self$vars
       }
 
 
@@ -161,7 +165,7 @@ Recipe <- R6Class(
 
         columns <- self$steps[[i]]$columns
         if (is.null(columns)) {
-          columns <- names(self$result)[1L]
+          columns <- names(self$result)[self$template_step]
         }
 
         # The template from step_add_vars is now in self$steps[[1]]
@@ -185,7 +189,7 @@ Recipe <- R6Class(
           # self$steps[[i]]$bake(unclass(self$template)[columns])
           "model" = self$steps[[i]]$bake(self),
           # default
-          self$steps[[i]]$bake(self$steps[[1L]])
+          self$steps[[i]]$bake(self$steps[[self$template_step]])
 
         )
 
@@ -516,13 +520,14 @@ Recipe <- R6Class(
     # @description
     # Get the result data
     # @return table of results
-    get_result = function(type = "df", steps = NULL) {
+    get_result = function(type = "df", steps = NULL, ...) {
 
       if (is.null(steps)) {
-        steps <- 1:length(self$steps)
+        steps <- self$template_step:length(self$steps)
       }
 
-      unlist(lapply(self$steps[steps], "[[", "result"), recursive = FALSE)
+      return_type(unlist(lapply(self$steps[steps], "[[", "result"), recursive = FALSE),
+                  type = type, ...)
 
     },
     # @description

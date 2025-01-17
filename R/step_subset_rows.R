@@ -15,24 +15,26 @@ StepSubsetRows <- R6Class(
                           role = "modify",
                           ...) {
       # get function parameters to pass to parent
-      terms <- substitute(terms)
       env_list <- get_function_arguments()
       env_list$step_name <- "step_subset_rows"
       env_list$type <- "model"
       super$initialize(
-        terms = terms,
+        terms = NULL,
         env_list[names(env_list) != "terms"],
         ...
       )
 
-
       self$row_numbers <- as.integer(row_numbers)
       invisible(self)
+
     },
     bake = function(r) {
-      dat <- unclass(r$get_result()[self$row_numbers, , drop = FALSE])
 
-      # should this be set in recipe
+      self$result <- collapse::ss(r$get_result(type = "list"),
+                                  i = self$row_numbers, check = FALSE)
+
+      r$template_step <- length(r$time_bake) + 1L
+
       return(NULL)
     }
   )
