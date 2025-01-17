@@ -386,17 +386,17 @@ results <- bench::press(
                       y = rnorm(rows))
     
     bench::mark(
-      hrec1 = {recipe(formula = formula, data = dat) |>
-                 step_subset_sample(size = 1000L) |>
-                 prep() |>
-                 bake()
-      nrow(hrec1$get_result("tbl"))},
+      h <- {hrec1 = recipe(formula = formula, data = dat) |>
+        step_subset_sample(size = 10000L) |>
+        prep() |>
+        bake()
+      h = nrow(hrec1$get_result("tbl"))},
       
       rec = nrow(recipes::recipe(formula = formula, data = dat) |>
-        recipes::step_sample(size = 10000 / rows) |>
-        recipes::prep() |>
-        recipes::bake(new_data = NULL)),
-
+                   recipes::step_sample(size = 10000 / rows) |>
+                   recipes::prep() |>
+                   recipes::bake(new_data = NULL)),
+      
       relative = FALSE,
       min_iterations = 1L,
       check = TRUE
