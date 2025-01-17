@@ -68,19 +68,65 @@
 
     
     
+<div class="section level2">
+<h2 id="cooper-bredehoeft-papadopulos-1967">Cooper Bredehoeft Papadopulos 1967<a class="anchor" aria-label="anchor" href="#cooper-bredehoeft-papadopulos-1967"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jkennel.github.io/hydrorecipes/">hydrorecipes</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: Bessel</span></span></code></pre></div>
-<p>!!!!!!!!!!!UNDER DEVELOPMENT!!!!!!!!!!!!!!!</p>
-<div class="section level4">
-<h4 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h4>
+<code class="sourceCode R"><span><span class="co"># check vs. CBP 1967 table 1</span></span>
+<span><span class="va">Tt_r2</span>    <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.0</span>, <span class="fl">2.15</span>, <span class="fl">4.64</span><span class="op">)</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span><span class="op">^</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3</span>, <span class="op">-</span><span class="fl">2</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">a_01</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9771</span>, <span class="fl">0.9658</span>, <span class="fl">0.9490</span>, <span class="fl">0.9238</span>, <span class="fl">0.8860</span>, <span class="fl">0.8283</span>,</span>
+<span>              <span class="fl">0.7460</span>, <span class="fl">0.6289</span>, <span class="fl">0.4782</span>, <span class="fl">0.3117</span>, <span class="fl">0.1665</span>, <span class="fl">0.07415</span><span class="op">)</span></span>
+<span><span class="va">a_0001</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9969</span>, <span class="fl">0.9949</span>, <span class="fl">0.9914</span>, <span class="fl">0.9853</span>, <span class="fl">0.9744</span>, <span class="fl">0.9545</span>,</span>
+<span>              <span class="fl">0.9183</span>, <span class="fl">0.8538</span>, <span class="fl">0.7436</span>, <span class="fl">0.5729</span>, <span class="fl">0.3543</span>, <span class="fl">0.1554</span><span class="op">)</span></span>
+<span><span class="va">a_000001</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9992</span>, <span class="fl">0.9985</span>, <span class="fl">0.9970</span>, <span class="fl">0.9942</span>, <span class="fl">0.9888</span>, <span class="fl">0.9781</span>,</span>
+<span>              <span class="fl">0.9572</span>, <span class="fl">0.9167</span>, <span class="fl">0.8410</span>, <span class="fl">0.7080</span>, <span class="fl">0.5038</span>, <span class="fl">0.2620</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Tt_r2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">formula</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">formula</a></span><span class="op">(</span><span class="va">x</span><span class="op">~</span><span class="va">.</span><span class="op">)</span></span>
+<span><span class="va">frec1</span> <span class="op">=</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/step_slug_cbp.html">step_slug_cbp</a></span><span class="op">(</span></span>
+<span>    times <span class="op">=</span> <span class="va">x</span>,</span>
+<span>    radius <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>    radius_casing <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>    radius_well <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>    specific_storage <span class="op">=</span> <span class="fl">1e-1</span>,</span>
+<span>    hydraulic_conductivity <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>    thickness <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>    head_0 <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>    n_terms <span class="op">=</span> <span class="fl">12L</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/plate.html">plate</a></span><span class="op">(</span><span class="st">"dt"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slug_cbp</span><span class="op">~</span><span class="va">x</span>, <span class="va">frec1</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">a_01</span><span class="op">~</span><span class="va">dat</span><span class="op">$</span><span class="va">x</span>, col <span class="op">=</span> <span class="st">"red"</span>, pch <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
+<p><img src="slug_test_files/figure-html/cbp-1.png" width="700"></p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># data(bouwer)</span></span>
+<span><span class="co"># bw &lt;- as.data.frame(bouwer)</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># rc &lt;- 4/2/12        # radius of 2 inches</span></span>
+<span><span class="co"># rw &lt;- 8.25/2/12     # radius of screen</span></span>
+<span><span class="co"># Le &lt;- 10            # screen length</span></span>
+<span><span class="co"># y0 &lt;- 1.44          # initial drawdown</span></span>
+<span><span class="co"># Lw &lt;- 17.92         # height of water above screen bottom</span></span>
+<span><span class="co"># wl &lt;- 6.08          # static wl</span></span>
+<span><span class="co"># H  &lt;- 18.92         # height of water level above base</span></span>
+<span><span class="co"># t  &lt;- as.numeric(bouwer$datetime - bouwer$datetime[1])    # elapsed time</span></span>
+<span><span class="co"># y  &lt;- wl - bouwer$val                                     # change in wl</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># bouwer_rice(t, y, rw, rc, Le, Lw, H) * 86400 # should be 4.5</span></span></code></pre></div>
+<div class="section level5">
+<h5 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h5>
 <p>Bouwer, H., 1989. The Bouwer and Rice Slug Test—An Update a.
 Groundwater, 27(3), pp.304-309.</p>
 <p>Cooper, H.H., J.D. Bredehoeft and S.S. Papadopulos, 1967. Response of
 a finite-diameter well to an instantaneous charge of water, Water
 Resources Research, vol. 3, no. 1, pp. 263-269.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.4.2 (2024-10-31)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
@@ -111,12 +157,14 @@ Resources Research, vol. 3, no. 1, pp. 263-269.</p>
 <span><span class="co">#&gt;  [9] earthtide_0.1.5   ragg_1.3.3        sass_0.4.9        gmp_0.7-5        </span></span>
 <span><span class="co">#&gt; [13] rmarkdown_2.29    evaluate_1.0.3    jquerylib_0.1.4   fastmap_1.2.0    </span></span>
 <span><span class="co">#&gt; [17] yaml_2.3.10       lifecycle_1.0.4   compiler_4.4.2    fs_1.6.5         </span></span>
-<span><span class="co">#&gt; [21] htmlwidgets_1.6.4 Rcpp_1.0.14       systemfonts_1.1.0 digest_0.6.37    </span></span>
+<span><span class="co">#&gt; [21] htmlwidgets_1.6.4 Rcpp_1.0.14       systemfonts_1.2.0 digest_0.6.37    </span></span>
 <span><span class="co">#&gt; [25] collapse_2.0.19   R6_2.5.1          parallel_4.4.2    bslib_0.8.0      </span></span>
 <span><span class="co">#&gt; [29] tools_4.4.2       Rmpfr_1.0-0       RcppThread_2.2.0  pkgdown_2.1.1    </span></span>
 <span><span class="co">#&gt; [33] cachem_1.1.0      desc_1.4.3</span></span></code></pre></div>
 </div>
-  </main>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
