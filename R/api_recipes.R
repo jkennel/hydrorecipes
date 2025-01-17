@@ -999,13 +999,13 @@ step_convolve_gamma <- function(.rec,
 #'   plate("tbl")
 #'
 step_convolve_exponential <- function(.rec,
-                                terms,
-                                amplitude,
-                                theta,
-                                align = "right",
-                                max_length = Inf,
-                                role = "predictor",
-                                ...) {
+                                      terms,
+                                      amplitude,
+                                      theta,
+                                      align = "right",
+                                      max_length = Inf,
+                                      role = "predictor",
+                                      ...) {
 
   terms <- substitute(terms)
   env_list <- get_function_arguments()
@@ -1651,12 +1651,12 @@ step_lead_lag <- function(.rec,
 #'        step_multiply(x, value = 4)
 #'
 step_multiply <- function(.rec,
-                           terms,
-                           values = 1.0,
-                           role = "predictor",
-                           skip = FALSE,
-                           keep_original_cols = FALSE,
-                           ...){
+                          terms,
+                          values = 1.0,
+                          role = "predictor",
+                          skip = FALSE,
+                          keep_original_cols = FALSE,
+                          ...){
 
   terms <- substitute(terms)
   env_list <- get_function_arguments()
@@ -2092,6 +2092,31 @@ step_subset_rows <- function(.rec,
   .rec$add_step(do.call(StepSubsetRows$new,
                         modifyList(x = env_list, val = list(...))))
 
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_subset_sample
+#'
+#' @description
+#'   selects rows from output.
+#'
+#' @param size number of samples.
+#' @inheritParams step_scale
+#'
+#' @return an updated recipe
+#' @export
+#'
+#' @examples
+#'
+#'
+step_subset_sample <- function(.rec,
+                             terms,
+                             size,
+                             role = "modify",
+                             ...) {
+  terms <- substitute(terms)
+  env_list <- get_function_arguments_no_rec()
+  .rec$add_step(do.call(StepSubsetSample$new,
+                        modifyList(x = env_list, val = list(...))))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_transport_fractures_heat

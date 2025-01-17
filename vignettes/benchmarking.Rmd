@@ -371,6 +371,44 @@ results <- bench::press(
 results
 
 ```
+
+```{r}
+#| echo: true
+#| warning: false
+
+formula <- as.formula(y~x+z)
+
+results <- bench::press(
+  rows = c(1e6, 1e7),
+  {
+    dat <- data.frame(x = rnorm(rows), 
+                      z = rnorm(rows),
+                      y = rnorm(rows))
+    
+    bench::mark(
+      hrec1 = {recipe(formula = formula, data = dat) |>
+                 step_subset_sample(size = 1000L) |>
+                 prep() |>
+                 bake()
+      nrow(hrec1$get_result("tbl"))},
+      
+      rec = nrow(recipes::recipe(formula = formula, data = dat) |>
+        recipes::step_sample(size = 10000 / rows) |>
+        recipes::prep() |>
+        recipes::bake(new_data = NULL)),
+
+      relative = FALSE,
+      min_iterations = 1L,
+      check = TRUE
+    )
+  }
+)
+
+results
+
+
+```
+
 ## step_cross_correlation
 
 ```{r}

@@ -7,17 +7,17 @@ StepSubsetRows <- R6Class(
   classname = "step_subset_rows",
   inherit = Step,
   public = list(
-
     # step specific variables
     row_numbers = NULL,
     initialize = function(terms,
-                          row_numbers,
+                          row_numbers = 1L,
                           role = "modify",
                           ...) {
       # get function parameters to pass to parent
       env_list <- get_function_arguments()
       env_list$step_name <- "step_subset_rows"
       env_list$type <- "model"
+
       super$initialize(
         terms = NULL,
         env_list[names(env_list) != "terms"],
