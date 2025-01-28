@@ -82,7 +82,7 @@ StepAquiferPatch <- R6Class(
       self$result <- setNames(
         list(
           barker_herbert(
-            time = s[["result"]][[1L]],
+            time = s[["result"]][[self$columns[[1L]]]],
             radius = self$radius,
             radius_patch = self$radius_patch,
             t_1 = self$transmissivity_inner,

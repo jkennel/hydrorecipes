@@ -80,8 +80,8 @@ StepAquiferTheisAniso <- R6Class(
           transmissivity_x = self$transmissivity_major,
           transmissivity_y = self$transmissivity_minor,
           thickness = self$thickness,
-          time = s[["result"]][[1L]],
-          flow_rate = s[["result"]][[2L]]
+          time = s[["result"]][[self$columns[[1L]]]],
+          flow_rate = s[["result"]][[self$columns[[2L]]]]
         ), self$new_columns)
 
       return(NULL)

@@ -90,8 +90,6 @@ StepTransportFracturesHeat <- R6Class(
 
       self$new_columns <- self$prefix
 
-      print(s[["result"]][[self$columns[3L]]])
-
       pfh <- list(parallel_fractures_heat(
         s[["result"]][[self$columns[1L]]], # time
         s[["result"]][[self$columns[2L]]], # z

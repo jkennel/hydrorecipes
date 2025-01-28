@@ -26,7 +26,7 @@ StepBaroHarmonic <- R6Class(
                           barometric_pressure,
                           earth_tide,
                           frequency = c(1.9324, 2.0), # M2 and S2
-                          cycle_size = 86400,
+                          cycle_size = 86400.0,
                           start = 0.0,
                           inverse = TRUE,
                           role = "augment",

@@ -37,7 +37,7 @@ StepAquiferWellboreStorage <- R6Class(
       env_list$step_name <- "step_aquifer_wellbore_storage"
       env_list$type <- "add"
       super$initialize(
-        terms = c(as.symbol(time), as.symbol(flow_rate)),
+        terms = c(as.symbol(time)),
         env_list,
         ...
       )
@@ -66,7 +66,7 @@ StepAquiferWellboreStorage <- R6Class(
       S  <- self$specific_storage * self$thickness
 
 
-      pc <- list(papadopulos_cooper_laplace(s[["result"]][[1L]],
+      pc <- list(papadopulos_cooper_laplace(s[["result"]][[self$columns[[1L]]]],
                                             self$flow_rate,
                                             self$radius,
                                             self$radius_casing,

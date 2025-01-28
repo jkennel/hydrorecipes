@@ -212,12 +212,12 @@ results <- bench::press(
                       z = rnorm(rows))
     bench::mark(
       hrec = (recipe(formula = formula, data = dat) |>
-        step_scale(x, fun = fsd, n_sd = 2L) |>
-        plate())[["x"]],
+                step_scale(x, fun = fsd, n_sd = 2L) |>
+                plate())[["x"]],
       rec  = (recipes::recipe(formula = formula, data = dat) |>
-        recipes::step_scale(x, factor = 2L) |> 
-        recipes::prep() |> 
-        recipes::bake(new_data = NULL))[["x"]],
+                recipes::step_scale(x, factor = 2L) |> 
+                recipes::prep() |> 
+                recipes::bake(new_data = NULL))[["x"]],
       check = TRUE,
       relative = relative,
       min_iterations = 1L
@@ -242,13 +242,13 @@ results <- bench::press(
     dat <- data.frame(x = rnorm(rows), 
                       y = rnorm(rows))
     bench::mark(
-    hrec = (recipe(formula = formula, data = dat) |>
-      step_intercept() |>
-      plate("tbl"))[["intercept"]],
-    rec = (recipes::recipe(formula = formula, data = dat) |>
-      recipes::step_intercept() |> 
-      recipes::prep() |> 
-      recipes::bake(new_data = NULL))[["intercept"]],
+      hrec = (recipe(formula = formula, data = dat) |>
+                step_intercept() |>
+                plate("tbl"))[["intercept"]],
+      rec = (recipes::recipe(formula = formula, data = dat) |>
+               recipes::step_intercept() |> 
+               recipes::prep() |> 
+               recipes::bake(new_data = NULL))[["intercept"]],
       check = TRUE,
       relative = relative,
       min_iterations = 1L
@@ -277,13 +277,13 @@ results <- bench::press(
     
     bench::mark(
       hrec1 = (recipe(formula = formula, data = dat) |>
-        step_normalize(c(x, z, y)) |>
-        plate("tbl"))[, c("x", "z", "y")],
+                 step_normalize(c(x, z, y)) |>
+                 plate("tbl"))[, c("x", "z", "y")],
       
       hrec2 = (recipe(formula = formula, data = dat) |>
-        step_center(c(x, z, y)) |>
-        step_scale(c(x, z, y)) |>
-        plate("tbl"))[, c("x", "z", "y")],
+                 step_center(c(x, z, y)) |>
+                 step_scale(c(x, z, y)) |>
+                 plate("tbl"))[, c("x", "z", "y")],
       
       rec = recipes::recipe(formula = formula, data = dat) |>
         recipes::step_normalize(x, y, z) |> 
@@ -869,8 +869,8 @@ results <- bench::press(
                       z = cumsum(rnorm(rows)))
     bench::mark(
       hrec = (recipe(formula = formula, data = dat) |>
-                       step_convolve_gamma(z, amplitude = 1, k = 1, theta = 1) |>
-                       plate("tbl")),
+                step_convolve_gamma(z, amplitude = 1, k = 1, theta = 1) |>
+                plate("tbl")),
       min_iterations = 1,
       relative = FALSE,
       check = TRUE
@@ -902,24 +902,24 @@ results <- bench::press(
     dat <- data.frame(x = as.numeric(1:rows), 
                       y = 1:rows)
     bench::mark(
-    hrec = recipe(formula = formula, data = dat) |>
-      step_lead_lag(x, lag = 1:10) |>
-      step_harmonic(x, 
-                    frequency = c(1, 2, 3), 
-                    cycle_size = 0.1, 
-                    starting_value = 0) |>
-      step_center(x) |> 
-      plate("tbl"),
-    rec  = recipes::recipe(formula = formula, data = dat) |>
-      recipes::step_lag(x, lag = 1:10, keep_original_cols = TRUE) |>
-      recipes::step_harmonic(x, 
-                             frequency = c(1, 2, 3), 
-                             cycle_size = 0.1, 
-                             starting_val = 0,
-                             keep_original_cols = TRUE) |>
-      recipes::step_center(x) |> 
-      recipes::prep() |> 
-      recipes::bake(new_data = NULL),
+      hrec = recipe(formula = formula, data = dat) |>
+        step_lead_lag(x, lag = 1:20) |>
+        step_harmonic(x, 
+                      frequency = c(1.0, 2.0, 3.0), 
+                      cycle_size = 0.1, 
+                      starting_value = 0.0) |>
+        step_center(x) |> 
+        plate("tbl"),
+      rec  = recipes::recipe(formula = formula, data = dat) |>
+        recipes::step_lag(x, lag = 1:20, keep_original_cols = TRUE) |>
+        recipes::step_harmonic(x, 
+                               frequency = c(1.0, 2.0, 3.0), 
+                               cycle_size = 0.1, 
+                               starting_val = 0.0,
+                               keep_original_cols = TRUE) |>
+        recipes::step_center(x) |> 
+        recipes::prep() |> 
+        recipes::bake(new_data = NULL),
       check = FALSE,
       relative = relative,
       min_iterations = 1
@@ -1071,16 +1071,16 @@ results <- bench::press(
                       y = rep(0.01, rows))
     bench::mark(
       hrec1 = unname(recipe(formula = formula, data = dat) |>
-        step_aquifer_theis_aniso(time = x, 
-                                 flow_rate = y,
-                                 distance_x = 0, 
-                                 distance_y = 100,
-                                 hydraulic_conductivity_major = 1e-4,
-                                 hydraulic_conductivity_minor = 1e-4) |>
-        plate("dt")),
+                       step_aquifer_theis_aniso(time = x, 
+                                                flow_rate = y,
+                                                distance_x = 0, 
+                                                distance_y = 100,
+                                                hydraulic_conductivity_major = 1e-4,
+                                                hydraulic_conductivity_minor = 1e-4) |>
+                       plate("dt")),
       hrec2 = unname(recipe(formula = formula, data = dat) |>
-        step_aquifer_theis(time = x, flow_rate = y,) |>
-        plate("dt")),
+                       step_aquifer_theis(time = x, flow_rate = y,) |>
+                       plate("dt")),
       check = TRUE)
   }
 )
@@ -1174,14 +1174,14 @@ results <- bench::press(
                       y = as.numeric(1:rows))
     bench::mark(
       hrec1 = unname(recipe(formula = formula, data = dat) |>
-        step_aquifer_wellbore_storage(time = x,
-                                      flow_rate = 0.01,
-                                      hydraulic_conductivity = 1e-4,
-                                      specific_storage = 1e-6, 
-                                      radius = 100,
-                                      radius_casing = 1e-15,
-                                      radius_well = 1e-15, n_terms = 18) |>
-        plate("dt")),
+                       step_aquifer_wellbore_storage(time = x,
+                                                     flow_rate = 0.01,
+                                                     hydraulic_conductivity = 1e-4,
+                                                     specific_storage = 1e-6, 
+                                                     radius = 100,
+                                                     radius_casing = 1e-15,
+                                                     radius_well = 1e-15, n_terms = 18) |>
+                       plate("dt")),
       hrec2 = unname(recipe(formula = formula, data = dat) |>
                        step_aquifer_theis(time = x,
                                           flow_rate = y) |>
@@ -1489,8 +1489,8 @@ b <- cumsum(rnorm(n0))
 b <- b - mean(b)
 max_t <- 720 * ceiling(2.554)
 a <- hydrorecipes:::convolve_overlap_save(x = b,
-                     y = hydrorecipes:::gamma_3(0:max_t, 0.816, 9.221, 2.554),
-                     0)
+                                          y = hydrorecipes:::gamma_3(0:max_t, 0.816, 9.221, 2.554),
+                                          0)
 
 max_t <- 720 * ceiling(2.554)
 
@@ -1501,8 +1501,8 @@ formula <- formula(a~b)
 f <- function(z, x) {
   max_t <- 720 * ceiling(z[3])
   hydrorecipes:::convolve_overlap_save(x = x,
-                                            y = hydrorecipes:::gamma_3(0:max_t, z[1], z[2], z[3]),
-                                            align = 0)[-(1:7200)]
+                                       y = hydrorecipes:::gamma_3(0:max_t, z[1], z[2], z[3]),
+                                       align = 0)[-(1:7200)]
 }
 
 
@@ -1596,7 +1596,7 @@ bench::mark(
     step_intercept() |>
     step_spline_b(z, df = 4) |>
     step_drop_columns(z)
-
+  
   hrec = recipe(formula = frm, data = dat) |>
     step_ols_gap_fill(c(x, y, z), recipe = h) |>
     prep() |>
@@ -1626,7 +1626,7 @@ results <- bench::press(
     dat <- data.frame(x = rnorm(rows),
                       y = 1:rows)
     dat[9:50, "x"] <- NA
-    dat[9, "y"] <- NA
+    dat[9L, "y"] <- NA
     
     bench::mark(
       hrec1 = recipe(formula = formula, data = dat) |>

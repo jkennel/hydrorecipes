@@ -43,14 +43,14 @@ r = 0.15
 Q = 10
 prec <- 1e-8
 pc <- hydrorecipes:::papadopulos_cooper_laplace(times,
-                                           Q,
-                                           r,
-                                           rc,
-                                           rw,
-                                           Tr,
-                                           S,
-                                           prec,
-                                           12L)
+                                                Q,
+                                                r,
+                                                rc,
+                                                rw,
+                                                Tr,
+                                                S,
+                                                prec,
+                                                12L)
 
 expect_equivalent(pc, m[, 3], tolerance = 5e-4)
 
@@ -63,10 +63,9 @@ frec = recipe(formula = formula, data = dat) |>
                                 flow_rate = 10.0,
                                 hydraulic_conductivity = 10.0,
                                 specific_storage = 1e-4) |>
-  prep() |>
-  bake()
+  plate()
 
-expect_equivalent(frec$result$aquifer_wellbore_storage, m[, 3],
+expect_equivalent(frec$aquifer_wellbore_storage, m[, 3],
                   tolerance = 5e-4)
 
 

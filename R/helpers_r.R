@@ -22,13 +22,13 @@ pad_num <- function(n, pad = "0") {
 name_columns <- function(id, column_name, n) {
 
   if (is.null(column_name)) {
-    if (n < 2) {
+    if (n < 2L) {
       return(file.path(id, fsep = "_"))
     }
     return(file.path(id, pad_num(n), fsep = "_"))
   }
 
-  if (n < 2) {
+  if (n < 2L) {
     return(file.path(id, column_name, fsep = "_"))
   }
 
@@ -127,13 +127,22 @@ determine_coefficients <- function(x, y, has_na, decomp, full) {
     )
   }
 
-  colnames(fit$coefficients) <- colnames(y)
-  rownames(fit$coefficients) <- colnames(x)
+  dimnames(fit$coefficients) <- list(colnames(x), colnames(y))
+
 
   fit
 
 }
 
+# n <- 2000
+# m <- matrix(1:(n*n), ncol = n)
+# nms <- paste("v", 1:n)
+# bench::mark(
+#   dimnames(m) <- list(nms, nms),
+#   {rownames(m) <- nms;
+#   colnames(m) <- nms},
+#   check = FALSE
+# )
 # X <- matrix(rnorm(1e7), ncol = 10)
 # y <- as.matrix(rnorm(1e6))
 # bench::mark(hydrorecipes:::llt_solve(X, y),
