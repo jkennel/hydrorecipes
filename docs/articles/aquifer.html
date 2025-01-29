@@ -504,26 +504,30 @@
 <code class="sourceCode R"><span></span>
 <span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">2</span>, length.out <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>,</span>
-<span>                  flow_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
+<span>                  flow_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">10.0</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">flow_rate</span><span class="op">~</span><span class="va">time</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">pc</span> <span class="op">=</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/step_aquifer_wellbore_storage.html">step_aquifer_wellbore_storage</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>                                flow_rate <span class="op">=</span> <span class="fl">10.0</span>,</span>
+<span>                                radius <span class="op">=</span> <span class="fl">10.0</span>,</span>
 <span>                                radius_casing <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>                                radius_well <span class="op">=</span> <span class="fl">0.3</span>,</span>
-<span>                                radius <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>                                flow_rate <span class="op">=</span> <span class="fl">10.0</span>,</span>
-<span>                                hydraulic_conductivity <span class="op">=</span> <span class="fl">10.0</span>,</span>
-<span>                                specific_storage <span class="op">=</span> <span class="fl">1e-4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>                                thickness <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>                                specific_storage <span class="op">=</span> <span class="fl">1e-4</span>,</span>
+<span>                                hydraulic_conductivity <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>                                n_terms <span class="op">=</span> <span class="fl">12L</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span></span>
 <span><span class="va">th</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">time</span><span class="op">~</span><span class="va">flow_rate</span>, <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/step_aquifer_grf.html">step_aquifer_grf</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>,</span>
 <span>                   flow_rate <span class="op">=</span> <span class="va">flow_rate</span>,</span>
 <span>                   thickness <span class="op">=</span> <span class="fl">1.0</span>,</span>
-<span>                   radius <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>                   radius <span class="op">=</span> <span class="fl">10.0</span>,</span>
 <span>                   specific_storage <span class="op">=</span> <span class="fl">1e-4</span>,</span>
-<span>                   hydraulic_conductivity <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>                   flow_dimension <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>                   hydraulic_conductivity <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>                   flow_dimension <span class="op">=</span> <span class="fl">2.0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">aquifer_wellbore_storage</span><span class="op">~</span><span class="va">time</span>, <span class="va">pc</span>, </span>
@@ -611,14 +615,14 @@ of hydrology, 318(1-4), pp.173-183.</p>
 <span><span class="co">#&gt; [1] hydrorecipes_0.0.6 Bessel_0.6-1      </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] cli_3.6.3         knitr_1.49        rlang_1.1.4       xfun_0.49        </span></span>
-<span><span class="co">#&gt;  [5] textshaping_0.4.1 data.table_1.16.4 jsonlite_1.8.9    htmltools_0.5.8.1</span></span>
-<span><span class="co">#&gt;  [9] earthtide_0.1.6   ragg_1.3.3        sass_0.4.9        gmp_0.7-5        </span></span>
-<span><span class="co">#&gt; [13] rmarkdown_2.29    evaluate_1.0.1    jquerylib_0.1.4   fastmap_1.2.0    </span></span>
+<span><span class="co">#&gt;  [1] cli_3.6.3         knitr_1.49        rlang_1.1.5       xfun_0.50        </span></span>
+<span><span class="co">#&gt;  [5] textshaping_1.0.0 data.table_1.16.4 jsonlite_1.8.9    htmltools_0.5.8.1</span></span>
+<span><span class="co">#&gt;  [9] earthtide_0.1.7   ragg_1.3.3        sass_0.4.9        gmp_0.7-5        </span></span>
+<span><span class="co">#&gt; [13] rmarkdown_2.29    evaluate_1.0.3    jquerylib_0.1.4   fastmap_1.2.0    </span></span>
 <span><span class="co">#&gt; [17] yaml_2.3.10       lifecycle_1.0.4   compiler_4.4.2    fs_1.6.5         </span></span>
-<span><span class="co">#&gt; [21] Rcpp_1.0.13-1     htmlwidgets_1.6.4 rstudioapi_0.17.1 systemfonts_1.1.0</span></span>
-<span><span class="co">#&gt; [25] digest_0.6.37     collapse_2.0.18   R6_2.5.1          parallel_4.4.2   </span></span>
-<span><span class="co">#&gt; [29] bslib_0.8.0       tools_4.4.2       Rmpfr_1.0-0       RcppThread_2.1.7 </span></span>
+<span><span class="co">#&gt; [21] Rcpp_1.0.14       htmlwidgets_1.6.4 rstudioapi_0.17.1 systemfonts_1.2.1</span></span>
+<span><span class="co">#&gt; [25] digest_0.6.37     collapse_2.0.19   R6_2.5.1          parallel_4.4.2   </span></span>
+<span><span class="co">#&gt; [29] bslib_0.8.0       tools_4.4.2       Rmpfr_1.0-0       RcppThread_2.2.0 </span></span>
 <span><span class="co">#&gt; [33] pkgdown_2.1.1     cachem_1.1.0      desc_1.4.3</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

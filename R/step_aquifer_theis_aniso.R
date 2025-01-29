@@ -70,7 +70,7 @@ StepAquiferTheisAniso <- R6Class(
     bake = function(s) {
 
       self$new_columns <- self$prefix
-      self$columns <- paste(self$columns, collapse = ",")
+      # self$columns <- paste(self$columns, collapse = ",")
 
       self$result <- setNames(
         theis_aniso_time(
