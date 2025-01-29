@@ -38,6 +38,10 @@ and y you would write `c(x,y)` in the hydrorecipes package.}
     cosine bell taper is applied to this proportion of the data at the
     beginning and end of the series.}
 
+\item{time_step}{\code{numeric} monitoring interval size}
+
+\item{formula}{formula notation to specify inputs and outputs}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}

@@ -30,6 +30,10 @@ and y you would write `c(x,y)` in the hydrorecipes package.}
 
 \item{window}{window weights}
 
+\item{time_step}{\code{numeric} monitoring interval size}
+
+\item{formula}{formula notation to specify inputs and outputs}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}

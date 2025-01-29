@@ -2,7 +2,7 @@
 % Please edit documentation in R/api_recipes.R
 \name{step_baro_least_squares}
 \alias{step_baro_least_squares}
-\title{step_baro_clark}
+\title{step_baro_least_squares}
 \usage{
 step_baro_least_squares(
   .rec,
@@ -17,6 +17,10 @@ step_baro_least_squares(
 }
 \arguments{
 \item{.rec}{the R6 recipe object.}
+
+\item{water_level}{\code{numeric vector} of the dependent variable (ie:water level)}
+
+\item{barometric_pressure}{\code{numeric vector} of the independent variable (ie:barometric pressure)}
 
 \item{lag_space}{\code{integer} spacing for lags, useful for higher frequency monitoring}
 

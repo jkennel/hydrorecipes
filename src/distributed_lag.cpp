@@ -240,7 +240,7 @@ List distributed_lag_thread_eigen(Eigen::Map<Eigen::VectorXd> x,
 //'
 //' @param x numeric vector to lag
 //' @param n_lag number of lag terms
-//' @param max_lag integer the maximum lag
+//' @param lag_max integer the maximum lag
 //' @param internal_knots location of internal knots
 //' @param boundary_knots location of boundary knots
 //' @param complete_basis logical intercept?
@@ -254,7 +254,7 @@ List distributed_lag_thread_eigen(Eigen::Map<Eigen::VectorXd> x,
 // [[Rcpp::export]]
 Rcpp::List distributed_lag_list(Eigen::Map<Eigen::VectorXd> x,
                                 arma::uword n_lag,
-                                arma::uword max_lag,
+                                arma::uword lag_max,
                                 const unsigned int df,
                                 const unsigned int degree,
                                 const arma::vec& internal_knots,
@@ -265,8 +265,8 @@ Rcpp::List distributed_lag_list(Eigen::Map<Eigen::VectorXd> x,
                                 const bool integral
 ) {
 
-  arma::vec rng = arma::linspace(0, max_lag, max_lag + 1);
-  arma::vec knots = log_lags_arma(n_lag, max_lag);
+  arma::vec rng = arma::linspace(0, lag_max, lag_max + 1);
+  arma::vec knots = log_lags_arma(n_lag, lag_max);
   arma::uvec one_n = { 0, n_lag - 1 };
 
   Rcpp::List s = b_spline_list(rng,
@@ -286,7 +286,7 @@ Rcpp::List distributed_lag_list(Eigen::Map<Eigen::VectorXd> x,
 // [[Rcpp::export]]
 std::list<Eigen::VectorXd> distributed_lag_list2(Eigen::Map<Eigen::VectorXd> x,
                                 arma::uword n_lag,
-                                arma::uword max_lag,
+                                arma::uword lag_max,
                                 const unsigned int df,
                                 const unsigned int degree,
                                 const arma::vec& internal_knots,
@@ -297,8 +297,8 @@ std::list<Eigen::VectorXd> distributed_lag_list2(Eigen::Map<Eigen::VectorXd> x,
                                 const bool integral
 ) {
 
-  arma::vec rng = arma::linspace(0, max_lag, max_lag + 1);
-  arma::vec knots = log_lags_arma(n_lag, max_lag);
+  arma::vec rng = arma::linspace(0, lag_max, lag_max + 1);
+  arma::vec knots = log_lags_arma(n_lag, lag_max);
   arma::uvec one_n = { 0, n_lag - 1 };
 
   std::list<Eigen::VectorXd> s = b_spline_list3(rng,
@@ -319,7 +319,7 @@ std::list<Eigen::VectorXd> distributed_lag_list2(Eigen::Map<Eigen::VectorXd> x,
 // [[Rcpp::export]]
 Rcpp::List distributed_lag_list3(Eigen::VectorXd x,
                                  arma::uword n_lag,
-                                 arma::uword max_lag,
+                                 arma::uword lag_max,
                                  const unsigned int df,
                                  const unsigned int degree,
                                  const arma::vec& internal_knots,
@@ -330,8 +330,8 @@ Rcpp::List distributed_lag_list3(Eigen::VectorXd x,
                                  const bool integral
 ) {
 
-  arma::vec rng = arma::linspace(0, max_lag, max_lag + 1);
-  arma::vec knots = log_lags_arma(n_lag, max_lag);
+  arma::vec rng = arma::linspace(0, lag_max, lag_max + 1);
+  arma::vec knots = log_lags_arma(n_lag, lag_max);
   arma::uvec one_n = { 0, n_lag - 1 };
 
   Rcpp::List s = b_spline_list(rng,
@@ -346,7 +346,7 @@ Rcpp::List distributed_lag_list3(Eigen::VectorXd x,
 
   int n_x = x.size();
 
-  if (n_x < max_lag * 10) {
+  if (n_x < lag_max * 10) {
     return(convolve_list(x, s, true, true));
   }
 
@@ -356,12 +356,12 @@ Rcpp::List distributed_lag_list3(Eigen::VectorXd x,
 // [[Rcpp::export]]
 Rcpp::List distributed_lag_list4(Eigen::VectorXd x,
                                  Rcpp::List s,
-                                 unsigned int max_lag
+                                 unsigned int lag_max
 ) {
 
   unsigned int n_x = x.size();
 
-  if (n_x < max_lag * 30) {
+  if (n_x < lag_max * 30) {
     return(convolve_list(x, s, true, true));
   }
 
@@ -395,8 +395,8 @@ l <- list(y,y,y,y,y,y,
           y,y)
 
 n_lags <- 20
-max_lag <- 86400
-ll <- as.numeric(hydrorecipes:::log_lags_arma(n_lags, max_lag))
+lag_max <- 86400
+ll <- as.numeric(hydrorecipes:::log_lags_arma(n_lags, lag_max))
 
 sp <- hydrorecipes:::b_spline_list3(y, df = 0L, degree = 3L,internal_knots = ll[2:19], boundary_knots = c(ll[1], ll[length(ll)]))
 bench::mark(
@@ -412,7 +412,7 @@ bench::mark(
 # ((hydrorecipes:::distributed_lag_list(x, 20, 1e5, 0, 3, ll[2:19], c(ll[1], ll[length(ll)]), TRUE, FALSE, 0, FALSE))[[1]]),
 ((hydrorecipes:::distributed_lag_list3(x,
                                    n_lags,
-                                   max_lag,
+                                   lag_max,
                                    0,
                                    3,
                                    ll[2:(n_lags-1)],

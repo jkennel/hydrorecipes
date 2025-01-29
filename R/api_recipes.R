@@ -32,9 +32,24 @@
 #' @importFrom stats nextn
 #' @importFrom stats convolve
 #' @importFrom stats spec.pgram
+#' @importFrom stats as.formula
+#' @importFrom stats setNames
+#' @importFrom stats rnorm
+#'
+#' @importFrom utils modifyList
+#'
 #' @importFrom R6 R6Class
 #'
+#' @importFrom gslnls gsl_nls
+#'
 #' @importFrom data.table rleid
+#' @importFrom data.table data.table
+#' @importFrom data.table as.data.table
+#' @importFrom data.table setDT
+#' @importFrom data.table ":="
+#' @importFrom data.table setnames
+#'
+#' @importFrom rlang as_name
 #'
 #' @useDynLib hydrorecipes, .registration = TRUE
 #'
@@ -119,6 +134,8 @@ step_add_vars <- function(.rec,
 #'
 #' @inheritParams step_scale
 #' @inheritParams step_aquifer_grf
+#'
+#' @param drawdown drawdown at the well (L)
 #' @param radius_well the radius of the well (L)
 #' @param n_terms number of terms for laplace solution inversion
 #'
@@ -176,7 +193,7 @@ step_aquifer_constant_drawdown <- function(.rec,
 #' @inheritParams step_aquifer_constant_drawdown
 #' @param time the time for evaluation (t)
 #' @param thickness the aquifer thickness (L)
-#' @param radius the distance to the observation well (L)
+#' @param radius the distance to the observation location (L)
 #' @param specific_storage specific storage of aquifer (L/L)
 #' @param hydraulic_conductivity the hydraulic conductivity (L/t)
 #' @param flow_rate the flow rate from the well (L^3/t)
@@ -371,6 +388,7 @@ step_aquifer_theis_aniso <- function(.rec,
 #'
 #' @inheritParams step_scale
 #' @inheritParams step_aquifer_grf
+#'
 #' @param leakage the leakage defined by hantush (smaller indicates more leaky)
 #' @param precision the precision of the solution (default 1e-10)
 #'
@@ -427,10 +445,11 @@ step_aquifer_theis_aniso <- function(.rec,
 step_aquifer_leaky <- function(.rec,
                                time,
                                flow_rate,
+                               thickness = 1.0,
                                leakage = 100.0,
                                radius = 100.0,
-                               storativity = 1e-6,
-                               transmissivity = 1e-4,
+                               specific_storage = 1e-6,
+                               hydraulic_conductivity = 1e-4,
                                precision = 1e-10,
                                role = "predictor",
                                ...) {
@@ -449,6 +468,13 @@ step_aquifer_leaky <- function(.rec,
 #'
 #' @inheritParams step_scale
 #' @inheritParams step_aquifer_grf
+#'
+#' @param radius_patch the radius of the cylindrical patch (L)
+#' @param specific_storage_inner specific storage of inner patch (L/L)
+#' @param specific_storage_outer specific storage of outer patch (L/L)
+#' @param hydraulic_conductivity_inner the hydraulic conductivity of the inner patch (L/t)
+#' @param hydraulic_conductivity_outer the hydraulic conductivity of the outer patch (L/t)
+#' @param n_stehfest integer number of terms to use in Stehfest method (typically < 18)
 #'
 #' @return The drawdown using the Theis model
 #'
@@ -497,11 +523,12 @@ step_aquifer_patch <- function(.rec,
 #'
 #' @inheritParams step_scale
 #' @inheritParams step_aquifer_grf
+#' @inheritParams step_aquifer_constant_drawdown
 #'
-#' @param radius distance from center of well
 #' @param radius_casing radius of casing in the interval over which the water
-#'   level declines
-#' @param radius_well effective radius of well screen or open hole
+#'   level declines (L)
+#' @param radius_well effective radius of well screen or open hole (L)
+#'
 #'
 #'
 #' @return The drawdown using the Papadopulos-Cooper model
@@ -553,8 +580,8 @@ step_aquifer_wellbore_storage <- function(.rec,
 #'
 #' @inheritParams step_scale
 #'
-#' @param dep \code{numeric vector} of the dependent variable (ie:water level)
-#' @param ind \code{numeric vector} of the independent variable (ie:barometric pressure)
+#' @param water_level \code{numeric vector} of the dependent variable (ie:water level)
+#' @param barometric_pressure \code{numeric vector} of the independent variable (ie:barometric pressure)
 #' @param lag_space \code{integer} spacing for lags, useful for higher frequency monitoring
 #' @param inverse \code{logical} whether the barometric relationship is inverse
 #'
@@ -610,17 +637,17 @@ step_baro_clark <- function(.rec,
 #'
 #' @inheritParams step_scale
 #'
-#' @param frequency
-#' @param radius_well
-#' @param transmissivity
-#' @param storage_confining
-#' @param storage_aquifer
-#' @param diffusivity_confining
-#' @param diffusivity_vadose
-#' @param thickness_confining
-#' @param thickness_vadose
-#' @param loading_efficiency
-#' @param attenuation
+#' @param frequency the frequency of the response
+#' @param radius_well well radius
+#' @param transmissivity aquifer transmissivity (L*L/t)
+#' @param storage_confining confining layer storativity (L/L)
+#' @param storage_aquifer aquifer storativity (L/L)
+#' @param diffusivity_confining confining layer diffusivity
+#' @param diffusivity_vadose air diffusivity of vadose zone
+#' @param thickness_confining confining layer thickness
+#' @param thickness_vadose vadose thickness
+#' @param loading_efficiency the loading efficiency of the aquifer
+#' @param attenuation an attenuation factor
 #'
 #' @return complex response vector in frequency domain
 #'
@@ -659,12 +686,11 @@ step_baro_frequency_semi_confined <- function(.rec,
 #' @inheritParams step_scale
 #' @inheritParams step_baro_frequency_semi_confined
 #'
-#' @param specific_yield
-#' @param k_vertical
-#' @param diffusivity_vertical
-#' @param thickness_saturated_well
-#' @param thickness_vadose
-#' @param thickness_aquifer
+#' @param specific_yield the specific yeild of of the unconfined system
+#' @param k_vertical vertical hydraulic conductivity of unconfined aquifer
+#' @param diffusivity_vertical vertical diffusivity of unconfined aquifer
+#' @param thickness_saturated_well length of saturated well
+#' @param thickness_aquifer aquifer thickness
 #'
 #' @return complex response vector in frequency domain
 #'
@@ -693,7 +719,7 @@ step_baro_frequency_unconfined <- function(.rec,
 }
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#' step_baro_clark
+#' step_baro_least_squares
 #'
 #' @description
 #' Least squares solution for calculating barometric efficiency
@@ -744,12 +770,9 @@ step_baro_least_squares <- function(.rec,
 #'
 #' @inheritParams step_fft_pgram
 #' @inheritParams step_harmonic
+#' @inheritParams step_baro_clark
 #'
-#' @param water_level \code{variable} unquoted water level column name
-#' @param barometric_pressure \code{variable} unquoted barometric pressure
-#'   column name
 #' @param earth_tide \code{variable} unquoted Earth tide column name
-#' @param inverse \code{logical} whether the barometric relationship is inverse
 #'
 #' @return \code{double} barometric efficiency using different methods
 #'
@@ -781,7 +804,7 @@ step_baro_harmonic <- function(.rec,
                                earth_tide,
                                frequency = c(1.9324, 2.0),
                                cycle_size = 86400,
-                               start = 0.0,
+                               starting_value = 0.0,
                                inverse = FALSE,
                                role = "augment",
                                ...) {
@@ -935,9 +958,9 @@ step_compare_columns <- function(.rec,
 #' @param amplitude amplitude
 #' @param k shape
 #' @param theta scale
+#' @param max_length the maximum length of the kernel
 #'
 #' @inheritParams step_kernel_filter
-#'
 #' @return an updated recipe
 #' @export
 #'
@@ -981,6 +1004,7 @@ step_convolve_gamma <- function(.rec,
 #' @param theta scale
 #'
 #' @inheritParams step_kernel_filter
+#' @inheritParams step_convolve_gamma
 #'
 #' @return an updated recipe
 #' @export
@@ -1021,8 +1045,8 @@ step_convolve_exponential <- function(.rec,
 #'   Calculate the autocorrelation function or cross-correlation
 #'
 #' @inheritParams step_scale
+#' @param lag_max maximum lag to calculate
 #'
-#' @references
 #' @return an updated recipe
 #' @export
 #'
@@ -1058,6 +1082,11 @@ step_cross_correlation <- function(.rec,
 #'   based method which is faster and more memory efficient.
 #'
 #' @inheritParams step_scale
+#' @param lag_max maximum lag to calculate (enter either lag_max and n_lag or knots)
+#' @param n_lag number of lags to calculate (enter either lag_max and n_lag or knots)
+#' @param knots specify the knot locations
+#' @param basis_matrix user specified basis_matrix
+#' @param intercept include intercept in basis matrix
 #'
 #' @references
 #' Gasparrini, A., 2011. Distributed Lag Linear and Non-Linear Models in R:
@@ -1080,7 +1109,7 @@ step_cross_correlation <- function(.rec,
 step_distributed_lag <- function(.rec,
                                  terms,
                                  n_lag = 12L,
-                                 max_lag = 86400L,
+                                 lag_max = 86400L,
                                  knots = NA_real_,
                                  basis_matrix = NA_real_,
                                  intercept = FALSE,
@@ -1206,7 +1235,7 @@ step_earthtide <- function(.rec,
                            azimuth = 0.0,
                            gravity = 0.0,
                            earth_radius = 6378136.3,
-                           earth_eccentricity = 0.0066943979514,
+                           earth_eccen = 0.0066943979514,
                            cutoff = 1e-6,
                            catalog = "ksm04",
                            eop = NULL,
@@ -1266,6 +1295,7 @@ step_fft_coherence <- function(.rec,
 #' @inheritParams stats::spec.pgram
 #' @param lst \code{logical} return a list?
 #' @param pad_fft \code{logical} Zero pad the list for faster FFT calculation?
+#' @param time_step \code{numeric} monitoring interval size
 #'
 #' @return an updated recipe
 #' @export
@@ -1304,6 +1334,8 @@ step_fft_pgram <- function(.rec,
 #'  Welch's method.
 #'
 #' @inheritParams step_scale
+#' @inheritParams step_fft_pgram
+#'
 #' @param length_subset length of fft section
 #' @param overlap amount of overlap
 #' @param window window weights
@@ -1341,6 +1373,9 @@ step_fft_welch <- function(.rec,
 #'
 #' @inheritParams step_scale
 #' @inheritParams stats::spec.pgram
+#' @inheritParams step_fft_pgram
+#'
+#' @param formula formula notation to specify inputs and outputs
 #'
 #' @return an updated recipe
 #' @export
@@ -1378,7 +1413,9 @@ step_fft_transfer_pgram <- function(.rec,
 #'
 #' @inheritParams step_scale
 #' @inheritParams stats::spec.pgram
-#' @param power spacing for the groups
+#' @inheritParams step_fft_pgram
+#' @inheritParams step_fft_transfer_pgram
+#'
 #' @param n_groups number of results
 #'
 #' @return an updated recipe
@@ -1419,6 +1456,8 @@ step_fft_transfer_experimental <- function(.rec,
 #'
 #' @inheritParams step_scale
 #' @inheritParams step_fft_welch
+#' @inheritParams step_fft_pgram
+#' @inheritParams step_fft_transfer_pgram
 #'
 #' @return an updated recipe
 #' @export
@@ -1530,6 +1569,7 @@ step_harmonic <- function(.rec,
 #'   Add an intercept term
 #'
 #' @inheritParams step_scale
+#' @param intercept what value to use (typically 1.0)
 #'
 #' @return an updated recipe
 #' @export
@@ -1640,6 +1680,7 @@ step_lead_lag <- function(.rec,
 #' @title step_multiply
 #'
 #' @inheritParams step_scale
+#' @param values multiply column(s) by these values
 #'
 #' @return an updated recipe
 #' @export
@@ -1774,9 +1815,11 @@ step_ols <- function(.rec,
 #'
 #'
 #' @inheritParams step_scale
-#' @param do_response \code{logical} calculate and return the responses?
-#' @param do_predict calculate and return the predictions?
+#' @inheritParams step_lead_lag
+#' @inheritParams gslnls::gsl_nls
+#'
 #' @param formula formula for the regression
+#' @param range limit the fitting range to observations between range[1] and range[2]
 #'
 #' @return an updated recipe
 #'
@@ -1803,10 +1846,13 @@ step_ols <- function(.rec,
 #'   bake()
 step_nls <- function(.rec,
                      formula,
-                     role = "predictor",
                      algorithm = "lm",
                      n_subset = 1L,
                      n_shift = 0L,
+                     range = c(-Inf, Inf),
+                     control =  gsl_nls_control(xtol = 1e-8),
+                     trace = FALSE,
+                     role = "predictor",
                      # do_response = TRUE,
                      # do_predict = TRUE,
                      ...){
@@ -1825,11 +1871,14 @@ step_nls <- function(.rec,
 #' @inheritParams step_scale
 #' @inheritParams recipes::step_pca
 #'
+#' @param n_comp number of components to retain
+#' @param center center values before PCA
+#' @param scale scale values before PCA
+#'
 #' @return an updated recipe
 #' @export
 #'
 #' @examples
-#'
 #' set.seed(1)
 #'
 #' formula <- as.formula(x~a+b+d+e+f+g)
@@ -1884,7 +1933,6 @@ step_pca <- function(.rec,
 #' @export
 #'
 #' @examples
-#'
 #' dat <- data.frame(x = rnorm(10), y = rnorm(10))
 #'
 #' rec <- recipe(y~x, data = dat) |>
@@ -1951,7 +1999,7 @@ step_scale <- function(.rec,
 #'   ) |>
 #'   plate("dt")
 step_slug_cbp <- function(.rec,
-                          times,
+                          time,
                           radius = 1.0,
                           radius_casing = 0.15,
                           radius_well = 0.15,
@@ -1983,7 +2031,6 @@ step_slug_cbp <- function(.rec,
 #' @export
 #'
 #' @examples
-#'
 #' formula <- as.formula(x~y+z)
 #' rows <- 1e5
 #'
@@ -2023,13 +2070,13 @@ step_spline_b <- function(.rec,
 #' @param internal_knots equivalent to knots from `splines2::bSplines`
 #' @param boundary_knots equivalent to Boundary.knots from `splines2::bSplines`
 #' @inheritParams splines2::nsp
+#' @inheritParams splines2::bsp
 #' @inheritParams step_scale
 #'
 #' @return an updated recipe
 #' @export
 #'
 #' @examples
-#'
 #' formula <- as.formula(x~y+z)
 #' rows <- 1e5
 #'
@@ -2071,7 +2118,6 @@ step_spline_n <- function(.rec,
 #' @return an updated recipe
 #' @export
 #'
-#' @examples
 #'
 step_subset_na_omit <- function(.rec,
                              terms,
@@ -2128,7 +2174,6 @@ step_subset_rows <- function(.rec,
 #' @return an updated recipe
 #' @export
 #'
-#' @examples
 #'
 #'
 step_subset_sample <- function(.rec,
@@ -2487,7 +2532,6 @@ prep <- function(.rec, retain = TRUE) {
 #'
 #' @inheritParams step_scale
 #' @inheritParams stats::lm
-#' @param type
 #'
 #' @return an updated recipe
 #' @export

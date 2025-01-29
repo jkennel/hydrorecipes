@@ -15,7 +15,7 @@ step_earthtide(
   azimuth = 0,
   gravity = 0,
   earth_radius = 6378136.3,
-  earth_eccentricity = 0.0066943979514,
+  earth_eccen = 0.0066943979514,
   cutoff = 1e-06,
   catalog = "ksm04",
   eop = NULL,
@@ -57,6 +57,9 @@ can only be used if do_predict == TRUE.}
 estimate gravity from elevation and latitude.}
 
 \item{earth_radius}{Radius of earth (m) (numeric) defaults to 6378136.3}
+
+\item{earth_eccen}{Eccentricity of earth (numeric)
+defaults to 6.69439795140e-3}
 
 \item{cutoff}{Cutoff amplitude for constituents (numeric)
 defaults to 1e-6.}

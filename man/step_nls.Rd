@@ -7,10 +7,13 @@
 step_nls(
   .rec,
   formula,
-  role = "predictor",
   algorithm = "lm",
   n_subset = 1L,
   n_shift = 0L,
+  range = c(-Inf, Inf),
+  control = gsl_nls_control(xtol = 1e-08),
+  trace = FALSE,
+  role = "predictor",
   ...
 )
 }
@@ -19,13 +22,39 @@ step_nls(
 
 \item{formula}{formula for the regression}
 
+\item{algorithm}{character string specifying the algorithm to use. The following choices are supported:
+\itemize{
+\item \code{"lm"} Levenberg-Marquardt algorithm (default).
+\item \code{"lmaccel"} Levenberg-Marquardt algorithm with geodesic acceleration.
+Stability is controlled by the \code{avmax} parameter in \code{control}, setting \code{avmax}
+to zero is analogous to not using geodesic acceleration.
+\item \code{"dogleg"} Powell's dogleg algorithm.
+\item \code{"ddogleg"} Double dogleg algorithm, an improvement over \code{"dogleg"}
+by including information about the Gauss-Newton step while the iteration is still
+far from the minimum.
+\item \code{"subspace2D"} 2D generalization of the dogleg algorithm. This method
+searches a larger subspace for a solution, it can converge more quickly than \code{"dogleg"}
+on some problems.
+}}
+
+\item{n_subset}{integer - spacing between adjacent samples in the result.}
+
+\item{n_shift}{integer - number of values to shift the starting position when
+n_subset is not equal to 0. The value of n_shift has to be less than
+`n_subset`.}
+
+\item{range}{limit the fitting range to observations between range[1] and range[2]}
+
+\item{control}{an optional list of control parameters to tune the least squares iterations and multistart algorithm.
+See \code{\link[gslnls]{gsl_nls_control}} for the available control parameters and their default values.}
+
+\item{trace}{logical value indicating if a trace of the iteration progress should be printed.
+Default is \code{FALSE}. If \code{TRUE}, the residual (weighted) sum-of-squares and the current parameter estimates
+are printed after each iteration.}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
-
-\item{do_response}{\code{logical} calculate and return the responses?}
-
-\item{do_predict}{calculate and return the predictions?}
 }
 \value{
 an updated recipe

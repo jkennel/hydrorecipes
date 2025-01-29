@@ -90,26 +90,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // log_lags_arma
-arma::vec log_lags_arma(arma::uword n, arma::uword max_lag);
-RcppExport SEXP _hydrorecipes_log_lags_arma(SEXP nSEXP, SEXP max_lagSEXP) {
+arma::vec log_lags_arma(arma::uword n, arma::uword lag_max);
+RcppExport SEXP _hydrorecipes_log_lags_arma(SEXP nSEXP, SEXP lag_maxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
-    Rcpp::traits::input_parameter< arma::uword >::type max_lag(max_lagSEXP);
-    rcpp_result_gen = Rcpp::wrap(log_lags_arma(n, max_lag));
+    Rcpp::traits::input_parameter< arma::uword >::type lag_max(lag_maxSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_lags_arma(n, lag_max));
     return rcpp_result_gen;
 END_RCPP
 }
 // log_lags
-Eigen::ArrayXd log_lags(unsigned int n, unsigned int max_lag);
-RcppExport SEXP _hydrorecipes_log_lags(SEXP nSEXP, SEXP max_lagSEXP) {
+Eigen::ArrayXd log_lags(unsigned int n, unsigned int lag_max);
+RcppExport SEXP _hydrorecipes_log_lags(SEXP nSEXP, SEXP lag_maxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< unsigned int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type max_lag(max_lagSEXP);
-    rcpp_result_gen = Rcpp::wrap(log_lags(n, max_lag));
+    Rcpp::traits::input_parameter< unsigned int >::type lag_max(lag_maxSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_lags(n, lag_max));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -387,14 +387,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // distributed_lag_list
-Rcpp::List distributed_lag_list(Eigen::Map<Eigen::VectorXd> x, arma::uword n_lag, arma::uword max_lag, const unsigned int df, const unsigned int degree, const arma::vec& internal_knots, const arma::vec& boundary_knots, const bool complete_basis, const bool periodic, const unsigned int derivs, const bool integral);
-RcppExport SEXP _hydrorecipes_distributed_lag_list(SEXP xSEXP, SEXP n_lagSEXP, SEXP max_lagSEXP, SEXP dfSEXP, SEXP degreeSEXP, SEXP internal_knotsSEXP, SEXP boundary_knotsSEXP, SEXP complete_basisSEXP, SEXP periodicSEXP, SEXP derivsSEXP, SEXP integralSEXP) {
+Rcpp::List distributed_lag_list(Eigen::Map<Eigen::VectorXd> x, arma::uword n_lag, arma::uword lag_max, const unsigned int df, const unsigned int degree, const arma::vec& internal_knots, const arma::vec& boundary_knots, const bool complete_basis, const bool periodic, const unsigned int derivs, const bool integral);
+RcppExport SEXP _hydrorecipes_distributed_lag_list(SEXP xSEXP, SEXP n_lagSEXP, SEXP lag_maxSEXP, SEXP dfSEXP, SEXP degreeSEXP, SEXP internal_knotsSEXP, SEXP boundary_knotsSEXP, SEXP complete_basisSEXP, SEXP periodicSEXP, SEXP derivsSEXP, SEXP integralSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd> >::type x(xSEXP);
     Rcpp::traits::input_parameter< arma::uword >::type n_lag(n_lagSEXP);
-    Rcpp::traits::input_parameter< arma::uword >::type max_lag(max_lagSEXP);
+    Rcpp::traits::input_parameter< arma::uword >::type lag_max(lag_maxSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type df(dfSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type degree(degreeSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type internal_knots(internal_knotsSEXP);
@@ -403,19 +403,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const bool >::type periodic(periodicSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type derivs(derivsSEXP);
     Rcpp::traits::input_parameter< const bool >::type integral(integralSEXP);
-    rcpp_result_gen = Rcpp::wrap(distributed_lag_list(x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral));
+    rcpp_result_gen = Rcpp::wrap(distributed_lag_list(x, n_lag, lag_max, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral));
     return rcpp_result_gen;
 END_RCPP
 }
 // distributed_lag_list2
-std::list<Eigen::VectorXd> distributed_lag_list2(Eigen::Map<Eigen::VectorXd> x, arma::uword n_lag, arma::uword max_lag, const unsigned int df, const unsigned int degree, const arma::vec& internal_knots, const arma::vec& boundary_knots, const bool complete_basis, const bool periodic, const unsigned int derivs, const bool integral);
-RcppExport SEXP _hydrorecipes_distributed_lag_list2(SEXP xSEXP, SEXP n_lagSEXP, SEXP max_lagSEXP, SEXP dfSEXP, SEXP degreeSEXP, SEXP internal_knotsSEXP, SEXP boundary_knotsSEXP, SEXP complete_basisSEXP, SEXP periodicSEXP, SEXP derivsSEXP, SEXP integralSEXP) {
+std::list<Eigen::VectorXd> distributed_lag_list2(Eigen::Map<Eigen::VectorXd> x, arma::uword n_lag, arma::uword lag_max, const unsigned int df, const unsigned int degree, const arma::vec& internal_knots, const arma::vec& boundary_knots, const bool complete_basis, const bool periodic, const unsigned int derivs, const bool integral);
+RcppExport SEXP _hydrorecipes_distributed_lag_list2(SEXP xSEXP, SEXP n_lagSEXP, SEXP lag_maxSEXP, SEXP dfSEXP, SEXP degreeSEXP, SEXP internal_knotsSEXP, SEXP boundary_knotsSEXP, SEXP complete_basisSEXP, SEXP periodicSEXP, SEXP derivsSEXP, SEXP integralSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd> >::type x(xSEXP);
     Rcpp::traits::input_parameter< arma::uword >::type n_lag(n_lagSEXP);
-    Rcpp::traits::input_parameter< arma::uword >::type max_lag(max_lagSEXP);
+    Rcpp::traits::input_parameter< arma::uword >::type lag_max(lag_maxSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type df(dfSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type degree(degreeSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type internal_knots(internal_knotsSEXP);
@@ -424,19 +424,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const bool >::type periodic(periodicSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type derivs(derivsSEXP);
     Rcpp::traits::input_parameter< const bool >::type integral(integralSEXP);
-    rcpp_result_gen = Rcpp::wrap(distributed_lag_list2(x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral));
+    rcpp_result_gen = Rcpp::wrap(distributed_lag_list2(x, n_lag, lag_max, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral));
     return rcpp_result_gen;
 END_RCPP
 }
 // distributed_lag_list3
-Rcpp::List distributed_lag_list3(Eigen::VectorXd x, arma::uword n_lag, arma::uword max_lag, const unsigned int df, const unsigned int degree, const arma::vec& internal_knots, const arma::vec& boundary_knots, const bool complete_basis, const bool periodic, const unsigned int derivs, const bool integral);
-RcppExport SEXP _hydrorecipes_distributed_lag_list3(SEXP xSEXP, SEXP n_lagSEXP, SEXP max_lagSEXP, SEXP dfSEXP, SEXP degreeSEXP, SEXP internal_knotsSEXP, SEXP boundary_knotsSEXP, SEXP complete_basisSEXP, SEXP periodicSEXP, SEXP derivsSEXP, SEXP integralSEXP) {
+Rcpp::List distributed_lag_list3(Eigen::VectorXd x, arma::uword n_lag, arma::uword lag_max, const unsigned int df, const unsigned int degree, const arma::vec& internal_knots, const arma::vec& boundary_knots, const bool complete_basis, const bool periodic, const unsigned int derivs, const bool integral);
+RcppExport SEXP _hydrorecipes_distributed_lag_list3(SEXP xSEXP, SEXP n_lagSEXP, SEXP lag_maxSEXP, SEXP dfSEXP, SEXP degreeSEXP, SEXP internal_knotsSEXP, SEXP boundary_knotsSEXP, SEXP complete_basisSEXP, SEXP periodicSEXP, SEXP derivsSEXP, SEXP integralSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
     Rcpp::traits::input_parameter< arma::uword >::type n_lag(n_lagSEXP);
-    Rcpp::traits::input_parameter< arma::uword >::type max_lag(max_lagSEXP);
+    Rcpp::traits::input_parameter< arma::uword >::type lag_max(lag_maxSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type df(dfSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type degree(degreeSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type internal_knots(internal_knotsSEXP);
@@ -445,20 +445,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const bool >::type periodic(periodicSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type derivs(derivsSEXP);
     Rcpp::traits::input_parameter< const bool >::type integral(integralSEXP);
-    rcpp_result_gen = Rcpp::wrap(distributed_lag_list3(x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral));
+    rcpp_result_gen = Rcpp::wrap(distributed_lag_list3(x, n_lag, lag_max, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral));
     return rcpp_result_gen;
 END_RCPP
 }
 // distributed_lag_list4
-Rcpp::List distributed_lag_list4(Eigen::VectorXd x, Rcpp::List s, unsigned int max_lag);
-RcppExport SEXP _hydrorecipes_distributed_lag_list4(SEXP xSEXP, SEXP sSEXP, SEXP max_lagSEXP) {
+Rcpp::List distributed_lag_list4(Eigen::VectorXd x, Rcpp::List s, unsigned int lag_max);
+RcppExport SEXP _hydrorecipes_distributed_lag_list4(SEXP xSEXP, SEXP sSEXP, SEXP lag_maxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type s(sSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type max_lag(max_lagSEXP);
-    rcpp_result_gen = Rcpp::wrap(distributed_lag_list4(x, s, max_lag));
+    Rcpp::traits::input_parameter< unsigned int >::type lag_max(lag_maxSEXP);
+    rcpp_result_gen = Rcpp::wrap(distributed_lag_list4(x, s, lag_max));
     return rcpp_result_gen;
 END_RCPP
 }

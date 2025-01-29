@@ -46,7 +46,6 @@ an updated recipe
 Adds a step to scale a data column(s)
 }
 \examples{
-
 dat <- data.frame(x = rnorm(10), y = rnorm(10))
 
 rec <- recipe(y~x, data = dat) |>

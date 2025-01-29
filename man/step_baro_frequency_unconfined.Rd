@@ -25,9 +25,29 @@ step_baro_frequency_unconfined(
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
-\item{thickness_aquifer}{}
+\item{frequency}{the frequency of the response}
 
-\item{attenuation}{}
+\item{radius_well}{well radius}
+
+\item{storage_aquifer}{aquifer storativity (L/L)}
+
+\item{specific_yield}{the specific yeild of of the unconfined system}
+
+\item{k_vertical}{vertical hydraulic conductivity of unconfined aquifer}
+
+\item{diffusivity_vertical}{vertical diffusivity of unconfined aquifer}
+
+\item{diffusivity_vadose}{air diffusivity of vadose zone}
+
+\item{thickness_saturated_well}{length of saturated well}
+
+\item{thickness_vadose}{vadose thickness}
+
+\item{thickness_aquifer}{aquifer thickness}
+
+\item{loading_efficiency}{the loading efficiency of the aquifer}
+
+\item{attenuation}{an attenuation factor}
 
 \item{role}{character - the name of the role}
 

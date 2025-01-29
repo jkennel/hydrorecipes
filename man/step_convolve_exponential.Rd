@@ -29,6 +29,8 @@ and y you would write `c(x,y)` in the hydrorecipes package.}
 
 \item{align}{character center, left or right align the convolution}
 
+\item{max_length}{the maximum length of the kernel}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}

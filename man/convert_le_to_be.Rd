@@ -9,6 +9,9 @@ convert_le_to_be(tf)
 \arguments{
 \item{tf}{complex transfer function}
 }
+\value{
+the loading efficiency
+}
 \description{
 convert_le_to_be
 }

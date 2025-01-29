@@ -4,16 +4,16 @@ kennel_2020[, wl2 := wl * 0.8]
 formula <- as.formula(wl + wl2~.)
 n_knots <- 12
 deg_free <- 27
-max_lag <- 1 + 720
+lag_max <- 1 + 720
 
 formula <- as.formula(wl+wl2~.)
 formula2 <- as.formula(wl+wl2~spline_b_datetime_25 )
 formula3 <- as.formula(wl+wl2~spline_b_datetime_25 + spline_b_datetime_26)
 hrec = hydrorecipes:::Recipe$new(formula = formula, data = unclass(kennel_2020))$
   add_step(hydrorecipes:::StepDistributedLag$new(baro,
-                                  knots = hydrorecipes:::log_lags(n_knots, max_lag)))$
+                                  knots = hydrorecipes:::log_lags(n_knots, lag_max)))$
   add_step(hydrorecipes:::StepDistributedLag$new(et,
-                                  knots = hydrorecipes:::log_lags(n_knots, max_lag)))$
+                                  knots = hydrorecipes:::log_lags(n_knots, lag_max)))$
   add_step(hydrorecipes:::StepSplineB$new(datetime, df = deg_free, intercept = FALSE))$
   add_step(hydrorecipes:::StepIntercept$new())$
   add_step(hydrorecipes:::StepDropColumns$new(baro))$
@@ -37,9 +37,9 @@ hrec$get_response_data(type = 'dt')[grep("spline", step_id)]
 
 hrec = hydrorecipes:::Recipe$new(formula = formula, data = unclass(kennel_2020))$
   add_step(hydrorecipes:::StepDistributedLag$new(baro,
-                                                 knots = hydrorecipes:::log_lags(n_knots, max_lag)))$
+                                                 knots = hydrorecipes:::log_lags(n_knots, lag_max)))$
   add_step(hydrorecipes:::StepDistributedLag$new(et,
-                                                 knots = hydrorecipes:::log_lags(n_knots, max_lag)))$
+                                                 knots = hydrorecipes:::log_lags(n_knots, lag_max)))$
   add_step(hydrorecipes:::StepSplineB$new(datetime, df = deg_free, intercept = FALSE))$
   add_step(hydrorecipes:::StepIntercept$new())$
   add_step(hydrorecipes:::StepDropColumns$new(baro))$

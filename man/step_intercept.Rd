@@ -17,6 +17,8 @@ and y you would write `c(x,y)` in the hydrorecipes package.}
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
+
+\item{intercept}{what value to use (typically 1.0)}
 }
 \value{
 an updated recipe

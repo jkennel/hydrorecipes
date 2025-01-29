@@ -1,11 +1,11 @@
 #' kelvin
 #' Kelvin functions of the second kind ker and kei and order 0 to 1.
 #'
+#' @inheritParams Bessel::BesselK
 #' @param z value to evaluate the kelvin functions
 #'
 #' @return data.table of real and imaginary kelvin functions
 #'
-#' @importFrom data.table ":=" "data.table" "setnames"
 #'
 #' @export
 kelvin <- function(z, nSeq = 2) {
@@ -33,16 +33,18 @@ kelvin <- function(z, nSeq = 2) {
 #' Cooper Jr, H.H., Bredehoeft, J.D., Papadopulos, I.S. and Bennett, R.R., 1965.
 #' The response of well‐aquifer systems to seismic waves. Journal of Geophysical Research, 70(16), pp.3915-3926.
 #'
+#' @param frequency the frequency of the response
+#' @param radius_well well radius
+#' @param radius_casing casing radius
+#' @param transmissivity aquifer transmissivity (L*L/t)
+#' @param storativity layer storativity (L/L)
+#' @param height_water height of water in well
+#' @param gravity gravitational acceleration at well
+#' @param thickness_aquifer aquifer thickness
 #'
-#' @param frequency
-#' @param storativity
-#' @param transmissivity
-#' @param thickness_aquifer
-#' @param height_water
-#' @param radius_well
-#' @param gravity
 #'
-#' @return
+#' @return tidal response
+#'
 #' @export
 #' @examples
 #' data('hsieh_1987_fig_2_3')
@@ -102,12 +104,9 @@ tidal_cooper_1965 <- function(frequency,
 #' Hsieh, P.A., Bredehoeft, J.D. and Farr, J.M., 1987.
 #' Determination of aquifer transmissivity from Earth tide analysis. Water resources research, 23(10), pp.1824-1832.
 #'
-#' @param frequency
-#' @param storativity
-#' @param transmissivity
-#' @param radius_well
+#' @inheritParams tidal_cooper_1965
 #'
-#' @return
+#' @return tidal response
 #' @export
 #'
 #' @examples

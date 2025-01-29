@@ -40,6 +40,13 @@ the specified \code{df} will be ignored.}
 \item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
 Otherwise, the first basis will be excluded from the output.}
 
+\item{periodic}{A logical value.  If \code{TRUE}, the periodic splines will
+be returned.  The default value is \code{FALSE}.}
+
+\item{degree}{A nonnegative integer specifying the degree of the piecewise
+polynomial. The default value is \code{3} for cubic splines. Zero degree
+is allowed for piecewise constant basis functions.}
+
 \item{role}{character - the name of the role}
 
 \item{...}{Optional arguments that are not used.}
@@ -51,7 +58,6 @@ an updated recipe
 generates basis splines.
 }
 \examples{
-
 formula <- as.formula(x~y+z)
 rows <- 1e5
 

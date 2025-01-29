@@ -16,7 +16,24 @@ tidal_cooper_1965(
 )
 }
 \arguments{
-\item{gravity}{}
+\item{frequency}{the frequency of the response}
+
+\item{storativity}{layer storativity (L/L)}
+
+\item{transmissivity}{aquifer transmissivity (L*L/t)}
+
+\item{thickness_aquifer}{aquifer thickness}
+
+\item{height_water}{height of water in well}
+
+\item{radius_well}{well radius}
+
+\item{radius_casing}{casing radius}
+
+\item{gravity}{gravitational acceleration at well}
+}
+\value{
+tidal response
 }
 \description{
 Cooper Jr, H.H., Bredehoeft, J.D., Papadopulos, I.S. and Bennett, R.R., 1965.

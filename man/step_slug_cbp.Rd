@@ -6,7 +6,7 @@
 \usage{
 step_slug_cbp(
   .rec,
-  times,
+  time,
   radius = 1,
   radius_casing = 0.15,
   radius_well = 0.15,
@@ -21,6 +21,8 @@ step_slug_cbp(
 }
 \arguments{
 \item{.rec}{the R6 recipe object.}
+
+\item{time}{the time for evaluation (t)}
 
 \item{radius}{distance from line source or center of well}
 

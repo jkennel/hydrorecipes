@@ -19,7 +19,27 @@ areal_rojstaczer_semiconfined(
 )
 }
 \arguments{
-\item{attenuation}{}
+\item{frequency}{the frequency of the response}
+
+\item{radius_well}{well radius}
+
+\item{transmissivity}{aquifer transmissivity (L*L/t)}
+
+\item{storage_confining}{confining layer storativity (L/L)}
+
+\item{storage_aquifer}{aquifer storativity (L/L)}
+
+\item{diffusivity_confining}{confining layer diffusivity}
+
+\item{diffusivity_vadose}{air diffusivity of vadose zone}
+
+\item{thickness_confining}{confining layer thickness}
+
+\item{thickness_vadose}{vadose thickness}
+
+\item{loading_efficiency}{the loading efficiency of the aquifer}
+
+\item{attenuation}{an attenuation factor}
 }
 \value{
 complex response vector in frequency domain

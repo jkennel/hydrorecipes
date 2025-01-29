@@ -10,6 +10,9 @@ unwrap(phase)
 \arguments{
 \item{phase}{the phase in radians}
 }
+\value{
+unwrapped vector
+}
 \description{
 unwrap
 Removes the large phase shifts that can be associated with using Arg or atan2.

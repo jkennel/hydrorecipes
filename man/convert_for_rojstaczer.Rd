@@ -9,6 +9,9 @@ convert_for_rojstaczer(tf)
 \arguments{
 \item{tf}{}
 }
+\value{
+conjugate of tf
+}
 \description{
 convert_for_rojstaczer
 }

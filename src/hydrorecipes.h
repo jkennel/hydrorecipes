@@ -262,7 +262,7 @@ std::list<Eigen::VectorXd> b_spline_list3(const arma::vec &x,
                                           const bool periodic,
                                           const unsigned int derivs,
                                           const bool integral);
-arma::vec log_lags_arma(arma::uword n, arma::uword max_lag);
+arma::vec log_lags_arma(arma::uword n, arma::uword lag_max);
 
 //==============================================================================
 // distributed_lag.cpp
@@ -279,7 +279,7 @@ List distributed_lag_thread_eigen(Eigen::Map<Eigen::VectorXd> x,
                                   int n_thread);
 Rcpp::List distributed_lag_list(Eigen::Map<Eigen::VectorXd> x,
                                 arma::uword n_lag,
-                                arma::uword max_lag,
+                                arma::uword lag_max,
                                 const unsigned int df,
                                 const unsigned int degree,
                                 const arma::vec &internal_knots,
@@ -290,7 +290,7 @@ Rcpp::List distributed_lag_list(Eigen::Map<Eigen::VectorXd> x,
                                 const bool integral = false);
 Rcpp::List distributed_lag_list3(Eigen::VectorXd x,
                                  arma::uword n_lag,
-                                 arma::uword max_lag,
+                                 arma::uword lag_max,
                                  const unsigned int df,
                                  const unsigned int degree,
                                  const arma::vec &internal_knots,

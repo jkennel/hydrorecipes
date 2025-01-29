@@ -17,6 +17,10 @@ step_baro_clark(
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
+\item{water_level}{\code{numeric vector} of the dependent variable (ie:water level)}
+
+\item{barometric_pressure}{\code{numeric vector} of the independent variable (ie:barometric pressure)}
+
 \item{lag_space}{\code{integer} spacing for lags, useful for higher frequency monitoring}
 
 \item{inverse}{\code{logical} whether the barometric relationship is inverse}
@@ -24,10 +28,6 @@ step_baro_clark(
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
-
-\item{dep}{\code{numeric vector} of the dependent variable (ie:water level)}
-
-\item{ind}{\code{numeric vector} of the independent variable (ie:barometric pressure)}
 }
 \value{
 barometric efficiency using Clark's method

@@ -26,18 +26,20 @@ step_aquifer_wellbore_storage(
 
 \item{flow_rate}{the flow rate from the well (L^3/t)}
 
-\item{radius}{distance from center of well}
+\item{radius}{the distance to the observation location (L)}
 
 \item{radius_casing}{radius of casing in the interval over which the water
-level declines}
+level declines (L)}
 
-\item{radius_well}{effective radius of well screen or open hole}
+\item{radius_well}{effective radius of well screen or open hole (L)}
 
 \item{thickness}{the aquifer thickness (L)}
 
 \item{specific_storage}{specific storage of aquifer (L/L)}
 
 \item{hydraulic_conductivity}{the hydraulic conductivity (L/t)}
+
+\item{n_terms}{number of terms for laplace solution inversion}
 
 \item{role}{character - the name of the role}
 

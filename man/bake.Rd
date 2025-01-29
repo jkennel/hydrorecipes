@@ -14,8 +14,6 @@ bake(.rec, data = NULL)
     the variables in the model.  If not found in \code{data}, the
     variables are taken from \code{environment(formula)},
     typically the environment from which \code{lm} is called.}
-
-\item{type}{}
 }
 \value{
 an updated recipe

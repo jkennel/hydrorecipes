@@ -170,7 +170,7 @@ expect_equivalent(fr, ns,
 #                                                                   0L, FALSE))))$
 #   plate("df")
 #
-# rng = 0:self$max_lag
+# rng = 0:self$lag_max
 # one_n = c(1L, self$n_lag)
 #
 # n_spline_list(0:6, 0L, 3L, knots,

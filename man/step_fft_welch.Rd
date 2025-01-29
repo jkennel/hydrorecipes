@@ -29,6 +29,8 @@ and y you would write `c(x,y)` in the hydrorecipes package.}
 
 \item{window}{window weights}
 
+\item{time_step}{\code{numeric} monitoring interval size}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}

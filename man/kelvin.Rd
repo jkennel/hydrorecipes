@@ -9,6 +9,11 @@ kelvin(z, nSeq = 2)
 }
 \arguments{
 \item{z}{value to evaluate the kelvin functions}
+
+\item{nSeq}{positive integer; if \eqn{> 1}, computes the result for
+    a whole \emph{sequence} of \code{nu} values;\cr
+    if \code{nu >= 0},\code{nu, nu+1, ..., nu+nSeq-1},\cr
+    if \code{nu < 0}, \code{nu, nu-1, ..., nu-nSeq+1}.}
 }
 \value{
 data.table of real and imaginary kelvin functions

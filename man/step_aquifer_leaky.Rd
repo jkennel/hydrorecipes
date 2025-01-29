@@ -8,10 +8,11 @@ step_aquifer_leaky(
   .rec,
   time,
   flow_rate,
+  thickness = 1,
   leakage = 100,
   radius = 100,
-  storativity = 1e-06,
-  transmissivity = 1e-04,
+  specific_storage = 1e-06,
+  hydraulic_conductivity = 1e-04,
   precision = 1e-10,
   role = "predictor",
   ...
@@ -24,9 +25,15 @@ step_aquifer_leaky(
 
 \item{flow_rate}{the flow rate from the well (L^3/t)}
 
+\item{thickness}{the aquifer thickness (L)}
+
 \item{leakage}{the leakage defined by hantush (smaller indicates more leaky)}
 
-\item{radius}{the distance to the observation well (L)}
+\item{radius}{the distance to the observation location (L)}
+
+\item{specific_storage}{specific storage of aquifer (L/L)}
+
+\item{hydraulic_conductivity}{the hydraulic conductivity (L/t)}
 
 \item{precision}{the precision of the solution (default 1e-10)}
 

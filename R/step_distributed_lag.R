@@ -14,8 +14,8 @@ StepDistributedLag <- R6Class(
     knots = NULL,
     # n_lag integer the number of lag terms.
     n_lag = NULL,
-    # max_lag integer the maximum lag.
-    max_lag = NULL,
+    # lag_max integer the maximum lag.
+    lag_max = NULL,
     # intercept boolean use an intercept for the basis matrix
     intercept = NULL,
     # basis_matrix matrix the basis matrix.
@@ -24,7 +24,7 @@ StepDistributedLag <- R6Class(
 
     initialize = function(terms,
                           n_lag = 12L,
-                          max_lag = 86400L,
+                          lag_max = 86400L,
                           knots = NA_real_,
                           basis_matrix = NA_real_,
                           intercept = FALSE,
@@ -48,14 +48,14 @@ StepDistributedLag <- R6Class(
         if (!all(is.na(knots))) {
           self$knots <- knots
         } else {
-          self$knots <- log_lags(self$n_lag, self$max_lag)
+          self$knots <- log_lags(self$n_lag, self$lag_max)
         }
 
         self$n_lag <- length(knots)
-        self$max_lag <- max(knots)
+        self$lag_max <- max(knots)
         self$intercept <- intercept
 
-        rng = 0:self$max_lag
+        rng = 0:self$lag_max
         one_n = c(1L, self$n_lag)
 
         # natural spline
@@ -64,12 +64,12 @@ StepDistributedLag <- R6Class(
                                            FALSE, 0L, FALSE)
 
       } else {
-        self$max_lag <- nrow(basis_matrix)
+        self$lag_max <- nrow(basis_matrix)
         self$n_lag <- ncol(basis_matrix)
         self$basis_matrix <- collapse::mctl(basis_matrix)
       }
 
-      self$n_na_max <- self$max_lag
+      self$n_na_max <- self$lag_max
 
       invisible(self)
     },
@@ -82,7 +82,7 @@ StepDistributedLag <- R6Class(
         dl[[i]] <- distributed_lag_list4(
           s[["result"]][[column_name]],
           self$basis_matrix,
-          self$max_lag
+          self$lag_max
         )
 
         names(dl[[i]]) <- name_columns(self$prefix, column_name[i], length(dl[[i]]))

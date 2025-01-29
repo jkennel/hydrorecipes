@@ -64,8 +64,8 @@ expect_error(hydrorecipes:::convolve_overlap_save(x, y, 0))
 n <- 864
 x <- rnorm(n*100)
 n_knots <- 9
-max_lag <- 1 + n
-knots <- hydrorecipes:::log_lags(n_knots, max_lag)
+lag_max <- 1 + n
+knots <- hydrorecipes:::log_lags(n_knots, lag_max)
 one_n <- c(1, length(knots))
 
 y1 <- hydrorecipes:::n_spline_list(0:n, 0L, 3L, knots[-one_n],

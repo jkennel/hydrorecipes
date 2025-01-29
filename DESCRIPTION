@@ -21,13 +21,13 @@ Imports:
     RcppArmadillo,
     RcppThread,
     RcppEigen,
+    data.table,
     earthtide,
     splines2,
     collapse,
     gslnls
 LinkingTo: Rcpp, RcppArmadillo, RcppThread, RcppEigen, splines2, BH
 Suggests:
-    data.table,
     rmarkdown,
     tinytest,
     RcppRoll,

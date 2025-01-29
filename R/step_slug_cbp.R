@@ -9,7 +9,7 @@ StepSlugCbp <- R6Class(
   public = list(
 
     # step specific variables
-    times = NULL,
+    time = NULL,
     thickness = NULL,
     radius = NULL,
     radius_casing = NULL,
@@ -19,7 +19,7 @@ StepSlugCbp <- R6Class(
     head_0 = NULL,
     n_terms = NULL,
 
-    initialize = function(times,
+    initialize = function(time,
                           radius = 0.1,
                           radius_casing = 0.1,
                           radius_well = 0.1,
@@ -32,12 +32,12 @@ StepSlugCbp <- R6Class(
                           ...) {
 
       # get function parameters to pass to parent
-      times <- deparse(substitute(times))
+      time <- deparse(substitute(time))
       env_list <- get_function_arguments()
       env_list$step_name <- "step_slug_cbp"
       env_list$type <- "add"
       super$initialize(
-        terms = as.symbol(times),
+        terms = as.symbol(time),
         env_list,
         ...
       )
@@ -53,7 +53,7 @@ StepSlugCbp <- R6Class(
       self$thickness <- thickness
 
       self$n_terms <- n_terms
-      self$columns <- times
+      self$columns <- time
 
       invisible(self)
     },

@@ -13,23 +13,26 @@ StepAquiferLeaky <- R6Class(
     time = NULL,
     # flow_rate well flow rates
     flow_rate = NULL,
+    # aquifer thickness
+    thickness = NULL,
     # leakage hantush leakage
     leakage = NULL,
     # radius distance to monitoring interval
     radius = NULL,
-    # storativity aquifer storativity
-    storativity = NULL,
-    # transmissivity aquifer transmissivity
-    transmissivity = NULL,
+    # specific_storage aquifer specific_storage
+    specific_storage = NULL,
+    # hydraulic_conductivity aquifer hydraulic_conductivity
+    hydraulic_conductivity = NULL,
     # max_terms number of terms to use in Hantush solution.  More is more
     #   precise but slower.
     precision = NULL,
     initialize = function(time,
                           flow_rate,
+                          thickness = 1.0,
                           leakage = 100.0,
                           radius = 100.0,
-                          storativity = 1e-6,
-                          transmissivity = 1e-4,
+                          specific_storage = 1e-6,
+                          hydraulic_conductivity = 1e-4,
                           precision = 1e-10,
                           role = "predictor",
                           ...) {
@@ -54,8 +57,9 @@ StepAquiferLeaky <- R6Class(
       self$radius <- radius
 
       # K & Ss
-      self$storativity <- storativity
-      self$transmissivity <- transmissivity
+      self$thickness <- thickness
+      self$specific_storage <- specific_storage
+      self$hydraulic_conductivity <- hydraulic_conductivity
       self$precision <- precision
 
       self$columns <- c(time, flow_rate)
@@ -71,8 +75,8 @@ StepAquiferLeaky <- R6Class(
         s[["result"]][[self$columns[[1L]]]],
         s[["result"]][[self$columns[[2L]]]],
         self$radius,
-        self$storativity,
-        self$transmissivity,
+        self$specific_storage * self$thickness,
+        self$hydraulic_conductivity * self$thickness,
         self$leakage,
         self$precision
       )

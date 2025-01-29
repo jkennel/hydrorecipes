@@ -57,7 +57,7 @@ b_spline_list3 <- function(x, df, degree, internal_knots, boundary_knots, comple
 #' Generate logarithmically spaced lags
 #'
 #' @param n integer number of lag terms
-#' @param max_lag integer the maximum lag
+#' @param lag_max integer the maximum lag
 #'
 #' @return vector of logarithmically spaced lags
 #'
@@ -65,8 +65,8 @@ b_spline_list3 <- function(x, df, degree, internal_knots, boundary_knots, comple
 #'
 #' @noRd
 #'
-log_lags_arma <- function(n, max_lag) {
-    .Call(`_hydrorecipes_log_lags_arma`, n, max_lag)
+log_lags_arma <- function(n, lag_max) {
+    .Call(`_hydrorecipes_log_lags_arma`, n, lag_max)
 }
 
 #' @title
@@ -76,7 +76,7 @@ log_lags_arma <- function(n, max_lag) {
 #' Generate logarithmically spaced lags
 #'
 #' @param n integer number of lag terms
-#' @param max_lag integer the maximum lag
+#' @param lag_max integer the maximum lag
 #'
 #' @return vector of logarithmically spaced lags
 #'
@@ -84,8 +84,8 @@ log_lags_arma <- function(n, max_lag) {
 #'
 #' @noRd
 #'
-log_lags <- function(n, max_lag) {
-    .Call(`_hydrorecipes_log_lags`, n, max_lag)
+log_lags <- function(n, lag_max) {
+    .Call(`_hydrorecipes_log_lags`, n, lag_max)
 }
 
 #' @title
@@ -280,7 +280,7 @@ distributed_lag_thread_eigen <- function(x, bl, lag_max, n_subset, n_shift, n_th
 #'
 #' @param x numeric vector to lag
 #' @param n_lag number of lag terms
-#' @param max_lag integer the maximum lag
+#' @param lag_max integer the maximum lag
 #' @param internal_knots location of internal knots
 #' @param boundary_knots location of boundary knots
 #' @param complete_basis logical intercept?
@@ -291,20 +291,20 @@ distributed_lag_thread_eigen <- function(x, bl, lag_max, n_subset, n_shift, n_th
 #'
 #' @noRd
 #'
-distributed_lag_list <- function(x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral) {
-    .Call(`_hydrorecipes_distributed_lag_list`, x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
+distributed_lag_list <- function(x, n_lag, lag_max, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral) {
+    .Call(`_hydrorecipes_distributed_lag_list`, x, n_lag, lag_max, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 
-distributed_lag_list2 <- function(x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral) {
-    .Call(`_hydrorecipes_distributed_lag_list2`, x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
+distributed_lag_list2 <- function(x, n_lag, lag_max, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral) {
+    .Call(`_hydrorecipes_distributed_lag_list2`, x, n_lag, lag_max, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 
-distributed_lag_list3 <- function(x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral) {
-    .Call(`_hydrorecipes_distributed_lag_list3`, x, n_lag, max_lag, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
+distributed_lag_list3 <- function(x, n_lag, lag_max, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral) {
+    .Call(`_hydrorecipes_distributed_lag_list3`, x, n_lag, lag_max, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 
-distributed_lag_list4 <- function(x, s, max_lag) {
-    .Call(`_hydrorecipes_distributed_lag_list4`, x, s, max_lag)
+distributed_lag_list4 <- function(x, s, lag_max) {
+    .Call(`_hydrorecipes_distributed_lag_list4`, x, s, lag_max)
 }
 
 #' @title
@@ -1580,7 +1580,7 @@ spec_taper <- function(n_row, p) {
 #' The first and last groups have length equal to 1.
 #'
 #' @param n the number of values to subset into groups. (integer)
-#' @param max_lag how fast groups get bigger. Larger numbers have a larger range
+#' @param lag_max how fast groups get bigger. Larger numbers have a larger range
 #' of group sizes. (integer)
 #' @param n_groups the number of groups to create. (integer)
 #' @param min_aggregate the minimum size for a group. (integer)

@@ -672,7 +672,7 @@ Eigen::VectorXd spec_taper(size_t n_row, double p) {
 //' The first and last groups have length equal to 1.
 //'
 //' @param n the number of values to subset into groups. (integer)
-//' @param max_lag how fast groups get bigger. Larger numbers have a larger range
+//' @param lag_max how fast groups get bigger. Larger numbers have a larger range
 //' of group sizes. (integer)
 //' @param n_groups the number of groups to create. (integer)
 //' @param min_aggregate the minimum size for a group. (integer)

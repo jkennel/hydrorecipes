@@ -6,7 +6,7 @@
 #'
 #' @param phase the phase in radians
 #'
-#' @return
+#' @return unwrapped vector
 #' @export
 #'
 unwrap <- function(phase) {
@@ -187,7 +187,7 @@ check_machine_max <- function(x, xmax = .Machine[['double.xmax']]) {
 #'
 #' @param tf complex transfer function
 #'
-#' @return
+#' @return the loading efficiency
 #' @export
 #'
 convert_le_to_be <- function(tf) {
@@ -200,7 +200,7 @@ convert_le_to_be <- function(tf) {
 #'
 #' @param tf
 #'
-#' @return
+#' @return conjugate of tf
 #' @export
 #'
 convert_for_rojstaczer <- function(tf) {
@@ -214,17 +214,18 @@ convert_for_rojstaczer <- function(tf) {
 # Determination of Fluid Flow Properties From the Response of Water Levels in Wells to Atmospheric Loading
 #' areal_rojstaczer_semiconfined
 #'
-#' @param frequency
-#' @param radius_well
-#' @param transmissivity
-#' @param storage_confining
-#' @param storage_aquifer
-#' @param diffusivity_confining
-#' @param diffusivity_vadose
-#' @param thickness_confining
-#' @param thickness_vadose
-#' @param loading_efficiency
-#' @param attenuation
+#'
+#' @param frequency the frequency of the response
+#' @param radius_well well radius
+#' @param transmissivity aquifer transmissivity (L*L/t)
+#' @param storage_confining confining layer storativity (L/L)
+#' @param storage_aquifer aquifer storativity (L/L)
+#' @param diffusivity_confining confining layer diffusivity
+#' @param diffusivity_vadose air diffusivity of vadose zone
+#' @param thickness_confining confining layer thickness
+#' @param thickness_vadose vadose thickness
+#' @param loading_efficiency the loading efficiency of the aquifer
+#' @param attenuation an attenuation factor
 #'
 #' @return complex response vector in frequency domain
 #' @export

@@ -34,7 +34,6 @@ StepNls <- R6Class(
     # std_error = NULL,
 
     initialize = function(formula = NULL,
-                          role = "predictor",
                           # start = 0,
                           # lower = 0,
                           # upper = 0,
@@ -44,6 +43,7 @@ StepNls <- R6Class(
                           range = c(-Inf, Inf),
                           control =  gsl_nls_control(xtol = 1e-8),
                           trace = FALSE,
+                          role = "predictor",
                           # do_response = TRUE,
                           # do_predict = TRUE,
                           ...) {

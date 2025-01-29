@@ -1419,13 +1419,13 @@ Eigen::MatrixXcd solve_cplx_irr(Eigen::MatrixXcd& x,
 // // [[Rcpp::export]]
 // Eigen::MatrixXcd solve_cplx_irr2(Eigen::MatrixXcd& x,
 //                                 size_t n,
-//                                 size_t max_lag) {
+//                                 size_t lag_max) {
 //
 //   // original number of series
 //   size_t n_col = get_column_number(x.cols());
 //
 //   size_t n_row = x.rows() / 2 + 1; // half spectrum only
-//   ArrayXd groups = log_lags(n, max_lag-1);
+//   ArrayXd groups = log_lags(n, lag_max-1);
 //   size_t n_ols = groups.size();
 //   size_t sub_size = n_col - 1;
 //

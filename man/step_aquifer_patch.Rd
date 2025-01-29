@@ -29,7 +29,19 @@ step_aquifer_patch(
 
 \item{thickness}{the aquifer thickness (L)}
 
-\item{radius}{the distance to the observation well (L)}
+\item{radius}{the distance to the observation location (L)}
+
+\item{radius_patch}{the radius of the cylindrical patch (L)}
+
+\item{specific_storage_inner}{specific storage of inner patch (L/L)}
+
+\item{specific_storage_outer}{specific storage of outer patch (L/L)}
+
+\item{hydraulic_conductivity_inner}{the hydraulic conductivity of the inner patch (L/t)}
+
+\item{hydraulic_conductivity_outer}{the hydraulic conductivity of the outer patch (L/t)}
+
+\item{n_stehfest}{integer number of terms to use in Stehfest method (typically < 18)}
 
 \item{role}{character - the name of the role}
 

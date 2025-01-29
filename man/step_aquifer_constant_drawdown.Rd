@@ -22,6 +22,8 @@ step_aquifer_constant_drawdown(
 
 \item{time}{the time for evaluation (t)}
 
+\item{drawdown}{drawdown at the well (L)}
+
 \item{thickness}{the aquifer thickness (L)}
 
 \item{radius_well}{the radius of the well (L)}

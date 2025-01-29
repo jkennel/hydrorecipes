@@ -15,7 +15,7 @@ StepBaroHarmonic <- R6Class(
 
     frequency = NULL,
     cycle_size = NULL,
-    start = NULL,
+    starting_value = NULL,
     inverse = NULL,
 
     barometric_efficiency = list(),
@@ -27,7 +27,7 @@ StepBaroHarmonic <- R6Class(
                           earth_tide,
                           frequency = c(1.9324, 2.0), # M2 and S2
                           cycle_size = 86400.0,
-                          start = 0.0,
+                          starting_value = 0.0,
                           inverse = TRUE,
                           role = "augment",
                           ...) {
@@ -55,7 +55,7 @@ StepBaroHarmonic <- R6Class(
       self$earth_tide <- earth_tide
       self$frequency <- frequency
       self$cycle_size <- cycle_size
-      self$start <- start
+      self$starting_value <- starting_value
       self$inverse <- inverse
 
       self$columns <- c(time, water_level, barometric_pressure, earth_tide)
@@ -78,7 +78,7 @@ StepBaroHarmonic <- R6Class(
         add_step(StepHarmonic$new(time_col,
                                   frequency = self$frequency,
                                   cycle_size = self$cycle_size,
-                                  starting_value = self$start))$
+                                  starting_valueing_value = self$starting_value))$
         plate("m")
 
       X <- harmonics[, -(2:4)]

@@ -22,6 +22,8 @@ function.  terms replaces the `...` of the recipes package but requires
 variables to be included within `c()`.  For example to include variables x
 and y you would write `c(x,y)` in the hydrorecipes package.}
 
+\item{values}{multiply column(s) by these values}
+
 \item{role}{character - the name of the role}
 
 \item{skip}{logical - should the step be skipped}

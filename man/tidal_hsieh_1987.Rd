@@ -14,7 +14,18 @@ tidal_hsieh_1987(
 )
 }
 \arguments{
-\item{radius_well}{}
+\item{frequency}{the frequency of the response}
+
+\item{storativity}{layer storativity (L/L)}
+
+\item{transmissivity}{aquifer transmissivity (L*L/t)}
+
+\item{radius_well}{well radius}
+
+\item{radius_casing}{casing radius}
+}
+\value{
+tidal response
 }
 \description{
 Hsieh, P.A., Bredehoeft, J.D. and Farr, J.M., 1987.

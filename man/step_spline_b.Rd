@@ -61,7 +61,6 @@ an updated recipe
 generates basis splines.
 }
 \examples{
-
 formula <- as.formula(x~y+z)
 rows <- 1e5
 

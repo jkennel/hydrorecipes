@@ -41,11 +41,13 @@ and y you would write `c(x,y)` in the hydrorecipes package.}
 
 \item{n_groups}{number of results}
 
+\item{time_step}{\code{numeric} monitoring interval size}
+
+\item{formula}{formula notation to specify inputs and outputs}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
-
-\item{power}{spacing for the groups}
 }
 \value{
 an updated recipe

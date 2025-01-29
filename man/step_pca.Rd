@@ -25,6 +25,12 @@ and y you would write `c(x,y)` in the hydrorecipes package.}
 
 \item{na_rm}{logical - should NA values be removed from calculations}
 
+\item{n_comp}{number of components to retain}
+
+\item{center}{center values before PCA}
+
+\item{scale}{scale values before PCA}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
@@ -37,7 +43,6 @@ an updated recipe
 in house function. Use at your own risk!
 }
 \examples{
-
 set.seed(1)
 
 formula <- as.formula(x~a+b+d+e+f+g)

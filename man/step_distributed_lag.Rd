@@ -8,7 +8,7 @@ step_distributed_lag(
   .rec,
   terms,
   n_lag = 12L,
-  max_lag = 86400L,
+  lag_max = 86400L,
   knots = NA_real_,
   basis_matrix = NA_real_,
   intercept = FALSE,
@@ -23,6 +23,16 @@ step_distributed_lag(
 function.  terms replaces the `...` of the recipes package but requires
 variables to be included within `c()`.  For example to include variables x
 and y you would write `c(x,y)` in the hydrorecipes package.}
+
+\item{n_lag}{number of lags to calculate (enter either lag_max and n_lag or knots)}
+
+\item{lag_max}{maximum lag to calculate (enter either lag_max and n_lag or knots)}
+
+\item{knots}{specify the knot locations}
+
+\item{basis_matrix}{user specified basis_matrix}
+
+\item{intercept}{include intercept in basis matrix}
 
 \item{role}{character - the name of the role}
 

@@ -12,7 +12,7 @@ step_baro_harmonic(
   earth_tide,
   frequency = c(1.9324, 2),
   cycle_size = 86400,
-  start = 0,
+  starting_value = 0,
   inverse = FALSE,
   role = "augment",
   ...
@@ -21,16 +21,18 @@ step_baro_harmonic(
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
-\item{water_level}{\code{variable} unquoted water level column name}
+\item{water_level}{\code{numeric vector} of the dependent variable (ie:water level)}
 
-\item{barometric_pressure}{\code{variable} unquoted barometric pressure
-column name}
+\item{barometric_pressure}{\code{numeric vector} of the independent variable (ie:barometric pressure)}
 
 \item{earth_tide}{\code{variable} unquoted Earth tide column name}
 
 \item{frequency}{numeric vector - the frequencies of the sin and cos curves}
 
 \item{cycle_size}{numeric - the period of the sin and cos curves}
+
+\item{starting_value}{numeric - the starting position of the sin and cos
+curves. This may be specified to have more control over the signal phase.}
 
 \item{inverse}{\code{logical} whether the barometric relationship is inverse}
 

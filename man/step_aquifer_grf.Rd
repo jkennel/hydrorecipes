@@ -26,7 +26,7 @@ step_aquifer_grf(
 
 \item{thickness}{the aquifer thickness (L)}
 
-\item{radius}{the distance to the observation well (L)}
+\item{radius}{the distance to the observation location (L)}
 
 \item{specific_storage}{specific storage of aquifer (L/L)}
 
