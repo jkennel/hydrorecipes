@@ -366,7 +366,6 @@ Eigen::VectorXd theis_aniso_u_grid(Eigen::VectorXd x,
 // @param thickness aquifer thickness
 // @param time prediction times
 // @param flow_rate well flow rates
-// @param flow_time_interval time between flow rate measurements in samples
 // @param flow_dimension flow dimension
 //
 // @return theis solution for multiple pumping scenario
@@ -595,7 +594,6 @@ double grf_u(const double radius,
 //' @param thickness aquifer thickness
 //' @param time prediction times
 //' @param flow_rate well flow rates
-//' @param flow_time_interval time between flow rate measurements in samples
 //' @param flow_dimension flow dimension
 //'
 //' @return theis solution for multiple pumping scenario
@@ -870,7 +868,6 @@ Rcpp::NumericVector hantush_well_rcpp(Rcpp::NumericVector u, double b, double pr
 //' @param leakage hantush leakage
 //' @param time prediction times
 //' @param flow_rate well flow rates
-//' @param flow_time_interval time between flow rate measurements in samples
 //' @param precision how precise should the solution be.  More is more precise but slower.
 //'
 //' @return hantush jacob solution for multiple pumping scenario

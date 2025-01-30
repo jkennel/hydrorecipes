@@ -28,8 +28,6 @@ grf_time(
 \item{flow_rate}{well flow rates}
 
 \item{flow_dimension}{flow dimension}
-
-\item{flow_time_interval}{time between flow rate measurements in samples}
 }
 \value{
 theis solution for multiple pumping scenario

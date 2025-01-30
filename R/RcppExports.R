@@ -913,7 +913,6 @@ grf_u <- function(radius, specific_storage, hydraulic_conductivity) {
 #' @param thickness aquifer thickness
 #' @param time prediction times
 #' @param flow_rate well flow rates
-#' @param flow_time_interval time between flow rate measurements in samples
 #' @param flow_dimension flow dimension
 #'
 #' @return theis solution for multiple pumping scenario
@@ -1002,7 +1001,6 @@ hantush_well_rcpp <- function(u, b, precision) {
 #' @param leakage hantush leakage
 #' @param time prediction times
 #' @param flow_rate well flow rates
-#' @param flow_time_interval time between flow rate measurements in samples
 #' @param precision how precise should the solution be.  More is more precise but slower.
 #'
 #' @return hantush jacob solution for multiple pumping scenario

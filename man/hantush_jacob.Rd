@@ -28,8 +28,6 @@ hantush_jacob(
 \item{leakage}{hantush leakage}
 
 \item{precision}{how precise should the solution be.  More is more precise but slower.}
-
-\item{flow_time_interval}{time between flow rate measurements in samples}
 }
 \value{
 hantush jacob solution for multiple pumping scenario
