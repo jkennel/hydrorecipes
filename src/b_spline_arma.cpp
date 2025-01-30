@@ -1,21 +1,20 @@
 #include "hydrorecipes.h"
 
-//' @title
-//' b_spline_list
-//'
-//' @description
-//' Create spline terms
-//'
-//' @inheritParams splines2::bSpline
-//' @param internal_knots locations where parameters can change
-//' @param boundary_knots end points of the spline
-//' @param complete_basis intercept argument
-//'
-//' @return List of distributed lags
-//'
-//' @export
-//'
-//' @noRd
+// @title
+// b_spline_list
+//
+// @description
+// Create spline terms
+//
+// @inheritParams splines2::bSpline
+// @param internal_knots locations where parameters can change
+// @param boundary_knots end points of the spline
+// @param complete_basis intercept argument
+//
+// @return List of distributed lags
+//
+// @export
+//
 // [[Rcpp::export]]
 Rcpp::List b_spline_list(const arma::vec& x,
                          const unsigned int df,
@@ -53,23 +52,22 @@ Rcpp::List b_spline_list(const arma::vec& x,
 }
 
 
-//' @title
-//' n_spline_list
-//'
-//' @description
-//' Create spline terms
-//'
-//' @inheritParams splines2::naturalSpline
-//' @param internal_knots locations where parameters can change
-//' @param boundary_knots end points of the spline
-//' @param complete_basis intercept argument
-//'
-//' @return List of distributed lags
-//'
-//' @export
-//'
-//' @noRd
-//'
+// @title
+// n_spline_list
+//
+// @description
+// Create spline terms
+//
+// @inheritParams splines2::naturalSpline
+// @param internal_knots locations where parameters can change
+// @param boundary_knots end points of the spline
+// @param complete_basis intercept argument
+//
+// @return List of distributed lags
+//
+// @export
+//
+//
 // [[Rcpp::export]]
 Rcpp::List n_spline_list(const arma::vec& x,
                          const unsigned int df,

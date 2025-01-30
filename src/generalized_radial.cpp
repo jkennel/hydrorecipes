@@ -351,30 +351,30 @@ Eigen::VectorXd theis_aniso_u_grid(Eigen::VectorXd x,
 
 
 //==============================================================================
-//' @title
-//' theis_aniso_time
-//'
-//' @description
-//' Convolution of GRF well function and flow rates in the time domain.
-//' Time series needs to be regularily spaced and so are the flow rates.  Some
-//' performance gains can be achieved if the number of flow rate does not change
-//' for each time.
-//'
-//' @param radius distance to monitoring interval
-//' @param specific_storage aquifer storativity
-//' @param hydraulic_conductivity aquifer hydraulic conductivity
-//' @param thickness aquifer thickness
-//' @param time prediction times
-//' @param flow_rate well flow rates
-//' @param flow_time_interval time between flow rate measurements in samples
-//' @param flow_dimension flow dimension
-//'
-//' @return theis solution for multiple pumping scenario
-//'
-//'
-//' @export
-//'
-//' @noRd
+// @title
+// theis_aniso_time
+//
+// @description
+// Convolution of GRF well function and flow rates in the time domain.
+// Time series needs to be regularily spaced and so are the flow rates.  Some
+// performance gains can be achieved if the number of flow rate does not change
+// for each time.
+//
+// @param radius distance to monitoring interval
+// @param specific_storage aquifer storativity
+// @param hydraulic_conductivity aquifer hydraulic conductivity
+// @param thickness aquifer thickness
+// @param time prediction times
+// @param flow_rate well flow rates
+// @param flow_time_interval time between flow rate measurements in samples
+// @param flow_dimension flow dimension
+//
+// @return theis solution for multiple pumping scenario
+//
+//
+// @export
+//
+// @noRd
 // [[Rcpp::export]]
 Rcpp::List theis_aniso_time(const double distance_x,
                             const double distance_y,
@@ -603,7 +603,6 @@ double grf_u(const double radius,
 //'
 //' @export
 //'
-//' @noRd
 // [[Rcpp::export]]
 Rcpp::List grf_time(const double radius,
                     const double specific_storage,
@@ -658,20 +657,20 @@ Rcpp::List grf_time(const double radius,
 //' performance gains can be achieved if the number of flow rate does not change
 //' for each time.
 //'
-//' @param radius distance to monitoring interval
-//' @param specific_storage aquifer storativity
+//' @param grid locations of grid points (x,y)
+//' @param well_locations locations of wells (x,y)
+//' @param flow_rate well flow rates
+//' @param time prediction times
+//' @param specific_storage aquifer specific storage
 //' @param hydraulic_conductivity aquifer hydraulic conductivity
 //' @param thickness aquifer thickness
-//' @param time prediction times
-//' @param flow_rate well flow rates
-//' @param flow_time_interval time between flow rate measurements in samples
 //' @param flow_dimension flow dimension
 //'
 //' @return theis solution for multiple pumping scenario
 //'
 //'
 //' @export
-//' @noRd
+//'
 // [[Rcpp::export]]
 Eigen::MatrixXd grf_grid(const Eigen::MatrixXd &grid,
                          const Eigen::MatrixXd &well_locations,
@@ -773,9 +772,9 @@ double hantush_epsilon(const double radius,
 //'   evaluation of Theis and Hantush-Jacob well functions. Journal of
 //'   hydrology, 318(1-4), pp.173-183.
 //'
+//' @inheritParams hantush_jacob
 //' @param u value of the Theis u
 //' @param b the leakance
-//' @param n_terms the number of terms used in the hantush approximation
 //'
 //'
 //' @return hantush well function
@@ -783,7 +782,6 @@ double hantush_epsilon(const double radius,
 //'
 //' @export
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 double hantush_well(double u, double b, double precision){
@@ -873,14 +871,13 @@ Rcpp::NumericVector hantush_well_rcpp(Rcpp::NumericVector u, double b, double pr
 //' @param time prediction times
 //' @param flow_rate well flow rates
 //' @param flow_time_interval time between flow rate measurements in samples
-//' @param n_terms number of terms to use in Hantush solution.  More is more precise but slower.
+//' @param precision how precise should the solution be.  More is more precise but slower.
 //'
 //' @return hantush jacob solution for multiple pumping scenario
 //'
 //'
 //' @export
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Rcpp::List hantush_jacob(

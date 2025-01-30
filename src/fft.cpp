@@ -170,7 +170,6 @@ Eigen::VectorXd convolve_vec(Eigen::VectorXd x,
 //'
 //' @export
 //'
-//'
 //' @examples
 //' a <- convolve_filter(x = 1:100,
 //'                      y = c(1:10, rep(0, 90)),
@@ -179,7 +178,6 @@ Eigen::VectorXd convolve_vec(Eigen::VectorXd x,
 //'
 //' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Eigen::VectorXd convolve_filter(const Eigen::VectorXd& x,
@@ -516,7 +514,6 @@ Eigen::VectorXd convolve_tf(Eigen::VectorXd x,
 //'
 //' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Eigen::MatrixXd convolve_matrix(const Eigen::VectorXd& x,

@@ -59,7 +59,6 @@ double c_cpp(double x) {
 //'
 //' @return ln(Re/rw)
 //'
-//' @noRd
 // [[Rcpp::export]]
 double bouwer_rice_abc(double rw, double Le, double Lw, double H) {
 
@@ -106,7 +105,6 @@ double bouwer_rice_abc(double rw, double Le, double Lw, double H) {
 //'
 //' @export
 //'
-//' @noRd
 // [[Rcpp::export]]
 double bouwer_rice(arma::vec time,
                    arma::vec drawdown,

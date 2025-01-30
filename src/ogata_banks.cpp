@@ -10,26 +10,26 @@
 // no decay
 // no retardation
 //==============================================================================
-//' @title
-//' Ogata-Banks solution for 1-D flow.
-//'
-//' @description
-//' Ogata, A., Banks, R.B., 1961. A solution of the differential equation of
-//' longitudinal dispersion in porous media. U. S. Geol. Surv. Prof. Pap. 411-A.
-//' 1-D, infinite source, uniform flow, constant parameters, no decay, no retardation
-//'
-//' @param D diffusion coefficient
-//' @param v double velocity
-//' @param C0 double concentration
-//' @param x double x position
-//' @param t double time
-//'
-//' @return ogata banks solution
-//'
-//' @export
-//'
-//' @noRd
-//'
+// @title
+// Ogata-Banks solution for 1-D flow.
+//
+// @description
+// Ogata, A., Banks, R.B., 1961. A solution of the differential equation of
+// longitudinal dispersion in porous media. U. S. Geol. Surv. Prof. Pap. 411-A.
+// 1-D, infinite source, uniform flow, constant parameters, no decay, no retardation
+//
+// @param D diffusion coefficient
+// @param v double velocity
+// @param C0 double concentration
+// @param x double x position
+// @param t double time
+//
+// @return ogata banks solution
+//
+// @export
+//
+// @noRd
+//
 // [[Rcpp::export]]
 double ogata_banks_ind(const double D,
                        const double v,

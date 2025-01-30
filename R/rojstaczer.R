@@ -264,10 +264,22 @@ areal_rojstaczer_semiconfined <- function(frequency,
   # return(data.table(frequency, R, Q, W, Q_div_W = Q / W, R_div_Q = R / Q, response = x0))
 }
 
-
+# Rojstaczer and Riley, 1990
+# Response of the Water Level in a Well to Earth Tides and Atmospheric Loading
+#   Under Unconfined Conditions
+#
+#' areal_rojstaczer_unconfined
+#'
 #' @inheritParams areal_rojstaczer_semiconfined
+#'
+#' @param k_vertical vertical hydraulic conductivity of vadose zone
+#' @param diffusivity_vertical unconfined layer diffusivity
+#' @param thickness_saturated_well saturated well thickness
+#' @param thickness_aquifer aquifer thickness
+#' @param specific_yield specific yield of unconfined aquifer
+#'
 #' @return complex response vector in frequency domain
-#' @noRd
+#'
 #' @export
 areal_rojstaczer_unconfined <- function(frequency,
                                         radius_well,
@@ -295,7 +307,6 @@ areal_rojstaczer_unconfined <- function(frequency,
   h1_h2   <- .calc_H1_H2(omega, 0, thickness_aquifer, diffusivity_vertical)
   uv      <- .calc_u_v(sqrt_Qu, h1_h2[['h1']], h1_h2[['h2']])
 
-  # print(uv)
   p0 <- ((mn$m - 1i * mn$n) - loading_efficiency) *
     (uv$u + 1i * uv$v) + loading_efficiency
 
