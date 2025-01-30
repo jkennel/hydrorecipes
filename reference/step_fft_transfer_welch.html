@@ -86,6 +86,14 @@ and y you would write `c(x,y)` in the hydrorecipes package.</p></dd>
 <dd><p>window weights</p></dd>
 
 
+<dt id="arg-time-step">time_step<a class="anchor" aria-label="anchor" href="#arg-time-step"></a></dt>
+<dd><p><code>numeric</code> monitoring interval size</p></dd>
+
+
+<dt id="arg-formula">formula<a class="anchor" aria-label="anchor" href="#arg-formula"></a></dt>
+<dd><p>formula notation to specify inputs and outputs</p></dd>
+
+
 <dt id="arg-role">role<a class="anchor" aria-label="anchor" href="#arg-role"></a></dt>
 <dd><p>character - the name of the role</p></dd>
 
@@ -108,7 +116,7 @@ and y you would write `c(x,y)` in the hydrorecipes package.</p></dd>
 <span class="r-in"><span>  <span class="fu">step_fft_transfer_welch</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">wl</span>, <span class="va">baro</span>, <span class="va">et</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          length_subset <span class="op">=</span> <span class="fl">1440</span><span class="op">*</span><span class="fl">8</span> <span class="op">+</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>                          overlap <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
-<span class="r-in"><span>                          window <span class="op">=</span> <span class="fu">window_nuttall</span><span class="op">(</span><span class="fl">1440</span><span class="op">*</span><span class="fl">8</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>                          window <span class="op">=</span> <span class="fu"><a href="window_nuttall.html">window_nuttall</a></span><span class="op">(</span><span class="fl">1440</span><span class="op">*</span><span class="fl">8</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="plate.html">plate</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

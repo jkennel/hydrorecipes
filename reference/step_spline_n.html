@@ -98,6 +98,17 @@ the specified <code>df</code> will be ignored.</p></dd>
 Otherwise, the first basis will be excluded from the output.</p></dd>
 
 
+<dt id="arg-periodic">periodic<a class="anchor" aria-label="anchor" href="#arg-periodic"></a></dt>
+<dd><p>A logical value.  If <code>TRUE</code>, the periodic splines will
+be returned.  The default value is <code>FALSE</code>.</p></dd>
+
+
+<dt id="arg-degree">degree<a class="anchor" aria-label="anchor" href="#arg-degree"></a></dt>
+<dd><p>A nonnegative integer specifying the degree of the piecewise
+polynomial. The default value is <code>3</code> for cubic splines. Zero degree
+is allowed for piecewise constant basis functions.</p></dd>
+
+
 <dt id="arg-role">role<a class="anchor" aria-label="anchor" href="#arg-role"></a></dt>
 <dd><p>character - the name of the role</p></dd>
 
@@ -113,8 +124,7 @@ Otherwise, the first basis will be excluded from the output.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">x</span><span class="op">~</span><span class="va">y</span><span class="op">+</span><span class="va">z</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">x</span><span class="op">~</span><span class="va">y</span><span class="op">+</span><span class="va">z</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">rows</span> <span class="op">&lt;-</span> <span class="fl">1e5</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">rows</span><span class="op">)</span>,</span></span>

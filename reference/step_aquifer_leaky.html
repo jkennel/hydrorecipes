@@ -50,10 +50,11 @@
 <span>  <span class="va">.rec</span>,</span>
 <span>  <span class="va">time</span>,</span>
 <span>  <span class="va">flow_rate</span>,</span>
+<span>  thickness <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  leakage <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  radius <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  storativity <span class="op">=</span> <span class="fl">1e-06</span>,</span>
-<span>  transmissivity <span class="op">=</span> <span class="fl">1e-04</span>,</span>
+<span>  specific_storage <span class="op">=</span> <span class="fl">1e-06</span>,</span>
+<span>  hydraulic_conductivity <span class="op">=</span> <span class="fl">1e-04</span>,</span>
 <span>  precision <span class="op">=</span> <span class="fl">1e-10</span>,</span>
 <span>  role <span class="op">=</span> <span class="st">"predictor"</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -76,12 +77,24 @@
 <dd><p>the flow rate from the well (L^3/t)</p></dd>
 
 
+<dt id="arg-thickness">thickness<a class="anchor" aria-label="anchor" href="#arg-thickness"></a></dt>
+<dd><p>the aquifer thickness (L)</p></dd>
+
+
 <dt id="arg-leakage">leakage<a class="anchor" aria-label="anchor" href="#arg-leakage"></a></dt>
 <dd><p>the leakage defined by hantush (smaller indicates more leaky)</p></dd>
 
 
 <dt id="arg-radius">radius<a class="anchor" aria-label="anchor" href="#arg-radius"></a></dt>
-<dd><p>the distance to the observation well (L)</p></dd>
+<dd><p>the distance to the observation location (L)</p></dd>
+
+
+<dt id="arg-specific-storage">specific_storage<a class="anchor" aria-label="anchor" href="#arg-specific-storage"></a></dt>
+<dd><p>specific storage of aquifer (L/L)</p></dd>
+
+
+<dt id="arg-hydraulic-conductivity">hydraulic_conductivity<a class="anchor" aria-label="anchor" href="#arg-hydraulic-conductivity"></a></dt>
+<dd><p>the hydraulic conductivity (L/t)</p></dd>
 
 
 <dt id="arg-precision">precision<a class="anchor" aria-label="anchor" href="#arg-precision"></a></dt>

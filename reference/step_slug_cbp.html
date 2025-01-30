@@ -48,7 +48,7 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">step_slug_cbp</span><span class="op">(</span></span>
 <span>  <span class="va">.rec</span>,</span>
-<span>  <span class="va">times</span>,</span>
+<span>  <span class="va">time</span>,</span>
 <span>  radius <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  radius_casing <span class="op">=</span> <span class="fl">0.15</span>,</span>
 <span>  radius_well <span class="op">=</span> <span class="fl">0.15</span>,</span>
@@ -68,6 +68,10 @@
 
 <dl><dt id="arg--rec">.rec<a class="anchor" aria-label="anchor" href="#arg--rec"></a></dt>
 <dd><p>the R6 recipe object.</p></dd>
+
+
+<dt id="arg-time">time<a class="anchor" aria-label="anchor" href="#arg-time"></a></dt>
+<dd><p>the time for evaluation (t)</p></dd>
 
 
 <dt id="arg-radius">radius<a class="anchor" aria-label="anchor" href="#arg-radius"></a></dt>
@@ -131,7 +135,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">frec1</span> <span class="op">=</span> <span class="fu"><a href="recipe.html">recipe</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">step_slug_cbp</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    times <span class="op">=</span> <span class="va">x</span>,</span></span>
+<span class="r-in"><span>    time <span class="op">=</span> <span class="va">x</span>,</span></span>
 <span class="r-in"><span>    radius <span class="op">=</span> <span class="fl">1.0</span>,</span></span>
 <span class="r-in"><span>    radius_casing <span class="op">=</span> <span class="fl">1.0</span>,</span></span>
 <span class="r-in"><span>    radius_well <span class="op">=</span> <span class="fl">1.0</span>,</span></span>

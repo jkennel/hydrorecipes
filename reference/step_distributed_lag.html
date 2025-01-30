@@ -53,7 +53,7 @@
 <span>  <span class="va">.rec</span>,</span>
 <span>  <span class="va">terms</span>,</span>
 <span>  n_lag <span class="op">=</span> <span class="fl">12L</span>,</span>
-<span>  max_lag <span class="op">=</span> <span class="fl">86400L</span>,</span>
+<span>  lag_max <span class="op">=</span> <span class="fl">86400L</span>,</span>
 <span>  knots <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
 <span>  basis_matrix <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
 <span>  intercept <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -75,6 +75,26 @@
 function.  terms replaces the `...` of the recipes package but requires
 variables to be included within `c()`.  For example to include variables x
 and y you would write `c(x,y)` in the hydrorecipes package.</p></dd>
+
+
+<dt id="arg-n-lag">n_lag<a class="anchor" aria-label="anchor" href="#arg-n-lag"></a></dt>
+<dd><p>number of lags to calculate (enter either lag_max and n_lag or knots)</p></dd>
+
+
+<dt id="arg-lag-max">lag_max<a class="anchor" aria-label="anchor" href="#arg-lag-max"></a></dt>
+<dd><p>maximum lag to calculate (enter either lag_max and n_lag or knots)</p></dd>
+
+
+<dt id="arg-knots">knots<a class="anchor" aria-label="anchor" href="#arg-knots"></a></dt>
+<dd><p>specify the knot locations</p></dd>
+
+
+<dt id="arg-basis-matrix">basis_matrix<a class="anchor" aria-label="anchor" href="#arg-basis-matrix"></a></dt>
+<dd><p>user specified basis_matrix</p></dd>
+
+
+<dt id="arg-intercept">intercept<a class="anchor" aria-label="anchor" href="#arg-intercept"></a></dt>
+<dd><p>include intercept in basis matrix</p></dd>
 
 
 <dt id="arg-role">role<a class="anchor" aria-label="anchor" href="#arg-role"></a></dt>

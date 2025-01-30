@@ -57,7 +57,7 @@
 <span>  azimuth <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  gravity <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  earth_radius <span class="op">=</span> <span class="fl">6378136.3</span>,</span>
-<span>  earth_eccentricity <span class="op">=</span> <span class="fl">0.0066943979514</span>,</span>
+<span>  earth_eccen <span class="op">=</span> <span class="fl">0.0066943979514</span>,</span>
 <span>  cutoff <span class="op">=</span> <span class="fl">1e-06</span>,</span>
 <span>  catalog <span class="op">=</span> <span class="st">"ksm04"</span>,</span>
 <span>  eop <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -124,6 +124,11 @@ estimate gravity from elevation and latitude.</p></dd>
 <dd><p>Radius of earth (m) (numeric) defaults to 6378136.3</p></dd>
 
 
+<dt id="arg-earth-eccen">earth_eccen<a class="anchor" aria-label="anchor" href="#arg-earth-eccen"></a></dt>
+<dd><p>Eccentricity of earth (numeric)
+defaults to 6.69439795140e-3</p></dd>
+
+
 <dt id="arg-cutoff">cutoff<a class="anchor" aria-label="anchor" href="#arg-cutoff"></a></dt>
 <dd><p>Cutoff amplitude for constituents (numeric)
 defaults to 1e-6.</p></dd>
@@ -171,7 +176,9 @@ may be faster while being more accurate than adjusting the cutoff.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">kennel_2020</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">kennel_2020</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">latitude</span>     <span class="op">&lt;-</span> <span class="fl">34.23411</span>                           <span class="co"># latitude</span></span></span>
 <span class="r-in"><span><span class="va">longitude</span>    <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">118.678</span>                           <span class="co"># longitude</span></span></span>
 <span class="r-in"><span><span class="va">elevation</span>    <span class="op">&lt;-</span> <span class="fl">500</span>                                <span class="co"># elevation</span></span></span>
@@ -180,8 +187,8 @@ may be faster while being more accurate than adjusting the cutoff.</p></dd>
 <span class="r-in"><span><span class="va">astro_update</span> <span class="op">&lt;-</span> <span class="fl">300</span>                                <span class="co"># how often to update astro parameters</span></span></span>
 <span class="r-in"><span><span class="va">method</span>       <span class="op">&lt;-</span> <span class="st">'volume_strain'</span>                    <span class="co"># which potential to calculate</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">wave_groups_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="fu">earthtide</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/earthtide/man/eterna_wavegroups.html" class="external-link">eterna_wavegroups</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">wave_groups_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">wave_groups_dl</span><span class="op">[</span><span class="va">time</span> <span class="op">==</span> <span class="st">'1 month'</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">wave_groups_dl</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="fu">earthtide</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/earthtide/man/eterna_wavegroups.html" class="external-link">eterna_wavegroups</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">wave_groups_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">wave_groups_dl</span><span class="op">[</span><span class="va">time</span> <span class="op">==</span> <span class="st">"1 month"</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">wave_groups_dl</span> <span class="op">&lt;-</span> <span class="va">wave_groups_dl</span><span class="op">[</span><span class="va">wave_groups_dl</span><span class="op">$</span><span class="va">start</span> <span class="op">&gt;</span> <span class="fl">0.5</span>,<span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">wave_groups_dl</span> <span class="op">&lt;-</span> <span class="va">wave_groups_dl</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">start</span>, <span class="va">end</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">ngr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">wave_groups_dl</span><span class="op">)</span></span></span>

@@ -88,6 +88,10 @@ and y you would write `c(x,y)` in the hydrorecipes package.</p></dd>
 <dd><p>window weights</p></dd>
 
 
+<dt id="arg-time-step">time_step<a class="anchor" aria-label="anchor" href="#arg-time-step"></a></dt>
+<dd><p><code>numeric</code> monitoring interval size</p></dd>
+
+
 <dt id="arg-role">role<a class="anchor" aria-label="anchor" href="#arg-role"></a></dt>
 <dd><p>character - the name of the role</p></dd>
 
@@ -109,8 +113,7 @@ and y you would write `c(x,y)` in the hydrorecipes package.</p></dd>
 <span class="r-in"><span>                  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">frec</span> <span class="op">=</span> <span class="fu"><a href="recipe.html">recipe</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">formula</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">step_fft_welch</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span>, length_subset <span class="op">=</span> <span class="fl">10</span>, window <span class="op">=</span> <span class="fu">window_rectangle</span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in window_rectangle(10):</span> could not find function "window_rectangle"</span>
+<span class="r-in"><span>  <span class="fu">step_fft_welch</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span>, length_subset <span class="op">=</span> <span class="fl">10</span>, window <span class="op">=</span> <span class="fu"><a href="window_rectangle.html">window_rectangle</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

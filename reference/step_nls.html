@@ -52,10 +52,13 @@ predictions and coefficients from a recipe.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">step_nls</span><span class="op">(</span></span>
 <span>  <span class="va">.rec</span>,</span>
 <span>  <span class="va">formula</span>,</span>
-<span>  role <span class="op">=</span> <span class="st">"predictor"</span>,</span>
 <span>  algorithm <span class="op">=</span> <span class="st">"lm"</span>,</span>
 <span>  n_subset <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>  n_shift <span class="op">=</span> <span class="fl">0L</span>,</span>
+<span>  range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>  control <span class="op">=</span> <span class="fu">gsl_nls_control</span><span class="op">(</span>xtol <span class="op">=</span> <span class="fl">1e-08</span><span class="op">)</span>,</span>
+<span>  trace <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  role <span class="op">=</span> <span class="st">"predictor"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -72,20 +75,52 @@ predictions and coefficients from a recipe.</p>
 <dd><p>formula for the regression</p></dd>
 
 
+<dt id="arg-algorithm">algorithm<a class="anchor" aria-label="anchor" href="#arg-algorithm"></a></dt>
+<dd><p>character string specifying the algorithm to use. The following choices are supported:</p><ul><li><p><code>"lm"</code> Levenberg-Marquardt algorithm (default).</p></li>
+<li><p><code>"lmaccel"</code> Levenberg-Marquardt algorithm with geodesic acceleration.
+Stability is controlled by the <code>avmax</code> parameter in <code>control</code>, setting <code>avmax</code>
+to zero is analogous to not using geodesic acceleration.</p></li>
+<li><p><code>"dogleg"</code> Powell's dogleg algorithm.</p></li>
+<li><p><code>"ddogleg"</code> Double dogleg algorithm, an improvement over <code>"dogleg"</code>
+by including information about the Gauss-Newton step while the iteration is still
+far from the minimum.</p></li>
+<li><p><code>"subspace2D"</code> 2D generalization of the dogleg algorithm. This method
+searches a larger subspace for a solution, it can converge more quickly than <code>"dogleg"</code>
+on some problems.</p></li>
+</ul></dd>
+
+
+<dt id="arg-n-subset">n_subset<a class="anchor" aria-label="anchor" href="#arg-n-subset"></a></dt>
+<dd><p>integer - spacing between adjacent samples in the result.</p></dd>
+
+
+<dt id="arg-n-shift">n_shift<a class="anchor" aria-label="anchor" href="#arg-n-shift"></a></dt>
+<dd><p>integer - number of values to shift the starting position when
+n_subset is not equal to 0. The value of n_shift has to be less than
+`n_subset`.</p></dd>
+
+
+<dt id="arg-range">range<a class="anchor" aria-label="anchor" href="#arg-range"></a></dt>
+<dd><p>limit the fitting range to observations between range[1] and range[2]</p></dd>
+
+
+<dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
+<dd><p>an optional list of control parameters to tune the least squares iterations and multistart algorithm.
+See <code><a href="https://rdrr.io/pkg/gslnls/man/gsl_nls_control.html" class="external-link">gsl_nls_control</a></code> for the available control parameters and their default values.</p></dd>
+
+
+<dt id="arg-trace">trace<a class="anchor" aria-label="anchor" href="#arg-trace"></a></dt>
+<dd><p>logical value indicating if a trace of the iteration progress should be printed.
+Default is <code>FALSE</code>. If <code>TRUE</code>, the residual (weighted) sum-of-squares and the current parameter estimates
+are printed after each iteration.</p></dd>
+
+
 <dt id="arg-role">role<a class="anchor" aria-label="anchor" href="#arg-role"></a></dt>
 <dd><p>character - the name of the role</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>additional arguments</p></dd>
-
-
-<dt id="arg-do-response">do_response<a class="anchor" aria-label="anchor" href="#arg-do-response"></a></dt>
-<dd><p><code>logical</code> calculate and return the responses?</p></dd>
-
-
-<dt id="arg-do-predict">do_predict<a class="anchor" aria-label="anchor" href="#arg-do-predict"></a></dt>
-<dd><p>calculate and return the predictions?</p></dd>
 
 </dl></div>
     <div class="section level2">
