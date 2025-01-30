@@ -6,3 +6,4 @@
 ^\.github$
 data/*Zone.Identifier
 README.qmd
+^LICENSE\.md$
