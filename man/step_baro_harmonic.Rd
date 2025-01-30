@@ -21,6 +21,8 @@ step_baro_harmonic(
 \arguments{
 \item{.rec}{the R6 recipe object.}
 
+\item{time}{name of column that holds the time information}
+
 \item{water_level}{\code{numeric vector} of the dependent variable (ie:water level)}
 
 \item{barometric_pressure}{\code{numeric vector} of the independent variable (ie:barometric pressure)}

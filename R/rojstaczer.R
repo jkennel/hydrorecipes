@@ -198,7 +198,7 @@ convert_le_to_be <- function(tf) {
 
 #' convert_for_rojstaczer
 #'
-#' @param tf
+#' @param tf the transfer function
 #'
 #' @return conjugate of tf
 #' @export
@@ -266,6 +266,8 @@ areal_rojstaczer_semiconfined <- function(frequency,
 
 
 #' @inheritParams areal_rojstaczer_semiconfined
+#' @return complex response vector in frequency domain
+#' @noRd
 #' @export
 areal_rojstaczer_unconfined <- function(frequency,
                                         radius_well,

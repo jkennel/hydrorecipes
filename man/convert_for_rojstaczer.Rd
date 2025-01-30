@@ -7,7 +7,7 @@
 convert_for_rojstaczer(tf)
 }
 \arguments{
-\item{tf}{}
+\item{tf}{the transfer function}
 }
 \value{
 conjugate of tf

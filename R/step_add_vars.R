@@ -22,7 +22,7 @@ StepAddVars <- R6Class(
 
       if ("error" %in% class(is_string)) {
         terms <- (substitute(terms))
-      } else if (!class(terms) == "character") {
+      } else if (!"character" %in% as.character(class(terms))) {
         terms <- substitute(terms)
       }
 

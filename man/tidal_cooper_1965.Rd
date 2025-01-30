@@ -37,7 +37,8 @@ tidal response
 }
 \description{
 Cooper Jr, H.H., Bredehoeft, J.D., Papadopulos, I.S. and Bennett, R.R., 1965.
-The response of well‐aquifer systems to seismic waves. Journal of Geophysical Research, 70(16), pp.3915-3926.
+The response of well‐aquifer systems to seismic waves. Journal of Geophysical
+Research, 70(16), pp.3915-3926.
 }
 \examples{
 data('hsieh_1987_fig_2_3')
@@ -46,18 +47,25 @@ transmissivity <- 1e-03
 radius_well <- 0.05
 frequency <- 10^seq(-5, 2, by = 0.1)
 tau   <- 1 / frequency
-cooper <- tidal_cooper_1965(frequency, storativity, transmissivity, thickness_aquifer = 1, height_water = 1, radius_well)
+cooper <- tidal_cooper_1965(frequency,
+                            storativity,
+                            transmissivity,
+                            thickness_aquifer = 1,
+                            height_water = 1,
+                            radius_well)
 plot(Mod(response)~dimensionless_frequency, cooper,
  type='l',
  log = 'x',
  xlim = c(1, 1000))
-points(response~dimensionless_frequency, hsieh_1987_fig_2_3[variable=='gain' & S == storativity])
+points(response~dimensionless_frequency,
+  hsieh_1987_fig_2_3[variable=='gain' & S == storativity])
 
 plot(unwrap(Arg(response)) * 180/pi~dimensionless_frequency, cooper,
  type='l',
  log = 'x',
  xlim = c(1, 1000),
  ylim = c(0, -90))
-points(response~dimensionless_frequency, hsieh_1987_fig_2_3[variable=='phase' & S == storativity])
+points(response~dimensionless_frequency,
+  hsieh_1987_fig_2_3[variable=='phase' & S == storativity])
 
 }

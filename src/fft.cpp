@@ -586,33 +586,6 @@ Eigen::MatrixXd convolve_matrix(const Eigen::VectorXd& x,
 //==============================================================================
 
 //==============================================================================
-//' @title
-//' convolve_matrix
-//'
-//' @description
-//' convolution of vector with matrix
-//'
-//' @param x vector to convolve with y (numeric vector)
-//' @param y numeric matrix to convolve with x (column by column convolution)
-//'  (numeric matrix)
-//' @param remove_partial keep the end values or fill with NA (boolean)
-//' @param reverse should x be reversed before convolution (boolean)
-//'
-//' @return numeric matrix of convolved values
-//'
-//' @export
-//'
-//'
-//' @examples
-//' a <- convolve_matrix(x = 1:100,
-//'                      y = as.matrix(1:10),
-//'                      remove_partial = FALSE,
-//'                      reverse = TRUE)
-//'
-//' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
-//'
-//' @noRd
-//'
 // [[Rcpp::export]]
 Rcpp::List convolve_list(const Eigen::VectorXd& x,
                          const Rcpp::List y,

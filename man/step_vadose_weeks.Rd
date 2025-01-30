@@ -42,15 +42,15 @@ Weeks 1979 solution
 formula <- as.formula(y~x)
 
 n <- 100
-dat <- data.frame(x = as.numeric(1:rows),
-                  y = as.numeric(1:rows))
+dat <- data.frame(x = as.numeric(1:n),
+                  y = as.numeric(1:n))
 
 frec1 = recipe(formula = formula, data = dat) |>
   step_vadose_weeks(time = x,
                     air_diffusivity = 0.8,
                     thickness = 5,
                     precision = 1e-12) |>
-  plate("dt")
+  plate()
 }
 \references{
 Weeks, E.P., 1979. Barometric fluctuations in wells tapping deep unconfined

@@ -161,7 +161,6 @@ Rcpp::NumericVector shift_subset(const Rcpp::NumericVector& x,
 //'
 //' @export
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Rcpp::List lag_list(const Rcpp::NumericVector& x,

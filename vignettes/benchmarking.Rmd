@@ -39,7 +39,7 @@ library(hydrorecipes)
 library(bench)
 library(tibble)
 library(RcppRoll) # for recipes::step_window
-
+library(splines2)
 ```
 
 ## creating a recipe

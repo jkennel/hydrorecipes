@@ -59,7 +59,7 @@ formula = formula(x~.)
 
 frec1 = recipe(formula = formula, data = dat) |>
   step_slug_cbp(
-    times = x,
+    time = x,
     radius = 1.0,
     radius_casing = 1.0,
     radius_well = 1.0,

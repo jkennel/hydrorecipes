@@ -18,12 +18,8 @@ Depends:
 Imports: 
     R6 (>= 2.3.0),
     Rcpp,
-    RcppArmadillo,
-    RcppThread,
-    RcppEigen,
     data.table,
     earthtide,
-    splines2,
     collapse,
     gslnls
 LinkingTo: Rcpp, RcppArmadillo, RcppThread, RcppEigen, splines2, BH
@@ -35,7 +31,10 @@ Suggests:
     tibble,
     knitr,
     bench,
-    plotly
+    plotly,
+    scales,
+    ggplot2,
+    splines2
 SystemRequirements: fftw3 (libfftw3-dev (deb), or fftw-devel (rpm)), C++17
 RoxygenNote: 7.3.2
 URL: https://jkennel.github.io/hydrorecipes/

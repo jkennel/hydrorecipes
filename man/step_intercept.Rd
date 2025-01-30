@@ -14,11 +14,11 @@ function.  terms replaces the `...` of the recipes package but requires
 variables to be included within `c()`.  For example to include variables x
 and y you would write `c(x,y)` in the hydrorecipes package.}
 
+\item{value}{what value to use (typically 1.0)}
+
 \item{role}{character - the name of the role}
 
 \item{...}{additional arguments}
-
-\item{intercept}{what value to use (typically 1.0)}
 }
 \value{
 an updated recipe

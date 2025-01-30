@@ -14,16 +14,14 @@
 //'
 //' @return barometric efficiency using Clark's method
 //'
-//'
 //' @export
 //'
 //' @examples
 //' n <- 1000
-//' baro <- sin(seq(0, 2*pi, length.out = 1000))
+//' baro <- sin(seq(0, 2 * pi, length.out = 1000))
 //' wl <- -0.4 * baro + rnorm(1000, sd = 0.02)
-//' be_clark_cpp(wl, baro, lag_space=1, inverse=TRUE)
+//' be_clark_cpp(wl, baro, lag_space = 1, inverse = TRUE)
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 double be_clark_cpp(arma::vec dep,

@@ -81,7 +81,7 @@ fractures
 \examples{
 formula <- as.formula(~time+z+x)
 
-dat <- setDT(expand.grid(10^(3:8),
+dat <- as.data.frame(expand.grid(10^(3:8),
                          seq(0.0, 10, 1),
                          c(0.0)))
 
@@ -91,7 +91,7 @@ frec1 = recipe(formula = formula, data = dat) |>
   step_transport_fractures_solute(time = time,
                                   distance_fracture = z,
                                   distance_matrix = x) |>
-  plate("dt")
+  plate()
 
 }
 \references{

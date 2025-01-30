@@ -192,22 +192,6 @@ std::list<Eigen::VectorXd> b_spline_list3(const arma::vec& x,
 
 
 //==============================================================================
-
-//' @title
-//' log_lags_arma
-//'
-//' @description
-//' Generate logarithmically spaced lags
-//'
-//' @param n integer number of lag terms
-//' @param lag_max integer the maximum lag
-//'
-//' @return vector of logarithmically spaced lags
-//'
-//' @export
-//'
-//' @noRd
-//'
 // [[Rcpp::export]]
 arma::vec log_lags_arma(arma::uword n, arma::uword lag_max) {
 
@@ -251,7 +235,6 @@ arma::vec log_lags_arma(arma::uword n, arma::uword lag_max) {
 //'
 //' @export
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Eigen::ArrayXd log_lags(unsigned int n, unsigned int lag_max) {

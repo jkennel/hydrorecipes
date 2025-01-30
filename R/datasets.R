@@ -5,6 +5,63 @@
 # tf <- fread('/media/kennel/Data/tmp/stockdale_mountain.csv')
 
 
+# Kruseman and de Ridder 2000 ---------------------------------------------
+#' @title
+#' kdr
+#'
+#' @description measured drawdown from kruseman and de ridder 2000 (figure 3.3).
+#' Oude Korendijk pumping test
+#'
+#' @docType data
+#'
+#' @usage data(kdr)
+#'
+#' @format data.table
+#'
+#' @keywords datasets
+#'
+#'
+#' @examples
+#' data(kdr)
+"kdr"
+
+# Hussein 2013 ---------------------------------------------
+#' @title
+#' hussein_gain
+#'
+#' @description Hussein 2013, Figure 5 gain
+#'
+#' @docType data
+#'
+#' @usage data(hussein_gain)
+#'
+#' @format data.table
+#'
+#' @keywords datasets
+#'
+#'
+#' @examples
+#' data(hussein_gain)
+"hussein_gain"
+
+#' @title
+#' hussein_phase
+#'
+#' @description Hussein 2013, Figure 5 phase
+#'
+#' @docType data
+#'
+#' @usage data(hussein_phase)
+#'
+#' @format data.table
+#'
+#' @keywords datasets
+#'
+#'
+#' @examples
+#' data(hussein_phase)
+"hussein_phase"
+
 # Kennel 2020 -------------------------------------------------------------
 #' @title
 #' kennel_2020
@@ -49,13 +106,13 @@
 
 
 #' @title
-#' bouwer_1976_abc
+#' bouwer_abc
 #'
 #' @description a, b and c values for Bouwer and Rice, 1976 solution, for testing
 #' https://pubs.usgs.gov/of/2002/ofr02197/spreadsheets/Slug_Bouwer-Rice.xls
 #' @docType data
 #'
-#' @usage data(bouwer_1976_abc)
+#' @usage data(bouwer_abc)
 #'
 #' @format data.table
 #'
@@ -63,31 +120,9 @@
 #'
 #'
 #' @examples
-#' data(bouwer_1976_abc)
-"bouwer_1976_abc"
+#' data(bouwer_abc)
+"bouwer_abc"
 
-
-#' @title
-#' bouwer_1976_water_level
-#'
-#' @description dataset for testing
-#' https://pubs.usgs.gov/of/2002/ofr02197/spreadsheets/Slug_Bouwer-Rice.xls
-#'
-#' @docType data
-#'
-#' @usage data(bouwer_1976_water_level)
-#'
-#' @format data.table
-#' \describe{
-#'   \item{datetime}{date and time}
-#'   \item{val}{depth to water in feet}
-#' }
-#' @keywords datasets
-#'
-#'
-#' @examples
-#' data(bouwer_1976_water_level)
-"bouwer_1976_water_level"
 
 
 # Rojstaczer & Riley 1990 -------------------------------------------------
@@ -152,7 +187,22 @@
 #' utils::data(rojstaczer_1990_fig_4)
 'rojstaczer_1990_fig_4'
 
-
+# Rojstaczer 1988 Fluid Flow Properties -----------------------------------
+#' @title Rojstaczer (1988a) Figure 3 Digitized
+#'
+#' @description Barometric efficiency and phase as a function of dimensionless
+#' frequency
+#'
+#' @format A \code{data.table} The columns are:
+#' \describe{
+#'  \item{\code{W}}{dimensionless frequency}
+#'  \item{\code{response}}{gain and phase of response}
+#'  \item{\code{variable}}{gain or phase}
+#' }
+#'
+#' @examples
+#' utils::data(rojstaczer_1988a_fig_3)
+'rojstaczer_1988a_fig_3'
 
 
 # Rojstaczer 1988 Fluid Flow Properties -----------------------------------
@@ -190,6 +240,23 @@
 #' utils::data(rojstaczer_1988b_fig_5)
 'rojstaczer_1988b_fig_5'
 
+
+#' @title Rojstaczer (1988b) Figure 6 Digitized
+#'
+#' @description Amplitude and phase response as a function of R_div_Q and
+#' dimesionless frequency.
+#'
+#' @format A \code{data.table} The columns are:
+#' \describe{
+#'  \item{\code{dimensionless_frequency}}{dimensionless frequency}
+#'  \item{\code{response}}{gain and phase of response}
+#'  \item{\code{R_div_Q}}{R div Q}
+#'  \item{\code{variable}}{gain or phase}
+#' }
+#'
+#' @examples
+#' utils::data(rojstaczer_1988b_fig_6)
+'rojstaczer_1988b_fig_6'
 
 # Hsieh 1987 --------------------------------------------------------------
 

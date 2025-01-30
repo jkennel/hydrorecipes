@@ -9,8 +9,7 @@ StepSubsetRows <- R6Class(
   public = list(
     # step specific variables
     row_numbers = NULL,
-    initialize = function(terms,
-                          row_numbers = 1L,
+    initialize = function(row_numbers = 1L,
                           role = "modify",
                           ...) {
       # get function parameters to pass to parent

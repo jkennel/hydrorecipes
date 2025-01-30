@@ -1,21 +1,6 @@
 #include "hydrorecipes.h"
 
 //==============================================================================
-//' @title
-//' distributed_lag_thread
-//'
-//' @description
-//' Create distributed lag terms
-//'
-//' @param x numeric vector to lag
-//' @param bl numeric matrix basis lag
-//' @param n_thread integer number of threads to use
-//'
-//' @return List of distributed lags
-//'
-//' @export
-//'
-//' @noRd
 // [[Rcpp::export]]
 Eigen::MatrixXd distributed_lag_thread(const Eigen::VectorXd& x,
                                        const Eigen::MatrixXd& bl,
@@ -59,22 +44,6 @@ Eigen::VectorXd convolve_eigen(const Eigen::VectorXd& x,
 }
 
 
-//==============================================================================
-//' @title
-//' distributed_lag_eigen
-//'
-//' @description
-//' Create distributed lag terms
-//'
-//' @param x numeric vector to lag
-//' @param bl numeric matrix basis lag
-//'
-//' @return List of distributed lags
-//'
-//' @export
-//'
-//' @noRd
-//'
 // [[Rcpp::export]]
 Rcpp::List distributed_lag_eigen(Eigen::Map<Eigen::VectorXd> x,
                                  Eigen::Map<Eigen::MatrixXd> bl) {
@@ -133,27 +102,6 @@ Rcpp::List distributed_lag_eigen(Eigen::Map<Eigen::VectorXd> x,
 
 
 
-//==============================================================================
-//' @title
-//' distributed_lag_thread_eigen
-//'
-//' @description
-//' Create distributed lag terms
-//'
-//' @param x numeric vector to lag
-//' @param bl numeric matrix basis lag
-//' @param lag_max integer maximum lag
-//' @param n_subset take every n_subset rows
-//' @param n_shift shift values from starting on first row.  Should be less than
-//'  n_subset
-//' @param n_thread integer number of threads to use
-//'
-//' @return List of distributed lags
-//'
-//' @export
-//'
-//' @noRd
-//'
 // [[Rcpp::export]]
 List distributed_lag_thread_eigen(Eigen::Map<Eigen::VectorXd> x,
                                   Eigen::Map<Eigen::MatrixXd> bl,
@@ -249,7 +197,6 @@ List distributed_lag_thread_eigen(Eigen::Map<Eigen::VectorXd> x,
 //'
 //' @export
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Rcpp::List distributed_lag_list(Eigen::Map<Eigen::VectorXd> x,

@@ -26,14 +26,15 @@ estimates the coherence between terms.
 }
 \examples{
 
-dat <- data.frame(x = rnorm(200),
-                  y = rnorm(200),
-                  z = rnorm(200))
+data(kennel_2020)
 
-formula <- as.formula(.~x+y)
-frec = recipe(formula = formula, data = dat) |>
-  step_fft_pgram(c(x, y,z)) |>
+form <- as.formula("wl~.")
+
+formula <- as.formula(wl~baro + et)
+frec = recipe(formula = formula, data = kennel_2020) |>
+  step_fft_pgram(c(wl, baro, et), spans = 7) |>
   step_fft_coherence() |>
-  plate("df")
+  prep() |>
+  bake()
 
 }

@@ -76,7 +76,6 @@ double weeks_1979(const double lag,
 //'                        precision = 1e-10,
 //'                        inverse = FALSE)
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Rcpp::List vadose_response(std::vector<double> time,

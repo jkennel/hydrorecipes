@@ -4,15 +4,10 @@
 \alias{step_subset_rows}
 \title{step_subset_rows}
 \usage{
-step_subset_rows(.rec, terms, row_numbers, role = "modify", ...)
+step_subset_rows(.rec, row_numbers, role = "modify", ...)
 }
 \arguments{
 \item{.rec}{the R6 recipe object.}
-
-\item{terms}{the unquoted names of the variables to use or a selector
-function.  terms replaces the `...` of the recipes package but requires
-variables to be included within `c()`.  For example to include variables x
-and y you would write `c(x,y)` in the hydrorecipes package.}
 
 \item{row_numbers}{integer vector of row numbers to keep.}
 
@@ -28,12 +23,11 @@ selects rows from output.
 }
 \examples{
 
-dat <- data.frame(x = as.numeric(1:200),
-y = rnorm(200))
+dat <- data.frame(x = as.numeric(1:200), y = rnorm(200))
 formula <- as.formula(y~x)
 
 frec1 = recipe(formula = formula, data = dat) |>
-  step_subset_rows(y, row_numbers = c(1, 5, 10)) |>
+  step_subset_rows(row_numbers = c(1, 5, 10)) |>
   plate("dt")
 
 }

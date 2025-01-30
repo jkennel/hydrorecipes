@@ -5,3 +5,4 @@
 ^pkgdown$
 ^\.github$
 data/*Zone.Identifier
+README.qmd

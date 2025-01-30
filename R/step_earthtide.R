@@ -71,7 +71,7 @@ StepEarthtide <- R6Class(
       self$azimuth <- azimuth
       self$gravity <- gravity
       self$earth_radius <- earth_radius
-      self$earth_eccentricity <- earth_eccentricity
+      self$earth_eccen <- earth_eccen
       self$cutoff <- cutoff
       self$wave_groups <- wave_groups
       self$catalog <- catalog
@@ -117,7 +117,7 @@ StepEarthtide <- R6Class(
         azimuth = self$azimuth,
         gravity = self$gravity,
         earth_radius = self$earth_radius,
-        earth_eccentricity = self$earth_eccentricity,
+        earth_eccen = self$earth_eccen,
         cutoff = self$cutoff,
         wave_groups = self$wave_groups,
         catalog = self$catalog,

@@ -199,17 +199,15 @@ get_types <- function(data) {
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
 # get column names
 get_terms <- function(x) {
   vapply(x,
-         FUN = rlang::as_name,
+         # FUN = rlang::as_name,
+         FUN = as.symbol,
          FUN.VALUE = character(1L),
          USE.NAMES = FALSE)
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
 
 get_function_arguments <- function() {
   as.list(sys.frame(which = -1L))

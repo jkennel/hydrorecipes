@@ -50,21 +50,6 @@ b_spline_list3 <- function(x, df, degree, internal_knots, boundary_knots, comple
     .Call(`_hydrorecipes_b_spline_list3`, x, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
 }
 
-#' @title
-#' log_lags_arma
-#'
-#' @description
-#' Generate logarithmically spaced lags
-#'
-#' @param n integer number of lag terms
-#' @param lag_max integer the maximum lag
-#'
-#' @return vector of logarithmically spaced lags
-#'
-#' @export
-#'
-#' @noRd
-#'
 log_lags_arma <- function(n, lag_max) {
     .Call(`_hydrorecipes_log_lags_arma`, n, lag_max)
 }
@@ -82,7 +67,6 @@ log_lags_arma <- function(n, lag_max) {
 #'
 #' @export
 #'
-#' @noRd
 #'
 log_lags <- function(n, lag_max) {
     .Call(`_hydrorecipes_log_lags`, n, lag_max)
@@ -101,16 +85,14 @@ log_lags <- function(n, lag_max) {
 #'
 #' @return barometric efficiency using Clark's method
 #'
-#'
 #' @export
 #'
 #' @examples
 #' n <- 1000
-#' baro <- sin(seq(0, 2*pi, length.out = 1000))
+#' baro <- sin(seq(0, 2 * pi, length.out = 1000))
 #' wl <- -0.4 * baro + rnorm(1000, sd = 0.02)
-#' be_clark_cpp(wl, baro, lag_space=1, inverse=TRUE)
+#' be_clark_cpp(wl, baro, lag_space = 1, inverse = TRUE)
 #'
-#' @noRd
 #'
 be_clark_cpp <- function(dep, ind, lag_space, inverse) {
     .Call(`_hydrorecipes_be_clark_cpp`, dep, ind, lag_space, inverse)
@@ -205,21 +187,6 @@ be_dft <- function(x, frequency) {
     .Call(`_hydrorecipes_be_dft`, x, frequency)
 }
 
-#' @title
-#' distributed_lag_thread
-#'
-#' @description
-#' Create distributed lag terms
-#'
-#' @param x numeric vector to lag
-#' @param bl numeric matrix basis lag
-#' @param n_thread integer number of threads to use
-#'
-#' @return List of distributed lags
-#'
-#' @export
-#'
-#' @noRd
 distributed_lag_thread <- function(x, bl, n_thread) {
     .Call(`_hydrorecipes_distributed_lag_thread`, x, bl, n_thread)
 }
@@ -228,45 +195,10 @@ convolve_eigen <- function(x, y) {
     .Call(`_hydrorecipes_convolve_eigen`, x, y)
 }
 
-#' @title
-#' distributed_lag_eigen
-#'
-#' @description
-#' Create distributed lag terms
-#'
-#' @param x numeric vector to lag
-#' @param bl numeric matrix basis lag
-#'
-#' @return List of distributed lags
-#'
-#' @export
-#'
-#' @noRd
-#'
 distributed_lag_eigen <- function(x, bl) {
     .Call(`_hydrorecipes_distributed_lag_eigen`, x, bl)
 }
 
-#' @title
-#' distributed_lag_thread_eigen
-#'
-#' @description
-#' Create distributed lag terms
-#'
-#' @param x numeric vector to lag
-#' @param bl numeric matrix basis lag
-#' @param lag_max integer maximum lag
-#' @param n_subset take every n_subset rows
-#' @param n_shift shift values from starting on first row.  Should be less than
-#'  n_subset
-#' @param n_thread integer number of threads to use
-#'
-#' @return List of distributed lags
-#'
-#' @export
-#'
-#' @noRd
-#'
 distributed_lag_thread_eigen <- function(x, bl, lag_max, n_subset, n_shift, n_thread) {
     .Call(`_hydrorecipes_distributed_lag_thread_eigen`, x, bl, lag_max, n_subset, n_shift, n_thread)
 }
@@ -289,7 +221,6 @@ distributed_lag_thread_eigen <- function(x, bl, lag_max, n_subset, n_shift, n_th
 #'
 #' @export
 #'
-#' @noRd
 #'
 distributed_lag_list <- function(x, n_lag, lag_max, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral) {
     .Call(`_hydrorecipes_distributed_lag_list`, x, n_lag, lag_max, df, degree, internal_knots, boundary_knots, complete_basis, periodic, derivs, integral)
@@ -502,33 +433,6 @@ convolve_matrix <- function(x, y, remove_partial, reverse) {
     .Call(`_hydrorecipes_convolve_matrix`, x, y, remove_partial, reverse)
 }
 
-#' @title
-#' convolve_matrix
-#'
-#' @description
-#' convolution of vector with matrix
-#'
-#' @param x vector to convolve with y (numeric vector)
-#' @param y numeric matrix to convolve with x (column by column convolution)
-#'  (numeric matrix)
-#' @param remove_partial keep the end values or fill with NA (boolean)
-#' @param reverse should x be reversed before convolution (boolean)
-#'
-#' @return numeric matrix of convolved values
-#'
-#' @export
-#'
-#'
-#' @examples
-#' a <- convolve_matrix(x = 1:100,
-#'                      y = as.matrix(1:10),
-#'                      remove_partial = FALSE,
-#'                      reverse = TRUE)
-#'
-#' b <- stats::convolve(1:100, rev(1:10), type = 'filter')
-#'
-#' @noRd
-#'
 convolve_list <- function(x, y, remove_partial, reverse) {
     .Call(`_hydrorecipes_convolve_list`, x, y, remove_partial, reverse)
 }
@@ -761,7 +665,6 @@ transfer_welch <- function(x, length_subset, overlap, window) {
 #'
 #' @return window of length n.
 #'
-#' @noRd
 #'
 window_hann <- function(n) {
     .Call(`_hydrorecipes_window_hann`, n)
@@ -778,7 +681,6 @@ window_hann <- function(n) {
 #'
 #' @return window of length n.
 #'
-#' @noRd
 #'
 window_tukey <- function(n, r) {
     .Call(`_hydrorecipes_window_tukey`, n, r)
@@ -794,7 +696,6 @@ window_tukey <- function(n, r) {
 #'
 #' @return window of length n.
 #'
-#' @noRd
 #'
 window_hann_cplx <- function(n) {
     .Call(`_hydrorecipes_window_hann_cplx`, n)
@@ -810,7 +711,7 @@ window_hann_cplx <- function(n) {
 #'
 #' @return window of length n.
 #'
-#' @noRd
+#' @export
 #'
 window_rectangle <- function(n) {
     .Call(`_hydrorecipes_window_rectangle`, n)
@@ -837,7 +738,6 @@ window_rectangle <- function(n) {
 #' # nuttall window
 #' window_first_deriv(100, 0.355768, 0.487396, 0.144232, 0.012604)
 #'
-#' @noRd
 #'
 window_first_deriv <- function(n, a0, a1, a2, a3) {
     .Call(`_hydrorecipes_window_first_deriv`, n, a0, a1, a2, a3)
@@ -858,7 +758,6 @@ window_first_deriv <- function(n, a0, a1, a2, a3) {
 #' @examples
 #' window_nuttall(100)
 #'
-#' @noRd
 #'
 window_nuttall <- function(n) {
     .Call(`_hydrorecipes_window_nuttall`, n)
@@ -879,7 +778,6 @@ window_nuttall <- function(n) {
 #' @examples
 #' window_blackman_nuttall(100)
 #'
-#' @noRd
 #'
 window_blackman_nuttall <- function(n) {
     .Call(`_hydrorecipes_window_blackman_nuttall`, n)
@@ -900,7 +798,6 @@ window_blackman_nuttall <- function(n) {
 #' @examples
 #' window_blackman_harris(100)
 #'
-#' @noRd
 #'
 window_blackman_harris <- function(n) {
     .Call(`_hydrorecipes_window_blackman_harris`, n)
@@ -918,7 +815,6 @@ window_blackman_harris <- function(n) {
 #'
 #' @return window of length n.
 #'
-#' @noRd
 #'
 window_scale <- function(window, n_new, n_fft) {
     .Call(`_hydrorecipes_window_scale`, window, n_new, n_fft)
@@ -1795,7 +1691,6 @@ shift_subset <- function(x, lag, n_subset, n_shift) {
 #'
 #' @export
 #'
-#' @noRd
 #'
 lag_list <- function(x, lags, n_subset, n_shift) {
     .Call(`_hydrorecipes_lag_list`, x, lags, n_subset, n_shift)
@@ -1913,39 +1808,10 @@ to_dummy_list_base <- function(x, n_fact) {
     .Call(`_hydrorecipes_to_dummy_list_base`, x, n_fact)
 }
 
-#' @title
-#' to_dummy
-#'
-#' @description
-#' Create binary terms based on a factor column.
-#'
-#' @param ind integer vector of values to dummy encode
-#'
-#' @return List of dummy encoded terms
-#'
-#' @export
-#'
-#' @noRd
-#'
 to_dummy <- function(ind, one_hot) {
     .Call(`_hydrorecipes_to_dummy`, ind, one_hot)
 }
 
-#' @title
-#' to_dummy_list
-#'
-#' @description
-#' Create binary terms based on intervals. This function uses `findInterval`,
-#' followed by a conversion to dummy encoding.
-#'
-#' @inheritParams base::findInterval
-#'
-#' @return List of dummy encoded terms
-#'
-#' @export
-#'
-#' @noRd
-#'
 to_dummy_list <- function(x, vec, one_hot = FALSE, rightmost_closed = FALSE, all_inside = FALSE, left_open = FALSE) {
     .Call(`_hydrorecipes_to_dummy_list`, x, vec, one_hot, rightmost_closed, all_inside, left_open)
 }
@@ -1978,7 +1844,6 @@ weeks_1979 <- function(lag, D, L, precision, inverse) {
 #'                        precision = 1e-10,
 #'                        inverse = FALSE)
 #'
-#' @noRd
 #'
 vadose_response <- function(time, air_diffusivity, thickness, precision, inverse) {
     .Call(`_hydrorecipes_vadose_response`, time, air_diffusivity, thickness, precision, inverse)

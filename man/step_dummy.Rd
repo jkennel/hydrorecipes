@@ -39,7 +39,7 @@ an updated recipe
 dummy encode a factor or factor like variable.
 }
 \examples{
-dat <- data.frame(x = qF(sample(1:10, 100, replace = TRUE)),
+dat <- data.frame(x = factor(sample(1:10, 100, replace = TRUE)),
                   y = rnorm(100))
 
 rec <- recipe(y~x, data = dat) |>

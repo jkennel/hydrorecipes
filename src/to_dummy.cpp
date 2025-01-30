@@ -35,22 +35,6 @@ Rcpp::IntegerVector to_dummy_list_base(const Rcpp::IntegerVector& x,
   return z;
 }
 
-
-//==============================================================================
-//' @title
-//' to_dummy
-//'
-//' @description
-//' Create binary terms based on a factor column.
-//'
-//' @param ind integer vector of values to dummy encode
-//'
-//' @return List of dummy encoded terms
-//'
-//' @export
-//'
-//' @noRd
-//'
 // [[Rcpp::export]]
 List to_dummy(const IntegerVector& ind, const bool one_hot) {
 
@@ -71,22 +55,6 @@ List to_dummy(const IntegerVector& ind, const bool one_hot) {
 
 }
 
-//==============================================================================
-//' @title
-//' to_dummy_list
-//'
-//' @description
-//' Create binary terms based on intervals. This function uses `findInterval`,
-//' followed by a conversion to dummy encoding.
-//'
-//' @inheritParams base::findInterval
-//'
-//' @return List of dummy encoded terms
-//'
-//' @export
-//'
-//' @noRd
-//'
 // [[Rcpp::export]]
 List to_dummy_list(const NumericVector& x,
                    const NumericVector& vec,

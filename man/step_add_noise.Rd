@@ -39,6 +39,7 @@ add noise to a variable
 Add noise.
 }
 \examples{
+dat <- data.frame(x = rnorm(100), y = rnorm(100))
 rec <- recipe(y~x, data = dat) |>
        step_add_noise(x) |> plate()
 

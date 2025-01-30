@@ -57,6 +57,6 @@ dat <- data.frame(x = rnorm(rows),
                   g = rnorm(rows))
 
 rec  = recipe(formula = formula, data = dat) |>
-  step_pca(all_numeric()) |>
+  step_pca(c(x,a,b,d,e,f,g)) |>
   plate()
 }

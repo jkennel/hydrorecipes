@@ -34,5 +34,5 @@ dat <- data.frame(x = rep(1, rows),
 
 frec = recipe(formula = formula, data = dat) |>
   step_varying(c(x, y, z)) |>
-  plate("tbl")
+  plate()
 }

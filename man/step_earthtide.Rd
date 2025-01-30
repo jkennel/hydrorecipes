@@ -90,6 +90,8 @@ an updated recipe
 Generate synthetic Earth tide waves and wave groups.
 }
 \examples{
+library(data.table)
+
 data(kennel_2020)
 latitude     <- 34.23411                           # latitude
 longitude    <- -118.678                           # longitude
@@ -99,8 +101,8 @@ catalog      <- 'ksm04'                            # hartmann wenzel catalog
 astro_update <- 300                                # how often to update astro parameters
 method       <- 'volume_strain'                    # which potential to calculate
 
-wave_groups_dl <- as.data.table(earthtide::eterna_wavegroups)
-wave_groups_dl <- na.omit(wave_groups_dl[time == '1 month'])
+wave_groups_dl <- data.table::as.data.table(earthtide::eterna_wavegroups)
+wave_groups_dl <- na.omit(wave_groups_dl[time == "1 month"])
 wave_groups_dl <- wave_groups_dl[wave_groups_dl$start > 0.5,]
 wave_groups_dl <- wave_groups_dl[, list(start, end)]
 ngr <- nrow(wave_groups_dl)

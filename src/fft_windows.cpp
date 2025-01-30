@@ -11,7 +11,6 @@
 //'
 //' @return window of length n.
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Eigen::VectorXd window_hann(size_t n) {
@@ -53,7 +52,6 @@ Eigen::VectorXd window_hann(size_t n) {
 //'
 //' @return window of length n.
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Eigen::VectorXd window_tukey(size_t n, double r) {
@@ -100,7 +98,6 @@ Eigen::VectorXd window_tukey(size_t n, double r) {
 //'
 //' @return window of length n.
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Eigen::VectorXcd window_hann_cplx(size_t n) {
@@ -130,7 +127,7 @@ Eigen::VectorXcd window_hann_cplx(size_t n) {
 //'
 //' @return window of length n.
 //'
-//' @noRd
+//' @export
 //'
 // [[Rcpp::export]]
 Eigen::VectorXd window_rectangle(size_t n) {
@@ -164,7 +161,6 @@ Eigen::VectorXd window_rectangle(size_t n) {
 //' # nuttall window
 //' window_first_deriv(100, 0.355768, 0.487396, 0.144232, 0.012604)
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Eigen::ArrayXd window_first_deriv(size_t n,
@@ -197,7 +193,6 @@ Eigen::ArrayXd window_first_deriv(size_t n,
 //' @examples
 //' window_nuttall(100)
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Eigen::ArrayXd window_nuttall(size_t n) {
@@ -228,7 +223,6 @@ Eigen::ArrayXd window_nuttall(size_t n) {
 //' @examples
 //' window_blackman_nuttall(100)
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Eigen::ArrayXd window_blackman_nuttall(size_t n) {
@@ -258,7 +252,6 @@ Eigen::ArrayXd window_blackman_nuttall(size_t n) {
 //' @examples
 //' window_blackman_harris(100)
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 Eigen::ArrayXd window_blackman_harris(size_t n) {
@@ -285,7 +278,6 @@ Eigen::ArrayXd window_blackman_harris(size_t n) {
 //'
 //' @return window of length n.
 //'
-//' @noRd
 //'
 // [[Rcpp::export]]
 double window_scale(Eigen::VectorXd window,

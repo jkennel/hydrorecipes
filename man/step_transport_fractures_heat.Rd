@@ -75,10 +75,9 @@ an updated recipe
 Sudicky and Frind 1982 solution adapted for heat. Two parallel fractures.
 }
 \examples{
-
 formula <- as.formula(~time+z+x)
 
-dat <- setDT(expand.grid(10^(3:8),
+dat <- as.data.frame(expand.grid(10^(3:8),
                          seq(0.0, 100, 1),
                          c(0.0, 0.05)))
 
@@ -89,7 +88,7 @@ frec1 = recipe(formula = formula, data = dat) |>
   step_transport_fractures_heat(time = time,
                                 distance_fracture = z,
                                 distance_matrix = x) |>
-  plate("dt")
+  plate()
 
 }
 \seealso{

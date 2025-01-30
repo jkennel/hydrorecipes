@@ -23,6 +23,7 @@
 #' @importFrom collapse missing_cases varying rowbind
 #' @importFrom collapse qDF qM qF qTBL mctl %!in% "%iin%" "%!iin%"
 #' @importFrom collapse pivot
+#' @importFrom collapse "%r*%" "%r-%"
 #'
 #' @importFrom earthtide calc_earthtide
 #' @importFrom R6 R6Class
@@ -41,6 +42,7 @@
 #' @importFrom R6 R6Class
 #'
 #' @importFrom gslnls gsl_nls
+#' @importFrom gslnls gsl_nls_control
 #'
 #' @importFrom data.table rleid
 #' @importFrom data.table data.table
@@ -48,8 +50,6 @@
 #' @importFrom data.table setDT
 #' @importFrom data.table ":="
 #' @importFrom data.table setnames
-#'
-#' @importFrom rlang as_name
 #'
 #' @useDynLib hydrorecipes, .registration = TRUE
 #'
@@ -81,6 +81,7 @@ recipe <- function(formula, data, ...) {
 #' @export
 #'
 #' @examples
+#' dat <- data.frame(x = rnorm(100), y = rnorm(100))
 #' rec <- recipe(y~x, data = dat) |>
 #'        step_add_noise(x) |> plate()
 #'
@@ -739,7 +740,7 @@ step_baro_frequency_unconfined <- function(.rec,
 #'
 #' least_squares <- recipe(wl~., kennel_2020) |>
 #'   step_baro_least_squares(wl, baro) |> # 1 minutes (every minute differences)
-#'   step_baro_least_squares(wl, baro, lag_space = 1440, differences = TRUE) |> # 1440 minutes (daily differences)
+#'   step_baro_least_squares(wl, baro, lag_space = 1440, differences = TRUE) |>
 #'   prep() |>
 #'   bake()
 #'
@@ -772,6 +773,7 @@ step_baro_least_squares <- function(.rec,
 #' @inheritParams step_harmonic
 #' @inheritParams step_baro_clark
 #'
+#' @param time name of column that holds the time information
 #' @param earth_tide \code{variable} unquoted Earth tide column name
 #'
 #' @return \code{double} barometric efficiency using different methods
@@ -1167,7 +1169,7 @@ step_drop_columns <- function(.rec,
 #' @export
 #'
 #' @examples
-#' dat <- data.frame(x = qF(sample(1:10, 100, replace = TRUE)),
+#' dat <- data.frame(x = factor(sample(1:10, 100, replace = TRUE)),
 #'                   y = rnorm(100))
 #'
 #' rec <- recipe(y~x, data = dat) |>
@@ -1202,6 +1204,8 @@ step_dummy <- function(.rec,
 #' @export
 #'
 #' @examples
+#' library(data.table)
+#'
 #' data(kennel_2020)
 #' latitude     <- 34.23411                           # latitude
 #' longitude    <- -118.678                           # longitude
@@ -1211,8 +1215,8 @@ step_dummy <- function(.rec,
 #' astro_update <- 300                                # how often to update astro parameters
 #' method       <- 'volume_strain'                    # which potential to calculate
 #'
-#' wave_groups_dl <- as.data.table(earthtide::eterna_wavegroups)
-#' wave_groups_dl <- na.omit(wave_groups_dl[time == '1 month'])
+#' wave_groups_dl <- data.table::as.data.table(earthtide::eterna_wavegroups)
+#' wave_groups_dl <- na.omit(wave_groups_dl[time == "1 month"])
 #' wave_groups_dl <- wave_groups_dl[wave_groups_dl$start > 0.5,]
 #' wave_groups_dl <- wave_groups_dl[, list(start, end)]
 #' ngr <- nrow(wave_groups_dl)
@@ -1264,15 +1268,16 @@ step_earthtide <- function(.rec,
 #'
 #' @examples
 #'
-#' dat <- data.frame(x = rnorm(200),
-#'                   y = rnorm(200),
-#'                   z = rnorm(200))
+#' data(kennel_2020)
 #'
-#' formula <- as.formula(.~x+y)
-#' frec = recipe(formula = formula, data = dat) |>
-#'   step_fft_pgram(c(x, y,z)) |>
+#' form <- as.formula("wl~.")
+#'
+#' formula <- as.formula(wl~baro + et)
+#' frec = recipe(formula = formula, data = kennel_2020) |>
+#'   step_fft_pgram(c(wl, baro, et), spans = 7) |>
 #'   step_fft_coherence() |>
-#'   plate("df")
+#'   prep() |>
+#'   bake()
 #'
 step_fft_coherence <- function(.rec,
                                terms,
@@ -1569,7 +1574,8 @@ step_harmonic <- function(.rec,
 #'   Add an intercept term
 #'
 #' @inheritParams step_scale
-#' @param intercept what value to use (typically 1.0)
+#'
+#' @param value what value to use (typically 1.0)
 #'
 #' @return an updated recipe
 #' @export
@@ -1893,7 +1899,7 @@ step_nls <- function(.rec,
 #'                   g = rnorm(rows))
 #'
 #' rec  = recipe(formula = formula, data = dat) |>
-#'   step_pca(all_numeric()) |>
+#'   step_pca(c(x,a,b,d,e,f,g)) |>
 #'   plate()
 step_pca <- function(.rec,
                      terms,
@@ -1987,7 +1993,7 @@ step_scale <- function(.rec,
 #'
 #' frec1 = recipe(formula = formula, data = dat) |>
 #'   step_slug_cbp(
-#'     times = x,
+#'     time = x,
 #'     radius = 1.0,
 #'     radius_casing = 1.0,
 #'     radius_well = 1.0,
@@ -2010,7 +2016,7 @@ step_slug_cbp <- function(.rec,
                           n_terms = 16,
                           role = "predictor",
                           ...) {
-  times <- substitute(times)
+  time <- substitute(time)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepSlugCbp$new,
                         modifyList(x = env_list, val = list(...))))
@@ -2143,20 +2149,17 @@ step_subset_na_omit <- function(.rec,
 #'
 #' @examples
 #'
-#' dat <- data.frame(x = as.numeric(1:200),
-#' y = rnorm(200))
+#' dat <- data.frame(x = as.numeric(1:200), y = rnorm(200))
 #' formula <- as.formula(y~x)
 #'
 #' frec1 = recipe(formula = formula, data = dat) |>
-#'   step_subset_rows(y, row_numbers = c(1, 5, 10)) |>
+#'   step_subset_rows(row_numbers = c(1, 5, 10)) |>
 #'   plate("dt")
 #'
 step_subset_rows <- function(.rec,
-                             terms,
                              row_numbers,
                              role = "modify",
                              ...) {
-  terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
   .rec$add_step(do.call(StepSubsetRows$new,
                         modifyList(x = env_list, val = list(...))))
@@ -2218,10 +2221,9 @@ step_subset_sample <- function(.rec,
 #' @export
 #'
 #' @examples
-#'
 #' formula <- as.formula(~time+z+x)
 #'
-#' dat <- setDT(expand.grid(10^(3:8),
+#' dat <- as.data.frame(expand.grid(10^(3:8),
 #'                          seq(0.0, 100, 1),
 #'                          c(0.0, 0.05)))
 #'
@@ -2232,7 +2234,7 @@ step_subset_sample <- function(.rec,
 #'   step_transport_fractures_heat(time = time,
 #'                                 distance_fracture = z,
 #'                                 distance_matrix = x) |>
-#'   plate("dt")
+#'   plate()
 #'
 step_transport_fractures_heat <- function(.rec,
                                           time,
@@ -2303,7 +2305,7 @@ step_transport_fractures_heat <- function(.rec,
 #' @examples
 #' formula <- as.formula(~time+z+x)
 #'
-#' dat <- setDT(expand.grid(10^(3:8),
+#' dat <- as.data.frame(expand.grid(10^(3:8),
 #'                          seq(0.0, 10, 1),
 #'                          c(0.0)))
 #'
@@ -2313,7 +2315,7 @@ step_transport_fractures_heat <- function(.rec,
 #'   step_transport_fractures_solute(time = time,
 #'                                   distance_fracture = z,
 #'                                   distance_matrix = x) |>
-#'   plate("dt")
+#'   plate()
 #'
 step_transport_fractures_solute <- function(.rec,
                                             time,
@@ -2441,15 +2443,15 @@ step_transport_ogata_banks <- function(.rec,
 #' formula <- as.formula(y~x)
 #'
 #' n <- 100
-#' dat <- data.frame(x = as.numeric(1:rows),
-#'                   y = as.numeric(1:rows))
+#' dat <- data.frame(x = as.numeric(1:n),
+#'                   y = as.numeric(1:n))
 #'
 #' frec1 = recipe(formula = formula, data = dat) |>
 #'   step_vadose_weeks(time = x,
 #'                     air_diffusivity = 0.8,
 #'                     thickness = 5,
 #'                     precision = 1e-12) |>
-#'   plate("dt")
+#'   plate()
 step_vadose_weeks <- function(.rec,
                               time,
                               air_diffusivity = 0.2,
@@ -2486,7 +2488,7 @@ step_vadose_weeks <- function(.rec,
 #'
 #' frec = recipe(formula = formula, data = dat) |>
 #'   step_varying(c(x, y, z)) |>
-#'   plate("tbl")
+#'   plate()
 step_varying <- function(.rec,
                          terms,
                          role = "predictor",

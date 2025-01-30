@@ -44,7 +44,7 @@ data(kennel_2020)
 
 least_squares <- recipe(wl~., kennel_2020) |>
   step_baro_least_squares(wl, baro) |> # 1 minutes (every minute differences)
-  step_baro_least_squares(wl, baro, lag_space = 1440, differences = TRUE) |> # 1440 minutes (daily differences)
+  step_baro_least_squares(wl, baro, lag_space = 1440, differences = TRUE) |>
   prep() |>
   bake()
 
