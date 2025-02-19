@@ -99,25 +99,26 @@
 <span>  <span class="fu"><a href="../reference/plate.html">plate</a></span><span class="op">(</span><span class="st">"dt"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slug_cbp</span><span class="op">~</span><span class="va">x</span>, <span class="va">frec1</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">a_01</span><span class="op">~</span><span class="va">dat</span><span class="op">$</span><span class="va">x</span>, col <span class="op">=</span> <span class="st">"red"</span>, pch <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">a_01</span><span class="op">~</span><span class="va">dat</span><span class="op">$</span><span class="va">x</span>, col <span class="op">=</span> <span class="st">"red"</span>, pch <span class="op">=</span> <span class="fl">20L</span><span class="op">)</span></span></code></pre></div>
 <p><img src="slug_test_files/figure-html/cbp-1.png" width="700"></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co"># data(bouwer)</span></span>
-<span><span class="co"># bw &lt;- as.data.frame(bouwer)</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># rc &lt;- 4/2/12        # radius of 2 inches</span></span>
-<span><span class="co"># rw &lt;- 8.25/2/12     # radius of screen</span></span>
-<span><span class="co"># Le &lt;- 10            # screen length</span></span>
-<span><span class="co"># y0 &lt;- 1.44          # initial drawdown</span></span>
-<span><span class="co"># Lw &lt;- 17.92         # height of water above screen bottom</span></span>
-<span><span class="co"># wl &lt;- 6.08          # static wl</span></span>
-<span><span class="co"># H  &lt;- 18.92         # height of water level above base</span></span>
-<span><span class="co"># t  &lt;- as.numeric(bouwer$datetime - bouwer$datetime[1])    # elapsed time</span></span>
-<span><span class="co"># y  &lt;- wl - bouwer$val                                     # change in wl</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># bouwer_rice(t, y, rw, rc, Le, Lw, H) * 86400 # should be 4.5</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># estimate transmissivity with bouwer rice</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">bouwer</span><span class="op">)</span></span>
+<span><span class="va">bw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">bouwer</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rc</span> <span class="op">&lt;-</span> <span class="fl">4</span><span class="op">/</span><span class="fl">2</span><span class="op">/</span><span class="fl">12</span>        <span class="co"># radius of 2 inches</span></span>
+<span><span class="va">rw</span> <span class="op">&lt;-</span> <span class="fl">8.25</span><span class="op">/</span><span class="fl">2</span><span class="op">/</span><span class="fl">12</span>     <span class="co"># radius of screen</span></span>
+<span><span class="va">Le</span> <span class="op">&lt;-</span> <span class="fl">10.0</span>          <span class="co"># screen length</span></span>
+<span><span class="va">y0</span> <span class="op">&lt;-</span> <span class="fl">1.44</span>          <span class="co"># initial drawdown</span></span>
+<span><span class="va">Lw</span> <span class="op">&lt;-</span> <span class="fl">17.92</span>         <span class="co"># height of water above screen bottom</span></span>
+<span><span class="va">wl</span> <span class="op">&lt;-</span> <span class="fl">6.08</span>          <span class="co"># static wl</span></span>
+<span><span class="va">H</span>  <span class="op">&lt;-</span> <span class="fl">18.92</span>         <span class="co"># height of water level above base</span></span>
+<span><span class="va">t</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">bouwer</span><span class="op">$</span><span class="va">datetime</span> <span class="op">-</span> <span class="va">bouwer</span><span class="op">$</span><span class="va">datetime</span><span class="op">[</span><span class="fl">1L</span><span class="op">]</span><span class="op">)</span>   <span class="co"># elapsed time</span></span>
+<span><span class="va">y</span>  <span class="op">&lt;-</span> <span class="va">wl</span> <span class="op">-</span> <span class="va">bouwer</span><span class="op">$</span><span class="va">val</span>                                     <span class="co"># change in wl</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/bouwer_rice.html">bouwer_rice</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">y</span>, <span class="va">rw</span>, <span class="va">rc</span>, <span class="va">Le</span>, <span class="va">Lw</span>, <span class="va">H</span><span class="op">)</span> <span class="op">*</span> <span class="fl">86400</span> <span class="co"># should be ~4.5</span></span>
+<span><span class="co">#&gt; [1] 4.45846</span></span></code></pre></div>
 <div class="section level5">
 <h5 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h5>
@@ -152,14 +153,14 @@ Resources Research, vol. 3, no. 1, pp. 263-269.</p>
 <span><span class="co">#&gt; [1] hydrorecipes_0.0.6 Bessel_0.6-1      </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] cli_3.6.3         knitr_1.49        rlang_1.1.5       xfun_0.50        </span></span>
+<span><span class="co">#&gt;  [1] cli_3.6.4         knitr_1.49        rlang_1.1.5       xfun_0.50        </span></span>
 <span><span class="co">#&gt;  [5] textshaping_1.0.0 data.table_1.16.4 jsonlite_1.8.9    htmltools_0.5.8.1</span></span>
 <span><span class="co">#&gt;  [9] earthtide_0.1.7   gslnls_1.4.1      ragg_1.3.3        sass_0.4.9       </span></span>
 <span><span class="co">#&gt; [13] gmp_0.7-5         rmarkdown_2.29    grid_4.4.2        evaluate_1.0.3   </span></span>
 <span><span class="co">#&gt; [17] jquerylib_0.1.4   fastmap_1.2.0     yaml_2.3.10       lifecycle_1.0.4  </span></span>
 <span><span class="co">#&gt; [21] compiler_4.4.2    fs_1.6.5          htmlwidgets_1.6.4 Rcpp_1.0.14      </span></span>
 <span><span class="co">#&gt; [25] lattice_0.22-6    systemfonts_1.2.1 digest_0.6.37     collapse_2.0.19  </span></span>
-<span><span class="co">#&gt; [29] R6_2.5.1          parallel_4.4.2    Matrix_1.7-1      bslib_0.8.0      </span></span>
+<span><span class="co">#&gt; [29] R6_2.6.1          parallel_4.4.2    Matrix_1.7-1      bslib_0.9.0      </span></span>
 <span><span class="co">#&gt; [33] tools_4.4.2       Rmpfr_1.0-0       RcppThread_2.2.0  pkgdown_2.1.1    </span></span>
 <span><span class="co">#&gt; [37] cachem_1.1.0      desc_1.4.3</span></span></code></pre></div>
 </div>
