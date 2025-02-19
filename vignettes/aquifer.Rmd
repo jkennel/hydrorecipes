@@ -199,6 +199,7 @@ hj <- recipe(formula = formula, data = dat) |>
 plot(aquifer_leaky~time, hj, type = "l", 
      ylab = "drawdown", 
      xlab = "")
+
 ```
 
 

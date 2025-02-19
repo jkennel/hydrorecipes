@@ -47,8 +47,8 @@ StepCoherence <- R6Class(
                                   c(rep("coherence", n),
                                   rep("phase", n)),
                                   comb$x, comb$y, sep = "_")
-        print(str(res))
-        print(self$new_columns)
+        # print(str(res))
+        # print(self$new_columns)
         res <- setNames(res, self$new_columns)
         res
 
