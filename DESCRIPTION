@@ -21,7 +21,8 @@ Imports:
     data.table,
     earthtide,
     collapse,
-    gslnls
+    gslnls,
+    plotly
 LinkingTo: Rcpp, RcppArmadillo, RcppThread, RcppEigen, splines2, BH
 Suggests:
     rmarkdown,
@@ -31,7 +32,6 @@ Suggests:
     tibble,
     knitr,
     bench,
-    plotly,
     scales,
     ggplot2,
     splines2
