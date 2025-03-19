@@ -474,6 +474,43 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// convolve_divide_weiner
+Eigen::VectorXd convolve_divide_weiner(Eigen::VectorXd x, Eigen::VectorXd y, double noise);
+RcppExport SEXP _hydrorecipes_convolve_divide_weiner(SEXP xSEXP, SEXP ySEXP, SEXP noiseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type y(ySEXP);
+    Rcpp::traits::input_parameter< double >::type noise(noiseSEXP);
+    rcpp_result_gen = Rcpp::wrap(convolve_divide_weiner(x, y, noise));
+    return rcpp_result_gen;
+END_RCPP
+}
+// convolve_divide_naive
+Eigen::VectorXd convolve_divide_naive(Eigen::VectorXd x, Eigen::VectorXd y);
+RcppExport SEXP _hydrorecipes_convolve_divide_naive(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(convolve_divide_naive(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// convolve_divide_naive_list
+List convolve_divide_naive_list(Eigen::VectorXd x, List y);
+RcppExport SEXP _hydrorecipes_convolve_divide_naive_list(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type x(xSEXP);
+    Rcpp::traits::input_parameter< List >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(convolve_divide_naive_list(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
 // convolve_correlation
 Eigen::VectorXd convolve_correlation(Eigen::VectorXd x, Eigen::VectorXd y, size_t lag_max);
 RcppExport SEXP _hydrorecipes_convolve_correlation(SEXP xSEXP, SEXP ySEXP, SEXP lag_maxSEXP) {
@@ -656,6 +693,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// convolve_divide_pgram
+Eigen::VectorXd convolve_divide_pgram(Eigen::MatrixXd& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper, bool pad_fft);
+RcppExport SEXP _hydrorecipes_convolve_divide_pgram(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP, SEXP pad_fftSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type spans(spansSEXP);
+    Rcpp::traits::input_parameter< bool >::type detrend(detrendSEXP);
+    Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
+    Rcpp::traits::input_parameter< double >::type taper(taperSEXP);
+    Rcpp::traits::input_parameter< bool >::type pad_fft(pad_fftSEXP);
+    rcpp_result_gen = Rcpp::wrap(convolve_divide_pgram(x, spans, detrend, demean, taper, pad_fft));
+    return rcpp_result_gen;
+END_RCPP
+}
 // spec_pgram_list
 Rcpp::List spec_pgram_list(Rcpp::List& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper, bool pad_fft);
 RcppExport SEXP _hydrorecipes_spec_pgram_list(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP, SEXP pad_fftSEXP) {
@@ -761,6 +814,21 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
     Rcpp::traits::input_parameter< double >::type taper(taperSEXP);
     rcpp_result_gen = Rcpp::wrap(transfer_pgram(x, spans, detrend, demean, taper));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pgram_predict
+Eigen::MatrixXcd pgram_predict(Eigen::MatrixXd& x, const Eigen::VectorXi& spans, bool detrend, bool demean, double taper);
+RcppExport SEXP _hydrorecipes_pgram_predict(SEXP xSEXP, SEXP spansSEXP, SEXP detrendSEXP, SEXP demeanSEXP, SEXP taperSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MatrixXd& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type spans(spansSEXP);
+    Rcpp::traits::input_parameter< bool >::type detrend(detrendSEXP);
+    Rcpp::traits::input_parameter< bool >::type demean(demeanSEXP);
+    Rcpp::traits::input_parameter< double >::type taper(taperSEXP);
+    rcpp_result_gen = Rcpp::wrap(pgram_predict(x, spans, detrend, demean, taper));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -2771,6 +2839,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_distributed_lag_list3", (DL_FUNC) &_hydrorecipes_distributed_lag_list3, 11},
     {"_hydrorecipes_distributed_lag_list4", (DL_FUNC) &_hydrorecipes_distributed_lag_list4, 3},
     {"_hydrorecipes_fft_matrix", (DL_FUNC) &_hydrorecipes_fft_matrix, 2},
+    {"_hydrorecipes_convolve_divide_weiner", (DL_FUNC) &_hydrorecipes_convolve_divide_weiner, 3},
+    {"_hydrorecipes_convolve_divide_naive", (DL_FUNC) &_hydrorecipes_convolve_divide_naive, 2},
+    {"_hydrorecipes_convolve_divide_naive_list", (DL_FUNC) &_hydrorecipes_convolve_divide_naive_list, 2},
     {"_hydrorecipes_convolve_correlation", (DL_FUNC) &_hydrorecipes_convolve_correlation, 3},
     {"_hydrorecipes_convolve_vec", (DL_FUNC) &_hydrorecipes_convolve_vec, 2},
     {"_hydrorecipes_convolve_filter", (DL_FUNC) &_hydrorecipes_convolve_filter, 4},
@@ -2785,6 +2856,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_multiply_ffts", (DL_FUNC) &_hydrorecipes_multiply_ffts, 1},
     {"_hydrorecipes_fill_lower_left", (DL_FUNC) &_hydrorecipes_fill_lower_left, 2},
     {"_hydrorecipes_spec_pgram", (DL_FUNC) &_hydrorecipes_spec_pgram, 6},
+    {"_hydrorecipes_convolve_divide_pgram", (DL_FUNC) &_hydrorecipes_convolve_divide_pgram, 6},
     {"_hydrorecipes_spec_pgram_list", (DL_FUNC) &_hydrorecipes_spec_pgram_list, 6},
     {"_hydrorecipes_spec_welch", (DL_FUNC) &_hydrorecipes_spec_welch, 4},
     {"_hydrorecipes_solve_cplx_parallel", (DL_FUNC) &_hydrorecipes_solve_cplx_parallel, 1},
@@ -2793,6 +2865,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hydrorecipes_ordinary_coherence_phase", (DL_FUNC) &_hydrorecipes_ordinary_coherence_phase, 1},
     {"_hydrorecipes_transfer_pgram_smooth", (DL_FUNC) &_hydrorecipes_transfer_pgram_smooth, 6},
     {"_hydrorecipes_transfer_pgram", (DL_FUNC) &_hydrorecipes_transfer_pgram, 5},
+    {"_hydrorecipes_pgram_predict", (DL_FUNC) &_hydrorecipes_pgram_predict, 5},
     {"_hydrorecipes_transfer_welch", (DL_FUNC) &_hydrorecipes_transfer_welch, 4},
     {"_hydrorecipes_window_hann", (DL_FUNC) &_hydrorecipes_window_hann, 1},
     {"_hydrorecipes_window_tukey", (DL_FUNC) &_hydrorecipes_window_tukey, 2},

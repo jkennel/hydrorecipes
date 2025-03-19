@@ -1067,7 +1067,7 @@ Eigen::ArrayXd gamma_inc(Eigen::ArrayXd u, double a)
   }
   else if (a < 0.0 && a >= -1.0)
   {
-     return(-1.0 * u.pow(a) * (-u).exp() / a + gamma_inc(u, a + 1.0) / a);
+    return(-1.0 * u.pow(a) * (-u).exp() / a + gamma_inc(u, a + 1.0) / a);
   }
 
   u = (u == 0.0).select(tg, u);
@@ -1076,7 +1076,7 @@ Eigen::ArrayXd gamma_inc(Eigen::ArrayXd u, double a)
 }
 
 /*** R
-n <- 1000000
+n <- 10000
 x <- abs(rnorm(n))
 
 

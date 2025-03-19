@@ -223,6 +223,61 @@ fft_matrix <- function(x, n_new) {
 }
 
 #' @title
+#' convolve_divide_weiner
+#'
+#' @description
+#' FFT based division
+#'
+#' @param x the vector that holds the output series (numeric vector)
+#' @param y the vector that holds the convolution kernel (numeric vector)
+#'
+#'
+#' @return numeric vector that approximates the input vector
+#'
+#'
+#' @noRd
+#'
+convolve_divide_weiner <- function(x, y, noise) {
+    .Call(`_hydrorecipes_convolve_divide_weiner`, x, y, noise)
+}
+
+#' @title
+#' convolve_divide_naive
+#'
+#' @description
+#' FFT based division
+#'
+#' @param x the vector that holds the output series (numeric vector)
+#' @param y the vector that holds the convolution kernel (numeric vector)
+#'
+#'
+#' @return numeric vector that approximates the input vector
+#'
+#'
+#' @noRd
+#'
+convolve_divide_naive <- function(x, y) {
+    .Call(`_hydrorecipes_convolve_divide_naive`, x, y)
+}
+
+#' @title
+#' convolve_divide_naive_list
+#'
+#' @description
+#' Multiply a transfer function with a real input and take the inverse FFT.
+#'
+#' @param x the vector that holds the series (numeric vector)
+#' @param y the list of kernels to convolve with x
+#'
+#' @return x divided by y
+#'
+#' @noRd
+#'
+convolve_divide_naive_list <- function(x, y) {
+    .Call(`_hydrorecipes_convolve_divide_naive_list`, x, y)
+}
+
+#' @title
 #' convolve_ccf
 #'
 #' @description
@@ -461,6 +516,25 @@ spec_pgram <- function(x, spans, detrend, demean, taper, pad_fft) {
 }
 
 #' @title
+#' convolve_divide_naive
+#'
+#' @description
+#' FFT based division
+#'
+#' @param x the vector that holds the output series (numeric vector)
+#' @param y the vector that holds the convolution kernel (numeric vector)
+#'
+#'
+#' @return numeric vector that approximates the input vector
+#'
+#'
+#' @noRd
+#'
+convolve_divide_pgram <- function(x, spans, detrend, demean, taper, pad_fft) {
+    .Call(`_hydrorecipes_convolve_divide_pgram`, x, spans, detrend, demean, taper, pad_fft)
+}
+
+#' @title
 #' spec_pgram_list
 #'
 #' @description
@@ -590,6 +664,10 @@ transfer_pgram_smooth <- function(x, spans, detrend, demean, taper, n_groups) {
 
 transfer_pgram <- function(x, spans, detrend, demean, taper) {
     .Call(`_hydrorecipes_transfer_pgram`, x, spans, detrend, demean, taper)
+}
+
+pgram_predict <- function(x, spans, detrend, demean, taper) {
+    .Call(`_hydrorecipes_pgram_predict`, x, spans, detrend, demean, taper)
 }
 
 #' @title

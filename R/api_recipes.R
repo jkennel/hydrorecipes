@@ -1638,6 +1638,33 @@ step_kernel_filter <- function(.rec,
 
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_kernel_divide_naive
+#'
+#' @description
+#'   Divide a signal by a kernel in the frequency domain.
+#'
+#' @param kernel the convolution kernel
+#'
+#' @inheritParams step_scale
+#'
+#' @return an updated recipe
+#' @export
+#'
+#'
+step_kernel_divide_naive <- function(.rec,
+                               terms,
+                               kernel,
+                               role = "predictor",
+                               ...) {
+
+  terms <- substitute(terms)
+  env_list <- get_function_arguments()
+  .rec$add_step(do.call(StepKernelDivideNaive$new,
+                        modifyList(x = env_list, val = list(...))))
+
+
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_lead_lag
 #'
 #' @description

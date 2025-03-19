@@ -46,6 +46,135 @@ Eigen::MatrixXcd fft_matrix(Eigen::MatrixXd x,
 //******************************************************************************
 // Convolution
 //******************************************************************************
+
+//==============================================================================
+//' @title
+//' convolve_divide_weiner
+//'
+//' @description
+//' FFT based division
+//'
+//' @param x the vector that holds the output series (numeric vector)
+//' @param y the vector that holds the convolution kernel (numeric vector)
+//'
+//'
+//' @return numeric vector that approximates the input vector
+//'
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::VectorXd convolve_divide_weiner(Eigen::VectorXd x,
+                                      Eigen::VectorXd y,
+                                      double noise) {
+
+  Eigen::FFT<double> fft;
+  size_t n_x = x.size();
+  size_t n_y = y.size();
+  size_t n_new = next_n_eigen(n_x + n_y - 1);
+
+  if (n_y != n_x) {
+    Rcpp::stop("convolve_divide: the lengths of x and y should be the same");
+  }
+
+  VectorXd x_pad = pad_vector(x, n_x, n_new);
+  VectorXd y_pad = pad_vector(y, n_x, n_new);
+
+  VectorXcd fft_x(n_new);
+  VectorXcd fft_y(n_new);
+
+  ArrayXd y_power(n_new);
+
+  VectorXd z(n_new);
+
+  fft.fwd(fft_x, x_pad);
+  fft.fwd(fft_y, y_pad);
+
+  y_power = 1.0 / (1.0 + 1.0 / (fft_y.array().abs2() * noise));
+
+  fft_x = fft_x.array() / (fft_y.array().conjugate() * (y_power));
+  fft.inv(z, fft_x);
+
+  return(z.tail(n_x).real());
+}
+
+
+//==============================================================================
+//' @title
+//' convolve_divide_naive
+//'
+//' @description
+//' FFT based division
+//'
+//' @param x the vector that holds the output series (numeric vector)
+//' @param y the vector that holds the convolution kernel (numeric vector)
+//'
+//'
+//' @return numeric vector that approximates the input vector
+//'
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::VectorXd convolve_divide_naive(Eigen::VectorXd x,
+                                      Eigen::VectorXd y) {
+
+  Eigen::FFT<double> fft;
+  size_t n_x = x.size();
+  size_t n_y = y.size();
+  size_t n_new = next_n_eigen(n_x + n_y - 1);
+
+  if (n_y != n_x) {
+    Rcpp::stop("convolve_divide: the lengths of x and y should be the same");
+  }
+
+  VectorXd x_pad = pad_vector(x, n_x, n_new);
+  VectorXd y_pad = pad_vector(y, n_x, n_new);
+
+  VectorXcd fft_x(n_new);
+  VectorXcd fft_y(n_new);
+
+  VectorXd z(n_new);
+
+  fft.fwd(fft_x, x_pad);
+  fft.fwd(fft_y, y_pad);
+
+  fft_x = fft_x.array() / fft_y.array().conjugate();
+  fft.inv(z, fft_x);
+
+  return(z.tail(n_x).real());
+}
+
+//==============================================================================
+//' @title
+//' convolve_divide_naive_list
+//'
+//' @description
+//' Multiply a transfer function with a real input and take the inverse FFT.
+//'
+//' @param x the vector that holds the series (numeric vector)
+//' @param y the list of kernels to convolve with x
+//'
+//' @return x divided by y
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+List convolve_divide_naive_list(Eigen::VectorXd x,
+                                List y) {
+
+  size_t n_y = y.size();
+  size_t n_x = x.size();
+  Eigen::VectorXd out(n_x);
+  Rcpp::List out_list(n_y);
+
+  for (size_t j = 0; j < n_y; ++j) {
+    out = convolve_divide_naive(x, y[j]);
+    out_list[j] = out;
+  }
+
+  return(out_list);
+}
 //==============================================================================
 //' @title
 //' convolve_ccf
@@ -85,7 +214,7 @@ Eigen::VectorXd convolve_correlation(Eigen::VectorXd x,
   }
 
   x = x.array() - x.array().mean();
-  y = y.array()-y.array().mean();
+  y = y.array() - y.array().mean();
 
   VectorXd x_pad = pad_vector(x, n_x, n_new);
   VectorXd y_pad = pad_vector(y, n_x, n_new);
@@ -893,6 +1022,68 @@ Eigen::MatrixXcd spec_pgram(Eigen::MatrixXd& x,
 
 //==============================================================================
 //' @title
+//' convolve_divide_naive
+//'
+//' @description
+//' FFT based division
+//'
+//' @param x the vector that holds the output series (numeric vector)
+//' @param y the vector that holds the convolution kernel (numeric vector)
+//'
+//'
+//' @return numeric vector that approximates the input vector
+//'
+//'
+//' @noRd
+//'
+// [[Rcpp::export]]
+Eigen::VectorXd convolve_divide_pgram(Eigen::MatrixXd& x,
+                                      const Eigen::VectorXi& spans,
+                                      bool detrend,
+                                      bool demean,
+                                      double taper,
+                                      bool pad_fft) {
+
+
+  if (spans.size() < 1) {
+    Rcpp::stop("spec_pgram: spans must be length 1 or larger.");
+  }
+
+  size_t n_row = x.rows();
+  size_t n_new = n_row;
+
+  if (pad_fft) {
+    n_new = next_n_eigen(n_row);
+  }
+
+  std::complex<double> scale = 1.0 / n_row; // or n_new
+
+  // taper vector
+  ArrayXd taper_array = spec_taper(n_row, taper).array();
+
+  // detrend or demean
+  x = detrend_and_demean_matrix(x, detrend, demean);
+
+  // Do FFTs
+  MatrixXcd x_fft_mat = fft_matrix(x.array().colwise() * taper_array,
+                                   n_new);
+
+
+  Eigen::FFT<double> fft;
+
+  Eigen::VectorXcd fft_x;
+
+  VectorXd z(n_row);
+
+  fft_x = x_fft_mat.col(0).array() / x_fft_mat.col(1).array().conjugate();
+  fft.inv(z, fft_x);
+
+  return(z.tail(n_row).real());
+}
+
+
+//==============================================================================
+//' @title
 //' spec_pgram_list
 //'
 //' @description
@@ -1216,6 +1407,7 @@ Eigen::MatrixXcd solve_cplx_parallel(const Eigen::MatrixXcd& x) {
     MatrixXcd X(sub_size, sub_size);
     // const int p = sub_size;
 
+    // make X matrix for solving
     for (size_t i = 0; i < sub_size; ++i) {
       for (size_t j = i; j < sub_size; ++j) {
 
@@ -1847,6 +2039,17 @@ Eigen::MatrixXcd transfer_pgram(Eigen::MatrixXd& x,
 }
 //==============================================================================
 
+// [[Rcpp::export]]
+Eigen::MatrixXcd pgram_predict(Eigen::MatrixXd& x,
+                                const Eigen::VectorXi& spans,
+                                bool detrend,
+                                bool demean,
+                                double taper) {
+
+  Eigen::MatrixXcd pgram = spec_pgram(x, spans, detrend, demean, taper);
+  Eigen::MatrixXcd out   = solve_cplx_parallel(pgram);
+  return(out);
+}
 
 //==============================================================================
 //' @title
@@ -2508,6 +2711,7 @@ bench::mark(
 #   b <- collapse::qM(hydrorecipes:::spec_pgram_list(l, spans = 3, TRUE, TRUE, taper = 0.1)),
 #   check = FALSE
 # )
+
 
 
 

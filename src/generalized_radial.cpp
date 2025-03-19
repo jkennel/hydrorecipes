@@ -621,6 +621,7 @@ Rcpp::List grf_time(const double radius,
   }
 
   double a = (flow_dimension / 2.0) - 1.0;
+  Rcpp::Rcout << "a: " << a << std::endl;
 
   // calculate the constant part
   double u_const = grf_u(radius, specific_storage, hydraulic_conductivity);
@@ -630,13 +631,21 @@ Rcpp::List grf_time(const double radius,
                                       flow_dimension);
 
   Eigen::VectorXd coef = coef_const * flow_rate.array();
+
   Eigen::VectorXd u = u_const / time.array();
 
   u = gamma_inc(u.array(), a);
+
+  // drawdown should always be positive
+  u = (u.array() < 0.0).select(0.0, u);
   u = u.unaryExpr([](double v) { return std::isfinite(v)? v : 0.0; });
 
+  Rcpp::Rcout << "u_const: " << u_const << std::endl;
+  Rcpp::Rcout << "u1: " << u[0] << std::endl;
+  Rcpp::Rcout << "u2: " << u[1] << std::endl;
+  Rcpp::Rcout << "time: " << time[0] << std::endl;
+
   u = impulse_function_eigen(u);
-  // Rcpp::Rcout << "u: " << u << std::endl;
 
   return Rcpp::List::create(
     Rcpp::Named("generalized_radial") = convolve_filter(u, coef, false, true)
