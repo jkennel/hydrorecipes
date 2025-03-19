@@ -640,9 +640,9 @@ Rcpp::List grf_time(const double radius,
   u = (time.array() <= 0.0).select(0.0, u);
   u = u.unaryExpr([](double v) { return std::isfinite(v)? v : 0.0; });
 
-  Rcpp::Rcout << "u_const: " << u_const << std::endl;
-  Rcpp::Rcout << "u_head: " << u.head(10) << std::endl;
-  Rcpp::Rcout << "time: " << time.head(10) << std::endl;
+  // Rcpp::Rcout << "u_const: " << u_const << std::endl;
+  // Rcpp::Rcout << "u_head: " << u.head(10) << std::endl;
+  // Rcpp::Rcout << "time: " << time.head(10) << std::endl;
 
   u = impulse_function_eigen(u);
 
