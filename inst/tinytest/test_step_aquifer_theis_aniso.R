@@ -215,26 +215,26 @@ o <- hydrorecipes:::grf_time(radius = sqrt(200),
                              thickness = 1,
                              time = 0:(n - 1),
                              flow_rate = i,
-                             flow_dimension = 3)
+                             flow_dimension = 1.5)
 
 k_raw <- hydrorecipes:::grf_time(radius = sqrt(200),
                              specific_storage = 1e-6,
                              hydraulic_conductivity = 1e-4,
                              thickness = 1,
-                             time = 0:(n + n + n),
-                             flow_rate = rep(1, each = n + n + n + 1),
-                             flow_dimension = 3)
+                             time = 0:(n),
+                             flow_rate = rep(1, each = n + 1),
+                             flow_dimension = 1.5)
 k <- rev(diff(k_raw[[1]]))
-o <- c(rep(0, n), o[[1]], rep(0, n))
+o <- c(o[[1]])
 plot(o, type = 'l')
 
 dat <- data.table(o = o,
                   k = k,
-                  i =  c(rep(0, n), rep(rep(c(0, 1), n/1000), each = 500), rep(0, n)))
+                  i =  c(rep(rep(c(0, 1), n/1000), each = 500)))
 
 tmp1 <- hydrorecipes:::convolve_divide_naive(o, k)
 
-plot(Mod(tmp1), type = 'l')
+plot(Mod(tmp1), type = 'l', ylim = c(0, 1.5))
 points(dat$i, col = "red", type = "l")
 
 r <- recipe(o~., dat) |>

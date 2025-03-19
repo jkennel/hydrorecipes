@@ -637,13 +637,12 @@ Rcpp::List grf_time(const double radius,
   u = gamma_inc(u.array(), a);
 
   // drawdown should always be positive
-  u = (u.array() < 0.0).select(0.0, u);
+  u = (time.array() <= 0.0).select(0.0, u);
   u = u.unaryExpr([](double v) { return std::isfinite(v)? v : 0.0; });
 
   Rcpp::Rcout << "u_const: " << u_const << std::endl;
-  Rcpp::Rcout << "u1: " << u[0] << std::endl;
-  Rcpp::Rcout << "u2: " << u[1] << std::endl;
-  Rcpp::Rcout << "time: " << time[0] << std::endl;
+  Rcpp::Rcout << "u_head: " << u.head(10) << std::endl;
+  Rcpp::Rcout << "time: " << time.head(10) << std::endl;
 
   u = impulse_function_eigen(u);
 
