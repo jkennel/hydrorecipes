@@ -1047,7 +1047,7 @@ Eigen::ArrayXd gamma_inc(Eigen::ArrayXd u, double a)
     v.setConstant(a);
 
     u = Eigen::igammac(v, u) * tg;
-    u = (u == 0.0).select(tg, u);
+    // u = (u == 0.0).select(tg, u);
   }
   else if (a == 0.0)
   {
@@ -1055,14 +1055,14 @@ Eigen::ArrayXd gamma_inc(Eigen::ArrayXd u, double a)
     for (auto &out : u) {
       if (out == 0){
         out = R_PosInf;
-      } else if (out > 700.0){
+      } else if (out > 709.0){
         out = 0.0;
       } else {
         out = -std::expint(-out);
       }
     }
 
-    u = (u == 0.0).select(tg, u);
+    // u = (u == 0.0).select(tg, u);
 
   }
   else if (a < 0.0 && a >= -1.0)
@@ -1070,7 +1070,7 @@ Eigen::ArrayXd gamma_inc(Eigen::ArrayXd u, double a)
     return(-1.0 * u.pow(a) * (-u).exp() / a + gamma_inc(u, a + 1.0) / a);
   }
 
-  u = (u == 0.0).select(tg, u);
+  // u = (u == 0.0).select(tg, u);
 
   return(u);
 }

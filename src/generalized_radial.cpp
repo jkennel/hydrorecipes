@@ -634,11 +634,12 @@ Rcpp::List grf_time(const double radius,
 
   Eigen::VectorXd u = u_const / time.array();
 
+  u = (time.array() <= 0.0).select(R_PosInf, u);
   u = gamma_inc(u.array(), a);
 
+
   // drawdown should always be positive
-  u = (time.array() <= 0.0).select(0.0, u);
-  u = u.unaryExpr([](double v) { return std::isfinite(v)? v : 0.0; });
+  // u = u.unaryExpr([](double v) { return std::isfinite(v)? v : 0.0; });
 
   // Rcpp::Rcout << "u_const: " << u_const << std::endl;
   // Rcpp::Rcout << "u_head: " << u.head(10) << std::endl;
