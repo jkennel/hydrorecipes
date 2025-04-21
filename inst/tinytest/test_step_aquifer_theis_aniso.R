@@ -205,17 +205,19 @@ dat <- expand.grid(seq(0.1, 10, 0.01), seq(0.1, 10, 0.01))
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 library(fftw)
 library(collapse)
+library(data.table)
+
 n <- 1e4
 
 
-i <- rep(rep(c(0, 1), n/1000), each = 500)
+i <- rep(rep(c(0,0,0,0,0,0,0,0,0, 1), n/1000), each = 100)
 o <- hydrorecipes:::grf_time(radius = sqrt(200),
                              specific_storage = 1e-6,
                              hydraulic_conductivity = 1e-4,
                              thickness = 1,
-                             time = 0:(n - 1),
+                             time = 1:(n),
                              flow_rate = i,
-                             flow_dimension = 1.5)
+                             flow_dimension = 1.0)[[1]]
 
 k_raw <- hydrorecipes:::grf_time(radius = sqrt(200),
                              specific_storage = 1e-6,
@@ -223,9 +225,10 @@ k_raw <- hydrorecipes:::grf_time(radius = sqrt(200),
                              thickness = 1,
                              time = 0:(n),
                              flow_rate = rep(1, each = n + 1),
-                             flow_dimension = 1.5)
-k <- rev(diff(k_raw[[1]]))
-o <- c(o[[1]])
+                             flow_dimension = 1.0)[[1]]
+k <- rev(diff(k_raw))
+# k <- -(max(k_raw) - k_raw)
+# o <- c(o[[1]])
 plot(o, type = 'l')
 
 dat <- data.table(o = o,
@@ -234,7 +237,7 @@ dat <- data.table(o = o,
 
 tmp1 <- hydrorecipes:::convolve_divide_naive(o, k)
 
-plot(Mod(tmp1), type = 'l', ylim = c(0, 1.5))
+plot(Mod(tmp1), type = 'l')
 points(dat$i, col = "red", type = "l")
 
 r <- recipe(o~., dat) |>

@@ -348,7 +348,7 @@ convolve_filter <- function(x, y, remove_partial, reverse) {
 #' convolve_overlap_add
 #'
 #' @description
-#' Multiply a transfer function with a real input and take the inverse FFT.
+#' Convolve two vectors
 #'
 #' @param x the vector that holds the series (numeric vector)
 #' @param y the kernel to convolve with x (complex numeric vector)

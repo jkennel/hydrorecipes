@@ -142,7 +142,7 @@ Eigen::VectorXd convolve_divide_naive(Eigen::VectorXd x,
   fft_x = fft_x.array() / fft_y.array().conjugate();
   fft.inv(z, fft_x);
 
-  return(z.tail(n_x).real());
+  return(z);
 }
 
 //==============================================================================
@@ -371,7 +371,7 @@ Eigen::VectorXd convolve_filter(const Eigen::VectorXd& x,
 //' convolve_overlap_add
 //'
 //' @description
-//' Multiply a transfer function with a real input and take the inverse FFT.
+//' Convolve two vectors
 //'
 //' @param x the vector that holds the series (numeric vector)
 //' @param y the kernel to convolve with x (complex numeric vector)
