@@ -174,10 +174,10 @@ StepEarthtide <- R6Class(
       list(x = x,
            variable = variable,
            value = amp_phase,
-           step_id = rep.int(self$id, nr * nc),
-           outcome = rep(colnames(co), each = nr),
-           term = rep.int(self$prefix, nr * nc),
-           step_columns = rep.int(paste(self$columns, collapse = "_"), nr * nc))
+           step_id = rep.int(self$id, 2L * nr * nc),
+           outcome = rep(rep(colnames(co), each = nr), 2L),
+           term = rep.int(self$prefix, nr * nc * 2L),
+           step_columns = rep.int(paste(self$columns, collapse = "_"), nr * nc * 2L))
 
     }
   )
