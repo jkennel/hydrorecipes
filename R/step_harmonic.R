@@ -100,9 +100,9 @@ StepHarmonic <- R6Class(
            variable = variable,
            value = amp_phase,
            step_id = rep.int(self$id, 2L * nr * nc),
-           outcome = rep(rep(colnames(co), each = nr), 2L),
-           term = rep.int(self$prefix, nr * nc * 2L),
-           step_columns = rep.int(paste(self$columns, collapse = "_"), nr * nc * 2L))
+           outcome = rep(rep(colnames(co), 2L), nr),
+           term = rep.int(self$prefix, 2L * nr * nc),
+           step_columns = rep.int(paste(self$columns, collapse = "_"), 2L * nr * nc))
 
     },
     test_eval = function() {
