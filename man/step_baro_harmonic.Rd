@@ -69,8 +69,8 @@ Acworth, R.I., Halloran, L.J., Rau, G.C., Cuthbert, M.O. and Bernardi, T.L.,
  Letters, 43(22), pp.11-671.
 }
 \seealso{
-Other barometric: 
-\code{\link{step_baro_clark}()},
-\code{\link{step_baro_least_squares}()}
+Other barometric:
+\code{\link[=step_baro_clark]{step_baro_clark()}},
+\code{\link[=step_baro_least_squares]{step_baro_least_squares()}}
 }
 \concept{barometric}

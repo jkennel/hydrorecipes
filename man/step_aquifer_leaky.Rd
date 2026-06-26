@@ -94,12 +94,12 @@ Hantush, M.S. and C.E. Jacob, 1955. Non-steady radial flow in an infinite
  leaky aquifer, Am. Geophys. Union Trans., vol. 36, no. 1, pp. 95-100.
 }
 \seealso{
-Other aquifer: 
-\code{\link{step_aquifer_constant_drawdown}()},
-\code{\link{step_aquifer_grf}()},
-\code{\link{step_aquifer_patch}()},
-\code{\link{step_aquifer_theis}()},
-\code{\link{step_aquifer_theis_aniso}()},
-\code{\link{step_aquifer_wellbore_storage}()}
+Other aquifer:
+\code{\link[=step_aquifer_constant_drawdown]{step_aquifer_constant_drawdown()}},
+\code{\link[=step_aquifer_grf]{step_aquifer_grf()}},
+\code{\link[=step_aquifer_patch]{step_aquifer_patch()}},
+\code{\link[=step_aquifer_theis]{step_aquifer_theis()}},
+\code{\link[=step_aquifer_theis_aniso]{step_aquifer_theis_aniso()}},
+\code{\link[=step_aquifer_wellbore_storage]{step_aquifer_wellbore_storage()}}
 }
 \concept{aquifer}

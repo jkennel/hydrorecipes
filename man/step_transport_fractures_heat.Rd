@@ -92,8 +92,8 @@ frec1 = recipe(formula = formula, data = dat) |>
 
 }
 \seealso{
-Other transport: 
-\code{\link{step_transport_fractures_solute}()},
-\code{\link{step_transport_ogata_banks}()}
+Other transport:
+\code{\link[=step_transport_fractures_solute]{step_transport_fractures_solute()}},
+\code{\link[=step_transport_ogata_banks]{step_transport_ogata_banks()}}
 }
 \concept{transport}

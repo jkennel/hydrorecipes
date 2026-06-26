@@ -100,8 +100,8 @@ Sudicky, E.A., Frind, E.O., Contaminant transport in fractured porous media:
  https://doi.org/10.1029/WR018i006p01634
 }
 \seealso{
-Other transport: 
-\code{\link{step_transport_fractures_heat}()},
-\code{\link{step_transport_ogata_banks}()}
+Other transport:
+\code{\link[=step_transport_fractures_heat]{step_transport_fractures_heat()}},
+\code{\link[=step_transport_ogata_banks]{step_transport_ogata_banks()}}
 }
 \concept{transport}

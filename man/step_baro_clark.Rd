@@ -56,8 +56,8 @@ Batu, V., 1998. Aquifer hydraulics: a comprehensive guide to hydrogeologic
 data analysis. John Wiley & Sons.
 }
 \seealso{
-Other barometric: 
-\code{\link{step_baro_harmonic}()},
-\code{\link{step_baro_least_squares}()}
+Other barometric:
+\code{\link[=step_baro_harmonic]{step_baro_harmonic()}},
+\code{\link[=step_baro_least_squares]{step_baro_least_squares()}}
 }
 \concept{barometric}

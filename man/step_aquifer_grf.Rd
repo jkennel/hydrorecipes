@@ -99,12 +99,12 @@ Barker, J.A., A generalized radial flow model for hydraulic tests
  10.1029/WR024i010p01796
 }
 \seealso{
-Other aquifer: 
-\code{\link{step_aquifer_constant_drawdown}()},
-\code{\link{step_aquifer_leaky}()},
-\code{\link{step_aquifer_patch}()},
-\code{\link{step_aquifer_theis}()},
-\code{\link{step_aquifer_theis_aniso}()},
-\code{\link{step_aquifer_wellbore_storage}()}
+Other aquifer:
+\code{\link[=step_aquifer_constant_drawdown]{step_aquifer_constant_drawdown()}},
+\code{\link[=step_aquifer_leaky]{step_aquifer_leaky()}},
+\code{\link[=step_aquifer_patch]{step_aquifer_patch()}},
+\code{\link[=step_aquifer_theis]{step_aquifer_theis()}},
+\code{\link[=step_aquifer_theis_aniso]{step_aquifer_theis_aniso()}},
+\code{\link[=step_aquifer_wellbore_storage]{step_aquifer_wellbore_storage()}}
 }
 \concept{aquifer}

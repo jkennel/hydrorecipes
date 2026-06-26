@@ -43,6 +43,7 @@
 #'
 #' @importFrom gslnls gsl_nls
 #' @importFrom gslnls gsl_nls_control
+#' @importFrom glmnet glmnet cv.glmnet
 #'
 #' @importFrom data.table rleid
 #' @importFrom data.table data.table
@@ -85,17 +86,21 @@ recipe <- function(formula, data, ...) {
 #' rec <- recipe(y~x, data = dat) |>
 #'        step_add_noise(x) |> plate()
 #'
-step_add_noise <- function(.rec,
-                           terms,
-                           sd = 1.0,
-                           mean = 0.0,
-                           fun = rnorm,
-                           role = "predictor",
-                           ...) {
+step_add_noise <- function(
+  .rec,
+  terms,
+  sd = 1.0,
+  mean = 0.0,
+  fun = rnorm,
+  role = "predictor",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepAddNoise$new,
-                        modifyList(x = env_list, val = list(...))))
+  .rec$add_step(do.call(
+    StepAddNoise$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_add_vars
@@ -116,16 +121,13 @@ step_add_noise <- function(.rec,
 #'        step_add_vars(z) |>
 #'        plate()
 #'
-step_add_vars <- function(.rec,
-                          terms,
-                          role = "predictor",
-                          ...) {
-
+step_add_vars <- function(.rec, terms, role = "predictor", ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepAddVars$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepAddVars$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_constant_drawdown
@@ -165,21 +167,24 @@ step_add_vars <- function(.rec,
 #'   plate()
 #'
 #' @export
-step_aquifer_constant_drawdown <- function(.rec,
-                                           time,
-                                           drawdown = 1.0,
-                                           thickness = 1.0,
-                                           radius_well = 0.15,
-                                           specific_storage = 1.0e-6,
-                                           hydraulic_conductivity = 1.0e-4,
-                                           n_terms = 16L,
-                                           role = "predictor",
-                                           ...) {
+step_aquifer_constant_drawdown <- function(
+  .rec,
+  time,
+  drawdown = 1.0,
+  thickness = 1.0,
+  radius_well = 0.15,
+  specific_storage = 1.0e-6,
+  hydraulic_conductivity = 1.0e-4,
+  n_terms = 16L,
+  role = "predictor",
+  ...
+) {
   time <- substitute(time)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepAquiferConstantDrawdown$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepAquiferConstantDrawdown$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_grf
@@ -255,23 +260,25 @@ step_aquifer_constant_drawdown <- function(.rec,
 #'
 #'
 #' @export
-step_aquifer_grf <- function(.rec,
-                             time,
-                             flow_rate,
-                             thickness = 1.0,
-                             radius = 100.0,
-                             specific_storage = 1.0e-6,
-                             hydraulic_conductivity = 1.0e-4,
-                             flow_dimension = 2.0,
-                             role = "predictor",
-                             ...) {
+step_aquifer_grf <- function(
+  .rec,
+  time,
+  flow_rate,
+  thickness = 1.0,
+  radius = 100.0,
+  specific_storage = 1.0e-6,
+  hydraulic_conductivity = 1.0e-4,
+  flow_dimension = 2.0,
+  role = "predictor",
+  ...
+) {
   time <- substitute(time)
   flow_rate <- substitute(flow_rate)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepAquiferGRF$new,
-                        modifyList(x = env_list, val = list(...))))  # need to add ... to this??
-
-
+  .rec$add_step(do.call(
+    StepAquiferGRF$new,
+    modifyList(x = env_list, val = list(...))
+  )) # need to add ... to this??
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_theis
@@ -310,20 +317,24 @@ step_aquifer_grf <- function(.rec,
 #'   bake()
 #'
 #' @export
-step_aquifer_theis <- function(.rec,
-                               time,
-                               flow_rate,
-                               thickness = 1.0,
-                               radius = 100.0,
-                               specific_storage = 1.0e-6,
-                               hydraulic_conductivity = 1.0e-4,
-                               role = "predictor",
-                               ...) {
+step_aquifer_theis <- function(
+  .rec,
+  time,
+  flow_rate,
+  thickness = 1.0,
+  radius = 100.0,
+  specific_storage = 1.0e-6,
+  hydraulic_conductivity = 1.0e-4,
+  role = "predictor",
+  ...
+) {
   time <- substitute(time)
   flow_rate <- substitute(flow_rate)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepAquiferTheis$new,
-                        modifyList(x = env_list, val = list(...))))
+  .rec$add_step(do.call(
+    StepAquiferTheis$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_theis_aniso
@@ -362,24 +373,27 @@ step_aquifer_theis <- function(.rec,
 #'   bake()
 #'
 #' @export
-step_aquifer_theis_aniso <- function(.rec,
-                                     time,
-                                     flow_rate,
-                                     thickness = 1.0,
-                                     distance_x = 100.0,
-                                     distance_y = 100.0,
-                                     specific_storage = 1.0e-6,
-                                     hydraulic_conductivity_major = 1.0e-4,
-                                     hydraulic_conductivity_minor = 1.0e-5,
-                                     major_axis_angle = 0.0,
-                                     role = "predictor",
-                                     ...) {
+step_aquifer_theis_aniso <- function(
+  .rec,
+  time,
+  flow_rate,
+  thickness = 1.0,
+  distance_x = 100.0,
+  distance_y = 100.0,
+  specific_storage = 1.0e-6,
+  hydraulic_conductivity_major = 1.0e-4,
+  hydraulic_conductivity_minor = 1.0e-5,
+  major_axis_angle = 0.0,
+  role = "predictor",
+  ...
+) {
   time <- substitute(time)
   flow_rate <- substitute(flow_rate)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepAquiferTheisAniso$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepAquiferTheisAniso$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_leaky
@@ -443,23 +457,26 @@ step_aquifer_theis_aniso <- function(.rec,
 #'   plate()
 #'
 #' @export
-step_aquifer_leaky <- function(.rec,
-                               time,
-                               flow_rate,
-                               thickness = 1.0,
-                               leakage = 100.0,
-                               radius = 100.0,
-                               specific_storage = 1e-6,
-                               hydraulic_conductivity = 1e-4,
-                               precision = 1e-10,
-                               role = "predictor",
-                               ...) {
+step_aquifer_leaky <- function(
+  .rec,
+  time,
+  flow_rate,
+  thickness = 1.0,
+  leakage = 100.0,
+  radius = 100.0,
+  specific_storage = 1e-6,
+  hydraulic_conductivity = 1e-4,
+  precision = 1e-10,
+  role = "predictor",
+  ...
+) {
   time <- substitute(time)
   flow_rate <- substitute(flow_rate)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepAquiferLeaky$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepAquiferLeaky$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_patch
@@ -497,24 +514,27 @@ step_aquifer_leaky <- function(.rec,
 #'   plate()
 #'
 #' @export
-step_aquifer_patch <- function(.rec,
-                               time,
-                               flow_rate = 0.01,
-                               thickness = 1.0,
-                               radius = 200.0,
-                               radius_patch = 100.0,
-                               specific_storage_inner = 1.0e-6,
-                               specific_storage_outer = 1.0e-5,
-                               hydraulic_conductivity_inner = 1.0e-4,
-                               hydraulic_conductivity_outer = 1.0e-6,
-                               n_stehfest = 12L,
-                               role = "predictor",
-                               ...) {
+step_aquifer_patch <- function(
+  .rec,
+  time,
+  flow_rate = 0.01,
+  thickness = 1.0,
+  radius = 200.0,
+  radius_patch = 100.0,
+  specific_storage_inner = 1.0e-6,
+  specific_storage_outer = 1.0e-5,
+  hydraulic_conductivity_inner = 1.0e-4,
+  hydraulic_conductivity_outer = 1.0e-6,
+  n_stehfest = 12L,
+  role = "predictor",
+  ...
+) {
   time <- substitute(time)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepAquiferPatch$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepAquiferPatch$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_aquifer_patch
@@ -555,23 +575,26 @@ step_aquifer_patch <- function(.rec,
 #'   bake()
 #'
 #' @export
-step_aquifer_wellbore_storage <- function(.rec,
-                                          time,
-                                          flow_rate = 1.0,
-                                          radius = 0.15,
-                                          radius_casing = 0.15,
-                                          radius_well = 0.15,
-                                          thickness = 1.0,
-                                          specific_storage = 1.0e-6,
-                                          hydraulic_conductivity = 1.0e-4,
-                                          n_terms = 12L,
-                                          role = "predictor",
-                                          ...) {
+step_aquifer_wellbore_storage <- function(
+  .rec,
+  time,
+  flow_rate = 1.0,
+  radius = 0.15,
+  radius_casing = 0.15,
+  radius_well = 0.15,
+  thickness = 1.0,
+  specific_storage = 1.0e-6,
+  hydraulic_conductivity = 1.0e-4,
+  n_terms = 12L,
+  role = "predictor",
+  ...
+) {
   time <- substitute(time)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepAquiferWellboreStorage$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepAquiferWellboreStorage$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_baro_clark
@@ -610,21 +633,23 @@ step_aquifer_wellbore_storage <- function(.rec,
 #' clarks$get_step_data("barometric_efficiency")
 #'
 #' @export
-step_baro_clark <- function(.rec,
-                            water_level,
-                            barometric_pressure,
-                            lag_space = 1L,
-                            inverse = FALSE,
-                            role = "augment",
-                            ...) {
+step_baro_clark <- function(
+  .rec,
+  water_level,
+  barometric_pressure,
+  lag_space = 1L,
+  inverse = FALSE,
+  role = "augment",
+  ...
+) {
   water_level <- substitute(water_level)
   barometric_pressure <- substitute(barometric_pressure)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepBaroClark$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepBaroClark$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
-
 
 
 # Hussein
@@ -653,28 +678,29 @@ step_baro_clark <- function(.rec,
 #' @return complex response vector in frequency domain
 #'
 #' @export
-step_baro_frequency_semi_confined <- function(.rec,
-                                              frequency,
-                                              radius_well,
-                                              transmissivity,
-                                              storage_confining,
-                                              storage_aquifer,
-                                              diffusivity_confining,
-                                              diffusivity_vadose,
-                                              thickness_confining,
-                                              thickness_vadose,
-                                              loading_efficiency,
-                                              attenuation,
-                                              role = "predictor",
-                                              ...) {
+step_baro_frequency_semi_confined <- function(
+  .rec,
+  frequency,
+  radius_well,
+  transmissivity,
+  storage_confining,
+  storage_aquifer,
+  diffusivity_confining,
+  diffusivity_vadose,
+  thickness_confining,
+  thickness_vadose,
+  loading_efficiency,
+  attenuation,
+  role = "predictor",
+  ...
+) {
   frequency <- substitute(frequency)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepBaroFrequencySemiConfined$new,
-                        modifyList(x = env_list,
-                                   val = list(...))))
-
+  .rec$add_step(do.call(
+    StepBaroFrequencySemiConfined$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
-
 
 
 #' step_baro_frequency_semi_confined
@@ -696,27 +722,29 @@ step_baro_frequency_semi_confined <- function(.rec,
 #' @return complex response vector in frequency domain
 #'
 #' @export
-step_baro_frequency_unconfined <- function(.rec,
-                                           frequency,
-                                           radius_well,
-                                           storage_aquifer,
-                                           specific_yield,
-                                           k_vertical,
-                                           diffusivity_vertical,
-                                           diffusivity_vadose,
-                                           thickness_saturated_well,
-                                           thickness_vadose,
-                                           thickness_aquifer,
-                                           loading_efficiency,
-                                           attenuation,
-                                           role = "predictor",
-                                           ...) {
+step_baro_frequency_unconfined <- function(
+  .rec,
+  frequency,
+  radius_well,
+  storage_aquifer,
+  specific_yield,
+  k_vertical,
+  diffusivity_vertical,
+  diffusivity_vadose,
+  thickness_saturated_well,
+  thickness_vadose,
+  thickness_aquifer,
+  loading_efficiency,
+  attenuation,
+  role = "predictor",
+  ...
+) {
   frequency <- substitute(frequency)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepBaroFrequencyUnconfined$new,
-                        modifyList(x = env_list,
-                                   val = list(...))))
-
+  .rec$add_step(do.call(
+    StepBaroFrequencyUnconfined$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -747,20 +775,23 @@ step_baro_frequency_unconfined <- function(.rec,
 #' least_squares$get_step_data("barometric_efficiency")
 #'
 #' @export
-step_baro_least_squares <- function(.rec,
-                                    water_level,
-                                    barometric_pressure,
-                                    lag_space = 1L,
-                                    inverse = FALSE,
-                                    differences = FALSE,
-                                    role = "augment",
-                                    ...) {
+step_baro_least_squares <- function(
+  .rec,
+  water_level,
+  barometric_pressure,
+  lag_space = 1L,
+  inverse = FALSE,
+  differences = FALSE,
+  role = "augment",
+  ...
+) {
   water_level <- substitute(water_level)
   barometric_pressure <- substitute(barometric_pressure)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepBaroLeastSquares$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepBaroLeastSquares$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' step_baro_harmonic
@@ -799,25 +830,28 @@ step_baro_least_squares <- function(.rec,
 #'                     et,
 #'                     inverse = FALSE)
 #' @export
-step_baro_harmonic <- function(.rec,
-                               time,
-                               water_level,
-                               barometric_pressure,
-                               earth_tide,
-                               frequency = c(1.9324, 2.0),
-                               cycle_size = 86400,
-                               starting_value = 0.0,
-                               inverse = FALSE,
-                               role = "augment",
-                               ...) {
+step_baro_harmonic <- function(
+  .rec,
+  time,
+  water_level,
+  barometric_pressure,
+  earth_tide,
+  frequency = c(1.9324, 2.0),
+  cycle_size = 86400,
+  starting_value = 0.0,
+  inverse = FALSE,
+  role = "augment",
+  ...
+) {
   time <- substitute(time)
   water_level <- substitute(water_level)
   barometric_pressure <- substitute(barometric_pressure)
   earth_tide <- substitute(earth_tide)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepBaroHarmonic$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepBaroHarmonic$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_center
@@ -838,19 +872,22 @@ step_baro_harmonic <- function(.rec,
 #'        prep() |>
 #'        bake()
 #'
-step_center <- function(.rec,
-                        terms,
-                        role = "predictor",
-                        skip = FALSE,
-                        na_rm = TRUE,
-                        fun = collapse::fmean,
-                        keep_original_cols = FALSE,
-                        ...) {
+step_center <- function(
+  .rec,
+  terms,
+  role = "predictor",
+  skip = FALSE,
+  na_rm = TRUE,
+  fun = collapse::fmean,
+  keep_original_cols = FALSE,
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepCenter$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepCenter$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_check_na
@@ -872,15 +909,13 @@ step_center <- function(.rec,
 #'        prep() |>
 #'        bake()
 #'
-step_check_na <- function(.rec,
-                          terms,
-                          role = "check",
-                          ...) {
+step_check_na <- function(.rec, terms, role = "check", ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepCheckNA$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepCheckNA$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_check_spacing
@@ -902,15 +937,13 @@ step_check_na <- function(.rec,
 #'        prep() |>
 #'        bake()
 #'
-step_check_spacing <- function(.rec,
-                               terms,
-                               role = "check",
-                               ...) {
+step_check_spacing <- function(.rec, terms, role = "check", ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepCheckSpacing$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepCheckSpacing$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_check_spacing
@@ -937,19 +970,22 @@ step_check_spacing <- function(.rec,
 #'  prep() |>
 #'  bake()
 #'
-step_compare_columns <- function(.rec,
-                                 data,
-                                 compare,
-                                 role = "add",
-                                 n_sd = 4,
-                                 na_rm = TRUE,
-                                 ...) {
+step_compare_columns <- function(
+  .rec,
+  data,
+  compare,
+  role = "add",
+  n_sd = 4,
+  na_rm = TRUE,
+  ...
+) {
   data <- substitute(data)
   compare <- substitute(compare)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepCompareColumns$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepCompareColumns$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_convolve_gamma
@@ -979,22 +1015,23 @@ step_compare_columns <- function(.rec,
 #'   step_convolve_gamma(z, amplitude = 1, theta = 1, k = 1) |>
 #'   plate("tbl")
 #'
-step_convolve_gamma <- function(.rec,
-                                terms,
-                                amplitude,
-                                k,
-                                theta,
-                                align = "right",
-                                max_length = Inf,
-                                role = "predictor",
-                                ...) {
-
+step_convolve_gamma <- function(
+  .rec,
+  terms,
+  amplitude,
+  k,
+  theta,
+  align = "right",
+  max_length = Inf,
+  role = "predictor",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepConvolveGamma$new,
-                        modifyList(x = env_list, val = list(...))))
-
-
+  .rec$add_step(do.call(
+    StepConvolveGamma$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_convolve_exponential
@@ -1024,21 +1061,22 @@ step_convolve_gamma <- function(.rec,
 #'   step_convolve_gamma(z, amplitude = 1, theta = 1, k = 1) |>
 #'   plate("tbl")
 #'
-step_convolve_exponential <- function(.rec,
-                                      terms,
-                                      amplitude,
-                                      theta,
-                                      align = "right",
-                                      max_length = Inf,
-                                      role = "predictor",
-                                      ...) {
-
+step_convolve_exponential <- function(
+  .rec,
+  terms,
+  amplitude,
+  theta,
+  align = "right",
+  max_length = Inf,
+  role = "predictor",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepConvolveExponential$new,
-                        modifyList(x = env_list, val = list(...))))
-
-
+  .rec$add_step(do.call(
+    StepConvolveExponential$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_cross_correlation
@@ -1065,16 +1103,19 @@ step_convolve_exponential <- function(.rec,
 #' frec = recipe(formula = formula, data = dat) |>
 #'  step_cross_correlation(c(x, y))
 #'
-step_cross_correlation <- function(.rec,
-                                   terms,
-                                   lag_max = 100,
-                                   role = "predictor",
-                                   ...) {
-
+step_cross_correlation <- function(
+  .rec,
+  terms,
+  lag_max = 100,
+  role = "predictor",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepCrossCorrelation$new,
-                        modifyList(x = env_list, val = list(...))))
+  .rec$add_step(do.call(
+    StepCrossCorrelation$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_distributed_lag
@@ -1108,20 +1149,23 @@ step_cross_correlation <- function(.rec,
 #' frec = recipe(formula = formula, data = dat) |>
 #'  step_distributed_lag(x, knots = hydrorecipes:::log_lags_arma(6, 800))
 #'
-step_distributed_lag <- function(.rec,
-                                 terms,
-                                 n_lag = 12L,
-                                 lag_max = 86400L,
-                                 knots = NA_real_,
-                                 basis_matrix = NA_real_,
-                                 intercept = FALSE,
-                                 role = "predictor",
-                                 ...) {
+step_distributed_lag <- function(
+  .rec,
+  terms,
+  n_lag = 12L,
+  lag_max = 86400L,
+  knots = NA_real_,
+  basis_matrix = NA_real_,
+  intercept = FALSE,
+  role = "predictor",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepDistributedLag$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepDistributedLag$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_drop_columns
@@ -1145,15 +1189,13 @@ step_distributed_lag <- function(.rec,
 #'
 #' frec = recipe(formula = formula, data = dat) |>
 #'   step_drop_columns(x)
-step_drop_columns <- function(.rec,
-                              terms,
-                              role = "modify",
-                              ...) {
+step_drop_columns <- function(.rec, terms, role = "modify", ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepDropColumns$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepDropColumns$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_dummy
@@ -1176,18 +1218,21 @@ step_drop_columns <- function(.rec,
 #'        step_dummy(x, one_hot = FALSE)
 #' rec <- recipe(y~x, data = dat) |>
 #'        step_dummy(x, one_hot = TRUE)
-step_dummy <- function(.rec,
-                       terms,
-                       one_hot = FALSE,
-                       role = "predictor",
-                       skip = FALSE,
-                       keep_original_cols = FALSE,
-                       ...) {
+step_dummy <- function(
+  .rec,
+  terms,
+  one_hot = FALSE,
+  role = "predictor",
+  skip = FALSE,
+  keep_original_cols = FALSE,
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepDummy$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepDummy$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_earthtide
@@ -1229,31 +1274,34 @@ step_dummy <- function(.rec,
 #'                  elevation = elevation,
 #'                  cutoff = cutoff,
 #'                  catalog = catalog)
-step_earthtide <- function(.rec,
-                           terms,
-                           do_predict = TRUE,
-                           method = "gravity",
-                           latitude = 0.0,
-                           longitude = 0.0,
-                           elevation = 0.0,
-                           azimuth = 0.0,
-                           gravity = 0.0,
-                           earth_radius = 6378136.3,
-                           earth_eccen = 0.0066943979514,
-                           cutoff = 1e-6,
-                           catalog = "ksm04",
-                           eop = NULL,
-                           scale = TRUE,
-                           n_thread = 1L,
-                           astro_update = 1L,
-                           interp_factor = 1L,
-                           role = "predictor",
-                           ...) {
+step_earthtide <- function(
+  .rec,
+  terms,
+  do_predict = TRUE,
+  method = "gravity",
+  latitude = 0.0,
+  longitude = 0.0,
+  elevation = 0.0,
+  azimuth = 0.0,
+  gravity = 0.0,
+  earth_radius = 6378136.3,
+  earth_eccen = 0.0066943979514,
+  cutoff = 1e-6,
+  catalog = "ksm04",
+  eop = NULL,
+  scale = TRUE,
+  n_thread = 1L,
+  astro_update = 1L,
+  interp_factor = 1L,
+  role = "predictor",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepEarthtide$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepEarthtide$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_fft_coherence
@@ -1279,15 +1327,13 @@ step_earthtide <- function(.rec,
 #'   prep() |>
 #'   bake()
 #'
-step_fft_coherence <- function(.rec,
-                               terms,
-                               role = "augment",
-                               ...) {
+step_fft_coherence <- function(.rec, terms, role = "augment", ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepCoherence$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepCoherence$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_fft_pgram
@@ -1314,22 +1360,25 @@ step_fft_coherence <- function(.rec,
 #' frec = recipe(formula = formula, data = dat) |>
 #'   step_fft_pgram(c(x,y))
 #'
-step_fft_pgram <- function(.rec,
-                           terms,
-                           spans = 3,
-                           detrend = TRUE,
-                           demean = TRUE,
-                           lst = TRUE,
-                           taper = 0.1,
-                           pad_fft = TRUE,
-                           time_step = 1,
-                           role = "predictor",
-                           ...) {
+step_fft_pgram <- function(
+  .rec,
+  terms,
+  spans = 3,
+  detrend = TRUE,
+  demean = TRUE,
+  lst = TRUE,
+  taper = 0.1,
+  pad_fft = TRUE,
+  time_step = 1,
+  role = "predictor",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepPgram$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepPgram$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_fft_welch
@@ -1356,19 +1405,22 @@ step_fft_pgram <- function(.rec,
 #'
 #' frec = recipe(formula = formula, data = dat) |>
 #'   step_fft_welch(c(x,y), length_subset = 10, window = window_rectangle(10))
-step_fft_welch <- function(.rec,
-                           terms,
-                           length_subset,
-                           overlap = 0.8,
-                           window,
-                           time_step = 1.0,
-                           role = "augment",
-                           ...) {
+step_fft_welch <- function(
+  .rec,
+  terms,
+  length_subset,
+  overlap = 0.8,
+  window,
+  time_step = 1.0,
+  role = "augment",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepWelch$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepWelch$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_fft_transfer_pgram
@@ -1394,21 +1446,24 @@ step_fft_welch <- function(.rec,
 #'        step_fft_transfer_pgram(c(wl, baro, et), spans = 3) |>
 #'        plate()
 #'
-step_fft_transfer_pgram <- function(.rec,
-                                    terms,
-                                    spans = 3,
-                                    detrend = TRUE,
-                                    demean = TRUE,
-                                    taper = 0.1,
-                                    time_step = 1.0,
-                                    formula = NULL,
-                                    role = "augment",
-                                    ...) {
+step_fft_transfer_pgram <- function(
+  .rec,
+  terms,
+  spans = 3,
+  detrend = TRUE,
+  demean = TRUE,
+  taper = 0.1,
+  time_step = 1.0,
+  formula = NULL,
+  role = "augment",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepTransferPgram$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepTransferPgram$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_fft_transfer_experimental
@@ -1435,23 +1490,26 @@ step_fft_transfer_pgram <- function(.rec,
 #'        step_fft_transfer_experimental(c(wl, baro, et), spans = 3) |>
 #'        plate()
 #'
-step_fft_transfer_experimental <- function(.rec,
-                                           terms,
-                                           spans = 3,
-                                           detrend = TRUE,
-                                           demean = TRUE,
-                                           taper = 0.1,
-                                           # power = 3,
-                                           n_groups = 200,
-                                           time_step = 1.0,
-                                           formula = NULL,
-                                           role = "augment",
-                                           ...) {
+step_fft_transfer_experimental <- function(
+  .rec,
+  terms,
+  spans = 3,
+  detrend = TRUE,
+  demean = TRUE,
+  taper = 0.1,
+  # power = 3,
+  n_groups = 200,
+  time_step = 1.0,
+  formula = NULL,
+  role = "augment",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepTransferExperimental$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepTransferExperimental$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_fft_transfer_welch
@@ -1478,20 +1536,23 @@ step_fft_transfer_experimental <- function(.rec,
 #'                           window = window_nuttall(1440*8+1)) |>
 #'   plate()
 #'
-step_fft_transfer_welch <- function(.rec,
-                                    terms,
-                                    length_subset,
-                                    overlap = 0.8,
-                                    window,
-                                    time_step = 1.0,
-                                    formula = NULL,
-                                    role = "augment",
-                                    ...) {
+step_fft_transfer_welch <- function(
+  .rec,
+  terms,
+  length_subset,
+  overlap = 0.8,
+  window,
+  time_step = 1.0,
+  formula = NULL,
+  role = "augment",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepTransferWelch$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepTransferWelch$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_find_interval
@@ -1518,16 +1579,13 @@ step_fft_transfer_welch <- function(.rec,
 #'   step_find_interval(x, vec = c(-0.1, 0.0, 0.1)) |>
 #'   plate("tbl")
 #'
-step_find_interval <- function(.rec,
-                               terms,
-                               vec,
-                               role = "augment",
-                               ...) {
+step_find_interval <- function(.rec, terms, vec, role = "augment", ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepFindInterval$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepFindInterval$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_harmonic
@@ -1552,20 +1610,23 @@ step_find_interval <- function(.rec,
 #'                      frequency = 2.0,
 #'                      cycle_size = 4.0,
 #'                      starting_value = 0.0)
-step_harmonic <- function(.rec,
-                          terms,
-                          frequency = NA_real_,
-                          cycle_size = NA_real_,
-                          starting_value = 0.0,
-                          role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE,
-                          ...) {
+step_harmonic <- function(
+  .rec,
+  terms,
+  frequency = NA_real_,
+  cycle_size = NA_real_,
+  starting_value = 0.0,
+  role = "predictor",
+  skip = FALSE,
+  keep_original_cols = FALSE,
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepHarmonic$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepHarmonic$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_intercept
@@ -1585,16 +1646,13 @@ step_harmonic <- function(.rec,
 #'
 #' rec <- recipe(y~x, data = dat) |>
 #'        step_intercept()
-step_intercept <- function(.rec,
-                           terms,
-                           value = 1.0,
-                           role = "predictor",
-                           ...) {
+step_intercept <- function(.rec, terms, value = 1.0, role = "predictor", ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepIntercept$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepIntercept$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_kernel_filter
@@ -1623,19 +1681,20 @@ step_intercept <- function(.rec,
 #'   step_kernel_filter(z, kernel = list(rep(1, 1001)/1001), align = "center") |>
 #'   plate("tbl")
 #'
-step_kernel_filter <- function(.rec,
-                               terms,
-                               kernel,
-                               align = "center",
-                               role = "predictor",
-                               ...) {
-
+step_kernel_filter <- function(
+  .rec,
+  terms,
+  kernel,
+  align = "center",
+  role = "predictor",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepKernelFilter$new,
-                        modifyList(x = env_list, val = list(...))))
-
-
+  .rec$add_step(do.call(
+    StepKernelFilter$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_kernel_divide_naive
@@ -1651,18 +1710,19 @@ step_kernel_filter <- function(.rec,
 #' @export
 #'
 #'
-step_kernel_divide_naive <- function(.rec,
-                               terms,
-                               kernel,
-                               role = "predictor",
-                               ...) {
-
+step_kernel_divide_naive <- function(
+  .rec,
+  terms,
+  kernel,
+  role = "predictor",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepKernelDivideNaive$new,
-                        modifyList(x = env_list, val = list(...))))
-
-
+  .rec$add_step(do.call(
+    StepKernelDivideNaive$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_lead_lag
@@ -1694,20 +1754,23 @@ step_kernel_divide_naive <- function(.rec,
 #' rec <- recipe(y~x, data = dat) |>
 #'        step_lead_lag(x, lag = 1, n_shift = 2, n_subset = 5)
 #'
-step_lead_lag <- function(.rec,
-                          terms,
-                          lag,
-                          n_shift = 0L,
-                          n_subset = 1L,
-                          role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE,
-                          ...) {
+step_lead_lag <- function(
+  .rec,
+  terms,
+  lag,
+  n_shift = 0L,
+  n_subset = 1L,
+  role = "predictor",
+  skip = FALSE,
+  keep_original_cols = FALSE,
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepLeadLag$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepLeadLag$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_multiply
@@ -1724,19 +1787,21 @@ step_lead_lag <- function(.rec,
 #' rec <- recipe(y~x, data = dat) |>
 #'        step_multiply(x, value = 4)
 #'
-step_multiply <- function(.rec,
-                          terms,
-                          values = 1.0,
-                          role = "predictor",
-                          skip = FALSE,
-                          keep_original_cols = FALSE,
-                          ...){
-
+step_multiply <- function(
+  .rec,
+  terms,
+  values = 1.0,
+  role = "predictor",
+  skip = FALSE,
+  keep_original_cols = FALSE,
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepMultiply$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepMultiply$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_normalize
@@ -1752,19 +1817,21 @@ step_multiply <- function(.rec,
 #' rec <- recipe(y~x, data = dat) |>
 #'        step_normalize(x)
 #'
-step_normalize <- function(.rec,
-                           terms,
-                           role = "predictor",
-                           skip = FALSE,
-                           na_rm = TRUE,
-                           keep_original_cols = FALSE,
-                           ...){
-
+step_normalize <- function(
+  .rec,
+  terms,
+  role = "predictor",
+  skip = FALSE,
+  na_rm = TRUE,
+  keep_original_cols = FALSE,
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepNormalize$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepNormalize$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_ols_gap_fill
@@ -1782,17 +1849,13 @@ step_normalize <- function(.rec,
 #' dat <- data.frame(x = rnorm(10), y = rnorm(10))
 #'
 #'
-step_ols_gap_fill <- function(.rec,
-                              terms,
-                              recipe,
-                              role = "predictor",
-                              ...){
-
+step_ols_gap_fill <- function(.rec, terms, recipe, role = "predictor", ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepOlsGapFill$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepOlsGapFill$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_ols
@@ -1828,17 +1891,85 @@ step_ols_gap_fill <- function(.rec,
 #'   step_ols(formula) |>
 #'   prep() |>
 #'   bake()
-step_ols <- function(.rec,
-                     formula,
-                     role = "predictor",
-                     do_response = TRUE,
-                     # do_predict = TRUE,
-                     ...){
-
+step_ols <- function(
+  .rec,
+  formula,
+  role = "predictor",
+  do_response = TRUE,
+  # do_predict = TRUE,
+  ...
+) {
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepOls$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(StepOls$new, modifyList(x = env_list, val = list(...))))
+}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#' @title step_gls
+#'
+#' @description Uses \code(glmnet::cv.glmnet)
+#'
+#'
+#' @inheritParams step_scale
+#' @inheritParams glmnet::glmnet
+#' @param do_response \code{logical} calculate and return the responses?
+#' @param formula formula for the regression
+#'
+#' @return an updated recipe
+#'
+#' @family ols
+#'
+#' @export
+#'
+#' @examples
+#' data("kennel_2020")
+#' kennel_2020[, datetime := as.numeric(datetime)]
+#' formula <- as.formula(wl~.)
+#' n_knots <- 12
+#' deg_free <- 27
+#' max_lag <- 1 + 720
+#'
+#' frec = recipe(formula = formula, data = unclass(kennel_2020)) |>
+#'   step_distributed_lag(baro, knots = hydrorecipes:::log_lags_arma(n_knots, max_lag)) |>
+#'   step_spline_b(datetime, df = deg_free, intercept = FALSE) |>
+#'   step_intercept() |>
+#'   step_drop_columns(baro) |>
+#'   step_drop_columns(datetime) |>
+#'   step_gls(formula) |>
+#'   prep() |>
+#'   bake()
+step_gls <- function(
+  .rec,
+  formula,
+  role = "predictor",
+  do_response = TRUE,
+  weights = NULL,
+  offset = NULL,
+  alpha = 1,
+  nlambda = 100,
+  lambda.min.ratio = NULL,
+  lambda = NULL,
+  standardize = TRUE,
+  intercept = FALSE,
+  # thresh = 1.0e-7,
+  # dfmax = NULL,
+  # pmax = NULL,
+  exclude = NULL,
+  penalty.factor = NULL,
+  lower.limits = -Inf,
+  upper.limits = Inf,
+  # maxit = 1e5,
+  type.gaussian = "covariance",
+  type.logistic = c("Newton", "modified.Newton"),
+  standardize.response = FALSE,
+  type.multinomial = c("ungrouped", "grouped"),
+  relax = FALSE,
+  # trace.it = 0,
+  cox.ties = c("breslow", "efron"),
+  control = list(),
+  s = 0.0,
+  ...
+) {
+  env_list <- get_function_arguments()
+  .rec$add_step(do.call(StepGls$new, modifyList(x = env_list, val = list(...))))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_nls
@@ -1877,23 +2008,22 @@ step_ols <- function(.rec,
 #'   step_ols(formula) |>
 #'   prep() |>
 #'   bake()
-step_nls <- function(.rec,
-                     formula,
-                     algorithm = "lm",
-                     n_subset = 1L,
-                     n_shift = 0L,
-                     range = c(-Inf, Inf),
-                     control =  gsl_nls_control(xtol = 1e-8),
-                     trace = FALSE,
-                     role = "predictor",
-                     # do_response = TRUE,
-                     # do_predict = TRUE,
-                     ...){
-
+step_nls <- function(
+  .rec,
+  formula,
+  algorithm = "lm",
+  n_subset = 1L,
+  n_shift = 0L,
+  range = c(-Inf, Inf),
+  control = gsl_nls_control(xtol = 1e-8),
+  trace = FALSE,
+  role = "predictor",
+  # do_response = TRUE,
+  # do_predict = TRUE,
+  ...
+) {
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepNls$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(StepNls$new, modifyList(x = env_list, val = list(...))))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_pca
@@ -1928,19 +2058,19 @@ step_nls <- function(.rec,
 #' rec  = recipe(formula = formula, data = dat) |>
 #'   step_pca(c(x,a,b,d,e,f,g)) |>
 #'   plate()
-step_pca <- function(.rec,
-                     terms,
-                     na_rm = TRUE,
-                     n_comp = 3,
-                     center = TRUE,
-                     scale = TRUE,
-                     role = "predictor",
-                     ...) {
+step_pca <- function(
+  .rec,
+  terms,
+  na_rm = TRUE,
+  n_comp = 3,
+  center = TRUE,
+  scale = TRUE,
+  role = "predictor",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments()
-  .rec$add_step(do.call(StepPca$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(StepPca$new, modifyList(x = env_list, val = list(...))))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_scale
@@ -1971,20 +2101,23 @@ step_pca <- function(.rec,
 #' rec <- recipe(y~x, data = dat) |>
 #'        step_scale(x)
 #'
-step_scale <- function(.rec,
-                       terms,
-                       role = "predictor",
-                       skip = FALSE,
-                       na_rm = TRUE,
-                       fun = collapse::fsd,
-                       n_sd = 1L,
-                       keep_original_cols = FALSE,
-                       ...) {
+step_scale <- function(
+  .rec,
+  terms,
+  role = "predictor",
+  skip = FALSE,
+  na_rm = TRUE,
+  fun = collapse::fsd,
+  n_sd = 1L,
+  keep_original_cols = FALSE,
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepScale$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepScale$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_slug_cbp
@@ -2031,23 +2164,26 @@ step_scale <- function(.rec,
 #'     n_terms = 12L
 #'   ) |>
 #'   plate("dt")
-step_slug_cbp <- function(.rec,
-                          time,
-                          radius = 1.0,
-                          radius_casing = 0.15,
-                          radius_well = 0.15,
-                          specific_storage = 1.0e-6,
-                          hydraulic_conductivity = 1.0e-4,
-                          head_0 = 1.0,
-                          thickness = 1.0,
-                          n_terms = 16,
-                          role = "predictor",
-                          ...) {
+step_slug_cbp <- function(
+  .rec,
+  time,
+  radius = 1.0,
+  radius_casing = 0.15,
+  radius_well = 0.15,
+  specific_storage = 1.0e-6,
+  hydraulic_conductivity = 1.0e-4,
+  head_0 = 1.0,
+  thickness = 1.0,
+  n_terms = 16,
+  role = "predictor",
+  ...
+) {
   time <- substitute(time)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepSlugCbp$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepSlugCbp$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_spline_b
@@ -2078,21 +2214,24 @@ step_slug_cbp <- function(.rec,
 #'   step_spline_b(x, df = 11L, intercept = FALSE)  |>
 #'  plate("tbl")
 #'
-step_spline_b <- function(.rec,
-                          terms,
-                          df = 0L,
-                          internal_knots = NULL,
-                          boundary_knots = NULL,
-                          intercept = FALSE,
-                          periodic = FALSE,
-                          degree = 3L,
-                          role = "predictor",
-                          ...) {
+step_spline_b <- function(
+  .rec,
+  terms,
+  df = 0L,
+  internal_knots = NULL,
+  boundary_knots = NULL,
+  intercept = FALSE,
+  periodic = FALSE,
+  degree = 3L,
+  role = "predictor",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepSplineB$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepSplineB$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_spline_n
@@ -2124,21 +2263,24 @@ step_spline_b <- function(.rec,
 #'   step_spline_n(x, df = 11L, intercept = FALSE)  |>
 #'  plate("tbl")
 #'
-step_spline_n <- function(.rec,
-                          terms,
-                          df = 0L,
-                          internal_knots = NULL,
-                          boundary_knots = NULL,
-                          intercept = FALSE,
-                          periodic = FALSE,
-                          degree = 3L,
-                          role = "predictor",
-                          ...) {
+step_spline_n <- function(
+  .rec,
+  terms,
+  df = 0L,
+  internal_knots = NULL,
+  boundary_knots = NULL,
+  intercept = FALSE,
+  periodic = FALSE,
+  degree = 3L,
+  role = "predictor",
+  ...
+) {
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepSplineN$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepSplineN$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_subset_na_omit
@@ -2152,15 +2294,13 @@ step_spline_n <- function(.rec,
 #' @export
 #'
 #'
-step_subset_na_omit <- function(.rec,
-                             terms,
-                             role = "modify",
-                             ...) {
+step_subset_na_omit <- function(.rec, terms, role = "modify", ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepSubsetNAOmit$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepSubsetNAOmit$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_subset_rows
@@ -2183,14 +2323,12 @@ step_subset_na_omit <- function(.rec,
 #'   step_subset_rows(row_numbers = c(1, 5, 10)) |>
 #'   plate("dt")
 #'
-step_subset_rows <- function(.rec,
-                             row_numbers,
-                             role = "modify",
-                             ...) {
+step_subset_rows <- function(.rec, row_numbers, role = "modify", ...) {
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepSubsetRows$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepSubsetRows$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_subset_sample
@@ -2206,15 +2344,13 @@ step_subset_rows <- function(.rec,
 #'
 #'
 #'
-step_subset_sample <- function(.rec,
-                             terms,
-                             size,
-                             role = "modify",
-                             ...) {
+step_subset_sample <- function(.rec, terms, size, role = "modify", ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepSubsetSample$new,
-                        modifyList(x = env_list, val = list(...))))
+  .rec$add_step(do.call(
+    StepSubsetSample$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_transport_fractures_heat
@@ -2263,33 +2399,36 @@ step_subset_sample <- function(.rec,
 #'                                 distance_matrix = x) |>
 #'   plate()
 #'
-step_transport_fractures_heat <- function(.rec,
-                                          time,
-                                          distance_fracture,
-                                          distance_matrix,
-                                          temperature_influent = 15.0,
-                                          time_influent = 0.0,
-                                          temperature_initial = 10,
-                                          fracture_aperture = 2e-4,
-                                          fracture_spacing = 1.0,
-                                          velocity = 0.1 / 86400.0,
-                                          thermal_conductivity_water = 0.615,
-                                          thermal_conductivity_solids = 3.4,
-                                          specific_heat_water = 4192,
-                                          specific_heat_solids = 908,
-                                          density_water = 1.0,
-                                          density_solids = 2.5,
-                                          porosity = 0.1,
-                                          n_terms = 30L,
-                                          role = "predictor",
-                                          ...) {
+step_transport_fractures_heat <- function(
+  .rec,
+  time,
+  distance_fracture,
+  distance_matrix,
+  temperature_influent = 15.0,
+  time_influent = 0.0,
+  temperature_initial = 10,
+  fracture_aperture = 2e-4,
+  fracture_spacing = 1.0,
+  velocity = 0.1 / 86400.0,
+  thermal_conductivity_water = 0.615,
+  thermal_conductivity_solids = 3.4,
+  specific_heat_water = 4192,
+  specific_heat_solids = 908,
+  density_water = 1.0,
+  density_solids = 2.5,
+  porosity = 0.1,
+  n_terms = 30L,
+  role = "predictor",
+  ...
+) {
   time <- substitute(time)
   distance_fracture <- substitute(distance_fracture)
   distance_matrix <- substitute(distance_matrix)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepTransportFracturesHeat$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepTransportFracturesHeat$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_transport_fractures_solute
@@ -2344,34 +2483,37 @@ step_transport_fractures_heat <- function(.rec,
 #'                                   distance_matrix = x) |>
 #'   plate()
 #'
-step_transport_fractures_solute <- function(.rec,
-                                            time,
-                                            distance_fracture,
-                                            distance_matrix,
-                                            concentration_influent = 1.0,
-                                            time_influent = 0.0,
-                                            concentration_initial = 0.0,
-                                            fracture_aperture = 2e-4,
-                                            fracture_spacing = 1.0,
-                                            velocity = 0.1 / 86400.0,
-                                            dispersivity_longitudinal = 0.1,
-                                            diffusion = 1e-9,
-                                            sorption_fracture = 0.0,
-                                            sorption_matrix = 0.0,
-                                            decay = 1e15, # no decay
-                                            density_bulk = 2.5,
-                                            porosity = 0.10,
-                                            tortuosity = 0.1,
-                                            n_terms = 30L,
-                                            role = "predictor",
-                                            ...) {
+step_transport_fractures_solute <- function(
+  .rec,
+  time,
+  distance_fracture,
+  distance_matrix,
+  concentration_influent = 1.0,
+  time_influent = 0.0,
+  concentration_initial = 0.0,
+  fracture_aperture = 2e-4,
+  fracture_spacing = 1.0,
+  velocity = 0.1 / 86400.0,
+  dispersivity_longitudinal = 0.1,
+  diffusion = 1e-9,
+  sorption_fracture = 0.0,
+  sorption_matrix = 0.0,
+  decay = 1e15, # no decay
+  density_bulk = 2.5,
+  porosity = 0.10,
+  tortuosity = 0.1,
+  n_terms = 30L,
+  role = "predictor",
+  ...
+) {
   time <- substitute(time)
   distance_fracture <- substitute(distance_fracture)
   distance_matrix <- substitute(distance_matrix)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepTransportFracturesSolute$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepTransportFracturesSolute$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_transport_ogata_banks
@@ -2425,22 +2567,25 @@ step_transport_fractures_solute <- function(.rec,
 #'   step_transport_ogata_banks(time = x, distance = y) |>
 #'   plate("dt")
 #'
-step_transport_ogata_banks <- function(.rec,
-                                       time,
-                                       distance,
-                                       concentration_initial = 1.0,
-                                       velocity = 0.1,
-                                       diffusion = 0.1,
-                                       retardation = 1.0,
-                                       decay = 0.0,
-                                       role = "predictor",
-                                       ...) {
+step_transport_ogata_banks <- function(
+  .rec,
+  time,
+  distance,
+  concentration_initial = 1.0,
+  velocity = 0.1,
+  diffusion = 0.1,
+  retardation = 1.0,
+  decay = 0.0,
+  role = "predictor",
+  ...
+) {
   time <- substitute(time)
   distance <- substitute(distance)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepTransportOgataBanks$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepTransportOgataBanks$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_vadose_weeks
@@ -2479,19 +2624,22 @@ step_transport_ogata_banks <- function(.rec,
 #'                     thickness = 5,
 #'                     precision = 1e-12) |>
 #'   plate()
-step_vadose_weeks <- function(.rec,
-                              time,
-                              air_diffusivity = 0.2,
-                              thickness = 40.0,
-                              precision = 1e-12,
-                              inverse = FALSE,
-                              role = "predictor",
-                              ...) {
+step_vadose_weeks <- function(
+  .rec,
+  time,
+  air_diffusivity = 0.2,
+  thickness = 40.0,
+  precision = 1e-12,
+  inverse = FALSE,
+  role = "predictor",
+  ...
+) {
   time <- substitute(time)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepVadoseWeeks$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepVadoseWeeks$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #' @title step_varying
@@ -2516,15 +2664,13 @@ step_vadose_weeks <- function(.rec,
 #' frec = recipe(formula = formula, data = dat) |>
 #'   step_varying(c(x, y, z)) |>
 #'   plate()
-step_varying <- function(.rec,
-                         terms,
-                         role = "predictor",
-                         ...) {
+step_varying <- function(.rec, terms, role = "predictor", ...) {
   terms <- substitute(terms)
   env_list <- get_function_arguments_no_rec()
-  .rec$add_step(do.call(StepVarying$new,
-                        modifyList(x = env_list, val = list(...))))
-
+  .rec$add_step(do.call(
+    StepVarying$new,
+    modifyList(x = env_list, val = list(...))
+  ))
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
@@ -2611,10 +2757,6 @@ plate <- function(.rec, type = "dt", ...) {
 }
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-
-
-
 # formula <- as.formula(y~x)
 # data <- data.frame(x = as.numeric(1:10000), y = as.numeric(1:10000))
 # dat <- data
@@ -2651,5 +2793,3 @@ plate <- function(.rec, type = "dt", ...) {
 #   check = FALSE
 #   # relative = TRUE
 # )
-
-

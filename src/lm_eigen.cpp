@@ -1,6 +1,6 @@
 #include "hydrorecipes.h"
 
-
+// just coefficients
 // [[Rcpp::export]]
 Eigen::MatrixXd llt_solve(Eigen::Map<Eigen::MatrixXd> &X,
                           Eigen::Map<Eigen::MatrixXd> &Y) {
@@ -16,7 +16,7 @@ Eigen::MatrixXd llt_solve(Eigen::Map<Eigen::MatrixXd> &X,
   return(betahat);
 }
 
-
+// Other regression info and decomposition in groups
 // [[Rcpp::export]]
 Rcpp::List llt_solve_full(Eigen::Map<Eigen::MatrixXd> &X,
                           Eigen::Map<Eigen::MatrixXd> &Y,

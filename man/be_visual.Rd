@@ -15,6 +15,10 @@ be_visual(
 )
 }
 \arguments{
+\item{dep}{\code{numeric vector} of the dependent variable (ie:water level)}
+
+\item{ind}{\code{numeric vector} of the independent variable (ie:barometric pressure)}
+
 \item{time}{name of the column containing the time (character)}
 
 \item{be_tests}{vector of barometric efficiencies to test (between 0 and 1) (numeric)}

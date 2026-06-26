@@ -65,12 +65,12 @@ Theis, C.V., 1935: The relation between the lowering of the piezometric
  16th Annual Meeting, Part 2, pp. 519-524.
 }
 \seealso{
-Other aquifer: 
-\code{\link{step_aquifer_constant_drawdown}()},
-\code{\link{step_aquifer_grf}()},
-\code{\link{step_aquifer_leaky}()},
-\code{\link{step_aquifer_patch}()},
-\code{\link{step_aquifer_theis_aniso}()},
-\code{\link{step_aquifer_wellbore_storage}()}
+Other aquifer:
+\code{\link[=step_aquifer_constant_drawdown]{step_aquifer_constant_drawdown()}},
+\code{\link[=step_aquifer_grf]{step_aquifer_grf()}},
+\code{\link[=step_aquifer_leaky]{step_aquifer_leaky()}},
+\code{\link[=step_aquifer_patch]{step_aquifer_patch()}},
+\code{\link[=step_aquifer_theis_aniso]{step_aquifer_theis_aniso()}},
+\code{\link[=step_aquifer_wellbore_storage]{step_aquifer_wellbore_storage()}}
 }
 \concept{aquifer}

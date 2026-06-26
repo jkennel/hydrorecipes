@@ -52,8 +52,8 @@ least_squares$get_step_data("barometric_efficiency")
 
 }
 \seealso{
-Other barometric: 
-\code{\link{step_baro_clark}()},
-\code{\link{step_baro_harmonic}()}
+Other barometric:
+\code{\link[=step_baro_clark]{step_baro_clark()}},
+\code{\link[=step_baro_harmonic]{step_baro_harmonic()}}
 }
 \concept{barometric}

@@ -70,12 +70,12 @@ Butler, J.J., 1988: Pumping tests in nonuniform aquifers – The radially
  symmetric case, Journal of Hydrology, Vol. 101, pp. 15-30.
 }
 \seealso{
-Other aquifer: 
-\code{\link{step_aquifer_constant_drawdown}()},
-\code{\link{step_aquifer_grf}()},
-\code{\link{step_aquifer_leaky}()},
-\code{\link{step_aquifer_theis}()},
-\code{\link{step_aquifer_theis_aniso}()},
-\code{\link{step_aquifer_wellbore_storage}()}
+Other aquifer:
+\code{\link[=step_aquifer_constant_drawdown]{step_aquifer_constant_drawdown()}},
+\code{\link[=step_aquifer_grf]{step_aquifer_grf()}},
+\code{\link[=step_aquifer_leaky]{step_aquifer_leaky()}},
+\code{\link[=step_aquifer_theis]{step_aquifer_theis()}},
+\code{\link[=step_aquifer_theis_aniso]{step_aquifer_theis_aniso()}},
+\code{\link[=step_aquifer_wellbore_storage]{step_aquifer_wellbore_storage()}}
 }
 \concept{aquifer}

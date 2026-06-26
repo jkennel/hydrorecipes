@@ -20,8 +20,6 @@ expect_equivalent(frec1$result, frec2$result,
                   info = "R6 and hydrorecipes api are equivalent")
 
 
-frec1$get_response_data(type = "df")
-
 
 # spline checks
 n <- 2e4

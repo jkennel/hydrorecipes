@@ -12,15 +12,10 @@
 pad_num <- function(n, pad = "0") {
   width <- floor(log10(n)) + 1L
 
-  formatC(seq_len(n),
-    width = width,
-    format = "d",
-    flag = "0"
-  )
+  formatC(seq_len(n), width = width, format = "d", flag = "0")
 }
 
 name_columns <- function(id, column_name, n) {
-
   if (is.null(column_name)) {
     if (n < 2L) {
       return(file.path(id, fsep = "_"))
@@ -32,11 +27,8 @@ name_columns <- function(id, column_name, n) {
     return(file.path(id, column_name, fsep = "_"))
   }
 
-
   file.path(id, column_name, pad_num(n), fsep = "_")
 }
-
-
 
 
 #' Make a random identification field for steps
@@ -50,7 +42,8 @@ name_columns <- function(id, column_name, n) {
 #' @keywords internal
 rand_id <- function(prefix = "step", len = 5L) {
   candidates <- c(letters, LETTERS, paste(0:9))
-  paste(prefix,
+  paste(
+    prefix,
     paste0(sample(candidates, len, replace = TRUE), collapse = ""),
     sep = "_"
   )
@@ -69,15 +62,14 @@ rand_id <- function(prefix = "step", len = 5L) {
 #
 # }
 
-
-
 # regression helpers ------------------------------------------------------
 # predictors outcomes
-get_regression_data <- function(new_data,
-                                term_info,
-                                vars,
-                                id_type = "predictor") {
-
+get_regression_data <- function(
+  new_data,
+  term_info,
+  vars,
+  id_type = "predictor"
+) {
   nms <- unique(names(new_data))
 
   # term info data
@@ -102,18 +94,15 @@ get_regression_data <- function(new_data,
   x$to_rem <- collapse::missing_cases(new_data)
   x$data <- collapse::qM(unclass(new_data)[x$term_info$ids])
   x
-
 }
-
 
 
 # y = outcomes
 # x = predictors
 determine_coefficients <- function(x, y, has_na, decomp, full) {
-
-
   # solve
-  if(full) {
+  if (full) {
+    # calculate additional info and component groups
     fit <- llt_solve_full(
       x[!has_na, , drop = FALSE],
       y[!has_na, , drop = FALSE],
@@ -129,10 +118,78 @@ determine_coefficients <- function(x, y, has_na, decomp, full) {
 
   dimnames(fit$coefficients) <- list(colnames(x), colnames(y))
 
+  fit
+}
+
+# y = outcomes
+# x = predictors
+determine_coefficients_gls <- function(x, y, has_na, decomp, full, ...) {
+  inter <- "intercept" %in% colnames(x)
+
+  n <- ncol(x)
+
+  cn <- colnames(x)
+  rn <- colnames(y)
+
+  # strip the intercept column
+  if (inter) {
+    wh <- which("intercept" == colnames(x))
+    x <- x[, -wh]
+  }
+
+  # solve
+  fam <- "gaussian"
+  if (ncol(y) > 1L) {
+    fam <- "mgaussian"
+  }
+
+  fit <- glmnet::glmnet(
+    x = x[!has_na, , drop = FALSE],
+    y = y[!has_na, , drop = FALSE],
+    family = fam,
+    ...
+  )
+
+  fit.cv <- cv.glmnet(
+    x = x[!has_na, , drop = FALSE],
+    y = y[!has_na, , drop = FALSE],
+    family = fam,
+    ...
+  )
+
+  # print(fit.cv)
+  # plot(fit.cv)
+  # fit$coefficients <- as.matrix(coef(fit.cv, s = 0))
+
+  if (fam == "gaussian") {
+    fit$coefficients <- as.matrix(coef(fit, ...))
+  } else {
+    fit$coefficients <- vapply(
+      as.matrix(coef(fit, ...)),
+      FUN = as.matrix,
+      FUN.VALUE = matrix(NA_real_, nrow = n + inter, ncol = 1)
+    )
+  }
+
+  if (inter) {
+    inter_col <- 1L
+
+    if (wh == n) {
+      fit$coefficients <- fit$coefficients[c(2L:n, 1L), , drop = FALSE]
+    } else if (wh > 1L) {
+      fit$coefficients <- fit$coefficients[
+        c(2:wh, 1, (wh + 1L):n),
+        ,
+        drop = FALSE
+      ]
+    }
+  }
+
+  dimnames(fit$coefficients) <- list(cn, rn)
 
   fit
-
 }
+
 
 # n <- 2000
 # m <- matrix(1:(n*n), ncol = n)
@@ -228,20 +285,16 @@ determine_coefficients <- function(x, y, has_na, decomp, full) {
 #   lst
 # }
 
-
 # formula can be used to subset or separate predictors and outcomes
 return_type <- function(x, type = "df", formula = NULL, combined = TRUE) {
-
   if (!is.null(formula)) {
     vars_list <- get_formula_vars(formula = formula, data = unclass(x))
   } else {
     vars_list <- names(x)
 
     if (!combined) {
-      vars_list <- list(predictors = vars_list[-1L],
-                        outcomes = vars_list[1L])
+      vars_list <- list(predictors = vars_list[-1L], outcomes = vars_list[1L])
     }
-
   }
 
   if (combined) {
@@ -262,21 +315,26 @@ return_type <- function(x, type = "df", formula = NULL, combined = TRUE) {
 
   x <- switch(
     type,
-    "df" = list(predictors  = collapse::qDF(unclass(x)[vars_list[[1L]]]),
-                outcomes    = collapse::qDF(unclass(x)[vars_list[[2L]]])),
-    "dt" = list(predictors  = collapse::qDT(unclass(x)[vars_list[[1L]]]),
-                outcomes    = collapse::qDT(unclass(x)[vars_list[[2L]]])),
-    "tbl" = list(predictors = collapse::qTBL(unclass(x)[vars_list[[1L]]]),
-                 outcomes   = collapse::qTBL(unclass(x)[vars_list[[2L]]])),
-    "m"   = list(predictors = collapse::qM(unclass(x)[vars_list[[1L]]]),
-                 outcomes   = collapse::qM(unclass(x)[vars_list[[2L]]])),
+    "df" = list(
+      predictors = collapse::qDF(unclass(x)[vars_list[[1L]]]),
+      outcomes = collapse::qDF(unclass(x)[vars_list[[2L]]])
+    ),
+    "dt" = list(
+      predictors = collapse::qDT(unclass(x)[vars_list[[1L]]]),
+      outcomes = collapse::qDT(unclass(x)[vars_list[[2L]]])
+    ),
+    "tbl" = list(
+      predictors = collapse::qTBL(unclass(x)[vars_list[[1L]]]),
+      outcomes = collapse::qTBL(unclass(x)[vars_list[[2L]]])
+    ),
+    "m" = list(
+      predictors = collapse::qM(unclass(x)[vars_list[[1L]]]),
+      outcomes = collapse::qM(unclass(x)[vars_list[[2L]]])
+    ),
 
-    list(predictors = unclass(x)[vars_list[[1L]]],
-         outcomes   = unclass(x)[vars_list[[2L]]])
-
+    list(
+      predictors = unclass(x)[vars_list[[1L]]],
+      outcomes = unclass(x)[vars_list[[2L]]]
+    )
   )
-
-
-
-
 }

@@ -46,8 +46,8 @@ ba_knots <- log_lags(15, 1441)  # knots for distributed lag baro terms
 df       <- 5                   # degrees of freedom for spline background trend
 
 rec <- recipe(form, kennel_2020) |>
-  step_distributed_lag(baro, knots = ba_knots) |>
-  step_spline_b(datetime, df = df) |>
+  step_distributed_lag(baro, knots = ba_knots, intercept = TRUE) |>
+  step_spline_b(datetime, df = df, intercept = FALSE) |>
   step_lead_lag(et, lag = seq(-120, 120, 60)) |>
   step_intercept() |>
   step_drop_columns(c(baro, et, datetime)) |>
@@ -85,5 +85,44 @@ points(wl_distributed_lag_baro +
        wl_spline_b_datetime + 
        wl_lead_lag_et + 
        wl_intercept~datetime, pred, type = "l", col = "red")
+
+plot(pred$wl_distributed_lag_baro, type = 'l')
+```
+
+
+Generalized least squares version with glmnet.
+
+```{r, fig.alt = "Estimated barometric response function which starts at zero and increases to around 0.82 after 500 minutes."}
+#|warning: false
+#|message: false
+data(kennel_2020)
+form     <- as.formula(wl~.)
+ba_knots <- log_lags(15, 1441*1)  # knots for distributed lag baro terms
+df       <- 8                   # degrees of freedom for spline background trend
+
+kennel_2020[, datetime := as.numeric(datetime)]
+recg <- recipe(form, kennel_2020) |>
+  step_distributed_lag(baro, knots = ba_knots, intercept = TRUE) |>
+  step_spline_b(datetime, df = df, intercept = FALSE) |>
+  step_intercept() |>
+  step_lead_lag(et, lag = seq(-120, 120, 60)) |>
+  step_drop_columns(c(baro, et, datetime)) |>
+  step_gls(formula = form,
+    alpha = 0.0, 
+    s = 1e-5,
+    standardize = TRUE,
+    intercept = TRUE) |>
+  prep() |>
+  bake()
+
+
+# responses
+respg <- recg$get_response_data(type = "dt")
+
+# barometric response function
+plot(value~x, data = respg[term == "distributed_lag" & variable == "cumulative"], 
+     type = "l",
+     xlab = "Lag time in minutes",
+     ylab = "Cumulative response", col = "blue")
 
 ```

@@ -66,12 +66,12 @@ Jacob, C.E. and S.W. Lohman, 1952. Nonsteady flow to a well of constant
  pp. 559-569.
 }
 \seealso{
-Other aquifer: 
-\code{\link{step_aquifer_grf}()},
-\code{\link{step_aquifer_leaky}()},
-\code{\link{step_aquifer_patch}()},
-\code{\link{step_aquifer_theis}()},
-\code{\link{step_aquifer_theis_aniso}()},
-\code{\link{step_aquifer_wellbore_storage}()}
+Other aquifer:
+\code{\link[=step_aquifer_grf]{step_aquifer_grf()}},
+\code{\link[=step_aquifer_leaky]{step_aquifer_leaky()}},
+\code{\link[=step_aquifer_patch]{step_aquifer_patch()}},
+\code{\link[=step_aquifer_theis]{step_aquifer_theis()}},
+\code{\link[=step_aquifer_theis_aniso]{step_aquifer_theis_aniso()}},
+\code{\link[=step_aquifer_wellbore_storage]{step_aquifer_wellbore_storage()}}
 }
 \concept{aquifer}

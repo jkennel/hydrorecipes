@@ -112,8 +112,51 @@ plot(value~x, resp_l[resp_l$term == "lead_lag" & resp_l$variable == "cumulative"
      xlab = "Lag in minutes",
      ylab = "Cumulative Response"
      )
-points(value~x, resp_dl[resp_dl$term == "distributed_lag_interpolated" & resp_dl$variable == "cumulative", ],
+points(value~x, resp_dl[resp_dl$term == "distributed_lag" & resp_dl$variable == "cumulative", ],
        type = "l", col = "red")
+
+```
+
+Distributed lag and earthtide
+
+```{r distlag, fig.alt = "Barometric response functions with standard leading and lagging method compared to the distributed lag method.  Both methods are generally the same but the distributed lag method is smoother."}
+library(hydrorecipes)
+data(kennel_2020)
+
+# synthetic earthtide
+latitude     <- 34.23411                           # latitude
+longitude    <- -118.678                           # longitude
+elevation    <- 500                                # elevation
+cutoff       <- 1e-5                               # cutoff
+catalog      <- 'ksm04'                            # hartmann wenzel catalog
+astro_update <- 300                                # how often to update astro parameters
+method       <- 'volume_strain'                    # which potential to calculate
+
+wave_groups_dl <- earthtide::eterna_wavegroups
+wave_groups_dl <- na.omit(wave_groups_dl[wave_groups_dl$time == '1 month', ])
+wave_groups_dl <- wave_groups_dl[wave_groups_dl$start > 0.5,]
+wave_groups_dl <- wave_groups_dl[, c("start", "end")]
+ngr <- nrow(wave_groups_dl)
+
+
+lag_dl <- recipe(wl~., kennel_2020) |>
+  step_distributed_lag(baro, knots = log_lags(15, 1440), intercept = TRUE) |> 
+  step_earthtide(datetime,
+                 do_predict = FALSE,
+                 wave_groups = wave_groups_dl,
+                 latitude = latitude,
+                 longitude = longitude,
+                 elevation = elevation,
+                 cutoff = cutoff,
+                 catalog = catalog,
+                 astro_update = 60) |>
+  step_spline_n(datetime, df = 11, intercept = TRUE) |> 
+  step_drop_columns(c(baro, datetime, et)) |>
+  step_ols(wl~.) |> 
+  prep() |>
+  bake()
+resp_dl <- lag_dl$get_response_data()
+pred_dl <- lag_dl$get_predict_data()
 
 ```
 

@@ -14,7 +14,13 @@ be_correct(
 )
 }
 \arguments{
+\item{dep}{\code{numeric vector} of the dependent variable (ie:water level)}
+
+\item{ind}{\code{numeric vector} of the independent variable (ie:barometric pressure)}
+
 \item{be}{\code{numeric} value of the barometric efficiency}
+
+\item{inverse}{\code{logical} whether the barometric relationship is inverse}
 
 \item{known_mean}{\code{numeric} explicitly enter the mean if known.  Otherwise estimate from data.}
 }

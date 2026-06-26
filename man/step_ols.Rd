@@ -43,7 +43,8 @@ frec = recipe(formula = formula, data = unclass(kennel_2020)) |>
   bake()
 }
 \seealso{
-Other ols: 
-\code{\link{step_nls}()}
+Other ols:
+\code{\link[=step_gls]{step_gls()}},
+\code{\link[=step_nls]{step_nls()}}
 }
 \concept{ols}

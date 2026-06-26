@@ -70,12 +70,12 @@ Papadopulos, I.S. and H.H. Cooper, 1967. Drawdown in a well of large
   diameter, Water Resources Research, vol. 3, no. 1, pp. 241-244.
 }
 \seealso{
-Other aquifer: 
-\code{\link{step_aquifer_constant_drawdown}()},
-\code{\link{step_aquifer_grf}()},
-\code{\link{step_aquifer_leaky}()},
-\code{\link{step_aquifer_patch}()},
-\code{\link{step_aquifer_theis}()},
-\code{\link{step_aquifer_theis_aniso}()}
+Other aquifer:
+\code{\link[=step_aquifer_constant_drawdown]{step_aquifer_constant_drawdown()}},
+\code{\link[=step_aquifer_grf]{step_aquifer_grf()}},
+\code{\link[=step_aquifer_leaky]{step_aquifer_leaky()}},
+\code{\link[=step_aquifer_patch]{step_aquifer_patch()}},
+\code{\link[=step_aquifer_theis]{step_aquifer_theis()}},
+\code{\link[=step_aquifer_theis_aniso]{step_aquifer_theis_aniso()}}
 }
 \concept{aquifer}

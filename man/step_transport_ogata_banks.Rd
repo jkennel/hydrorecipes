@@ -77,8 +77,8 @@ Ogata, A., Banks, R.B., 1961. A solution of the differential equation of
   1-D, infinite source, uniform flow, constant parameters, decay, retardation
 }
 \seealso{
-Other transport: 
-\code{\link{step_transport_fractures_heat}()},
-\code{\link{step_transport_fractures_solute}()}
+Other transport:
+\code{\link[=step_transport_fractures_heat]{step_transport_fractures_heat()}},
+\code{\link[=step_transport_fractures_solute]{step_transport_fractures_solute()}}
 }
 \concept{transport}

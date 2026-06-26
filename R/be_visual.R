@@ -2,7 +2,7 @@
 #'
 #' Adjust values based on the barometric efficiency
 #'
-#' @inheritParams be_least_squares_diff
+#' @inheritParams be_clark_cpp
 #' @param be \code{numeric} value of the barometric efficiency
 #' @param known_mean \code{numeric} explicitly enter the mean if known.  Otherwise estimate from data.
 #'
@@ -18,22 +18,22 @@
 #' dat$wl + be_correct(dat, be=0.4, inverse = FALSE, known_mean = 9)
 #' # should return ~21.6 = 18 + 0.4 * 9
 #'
-be_correct <- function(dat,
-                       dep = 'wl',
-                       ind = 'baro',
-                       be = 0,
-                       inverse = TRUE,
-                       known_mean = NULL){
-
+be_correct <- function(
+  dat,
+  dep = 'wl',
+  ind = 'baro',
+  be = 0,
+  inverse = TRUE,
+  known_mean = NULL
+) {
   # hack for 'global variables NOTE
   corrected <- NULL
 
   dat_c <- copy(dat)
-  adj   <- dat_c[[ind]]
-
+  adj <- dat_c[[ind]]
 
   adj[is.na(adj)] <- 0
-  if (is.null(known_mean)){
+  if (is.null(known_mean)) {
     adj <- be * (adj - mean(adj, na.rm = TRUE))
   } else {
     adj <- be * (adj - known_mean)
@@ -44,9 +44,7 @@ be_correct <- function(dat,
   } else {
     return(-adj)
   }
-
 }
-
 
 
 #' be_visual_data
@@ -80,12 +78,13 @@ be_correct <- function(dat,
 #'                   wl = wl, baro = baro)
 #' be_visual_data(dat)
 #'
-be_visual_data <- function(dat,
-                           dep = 'wl',
-                           ind = 'baro',
-                           be_tests = seq(0, 1, 0.1),
-                           inverse = TRUE) {
-
+be_visual_data <- function(
+  dat,
+  dep = 'wl',
+  ind = 'baro',
+  be_tests = seq(0, 1, 0.1),
+  inverse = TRUE
+) {
   # hack for 'global variables NOTE
   correction <- NULL
   corrected <- NULL
@@ -93,20 +92,18 @@ be_visual_data <- function(dat,
 
   dat_tmp <- copy(dat)
 
-
   dat_list <- list()
   for (i in seq_along(be_tests)) {
-
-    dat_tmp[, correction := be_correct(dat, dep, ind, be_tests[i], inverse = inverse) ]
+    dat_tmp[,
+      correction := be_correct(dat, dep, ind, be_tests[i], inverse = inverse)
+    ]
     dat_tmp[, corrected := get(dep) + correction]
     dat_tmp[, be := as.numeric(be_tests[i])]
 
     dat_list[[i]] <- copy(dat_tmp)
   }
 
-
   return(rbindlist(dat_list))
-
 }
 
 #' be_visual_plot
@@ -137,53 +134,46 @@ be_visual_data <- function(dat,
 #' dat_be <- be_visual_data(dat)
 #' #be_visual_plot(dat_be) #not run
 #'
-be_visual_plot <- function(dat,
-                           time = 'datetime',
-                           subsample = TRUE){
-
-
-  if (time == 'time'){
+be_visual_plot <- function(dat, time = 'datetime', subsample = TRUE) {
+  if (time == 'time') {
     dat[, datetime := time]
   } else if (time != 'time') {
-
-    if (time == 'datetime') {
-    } else if ('time' %in% names(dat)) {
+    if (time == 'datetime') {} else if ('time' %in% names(dat)) {
       dat <- dat[, -c('time'), with = FALSE]
       dat[, datetime := get(time)]
     }
   }
-
 
   # hack for 'global variables NOTE
   corrected <- NULL
   datetime <- NULL
   be <- NULL
 
-
   setkey(dat, be, datetime)
 
-
   if (nrow(dat) > 60000) {
-
     n_group <- length(unique(dat$be))
-    n <- nrow(dat)/n_group
-    max_per_group <- round(60000/n_group)
+    n <- nrow(dat) / n_group
+    max_per_group <- round(60000 / n_group)
     dat <- dat[, .SD[seq(1, n, length.out = max_per_group)], by = be]
-
   }
 
   # return plotly plot
   p1 <- plot_ly(dat, x = ~datetime, y = ~corrected, height = 400, width = 700)
   p1 <- add_lines(p1, frame = ~be)
-  p1 <- layout(p1, xaxis = list(range = range(dat$datetime),
-                                title = ''),
-               yaxis = list(title = 'BE compensated water level'))
+  p1 <- layout(
+    p1,
+    xaxis = list(range = range(dat$datetime), title = ''),
+    yaxis = list(title = 'BE compensated water level')
+  )
 
   p1 <- hide_legend(p1)
   p1 <- animation_opts(p1, transition = 0)
-  p1 <- animation_slider(p1, currentvalue = list(prefix = "BE: ", font = list(color = "steelblue")))
+  p1 <- animation_slider(
+    p1,
+    currentvalue = list(prefix = "BE: ", font = list(color = "steelblue"))
+  )
   p1
-
 }
 
 
@@ -191,7 +181,7 @@ be_visual_plot <- function(dat,
 #'
 #' Generate dataset for comparing barometric efficiency
 #'
-#' @inheritParams be_least_squares_diff
+#' @inheritParams be_clark_cpp
 #' @param time name of the column containing the time (character)
 #' @param be_tests vector of barometric efficiencies to test (between 0 and 1) (numeric)
 #' @param inverse  whether the barometric relationship is inverse
@@ -223,16 +213,15 @@ be_visual_plot <- function(dat,
 #'                   wl = wl, baro = baro)
 #' be_visual(dat)
 #'
-be_visual <- function(dat,
-                      dep = 'wl',
-                      ind = 'baro',
-                      time = 'datetime',
-                      be_tests = seq(0, 1, 0.1),
-                      inverse = TRUE,
-                      subsample = TRUE) {
-
-
+be_visual <- function(
+  dat,
+  dep = 'wl',
+  ind = 'baro',
+  time = 'datetime',
+  be_tests = seq(0, 1, 0.1),
+  inverse = TRUE,
+  subsample = TRUE
+) {
   dt <- be_visual_data(dat, dep, ind, be_tests, inverse)
   be_visual_plot(dt, time, subsample)
-
 }

@@ -70,12 +70,12 @@ Heilweil, V.M. and Hsieh, P.A., 2006. Determining anisotropic transmissivity
   using a simplified Papadopulos method. Groundwater, 44(5), pp.749-753.
 }
 \seealso{
-Other aquifer: 
-\code{\link{step_aquifer_constant_drawdown}()},
-\code{\link{step_aquifer_grf}()},
-\code{\link{step_aquifer_leaky}()},
-\code{\link{step_aquifer_patch}()},
-\code{\link{step_aquifer_theis}()},
-\code{\link{step_aquifer_wellbore_storage}()}
+Other aquifer:
+\code{\link[=step_aquifer_constant_drawdown]{step_aquifer_constant_drawdown()}},
+\code{\link[=step_aquifer_grf]{step_aquifer_grf()}},
+\code{\link[=step_aquifer_leaky]{step_aquifer_leaky()}},
+\code{\link[=step_aquifer_patch]{step_aquifer_patch()}},
+\code{\link[=step_aquifer_theis]{step_aquifer_theis()}},
+\code{\link[=step_aquifer_wellbore_storage]{step_aquifer_wellbore_storage()}}
 }
 \concept{aquifer}

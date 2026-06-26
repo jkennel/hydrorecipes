@@ -1,5 +1,34 @@
 data("kennel_2020")
 kennel_2020[, datetime := as.numeric(datetime)]
+kennel_2020[, wl2 := wl * 0.5]
+
+n_knots <- 12
+deg_free <- 27
+lag_max <- 1 + 720
+
+formula <- as.formula(wl + wl2~.)
+hrec = hydrorecipes:::Recipe$new(formula = formula, data = unclass(kennel_2020))$
+  add_step(hydrorecipes:::StepDistributedLag$new(baro,
+                                                 knots = hydrorecipes:::log_lags(n_knots, lag_max)))$
+  add_step(hydrorecipes:::StepSplineB$new(datetime, df = deg_free, intercept = FALSE))$
+  add_step(hydrorecipes:::StepIntercept$new())$
+  add_step(hydrorecipes:::StepDropColumns$new(baro))$
+  add_step(hydrorecipes:::StepDropColumns$new(datetime))$
+  add_step(hydrorecipes:::StepOls$new(formula))$
+  prep()$
+  bake()
+
+
+tmp <- hrec$get_response_data(type = 'dt')[grep("distributed_lag", step_id)]
+expect_true(all(tmp[variable == "cumulative" & outcome == "wl"]$value < 1.0))
+expect_equal(tmp[variable == "cumulative" & outcome == "wl"]$value * 0.5,
+             tmp[variable == "cumulative" & outcome == "wl2"]$value)
+
+
+
+
+data("kennel_2020")
+kennel_2020[, datetime := as.numeric(datetime)]
 kennel_2020[, wl2 := wl * 0.8]
 kennel_2020[, wl3 := wl * 0.6]
 formula <- as.formula(wl + wl2 + wl3~.)
@@ -33,6 +62,7 @@ hrec = hydrorecipes:::Recipe$new(formula = formula, data = unclass(kennel_2020))
 hrec$get_response_data(type = 'dt')[grep("harmonic", step_id)]
 hrec$get_response_data(type = 'dt')[grep("earthtide", step_id)]
 hrec$get_response_data(type = 'dt')[grep("spline", step_id)]
+
 
 
 
